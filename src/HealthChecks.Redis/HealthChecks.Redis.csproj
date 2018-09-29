@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <Description>BeatPulse.Redis is the health check package for Redis on BeatPulse</Description>
+    <PackageTags>BeatPulse;HealthCheck;Beat;Health;Redis</PackageTags>
+    <Version>$(HealthCheckRedis)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Company>$(Company)</Company>
+    <Authors>$(Authors)</Authors>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis.StrongName" Version="$(StackExchangeRedisStrongName)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+
+</Project>

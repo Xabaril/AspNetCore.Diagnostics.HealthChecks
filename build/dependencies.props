@@ -1,0 +1,109 @@
+<Project>
+  <PropertyGroup Label="SDK Versions">
+    <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
+    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package information">
+    <PackageLicenseUrl>https://github.com/Xabaril/BeatPulse/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/xabaril/BeatPulse</PackageProjectUrl>
+    <RepositoryUrl>http://github.com/xabaril/BeatPulse</RepositoryUrl>
+    <Authors>Xabaril Contributors</Authors>
+    <Company>Xabaril</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package Versions">
+    <MicrosoftExtensionsDiagnosticsHealthChecks>3.0.0-alpha1-10549</MicrosoftExtensionsDiagnosticsHealthChecks>
+    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-preview3-35304</MicrosoftAspNetCoreDiagnosticsHealthChecks>
+    <FluentAssertions>5.4.2</FluentAssertions>
+    <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
+    <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>
+    <xunit>2.4.0</xunit>
+    <xunitrunnervisualstudio>2.4.0</xunitrunnervisualstudio>
+    <SystemDataSqlClient>4.4.2</SystemDataSqlClient>
+    <MicrosoftDataSqlite>2.0.1</MicrosoftDataSqlite>
+    <StackExchangeRedisStrongName>1.2.6</StackExchangeRedisStrongName>
+    <RabbitMQClient>5.0.1</RabbitMQClient>
+    <OracleManagedDataAccessCore>2.18.3</OracleManagedDataAccessCore>
+    <Npgsql>3.2.6</Npgsql>
+    <MongoDBDriver>2.5.0</MongoDBDriver>
+    <MySqlConnector>0.40.4</MySqlConnector>
+    <ConfluentKafka>0.11.4</ConfluentKafka>
+    <SSHNet>2016.1.0</SSHNet>
+    <SystemBuffers>4.5.0</SystemBuffers>
+    <!--<HostingAbstractionsVersion>2.1.1</HostingAbstractionsVersion>
+    <ASPNetCoreRoutingVersion>2.1.1</ASPNetCoreRoutingVersion>
+    <ASPNetCoreAllPackageVersion>2.1.3</ASPNetCoreAllPackageVersion>
+    <MicrosoftExtensionsDependencyInjectionVersion>2.1.1</MicrosoftExtensionsDependencyInjectionVersion>
+    <MongoDBDriverVersion>2.5.0</MongoDBDriverVersion>
+    <NpgsqlVersion>3.2.6</NpgsqlVersion>
+    <RedisVersion>1.2.6</RedisVersion>
+    <SqlClientVersion>4.4.2</SqlClientVersion>
+    <FluentAssertionsVersion>5.4.1</FluentAssertionsVersion>
+    <ASPNetCoreTestHostVersion>2.1.1</ASPNetCoreTestHostVersion>
+    <XUnitPackageVersion>2.4.0</XUnitPackageVersion>
+    <XUnitRunnerVisualstudio>2.4.0</XUnitRunnerVisualstudio>
+    <WindowsAzureStorageVersion>9.1.0</WindowsAzureStorageVersion>
+    <MySqlConnectorVersion>0.40.4</MySqlConnectorVersion>
+    <MicrosoftAzureDocumentDbCoreVersion>1.9.1</MicrosoftAzureDocumentDbCoreVersion>
+    <MicrosoftDataSqliteVersion>2.0.1</MicrosoftDataSqliteVersion>
+    <NewtonSoftJsonVersion>11.0.2</NewtonSoftJsonVersion>
+    <MicrosoftEntityFrameworkCoreVersion>2.1.0</MicrosoftEntityFrameworkCoreVersion>
+    <MicrosoftEntityFrameworkCoreDesignVersion>2.1.0</MicrosoftEntityFrameworkCoreDesignVersion>
+    <MicrosoftEntityFrameworkCoreSqlLiteVersion>2.1.0</MicrosoftEntityFrameworkCoreSqlLiteVersion>
+    <MicrosoftEntityFrameworkCoreSqlLiteDesignVersion>1.1.5</MicrosoftEntityFrameworkCoreSqlLiteDesignVersion>
+    <MicrosoftExtensionConfigurationBinderVersion>2.1.1</MicrosoftExtensionConfigurationBinderVersion>
+    <ConfluentKafkaVersion>0.11.4</ConfluentKafkaVersion>
+    <MicrosoftAzureEventHubsVersion>2.0.0</MicrosoftAzureEventHubsVersion>
+    <MicrosoftAzureServiceBusVersion>2.0.0</MicrosoftAzureServiceBusVersion>
+    <RabbitMQVersion>5.0.1</RabbitMQVersion>
+    <ApplicationInsightsVersion>2.4.0</ApplicationInsightsVersion>
+    <AWSSDKDynamoDBv2Version>3.3.9</AWSSDKDynamoDBv2Version>
+    <OracleManagedDataAccessCoreVersion>2.12.0-beta3</OracleManagedDataAccessCoreVersion>
+    <SSHNetPackageVersion>2016.1.0</SSHNetPackageVersion>-->
+  </PropertyGroup>
+
+  <PropertyGroup Label="CLI Tools Versions">
+    <DotnetXUnitPackageVersion>2.4.0</DotnetXUnitPackageVersion>
+    <DotnetWatcherToolPackageVersion>2.0.0</DotnetWatcherToolPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Health Checks Package Versions">
+    <HealthCheckIdSvr>0.0.1</HealthCheckIdSvr>
+    <HealthCheckSqlServer>0.0.1</HealthCheckSqlServer>
+    <HealthCheckSqlite>0.0.1</HealthCheckSqlite>
+    <HealthCheckUri>0.0.1</HealthCheckUri>
+    <HealthCheckRedis>0.0.1</HealthCheckRedis>
+    <HealthCheckOracle>0.0.1</HealthCheckOracle>
+    <HealthCheckNpgSql>0.0.1</HealthCheckNpgSql>
+    <HealthCheckMongoDB>0.0.1</HealthCheckMongoDB>
+    <HealthCheckMySql>0.0.1</HealthCheckMySql>
+    <HealthCheckKafka>0.0.1</HealthCheckKafka>
+    <HealthCheckSystem>0.0.1</HealthCheckSystem>
+    <HealthCheckNetwork>0.0.1</HealthCheckNetwork>
+    <HealthCheckDynamoDb>0.0.1</HealthCheckDynamoDb>
+    <!--<BeatPulsePackageVersion>3.0.0</BeatPulsePackageVersion>
+    <BeatPulseAzureStoragePackageVersion>3.0.0</BeatPulseAzureStoragePackageVersion>
+    <BeatPulseDocumentDbPackageVersion>3.0.0</BeatPulseDocumentDbPackageVersion>
+    <BeatPulseMongoDbPackageVersion>3.0.0</BeatPulseMongoDbPackageVersion>
+    <BeatPulseMySqlPackageVersion>3.0.0</BeatPulseMySqlPackageVersion>
+    <BeatpulseNpgSqlPackageVersion>3.0.0</BeatpulseNpgSqlPackageVersion>
+    <BeatpulseRedisPackageVersion>3.0.0</BeatpulseRedisPackageVersion>
+    <BeatPulseSqlitePackageVersion>3.0.0</BeatPulseSqlitePackageVersion>
+    <BeatPulseSqlServerPackageVersion>3.0.0</BeatPulseSqlServerPackageVersion>
+    <BeatPulseUIPackageVersion>3.0.0</BeatPulseUIPackageVersion>
+    <BeatPulseKafkaVersion>3.0.0</BeatPulseKafkaVersion>
+    <BeatPulseRabbitMQPackageVersion>3.0.0</BeatPulseRabbitMQPackageVersion>-->
+    <!--<BeatPulseAzureServiceBusVersion>3.0.0</BeatPulseAzureServiceBusVersion>
+    <BeatPulseAITrackerVersion>3.0.0</BeatPulseAITrackerVersion>
+    <BeatPulsePrometheusTrackerVersion>3.0.0</BeatPulsePrometheusTrackerVersion>
+    <BeatPulseAWSDynamoDBPackageVersion>3.0.0</BeatPulseAWSDynamoDBPackageVersion>
+    <BeatPulseStatusPageTracker>3.0.0</BeatPulseStatusPageTracker>
+    <BeatPulseUrisVersion>3.0.0</BeatPulseUrisVersion>
+    <BeatPulseOraclePackageVersion>3.0.0-beta3</BeatPulseOraclePackageVersion>
+    <BeatPulseSystemPackageVersion>3.0.0</BeatPulseSystemPackageVersion>
+    <BeatPulseNetworkPackageVersion>3.0.0</BeatPulseNetworkPackageVersion>-->
+  </PropertyGroup>
+
+</Project>

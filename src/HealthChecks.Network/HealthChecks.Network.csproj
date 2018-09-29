@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <Description>BeatPulse.Network is the health check package for network services on BeatPulse </Description>
+    <PackageTags>BeatPulse;HealthCheck;Beat;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
+    <Version>$(HealthCheckNetwork)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Company>$(Company)</Company>
+    <Authors>$(Authors)</Authors>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SSH.NET" Version="$(SSHNet)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="System.Buffers" Version="$(SystemBuffers)" />
+  </ItemGroup>
+
+
+</Project>

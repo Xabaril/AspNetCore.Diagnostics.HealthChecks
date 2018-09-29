@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
+    <PackageReference Include="xunit" Version="$(xunit)" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="$(MicrosoftAspNetCoreDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
+  </ItemGroup>
+
+</Project>

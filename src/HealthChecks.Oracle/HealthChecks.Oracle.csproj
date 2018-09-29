@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <Description>BeatPulse.Oracle is the health check package for Oracle Database on BeatPulse </Description>
+    <PackageTags>BeatPulse;HealthCheck;Beat;Health;Oracle</PackageTags>
+    <Version>$(HealthCheckOracle)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Company>$(Company)</Company>
+    <Authors>$(Authors)</Authors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="$(OracleManagedDataAccessCore)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+</Project>

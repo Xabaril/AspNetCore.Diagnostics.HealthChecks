@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>HealthCheck;BeatPulse;Health;IdentityServer;IdSvr</PackageTags>
-    <Description>HealthCheck.IdSvr is the health check package for IdentityServer</Description>
+    <PackageTags>HealthCheck;IdentityServer;IdSvr</PackageTags>
+    <Description>HealthChecks.IdSvr is the health check package for IdentityServer</Description>
     <Version>$(HealthCheckIdSvr)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>
@@ -15,5 +14,4 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
   </ItemGroup>
-
 </Project>

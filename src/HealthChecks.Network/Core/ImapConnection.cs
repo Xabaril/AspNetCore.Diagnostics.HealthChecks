@@ -59,7 +59,7 @@ namespace HealthChecks.Network.Core
             }
 
             var result = await ExecuteCommand(ImapCommands.Login(user, password));
-            IsAuthenticated = result.Contains(ImapResponse.OK);
+            IsAuthenticated = !result.Contains(ImapResponse.AUTHFAILED);
             return IsAuthenticated;
         }
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace FunctionalTests.BeatPulse.Network
 
         //Host and login account to fast switch tests against different server
         private string _host = "localhost";
-        private string _validAccount = "admin@beatpulse.com";
+        private string _validAccount = "admin@healthchecks.com";
         private string _validPassword = "beatpulse";
 
         public imap_healthcheck_should(ExecutionFixture fixture)
@@ -52,7 +53,7 @@ namespace FunctionalTests.BeatPulse.Network
             });
 
             var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/healh")
+            var response = await server.CreateRequest("/health")
                 .GetAsync();
 
             response.EnsureSuccessStatusCode();
@@ -104,7 +105,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.Port = 993;
                         setup.ConnectionType = ImapConnectionType.SSL_TLS;
                         setup.AllowInvalidRemoteCertificates = true;
-                        setup.LoginWith(_validAccount, "invalidpassword");
+                        setup.LoginWith("invalid@healthchecks.com", "invalidpassword");
                     });
                })
                .Configure(app =>
@@ -133,7 +134,7 @@ namespace FunctionalTests.BeatPulse.Network
                     .AddImapHealthCheck(setup =>
                     {
                         setup.Host = _host;
-                        setup.Port = 993;
+                        setup.Port = 143;
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
                         setup.CheckFolderExists("INBOX");
@@ -265,7 +266,7 @@ namespace FunctionalTests.BeatPulse.Network
                       setup.ConnectionType = ImapConnectionType.STARTTLS;
                       setup.AllowInvalidRemoteCertificates = true;
                       setup.LoginWith(_validAccount, _validPassword);
-                       setup.CheckFolderExists("INBOX");
+                      setup.CheckFolderExists("INBOX");
                    });
               })
               .Configure(app =>
@@ -299,10 +300,13 @@ namespace FunctionalTests.BeatPulse.Network
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 var options = new HealthCheckOptions()
                  {
                      Predicate = r => r.Tags.Contains("imap")
-                 });
+                 };
+                 options.ResultStatusCodes[HealthStatus.Failed] = (int)HttpStatusCode.ServiceUnavailable;
+
+                 app.UseHealthChecks("/health", options);
              });
 
             var server = new TestServer(webHostBuilder);

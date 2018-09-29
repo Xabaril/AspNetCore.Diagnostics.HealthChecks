@@ -3,8 +3,8 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <Description>BeatPulse.MySql is the health check package for MySQL on BeatPulse </Description>
-    <PackageTags>BeatPulse;HealthCheck;Beat;Health;MySQL</PackageTags>
+    <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
+    <PackageTags>HealthChecks;HealthCheck;Health;MySQL</PackageTags>
     <Version>$(HealthCheckMySql)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>

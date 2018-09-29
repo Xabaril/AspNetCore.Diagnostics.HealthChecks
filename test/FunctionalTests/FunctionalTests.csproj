@@ -30,5 +30,11 @@
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="id_rsa">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

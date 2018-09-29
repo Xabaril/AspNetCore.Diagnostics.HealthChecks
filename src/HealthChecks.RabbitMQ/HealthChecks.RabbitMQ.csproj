@@ -1,17 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>BeatPulse;HealthCheck;Beat;Health;RabbitMQ</PackageTags>
-    <Description>BeatPulse.RabbitMQ is the health check package for RabbitMQ on BeatPulse</Description>
+    <PackageTags>BeatPulse;HealthCheck;Health;RabbitMQ</PackageTags>
+    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.</Description>
     <Version>$(BeatPulseRabbitMQPackageVersion)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="$(RabbitMQClient)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />

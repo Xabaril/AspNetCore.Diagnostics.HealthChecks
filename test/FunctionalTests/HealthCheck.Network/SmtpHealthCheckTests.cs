@@ -20,7 +20,7 @@ namespace FunctionalTests.BeatPulse.Network
 
         //Host and login account to fast switch tests against different server
         private string _host = "localhost";
-        private string _validAccount = "admin@beatpulse.com";
+        private string _validAccount = "admin@healthchecks.com";
         private string _validPassword = "beatpulse";
 
         public smtp_healthcheck_should(ExecutionFixture fixture)

@@ -7,9 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48-FF38-4A49-9E59-0EC1FC4474C0}"
 	ProjectSection(SolutionItems) = preProject
-		build\build.ps1 = build\build.ps1
+		.env = .env
+		build.ps1 = build.ps1
 		build\dependencies.props = build\dependencies.props
-		build\docker-compose.yml = build\docker-compose.yml
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}"
@@ -43,6 +44,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.DynamoDb", "src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj", "{D225BD53-08A6-4CF8-9E5D-8CFFD306E5BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Network", "src\HealthChecks.Network\HealthChecks.Network.csproj", "{46A58C98-B38F-486C-83BA-3772A217A24E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.DocumentDb", "src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj", "{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureStorage", "src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj", "{E7A1DD9B-B7B1-450D-9736-331EE85649E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus", "src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj", "{4F45BB95-CB91-406D-B8A4-01E2830CC451}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +117,18 @@ Global
 		{46A58C98-B38F-486C-83BA-3772A217A24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A58C98-B38F-486C-83BA-3772A217A24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A58C98-B38F-486C-83BA-3772A217A24E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +149,9 @@ Global
 		{E6AF5AD6-618A-491D-B8BB-F8EF56C6B403} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{D225BD53-08A6-4CF8-9E5D-8CFFD306E5BB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{46A58C98-B38F-486C-83BA-3772A217A24E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{E7A1DD9B-B7B1-450D-9736-331EE85649E1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{4F45BB95-CB91-406D-B8A4-01E2830CC451} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

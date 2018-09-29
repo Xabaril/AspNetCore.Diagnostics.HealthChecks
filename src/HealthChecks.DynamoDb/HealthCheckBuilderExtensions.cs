@@ -14,7 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new DynamoDBOptions();
             setup?.Invoke(options);
 
-
             return builder.Add(new HealthCheckRegistration(
                 NAME,
                 sp => new DynamoDbHealthCheck(options, sp.GetService<ILogger<DynamoDbHealthCheck>>()),

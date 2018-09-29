@@ -1,0 +1,94 @@
+version: '3'
+services:
+    sqlserver:
+        image: microsoft/mssql-server-linux
+        restart: always
+        ports:
+            - ${SQLSERVER_PORT}:1433
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=${SQLSERVER_PASSWORD}
+    redis:
+        image: redis:alpine
+        ports:
+            - ${REDIS_PORT}:6379
+    postgres:
+        image: postgres
+        environment:
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        ports:
+            - ${POSTGRES_PORT}:5432
+    mongodb:
+        image: mongo
+        ports:
+            - ${MONGODB_PORT}:27017
+    mysql:
+        image: mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - ${MYSQL_PORT}:3306
+    zookeeper:
+        image: confluent/zookeeper
+        ports:
+            - ${ZOOKEEPER_PORT}:2181
+    kafka:
+        image: confluent/kafka
+        environment:
+            - KAFKA_ADVERTISED_HOST_NAME=localhost
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+            - KAFKA_ADVERTISED_PORT=9092
+        ports:
+          - ${KAFKA_PORT}:9092
+        links: 
+          - zookeeper
+    rabbitmq:
+        image: rabbitmq
+        ports:
+          - ${RABBITMQ_PORT}:5672
+    idsvr:
+        image: nakah/identityserver4
+        ports:
+          - ${IDSVR_PORT}:80
+    oracle:
+        image: wnameless/oracle-xe-11g
+        ports: 
+            - ${ORACLE_PORT}:1521
+        environment:
+            - ORACLE_ALLOW_REMOTE=true
+    ftp:
+        image: bogem/ftp
+        ports:
+            - ${FTP_PORT}:21
+            - 47400-47470:47400-47470
+        environment:
+            - FTP_USER=${FTP_USER}
+            - FTP_PASS=${FTP_PASS}
+            - PASV_ADDRESS=127.0.0.1
+    sftp:
+        image: atmoz/sftp
+        ports: 
+            - ${SFTP_PORT}:22
+        volumes:
+            - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro
+        command: foo:pass:::upload
+    mail:
+        image: tvial/docker-mailserver:latest
+        hostname: mail
+        container_name: mail
+        domainname: healthchecks.com        
+        ports:
+            - 25:25               
+            - 143:143
+            - 465:465
+            - 587:587
+            - 993:993          
+            - 995:995  
+        environment:
+            - SSL_TYPE=self-signed
+            - DMS_DEBUG=1
+        volumes:
+            - ./build/docker-services/mail/:/tmp/docker-mailserver/
+        
+        

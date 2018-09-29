@@ -3,8 +3,8 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <Description>BeatPulse.Oracle is the health check package for Oracle Database on BeatPulse </Description>
-    <PackageTags>BeatPulse;HealthCheck;Beat;Health;Oracle</PackageTags>
+    <Description>HealthChecks.Oracle is the health check package for Oracle Database.</Description>
+    <PackageTags>HealthCheck;Health;Oracle</PackageTags>
     <Version>$(HealthCheckOracle)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>

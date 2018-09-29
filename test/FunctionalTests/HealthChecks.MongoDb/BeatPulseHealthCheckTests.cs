@@ -48,11 +48,11 @@ namespace BeatPulse.MongoDb
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
-        public async Task return_false_if_mongodb_is_not_available()
+        public async Task be_unhealthy_if_mongodb_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()

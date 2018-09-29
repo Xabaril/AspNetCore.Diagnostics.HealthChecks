@@ -4,8 +4,8 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>BeatPulse;HealthCheck;Beat;Health;MongoDb</PackageTags>
-    <Description>BeatPulse.MongoDb is the health check package for MongoDb on BeatPulse</Description>
+    <PackageTags>HealthCheck;Health;MongoDb</PackageTags>
+    <Description>HealthChecks.MongoDb is the health check package for MongoDb.</Description>
     <Version>$(HealthCheckMongoDB)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>

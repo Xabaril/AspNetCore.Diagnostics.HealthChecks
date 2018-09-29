@@ -4,8 +4,8 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <Description>BeatPulse.Network is the health check package for network services on BeatPulse </Description>
-    <PackageTags>BeatPulse;HealthCheck;Beat;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
+    <Description>HealthChecks.Network is the health check package for network services.</Description>
+    <PackageTags>HealthCheck;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Version>$(HealthCheckNetwork)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>

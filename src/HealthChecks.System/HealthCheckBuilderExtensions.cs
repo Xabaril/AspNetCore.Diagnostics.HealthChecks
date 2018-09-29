@@ -1,5 +1,4 @@
-﻿using BeatPulse.System;
-using HealthChecks.System;
+﻿using HealthChecks.System;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using System;

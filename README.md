@@ -9,23 +9,7 @@ This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and 
 
 ## Included Health Checks
 
-    1 Sql Server
-    2 MySql
-    3 Oracle
-    4 Sqlite
-    5 Postgres
-    6 RabbitMQ
-    7 Redis
-    8 System: Disk Storage, Private Memory, Virtual Memory
-    9 Azure Service Bus: EventHub, Queue and Topics
-    10 Azure Storage: Blob, Queue and Table
-    11 Azure DocumentDb
-    12 Amazon DynamoDb
-    13 Network: Ftp, SFtp, Dns, Tcp port, Smtp, Impa
-    14 Mongo 
-    15 Kafka
-    16 Identity Server
-    17 Uri: single uri and uri groups
+HealthChecks packages include health checks for Sql Server, MySql, Oracle, Sqlite, Postgres, RabbitMQ, Redis, System: Disk Storage, Private Memory, Virtual Memory, Azure Service Bus: EventHub, Queue and Topics, Azure Storage: Blob, Queue and Table, Azure DocumentDb, Amazon DynamoDb, Network: Ftp, SFtp, Dns, Tcp port, Smtp, Impa, Mongo, Kafka, Identity Server and Uri: single uri and uri groups
 
 ``` PowerShell
 Install-Package HealthChecks.System

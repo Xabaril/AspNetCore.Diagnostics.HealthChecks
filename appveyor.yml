@@ -1,0 +1,36 @@
+version: '{build}'
+environment:
+  matrix:    
+    - node_version: '10'
+install:
+  - ps: 'Install-Product node $env:node_version x64'
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2017
+services:
+  - mssql2016
+  - postgresql101
+  - mongodb
+  - mysql
+nuget:
+  disable_publish_on_pr: true
+build_script:
+- ps: .\Build.ps1
+test: off
+artifacts:
+- path: .\artifacts\*.nupkg
+  name: NuGet
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/xabaril/api/v2/package
+  api_key:
+    secure: JCTBs2rhU7P11G6ZbxDKOuQoyIKhILGcaKtILxCDwdVlnzvvaXc92nNXQlVsR7u0
+  skip_symbols: true
+  on:
+    branch: master
+- provider: NuGet
+  name: production
+  api_key:
+    secure: 44bohP+05nCVBsZvK3tklX4yK8Rwi7vWRKTj1sMI1V26twqZJayTtRxv0fLF1t2o
+  on:
+    appveyor_repo_tag: true

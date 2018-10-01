@@ -45,21 +45,21 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>0.0.1</HealthCheckIdSvr>
-    <HealthCheckSqlServer>0.0.1</HealthCheckSqlServer>
-    <HealthCheckSqlite>0.0.1</HealthCheckSqlite>
-    <HealthCheckUri>0.0.1</HealthCheckUri>
-    <HealthCheckRedis>0.0.1</HealthCheckRedis>
-    <HealthCheckOracle>0.0.1</HealthCheckOracle>
-    <HealthCheckNpgSql>0.0.1</HealthCheckNpgSql>
-    <HealthCheckMongoDB>0.0.1</HealthCheckMongoDB>
-    <HealthCheckMySql>0.0.1</HealthCheckMySql>
-    <HealthCheckKafka>0.0.1</HealthCheckKafka>
-    <HealthCheckSystem>0.0.1</HealthCheckSystem>
-    <HealthCheckNetwork>0.0.1</HealthCheckNetwork>
-    <HealthCheckDynamoDb>0.0.1</HealthCheckDynamoDb>
-    <HealthCheckDocumentDb>0.0.1</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>0.0.1</HealthCheckAzureStorage>
-    <HealthCheckAzureServiceBus>0.0.1</HealthCheckAzureServiceBus>
+    <HealthCheckIdSvr>2.2.0-preview3-35304</HealthCheckIdSvr>
+    <HealthCheckSqlServer>2.2.0-preview3-35304</HealthCheckSqlServer>
+    <HealthCheckSqlite>2.2.0-preview3-35304</HealthCheckSqlite>
+    <HealthCheckUri>2.2.0-preview3-35304</HealthCheckUri>
+    <HealthCheckRedis>2.2.0-preview3-35304</HealthCheckRedis>
+    <HealthCheckOracle>2.2.0-preview3-35304</HealthCheckOracle>
+    <HealthCheckNpgSql>2.2.0-preview3-35304</HealthCheckNpgSql>
+    <HealthCheckMongoDB>2.2.0-preview3-35304</HealthCheckMongoDB>
+    <HealthCheckMySql>2.2.0-preview3-35304</HealthCheckMySql>
+    <HealthCheckKafka>2.2.0-preview3-35304</HealthCheckKafka>
+    <HealthCheckSystem>2.2.0-preview3-35304</HealthCheckSystem>
+    <HealthCheckNetwork>2.2.0-preview3-35304</HealthCheckNetwork>
+    <HealthCheckDynamoDb>2.2.0-preview3-35304</HealthCheckDynamoDb>
+    <HealthCheckDocumentDb>2.2.0-preview3-35304</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>2.2.0-preview3-35304</HealthCheckAzureStorage>
+    <HealthCheckAzureServiceBus>2.2.0-preview3-35304</HealthCheckAzureServiceBus>
   </PropertyGroup>
 </Project>

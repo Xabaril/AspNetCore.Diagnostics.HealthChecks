@@ -5,7 +5,7 @@
 
 # AspNetCore.Diagnostics.HealthChecks
 
-This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI port to new *Microsof Health Checks* feature included on **ASP.NET Core 2.2**.
+This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI port to new *Microsoft Health Checks* feature included on **ASP.NET Core 2.2**.
 
 ## Included Health Checks
 

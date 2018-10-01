@@ -27,6 +27,26 @@ This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and 
     16 Identity Server
     17 Uri: single uri and uri groups
 
+``` PowerShell
+Install-Package HealthChecks.System
+Install-Package HealthChecks.Network
+Install-Package HealthChecks.SqlServer
+Install-Package HealthChecks.MongoDb
+Install-Package HealthChecks.Npgsql
+Install-Package HealthChecks.Redis
+Install-Package HealthChecks.AzureStorage
+Install-Package HealthChecks.AzureServiceBus
+Install-Package HealthChecks.MySql
+Install-Package HealthChecks.DocumentDb
+Install-Package HealthChecks.SqLite
+Install-Package HealthChecks.Kafka
+Install-Package HealthChecks.RabbitMQ
+Install-Package HealthChecks.IdSvr
+Install-Package HealthChecks.DynamoDB
+Install-Package HealthChecks.Oracle
+Install-Package HealthChecks.Uris
+```
+
 ## Health Check UI and Fail notifications
 
 ** TODO ** 

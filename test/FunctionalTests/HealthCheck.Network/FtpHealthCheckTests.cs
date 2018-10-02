@@ -36,7 +36,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.AddHost("ftp://localhost:21",
                                 createFile: false,
                                 credentials: new NetworkCredential("bob", "12345"));
-                    });
+                    }, tags: new string[] { "ftp" });
                })
                .Configure(app =>
                {
@@ -66,7 +66,7 @@ namespace FunctionalTests.BeatPulse.Network
                        setup.AddHost("ftp://localhost:21",
                                createFile: true,
                                credentials: new NetworkCredential("bob", "12345"));
-                   });
+                   }, tags: new string[] { "ftp" });
               })
               .Configure(app =>
               {

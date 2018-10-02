@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
@@ -12,20 +11,16 @@ namespace HealthChecks.AzureStorage
         : IHealthCheck
     {
         private readonly CloudStorageAccount _storageAccount;
-        private readonly ILogger<AzureBlobStorageHealthCheck> _logger;
 
-        public AzureBlobStorageHealthCheck(string connectionString,ILogger<AzureBlobStorageHealthCheck> logger = null)
+        public AzureBlobStorageHealthCheck(string connectionString)
         {
             _storageAccount = CloudStorageAccount.Parse(connectionString);
-            _logger = logger;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                _logger?.LogInformation($"{nameof(AzureBlobStorageHealthCheck)} is checking the Azure Blob.");
-
                 var blobClient = _storageAccount.CreateCloudBlobClient();
 
                 var serviceProperties = await blobClient.GetServicePropertiesAsync(
@@ -33,14 +28,10 @@ namespace HealthChecks.AzureStorage
                     operationContext: null,
                     cancellationToken: cancellationToken);
 
-                _logger?.LogInformation($"The {nameof(AzureBlobStorageHealthCheck)} check success.");
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)
             {
-                _logger?.LogWarning($"The {nameof(AzureBlobStorageHealthCheck)} check fail for {_storageAccount.BlobStorageUri} with the exception {ex.ToString()}.");
-
                 return HealthCheckResult.Failed(exception:ex);
             }
         }

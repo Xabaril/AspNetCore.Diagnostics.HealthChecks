@@ -43,7 +43,7 @@ namespace FunctionalTests.BeatPulse.Network
                        setup.Port = 465;
                        setup.ConnectionType = SmtpConnectionType.SSL;
                        setup.AllowInvalidRemoteCertificates = true;
-                   });
+                   }, tags: new string[] { "smtp" });
               })
               .Configure(app =>
               {
@@ -75,7 +75,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.Port = 587;
                         setup.ConnectionType = SmtpConnectionType.TLS;
                         setup.AllowInvalidRemoteCertificates = true;
-                    });
+                    }, tags: new string[] { "smtp" });
                 })
                 .Configure(app =>
                 {
@@ -105,7 +105,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.Host = _host;
                         setup.Port = 587;
                         setup.AllowInvalidRemoteCertificates = true;
-                    });
+                    }, tags: new string[] { "smtp" });
                 })
                 .Configure(app =>
                 {
@@ -136,7 +136,7 @@ namespace FunctionalTests.BeatPulse.Network
                             setup.Host = _host;
                             setup.Port = 45;
                             setup.AllowInvalidRemoteCertificates = true;
-                        });
+                        }, tags: new string[] { "smtp" });
                 })
                 .Configure(app =>
                 {
@@ -168,7 +168,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.Port = 465;
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
-                    });
+                    }, tags: new string[] { "smtp" });
                 })
                 .Configure(app =>
                 {
@@ -200,7 +200,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.Port = 587;
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
-                    });
+                    }, tags: new string[] { "smtp" });
                 })
                 .Configure(app =>
                 {
@@ -233,7 +233,7 @@ namespace FunctionalTests.BeatPulse.Network
                           setup.Port = 587;
                           setup.AllowInvalidRemoteCertificates = true;
                           setup.LoginWith(_validAccount, "wrongpass");
-                      });
+                      }, tags: new string[] { "smtp" });
                  })
                  .Configure(app =>
                  {

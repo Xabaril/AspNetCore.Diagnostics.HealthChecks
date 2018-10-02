@@ -32,7 +32,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddRabbitMQ(connectionString);
+                 .AddRabbitMQ(connectionString, tags: new string[] { "rabbitmq" });
             })
             .Configure(app =>
             {
@@ -59,7 +59,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                .AddRabbitMQ("amqp://nonexistingdomain:5672");
+                .AddRabbitMQ("amqp://nonexistingdomain:5672", tags: new string[] { "rabbitmq" });
            })
            .Configure(app =>
            {

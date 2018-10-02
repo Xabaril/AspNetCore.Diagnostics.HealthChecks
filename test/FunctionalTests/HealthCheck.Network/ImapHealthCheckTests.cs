@@ -42,7 +42,7 @@ namespace FunctionalTests.BeatPulse.Network
                      setup.Host = _host;
                      setup.Port = 993;
                      setup.AllowInvalidRemoteCertificates = true;
-                 });
+                 }, tags: new string[] { "imap" });
             })
             .Configure(app =>
             {
@@ -73,7 +73,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.Port = 993;
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
-                    });
+                    }, tags: new string[] { "imap" });
                })
                .Configure(app =>
                {
@@ -106,7 +106,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.ConnectionType = ImapConnectionType.SSL_TLS;
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith("invalid@healthchecks.com", "invalidpassword");
-                    });
+                    }, tags: new string[] { "imap" });
                })
                .Configure(app =>
                {
@@ -138,7 +138,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
                         setup.CheckFolderExists("INBOX");
-                    });
+                    }, tags: new string[] { "imap" });
                })
                .Configure(app =>
                {
@@ -171,7 +171,7 @@ namespace FunctionalTests.BeatPulse.Network
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
                         setup.CheckFolderExists("INVALIDFOLDER");
-                    });
+                    }, tags: new string[] { "imap" });
                })
                .Configure(app =>
                {
@@ -202,7 +202,7 @@ namespace FunctionalTests.BeatPulse.Network
                        setup.Host = _host;
                        setup.Port = 143;
                        setup.AllowInvalidRemoteCertificates = true;
-                   });
+                   }, tags: new string[] { "imap" });
               })
               .Configure(app =>
               {
@@ -233,7 +233,7 @@ namespace FunctionalTests.BeatPulse.Network
                        setup.Port = 143;
                        setup.AllowInvalidRemoteCertificates = true;
                        setup.LoginWith(_validAccount, _validPassword);
-                   });
+                   }, tags: new string[] { "imap" });
               })
               .Configure(app =>
               {
@@ -267,7 +267,7 @@ namespace FunctionalTests.BeatPulse.Network
                       setup.AllowInvalidRemoteCertificates = true;
                       setup.LoginWith(_validAccount, _validPassword);
                       setup.CheckFolderExists("INBOX");
-                   });
+                   }, tags: new string[] { "imap" });
               })
               .Configure(app =>
               {
@@ -296,7 +296,7 @@ namespace FunctionalTests.BeatPulse.Network
                   {
                       setup.Host = _host;
                       setup.Port = 135;
-                  });
+                  }, tags: new string[] { "imap" });
              })
              .Configure(app =>
              {

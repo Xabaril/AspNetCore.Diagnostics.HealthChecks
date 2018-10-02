@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
 using Renci.SshNet;
 using System;
 using System.IO;
@@ -14,20 +13,15 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly SftpHealthCheckOptions _options;
-        private readonly ILogger<SftpHealthCheck> _logger;
-
-        public SftpHealthCheck(SftpHealthCheckOptions options, ILogger<SftpHealthCheck> logger = null)
+        public SftpHealthCheck(SftpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            _logger = logger;
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                _logger?.LogInformation($"{nameof(SftpHealthCheck)} is checking SFTP connections.");
-
                 foreach (var item in _options.ConfiguredHosts.Values)
                 {
                     var connectionInfo = new ConnectionInfo(item.Host, item.UserName, item.AuthenticationMethods.ToArray());
@@ -50,15 +44,11 @@ namespace HealthChecks.Network
                         }
                         else
                         {
-                            _logger?.LogWarning($"The {nameof(SftpHealthCheck)} check fail for sftp host {item.Host}.");
-
                             return Task.FromResult(
                                 HealthCheckResult.Failed($"Connection with sftp host {item.Host}:{item.Port} failed"));
                         }
                     }
                 }
-
-                _logger?.LogInformation($"The {nameof(SftpHealthCheck)} check success.");
 
                 return Task.FromResult(
                     HealthCheckResult.Passed());
@@ -66,8 +56,6 @@ namespace HealthChecks.Network
             }
             catch (Exception ex)
             {
-                _logger?.LogWarning($"The {nameof(SftpHealthCheck)} check fail with the exception {ex.ToString()}.");
-
                 return Task.FromResult(
                     HealthCheckResult.Failed(exception:ex));
             }

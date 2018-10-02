@@ -29,7 +29,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from sqlite_master where type='table'");
+                    .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from sqlite_master where type='table'", tags: new string[] { "sqlite" });
                })
                .Configure(app =>
                {
@@ -38,7 +38,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                        Predicate = r => r.Tags.Contains("sqlite")
                    });
                });
-           
+
             var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
@@ -56,7 +56,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSqlite($"Data Source=fake.db", healthQuery: "select * from Users");
+                    .AddSqlite($"Data Source=fake.db", healthQuery: "select * from Users", tags: new string[] { "sqlite" });
                })
                .Configure(app =>
                {
@@ -83,7 +83,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from invaliddb");
+                    .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from invaliddb", tags: new string[] { "sqlite" });
                })
                .Configure(app =>
                {

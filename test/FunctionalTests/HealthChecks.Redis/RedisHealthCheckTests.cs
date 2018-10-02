@@ -35,7 +35,7 @@ namespace FunctionalTests.HealthChecks.Redis
              .ConfigureServices(services =>
              {
                  services.AddHealthChecks()
-                  .AddRedis(connectionString);
+                  .AddRedis(connectionString, tags: new string[] { "redis" });
              })
              .Configure(app =>
              {
@@ -62,7 +62,7 @@ namespace FunctionalTests.HealthChecks.Redis
              .ConfigureServices(services =>
              {
                  services.AddHealthChecks()
-                  .AddRedis("nonexistinghost:6379,allowAdmin=true");
+                  .AddRedis("nonexistinghost:6379,allowAdmin=true", tags: new string[] { "redis" });
              })
              .Configure(app =>
              {

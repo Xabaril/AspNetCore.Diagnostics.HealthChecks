@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -11,12 +10,10 @@ namespace HealthChecks.Uris
         : IHealthCheck
     {
         private readonly UriHealthCheckOptions _options;
-        private readonly ILogger<UriHealthCheck> _logger;
 
-        public UriHealthCheck(UriHealthCheckOptions options, ILogger<UriHealthCheck> logger = null)
+        public UriHealthCheck(UriHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            _logger = logger;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -27,8 +24,6 @@ namespace HealthChecks.Uris
 
             try
             {
-                _logger?.LogInformation($"{nameof(UriHealthCheck)} is checking configured uri's.");
-
                 foreach (var item in _options.UrisOptions)
                 {
                     var method = item.HttpMethod ?? defaultHttpMethod;
@@ -52,8 +47,6 @@ namespace HealthChecks.Uris
 
                         if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
                         {
-                            _logger?.LogWarning($"The {nameof(UriHealthCheck)} check fail for uri {item.Uri}.");
-
                             return HealthCheckResult.Failed($"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
                         }
 
@@ -61,14 +54,10 @@ namespace HealthChecks.Uris
                     }
                 }
 
-                _logger?.LogDebug($"The {nameof(UriHealthCheck)} check success.");
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)
             {
-                _logger?.LogWarning($"The {nameof(UriHealthCheck)} check fail with the exception {ex.ToString()}.");
-
                 return HealthCheckResult.Failed(exception:ex);
             }
         }

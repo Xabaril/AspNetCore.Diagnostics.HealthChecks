@@ -37,7 +37,7 @@ namespace BeatPulse.Npgsql
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddNpgSql(connectionString);
+                    .AddNpgSql(connectionString, tags: new string[] { "npgsql" });
                 })
                 .Configure(app =>
                 {
@@ -72,7 +72,7 @@ namespace BeatPulse.Npgsql
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                   .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB");
+                   .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB", tags: new string[] { "npgsql" });
                })
                .Configure(app =>
                {
@@ -100,7 +100,7 @@ namespace BeatPulse.Npgsql
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                  .AddNpgSql("Server=200.0.0.1;Port=5432;User ID=postgres;Password=Password12!;database=postgres");
+                  .AddNpgSql("Server=200.0.0.1;Port=5432;User ID=postgres;Password=Password12!;database=postgres", tags: new string[] { "npgsql" });
               })
               .Configure(app =>
               {

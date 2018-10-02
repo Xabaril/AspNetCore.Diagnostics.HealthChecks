@@ -41,7 +41,7 @@ namespace FunctionalTests.HealthChecks.System
                   .AddDiskStorageHealthCheck(setup =>
                   {
                       setup.AddDrive(testDrive.Name, targetFreeSpace);
-                  });
+                  }, tags: new string[] { "diskstorage" });
              })
              .Configure(app =>
              {
@@ -74,7 +74,7 @@ namespace FunctionalTests.HealthChecks.System
                   .AddDiskStorageHealthCheck(setup =>
                   {
                       setup.AddDrive(testDrive.Name, targetFreeSpace);
-                  });
+                  }, tags: new string[] { "diskstorage" });
              })
              .Configure(app =>
              {
@@ -102,7 +102,7 @@ namespace FunctionalTests.HealthChecks.System
                   .AddDiskStorageHealthCheck(setup =>
                   {
                       setup.AddDrive("nonexistingdisk", 104857600);
-                  });
+                  }, tags: new string[] { "diskstorage" });
              })
              .Configure(app =>
              {

@@ -4,7 +4,6 @@ using System.Net.Http;
 
 namespace HealthChecks.Uris
 {
-
     public interface IUriOptions
     {
         IUriOptions UseGet();

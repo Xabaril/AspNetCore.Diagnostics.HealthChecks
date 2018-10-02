@@ -42,7 +42,7 @@ namespace FunctionalTests.BeatPulse.Kafka
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddKafka(config);
+                    .AddKafka(config, tags: new string[] { "kafka" });
                 })
                 .Configure(app =>
                 {
@@ -74,7 +74,7 @@ namespace FunctionalTests.BeatPulse.Kafka
                  .ConfigureServices(services =>
                  {
                      services.AddHealthChecks()
-                     .AddKafka(config);
+                     .AddKafka(config, tags: new string[] { "kafka" });
                  })
                  .Configure(app =>
                  {

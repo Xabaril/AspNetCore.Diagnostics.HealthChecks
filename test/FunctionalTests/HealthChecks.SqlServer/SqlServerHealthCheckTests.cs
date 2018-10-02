@@ -37,7 +37,7 @@ namespace FunctionalTests.HealthChecks.SqlServer
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSqlServer(connectionString);
+                    .AddSqlServer(connectionString, tags: new string[] { "sqlserver" });
                })
                .Configure(app =>
                {
@@ -64,7 +64,7 @@ namespace FunctionalTests.HealthChecks.SqlServer
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                   .AddSqlServer("Server=tcp:200.0.0.100,1833;Initial Catalog=master;User Id=sa;Password=Password12!");
+                   .AddSqlServer("Server=tcp:200.0.0.100,1833;Initial Catalog=master;User Id=sa;Password=Password12!", tags: new string[] { "sqlserver" });
               })
               .Configure(app =>
               {
@@ -98,7 +98,7 @@ namespace FunctionalTests.HealthChecks.SqlServer
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                   .AddSqlServer(connectionString, healthQuery: "SELECT 1 FROM [NOT_VALID_DB]");
+                   .AddSqlServer(connectionString, healthQuery: "SELECT 1 FROM [NOT_VALID_DB]", tags: new string[] { "sqlserver" });
               })
               .Configure(app =>
               {

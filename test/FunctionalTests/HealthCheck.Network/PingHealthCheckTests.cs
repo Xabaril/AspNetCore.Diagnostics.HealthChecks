@@ -34,7 +34,7 @@ namespace FunctionalTests.BeatPulse.Network
                     .AddPingHealthCheck(setup =>
                     {
                         setup.AddHost("127.0.0.1", 5000);
-                    });
+                    }, tags: new string[] { "ping" });
                })
                .Configure(app =>
                {
@@ -64,7 +64,7 @@ namespace FunctionalTests.BeatPulse.Network
                     {
                         setup.AddHost("127.0.0.1", 3000);
                         setup.AddHost("nonexistinghost", 3000);
-                    });
+                    }, tags: new string[] { "ping" });
                })
                .Configure(app =>
                {

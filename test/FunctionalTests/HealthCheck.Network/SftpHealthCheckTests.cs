@@ -39,7 +39,7 @@ namespace FunctionalTests.BeatPulse.Network
                                         .Build();
 
                         setup.AddHost(cfg);
-                    });
+                    }, tags: new string[] { "sftp" });
                })
                .Configure(app =>
                {
@@ -72,7 +72,7 @@ namespace FunctionalTests.BeatPulse.Network
                                         .Build();
 
                        setup.AddHost(cfg);
-                   });
+                   }, tags: new string[] { "sftp" });
               })
               .Configure(app =>
               {
@@ -108,7 +108,7 @@ namespace FunctionalTests.BeatPulse.Network
                                         .Build();
 
                        setup.AddHost(cfg);
-                   });
+                   }, tags: new string[] { "sftp" });
               })
               .Configure(app =>
               {
@@ -145,7 +145,7 @@ namespace FunctionalTests.BeatPulse.Network
                                         .Build();
 
                        setup.AddHost(cfg);
-                   });
+                   }, tags: new string[] { "sftp" });
               })
               .Configure(app =>
               {
@@ -182,7 +182,7 @@ namespace FunctionalTests.BeatPulse.Network
                                         .Build();
 
                        setup.AddHost(cfg);
-                   });
+                   }, tags: new string[] { "sftp" });
               })
               .Configure(app =>
               {

@@ -32,7 +32,7 @@ namespace BeatPulse.MongoDb
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddMongoDb(connectionString);
+                    .AddMongoDb(connectionString,tags:new string[] { "mongodb" });
                 })
                 .Configure(app =>
                 {
@@ -59,7 +59,7 @@ namespace BeatPulse.MongoDb
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                   .AddMongoDb("mongodb://nonexistingdomain:27017");
+                   .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
                })
                .Configure(app =>
                {

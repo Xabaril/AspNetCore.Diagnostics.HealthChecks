@@ -37,6 +37,13 @@
     <MicrosoftAzureEventHubs>2.0.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>2.0.0</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.9</AWSSDKDynamoDBv2>
+    <NewtonsoftJson>11.0.2</NewtonsoftJson>
+    <MicrosoftAspNetCoreHostingAbstractions>2.1.1</MicrosoftAspNetCoreHostingAbstractions>
+    <MicrosoftEntityFrameworkCore>2.1.1</MicrosoftEntityFrameworkCore>
+    <MicrosoftEntityFrameworkCoreDesign>2.1.1</MicrosoftEntityFrameworkCoreDesign>
+    <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
+    <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
+    <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -61,5 +68,6 @@
     <HealthCheckDocumentDb>2.2.0-preview3-35304</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0-preview3-35304</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.0-preview3-35304</HealthCheckAzureServiceBus>
+    <HealthCheckUI>2.2.0-preview3-35304</HealthCheckUI>
   </PropertyGroup>
 </Project>

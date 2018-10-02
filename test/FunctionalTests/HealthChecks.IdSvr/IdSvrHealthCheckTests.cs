@@ -30,7 +30,7 @@ namespace FunctionalTests.HealthChecks.IdSvr
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddIdentityServer(new Uri("http://localhost:7777"));
+                    .AddIdentityServer(new Uri("http://localhost:7777"), tags: new string[] { "idsvr" });
                 })
                 .Configure(app =>
                 {
@@ -57,7 +57,7 @@ namespace FunctionalTests.HealthChecks.IdSvr
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddIdentityServer(new Uri("http://localhost:8888"));
+                    .AddIdentityServer(new Uri("http://localhost:8888"), tags: new string[] { "idsvr" });
                 })
                 .Configure(app=>
                 {

@@ -1,0 +1,34 @@
+{
+  "name": "beatpulse.ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:dll": "webpack-cli --mode production --config ./build/webpack.dll.js",
+    "buildcss:prod": "uglifycss ./assets/beatpulse.css --output ./assets/beatpulse.css",
+    "build:prod": "webpack-cli --mode production --config ./build/webpack.config.js",
+    "build": "npm run build:dll && npm run build:prod"
+  },
+  "author": "Xabaril Team",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "2.22.2",
+    "react": "16.4.0",
+    "react-burger-menu": "2.5.0",
+    "react-dom": "16.4.0",
+    "react-json-view": "1.17.0",
+    "react-router-dom": "4.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "16.3.16",
+    "@types/react-burger-menu": "2.2.0",
+    "@types/react-dom": "16.0.6",
+    "@types/react-router-dom": "4.2.7",
+    "awesome-typescript-loader": "5.0.0",
+    "typescript": "2.9.1",
+    "uglifycss": "0.0.29",
+    "url-loader": "1.0.1",
+    "webpack": "4.10.2",
+    "webpack-cli": "3.0.2"
+  }
+}

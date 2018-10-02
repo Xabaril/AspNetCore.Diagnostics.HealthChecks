@@ -32,7 +32,7 @@ namespace FunctionalTests.HealthChecks.MySql
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                   .AddMySql(connectionString);
+                   .AddMySql(connectionString, tags: new string[] { "mysql" });
                })
                .Configure(app =>
                {
@@ -61,7 +61,7 @@ namespace FunctionalTests.HealthChecks.MySql
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddMySql(connectionString);
+                    .AddMySql(connectionString, tags: new string[] { "mysql" });
                 })
                 .Configure(app =>
                 {

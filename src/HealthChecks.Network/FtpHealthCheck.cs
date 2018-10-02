@@ -21,7 +21,6 @@ namespace HealthChecks.Network
         {
             try
             {
-
                 foreach (var item in _options.Hosts.Values)
                 {
                     var ftpRequest = CreateFtpWebRequest(item.host, item.createFile, item.credentials);

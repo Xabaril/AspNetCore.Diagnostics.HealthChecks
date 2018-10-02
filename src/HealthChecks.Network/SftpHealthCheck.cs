@@ -17,7 +17,6 @@ namespace HealthChecks.Network
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -31,7 +30,6 @@ namespace HealthChecks.Network
                         sftpClient.Connect();
 
                         var connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
-
                         if (connectionSuccess)
                         {
                             if (item.FileCreationOptions.createFile)

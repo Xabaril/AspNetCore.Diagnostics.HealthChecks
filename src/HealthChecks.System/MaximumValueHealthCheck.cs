@@ -11,13 +11,11 @@ namespace HealthChecks.System
     {
         private readonly T maximunValue;
         private readonly Func<T> currentValueFunc;
-
         public MaximumValueHealthCheck(T maximunValue, Func<T> currentValueFunc)
         {
             this.maximunValue = maximunValue;
             this.currentValueFunc = currentValueFunc;
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var currentValue = currentValueFunc();

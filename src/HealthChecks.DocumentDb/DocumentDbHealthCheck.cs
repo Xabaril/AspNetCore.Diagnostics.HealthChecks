@@ -26,7 +26,6 @@ namespace HealthChecks.DocumentDb
                     _documentDbOptions.PrimaryKey))
                 {
                     await documentDbClient.OpenAsync();
-
                     return HealthCheckResult.Passed();
                 }
             }

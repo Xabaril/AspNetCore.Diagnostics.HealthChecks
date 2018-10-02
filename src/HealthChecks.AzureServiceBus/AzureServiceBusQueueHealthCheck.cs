@@ -34,8 +34,6 @@ namespace HealthChecks.AzureServiceBus
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await queueClient.CancelScheduledMessageAsync(scheduledMessageId);
-
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)

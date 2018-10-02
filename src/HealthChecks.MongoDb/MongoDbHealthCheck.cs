@@ -22,7 +22,6 @@ namespace HealthChecks.MongoDb
             {
                 await new MongoClient(_connectionString)
                     .ListDatabasesAsync(cancellationToken);
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)

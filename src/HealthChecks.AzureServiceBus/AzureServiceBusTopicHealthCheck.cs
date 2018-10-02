@@ -20,7 +20,6 @@ namespace HealthChecks.AzureServiceBus
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _topicName = topicName ?? throw new ArgumentNullException(nameof(topicName));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -32,7 +31,6 @@ namespace HealthChecks.AzureServiceBus
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await topicClient.CancelScheduledMessageAsync(scheduledMessageId);
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)

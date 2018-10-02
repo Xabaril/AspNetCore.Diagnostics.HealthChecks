@@ -10,12 +10,10 @@ namespace HealthChecks.Uris
         : IHealthCheck
     {
         private readonly UriHealthCheckOptions _options;
-
         public UriHealthCheck(UriHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var defaultHttpMethod = _options.HttpMethod;

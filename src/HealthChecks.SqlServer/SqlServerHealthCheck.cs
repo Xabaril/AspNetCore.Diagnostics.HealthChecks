@@ -11,13 +11,11 @@ namespace HealthChecks.SqlServer
     {
         private readonly string _connectionString;
         private readonly string _sql;
-
         public SqlServerHealthCheck(string sqlserverconnectionstring, string sql)
         {
             _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -29,7 +27,6 @@ namespace HealthChecks.SqlServer
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-
                         await command.ExecuteScalarAsync();
                     }
 

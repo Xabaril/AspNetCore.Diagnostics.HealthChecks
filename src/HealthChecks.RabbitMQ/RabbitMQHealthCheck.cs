@@ -28,7 +28,6 @@ namespace HealthChecks.RabbitMQ
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel())
                 {
-
                     return Task.FromResult(
                         HealthCheckResult.Passed());
                 }

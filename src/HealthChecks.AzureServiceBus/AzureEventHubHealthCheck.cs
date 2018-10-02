@@ -26,13 +26,10 @@ namespace HealthChecks.AzureServiceBus
                 {
                     EntityPath = _eventHubName
                 };
-
                 var eventHubClient = EventHubClient
                     .CreateFromConnectionString(connectionStringBuilder.ToString());
 
                 await eventHubClient.GetRuntimeInformationAsync();
-
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)

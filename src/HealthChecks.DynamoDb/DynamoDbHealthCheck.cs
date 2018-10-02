@@ -28,7 +28,6 @@ namespace HealthChecks.DynamoDb
                 var client = new AmazonDynamoDBClient(credentials, _options.RegionEndpoint);
 
                 await client.ListTablesAsync();
-
                 return HealthCheckResult.Passed();
             }
             catch (Exception ex)

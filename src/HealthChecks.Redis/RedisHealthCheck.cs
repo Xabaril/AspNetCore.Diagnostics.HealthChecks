@@ -10,12 +10,10 @@ namespace HealthChecks.Redis
         : IHealthCheck
     {
         private readonly string _redisConnectionString;
-
         public RedisHealthCheck(string redisConnectionString)
         {
             _redisConnectionString = redisConnectionString ?? throw new ArgumentNullException(nameof(redisConnectionString));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

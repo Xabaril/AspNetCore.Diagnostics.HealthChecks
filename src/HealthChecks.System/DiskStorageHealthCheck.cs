@@ -11,12 +11,10 @@ namespace HealthChecks.System
         : IHealthCheck
     {
         private readonly DiskStorageOptions _options;
-
         public DiskStorageHealthCheck(DiskStorageOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

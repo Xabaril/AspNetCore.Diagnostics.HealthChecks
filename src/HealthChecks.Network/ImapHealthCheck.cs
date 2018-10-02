@@ -47,7 +47,6 @@ namespace HealthChecks.Network
                 }
 
                 return HealthCheckResult.Passed();
-
             }
             catch (Exception ex)
             {

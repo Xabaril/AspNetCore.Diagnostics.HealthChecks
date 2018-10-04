@@ -10,7 +10,7 @@ const PlusIcon = require("../../assets/svg/plus.svg");
 const MinusIcon = require('../../assets/svg/minus.svg');
 
 
-const beatPulseIntervalStorageKey = "healthchecks-ui-polling";
+const healthChecksIntervalStorageKey = "healthchecks-ui-polling";
 
 interface LivenessState {
     error: Nullable<string>;
@@ -33,7 +33,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
         this.expandAll = this.expandAll.bind(this);
         this.collapseAll = this.collapseAll.bind(this);
 
-        const pollingIntervalSetting = localStorage.getItem(beatPulseIntervalStorageKey) || 10;
+        const pollingIntervalSetting = localStorage.getItem(healthChecksIntervalStorageKey) || 10;
 
         this.state = {
             error: '',
@@ -72,12 +72,12 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
     }
 
     initPolling() {
-        localStorage.setItem(beatPulseIntervalStorageKey, this.state.pollingIntervalSetting.toString());
+        localStorage.setItem(healthChecksIntervalStorageKey, this.state.pollingIntervalSetting.toString());
         this._healthChecksClient.startPolling(this.configuredInterval(), this.onPollingElapsed.bind(this));
     }
 
     configuredInterval(): string | number {
-        let configuredInterval = localStorage.getItem(beatPulseIntervalStorageKey) || this.state.pollingIntervalSetting;
+        let configuredInterval = localStorage.getItem(healthChecksIntervalStorageKey) || this.state.pollingIntervalSetting;
         return (configuredInterval as any) * 1000;
     }
 
@@ -121,7 +121,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
             <div className="container liveness-container">
                 <div className="row top-buffer-40">
                     <div className="header-logo">
-                        <img src={DarkHeartIcon} className="logo-icon" /><h2 className="title">BeatPulse Liveness status</h2>
+                        <img src={DarkHeartIcon} className="logo-icon" /><h2 className="title">Health Checks status</h2>
                     </div>
                     <div className="col text-right">
                         <label>Refresh every</label>

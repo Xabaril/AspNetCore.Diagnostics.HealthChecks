@@ -9,7 +9,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "../assets"),
-        filename: 'beatpulse-bundle.js'
+        filename: 'healthchecks-bundle.js'
     },
     module: {
         rules: [

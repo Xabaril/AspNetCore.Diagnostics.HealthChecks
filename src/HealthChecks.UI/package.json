@@ -1,11 +1,11 @@
 {
-  "name": "beatpulse.ui",
+  "name": "healthchecks.ui",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build:dll": "webpack-cli --mode production --config ./build/webpack.dll.js",
-    "buildcss:prod": "uglifycss ./assets/beatpulse.css --output ./assets/beatpulse.css",
+    "buildcss:prod": "uglifycss ./assets/healthchecksui.css --output ./assets/healthchecksui.css",
     "build:prod": "webpack-cli --mode production --config ./build/webpack.config.js",
     "build": "npm run build:dll && npm run build:prod"
   },

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    class BackgroundService
+    class LivenessHostedService
         : IHostedService
     {
-        private readonly ILogger<BackgroundService> _logger;
+        private readonly ILogger<LivenessHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
 
         private Task _executingTask;
 
-        public BackgroundService(IServiceProvider provider,IOptions<Settings> settings, ILogger<BackgroundService> logger)
+        public LivenessHostedService(IServiceProvider provider,IOptions<Settings> settings, ILogger<LivenessHostedService> logger)
         {
             _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(provider));

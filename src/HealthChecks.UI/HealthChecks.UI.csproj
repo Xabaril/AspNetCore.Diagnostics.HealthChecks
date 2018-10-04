@@ -17,6 +17,7 @@
     <EmbeddedResource Include="assets\healthchecksui.css" />
     <EmbeddedResource Include="assets\bootstrap-min.css" />
     <EmbeddedResource Include="assets\vendors-dll.js" />    
+    <EmbeddedResource Include="assets\healthchecks-bundle.js" /> 
   </ItemGroup>
 
   <ItemGroup>

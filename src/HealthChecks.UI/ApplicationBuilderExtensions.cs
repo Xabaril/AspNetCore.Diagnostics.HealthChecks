@@ -15,6 +15,10 @@ namespace HealthChecks.UI
 
             return ConfigurePipeline(app, options);
         }
+        public static IApplicationBuilder UseHealthChecksUI(this IApplicationBuilder app)
+        {
+            return ConfigurePipeline(app, new Options());
+        }
 
         private static IApplicationBuilder ConfigurePipeline(IApplicationBuilder app, Options options)
         {
@@ -23,7 +27,7 @@ namespace HealthChecks.UI
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 
             app.Map(options.ApiPath, appBuilder => appBuilder.UseMiddleware<UIApiEndpointMiddleware>());
-            app.Map(options.UIPath, appBuilder => appBuilder.UseMiddleware<UIWebHooksApiMiddleware>());
+            app.Map(options.WebhookPath, appBuilder => appBuilder.UseMiddleware<UIWebHooksApiMiddleware>());
 
             new UIResourcesMapper(
                 new UIEmbeddedResourcesReader(embeddedResourcesAssembly))

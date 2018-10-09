@@ -14,15 +14,15 @@ namespace HealthChecks.Publisher.ApplicationInsights.DependencyInjection
     /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
     public static class ApplicationInsightsHealthCheckBuilderExtensions
     {
-        public static IHealthChecksBuilder AddApplicationInsightsPublisher(this IHealthChecksBuilder builder,string instrumentationKey = default)
-        {
-            builder.Services
-               .AddSingleton<IHealthCheckPublisher>(sp =>
-               {
-                   return new ApplicationInsightsPublisher(instrumentationKey);
-               });
+        //public static IHealthChecksBuilder AddApplicationInsightsPublisher(this IHealthChecksBuilder builder,string instrumentationKey = default)
+        //{
+        //    builder.Services
+        //       .AddSingleton<IHealthCheckPublisher>(sp =>
+        //       {
+        //           return new ApplicationInsightsPublisher(instrumentationKey);
+        //       });
 
-            return builder;
-        }
+        //    return builder;
+        //}
     }
 }

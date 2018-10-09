@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package Versions">
-    <MicrosoftExtensionsDiagnosticsHealthChecks>3.0.0-alpha1-10549</MicrosoftExtensionsDiagnosticsHealthChecks>
-    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-preview3-35304</MicrosoftAspNetCoreDiagnosticsHealthChecks>
+    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0-preview3-35374</MicrosoftExtensionsDiagnosticsHealthChecks>
+    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-preview3-35374</MicrosoftAspNetCoreDiagnosticsHealthChecks>
     <FluentAssertions>5.4.2</FluentAssertions>
     <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
     <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>
@@ -44,6 +44,7 @@
     <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -69,5 +70,7 @@
     <HealthCheckAzureStorage>2.2.0-preview3-35304</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.0-preview3-35304</HealthCheckAzureServiceBus>
     <HealthCheckUI>2.2.0-preview3-35304</HealthCheckUI>
+    <HealthCheckUIClient>2.2.0-preview3-35304</HealthCheckUIClient>
+    <HealthCheckPublisherAppplicationInsights>2.2.0-preview3-35304</HealthCheckPublisherAppplicationInsights>
   </PropertyGroup>
 </Project>

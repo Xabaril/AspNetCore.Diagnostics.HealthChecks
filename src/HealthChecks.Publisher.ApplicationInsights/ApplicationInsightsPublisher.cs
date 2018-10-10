@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace HealthChecks.Publisher.ApplicationInsights
 {
     class ApplicationInsightsPublisher
+        :IHealthCheckPublisher
     {
         const string EVENT_NAME = "AspNetCoreHealthCheck";
         const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
@@ -22,7 +23,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _instrumentationKey = instrumentationKey;
         }
 
-        Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
+        public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             //override instrumentation key or use default instrumentation 
             //key active on the project.

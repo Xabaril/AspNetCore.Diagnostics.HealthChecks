@@ -14,13 +14,6 @@ namespace HealthChecks.UI.Core.Data.Configuration
             builder.Property(le => le.LastExecuted)
                 .IsRequired(true);
 
-            builder.Property(le => le.Status)
-                .HasMaxLength(50)
-                .IsRequired(true);
-
-            builder.Property(le => le.IsHealthy)
-               .IsRequired(true);
-
             builder.Property(le => le.Uri)
                 .HasMaxLength(500)
                 .IsRequired(true);
@@ -29,14 +22,13 @@ namespace HealthChecks.UI.Core.Data.Configuration
                .HasMaxLength(500)
                .IsRequired(true);
 
-            builder.Property(le => le.Result)
-                .HasMaxLength(2000)
-                .IsRequired(true);
-
             builder.Property(le => le.DiscoveryService)
                 .HasMaxLength(50);
 
             builder.HasMany(le => le.History)
+                .WithOne();
+
+            builder.HasMany(le => le.Entries)
                 .WithOne();
         }
     }

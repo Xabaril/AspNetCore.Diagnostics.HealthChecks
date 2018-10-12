@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    class LivenessHostedService
+    class HealthCheckCollectorHostedService
         : IHostedService
     {
-        private readonly ILogger<LivenessHostedService> _logger;
+        private readonly ILogger<HealthCheckCollectorHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
 
         private Task _executingTask;
 
-        public LivenessHostedService(IServiceProvider provider,IOptions<Settings> settings, ILogger<LivenessHostedService> logger)
+        public HealthCheckCollectorHostedService(IServiceProvider provider,IOptions<Settings> settings, ILogger<HealthCheckCollectorHostedService> logger)
         {
             _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(provider));
@@ -53,11 +53,11 @@ namespace HealthChecks.UI.Core.HostedService
                 using (var scope = scopeFactory.CreateScope())
                 {
                     var runner = scope.ServiceProvider
-                        .GetRequiredService<ILivenessRunner>();
+                        .GetRequiredService<IHealthCheckReportCollector>();
 
                     try
                     {
-                        await runner.Run(cancellationToken);
+                        await runner.Collect(cancellationToken);
 
                         _logger.LogDebug("BackgroundService executed succesfully.");
                     }

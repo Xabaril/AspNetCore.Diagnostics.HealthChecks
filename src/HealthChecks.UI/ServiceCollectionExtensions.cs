@@ -1,5 +1,4 @@
 ﻿using HealthChecks.UI.Configuration;
-using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
 using HealthChecks.UI.Core.HostedService;
@@ -28,9 +27,9 @@ namespace HealthChecks.UI
                 configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
             });
 
-            services.AddSingleton<IHostedService, LivenessHostedService>();
+            services.AddSingleton<IHostedService, HealthCheckCollectorHostedService>();
             services.AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
-            services.AddScoped<ILivenessRunner, LivenessRunner>();
+            services.AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
             services.AddDbContext<HealthChecksDb>(db =>
             {
                 db.UseSqlite("Data Source=healthchecksdb");

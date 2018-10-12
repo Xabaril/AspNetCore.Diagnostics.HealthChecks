@@ -26,6 +26,7 @@ namespace HealthChecks.UI.Core.Data
         {
             modelBuilder.ApplyConfiguration(new HealthCheckConfigurationMap());
             modelBuilder.ApplyConfiguration(new HealthCheckExecutionMap());
+            modelBuilder.ApplyConfiguration(new HealthCheckExecutionEntryMap());
             modelBuilder.ApplyConfiguration(new HealthCheckExecutionHistoryMap());
             modelBuilder.ApplyConfiguration(new HealthCheckFailureNotificationsMap());
         }

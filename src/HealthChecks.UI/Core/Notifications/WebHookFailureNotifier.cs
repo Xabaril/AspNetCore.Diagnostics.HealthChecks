@@ -1,6 +1,7 @@
 ﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -25,33 +26,36 @@ namespace HealthChecks.UI.Core.Notifications
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task NotifyDown(string livenessName, string message)
+        public async Task NotifyDown(string name, HealthReport report)
         {
-            await Notify(livenessName, failure: message, isUp: false);
+            await Notify(name, 
+                failure: GetFailedMessageFromContent(report), 
+                IsHealthy: false);
         }
 
-        public async Task NotifyWakeUp(string livenessName)
+        public async Task NotifyWakeUp(string name)
         {
-            await Notify(livenessName, isUp: true);
+            await Notify(name, 
+                IsHealthy: true);
         }
 
-        private async Task Notify(string livenessName, string failure = "", bool isUp = false)
+        private async Task Notify(string name, string failure = "", bool IsHealthy = false)
         {
             foreach (var webHook in _settings.Webhooks)
             {
-                var payload = isUp ? webHook.RestoredPayload : webHook.Payload;
+                var payload = IsHealthy ? webHook.RestoredPayload : webHook.Payload;
+                
+                payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name);
 
-                payload = payload.Replace(Keys.LIVENESS_BOOKMARK, livenessName);
-
-                if (!await IsNotifiedOnWindowTime(livenessName, isUp))
+                if (!await IsNotifiedOnWindowTime(name, IsHealthy))
                 {
                     payload = payload.Replace(Keys.FAILURE_BOOKMARK, failure);
 
                     await SaveNotification(new HealthCheckFailureNotification()
                     {
                         LastNotified = DateTime.UtcNow,
-                        HealthCheckName = livenessName,
-                        IsUpAndRunning = isUp
+                        HealthCheckName = name,
+                        IsUpAndRunning = IsHealthy
                     });
 
                     await SendRequest(webHook.Uri, webHook.Name, payload);
@@ -62,6 +66,15 @@ namespace HealthChecks.UI.Core.Notifications
                 }
             }
         }
+        private string GetFailedMessageFromContent(HealthReport healthReport)
+        {
+            var failedChecks = healthReport.Entries.Values
+                .Where(c => c.Status != HealthStatus.Healthy)
+                .Count();
+
+            return $"There is at least {failedChecks} HealthChecks  failing.";
+        }
+
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
         {
             var lastNotification = await _db.Failures
@@ -107,7 +120,6 @@ namespace HealthChecks.UI.Core.Notifications
                         _logger.LogError($"The webhook notification has not executed successfully for {name} webhook. The error code is {response.StatusCode}.");
                     }
                 }
-
             }
             catch (Exception exception)
             {

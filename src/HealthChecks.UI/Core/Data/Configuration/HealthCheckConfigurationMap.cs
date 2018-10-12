@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace HealthChecks.UI.Core.Data.Configuration
 {
     class HealthCheckConfigurationMap
-        : IEntityTypeConfiguration<HealthCheckConfiguration>
+        : IEntityTypeConfiguration< HealthCheckConfiguration>
     {
         public void Configure(EntityTypeBuilder<HealthCheckConfiguration> builder)
         {

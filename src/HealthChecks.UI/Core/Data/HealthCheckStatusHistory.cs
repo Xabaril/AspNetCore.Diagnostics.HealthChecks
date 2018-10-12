@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
 
 namespace HealthChecks.UI.Core.Data
 {
@@ -6,7 +7,7 @@ namespace HealthChecks.UI.Core.Data
     {
         public int Id { get; set; }
 
-        public string Status { get; set; }
+        public HealthStatus Status { get; set; }
 
         public DateTime On { get; set; }
     }

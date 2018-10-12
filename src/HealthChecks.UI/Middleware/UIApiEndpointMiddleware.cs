@@ -29,25 +29,26 @@ namespace HealthChecks.UI.Middleware
 
                 var cancellationToken = new CancellationToken();
 
-                var registeredLiveness = await db.Configurations
+                var healthChecks = await db.Configurations
                     .ToListAsync(cancellationToken);
 
-                var livenessExecutions = new List<HealthCheckExecution>();
+                var healthChecksExecutions = new List<HealthCheckExecution>();
 
-                foreach (var item in registeredLiveness)
+                foreach (var item in healthChecks)
                 {
                     var execution = await db.Executions
                         .Include(le => le.History)
+                        .Include(le => le.Entries)
                         .Where(le => le.Name.Equals(item.Name, StringComparison.InvariantCultureIgnoreCase))
                         .SingleOrDefaultAsync(cancellationToken);
 
                     if (execution != null)
                     {
-                        livenessExecutions.Add(execution);
+                        healthChecksExecutions.Add(execution);
                     }
                 }
 
-                var responseContent = JsonConvert.SerializeObject(livenessExecutions, new JsonSerializerSettings()
+                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, new JsonSerializerSettings()
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });

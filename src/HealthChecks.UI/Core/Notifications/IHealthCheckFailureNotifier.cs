@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
 {
     interface IHealthCheckFailureNotifier
     {
-        Task NotifyDown(string livenessName, string message);
+        Task NotifyDown(string name, HealthReport report);
 
-        Task NotifyWakeUp(string livenessName);
+        Task NotifyWakeUp(string name);
     }
 }

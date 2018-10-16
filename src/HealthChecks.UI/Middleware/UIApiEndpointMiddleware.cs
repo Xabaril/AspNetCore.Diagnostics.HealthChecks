@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,8 @@ namespace HealthChecks.UI.Middleware
 
                 var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, new JsonSerializerSettings()
                 {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Converters = new[] { new StringEnumConverter() }
                 });
 
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;

@@ -5,13 +5,13 @@ export interface HttpRequest {
     content?: any;
 }
 export interface Liveness {
-    livenessName: string;
+    name: string;
     onStateFrom: string;
     lastExecuted: string;
     status: string;
     livenessResult: string;
     discoveryService: string;
-    checks : Array<Check>;
+    entries : Array<Check>;
 }
 
 export interface LivenessResult {
@@ -20,12 +20,9 @@ export interface LivenessResult {
 
 export interface Check {
     name: string;
-    message: string;
-    exception: string;
-    elapsed: string;
-    run: boolean;
-    path: string,
-    isHealthy: boolean
+    status: string;
+    description: string;
+    duration: string;    
 }
 
 interface WebHook {

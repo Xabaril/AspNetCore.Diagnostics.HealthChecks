@@ -1,5 +1,6 @@
 import React from "react";
 import { Check } from "../typings/models";
+import { getStatusImage } from "../healthChecksResources";
 
 interface CheckTableProps {
     checks: Array<Check>;
@@ -9,7 +10,7 @@ const renderTable = (props: CheckTableProps) => {
 
     if (!Array.isArray(props.checks)) {
         return <tr>
-            <td className="td-message" colSpan={6}>{props.checks}</td></tr>;
+            <td className="td-message" colSpan={4}>{props.checks}</td></tr>;
     }
 
     return props.checks.map((item, index) => {
@@ -17,20 +18,15 @@ const renderTable = (props: CheckTableProps) => {
             <td>
                 {item.name}
             </td>
-            <td>
-                {item.message}
+            <td className="centered">
+                <img className="status-icon" src={getStatusImage(item.status)} />
+                {item.status}
             </td>
             <td>
-                {item.elapsed}
+                {item.description}
             </td>
             <td>
-                {item.run.toString()}
-            </td>
-            <td>
-                {item.path}
-            </td>
-            <td>
-                {item.isHealthy.toString()}
+                {item.duration.toString()}
             </td>
         </tr>
     });
@@ -42,11 +38,9 @@ const CheckTable: React.SFC<CheckTableProps> = (props) => {
         <thead className="thead-black">
             <tr>
                 <th>Name</th>
-                <th>Message</th>
-                <th>Elapsed time</th>
-                <th>Run</th>
-                <th>Path</th>
-                <th>Is Healthy</th>
+                <th>Health</th>
+                <th>Description</th>
+                <th>Duration</th>                
             </tr>
         </thead>
         <tbody>

@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Liveness, Check } from "../typings/models";
+import { Liveness } from "../typings/models";
 import { getStatusImage, discoveryServices } from "../healthChecksResources";
 import { CheckTable } from "./CheckTable";
 
@@ -42,10 +42,6 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
         return new Date(date).toLocaleString();
     }
 
-    getStatusImage(status: string) {
-        return getStatusImage(status);
-    }
-
     getDiscoveryServiceImage(discoveryService: string) {
 
         if (discoveryService != null) {
@@ -75,9 +71,9 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
                     <tr>
                         <th></th>
                         <th>Name</th>
-                        <th>IsHealthy</th>
-                        <th>Status</th>
-                        <th>Last Execution</th>
+                        <th>Health</th>
+                        <th>On state from</th>
+                        <th>Last execution</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,10 +85,10 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
                                 </td>
                                 <td>
                                     {this.getDiscoveryServiceImage(item.discoveryService)}
-                                    {item.livenessName}
+                                    {item.name}
                                 </td>
                                 <td className="centered">
-                                    <img className="status-icon" src={this.getStatusImage(item.status)} />
+                                    <img className="status-icon" src={getStatusImage(item.status)} />
                                 </td>
                                 <td>
                                     {item.onStateFrom}
@@ -103,7 +99,7 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
                             </tr>
                             <tr className="checks-table hidden">
                                 <td style={{ padding: 0 }} colSpan={5}>
-                                    <CheckTable checks={item.checks} />
+                                    <CheckTable checks={item.entries} />
                                 </td>
                             </tr>
                         </React.Fragment>

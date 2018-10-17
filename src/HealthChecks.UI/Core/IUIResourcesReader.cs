@@ -2,7 +2,7 @@
 
 namespace HealthChecks.UI.Core
 {
-    interface IUIResourcesReader
+    internal interface IUIResourcesReader
     {
         IEnumerable<UIResource> UIResources { get; }
     }

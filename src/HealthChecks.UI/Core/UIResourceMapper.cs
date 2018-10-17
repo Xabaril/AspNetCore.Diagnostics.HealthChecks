@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core
 {
-    class UIResourcesMapper
+    internal class UIResourcesMapper
     {
         private readonly IUIResourcesReader _reader;
 

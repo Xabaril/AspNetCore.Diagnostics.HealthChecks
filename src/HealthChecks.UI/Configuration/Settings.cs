@@ -2,9 +2,9 @@
 
 namespace HealthChecks.UI.Configuration
 {
-    class Settings
+    internal class Settings
     {
-        public List<HealthCheckSetting> Liveness { get; set; }
+        public List<HealthCheckSetting> HealthChecks { get; set; }
 
         public List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
 
@@ -13,14 +13,14 @@ namespace HealthChecks.UI.Configuration
         public int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
     }
 
-    class HealthCheckSetting
+    internal class HealthCheckSetting
     {
         public string Name { get; set; }
 
         public string Uri { get; set; }
     }
 
-    class WebHookNotification
+    internal class WebHookNotification
     {
         public string Name { get; set; }
         public string Uri { get; set; }

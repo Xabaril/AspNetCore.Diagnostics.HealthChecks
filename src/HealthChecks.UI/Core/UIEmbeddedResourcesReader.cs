@@ -5,7 +5,8 @@ using System.Reflection;
 
 namespace HealthChecks.UI.Core
 {
-    class UIEmbeddedResourcesReader : IUIResourcesReader
+    internal class UIEmbeddedResourcesReader
+        : IUIResourcesReader
     {
         private readonly Assembly _assembly;
 
@@ -40,7 +41,7 @@ namespace HealthChecks.UI.Core
                 using (var reader = new StreamReader(contentStream))
                 {
                     string result = reader.ReadToEnd();
-                    
+
                     resourceList.Add(
                         UIResource.Create($"{fileName}.{extension}", result,
                         ContentType.FromExtension(extension)));

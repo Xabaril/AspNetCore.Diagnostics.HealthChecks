@@ -2,7 +2,7 @@
 
 namespace HealthChecks.UI.Core
 {
-    class UIResource
+    internal class UIResource
     {
         public string Content { get; internal set; }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HealthChecks.UI.Core
 {
-    class ContentType
+    internal class ContentType
     {
         public const string JAVASCRIPT = "text/javascript";
         public const string CSS = "text/css";

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    class HealthCheckCollectorHostedService
+    internal class HealthCheckCollectorHostedService
         : IHostedService
     {
         private readonly ILogger<HealthCheckCollectorHostedService> _logger;
@@ -48,7 +48,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogDebug("Executing Background service.");
+                _logger.LogDebug("Executing HealthCheck collector HostedService.");
 
                 using (var scope = scopeFactory.CreateScope())
                 {
@@ -59,11 +59,11 @@ namespace HealthChecks.UI.Core.HostedService
                     {
                         await runner.Collect(cancellationToken);
 
-                        _logger.LogDebug("BackgroundService executed succesfully.");
+                        _logger.LogDebug("HealthCheck collector HostedService executed succesfully.");
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError("BackgroundService throw a error:", ex);
+                        _logger.LogError("HealthCheck collector HostedService throw a error:", ex);
                     }  
                 }
 

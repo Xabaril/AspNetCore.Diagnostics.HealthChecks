@@ -1,10 +1,9 @@
 ﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
-using Microsoft.AspNetCore.Builder;
 using System;
 
-namespace HealthChecks.UI
+namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {

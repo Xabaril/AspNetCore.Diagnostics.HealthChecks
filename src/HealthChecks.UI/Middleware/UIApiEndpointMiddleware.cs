@@ -7,30 +7,34 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Middleware
 {
-    class UIApiEndpointMiddleware
+    internal class UIApiEndpointMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly JsonSerializerSettings _jsonSerializationSettings;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public UIApiEndpointMiddleware(RequestDelegate next)
+        public UIApiEndpointMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {
             _next = next;
+            _serviceScopeFactory = serviceScopeFactory;
+            _jsonSerializationSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
-        public async Task InvokeAsync(HttpContext context, IServiceScopeFactory serviceScopeFactory)
+        public async Task InvokeAsync(HttpContext context)
         {
-            using (var scope = serviceScopeFactory.CreateScope())
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var db = scope.ServiceProvider.GetService<HealthChecksDb>();
 
-                var cancellationToken = new CancellationToken();
-
                 var healthChecks = await db.Configurations
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync();
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 
@@ -40,7 +44,7 @@ namespace HealthChecks.UI.Middleware
                         .Include(le => le.History)
                         .Include(le => le.Entries)
                         .Where(le => le.Name.Equals(item.Name, StringComparison.InvariantCultureIgnoreCase))
-                        .SingleOrDefaultAsync(cancellationToken);
+                        .SingleOrDefaultAsync();
 
                     if (execution != null)
                     {
@@ -48,13 +52,9 @@ namespace HealthChecks.UI.Middleware
                     }
                 }
 
-                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, new JsonSerializerSettings()
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
+                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
 
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
-
                 await context.Response.WriteAsync(responseContent);
             }
         }

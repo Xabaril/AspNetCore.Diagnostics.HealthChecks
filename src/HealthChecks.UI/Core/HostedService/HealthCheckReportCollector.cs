@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    class HealthCheckReportCollector
+    internal class HealthCheckReportCollector
         : IHealthCheckReportCollector
     {
         private readonly HealthChecksDb _db;
@@ -36,7 +36,7 @@ namespace HealthChecks.UI.Core.HostedService
 
         public async Task Collect(CancellationToken cancellationToken)
         {
-            using (_logger.BeginScope("HealthReportCollector is on Collect method."))
+            using (_logger.BeginScope("HealthReportCollector is collection health checks results."))
             {
                 var healthChecks = await _db.Configurations
                    .ToListAsync();
@@ -45,7 +45,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        _logger.LogDebug("HealthReportCollector Collect is cancelled.");
+                        _logger.LogDebug("HealthReportCollector is cancelled.");
 
                         break;
                     }
@@ -66,7 +66,7 @@ namespace HealthChecks.UI.Core.HostedService
                     await SaveExecutionHistory(item, healthReport);
                 }
 
-                _logger.LogDebug("HealthReportCollector Collect is completed.");
+                _logger.LogDebug("HealthReportCollector is completed.");
             }
         }
 

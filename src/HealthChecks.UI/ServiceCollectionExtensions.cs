@@ -1,22 +1,22 @@
-﻿using HealthChecks.UI.Configuration;
+﻿using HealthChecks.UI;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HealthChecks.UI
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddHealthChecksUI(this IServiceCollection services)
+        public static IServiceCollection AddHealthChecksUI(this IServiceCollection services, string databaseName = "healthchecksdb")
         {
             var configuration = services.BuildServiceProvider()
                 .GetService<IConfiguration>();
@@ -32,7 +32,7 @@ namespace HealthChecks.UI
             services.AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
             services.AddDbContext<HealthChecksDb>(db =>
             {
-                db.UseSqlite("Data Source=healthchecksdb");
+                db.UseSqlite($"Data Source={databaseName}");
             });
 
             var kubernetesDiscoveryOptions = new KubernetesDiscoveryOptions();
@@ -71,7 +71,7 @@ namespace HealthChecks.UI
                 await db.Database.MigrateAsync();
 
                 var liveness = settings.Value?
-                    .Liveness?
+                    .HealthChecks?
                     .Select(s => new HealthCheckConfiguration()
                     {
                         Name = s.Name,

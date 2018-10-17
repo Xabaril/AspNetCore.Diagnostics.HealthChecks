@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace HealthChecks.UI.Core
 {
-    static class UIResourceExtensions
+    internal static class UIResourceExtensions
     {
         public static IEnumerable<UIResource> WithContentType(this IEnumerable<UIResource> resources, string contentType)
         {

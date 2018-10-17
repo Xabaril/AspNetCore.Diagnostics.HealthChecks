@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
 {
-    class WebHookFailureNotifier
+    internal class WebHookFailureNotifier
         : IHealthCheckFailureNotifier
     {
         private readonly ILogger<WebHookFailureNotifier> _logger;
@@ -30,24 +30,24 @@ namespace HealthChecks.UI.Core.Notifications
         {
             await Notify(name, 
                 failure: GetFailedMessageFromContent(report), 
-                IsHealthy: false);
+                isHealthy: false);
         }
 
         public async Task NotifyWakeUp(string name)
         {
             await Notify(name, 
-                IsHealthy: true);
+                isHealthy: true);
         }
 
-        private async Task Notify(string name, string failure = "", bool IsHealthy = false)
+        private async Task Notify(string name, string failure = "", bool isHealthy = false)
         {
             foreach (var webHook in _settings.Webhooks)
             {
-                var payload = IsHealthy ? webHook.RestoredPayload : webHook.Payload;
+                var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
                 
                 payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name);
 
-                if (!await IsNotifiedOnWindowTime(name, IsHealthy))
+                if (!await IsNotifiedOnWindowTime(name, isHealthy))
                 {
                     payload = payload.Replace(Keys.FAILURE_BOOKMARK, failure);
 
@@ -55,7 +55,7 @@ namespace HealthChecks.UI.Core.Notifications
                     {
                         LastNotified = DateTime.UtcNow,
                         HealthCheckName = name,
-                        IsUpAndRunning = IsHealthy
+                        IsUpAndRunning = isHealthy
                     });
 
                     await SendRequest(webHook.Uri, webHook.Name, payload);
@@ -66,14 +66,7 @@ namespace HealthChecks.UI.Core.Notifications
                 }
             }
         }
-        private string GetFailedMessageFromContent(HealthReport healthReport)
-        {
-            var failedChecks = healthReport.Entries.Values
-                .Where(c => c.Status != HealthStatus.Healthy)
-                .Count();
-
-            return $"There is at least {failedChecks} HealthChecks  failing.";
-        }
+        
 
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
         {
@@ -94,7 +87,9 @@ namespace HealthChecks.UI.Core.Notifications
         {
             if (notification != null)
             {
-                await _db.Failures.AddAsync(notification);
+                await _db.Failures
+                    .AddAsync(notification);
+
                 await _db.SaveChangesAsync();
             }
         }
@@ -125,6 +120,14 @@ namespace HealthChecks.UI.Core.Notifications
             {
                 _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
             }
+        }
+        private string GetFailedMessageFromContent(HealthReport healthReport)
+        {
+            var failedChecks = healthReport.Entries.Values
+                .Where(c => c.Status != HealthStatus.Healthy)
+                .Count();
+
+            return $"There is at least {failedChecks} HealthChecks failing.";
         }
     }
 }

@@ -53,24 +53,24 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>2.2.0-preview3-35304</HealthCheckIdSvr>
-    <HealthCheckSqlServer>2.2.0-preview3-35304</HealthCheckSqlServer>
-    <HealthCheckSqlite>2.2.0-preview3-35304</HealthCheckSqlite>
-    <HealthCheckUri>2.2.0-preview3-35304</HealthCheckUri>
-    <HealthCheckRedis>2.2.0-preview3-35304</HealthCheckRedis>
-    <HealthCheckOracle>2.2.0-preview3-35304</HealthCheckOracle>
-    <HealthCheckNpgSql>2.2.0-preview3-35304</HealthCheckNpgSql>
-    <HealthCheckMongoDB>2.2.0-preview3-35304</HealthCheckMongoDB>
-    <HealthCheckMySql>2.2.0-preview3-35304</HealthCheckMySql>
-    <HealthCheckKafka>2.2.0-preview3-35304</HealthCheckKafka>
-    <HealthCheckSystem>2.2.0-preview3-35304</HealthCheckSystem>
-    <HealthCheckNetwork>2.2.0-preview3-35304</HealthCheckNetwork>
-    <HealthCheckDynamoDb>2.2.0-preview3-35304</HealthCheckDynamoDb>
-    <HealthCheckDocumentDb>2.2.0-preview3-35304</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>2.2.0-preview3-35304</HealthCheckAzureStorage>
-    <HealthCheckAzureServiceBus>2.2.0-preview3-35304</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.0-preview3-35304</HealthCheckUI>
-    <HealthCheckUIClient>2.2.0-preview3-35304</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.2.0-preview3-35304</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckIdSvr>2.2.0-preview3-35497</HealthCheckIdSvr>
+    <HealthCheckSqlServer>2.2.0-preview3-35497</HealthCheckSqlServer>
+    <HealthCheckSqlite>2.2.0-preview3-35497</HealthCheckSqlite>
+    <HealthCheckUri>2.2.0-preview3-35497</HealthCheckUri>
+    <HealthCheckRedis>2.2.0-preview3-35497</HealthCheckRedis>
+    <HealthCheckOracle>2.2.0-preview3-35497</HealthCheckOracle>
+    <HealthCheckNpgSql>2.2.0-preview3-35497</HealthCheckNpgSql>
+    <HealthCheckMongoDB>2.2.0-preview3-35497</HealthCheckMongoDB>
+    <HealthCheckMySql>2.2.0-preview3-35497</HealthCheckMySql>
+    <HealthCheckKafka>2.2.0-preview3-35497</HealthCheckKafka>
+    <HealthCheckSystem>2.2.0-preview3-35497</HealthCheckSystem>
+    <HealthCheckNetwork>2.2.0-preview3-35497</HealthCheckNetwork>
+    <HealthCheckDynamoDb>2.2.0-preview3-35497</HealthCheckDynamoDb>
+    <HealthCheckDocumentDb>2.2.0-preview3-35497</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>2.2.0-preview3-35497</HealthCheckAzureStorage>
+    <HealthCheckAzureServiceBus>2.2.0-preview3-35497</HealthCheckAzureServiceBus>
+    <HealthCheckUI>2.2.0-preview3-35497</HealthCheckUI>
+    <HealthCheckUIClient>2.2.0-preview3-35497</HealthCheckUIClient>
+    <HealthCheckPublisherAppplicationInsights>2.2.0-preview3-35497</HealthCheckPublisherAppplicationInsights>
   </PropertyGroup>
 </Project>

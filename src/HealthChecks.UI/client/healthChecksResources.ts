@@ -9,9 +9,10 @@ const degradedImage = require("../assets/images/degraded.png");
 const kubernetesIcon = require('../assets/images/kubernetes-icon.png');
 
 const imageResources = [
-    { state: statusUp, image: okImage },
-    { state: statusDown, image: downImage },
-    { state: statusDegraded, image: degradedImage },
+    { state: 'Failed', image: downImage },
+    { state: 'Unhealthy', image: downImage },
+    { state: 'Degraded', image: degradedImage },
+    { state: 'Healthy', image: okImage }
 ]
 
 export const discoveryServices = [

@@ -33,7 +33,6 @@ namespace HealthChecks.UI.Core.HostedService
             _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
         public async Task Collect(CancellationToken cancellationToken)
         {
             using (_logger.BeginScope("HealthReportCollector is collection health checks results."))
@@ -46,21 +45,21 @@ namespace HealthChecks.UI.Core.HostedService
                     if (cancellationToken.IsCancellationRequested)
                     {
                         _logger.LogDebug("HealthReportCollector is cancelled.");
-
                         break;
                     }
 
                     var healthReport = await GetHealthReport(item);
 
-                    if ((int)healthReport.Status == (int)HealthStatus.Healthy
-                        &&
-                        (await HasLivenessRecoveredFromFailure(item)))
+                    if (healthReport.Status != HealthStatus.Healthy)                       
                     {
-                        await _healthCheckFailureNotifier.NotifyWakeUp(item.Name);
+                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
                     }
                     else
                     {
-                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                        if (await HasLivenessRecoveredFromFailure(item))
+                        {
+                            await _healthCheckFailureNotifier.NotifyWakeUp(item.Name);
+                        }
                     }
 
                     await SaveExecutionHistory(item, healthReport);
@@ -69,12 +68,10 @@ namespace HealthChecks.UI.Core.HostedService
                 _logger.LogDebug("HealthReportCollector is completed.");
             }
         }
-
         protected internal virtual Task<HttpResponseMessage> PerformRequest(string uri)
         {
             return new HttpClient().GetAsync(uri);
         }
-
         private async Task<HealthReport> GetHealthReport(HealthCheckConfiguration configuration)
         {
             var (uri, name) = configuration;
@@ -94,7 +91,6 @@ namespace HealthChecks.UI.Core.HostedService
                     totalDuration: TimeSpan.FromSeconds(0));
             }
         }
-
         private async Task<bool> HasLivenessRecoveredFromFailure(HealthCheckConfiguration configuration)
         {
             var previous = await GetHealthCheckExecution(configuration);
@@ -106,7 +102,6 @@ namespace HealthChecks.UI.Core.HostedService
 
             return false;
         }
-
         private async Task<HealthCheckExecution> GetHealthCheckExecution(HealthCheckConfiguration configuration)
         {
             return await _db.Executions
@@ -115,7 +110,6 @@ namespace HealthChecks.UI.Core.HostedService
                 .Where(le => le.Name.Equals(configuration.Name, StringComparison.InvariantCultureIgnoreCase))
                 .SingleOrDefaultAsync();
         }
-
         private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, HealthReport healthReport)
         {
             _logger.LogDebug("HealthReportCollector save a new health report execution history.");

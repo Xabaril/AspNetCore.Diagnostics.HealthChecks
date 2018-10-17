@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? NAME,
-               sp => new SqlServerHealthCheck(connectionString,healthQuery),
+               sp => new SqlServerHealthCheck(connectionString, healthQuery),
                failureStatus,
                tags));
         }

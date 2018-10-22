@@ -1,8 +1,8 @@
 # Failure notification WebHooks
 
-## Microsoft Teams
-
 ![HealthChecksUI](./images/ui-webhooks.png)
+
+## Microsoft Teams
 
 If you want to send failure notifications to Microsoft Teams the payload to be used is:
 

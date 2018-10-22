@@ -33,7 +33,7 @@ Once the package is installed you can add the HealthCheck using the **AddXXX** e
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddHealthChecks()
-        .AddSqlServer(Configuration["Data:ConnectionStrings:Sample"])
+        .AddSqlServer(Configuration["Data:ConnectionStrings:Sql"])
         .AddRedis(Configuration["Data:ConnectionStrings:Redis"]);
 }
 ```
@@ -42,15 +42,15 @@ Each HealthCheck registration support also name, tags, failure status and other 
 
 ```csharp
  public void ConfigureServices(IServiceCollection services)
-  {
+{
       services.AddHealthChecks()
           .AddSqlServer(
               connectionString: Configuration["Data:ConnectionStrings:Sql"],
-              healthQuery:"SELECT 1;",
+              healthQuery: "SELECT 1;",
               name: "sql", 
               failureStatus: HealthStatus.Degraded,
               tags: new string[] { "db", "sql", "sqlserver" });
-  }
+}
 ```
 
 ## HealthCheckUI and failure notifications

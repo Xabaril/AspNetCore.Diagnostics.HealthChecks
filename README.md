@@ -1,13 +1,9 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks) 
-
-[![Build history](https://buildstats.info/appveyor/chart/xabaril/aspnetcore-diagnostics-healthchecks)](https://ci.appveyor.com/project/xabaril/aspnetcore-diagnostics-healthchecks/history)
-
 
 # AspNetCore.Diagnostics.HealthChecks
 
-This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI port to new *Microsoft Health Checks* feature included on **ASP.NET Core 2.2**.
+This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI *port* to new *Microsoft Health Checks* feature included on **ASP.NET Core 2.2**.
 
-## Included Health Checks
+## Health Checks
 
 HealthChecks packages include health checks for Sql Server, MySql, Oracle, Sqlite, Postgres, RabbitMQ, Redis, System: Disk Storage, Private Memory, Virtual Memory, Azure Service Bus: EventHub, Queue and Topics, Azure Storage: Blob, Queue and Table, Azure DocumentDb, Amazon DynamoDb, Network: Ftp, SFtp, Dns, Tcp port, Smtp, Impa, Mongo, Kafka, Identity Server and Uri: single uri and uri groups
 
@@ -31,10 +27,37 @@ Install-Package HealthChecks.Oracle
 Install-Package HealthChecks.Uris
 ```
 
-## Health Check UI and Fail notifications
+Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.
 
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddHealthChecks()
+        .AddSqlServer(Configuration["Data:ConnectionStrings:Sample"])
+        .AddRedis(Configuration["Data:ConnectionStrings:Redis"]);
+}
+```
 
-The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uri's. To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
+Each HealthCheck registration support also name, tags, failure status and other optional parameters.
+
+```csharp
+ public void ConfigureServices(IServiceCollection services)
+  {
+      services.AddHealthChecks()
+          .AddSqlServer(
+              connectionString: Configuration["Data:ConnectionStrings:Sql"],
+              healthQuery:"SELECT 1;",
+              name: "sql", 
+              failureStatus: HealthStatus.Degraded,
+              tags: new string[] { "db", "sql", "sqlserver" });
+  }
+```
+
+## HealthCheckUI and failure notifications
+
+The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uri's. 
+
+To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
 
 ```csharp
     public class Startup
@@ -61,7 +84,19 @@ This automatically registers a new interface on **/health-ui**.
 
 ### Configuration
 
-The healthchecks to be used on HealthCheck-UI are configured using the **HealthCheck-UI** settings.
+By default HealthChecks return a simple Status Code (200 or 503 ) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can  enable it adding an specific ResponseWriter.
+
+```csharp
+ app.UseHealthChecks("/health", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+```
+
+> *WriteHealthCheckUIResponse* is defined on HealthChecks.UI.Client nuget package.
+
+To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings. 
 
 ```json
 {
@@ -95,7 +130,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
 
 ### Failure Notifications
 
-If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** property. At this moment we support two bookmarks:
+If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:
 
 [[LIVENESS]] The name of the liveness that returns *Down*.
 

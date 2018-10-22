@@ -42,7 +42,8 @@ You must escape the json before setting the **Payload** property in the configur
       {
         "Name": "Teams",
         "Uri": "https://outlook.office.com/webhook/...",
-        "Payload": "{\r\n  \"@context\": \"http://schema.org/extensions\",\r\n  \"@type\": \"MessageCard\",\r\n  \"themeColor\": \"0072C6\",\r\n  \"title\": \"[[LIVENESS]] has failed!\",\r\n  \"text\": \"[[FAILURE]] Click **Learn More** to go to BeatPulseUI Portal\",\r\n  \"potentialAction\": [\r\n    {\r\n      \"@type\": \"OpenUri\",\r\n      \"name\": \"Lear More\",\r\n      \"targets\": [\r\n        { \"os\": \"default\", \"uri\": \"http://localhost:52665/beatpulse-ui\" }\r\n      ]\r\n    }\r\n  ]\r\n}"
+        "Payload": "{\r\n  \"@context\": \"http://schema.org/extensions\",\r\n  \"@type\": \"MessageCard\",\r\n  \"themeColor\": \"0072C6\",\r\n  \"title\": \"[[LIVENESS]] has failed!\",\r\n  \"text\": \"[[FAILURE]] Click **Learn More** to go to BeatPulseUI Portal\",\r\n  \"potentialAction\": [\r\n    {\r\n      \"@type\": \"OpenUri\",\r\n      \"name\": \"Lear More\",\r\n      \"targets\": [\r\n        { \"os\": \"default\", \"uri\": \"http://localhost:52665/beatpulse-ui\" }\r\n      ]\r\n    }\r\n  ]\r\n}",
+        "RestoredPayload": "{\"text\":\"The HealthCheck [[LIVENESS]] is recovered. All is up and running\",\"channel\":\"#general\",\"link_names\": 1,\"username\":\"monkey-bot\",\"icon_emoji\":\":monkey_face"
       }
     ],
     "EvaluationTimeOnSeconds": 10
@@ -105,7 +106,7 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<Mail> messa
     Content content = new Content
     {
         Type = "text/plain",
-        Value = $"The liveness {payload.liveness} is failing with message {payload.message}"
+        Value = $"The HealthCheck {payload.liveness} is failing with message {payload.message}"
     };
 
     mail.AddContent(content);
@@ -127,8 +128,8 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<Mail> messa
     "Webhooks": [
       {
         "Name": "AzureFunctions",
-        "Uri": "https://beatpulsenotifier.azurewebsites.net/api/sample?code=...==",
-        "Payload": "{\"liveness\": \"[[LIVENESS]]\",\"message\": \"[[FAILURE]]\"}"
+        "Uri": "https://notifier.azurewebsites.net/api/sample?code=...==",
+        "Payload": "{\"HealthCheck\": \"[[LIVENESS]]\",\"message\": \"[[FAILURE]]\"}"
       }
     ],
     "EvaluationTimeOnSeconds": 10
@@ -144,7 +145,7 @@ Next **json** is a payload sample for Slack web hook integration:
 
 ```json
 {
-  "text": "The livneess [[LIVENESS]] is failing with the error message [[FAILURE]]. <http://yourappstatus|Click here> to get more details",
+  "text": "The HealthCheck [[LIVENESS]] is failing with the error message [[FAILURE]]. <http://yourappstatus|Click here> to get more details",
   "channel": "#general",
   "link_names": 1,
   "username": "monkey-bot",
@@ -167,7 +168,8 @@ And the HealthChecksUI configuration:
       {
         "Name": "Slack",
         "Uri": "https://hooks.slack.com/services/.../...",
-        "Payload": "{\"text\":\"The livneess [[LIVENESS]] is failing with the error message [[FAILURE]]. <http://yourappstatus|Click here> to get more details.\",\"channel\":\"#general\",\"link_names\": 1,\"username\":\"monkey-bot\",\"icon_emoji\":\":monkey_face:\"}"
+        "Payload": "{\"text\":\"The HealthCheck [[LIVENESS]] is failing with the error message [[FAILURE]]. <http://yourappstatus|Click here> to get more details.\",\"channel\":\"#general\",\"link_names\": 1,\"username\":\"monkey-bot\",\"icon_emoji\":\":monkey_face:\"}",
+        "RestoredPayload": "{\"text\":\"The HealthCheck [[LIVENESS]] is recovered. All is up and running\",\"channel\":\"#general\",\"link_names\": 1,\"username\":\"monkey-bot\",\"icon_emoji\":\":monkey_face"
       }
     ],
     "EvaluationTimeOnSeconds": 10

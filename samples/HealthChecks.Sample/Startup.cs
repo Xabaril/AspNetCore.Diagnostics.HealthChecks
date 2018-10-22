@@ -29,7 +29,7 @@ namespace HealthChecks.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHealthChecks()
-                .AddSqlServer(Configuration["Data:ConnectionStrings:Sample"])
+                .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random");
 
             services.AddMvc()
@@ -64,7 +64,7 @@ namespace HealthChecks.Sample
                 return Task.FromResult(HealthCheckResult.Passed());
             }
 
-            return Task.FromResult(HealthCheckResult.Failed(description:"failed"));
+            return Task.FromResult(HealthCheckResult.Failed(description: "failed"));
         }
     }
 }

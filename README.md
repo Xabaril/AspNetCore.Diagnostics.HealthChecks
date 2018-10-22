@@ -10,7 +10,25 @@ This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and 
 
 ## Health Checks
 
-HealthChecks packages include health checks for Sql Server, MySql, Oracle, Sqlite, Postgres, RabbitMQ, Redis, System: Disk Storage, Private Memory, Virtual Memory, Azure Service Bus: EventHub, Queue and Topics, Azure Storage: Blob, Queue and Table, Azure DocumentDb, Amazon DynamoDb, Network: Ftp, SFtp, Dns, Tcp port, Smtp, Impa, Mongo, Kafka, Identity Server and Uri: single uri and uri groups
+HealthChecks packages include health checks for:
+
+- Sql Server
+- MySql
+- Oracle
+- Sqlite
+- Postgres 
+- RabbitMQ
+- Redis 
+- System: Disk Storage, Private Memory, Virtual Memory
+- Azure Service Bus: EventHub, Queue and Topics
+- Azure Storage: Blob, Queue and Table
+- Azure DocumentDb
+- Amazon DynamoDb
+- Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
+- Mongo
+- Kafka
+- Identity Server
+- Uri: single uri and uri groups
 
 ``` PowerShell
 Install-Package HealthChecks.System
@@ -43,7 +61,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-Each HealthCheck registration support also name, tags, failure status and other optional parameters.
+Each HealthCheck registration supports also name, tags, failure status and other optional parameters.
 
 ```csharp
  public void ConfigureServices(IServiceCollection services)
@@ -60,7 +78,7 @@ Each HealthCheck registration support also name, tags, failure status and other 
 
 ## HealthCheckUI and failure notifications
 
-The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uri's. 
+The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris. 
 
 To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
 
@@ -89,7 +107,7 @@ This automatically registers a new interface on **/health-ui**.
 
 ### Configuration
 
-By default HealthChecks return a simple Status Code (200 or 503 ) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can  enable it adding an specific ResponseWriter.
+By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
  app.UseHealthChecks("/health", new HealthCheckOptions()
@@ -126,10 +144,10 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 }
 ```
 
-    1.- HealthChecks: The collection of health checks uris to watch.
+    1.- HealthChecks: The collection of health checks uris to evaluate.
     2.- EvaluationTimeOnSeconds: Number of elapsed seconds between health checks.
-    3.- Webhooks: If any health check return a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be scape. For mor information see Notifications section)
-    4.- MinimumSecondsBetweenFailureNotifications: The minimun seconds between failure notifications in order not flooding the notification receiver.
+    3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
+    4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
 All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name.
 
@@ -145,11 +163,11 @@ The [web hooks section](./doc/webhooks.md) contains more information and webhook
 
 ## Contributing
 
-AspNetCore.Diagnostics.HealthChecks  wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro @unaizorrilla, Luis Ruiz Pavón @lurumad, Carlos Landeras @carloslanderas and Eduard Tomás @eiximenis.
+AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
 
 *Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger.
 
-If you want to contribute to a project and make it better, your help is very welcome. You can contribute with helpful bug reports, feature request and also new features with pull requests.
+If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 
 1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
 2. Build.ps1 is working on local and AppVeyor.

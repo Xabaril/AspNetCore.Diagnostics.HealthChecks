@@ -65,7 +65,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
         }
         catch (error) {
             this.setState({
-                error: 'Could not retrieve liveness data'
+                error: 'Could not retrieve health checks data'
             });
             console.error(error);
         };

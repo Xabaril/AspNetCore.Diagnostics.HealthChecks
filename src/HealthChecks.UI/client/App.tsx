@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import { LivenessPage } from "./components/LivenessPage";
 import { WebhooksPage } from "./components/WebhooksPage";
-import { Footer} from "./components/Footer";
+import { Footer } from "./components/Footer";
 import { scaleRotate as Menu } from "react-burger-menu";
 
 interface AppProps {
@@ -37,20 +37,22 @@ export class App extends React.Component<AppProps, AppState> {
         return <React.Fragment>
             <div id="outer-container" style={{ height: '100%' }}>
                 <Menu onStateChange={(state) => this.setState({ menuOpen: state.isOpen })}
-                      isOpen={this.state.menuOpen}
-                      pageWrapId={'wrapper'}
-                      outerContainerId={"outer-container"} >
+                    isOpen={this.state.menuOpen}
+                    pageWrapId={'wrapper'}
+                    outerContainerId={"outer-container"} >
                     <Link to={this.props.mountPath} className="menu-item" onClick={this.toggleMenu}>
-                        <img className="menu-icon" src={WhiteHeartIcon} />Liveness
+                        <img className="menu-icon" src={WhiteHeartIcon} />
+                        <div>Health Checks</div>
                     </Link>
                     <Link to="/webhooks" className="menu-item" onClick={this.toggleMenu}>
-                        <img className="menu-icon" src={WhiteGearIcon}/> Webhooks
-                </Link>
+                        <img className="menu-icon" src={WhiteGearIcon} />
+                        <div>Webhooks</div>
+                    </Link>
                 </Menu>
                 <Route exact path={this.props.mountPath} render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />
                 <Route path="/webhooks" render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
             </div>
-            <Footer/>
+            <Footer />
         </React.Fragment>
     }
 }

@@ -2,7 +2,9 @@ version: '{build}'
 environment:
   matrix:    
     - node_version: '10'
+    - net_core_sk: '2.2.100-preview3-009430'
 install:
+  - ps: ./dotnet-install.ps1 -Version $env:net_core_sk
   - ps: 'Install-Product node $env:node_version x64'
 pull_requests:
   do_not_increment_build_number: true

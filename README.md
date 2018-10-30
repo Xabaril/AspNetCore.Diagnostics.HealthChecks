@@ -64,7 +64,7 @@ public void ConfigureServices(IServiceCollection services)
 Each HealthCheck registration supports also name, tags, failure status and other optional parameters.
 
 ```csharp
- public void ConfigureServices(IServiceCollection services)
+public void ConfigureServices(IServiceCollection services)
 {
       services.AddHealthChecks()
           .AddSqlServer(
@@ -76,6 +76,25 @@ Each HealthCheck registration supports also name, tags, failure status and other
 }
 ```
 
+## HealthCheck push results
+
+HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **HealthChecks.Publisher.ApplicationInsights** define a consumer to send report results to Application Insights.
+
+Include the package in your project:
+
+```powershell
+install-package HealthChecks.Publisher.ApplicationInsights
+```
+
+Add publisher into the *IHealthCheckBuilder*
+
+```csharp
+services.AddHealthChecks()
+        .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
+        .AddCheck<RandomHealthCheck>("random")
+        .AddApplicationInsightsPublisher();
+```
+
 ## HealthCheckUI and failure notifications
 
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris. 
@@ -83,18 +102,18 @@ The project HealthChecks.UI is a minimal UI interface that stores and shows the 
 To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
 
 ```csharp
-    public class Startup
-    {       
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddHealthChecksUI();
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseHealthChecksUI();
-        }
+public class Startup
+{       
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddHealthChecksUI();
     }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    {
+        app.UseHealthChecksUI();
+    }
+}
 ```
 
 This automatically registers a new interface on **/health-ui**. 

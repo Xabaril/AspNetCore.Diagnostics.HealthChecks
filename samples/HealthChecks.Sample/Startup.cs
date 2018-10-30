@@ -30,7 +30,8 @@ namespace HealthChecks.Sample
         {
             services.AddHealthChecks()
                 .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
-                .AddCheck<RandomHealthCheck>("random");
+                .AddCheck<RandomHealthCheck>("random")
+                .AddApplicationInsightsPublisher();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

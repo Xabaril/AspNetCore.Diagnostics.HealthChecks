@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.System
 {
-    public class MaximumValueHealthCheck<T> 
+    public class MaximumValueHealthCheck<T>
         : IHealthCheck
         where T : IComparable<T>
     {
@@ -22,11 +22,11 @@ namespace HealthChecks.System
 
             if (currentValue.CompareTo(maximunValue) <= 0)
             {
-                return Task.FromResult(HealthCheckResult.Passed());
+                return Task.FromResult(HealthCheckResult.Healthy());
             }
 
             return Task.FromResult(
-                HealthCheckResult.Failed($"Maximun={maximunValue}, Current={currentValue}"));
+                new HealthCheckResult(context.Registration.FailureStatus, description: $"Maximun={maximunValue}, Current={currentValue}"));
         }
     }
 }

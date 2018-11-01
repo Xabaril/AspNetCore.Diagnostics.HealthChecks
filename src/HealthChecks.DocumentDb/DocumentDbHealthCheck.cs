@@ -10,13 +10,11 @@ namespace HealthChecks.DocumentDb
         : IHealthCheck
     {
         private readonly DocumentDbOptions _documentDbOptions = new DocumentDbOptions();
-
         public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions)
         {
             _documentDbOptions.UriEndpoint = documentDbOptions.UriEndpoint ?? throw new ArgumentNullException(nameof(documentDbOptions.UriEndpoint));
             _documentDbOptions.PrimaryKey = documentDbOptions.PrimaryKey ?? throw new ArgumentNullException(nameof(documentDbOptions.PrimaryKey));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -26,12 +24,12 @@ namespace HealthChecks.DocumentDb
                     _documentDbOptions.PrimaryKey))
                 {
                     await documentDbClient.OpenAsync();
-                    return HealthCheckResult.Passed();
+                    return HealthCheckResult.Healthy();
                 }
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

@@ -12,12 +12,10 @@ namespace HealthChecks.Kafka
     public class KafkaHealthCheck : IHealthCheck
     {
         private readonly Dictionary<string, object> _configuration;
-
         public KafkaHealthCheck(Dictionary<string, object> configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -28,15 +26,15 @@ namespace HealthChecks.Kafka
 
                     if (result.Error.Code != ErrorCode.NoError)
                     {
-                        return HealthCheckResult.Failed($"ErrorCode {result.Error.Code} with reason ('{result.Error.Reason}')");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"ErrorCode {result.Error.Code} with reason ('{result.Error.Reason}')");
                     }
 
-                    return HealthCheckResult.Passed();
+                    return HealthCheckResult.Healthy();
                 }
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

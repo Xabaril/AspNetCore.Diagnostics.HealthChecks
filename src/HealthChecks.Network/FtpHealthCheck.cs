@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading;
@@ -11,12 +10,10 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly FtpHealthCheckOptions _options;
-
         public FtpHealthCheck(FtpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -30,19 +27,18 @@ namespace HealthChecks.Network
                         if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated
                             && ftpResponse.StatusCode != FtpStatusCode.ClosingData)
                         {
-                            HealthCheckResult.Failed($"Error connecting to ftp host {item.host} with exit code {ftpResponse.StatusCode}");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error connecting to ftp host {item.host} with exit code {ftpResponse.StatusCode}");
                         }
                     }
                 }
 
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-
         WebRequest CreateFtpWebRequest(string host, bool createFile = false, NetworkCredential credentials = null)
         {
             FtpWebRequest ftpRequest;

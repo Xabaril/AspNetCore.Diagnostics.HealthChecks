@@ -131,7 +131,7 @@ namespace HealthChecks.UI.Core.HostedService
                 }
                 else
                 {
-                    _logger.LogDebug("LivenessExecutionHistory already exist but on different state, update the values.");
+                    _logger.LogDebug("HealthCheckReportCollector already exist but on different state, update the values.");
 
                     execution.History.Add(new HealthCheckExecutionHistory()
                     {

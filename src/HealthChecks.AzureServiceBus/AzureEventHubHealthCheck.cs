@@ -11,13 +11,11 @@ namespace HealthChecks.AzureServiceBus
     {
         private readonly string _connectionString;
         private readonly string _eventHubName;
-
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _eventHubName = eventHubName ?? throw new ArgumentNullException(nameof(eventHubName));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -26,15 +24,13 @@ namespace HealthChecks.AzureServiceBus
                 {
                     EntityPath = _eventHubName
                 };
-                var eventHubClient = EventHubClient
-                    .CreateFromConnectionString(connectionStringBuilder.ToString());
-
+                var eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
                 await eventHubClient.GetRuntimeInformationAsync();
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception: ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

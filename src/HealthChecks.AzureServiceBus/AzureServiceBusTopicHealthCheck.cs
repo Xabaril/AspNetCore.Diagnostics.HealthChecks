@@ -11,10 +11,8 @@ namespace HealthChecks.AzureServiceBus
         : IHealthCheck
     {
         private const string TEST_MESSAGE = "HealthCheckTestMessage";
-
         private readonly string _connectionString;
         private readonly string _topicName;
-
         public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
@@ -31,11 +29,11 @@ namespace HealthChecks.AzureServiceBus
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await topicClient.CancelScheduledMessageAsync(scheduledMessageId);
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception: ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

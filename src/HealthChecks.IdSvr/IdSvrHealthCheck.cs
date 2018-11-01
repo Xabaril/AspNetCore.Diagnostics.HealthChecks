@@ -10,14 +10,11 @@ namespace HealthChecks.IdSvr
         : IHealthCheck
     {
         const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
-
         private readonly Uri _idSvrUri;
-
         public IdSvrHealthCheck(Uri idSvrUri)
         {
             _idSvrUri = idSvrUri ?? throw new ArgumentNullException(nameof(idSvrUri));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -28,15 +25,15 @@ namespace HealthChecks.IdSvr
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        return HealthCheckResult.Failed("Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: "Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
                     }
 
-                    return HealthCheckResult.Passed();
+                    return HealthCheckResult.Healthy();
                 }
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

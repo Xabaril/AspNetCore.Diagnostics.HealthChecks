@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Network
 {
-    public class SmtpHealthCheck 
+    public class SmtpHealthCheck
         : IHealthCheck
     {
         private readonly SmtpHealthCheckOptions _options;
-
         public SmtpHealthCheck(SmtpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -30,21 +28,21 @@ namespace HealthChecks.Network
 
                             if (!await smtpConnection.AuthenticateAsync(user, password))
                             {
-                                return HealthCheckResult.Failed($"Error login to smtp server{_options.Host}:{_options.Port} with configured credentials");
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server{_options.Host}:{_options.Port} with configured credentials");
                             }
                         }
 
-                        return HealthCheckResult.Passed();
+                        return HealthCheckResult.Healthy();
                     }
                     else
                     {
-                        return HealthCheckResult.Failed($"Could not connect to smtp server {_options.Host}:{_options.Port} - SSL : {_options.ConnectionType}");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not connect to smtp server {_options.Host}:{_options.Port} - SSL : {_options.ConnectionType}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

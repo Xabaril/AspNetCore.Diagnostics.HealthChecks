@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 		build.ps1 = build.ps1
 		build\dependencies.props = build\dependencies.props
 		docker-compose.yml = docker-compose.yml
+		dotnet-install.ps1 = dotnet-install.ps1
+		install-sdk.ps1 = install-sdk.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}"

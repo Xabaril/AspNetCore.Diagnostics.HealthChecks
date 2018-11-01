@@ -304,7 +304,7 @@ namespace FunctionalTests.BeatPulse.Network
                  {
                      Predicate = r => r.Tags.Contains("imap")
                  };
-                 options.ResultStatusCodes[HealthStatus.Failed] = (int)HttpStatusCode.ServiceUnavailable;
+                 options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.ServiceUnavailable;
 
                  app.UseHealthChecks("/health", options);
              });

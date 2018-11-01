@@ -29,7 +29,7 @@ namespace HealthChecks.Uris
 
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        return HealthCheckResult.Failed($"Liveness execution is cancelled.");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"{nameof(UriHealthCheck)} execution is cancelled.");
                     }
 
                     using (var httpClient = new HttpClient())
@@ -45,18 +45,18 @@ namespace HealthChecks.Uris
 
                         if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
                         {
-                            return HealthCheckResult.Failed($"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
                         }
 
                         ++idx;
                     }
                 }
 
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

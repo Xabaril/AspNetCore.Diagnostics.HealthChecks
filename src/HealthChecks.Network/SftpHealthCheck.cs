@@ -9,7 +9,7 @@ using ConnectionInfo = Renci.SshNet.ConnectionInfo;
 
 namespace HealthChecks.Network
 {
-    public class SftpHealthCheck 
+    public class SftpHealthCheck
         : IHealthCheck
     {
         private readonly SftpHealthCheckOptions _options;
@@ -43,19 +43,19 @@ namespace HealthChecks.Network
                         else
                         {
                             return Task.FromResult(
-                                HealthCheckResult.Failed($"Connection with sftp host {item.Host}:{item.Port} failed"));
+                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
                         }
                     }
                 }
 
                 return Task.FromResult(
-                    HealthCheckResult.Passed());
+                    HealthCheckResult.Healthy());
 
             }
             catch (Exception ex)
             {
                 return Task.FromResult(
-                    HealthCheckResult.Failed(exception:ex));
+                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
     }

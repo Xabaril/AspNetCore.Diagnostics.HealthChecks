@@ -11,16 +11,13 @@ namespace HealthChecks.AzureServiceBus
         : IHealthCheck
     {
         private const string TEST_MESSAGE = "HealthCheckTest";
-
         private readonly string _connectionString;
         private readonly string _queueName;
-
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _queueName = queueName ?? throw new ArgumentNullException(nameof(queueName));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -34,11 +31,11 @@ namespace HealthChecks.AzureServiceBus
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await queueClient.CancelScheduledMessageAsync(scheduledMessageId);
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception: ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

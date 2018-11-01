@@ -30,12 +30,12 @@ namespace HealthChecks.Sqlite
                         await command.ExecuteScalarAsync();
                     }
 
-                    return HealthCheckResult.Passed();
+                    return HealthCheckResult.Healthy();
                 }
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

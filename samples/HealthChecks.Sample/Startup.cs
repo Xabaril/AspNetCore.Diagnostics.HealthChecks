@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using HealthChecks.UI.Client;
+﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -11,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HealthChecks.Sample
 {
@@ -62,10 +58,10 @@ namespace HealthChecks.Sample
         {
             if (DateTime.UtcNow.Minute % 2 == 0)
             {
-                return Task.FromResult(HealthCheckResult.Passed());
+                return Task.FromResult(HealthCheckResult.Healthy());
             }
 
-            return Task.FromResult(HealthCheckResult.Failed(description: "failed"));
+            return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed"));
         }
     }
 }

@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Network
 {
-    public class PingHealthCheck 
+    public class PingHealthCheck
         : IHealthCheck
     {
         private readonly PingHealthCheckOptions _options;
-
         public PingHealthCheck(PingHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var configuredHosts = _options.ConfiguredHosts.Values;
@@ -30,16 +28,16 @@ namespace HealthChecks.Network
 
                         if (pingReply.Status != IPStatus.Success)
                         {
-                            return HealthCheckResult.Failed($"Ping check for host {host} is failed with status reply:{pingReply.Status}");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ping check for host {host} is failed with status reply:{pingReply.Status}");
                         }
                     }
                 }
 
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

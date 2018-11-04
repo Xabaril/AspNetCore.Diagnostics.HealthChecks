@@ -52,6 +52,8 @@ Install-Package HealthChecks.Uris
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.
 
+> We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChceks pacakges.
+
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {

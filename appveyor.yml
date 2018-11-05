@@ -27,13 +27,13 @@ deploy:
   server: https://www.myget.org/F/xabaril/api/v2/package
   api_key:
     secure: uESSL/tmtvlykkG7fgS0dFd4UpR+12vOSqFN3AiuHhxJpDiUl6EWZbgNoxcrRrch
-  skip_symbols: false
+  skip_symbols: true
   on:
     branch: master
 - provider: NuGet
   name: production
   api_key:
     secure: 44bohP+05nCVBsZvK3tklX4yK8Rwi7vWRKTj1sMI1V26twqZJayTtRxv0fLF1t2o
-  skip_symbols: false
+  skip_symbols: true
   on:
     appveyor_repo_tag: true

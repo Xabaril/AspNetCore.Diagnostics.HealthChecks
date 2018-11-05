@@ -11,11 +11,13 @@
     <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks </RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>true</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <PropertyGroup Label="Package Versions">
-    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0-rtm-35613</MicrosoftExtensionsDiagnosticsHealthChecks>
-    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-rtm-35613</MicrosoftAspNetCoreDiagnosticsHealthChecks>
+    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0-rtm-35639</MicrosoftExtensionsDiagnosticsHealthChecks>
+    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-rtm-35639</MicrosoftAspNetCoreDiagnosticsHealthChecks>
     <FluentAssertions>5.4.2</FluentAssertions>
     <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
     <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>

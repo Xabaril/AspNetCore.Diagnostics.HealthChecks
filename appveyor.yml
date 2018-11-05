@@ -26,7 +26,7 @@ deploy:
 - provider: NuGet
   server: https://www.myget.org/F/xabaril/api/v2/package
   api_key:
-    secure: JCTBs2rhU7P11G6ZbxDKOuQoyIKhILGcaKtILxCDwdVlnzvvaXc92nNXQlVsR7u0
+    secure: uESSL/tmtvlykkG7fgS0dFd4UpR+12vOSqFN3AiuHhxJpDiUl6EWZbgNoxcrRrch
   skip_symbols: false
   on:
     branch: master

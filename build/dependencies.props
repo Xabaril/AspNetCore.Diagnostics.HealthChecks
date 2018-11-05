@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
-    <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks /blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks </PackageProjectUrl>
-    <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks </RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
+    <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -55,25 +55,25 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>2.2.0-rtm-35613</HealthCheckIdSvr>
-    <HealthCheckSqlServer>2.2.0-rtm-35613</HealthCheckSqlServer>
-    <HealthCheckSqlite>2.2.0-rtm-35613</HealthCheckSqlite>
-    <HealthCheckUri>2.2.0-rtm-35613</HealthCheckUri>
-    <HealthCheckRedis>2.2.0-rtm-35613</HealthCheckRedis>
-    <HealthCheckRabbitMQ>2.2.0-rtm-35613</HealthCheckRabbitMQ>
-    <HealthCheckOracle>2.2.0-rtm-35613</HealthCheckOracle>
-    <HealthCheckNpgSql>2.2.0-rtm-35613</HealthCheckNpgSql>
-    <HealthCheckMongoDB>2.2.0-rtm-35613</HealthCheckMongoDB>
-    <HealthCheckMySql>2.2.0-rtm-35613</HealthCheckMySql>
-    <HealthCheckKafka>2.2.0-rtm-35613</HealthCheckKafka>
-    <HealthCheckSystem>2.2.0-rtm-35613</HealthCheckSystem>
-    <HealthCheckNetwork>2.2.0-rtm-35613</HealthCheckNetwork>
-    <HealthCheckDynamoDb>2.2.0-rtm-35613</HealthCheckDynamoDb>
-    <HealthCheckDocumentDb>2.2.0-rtm-35613</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>2.2.0-rtm-35613</HealthCheckAzureStorage>
-    <HealthCheckAzureServiceBus>2.2.0-rtm-35613</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.0-rtm-35613</HealthCheckUI>
-    <HealthCheckUIClient>2.2.0-rtm-35613</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.2.0-rtm-35613</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckIdSvr>2.2.0-rtm-35639</HealthCheckIdSvr>
+    <HealthCheckSqlServer>2.2.0-rtm-35639</HealthCheckSqlServer>
+    <HealthCheckSqlite>2.2.0-rtm-35639</HealthCheckSqlite>
+    <HealthCheckUri>2.2.0-rtm-35639</HealthCheckUri>
+    <HealthCheckRedis>2.2.0-rtm-35639</HealthCheckRedis>
+    <HealthCheckRabbitMQ>2.2.0-rtm-35639</HealthCheckRabbitMQ>
+    <HealthCheckOracle>2.2.0-rtm-35639</HealthCheckOracle>
+    <HealthCheckNpgSql>2.2.0-rtm-35639</HealthCheckNpgSql>
+    <HealthCheckMongoDB>2.2.0-rtm-35639</HealthCheckMongoDB>
+    <HealthCheckMySql>2.2.0-rtm-35639</HealthCheckMySql>
+    <HealthCheckKafka>2.2.0-rtm-35639</HealthCheckKafka>
+    <HealthCheckSystem>2.2.0-rtm-35639</HealthCheckSystem>
+    <HealthCheckNetwork>2.2.0-rtm-35639</HealthCheckNetwork>
+    <HealthCheckDynamoDb>2.2.0-rtm-35639</HealthCheckDynamoDb>
+    <HealthCheckDocumentDb>2.2.0-rtm-35639</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>2.2.0-rtm-35639</HealthCheckAzureStorage>
+    <HealthCheckAzureServiceBus>2.2.0-rtm-35639</HealthCheckAzureServiceBus>
+    <HealthCheckUI>2.2.0-rtm-35639</HealthCheckUI>
+    <HealthCheckUIClient>2.2.0-rtm-35639</HealthCheckUIClient>
+    <HealthCheckPublisherAppplicationInsights>2.2.0-rtm-35639</HealthCheckPublisherAppplicationInsights>
   </PropertyGroup>
 </Project>

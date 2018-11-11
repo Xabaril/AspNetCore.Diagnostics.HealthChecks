@@ -1,0 +1,63 @@
+﻿using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Prometheus.Advanced;
+
+namespace HealthChecks.Publisher.Prometheus
+{
+    internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher
+
+    {
+        private static readonly HttpClient HttpClient = new HttpClient();
+
+        private readonly Uri _targetUrl;
+
+        public PrometheusGatewayPublisher(string endpoint, string job, string instance = null)
+        {
+            var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
+            if (!string.IsNullOrEmpty(instance))
+            {
+                sb.AppendFormat("/instance/{0}", instance);
+            }
+
+            if (!Uri.TryCreate(sb.ToString(), UriKind.Absolute, out _targetUrl))
+            {
+                throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
+            }
+        }
+
+
+        public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
+        {
+            WriteMetricsFromHealthReport(report);
+
+            await PushMetrics();
+        }
+
+        private async Task PushMetrics()
+        {
+            try
+            {
+                var outStream = CollectionToStreamWriter(Registry);
+
+                // StreamContent takes ownership of the stream.
+                var response = await HttpClient.PostAsync(_targetUrl, new StreamContent(outStream));
+
+                // If anything goes wrong, we want to get at least an entry in the trace log.
+                response.EnsureSuccessStatusCode();
+            }
+            catch (ScrapeFailedException ex)
+            {
+                Trace.WriteLine($"Skipping metrics push due to failed scrape: {ex.Message}");
+            }
+            catch (Exception ex) when (!(ex is OperationCanceledException))
+            {
+                Trace.WriteLine($"Error in MetricPusher: {ex.Message}");
+            }
+        }
+    }
+}

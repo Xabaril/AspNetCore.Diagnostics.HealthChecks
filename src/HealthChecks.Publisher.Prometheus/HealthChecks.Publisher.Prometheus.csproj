@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <PackageTags>HealthCheck;Publisher;Prometheus;Prometheus Gateway</PackageTags>
+    <Description>HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
+    <Version>$(HealthCheckPublisherPrometheus)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Company>$(Company)</Company>
+    <Authors>$(Authors)</Authors>
+    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="prometheus-net" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions"  />
+  </ItemGroup>
+</Project>

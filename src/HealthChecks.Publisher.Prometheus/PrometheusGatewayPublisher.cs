@@ -9,25 +9,32 @@ using Prometheus.Advanced;
 
 namespace HealthChecks.Publisher.Prometheus
 {
-    internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher
+    internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher, IDisposable
 
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private readonly HttpClient _httpClient = new HttpClient();
 
         private readonly Uri _targetUrl;
+
 
         public PrometheusGatewayPublisher(string endpoint, string job, string instance = null)
         {
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
-            if (!string.IsNullOrEmpty(instance))
-            {
-                sb.AppendFormat("/instance/{0}", instance);
-            }
+            if (!string.IsNullOrEmpty(instance)) sb.AppendFormat("/instance/{0}", instance);
 
             if (!Uri.TryCreate(sb.ToString(), UriKind.Absolute, out _targetUrl))
-            {
                 throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
-            }
+        }
+
+        public PrometheusGatewayPublisher(HttpClient httpClient, string endpoint, string job, string instance) : this(
+            endpoint, job, instance)
+        {
+            _httpClient = httpClient;
+        }
+
+        public void Dispose()
+        {
+            _httpClient?.Dispose();
         }
 
 
@@ -45,8 +52,7 @@ namespace HealthChecks.Publisher.Prometheus
                 var outStream = CollectionToStreamWriter(Registry);
 
                 // StreamContent takes ownership of the stream.
-                var response = await HttpClient.PostAsync(_targetUrl, new StreamContent(outStream));
-
+                var response = await _httpClient.PostAsync(_targetUrl, new StreamContent(outStream));
                 // If anything goes wrong, we want to get at least an entry in the trace log.
                 response.EnsureSuccessStatusCode();
             }

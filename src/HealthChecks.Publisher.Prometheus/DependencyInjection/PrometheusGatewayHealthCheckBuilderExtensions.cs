@@ -1,4 +1,5 @@
-﻿using HealthChecks.Publisher.Prometheus;
+﻿using System.Net.Http;
+using HealthChecks.Publisher.Prometheus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -22,6 +23,14 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services
                 .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(endpoint, job,instance));
+
+            return builder;
+        }
+
+        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder, HttpClient client, string endpoint, string job, string instance = null)
+        {
+            builder.Services
+                .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(client,endpoint, job,instance));
 
             return builder;
         }

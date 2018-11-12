@@ -50,10 +50,7 @@ namespace HealthChecks.Publisher.Prometheus
             try
             {
                 var outStream = CollectionToStreamWriter(Registry);
-
-                // StreamContent takes ownership of the stream.
                 var response = await _httpClient.PostAsync(_targetUrl, new StreamContent(outStream));
-                // If anything goes wrong, we want to get at least an entry in the trace log.
                 response.EnsureSuccessStatusCode();
             }
             catch (ScrapeFailedException ex)
@@ -62,7 +59,7 @@ namespace HealthChecks.Publisher.Prometheus
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))
             {
-                Trace.WriteLine($"Error in MetricPusher: {ex.Message}");
+                Trace.WriteLine($"Error in PushMetrics: {ex.Message}");
             }
         }
     }

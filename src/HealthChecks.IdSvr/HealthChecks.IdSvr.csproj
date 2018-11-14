@@ -3,13 +3,14 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>HealthCheck;IdentityServer;IdSvr</PackageTags>
-    <Description>HealthChecks.IdSvr is the health check package for IdentityServer</Description>
+    <PackageTags>HealthCheck;IdentityServer;IdSvr;OpenId;OpenIdConnect</PackageTags>
+    <Description>HealthChecks.IdSvr is the health check package for OpenIdConnect servers</Description>
     <Version>$(HealthCheckIdSvr)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <LangVersion>latest</LangVersion>
+    <PackageId>AspNetCore.HealthChecks.OpenIdConnectServer</PackageId>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>

@@ -8,7 +8,7 @@
   <PropertyGroup Label="Package information">
     <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
-    <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
+    <RepositoryUrl>https://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

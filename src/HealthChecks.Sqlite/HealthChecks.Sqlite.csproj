@@ -10,6 +10,7 @@
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <LangVesrion>latest</LangVesrion>
+    <PackageId>AspNetCore.HealthChecks.Sqlite</PackageId>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>

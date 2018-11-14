@@ -31,23 +31,23 @@ HealthChecks packages include health checks for:
 - Uri: single uri and uri groups
 
 ``` PowerShell
-Install-Package HealthChecks.System
-Install-Package HealthChecks.Network
-Install-Package HealthChecks.SqlServer
-Install-Package HealthChecks.MongoDb
-Install-Package HealthChecks.Npgsql
-Install-Package HealthChecks.Redis
-Install-Package HealthChecks.AzureStorage
-Install-Package HealthChecks.AzureServiceBus
-Install-Package HealthChecks.MySql
-Install-Package HealthChecks.DocumentDb
-Install-Package HealthChecks.SqLite
-Install-Package HealthChecks.Kafka
-Install-Package HealthChecks.RabbitMQ
-Install-Package HealthChecks.IdSvr
-Install-Package HealthChecks.DynamoDB
-Install-Package HealthChecks.Oracle
-Install-Package HealthChecks.Uris
+Install-Package AspNetCore.HealthChecks.System
+Install-Package AspNetCore.HealthChecks.Network
+Install-Package AspNetCore.HealthChecks.SqlServer
+Install-Package AspNetCore.HealthChecks.MongoDb
+Install-Package AspNetCore.HealthChecks.Npgsql
+Install-Package AspNetCore.HealthChecks.Redis
+Install-Package AspNetCore.HealthChecks.AzureStorage
+Install-Package AspNetCore.HealthChecks.AzureServiceBus
+Install-Package AspNetCore.HealthChecks.MySql
+Install-Package AspNetCore.HealthChecks.DocumentDb
+Install-Package AspNetCore.HealthChecks.SqLite
+Install-Package AspNetCore.HealthChecks.Kafka
+Install-Package AspNetCore.HealthChecks.RabbitMQ
+Install-Package AspNetCore.HealthChecks.IdSvr
+Install-Package AspNetCore.HealthChecks.DynamoDB
+Install-Package AspNetCore.HealthChecks.Oracle
+Install-Package AspNetCore.HealthChecks.Uris
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.

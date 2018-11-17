@@ -22,15 +22,16 @@ namespace Microsoft.Extensions.DependencyInjection
             string endpoint, string job, string instance = null)
         {
             builder.Services
-                .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(endpoint, job,instance));
+                .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(endpoint, job, instance));
 
             return builder;
         }
 
-        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder, HttpClient client, string endpoint, string job, string instance = null)
+        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder,
+            HttpClient client, string endpoint, string job, string instance = null)
         {
             builder.Services
-                .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(client,endpoint, job,instance));
+                .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(client, endpoint, job, instance));
 
             return builder;
         }

@@ -19,7 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="prometheus-net" Version="2.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions"  />
+    <PackageReference Include="prometheus-net" Version="$(PrometheusNet)" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.0.0" />
   </ItemGroup>
 </Project>

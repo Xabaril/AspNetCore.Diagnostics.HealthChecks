@@ -11,6 +11,7 @@
     <Authors>$(Authors)</Authors>
     <LangVersion>Latest</LangVersion>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
+    <PackageId>AspNetCore.HealthChecks.Uris</PackageId>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>

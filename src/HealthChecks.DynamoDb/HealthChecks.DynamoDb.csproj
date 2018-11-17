@@ -10,6 +10,7 @@
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <LangVersion>latest</LangVersion>
+    <PackageId>AspNetCore.HealthChecks.DynamoDb</PackageId>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>

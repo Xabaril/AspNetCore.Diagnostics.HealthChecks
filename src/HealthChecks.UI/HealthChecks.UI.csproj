@@ -11,6 +11,7 @@
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+    <PackageId>AspNetCore.HealthChecks.UI</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

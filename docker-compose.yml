@@ -12,6 +12,11 @@ services:
         image: redis:alpine
         ports:
             - ${REDIS_PORT}:6379
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        ports:
+          - "9300:9300"
+          - ${ELASTICSEARCH_PORT}:9200
     postgres:
         image: postgres
         environment:

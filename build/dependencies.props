@@ -29,6 +29,7 @@
     <RabbitMQClient>5.0.1</RabbitMQClient>
     <OracleManagedDataAccessCore>2.18.3</OracleManagedDataAccessCore>
     <Npgsql>3.2.6</Npgsql>
+    <NEST>6.1.0</NEST>
     <MongoDBDriver>2.5.0</MongoDBDriver>
     <MySqlConnector>0.40.4</MySqlConnector>
     <ConfluentKafka>0.11.4</ConfluentKafka>
@@ -60,6 +61,7 @@
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.0</HealthCheckUri>
     <HealthCheckRedis>2.2.0</HealthCheckRedis>
+    <HealthCheckElasticsearch>2.2.0</HealthCheckElasticsearch>
     <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>

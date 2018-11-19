@@ -18,6 +18,7 @@ HealthChecks packages include health checks for:
 - Sqlite
 - Postgres 
 - RabbitMQ
+- Elasticsearch
 - Redis 
 - System: Disk Storage, Private Memory, Virtual Memory
 - Azure Service Bus: EventHub, Queue and Topics
@@ -36,6 +37,7 @@ Install-Package AspNetCore.HealthChecks.Network
 Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.Npgsql
+Install-Package AspNetCore.HealthChecks.Elasticsearch
 Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus

@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Sample", "samp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Client", "src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj", "{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Elasticsearch", "src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj", "{38C22D56-7921-47D3-82C1-8EEB7E95AFAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,10 @@ Global
 		{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C22D56-7921-47D3-82C1-8EEB7E95AFAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C22D56-7921-47D3-82C1-8EEB7E95AFAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C22D56-7921-47D3-82C1-8EEB7E95AFAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C22D56-7921-47D3-82C1-8EEB7E95AFAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +197,7 @@ Global
 		{EEF1E206-DEE3-45F2-A753-73D2FFFF8EDA} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{0A7AF6F0-DEA6-4195-91F3-CD9E2484E1F3} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 		{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{38C22D56-7921-47D3-82C1-8EEB7E95AFAC} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

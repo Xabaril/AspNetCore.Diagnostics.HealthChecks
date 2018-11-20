@@ -10,9 +10,9 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
             HealthStatus expectedResult)
         {
 
-            assertions.Contain($"liveness{{healthcheck=\"{checkName}\"}} {expectedResult:D}",
-                "health check liveness must be included");
-            assertions.Contain($"liveness_duration_seconds{{healthcheck=\"{checkName}\"}}",
+            assertions.Contain($"healthcheck{{healthcheck=\"{checkName}\"}} {expectedResult:D}",
+                "health check  must be included");
+            assertions.Contain($"healthcheck_duration_seconds{{healthcheck=\"{checkName}\"}}",
                 "health check duration must be included");
             return new AndConstraint<StringAssertions>(assertions);
         }

@@ -2,6 +2,8 @@
 using HealthChecks.Publisher.Prometheus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
+
+
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class PrometheusGatewayHealthCheckBuilderExtensions
@@ -15,8 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
         /// <param name="endpoint">Endpoint url e.g. http://myendpoint:9091</param>
-        /// <param name="job"> The job name the series can be filtered on (typically the application name)</param>
-        /// <param name="instance">If there are multiple instances</param>
+        /// <param name="job"> The job name the series can be filtered on (typically the application name).</param>
+        /// <param name="instance">If there are multiple instances.</param>
         /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
         public static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder,
             string endpoint, string job, string instance = null)
@@ -27,7 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder,
+        internal static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder,
             HttpClient client, string endpoint, string job, string instance = null)
         {
             builder.Services

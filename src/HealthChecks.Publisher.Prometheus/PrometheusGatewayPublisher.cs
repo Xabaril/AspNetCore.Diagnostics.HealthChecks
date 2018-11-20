@@ -1,24 +1,23 @@
-﻿using System;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Prometheus.Advanced;
+using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Prometheus.Advanced;
 
 namespace HealthChecks.Publisher.Prometheus
 {
     internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher, IDisposable
     {
         private readonly HttpClient _httpClient = new HttpClient();
-
         private readonly Uri _targetUrl;
-
 
         public PrometheusGatewayPublisher(string endpoint, string job, string instance = null)
         {
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
+
             if (!string.IsNullOrEmpty(instance))
             {
                 sb.AppendFormat("/instance/{0}", instance);
@@ -55,7 +54,9 @@ namespace HealthChecks.Publisher.Prometheus
             {
                 using (var outStream = CollectionToStreamWriter(Registry))
                 {
-                    var response = await _httpClient.PostAsync(_targetUrl, new StreamContent(outStream));
+                    var response = await _httpClient
+                        .PostAsync(_targetUrl, new StreamContent(outStream));
+
                     response.EnsureSuccessStatusCode();
                 }
             }

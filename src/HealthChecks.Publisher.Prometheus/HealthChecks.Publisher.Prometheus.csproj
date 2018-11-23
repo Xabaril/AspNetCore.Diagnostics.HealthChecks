@@ -1,25 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>HealthCheck;Azure;DocumentDb</PackageTags>
-    <Description>HealthChecks.DocumentDb is the health check package for Azure DocumentDb.</Description>
-    <Version>$(HealthCheckDocumentDb)</Version>
+    <PackageTags>HealthCheck;Publisher;Prometheus;Prometheus Gateway</PackageTags>
+    <Description>HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
+    <Version>$(HealthCheckPublisherPrometheus)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
-    <LangVersion>latest</LangVersion>
-    <PackageId>AspNetCore.HealthChecks.DocumentDb</PackageId>
+    <PackageId>AspNetCore.HealthChecks.Publisher.Prometheus</PackageId>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="$(MicrosoftAzureDocumentDbCore)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="prometheus-net" Version="$(PrometheusNet)" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.0.0" />
   </ItemGroup>
 </Project>

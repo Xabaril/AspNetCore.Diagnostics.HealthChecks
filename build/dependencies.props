@@ -8,7 +8,7 @@
   <PropertyGroup Label="Package information">
     <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
-    <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
+    <RepositoryUrl>https://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package Versions">
-    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0-rtm-35639</MicrosoftExtensionsDiagnosticsHealthChecks>
-    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-rtm-35639</MicrosoftAspNetCoreDiagnosticsHealthChecks>
+    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0</MicrosoftExtensionsDiagnosticsHealthChecks>
+    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0</MicrosoftAspNetCoreDiagnosticsHealthChecks>
     <FluentAssertions>5.4.2</FluentAssertions>
     <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
     <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>
@@ -47,6 +47,7 @@
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
+    <PrometheusNet>2.1.3</PrometheusNet>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -55,25 +56,26 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>2.2.0-rtm-35639</HealthCheckIdSvr>
-    <HealthCheckSqlServer>2.2.0-rtm-35639</HealthCheckSqlServer>
-    <HealthCheckSqlite>2.2.0-rtm-35639</HealthCheckSqlite>
-    <HealthCheckUri>2.2.0-rtm-35639</HealthCheckUri>
-    <HealthCheckRedis>2.2.0-rtm-35639</HealthCheckRedis>
-    <HealthCheckRabbitMQ>2.2.0-rtm-35639</HealthCheckRabbitMQ>
-    <HealthCheckOracle>2.2.0-rtm-35639</HealthCheckOracle>
-    <HealthCheckNpgSql>2.2.0-rtm-35639</HealthCheckNpgSql>
-    <HealthCheckMongoDB>2.2.0-rtm-35639</HealthCheckMongoDB>
-    <HealthCheckMySql>2.2.0-rtm-35639</HealthCheckMySql>
-    <HealthCheckKafka>2.2.0-rtm-35639</HealthCheckKafka>
-    <HealthCheckSystem>2.2.0-rtm-35639</HealthCheckSystem>
-    <HealthCheckNetwork>2.2.0-rtm-35639</HealthCheckNetwork>
-    <HealthCheckDynamoDb>2.2.0-rtm-35639</HealthCheckDynamoDb>
-    <HealthCheckDocumentDb>2.2.0-rtm-35639</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>2.2.0-rtm-35639</HealthCheckAzureStorage>
-    <HealthCheckAzureServiceBus>2.2.0-rtm-35639</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.0-rtm-35639</HealthCheckUI>
-    <HealthCheckUIClient>2.2.0-rtm-35639</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.2.0-rtm-35639</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckIdSvr>2.2.0</HealthCheckIdSvr>
+    <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
+    <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
+    <HealthCheckUri>2.2.0</HealthCheckUri>
+    <HealthCheckRedis>2.2.0</HealthCheckRedis>
+    <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
+    <HealthCheckOracle>2.2.0</HealthCheckOracle>
+    <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
+    <HealthCheckMongoDB>2.2.0</HealthCheckMongoDB>
+    <HealthCheckMySql>2.2.0</HealthCheckMySql>
+    <HealthCheckKafka>2.2.0</HealthCheckKafka>
+    <HealthCheckSystem>2.2.0</HealthCheckSystem>
+    <HealthCheckNetwork>2.2.0</HealthCheckNetwork>
+    <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
+    <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
+    <HealthCheckAzureServiceBus>2.2.0</HealthCheckAzureServiceBus>
+    <HealthCheckUI>2.2.0</HealthCheckUI>
+    <HealthCheckUIClient>2.2.0</HealthCheckUIClient>
+    <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
   </PropertyGroup>
 </Project>

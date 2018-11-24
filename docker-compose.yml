@@ -19,6 +19,11 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         ports:
             - ${POSTGRES_PORT}:5432
+    eventstore: 
+        image: eventstore/eventstore
+        ports: 
+          - "2113:2113"
+          - ${EVENTSTORE_PORT}:1113
     mongodb:
         image: mongo
         ports:

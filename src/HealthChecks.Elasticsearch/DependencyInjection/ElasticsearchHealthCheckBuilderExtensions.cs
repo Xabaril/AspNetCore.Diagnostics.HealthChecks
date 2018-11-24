@@ -1,7 +1,6 @@
 ﻿using HealthChecks.Elasticsearch;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Generic;
-using HealthChecks.Elasticsearch;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

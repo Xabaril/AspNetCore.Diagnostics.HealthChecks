@@ -18,14 +18,14 @@ namespace FunctionalTests.HealthChecks.Elasticsearch
         private readonly ExecutionFixture _fixture;
 
         public elasticsearch_healthcheck_should(ExecutionFixture fixture)
-        {
+        { 
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
         [SkipOnAppVeyor]
         public async Task be_healthy_if_elasticsearch_is_available()
         {
-            var connectionString = @"localhost:9200";
+            var connectionString = @"http://localhost:9200";
 
             var webHostBuilder = new WebHostBuilder()
             .UseStartup<DefaultStartup>()

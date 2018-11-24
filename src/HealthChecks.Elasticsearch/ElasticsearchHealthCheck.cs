@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using NEST;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Nest;
 
 namespace HealthChecks.Elasticsearch
 {
@@ -24,7 +24,7 @@ namespace HealthChecks.Elasticsearch
 
                 return isSuccess
                     ? HealthCheckResult.Healthy()
-                    : HealthCheckResult.UnHealthy(pingResult.ApiCall.OriginalException);
+                    : HealthCheckResult.Unhealthy(pingResult.ApiCall.DebugInformation, pingResult.ApiCall.OriginalException);
 
             }
             catch (Exception ex)

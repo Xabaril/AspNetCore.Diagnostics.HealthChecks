@@ -17,6 +17,7 @@ HealthChecks packages include health checks for:
 - Oracle
 - Sqlite
 - Postgres 
+- EventStore
 - RabbitMQ
 - Redis 
 - System: Disk Storage, Private Memory, Virtual Memory
@@ -37,6 +38,7 @@ Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.Redis
+Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
 Install-Package AspNetCore.HealthChecks.MySql

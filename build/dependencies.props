@@ -48,6 +48,7 @@
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
+    <PrometheusNet>2.1.3</PrometheusNet>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -77,5 +78,6 @@
     <HealthCheckUI>2.2.0</HealthCheckUI>
     <HealthCheckUIClient>2.2.0</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
   </PropertyGroup>
 </Project>

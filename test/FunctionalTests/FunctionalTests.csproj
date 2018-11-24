@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />

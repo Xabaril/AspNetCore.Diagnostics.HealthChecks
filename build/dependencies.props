@@ -33,6 +33,7 @@
     <MySqlConnector>0.40.4</MySqlConnector>
     <ConfluentKafka>0.11.4</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
+    <NEST>6.1.0</NEST> 
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
     <WindowsAzureStorage>9.1.0</WindowsAzureStorage>
@@ -64,6 +65,7 @@
     <HealthCheckRedis>2.2.0</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
+    <HealthCheckElasticsearch>2.2.0</HealthCheckElasticsearch> 
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.0</HealthCheckMongoDB>

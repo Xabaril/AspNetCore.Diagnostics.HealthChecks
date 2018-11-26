@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <!--<TargetFramework>netcoreapp2.1</TargetFramework>-->
@@ -12,6 +12,7 @@
     <Authors>$(Authors)</Authors>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
     <PackageId>AspNetCore.HealthChecks.UI</PackageId>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

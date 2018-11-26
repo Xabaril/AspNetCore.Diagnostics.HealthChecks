@@ -40,6 +40,7 @@
     <MicrosoftAzureServiceBus>2.0.0</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.9</AWSSDKDynamoDBv2>
     <NewtonsoftJson>11.0.2</NewtonsoftJson>
+    <EventStoreClientAPINetCore>4.1.0.23</EventStoreClientAPINetCore>
     <MicrosoftAspNetCoreHostingAbstractions>2.1.1</MicrosoftAspNetCoreHostingAbstractions>
     <MicrosoftEntityFrameworkCore>2.1.1</MicrosoftEntityFrameworkCore>
     <MicrosoftEntityFrameworkCoreDesign>2.1.1</MicrosoftEntityFrameworkCoreDesign>
@@ -62,6 +63,7 @@
     <HealthCheckUri>2.2.0</HealthCheckUri>
     <HealthCheckRedis>2.2.0</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
+    <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.0</HealthCheckMongoDB>

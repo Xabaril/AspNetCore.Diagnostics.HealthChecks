@@ -1,15 +1,17 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EventStore.ClientAPI;
-using EventStore.ClientAPI.SystemData;
 
 namespace HealthChecks.EventStore
 {
     public class EventStoreHealthCheck
         : IHealthCheck
     {
+        const string CONNECTION_NAME = "AspNetCore HealthCheck Connection";
+
         private readonly string _eventStoreConnection;
         private readonly string _login;
         private readonly string _password;
@@ -22,7 +24,6 @@ namespace HealthChecks.EventStore
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-
             try
             {
                 var eventStoreUri = new Uri(_eventStoreConnection);
@@ -46,7 +47,7 @@ namespace HealthChecks.EventStore
                 var connection = EventStoreConnection.Create(
                     connectionSettings,
                     eventStoreUri,
-                    "AspnetCore HealthCheck");
+                    CONNECTION_NAME);
 
                 await connection.ConnectAsync();
 
@@ -54,7 +55,7 @@ namespace HealthChecks.EventStore
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy(ex.Message, ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

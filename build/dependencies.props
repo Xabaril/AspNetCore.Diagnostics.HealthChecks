@@ -50,6 +50,7 @@
     <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
+    <AWSSKDS3>3.3.29</AWSSKDS3>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -81,5 +82,6 @@
     <HealthCheckUIClient>2.2.0</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
+    <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
   </PropertyGroup>
 </Project>

@@ -148,7 +148,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 
 ```json
 {
-  "HealthCheck-UI": {
+  "HealthChecks-UI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",

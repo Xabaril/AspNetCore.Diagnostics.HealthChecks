@@ -26,6 +26,7 @@ HealthChecks packages include health checks for:
 - Azure Storage: Blob, Queue and Table
 - Azure DocumentDb
 - Amazon DynamoDb
+- Amazon S3
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
 - Mongo
 - Kafka

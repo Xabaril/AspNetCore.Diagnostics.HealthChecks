@@ -52,6 +52,7 @@ Install-Package AspNetCore.HealthChecks.IdSvr
 Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris
+Install-Package AspNetCore.HealthChecks.Aws.S3
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.

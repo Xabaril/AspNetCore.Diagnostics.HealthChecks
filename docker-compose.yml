@@ -100,5 +100,20 @@ services:
             - DMS_DEBUG=1
         volumes:
             - ./build/docker-services/mail/:/tmp/docker-mailserver/
-        
+    localstack:
+        image: localstack/localstack
+        ports:
+        - "4567-4584:4567-4584"
+        - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+        environment:
+        - SERVICES=${SERVICES- }
+        - DEBUG=${DEBUG- }
+        - DATA_DIR=${DATA_DIR- }
+        - PORT_WEB_UI=${PORT_WEB_UI- }
+        - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+        - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+        - DOCKER_HOST=unix:///var/run/docker.sock
+        volumes:
+        - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+        - "/var/run/docker.sock:/var/run/docker.sock"   
         

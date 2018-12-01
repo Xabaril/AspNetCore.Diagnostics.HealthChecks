@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
+﻿using HealthChecks.Aws.S3;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
+using System.Collections.Generic;
 
-namespace HealthChecks.Aws.S3.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class S3HealthCheckBuilderExtensions
     {

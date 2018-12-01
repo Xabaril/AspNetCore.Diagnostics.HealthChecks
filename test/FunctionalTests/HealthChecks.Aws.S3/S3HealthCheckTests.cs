@@ -1,17 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using FluentAssertions;
 using FunctionalTests.Base;
-using HealthChecks.Aws.S3.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FunctionalTests.HealthChecks.Aws.S3
@@ -35,7 +35,7 @@ namespace FunctionalTests.HealthChecks.Aws.S3
         public s3_healthcheck_should(ExecutionFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-            _s3Client = new AmazonS3Client(_localStackS3Config);
+            _s3Client = new AmazonS3Client(new AnonymousAWSCredentials(), _localStackS3Config);
         }
 
         [SkipOnAppVeyor]

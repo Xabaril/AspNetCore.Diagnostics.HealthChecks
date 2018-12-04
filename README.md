@@ -124,7 +124,7 @@ public class Startup
 }
 ```
 
-This automatically registers a new interface on **/health-ui**. 
+This automatically registers a new interface on **/healthchecks-ui**. 
 
 > Optionally, *UseHealthChecksUI* can be configured with different UI response path.
 

@@ -58,7 +58,7 @@ Install-Package AspNetCore.HealthChecks.Aws.S3
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.
 
-> We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChceks pacakges.
+> We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChecks pacakges.
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)

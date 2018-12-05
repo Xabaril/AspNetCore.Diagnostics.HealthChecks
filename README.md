@@ -28,7 +28,7 @@ HealthChecks packages include health checks for:
 - Amazon DynamoDb
 - Amazon S3
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
-- Mongo
+- MongoDB
 - Kafka
 - Identity Server
 - Uri: single uri and uri groups

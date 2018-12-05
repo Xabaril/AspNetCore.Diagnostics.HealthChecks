@@ -14,6 +14,8 @@ namespace HealthChecks.UI.Client
             var settings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
 
             settings.Converters.Add(new StringEnumConverter());

@@ -23,6 +23,8 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath);
 
+            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET,options.ResourcesPath);
+
             return resource;
         }
     }

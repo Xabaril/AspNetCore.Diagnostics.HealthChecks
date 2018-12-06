@@ -126,7 +126,8 @@ public class Startup
 
 This automatically registers a new interface on **/healthchecks-ui**. 
 
-> Optionally, *UseHealthChecksUI* can be configured with different UI response path.
+> Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload.
+
 
 ![HealthChecksUI](./doc/images/ui-home.png)
 

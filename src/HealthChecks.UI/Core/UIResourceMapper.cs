@@ -22,7 +22,7 @@ namespace HealthChecks.UI.Core
 
             foreach (var resource in resources)
             {
-                app.Map($"{Keys.HEALTHCHECKSUI_RESOURCES_PATH}/{resource.FileName}", appBuilder =>
+                app.Map($"{options.ResourcesPath}/{resource.FileName}", appBuilder =>
                 {
                     appBuilder.Run(async context =>
                     {

@@ -24,6 +24,7 @@ HealthChecks packages include health checks for:
 - System: Disk Storage, Private Memory, Virtual Memory
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
+- Azure Key Vault
 - Azure DocumentDb
 - Amazon DynamoDb
 - Amazon S3
@@ -44,6 +45,7 @@ Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
+Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite

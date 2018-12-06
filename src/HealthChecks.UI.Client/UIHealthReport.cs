@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Client
 
             foreach (var item in report.Entries)
             {
-                var uiEntry = new UIHealthReportEntry()
+                var entry = new UIHealthReportEntry()
                 {
                     Data = item.Value.Data,
                     Description = item.Value.Description,
@@ -34,11 +34,13 @@ namespace HealthChecks.UI.Client
 
                 if (item.Value.Exception != null)
                 {
-                    uiEntry.Exception = item.Value.Exception?.Message;
-                    uiEntry.Description = item.Value.Exception?.Message;
+                    var message = item.Value.Exception?.Message.ToString();
+
+                    entry.Exception = message;
+                    entry.Description = item.Value.Description ?? message;
                 }
 
-                uiReport.Entries.Add(item.Key, uiEntry);
+                uiReport.Entries.Add(item.Key, entry);
             }
 
             return uiReport;

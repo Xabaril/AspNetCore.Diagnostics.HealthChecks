@@ -36,9 +36,17 @@ namespace HealthChecks.UI.Core
             {
                 appBuilder.Run(context =>
                 {
-                    context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
-                    context.Response.ContentType = UIMain.ContentType;
-                    context.Response.WriteAsync(UIMain.Content);
+                    context.Response.OnStarting(async () =>
+                    {
+                        if (!context.Response.Headers.ContainsKey("Cache-Control"))
+                        {
+                            context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+                        }
+
+                        context.Response.ContentType = UIMain.ContentType;
+                        await context.Response.WriteAsync(UIMain.Content);
+                    });
+
                     return Task.CompletedTask;
                 });
             });

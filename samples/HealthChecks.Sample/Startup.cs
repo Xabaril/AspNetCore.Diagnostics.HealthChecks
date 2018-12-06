@@ -27,6 +27,7 @@ namespace HealthChecks.Sample
             services.AddHealthChecks()
                 .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random")
+                .AddIdentityServer(new Uri("http://localhost:6060"))
                 .AddApplicationInsightsPublisher();
 
             services.AddMvc()

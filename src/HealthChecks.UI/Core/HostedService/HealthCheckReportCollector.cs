@@ -1,4 +1,5 @@
-﻿using HealthChecks.UI.Configuration;
+﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,7 @@ namespace HealthChecks.UI.Core.HostedService
 
                     var healthReport = await GetHealthReport(item);
 
-                    if (healthReport.Status != HealthStatus.Healthy)                       
+                    if (healthReport.Status != UIHealthStatus.Healthy)                       
                     {
                         await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
                     }
@@ -72,7 +73,7 @@ namespace HealthChecks.UI.Core.HostedService
         {
             return new HttpClient().GetAsync(uri);
         }
-        private async Task<HealthReport> GetHealthReport(HealthCheckConfiguration configuration)
+        private async Task<UIHealthReport> GetHealthReport(HealthCheckConfiguration configuration)
         {
             var (uri, name) = configuration;
 
@@ -80,14 +81,14 @@ namespace HealthChecks.UI.Core.HostedService
             {
                 var response = await PerformRequest(uri);
 
-                return await response.As<HealthReport>();
+                return await response.As<UIHealthReport>();
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception, "GetHealthReport throw the exception.");
 
-                return new HealthReport(
-                    entries: new Dictionary<string, HealthReportEntry>(),
+                return new UIHealthReport(
+                    entries: new Dictionary<string, UIHealthReportEntry>(),
                     totalDuration: TimeSpan.FromSeconds(0));
             }
         }
@@ -97,7 +98,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (previous != null)
             {
-                return previous.Status != HealthStatus.Healthy;
+                return previous.Status != UIHealthStatus.Healthy;
             }
 
             return false;
@@ -110,7 +111,7 @@ namespace HealthChecks.UI.Core.HostedService
                 .Where(le => le.Name.Equals(configuration.Name, StringComparison.InvariantCultureIgnoreCase))
                 .SingleOrDefaultAsync();
         }
-        private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, HealthReport healthReport)
+        private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, UIHealthReport healthReport)
         {
             _logger.LogDebug("HealthReportCollector save a new health report execution history.");
 

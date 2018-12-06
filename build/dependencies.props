@@ -78,8 +78,8 @@
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.0</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.0</HealthCheckUI>
-    <HealthCheckUIClient>2.2.1</HealthCheckUIClient>
+    <HealthCheckUI>2.2.2</HealthCheckUI>
+    <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>

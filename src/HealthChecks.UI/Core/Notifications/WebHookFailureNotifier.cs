@@ -1,4 +1,5 @@
-﻿using HealthChecks.UI.Configuration;
+﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -26,7 +27,7 @@ namespace HealthChecks.UI.Core.Notifications
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task NotifyDown(string name, HealthReport report)
+        public async Task NotifyDown(string name, UIHealthReport report)
         {
             await Notify(name, 
                 failure: GetFailedMessageFromContent(report), 
@@ -121,10 +122,10 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
             }
         }
-        private string GetFailedMessageFromContent(HealthReport healthReport)
+        private string GetFailedMessageFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Values
-                .Where(c => c.Status != HealthStatus.Healthy)
+                .Where(c => c.Status != UIHealthStatus.Healthy)
                 .Count();
 
             return $"There is at least {failedChecks} HealthChecks failing.";

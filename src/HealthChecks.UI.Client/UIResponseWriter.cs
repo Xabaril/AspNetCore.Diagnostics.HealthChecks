@@ -15,15 +15,17 @@ namespace HealthChecks.UI.Client
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             };
 
             settings.Converters.Add(new StringEnumConverter());
 
             httpContext.Response.ContentType = "application/json";
 
-            var jsonResponse = result != null ? 
-                JsonConvert.SerializeObject(result, settings)
+            var report = UIHealthReport.CreateFrom(result);
+            
+            var jsonResponse = result != null ?
+                JsonConvert.SerializeObject(report, settings)
                 : "{}";
 
             return httpContext.Response.WriteAsync(jsonResponse);

@@ -5,11 +5,8 @@ namespace HealthChecks.UI.Core
     internal class UIResource
     {
         public string Content { get; internal set; }
-
         public string ContentType { get; }
-
         public string FileName { get;}
-        
         private UIResource(string fileName, string content, string contentType)
         {
             Content = content ?? throw new ArgumentNullException(nameof(content));

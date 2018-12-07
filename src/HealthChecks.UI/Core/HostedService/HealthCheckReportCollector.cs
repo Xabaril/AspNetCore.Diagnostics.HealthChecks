@@ -22,7 +22,6 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
         private readonly Settings _settings;
         private readonly ILogger<HealthCheckReportCollector> _logger;
-
         public HealthCheckReportCollector(
             HealthChecksDb db,
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
@@ -51,7 +50,7 @@ namespace HealthChecks.UI.Core.HostedService
 
                     var healthReport = await GetHealthReport(item);
 
-                    if (healthReport.Status != UIHealthStatus.Healthy)                       
+                    if (healthReport.Status != UIHealthStatus.Healthy)
                     {
                         await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
                     }
@@ -107,7 +106,7 @@ namespace HealthChecks.UI.Core.HostedService
         {
             return await _db.Executions
                 .Include(le => le.History)
-                .Include(le=>le.Entries)
+                .Include(le => le.Entries)
                 .Where(le => le.Name.Equals(configuration.Name, StringComparison.InvariantCultureIgnoreCase))
                 .SingleOrDefaultAsync();
         }
@@ -128,7 +127,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     _logger.LogDebug("HealthReport history already exist and is in the same state, update the values.");
 
-                    execution.LastExecuted = lastExecutionTime;    
+                    execution.LastExecuted = lastExecutionTime;
                 }
                 else
                 {

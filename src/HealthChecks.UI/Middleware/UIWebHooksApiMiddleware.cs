@@ -15,7 +15,6 @@ namespace HealthChecks.UI.Core
     {
         private readonly JsonSerializerSettings _jsonSerializationSettings;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-
         public UIWebHooksApiMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {
             _jsonSerializationSettings = new JsonSerializerSettings()
@@ -24,28 +23,21 @@ namespace HealthChecks.UI.Core
             };
             _serviceScopeFactory = serviceScopeFactory;
         }
-
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var beatPulseSettings = scope.ServiceProvider.GetService<IOptions<Settings>>();
-                context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
-
-                var sanitizedWebhooksResponse = beatPulseSettings.Value.Webhooks.Select(w =>
+                var settings = scope.ServiceProvider.GetService<IOptions<Settings>>();
+                var sanitizedWebhooksResponse = settings.Value.Webhooks.Select(item => new
                 {
-                    dynamic payload = string.IsNullOrEmpty(w.Payload) ? new JObject() : JObject.Parse(Regex.Unescape(w.Payload));
-                    dynamic webhook = new
-                    {
-                        w.Name,
-                        w.Uri,
-                        Payload = payload
-                    };
-
-                    return webhook;
+                    item.Name,
+                    item.Uri,
+                    Payload = string.IsNullOrEmpty(item.Payload) ? new JObject() : JObject.Parse(Regex.Unescape(item.Payload))
                 });
+                context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
+                var response = JsonConvert.SerializeObject(sanitizedWebhooksResponse, _jsonSerializationSettings);
 
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(sanitizedWebhooksResponse, _jsonSerializationSettings));
+                await context.Response.WriteAsync(response);
             }
         }
     }

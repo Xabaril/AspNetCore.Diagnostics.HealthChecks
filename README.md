@@ -86,21 +86,23 @@ public void ConfigureServices(IServiceCollection services)
 
 ## HealthCheck push results
 
-HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **HealthChecks.Publisher.ApplicationInsights** define a consumer to send report results to Application Insights.
+HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights** or **AspNetCore.HealthChecks.Publisher.Prometheus** define a consumers to send report results to Application Insights or Prometheus.
 
 Include the package in your project:
 
 ```powershell
-install-package HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.Prometheus
 ```
 
-Add publisher into the *IHealthCheckBuilder*
+Add publisher[s] into the *IHealthCheckBuilder*
 
 ```csharp
 services.AddHealthChecks()
         .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
         .AddCheck<RandomHealthCheck>("random")
-        .AddApplicationInsightsPublisher();
+        .AddApplicationInsightsPublisher()
+        .AddPrometheusGatewayPublisher();
 ```
 
 ## HealthCheckUI and failure notifications

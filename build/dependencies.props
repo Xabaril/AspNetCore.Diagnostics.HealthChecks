@@ -48,6 +48,7 @@
     <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsDependencyInjection>2.1.1</MicrosoftExtensionsDependencyInjection>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>

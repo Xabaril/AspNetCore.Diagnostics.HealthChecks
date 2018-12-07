@@ -73,7 +73,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Elasticsearch"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.EventStore", "src\HealthChecks.EventStore\HealthChecks.EventStore.csproj", "{39667845-526D-46ED-90F0-05ED6B8814F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureKeyVault", "src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj", "{A6414860-EBAE-43E4-8109-DE745DA15C43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureKeyVault", "src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj", "{A6414860-EBAE-43E4-8109-DE745DA15C43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{300A1B42-EA00-480A-AC43-007EBC7CE472}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -193,6 +195,10 @@ Global
 		{A6414860-EBAE-43E4-8109-DE745DA15C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6414860-EBAE-43E4-8109-DE745DA15C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6414860-EBAE-43E4-8109-DE745DA15C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,6 +232,7 @@ Global
 		{8ACAEE4F-55EA-452F-A5EF-9D99EA9885F9} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{39667845-526D-46ED-90F0-05ED6B8814F1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{A6414860-EBAE-43E4-8109-DE745DA15C43} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{300A1B42-EA00-480A-AC43-007EBC7CE472} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

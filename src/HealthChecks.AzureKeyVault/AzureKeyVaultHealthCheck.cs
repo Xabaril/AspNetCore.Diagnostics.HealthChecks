@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.AzureKeyVault
 {
-    internal class AzureKeyVaultHealthCheck : IHealthCheck
+    public class AzureKeyVaultHealthCheck : IHealthCheck
     {
         private readonly AzureKeyVaultOptions _keyVaultOptions;
 
@@ -19,7 +19,7 @@ namespace HealthChecks.AzureKeyVault
             if (string.IsNullOrEmpty(keyVaultOptions.KeyVaultUrlBase)) throw new ArgumentNullException(keyVaultOptions.KeyVaultUrlBase);
             if (string.IsNullOrEmpty(keyVaultOptions.ClientId)) throw new ArgumentNullException(keyVaultOptions.ClientId);
             if (string.IsNullOrEmpty(keyVaultOptions.ClientSecret)) throw new ArgumentNullException(keyVaultOptions.ClientSecret);
-
+                
             _keyVaultOptions = keyVaultOptions;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

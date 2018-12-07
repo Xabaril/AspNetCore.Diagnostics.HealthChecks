@@ -38,13 +38,24 @@ echo "build: Build version suffix is $buildSuffix"
 
 exec { & dotnet build AspNetCore.Diagnostics.HealthChecks.sln -c Release --version-suffix=$buildSuffix -v q /nologo }
 
+echo "Running unit tests" 
+
+try {
+    
+Push-Location -Path .\test\UnitTests
+        exec { & dotnet test}
+} finally {
+        Pop-Location
+}
+
+
 if (-Not (Test-Path 'env:APPVEYOR')) {
 	exec { & docker-compose up -d }
 }
 
 echo "compose up done"
 
-echo "running tests"
+echo "Running functional tests"
 
 try {
     

@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace HealthChecks.UI.Client
 {
+    /*
+     * Models for UI Client. This models represent a indirection between HealthChecks API and 
+     * UI Client in order to implement some features not present on HealthChecks of substiture 
+     * some properties etc.
+     */
     public class UIHealthReport
     {
         public UIHealthStatus Status { get; set; }
@@ -34,7 +39,9 @@ namespace HealthChecks.UI.Client
 
                 if (item.Value.Exception != null)
                 {
-                    var message = item.Value.Exception?.Message.ToString();
+                    var message = item.Value.Exception?
+                        .Message
+                        .ToString();
 
                     entry.Exception = message;
                     entry.Description = item.Value.Description ?? message;

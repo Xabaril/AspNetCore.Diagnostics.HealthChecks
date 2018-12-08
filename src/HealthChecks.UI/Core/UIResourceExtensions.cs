@@ -10,7 +10,6 @@ namespace HealthChecks.UI.Core
         {
             return resources.Where(r => r.ContentType == contentType);
         }           
-       
         public static UIResource GetMainUI(this IEnumerable<UIResource> resources, Options options)
         {
             var resource = resources

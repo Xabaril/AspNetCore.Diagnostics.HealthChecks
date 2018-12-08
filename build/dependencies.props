@@ -66,7 +66,7 @@
     <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.0</HealthCheckUri>
-    <HealthCheckRedis>2.2.0</HealthCheckRedis>
+    <HealthCheckRedis>2.2.1</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.0</HealthCheckElasticsearch> 
@@ -81,7 +81,7 @@
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.1</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.3</HealthCheckUI>
+    <HealthCheckUI>2.2.4</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>

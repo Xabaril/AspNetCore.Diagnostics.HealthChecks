@@ -24,7 +24,8 @@ namespace HealthChecks.UI.Middleware
             _serviceScopeFactory = serviceScopeFactory;
             _jsonSerializationSettings = new JsonSerializerSettings()
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Converters = new[] { new StringEnumConverter() }
             };
         }
 
@@ -53,13 +54,9 @@ namespace HealthChecks.UI.Middleware
                     }
                 }
 
-                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, new JsonSerializerSettings()
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    Converters = new[] { new StringEnumConverter() }
-                });
-
+                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
+
                 await context.Response.WriteAsync(responseContent);
             }
         }

@@ -9,26 +9,32 @@ namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
-        public static Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport result)
+        const string DEFAULT_CONTENT_TYPE = "application/json";
+
+        public static Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
         {
-            var settings = new JsonSerializerSettings()
+            var response = "{}";
+
+            if (report != null)
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            };
+                var settings = new JsonSerializerSettings()
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                };
 
-            settings.Converters.Add(new StringEnumConverter());
+                settings.Converters.Add(new StringEnumConverter());
 
-            httpContext.Response.ContentType = "application/json";
+                httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
 
-            var report = UIHealthReport.CreateFrom(result);
-            
-            var jsonResponse = result != null ?
-                JsonConvert.SerializeObject(report, settings)
-                : "{}";
+                var uiReport = UIHealthReport
+                    .CreateFrom(report);
 
-            return httpContext.Response.WriteAsync(jsonResponse);
+                response = JsonConvert.SerializeObject(uiReport, settings);
+            }
+
+            return httpContext.Response.WriteAsync(response);
         }
     }
 }

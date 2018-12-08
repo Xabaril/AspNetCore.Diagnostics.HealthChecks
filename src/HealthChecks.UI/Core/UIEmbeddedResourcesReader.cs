@@ -9,22 +9,18 @@ namespace HealthChecks.UI.Core
         : IUIResourcesReader
     {
         private readonly Assembly _assembly;
-
         public UIEmbeddedResourcesReader(Assembly assembly)
         {
             _assembly = assembly ?? throw new ArgumentNullException(nameof(assembly));
         }
-
         public IEnumerable<UIResource> UIResources
         {
             get
             {
                 var embeddedResources = _assembly.GetManifestResourceNames();
-
                 return ParseEmbeddedResources(embeddedResources);
             }
         }
-
         private IEnumerable<UIResource> ParseEmbeddedResources(string[] embeddedFiles)
         {
             const char SPLIT_SEPARATOR = '.';

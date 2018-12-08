@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace UnitTests.HealthChecks.AzureKeyVault
+namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
 {
     public class azure_keyvault_registration_should
     {

@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>    
-    <ProjectReference Include="..\..\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj" />    
+    <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
   </ItemGroup>
 
 </Project>

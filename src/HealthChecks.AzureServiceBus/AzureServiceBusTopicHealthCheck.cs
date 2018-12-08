@@ -15,8 +15,11 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _topicName;
         public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _topicName = topicName ?? throw new ArgumentNullException(nameof(topicName));
+            if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
+            if (string.IsNullOrEmpty(topicName)) throw new ArgumentNullException(nameof(topicName));
+
+            _connectionString = connectionString;
+            _topicName = topicName;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

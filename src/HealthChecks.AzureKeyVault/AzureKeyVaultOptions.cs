@@ -34,7 +34,7 @@ namespace HealthChecks.AzureKeyVault
         {            
             if(string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
             {
-                throw new ArgumentNullException("ClientId and ClientSecret paranters should not be empty");
+                throw new ArgumentNullException("ClientId and ClientSecret parameters should not be empty");
             }
             
             ClientId = clientId;

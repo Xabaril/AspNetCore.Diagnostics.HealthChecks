@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
@@ -7,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Microsoft.Azure.KeyVault.KeyVaultClient;
 
 namespace HealthChecks.AzureKeyVault
 {
@@ -16,19 +18,20 @@ namespace HealthChecks.AzureKeyVault
 
         public AzureKeyVaultHealthCheck(AzureKeyVaultOptions keyVaultOptions)
         {
-            if (string.IsNullOrEmpty(keyVaultOptions.KeyVaultUrlBase)) throw new ArgumentNullException(keyVaultOptions.KeyVaultUrlBase);
-            if (string.IsNullOrEmpty(keyVaultOptions.ClientId)) throw new ArgumentNullException(keyVaultOptions.ClientId);
-            if (string.IsNullOrEmpty(keyVaultOptions.ClientSecret)) throw new ArgumentNullException(keyVaultOptions.ClientSecret);
-                
+            if (!Uri.TryCreate(keyVaultOptions.KeyVaultUrlBase, UriKind.Absolute, out var _))
+            {
+                throw new ArgumentException("KeyVaultUrlBase must be a valid Uri");
+            }
+
             _keyVaultOptions = keyVaultOptions;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            string currentSecret = string.Empty;
+            var currentSecret = string.Empty;
 
             try
             {
-                var client = new KeyVaultClient(GetToken);
+                var client = GetClient(_keyVaultOptions);
                 foreach (var secretIdentifier in _keyVaultOptions.Secrets)
                 {
                     currentSecret = secretIdentifier;
@@ -36,12 +39,24 @@ namespace HealthChecks.AzureKeyVault
                 }
 
                 return HealthCheckResult.Healthy();
-
             }
             catch (Exception ex)
             {
                 var secretException = new Exception($"{currentSecret} secret error - {ex.Message}", ex);
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: secretException);
+            }
+        }
+
+        private KeyVaultClient GetClient(AzureKeyVaultOptions options)
+        {
+            if (string.IsNullOrEmpty(options.ClientId))
+            {
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                return new KeyVaultClient(new AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+            }
+            else
+            {
+                return new KeyVaultClient(GetToken);
             }
         }
 

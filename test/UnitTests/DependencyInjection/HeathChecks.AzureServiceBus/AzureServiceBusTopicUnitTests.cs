@@ -28,7 +28,6 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azuretopic");
             check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
-
         }
 
         [Fact]
@@ -54,7 +53,7 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusTopic("", "");
+                .AddAzureServiceBusTopic(string.Empty, string.Empty);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

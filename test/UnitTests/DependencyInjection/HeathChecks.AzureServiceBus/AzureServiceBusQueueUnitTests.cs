@@ -54,7 +54,7 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusQueue("", "");
+                .AddAzureServiceBusQueue(string.Empty, string.Empty);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

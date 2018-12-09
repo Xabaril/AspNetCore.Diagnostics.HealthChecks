@@ -19,11 +19,11 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
             var services = new ServiceCollection();
             services.AddHealthChecks()
                 .AddAzureKeyVault(setup =>
-                {
-                    setup.KeyVaultUrlBase = "http://url";
-                    setup.ClientId = "value";
-                    setup.ClientSecret = "value";
-                });
+               {
+                   setup
+                   .UseKeyVaultUrl("https://keyvault")
+                   .AddSecret("supercret");
+               });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -43,9 +43,10 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
             services.AddHealthChecks()
                 .AddAzureKeyVault(setup =>
                 {
-                    setup.KeyVaultUrlBase = "http://url";
-                    setup.ClientId = "value";
-                    setup.ClientSecret = "value";
+                    setup
+                    .UseKeyVaultUrl("https://keyvault")
+                    .UseClientSecrets("client", "secret");
+
                 }, name: "keyvaultcheck");
 
             var serviceProvider = services.BuildServiceProvider();
@@ -56,6 +57,26 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
 
             registration.Name.Should().Be("keyvaultcheck");
             check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
+        }
+
+        [Fact]
+        public void fail_when_invalidad_uri_provided_in_configuration()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureKeyVault(setup =>
+                {
+                    setup
+                    .UseKeyVaultUrl("invalid URI")
+                    .AddSecret("mysecret");
+                });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+
+            Assert.Throws<ArgumentException>(() => registration.Factory(serviceProvider));
         }
 
         [Fact]
@@ -70,7 +91,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
 
             var registration = options.Value.Registrations.First();
 
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+            Assert.Throws<ArgumentException>(() => registration.Factory(serviceProvider));
         }
     }
 }

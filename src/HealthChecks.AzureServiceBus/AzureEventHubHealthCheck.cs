@@ -13,8 +13,15 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _eventHubName;
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
-            if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
-            if (string.IsNullOrEmpty(eventHubName)) throw new ArgumentNullException(nameof(eventHubName));
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+
+            if (string.IsNullOrEmpty(eventHubName))
+            {
+                throw new ArgumentNullException(nameof(eventHubName));
+            }
 
             _connectionString = connectionString;
             _eventHubName = eventHubName;

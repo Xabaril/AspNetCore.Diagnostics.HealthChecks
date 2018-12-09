@@ -54,6 +54,7 @@
     <AWSSKDS3>3.3.29</AWSSKDS3>
     <MicrosoftAzureKeyVault>3.0.2</MicrosoftAzureKeyVault>
     <MicrosoftIdentityModelClientsActiveDirectory>4.4.1</MicrosoftIdentityModelClientsActiveDirectory>
+    <MicrosoftAzureServicesAppAuthentication>1.0.3</MicrosoftAzureServicesAppAuthentication>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">

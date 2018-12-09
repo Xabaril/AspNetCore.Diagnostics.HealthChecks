@@ -28,7 +28,6 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azureeventhub");
             check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
-
         }
 
         [Fact]
@@ -54,7 +53,7 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureEventHub("","");
+                .AddAzureEventHub(string.Empty, string.Empty);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

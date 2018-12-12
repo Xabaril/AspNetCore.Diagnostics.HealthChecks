@@ -16,9 +16,9 @@ namespace FunctionalTests.HealthChecks.Gcp.Datastore
     [Collection("execution")]
     public class datastore_healthcheck_should
     {
-        private const string ProjectId = "demo";
+        private const string ProjectId = "project-test";
         private const string Host = "localhost";
-        private const int Port = 8000;
+        private const int Port = 8081;
         private const int BadPort = 8001;
         private readonly ExecutionFixture _fixture;
 

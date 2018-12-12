@@ -25,7 +25,8 @@ namespace HealthChecks.Gcp.Datastore
             {
                 using (var transaction = await _datastoreDb.BeginTransactionAsync(
                         CallSettings.FromCallTiming(
-                            CallTiming.FromTimeout(TimeSpan.FromSeconds(_timeOut)))))
+                            CallTiming.FromTimeout(
+                                TimeSpan.FromSeconds(_timeOut)))))
                 {
                     return HealthCheckResult.Healthy();
                 }

@@ -72,7 +72,7 @@
     <HealthCheckMongoDB>2.2.0</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
     <HealthCheckKafka>2.2.0</HealthCheckKafka>
-    <HealthCheckSystem>2.2.0</HealthCheckSystem>
+    <HealthCheckSystem>2.2.1</HealthCheckSystem>
     <HealthCheckNetwork>2.2.0</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>

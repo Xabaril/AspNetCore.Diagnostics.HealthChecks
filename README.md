@@ -111,13 +111,7 @@ services.AddHealthChecks()
 
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
 
-Include the package in your project:
-
-```powershell
-install-package AspNetCore.HealthChecks.UI
-```
-
-To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
+To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**
 
 ```csharp
 public class Startup

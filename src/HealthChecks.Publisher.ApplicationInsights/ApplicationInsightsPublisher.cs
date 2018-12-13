@@ -16,21 +16,28 @@ namespace HealthChecks.Publisher.ApplicationInsights
         const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
         const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
 
+        private readonly string _instrumentationKey;
         private static TelemetryClient _client;
 
         public ApplicationInsightsPublisher(string instrumentationKey = default)
         {
-            //override instrumentation key or use default instrumentation 
-            //key active on the project.
-
-            var configuration = string.IsNullOrWhiteSpace(instrumentationKey)
-                ? TelemetryConfiguration.Active
-                : new TelemetryConfiguration(instrumentationKey);
-            _client = new TelemetryClient(configuration);
+            _instrumentationKey = instrumentationKey;
         }
 
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
+            if (_client == null)
+            {
+                //override instrumentation key or use default instrumentation 
+                //key active on the project.
+
+                var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
+                    ? TelemetryConfiguration.Active
+                    : new TelemetryConfiguration(_instrumentationKey);
+
+                _client = new TelemetryClient(configuration);
+            }
+
             _client.TrackEvent(EVENT_NAME,
                 properties: new Dictionary<string, string>()
                 {

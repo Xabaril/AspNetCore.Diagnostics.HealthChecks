@@ -10,13 +10,15 @@ using System.Threading.Tasks;
 namespace HealthChecks.Publisher.ApplicationInsights
 {
     class ApplicationInsightsPublisher
-        :IHealthCheckPublisher
+        : IHealthCheckPublisher
     {
         const string EVENT_NAME = "AspNetCoreHealthCheck";
         const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
         const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
 
         private readonly string _instrumentationKey;
+        private static TelemetryClient _client;
+        private static object sync_root = new object();
 
         public ApplicationInsightsPublisher(string instrumentationKey = default)
         {
@@ -25,15 +27,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
 
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
-            //override instrumentation key or use default instrumentation 
-            //key active on the project.
-            var configuration = String.IsNullOrWhiteSpace(_instrumentationKey)
-                ? TelemetryConfiguration.Active
-                : new TelemetryConfiguration(_instrumentationKey);
-
-            var client = new TelemetryClient(configuration);
-
-            client.TrackEvent(EVENT_NAME,
+            GetOrCreateTelemetryClient().TrackEvent(EVENT_NAME,
                 properties: new Dictionary<string, string>()
                 {
                     {nameof(Environment.MachineName),Environment.MachineName},
@@ -46,6 +40,29 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 });
 
             return Task.CompletedTask;
+        }
+
+        TelemetryClient GetOrCreateTelemetryClient()
+        {
+            if (_client == null)
+            {
+                lock (sync_root)
+                {
+                    if (_client == null)
+                    {
+                        //override instrumentation key or use default instrumentation 
+                        //key active on the project.
+
+                        var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
+                            ? TelemetryConfiguration.Active
+                            : new TelemetryConfiguration(_instrumentationKey);
+
+                        _client = new TelemetryClient(configuration);
+                    }
+                }
+            }
+
+            return _client;
         }
     }
 }

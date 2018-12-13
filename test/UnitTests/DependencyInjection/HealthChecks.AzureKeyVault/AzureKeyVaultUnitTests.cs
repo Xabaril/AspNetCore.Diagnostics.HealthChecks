@@ -4,9 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
@@ -63,35 +61,17 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         public void fail_when_invalidad_uri_provided_in_configuration()
         {
             var services = new ServiceCollection();
-            services.AddHealthChecks()
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                services.AddHealthChecks()
                 .AddAzureKeyVault(setup =>
                 {
                     setup
                     .UseKeyVaultUrl("invalid URI")
                     .AddSecret("mysecret");
                 });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-
-            Assert.Throws<ArgumentException>(() => registration.Factory(serviceProvider));
-        }
-
-        [Fact]
-        public void fail_when_no_health_check_configuration_provided()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureKeyVault(setup => { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-
-            Assert.Throws<ArgumentException>(() => registration.Factory(serviceProvider));
+            });
         }
     }
 }

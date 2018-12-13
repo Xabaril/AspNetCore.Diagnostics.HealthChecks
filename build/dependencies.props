@@ -87,6 +87,6 @@
     <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
-    <HealthCheckKeyVault>2.2.0</HealthCheckKeyVault>
+    <HealthCheckKeyVault>2.2.1</HealthCheckKeyVault>
   </PropertyGroup>
 </Project>

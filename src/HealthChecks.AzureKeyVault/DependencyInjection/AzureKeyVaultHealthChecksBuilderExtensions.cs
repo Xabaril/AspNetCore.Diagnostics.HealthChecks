@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string KEYVAULT_NAME = "azurekeyvault";
 
         /// <summary>
-        /// Add a health check for Azure Key Vault. Default behaviour is using Managed Service Identity, to use Client Secrets call UseClientSecrets in setup action
+        /// Add a health check for Azure Key Vault. 
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup"> Setup action to configure Azure Key Vault options.</param>    

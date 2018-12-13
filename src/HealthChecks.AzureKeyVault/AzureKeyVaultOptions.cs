@@ -9,13 +9,12 @@ namespace HealthChecks.AzureKeyVault
     public class AzureKeyVaultOptions
     {
         internal HashSet<string> _secrets = new HashSet<string>();
+
         internal IEnumerable<string> Secrets
         {
-            get
-            {
-                return _secrets;
-            }
+            get { return _secrets; }
         }
+
         internal string KeyVaultUrlBase { get; private set; }
         internal string ClientId { get; private set; }
         internal string ClientSecret { get; private set; }
@@ -50,6 +49,7 @@ namespace HealthChecks.AzureKeyVault
             {
                 throw new ArgumentNullException("ClientId and ClientSecret parameters should not be empty.");
             }
+
             ClientId = clientId;
             ClientSecret = clientSecret;
             UseManagedServiceIdentity = false;
@@ -60,11 +60,11 @@ namespace HealthChecks.AzureKeyVault
         /// Azure key vault connection is performed using Azure Managed Service Identity.
         /// </summary>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions UseAzureManagedServiceIdentity(bool useManagedServiceIdentity = true)
+        public AzureKeyVaultOptions UseAzureManagedServiceIdentity()
         {
             ClientId = string.Empty;
             ClientSecret = string.Empty;
-            UseManagedServiceIdentity = useManagedServiceIdentity;
+            UseManagedServiceIdentity = true;
             return this;
         }
 
@@ -75,10 +75,8 @@ namespace HealthChecks.AzureKeyVault
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureKeyVaultOptions AddSecret(string secretIdentifier)
         {
-            if (!_secrets.Contains(secretIdentifier))
-            {
-                _secrets.Add(secretIdentifier);
-            }
+            _secrets.Add(secretIdentifier);
+
             return this;
         }
     }

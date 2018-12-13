@@ -58,7 +58,7 @@ Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
 ```
 
-Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.
+Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
 
 > We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChecks pacakges.
 
@@ -198,6 +198,11 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 [[FAILURE]] A detail message with the failure.
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
+
+###Liveness and readiness probes with kubernetes
+
+Asp.Net Core Healthchecks becomes really useful to configure our liveness and readiness tests in kubernetes deployments. You can read more on the [liveness
+probes section samples](./doc/kubernetes-liveness.md)
 
 ## Contributing
 

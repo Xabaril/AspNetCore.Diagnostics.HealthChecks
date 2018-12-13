@@ -35,7 +35,7 @@ namespace HealthChecks.UI.Core.HostedService
         }
         public async Task Collect(CancellationToken cancellationToken)
         {
-            using (_logger.BeginScope("HealthReportCollector is collection health checks results."))
+            using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
             {
                 var healthChecks = await _db.Configurations
                    .ToListAsync();
@@ -44,7 +44,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        _logger.LogDebug("HealthReportCollector is cancelled.");
+                        _logger.LogDebug("HealthReportCollector has been cancelled.");
                         break;
                     }
 
@@ -65,7 +65,7 @@ namespace HealthChecks.UI.Core.HostedService
                     await SaveExecutionHistory(item, healthReport);
                 }
 
-                _logger.LogDebug("HealthReportCollector is completed.");
+                _logger.LogDebug("HealthReportCollector has completed.");
             }
         }
         protected internal virtual Task<HttpResponseMessage> PerformRequest(string uri)
@@ -84,7 +84,7 @@ namespace HealthChecks.UI.Core.HostedService
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "GetHealthReport throw the exception.");
+                _logger.LogError(exception, "GetHealthReport threw an exception.");
 
                 return new UIHealthReport(
                     entries: new Dictionary<string, UIHealthReportEntry>(),
@@ -112,7 +112,7 @@ namespace HealthChecks.UI.Core.HostedService
         }
         private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, UIHealthReport healthReport)
         {
-            _logger.LogDebug("HealthReportCollector save a new health report execution history.");
+            _logger.LogDebug("HealthReportCollector - health report execution history saved.");
 
             var execution = await GetHealthCheckExecution(configuration);
 
@@ -125,13 +125,13 @@ namespace HealthChecks.UI.Core.HostedService
 
                 if (execution.Status == healthReport.Status)
                 {
-                    _logger.LogDebug("HealthReport history already exist and is in the same state, update the values.");
+                    _logger.LogDebug("HealthReport history already exists and is in the same state, updating the values.");
 
                     execution.LastExecuted = lastExecutionTime;
                 }
                 else
                 {
-                    _logger.LogDebug("HealthCheckReportCollector already exist but on different state, update the values.");
+                    _logger.LogDebug("HealthCheckReportCollector already exists but on different state, updating the values.");
 
                     execution.History.Add(new HealthCheckExecutionHistory()
                     {

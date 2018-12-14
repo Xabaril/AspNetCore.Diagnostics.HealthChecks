@@ -199,9 +199,9 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
-###Liveness and readiness probes with kubernetes
+## Liveness and readiness probes with kubernetes and HealthChecks
 
-Asp.Net Core Healthchecks becomes really useful to configure our liveness and readiness tests in kubernetes deployments. You can read more on the [liveness
+Asp.Net Core Healthchecks becomes really useful to configure our liveness and readiness probes in kubernetes deployments. You can read more on the [liveness
 probes section samples](./doc/kubernetes-liveness.md)
 
 ## Contributing

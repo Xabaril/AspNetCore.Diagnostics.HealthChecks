@@ -1,10 +1,10 @@
-## Kubernetes liveness and readiness probes
+## Kubernetes liveness and readiness probes using HealthChecks
 
-Asp.Net Core HealthChecks becomes really useful to configure our liveness and readiness probes in our kubernetes deployments. In the following lines we will show a sample of how can we do this.
+Asp.Net Core HealthChecks becomes really useful to configure our liveness and readiness probes in our kubernetes deployments. In the following lines we will show a sample of how can we do this. This sample is a little tutorial that might be useful for people starting to work with HealthChecks and Kubernetes.
 
 To follow the sample you will need to have docker and kubernetes running on your local computer, because we are going to build an image locally and we are not going to publish it. Remember that if you are using Windows and you are using minikube instead of docker for windows you have to set the docker environment to aim the minikube vm by executing **eval $(minikube docker-env)** in a bash window so docker sends the build context to the minikube machine and the k8s cluster can see the local images.
 
-First of all, we can create a new Empty Asp.Net Core application called **WebApp* and add the **Microsoft.AspNetCore.Diagnostics.HealthChecks** package to add health the health checks capabilities to our application. Remember to set the Docker support checkbox to have the project Dockerfile automatically created.
+First of all, we can create a new Empty Asp.Net Core application called **WebApp** and add the **Microsoft.AspNetCore.Diagnostics.HealthChecks** package to add the health checks capabilities to our application. Remember to set the Docker support checkbox to have the project **Dockerfile** automatically created.
 
 Next, we are going to configure a health check to represent the health of the service itself represented under the name "self".
 
@@ -19,7 +19,7 @@ located where the csproj was created:
 
 `dotnet add package AspNetCore.HealthChecks.SqlServer`
 
-`dotnet add package Install-Package AspNetCore.HealthChecks.Redis`
+`dotnet add package AspNetCore.HealthChecks.Redis`
 
 Once you confirm the packages are installed, we are going to configure this two health checks under a tag called "services"
 
@@ -107,9 +107,9 @@ services.AddHealthChecks()
 
 ```
 
-We are set!, we have the /self path to represent our application status. Think about what kind of code will you need to express the health you are working on. Maybe a call to an MVC controller that shall be always responding?.
+We are set!, we have the /self path to represent our application status. Think about what kind of code will you need to express the health of the app you are working on right now. Maybe a call to an MVC controller that shall be always responding?.
 
-The next think we are going to do is use the Dockerfile that Visual studio 2017 has automatically created for us and lets build a docker image.
+The next think we are going to do is using the Dockerfile that Visual studio 2017 has automatically created for us and build a docker image.
 
 Open a terminal and locate your path where the project sln is located and execute the following command to build the docker image:
 
@@ -122,7 +122,7 @@ Once our docker image is created, we are going to deploy to kubernetes 3 deploym
 
 (both of them with a service exposing the containers to the cluster using ClusterIp)
 
-- And the third one will be a deployment that creates 3 replicas of our webapp thas is configured with Asp.Net Core Healthchecks (webapp image). This deployment will be exposed using a Nodeport bound to our host 30000 port. This Nodeport will do local load balancing among all our replicas.
+- The third one will be a deployment that creates 3 replicas of our webapp thas is configured with Asp.Net Core Healthchecks (webapp image). This deployment will be exposed using a Nodeport bound to our host 30000 port. This Nodeport will do local load balancing among all our replicas.
 
 To avoid pasting all the deployment and services yaml files within the tutorial I have created a gist on the following [link](https://gist.github.com/CarlosLanderas/4f651fdaa2342db55f66d41f405630c6).
 
@@ -135,6 +135,7 @@ Once you have both files in place, be sure your kubernetes local cluster is runn
 and execute the following commands:
 
 `kubectl apply -f infra.yml`
+
 `kubectl apply -f deployment.yml`
 
 The output of the commands should be:
@@ -169,7 +170,7 @@ While your pods are being created, let's take a look to our deployment.yml file 
           periodSeconds: 15
 ```
 
-As you can see, we are declaring the liveness probe that should be executed against each of our replicas in webapp deployment. This declaration will trigger an http request to the /self path we declared for the app health, giving and initial delay of **10 seconds of margin** to allow the pod initializing correcly. If we don't give **enough delay** so the pod can start the pod will be killed by the orchestrator all the time because we are not giving it time to be ready so we will find ourselves in a start-killing-loop
+As you can see, we are declaring the liveness probe that should be executed against each of our replicas in webapp deployment. This declaration will trigger an http request to the /self path we declared for the app health, giving and initial delay of **10 seconds of margin** to allow the pod initializing correcly. If we don't give **enough delay** so the pod can start the pod will be killed by the orchestrator all the time because we are not giving it time to be ready so we will find ourselves in a start-killed-loop
 
 In the line 23 of the deployment yaml we can find the readiness probe described like this:
 
@@ -190,7 +191,7 @@ As you can see the declaration is very similar, but this time we are targetting 
 
 If the pod is not healthy, k8s will kill the pod and restart it so it can get recovered.
 
-The readiness check will tell k8s if our app is ready ( this means the app has finished booting and all the dependencies are up and ready).
+The readiness check will tell k8s if our app is ready (In this case configured to tell if the dependencies are up and ready but it could apply to other scenarios like the application initialization that might be a long running process).
 
 If some of the dependencies are broken or not ready, when the readiness check is triggered, k8s will notice that the pod is not ready and no traffic will be redirected to that pod. That means if we have 3 replicas and one of them is not ready, instead of sharing all the requests among the 3 replicas only 2 will be serving requests and the failing one will be out of traffic until it gets recovered.
 
@@ -227,7 +228,7 @@ On the console, execute the following command:
 
 `kubectl get pods --watch`
 
-This will show the pods with watch mode, and we will see live updated whenever a pod status changes.
+This will show the pods with watch mode, and we will see live updates whenever a pod status changes.
 
 Open a new console and execute the following command to switch to unhealthy status some of the replicas:
 
@@ -236,11 +237,13 @@ Open a new console and execute the following command to switch to unhealthy stat
 As we are getting balanced, we can reach the same replica twice, so be sure to receive at least two messages in which the pod enters in a unhealthy state:
 
 `webapp-deploy-7686b8c794-kzjrx running False`
+
 `webapp-deploy-7686b8c794-kzjrx running False`
 
 If we wait some seconds for the liveness probe to pass, we will see on the watch console that our pods have been killed by kubernetes showing a 1 number on the restarts column:
 
 `webapp-deploy-7686b8c794-fvfq9   1/1   Running   1     23m`
+
 `webapp-deploy-7686b8c794-kzjrx   1/1   Running   1     23m`
 
 Kubernetes executed the liveness probe against the replicas and the two being unhealthy were killed and restarted.
@@ -271,9 +274,11 @@ We will not receive any response:
 curl: (7) Failed to connect to 192.168.99.100 port 30000: Connection refused
 
 
-The pods are alive but one of their dependencies are not.
+The pods are alive but one of their dependencies isn't.
 
 In a real scenario, maybe one, maybe some, but not all the pods will be ready, and that pods will get out of traffic, but as we are using the same images and dependencies on this deployment all pods are expelled from service.
+
+This has been a little introduction to how can you use Health Checks and benefit from it when you are running containers within an orchestrator.
 
 
 

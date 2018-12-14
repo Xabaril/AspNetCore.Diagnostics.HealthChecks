@@ -201,13 +201,10 @@ The [web hooks section](./doc/webhooks.md) contains more information and webhook
 
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
-
    - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness](./doc/kubernetes-liveness.md)
    - [ASP.NET Core HealthChecks features video with @condrong](https://t.co/YriQ6cLWVm)
    - [How to set up ASP.NET Core 2.2 Health Checks with BeatPulse's AspNetCore.Diagnostics.HealthChecks with Scott Hanselman](https://www.hanselman.com/blog/HowToSetUpASPNETCore22HealthChecksWithBeatPulsesAspNetCoreDiagnosticsHealthChecks.aspx)
    - [ASP.NET Core HealthChecks announcement](https://t.co/47M9FBfpWF)
-
-
 
 ## Contributing
 

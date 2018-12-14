@@ -48,9 +48,13 @@
     <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsDependencyInjection>2.1.1</MicrosoftExtensionsDependencyInjection>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
+    <MicrosoftAzureKeyVault>3.0.2</MicrosoftAzureKeyVault>
+    <MicrosoftIdentityModelClientsActiveDirectory>4.4.1</MicrosoftIdentityModelClientsActiveDirectory>
+    <MicrosoftAzureServicesAppAuthentication>1.0.3</MicrosoftAzureServicesAppAuthentication>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -77,11 +81,12 @@
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
-    <HealthCheckAzureServiceBus>2.2.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>2.2.1</HealthCheckAzureServiceBus>
     <HealthCheckUI>2.2.4</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.2.0</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherAppplicationInsights>2.2.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
+    <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
   </PropertyGroup>
 </Project>

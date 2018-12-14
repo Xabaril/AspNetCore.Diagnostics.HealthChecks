@@ -24,6 +24,7 @@ HealthChecks packages include health checks for:
 - System: Disk Storage, Private Memory, Virtual Memory
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
+- Azure Key Vault
 - Azure DocumentDb
 - Amazon DynamoDb
 - Amazon S3
@@ -44,6 +45,7 @@ Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
+Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
@@ -56,7 +58,7 @@ Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
 ```
 
-Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.
+Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
 
 > We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChecks pacakges.
 
@@ -126,9 +128,15 @@ public class Startup
 }
 ```
 
-This automatically registers a new interface on **/healthchecks-ui**. 
+This automatically registers a new interface on **/healthchecks-ui** where the spa will be served. 
 
-> Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload.
+> Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
+
+**Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend spa to receive the result of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by default is the url that the spa queries.
+
+Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
+
+When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring UseHealthChecks method.
 
 
 ![HealthChecksUI](./doc/images/ui-home.png)
@@ -190,6 +198,11 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 [[FAILURE]] A detail message with the failure.
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
+
+## Liveness and readiness probes with kubernetes and HealthChecks
+
+Asp.Net Core Healthchecks becomes really useful to configure our liveness and readiness probes in kubernetes deployments. You can read more on the [liveness
+probes section samples](./doc/kubernetes-liveness.md)
 
 ## Contributing
 

@@ -10,9 +10,12 @@ namespace HealthChecks.Uris
         : IHealthCheck
     {
         private readonly UriHealthCheckOptions _options;
-        public UriHealthCheck(UriHealthCheckOptions options)
+        private readonly Func<HttpClient> _httpClientFactory;
+
+        public UriHealthCheck(UriHealthCheckOptions options, Func<HttpClient> httpClientFactory)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -32,24 +35,23 @@ namespace HealthChecks.Uris
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"{nameof(UriHealthCheck)} execution is cancelled.");
                     }
 
-                    using (var httpClient = new HttpClient())
+                    var httpClient = _httpClientFactory();
+                    
+                    var requestMessage = new HttpRequestMessage(method, item.Uri);
+
+                    foreach (var header in item.Headers)
                     {
-                        var requestMessage = new HttpRequestMessage(method, item.Uri);
-
-                        foreach (var header in item.Headers)
-                        {
-                            requestMessage.Headers.Add(header.Name, header.Value);
-                        }
-
-                        var response = await httpClient.SendAsync(requestMessage);
-
-                        if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
-                        }
-
-                        ++idx;
+                        requestMessage.Headers.Add(header.Name, header.Value);
                     }
+
+                    var response = await httpClient.SendAsync(requestMessage);
+
+                    if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
+                    }
+
+                    ++idx;
                 }
 
                 return HealthCheckResult.Healthy();

@@ -276,7 +276,7 @@ curl: (7) Failed to connect to 192.168.99.100 port 30000: Connection refused
 
 The pods are alive but one of their dependencies isn't.
 
-In a real scenario, maybe one, maybe some, but not all the pods will be ready, and that pods will get out of traffic, but as we are using the same images and dependencies on this deployment all pods are expelled from service.
+In a real scenario, maybe one, maybe some, but not all the pods will be non ready, and that pods will get out of traffic, but as we are using the same images and dependencies on this deployment all pods are expelled from service.
 
 This has been a little introduction to how can you use Health Checks and benefit from it when you are running containers within an orchestrator.
 

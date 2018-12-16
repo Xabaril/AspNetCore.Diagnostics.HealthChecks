@@ -6,13 +6,13 @@ module.exports = {
         vendors: [path.join(__dirname, "vendors.js")]
     },
     output: {
-        path: path.join(__dirname, "../Assets"),
+        path: path.join(__dirname, "../assets"),
         filename: "[name]-dll.js",
         library: "[name]"
     },
     plugins: [
         new webpack.DllPlugin({
-            path: path.join(__dirname, "../Assets", "[name]-manifest.json"),
+            path: path.join(__dirname, "../assets", "[name]-manifest.json"),
             name: "[name]"            
         }),
         new webpack.optimize.OccurrenceOrderPlugin()        

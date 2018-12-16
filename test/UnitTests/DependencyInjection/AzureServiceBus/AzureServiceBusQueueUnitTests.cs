@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
+namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 {
     public class azure_service_bus_queue_registration_should
     {

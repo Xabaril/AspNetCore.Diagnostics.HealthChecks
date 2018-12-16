@@ -148,7 +148,7 @@ When we target applications to be tested and shown on the UI interface, those en
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
- app.UseHealthChecks("/health", new HealthCheckOptions()
+ app.UseHealthChecks("/healthz", new HealthCheckOptions()
 {
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -165,7 +165,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",
-        "Uri": "http://localhost:6457/health"
+        "Uri": "http://localhost:6457/healthz"
       }
     ],
     "Webhooks": [

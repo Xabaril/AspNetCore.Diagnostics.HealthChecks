@@ -10,7 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace BeatPulse.Npgsql
+namespace FunctionalTests.HealthChecks.Npgsql
 {
     [Collection("execution")]
     public class npgsql_healthcheck_should

@@ -10,7 +10,6 @@ namespace HealthChecks.UI.Core
         {
             return resources.Where(r => r.ContentType == contentType);
         }           
-       
         public static UIResource GetMainUI(this IEnumerable<UIResource> resources, Options options)
         {
             var resource = resources
@@ -22,6 +21,8 @@ namespace HealthChecks.UI.Core
 
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath);
+
+            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET,options.ResourcesPath);
 
             return resource;
         }

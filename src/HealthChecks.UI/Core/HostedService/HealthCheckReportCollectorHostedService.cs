@@ -15,16 +15,13 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly ILogger<HealthCheckCollectorHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
-
         private Task _executingTask;
-
         public HealthCheckCollectorHostedService(IServiceProvider provider,IOptions<Settings> settings, ILogger<HealthCheckCollectorHostedService> logger)
         {
             _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(provider));
             _settings = settings.Value ?? new Settings();
         }
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteASync(cancellationToken);
@@ -36,12 +33,10 @@ namespace HealthChecks.UI.Core.HostedService
 
             return Task.CompletedTask;
         }
-
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
-
         private async Task ExecuteASync(CancellationToken cancellationToken)
         {
             var scopeFactory = _serviceProvider.GetRequiredService<IServiceScopeFactory>();

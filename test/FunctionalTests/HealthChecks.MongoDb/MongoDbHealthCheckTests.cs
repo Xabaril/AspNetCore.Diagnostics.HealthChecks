@@ -10,7 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace BeatPulse.MongoDb
+namespace FunctionalTests.HealthChecks.MongoDb
 {
     [Collection("execution")]
     public class mongodb_healthcheck_should

@@ -24,11 +24,12 @@ HealthChecks packages include health checks for:
 - System: Disk Storage, Private Memory, Virtual Memory
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
+- Azure Key Vault
 - Azure DocumentDb
 - Amazon DynamoDb
 - Amazon S3
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
-- Mongo
+- MongoDB
 - Kafka
 - Identity Server
 - Uri: single uri and uri groups
@@ -44,6 +45,7 @@ Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
+Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
@@ -56,7 +58,7 @@ Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
 ```
 
-Once the package is installed you can add the HealthCheck using the **AddXXX** extension methods.
+Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
 
 > We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChecks pacakges.
 
@@ -86,28 +88,30 @@ public void ConfigureServices(IServiceCollection services)
 
 ## HealthCheck push results
 
-HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **HealthChecks.Publisher.ApplicationInsights** define a consumer to send report results to Application Insights.
+HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights** or **AspNetCore.HealthChecks.Publisher.Prometheus** define a consumers to send report results to Application Insights or Prometheus.
 
 Include the package in your project:
 
 ```powershell
-install-package HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.Prometheus
 ```
 
-Add publisher into the *IHealthCheckBuilder*
+Add publisher[s] into the *IHealthCheckBuilder*
 
 ```csharp
 services.AddHealthChecks()
         .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
         .AddCheck<RandomHealthCheck>("random")
-        .AddApplicationInsightsPublisher();
+        .AddApplicationInsightsPublisher()
+        .AddPrometheusGatewayPublisher();
 ```
 
 ## HealthCheckUI and failure notifications
 
-The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris. 
+The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
 
-To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
+To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**
 
 ```csharp
 public class Startup
@@ -124,9 +128,16 @@ public class Startup
 }
 ```
 
-This automatically registers a new interface on **/healthchecks-ui**. 
+This automatically registers a new interface on **/healthchecks-ui** where the spa will be served. 
 
-> Optionally, *UseHealthChecksUI* can be configured with different UI response path.
+> Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
+
+**Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend spa to receive the result of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by default is the url that the spa queries.
+
+Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
+
+When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring UseHealthChecks method.
+
 
 ![HealthChecksUI](./doc/images/ui-home.png)
 
@@ -137,7 +148,7 @@ This automatically registers a new interface on **/healthchecks-ui**.
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
- app.UseHealthChecks("/health", new HealthCheckOptions()
+ app.UseHealthChecks("/healthz", new HealthCheckOptions()
 {
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -154,7 +165,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",
-        "Uri": "http://localhost:6457/health"
+        "Uri": "http://localhost:6457/healthz"
       }
     ],
     "Webhooks": [
@@ -188,11 +199,19 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
+## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
+
+   - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness by Carlos Landeras](./doc/kubernetes-liveness.md)
+   - [ASP.NET Core HealthChecks features video by @condrong](https://t.co/YriQ6cLWVm)
+   - [How to set up ASP.NET Core 2.2 Health Checks with BeatPulse's AspNetCore.Diagnostics.HealthChecks by Scott Hanselman](https://www.hanselman.com/blog/HowToSetUpASPNETCore22HealthChecksWithBeatPulsesAspNetCoreDiagnosticsHealthChecks.aspx)
+   - [ASP.NET Core HealthChecks announcement](https://t.co/47M9FBfpWF)
+   - [ASP.NET Core 2.2 HealthChecks Explained by Thomas Ardal](https://blog.elmah.io/asp-net-core-2-2-health-checks-explained/)
+
 ## Contributing
 
 AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
 
-*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup.
+*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301.
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

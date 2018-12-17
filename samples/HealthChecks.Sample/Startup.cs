@@ -27,6 +27,7 @@ namespace HealthChecks.Sample
             services.AddHealthChecks()
                 .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random")
+                .AddIdentityServer(new Uri("http://localhost:6060"))
                 .AddApplicationInsightsPublisher();
 
             services.AddMvc()
@@ -41,7 +42,7 @@ namespace HealthChecks.Sample
                 Predicate = _ => true
             });
 
-            app.UseHealthChecks("/health-ui", new HealthCheckOptions()
+            app.UseHealthChecks("/healthz", new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

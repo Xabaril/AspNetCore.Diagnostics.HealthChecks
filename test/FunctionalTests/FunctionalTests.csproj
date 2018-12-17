@@ -34,6 +34,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
   </ItemGroup>
   
   <ItemGroup>

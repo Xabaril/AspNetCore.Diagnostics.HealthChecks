@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,7 +33,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
             services.AddDbContext<HealthChecksDb>(db =>
             {
-                db.UseSqlite($"Data Source={databaseName}");
+                var contentRoot = configuration[HostDefaults.ContentRootKey];
+                var path = Path.Combine(Path.GetDirectoryName(contentRoot), databaseName);
+                db.UseSqlite($"Data Source={path}");
             });
 
             var kubernetesDiscoveryOptions = new KubernetesDiscoveryOptions();

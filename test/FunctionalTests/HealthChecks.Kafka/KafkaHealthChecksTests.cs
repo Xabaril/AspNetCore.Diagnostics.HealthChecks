@@ -11,7 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.BeatPulse.Kafka
+namespace FunctionalTests.HealthChecks.Kafka
 {
     [Collection("execution")]
     public class kafka_healthcheck_should

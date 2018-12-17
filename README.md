@@ -51,7 +51,7 @@ Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.RabbitMQ
-Install-Package AspNetCore.HealthChecks.IdSvr
+Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
 Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris

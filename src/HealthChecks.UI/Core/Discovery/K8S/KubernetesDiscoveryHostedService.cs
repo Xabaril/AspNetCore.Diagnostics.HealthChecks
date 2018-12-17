@@ -16,9 +16,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly KubernetesDiscoveryOptions _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _discoveryClient;
+        private readonly HttpClient _clusterServiceClient;
+
         private Task _executingTask;
-        
+
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
             KubernetesDiscoveryOptions discoveryOptions,
@@ -29,8 +31,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _httpClient = httpClientFactory?.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME) ??
-                throw new ArgumentNullException(nameof(_httpClient));
+            _discoveryClient = httpClientFactory.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME);
+            _clusterServiceClient = httpClientFactory.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -63,7 +65,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                     try
                     {
-                        var services = await _httpClient.GetServices(_discoveryOptions.ServicesLabel);
+                        var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
                         foreach (var item in services.Items)
                         {
                             var serviceAddress = ComposeBeatpulseServiceAddress(item);
@@ -113,11 +115,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         }
         async Task<HttpStatusCode> CallClusterService(string host)
         {
-            using (var client = new HttpClient())
-            {
-                var response = await client.GetAsync(host);
-                return response.StatusCode;
-            }
+            var response = await _clusterServiceClient.GetAsync(host);
+            return response.StatusCode;
         }
 
         Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)

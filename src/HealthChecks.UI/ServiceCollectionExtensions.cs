@@ -48,8 +48,8 @@ namespace Microsoft.Extensions.DependencyInjection
             if (kubernetesDiscoveryOptions.Enabled)
             {
                 services.AddSingleton(kubernetesDiscoveryOptions);
-                services.AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) 
-                    => client.ConfigureKubernetesClient(provider));
+                services.AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) => client.ConfigureKubernetesClient(provider));
+                services.AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
                 services.AddHostedService<KubernetesDiscoveryHostedService>();
             }
 

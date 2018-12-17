@@ -21,17 +21,21 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
         private readonly Settings _settings;
+        private readonly HttpClient _httpClient;
         private readonly ILogger<HealthCheckReportCollector> _logger;
         public HealthCheckReportCollector(
             HealthChecksDb db,
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
             IOptions<Settings> settings,
+            IHttpClientFactory httpClientFactory,
             ILogger<HealthCheckReportCollector> logger)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
             _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
         }
         public async Task Collect(CancellationToken cancellationToken)
         {
@@ -68,17 +72,13 @@ namespace HealthChecks.UI.Core.HostedService
                 _logger.LogDebug("HealthReportCollector has completed.");
             }
         }
-        protected internal virtual Task<HttpResponseMessage> PerformRequest(string uri)
-        {
-            return new HttpClient().GetAsync(uri);
-        }
         private async Task<UIHealthReport> GetHealthReport(HealthCheckConfiguration configuration)
         {
             var (uri, name) = configuration;
 
             try
             {
-                var response = await PerformRequest(uri);
+                var response = await _httpClient.GetAsync(uri);
 
                 return await response.As<UIHealthReport>();
             }

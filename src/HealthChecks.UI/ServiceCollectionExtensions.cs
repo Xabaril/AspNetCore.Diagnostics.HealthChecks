@@ -11,6 +11,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -28,6 +30,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
             });
 
+            services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+
             services.AddSingleton<IHostedService, HealthCheckCollectorHostedService>();
             services.AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
             services.AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
@@ -44,6 +48,8 @@ namespace Microsoft.Extensions.DependencyInjection
             if (kubernetesDiscoveryOptions.Enabled)
             {
                 services.AddSingleton(kubernetesDiscoveryOptions);
+                services.AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) 
+                    => client.ConfigureKubernetesClient(provider));
                 services.AddHostedService<KubernetesDiscoveryHostedService>();
             }
 

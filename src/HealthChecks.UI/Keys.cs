@@ -13,5 +13,7 @@
         internal const string DEFAULT_RESPONSE_CONTENT_TYPE = "application/json";
         internal const string LIVENESS_BOOKMARK = "[[LIVENESS]]";
         internal const string FAILURE_BOOKMARK = "[[FAILURE]]";
+        internal const string HEALTH_CHECK_HTTP_CLIENT_NAME = "health-checks";
+        internal const string K8S_DISCOVERY_HTTP_CLIENT_NAME = "k8s-discovery";
     }
 }

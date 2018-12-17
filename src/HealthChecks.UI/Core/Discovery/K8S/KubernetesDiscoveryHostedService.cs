@@ -16,16 +16,21 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly KubernetesDiscoveryOptions _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly HttpClient _httpClient;
         private Task _executingTask;
-
+        
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
             KubernetesDiscoveryOptions discoveryOptions,
+            IHttpClientFactory httpClientFactory,
             ILogger<KubernetesDiscoveryHostedService> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _httpClient = httpClientFactory?.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME) ??
+                throw new ArgumentNullException(nameof(_httpClient));
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -58,22 +63,18 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                     try
                     {
-                        using (var kubernetesClient = new KubernetesClient(_discoveryOptions.ClusterHost, _discoveryOptions.Token))
+                        var services = await _httpClient.GetServices(_discoveryOptions.ServicesLabel);
+                        foreach (var item in services.Items)
                         {
+                            var serviceAddress = ComposeBeatpulseServiceAddress(item);
 
-                            var services = await kubernetesClient.GetServices(_discoveryOptions.ServicesLabel);
-                            foreach (var item in services.Items)
+                            if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                             {
-                                var serviceAddress = ComposeBeatpulseServiceAddress(item);
-
-                                if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
-                                {
-                                    var statusCode = await CallClusterService(serviceAddress);
-                                    if (IsValidBeatpulseStatusCode(statusCode))
-                                    {    
-                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
-                                        _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
-                                    }
+                                var statusCode = await CallClusterService(serviceAddress);
+                                if (IsValidBeatpulseStatusCode(statusCode))
+                                {    
+                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                    _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
                                 }
                             }
                         }

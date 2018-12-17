@@ -9,8 +9,8 @@ namespace HealthChecks.AzureServiceBus
     public class AzureEventHubHealthCheck
         : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string _eventHubName;
+        private readonly EventHubClient _eventHubClient;
+
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
             if (string.IsNullOrEmpty(connectionString))
@@ -23,19 +23,18 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(eventHubName));
             }
 
-            _connectionString = connectionString;
-            _eventHubName = eventHubName;
+            var connectionStringBuilder = new EventHubsConnectionStringBuilder(connectionString)
+            {
+                EntityPath = eventHubName
+            };
+            _eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var connectionStringBuilder = new EventHubsConnectionStringBuilder(_connectionString)
-                {
-                    EntityPath = _eventHubName
-                };
-                var eventHubClient = EventHubClient.CreateFromConnectionString(connectionStringBuilder.ToString());
-                await eventHubClient.GetRuntimeInformationAsync();
+                await _eventHubClient.GetRuntimeInformationAsync();
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

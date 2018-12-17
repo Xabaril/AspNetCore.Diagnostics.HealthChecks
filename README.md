@@ -33,6 +33,7 @@ HealthChecks packages include health checks for:
 - Kafka
 - Identity Server
 - Uri: single uri and uri groups
+- Google Cloud Datastore
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -56,6 +57,7 @@ Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
+Install-Package AspNetCore.HealthChecks.Gcp.Datastore
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

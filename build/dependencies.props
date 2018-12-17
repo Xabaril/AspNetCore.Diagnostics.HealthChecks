@@ -25,7 +25,7 @@
     <xunitrunnervisualstudio>2.4.0</xunitrunnervisualstudio>
     <SystemDataSqlClient>4.4.2</SystemDataSqlClient>
     <MicrosoftDataSqlite>2.0.1</MicrosoftDataSqlite>
-    <StackExchangeRedisStrongName>1.2.6</StackExchangeRedisStrongName>
+    <StackExchangeRedis>2.0.513</StackExchangeRedis>
     <RabbitMQClient>5.0.1</RabbitMQClient>
     <OracleManagedDataAccessCore>2.18.3</OracleManagedDataAccessCore>
     <Npgsql>3.2.6</Npgsql>
@@ -67,7 +67,7 @@
     <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.1</HealthCheckUri>
-    <HealthCheckRedis>2.2.1</HealthCheckRedis>
+    <HealthCheckRedis>2.2.2</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.0</HealthCheckElasticsearch> 

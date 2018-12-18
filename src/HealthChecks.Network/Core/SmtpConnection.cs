@@ -23,6 +23,8 @@ namespace HealthChecks.Network.Core
             }
         }
 
+        private bool ShouldUpgradeConnection => !UseSSL && _connectionType != SmtpConnectionType.PLAIN;
+
         public SmtpConnection(SmtpConnectionOptions options)
             : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
         {
@@ -61,7 +63,7 @@ namespace HealthChecks.Network.Core
 
         public async Task<bool> AuthenticateAsync(string userName, string password)
         {
-            if (!UseSSL && _connectionType != SmtpConnectionType.PLAIN)
+            if (ShouldUpgradeConnection)
             {
                 await UpgradeToSecureConnection();
             }

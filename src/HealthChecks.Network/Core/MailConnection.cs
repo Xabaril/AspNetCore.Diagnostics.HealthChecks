@@ -14,7 +14,7 @@ namespace HealthChecks.Network.Core
         public int Port { get; protected set; }
         public string Host { get; protected set; }
         protected bool UseSSL { get; set; } = true;
-
+        
         protected TcpClient _tcpClient = null;
         protected Stream _stream = null;
         protected Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;

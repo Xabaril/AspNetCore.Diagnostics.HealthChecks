@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Network.Core
 {
-    internal class SmtpConnection: MailConnection
+    internal class SmtpConnection : MailConnection
     {
         private readonly SmtpConnectionOptions _options;
         private SmtpConnectionType _connectionType;
@@ -23,7 +23,7 @@ namespace HealthChecks.Network.Core
             }
         }
 
-        public SmtpConnection(SmtpConnectionOptions options) 
+        public SmtpConnection(SmtpConnectionOptions options)
             : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -41,7 +41,9 @@ namespace HealthChecks.Network.Core
                 case SmtpConnectionType.AUTO when Port == 587:
                     ConnectionType = SmtpConnectionType.TLS;
                     break;
-                    
+                case SmtpConnectionType.AUTO when Port == 25:
+                    ConnectionType = SmtpConnectionType.PLAIN;
+                    break;
             }
 
             if (ConnectionType == SmtpConnectionType.AUTO)
@@ -59,16 +61,20 @@ namespace HealthChecks.Network.Core
 
         public async Task<bool> AuthenticateAsync(string userName, string password)
         {
-            if(!UseSSL)
+            if (!UseSSL && _connectionType != SmtpConnectionType.PLAIN)
             {
                 await UpgradeToSecureConnection();
             }
             await ExecuteCommand(SmtpCommands.EHLO(Host));
             await ExecuteCommand(SmtpCommands.AUTHLOGIN());
             await ExecuteCommand($"{ ToBase64(userName)}\r\n");
-            var result = await ExecuteCommand($"{ToBase64(password)}\r\n");
+
+            password = password?.Length > 0 ? ToBase64(password) : "";
+
+            var result = await ExecuteCommand($"{password}\r\n");
             return result.Contains(SmtpResponse.AUTHENTICATION_SUCCESS);
         }
+
 
         private async Task<bool> UpgradeToSecureConnection()
         {

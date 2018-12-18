@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,19 +47,19 @@ namespace HealthChecks.UI.Core.HostedService
 
                 using (var scope = scopeFactory.CreateScope())
                 {
-                    var runner = scope.ServiceProvider
-                        .GetRequiredService<IHealthCheckReportCollector>();
-
-                    try
+                    using (var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>())
                     {
-                        await runner.Collect(cancellationToken);
+                        try
+                        {
+                            await runner.Collect(cancellationToken);
 
-                        _logger.LogDebug("HealthCheck collector HostedService executed succesfully.");
+                            _logger.LogDebug("HealthCheck collector HostedService executed succesfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError("HealthCheck collector HostedService throw a error:", ex);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError("HealthCheck collector HostedService throw a error:", ex);
-                    }  
                 }
 
                 await Task.Delay(_settings.EvaluationTimeOnSeconds * 1000);

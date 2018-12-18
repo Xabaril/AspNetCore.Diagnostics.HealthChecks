@@ -9,9 +9,9 @@ namespace HealthChecks.IdSvr
     public class IdSvrHealthCheck
         : IHealthCheck
     {
-        private readonly Func<HttpClient> _httpClientFactory;
         const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
 
+        private readonly Func<HttpClient> _httpClientFactory;
         public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));

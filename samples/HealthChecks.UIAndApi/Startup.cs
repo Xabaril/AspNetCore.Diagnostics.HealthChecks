@@ -32,7 +32,7 @@ namespace HealthChecks.UIAndApi
             services
                 .AddHealthChecksUI()
                 .AddHealthChecks()
-                .AddUrlGroup(new Uri("http://httpbin.org/status/500"))
+                .AddUrlGroup(new Uri("http://httpbin.org/status/200"))
                 .Services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

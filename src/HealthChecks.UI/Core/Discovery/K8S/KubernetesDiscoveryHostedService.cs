@@ -68,12 +68,12 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                         var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
                         foreach (var item in services.Items)
                         {
-                            var serviceAddress = ComposeBeatpulseServiceAddress(item);
+                            var serviceAddress = ComposeHealthChecksServiceAddress(item);
 
                             if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                             {
                                 var statusCode = await CallClusterService(serviceAddress);
-                                if (IsValidBeatpulseStatusCode(statusCode))
+                                if (IsValidHealthChecksStatusCode(statusCode))
                                 {    
                                     await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
                                     _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
@@ -97,18 +97,18 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 .Any(lc => lc.Uri.Equals(host, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        bool IsValidBeatpulseStatusCode(HttpStatusCode statusCode)
+        bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
 
-        string ComposeBeatpulseServiceAddress(Service service)
+        string ComposeHealthChecksServiceAddress(Service service)
         {
             var serviceAddress = service.Status?.LoadBalancer?.Ingress?.First().Ip ?? null;
 
             if (!string.IsNullOrEmpty(serviceAddress))
             {
-                serviceAddress = $"http://{serviceAddress}/{_discoveryOptions.BeatpulsePath}";
+                serviceAddress = $"http://{serviceAddress}/{_discoveryOptions.HealthPath}";
             }
 
             return serviceAddress;

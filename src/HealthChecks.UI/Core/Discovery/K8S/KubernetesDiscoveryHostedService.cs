@@ -13,7 +13,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesDiscoveryHostedService : IHostedService
     {
-        private readonly KubernetesDiscoveryOptions _discoveryOptions;
+        private readonly KubernetesDiscoverySettings _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly HttpClient _discoveryClient;
@@ -23,7 +23,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
-            KubernetesDiscoveryOptions discoveryOptions,
+            KubernetesDiscoverySettings discoveryOptions,
             IHttpClientFactory httpClientFactory,
             ILogger<KubernetesDiscoveryHostedService> logger)
         {

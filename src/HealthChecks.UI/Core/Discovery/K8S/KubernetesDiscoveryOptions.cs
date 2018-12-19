@@ -1,6 +1,6 @@
 ﻿namespace HealthChecks.UI.Core.Discovery.K8S
 {
-    public class KubernetesDiscoveryOptions
+    class KubernetesDiscoverySettings
     {
         public bool Enabled { get; set; } = false;
         public string ClusterHost { get; set; }

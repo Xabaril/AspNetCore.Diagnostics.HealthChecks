@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace HealthChecks.UI.Core.HostedService
 {
     internal class HealthCheckReportCollector
-        : IHealthCheckReportCollector, IDisposable
+        : IHealthCheckReportCollector
     {
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
@@ -171,6 +171,11 @@ namespace HealthChecks.UI.Core.HostedService
             if (_db != null)
             {
                 _db.Dispose();
+            }
+
+            if (_healthCheckFailureNotifier != null)
+            {
+                _healthCheckFailureNotifier.Dispose();
             }
         }
     }

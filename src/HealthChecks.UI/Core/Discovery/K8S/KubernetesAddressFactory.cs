@@ -41,10 +41,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 return service.Status?.LoadBalancer?.Ingress?.First().Ip ??
                        service.Status?.LoadBalancer?.Ingress?.First().HostName;
             }
-            else
-            {
-                throw new Exception($"No LoadBalancer information found for {service.Metadata.Name} service");
-            }
+
+            return service.Spec.ClusterIP;
         }
 
         private string GetServicePort(Service service)

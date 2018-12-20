@@ -1,0 +1,120 @@
+{
+  "kind": "ServiceList",
+  "apiVersion": "v1",
+  "metadata": {
+    "selfLink": "/api/v1/services",
+    "resourceVersion": "8870"
+  },
+  "items": [
+    {
+      "metadata": {
+        "name": "webapp",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/webapp",
+        "uid": "24185b11-0433-11e9-a5ae-00155d020f0d",
+        "resourceVersion": "3077",
+        "creationTimestamp": "2018-12-20T08:42:10Z",
+        "labels": { "HealthChecks": "true" },
+        "annotations": { "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"name\":\"webapp\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":10000,\"targetPort\":80}],\"selector\":{\"app\":\"webapp\"},\"type\":\"LoadBalancer\"}}\n" }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 10000,
+            "targetPort": 80,
+            "nodePort": 31147
+          }
+        ],
+        "selector": { "app": "webapp" },
+        "clusterIP": "10.107.229.55",
+        "type": "LoadBalancer",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster"
+      },
+      "status": { "loadBalancer": { "ingress": [ { "hostname": "localhost" } ] } }
+    },
+    {
+      "metadata": {
+        "name": "webapp2",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/webapp2",
+        "uid": "d92235fe-0437-11e9-a5ae-00155d020f0d",
+        "resourceVersion": "3082",
+        "creationTimestamp": "2018-12-20T09:15:52Z",
+        "labels": { "HealthChecks": "true" },
+        "annotations": { "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"name\":\"webapp2\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":9000,\"targetPort\":80}],\"selector\":{\"app\":\"webapp2\"},\"type\":\"LoadBalancer\"}}\n" }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 9000,
+            "targetPort": 80,
+            "nodePort": 30906
+          }
+        ],
+        "selector": { "app": "webapp2" },
+        "clusterIP": "10.98.237.192",
+        "type": "LoadBalancer",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster"
+      },
+      "status": { "loadBalancer": { "ingress": [ { "hostname": "localhost" } ] } }
+    },
+    {
+      "metadata": {
+        "name": "webapp3",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/webapp3",
+        "uid": "481c6c43-0439-11e9-a5ae-00155d020f0d",
+        "resourceVersion": "6334",
+        "creationTimestamp": "2018-12-20T09:26:08Z",
+        "labels": { "HealthChecks": "true" },
+        "annotations": { "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"name\":\"webapp3\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"nodePort\":30000,\"port\":80}],\"selector\":{\"app\":\"webapp3\"},\"type\":\"NodePort\"}}\n" }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80,
+            "nodePort": 30000
+          }
+        ],
+        "selector": { "app": "webapp3" },
+        "clusterIP": "10.99.196.68",
+        "type": "NodePort",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster"
+      },
+      "status": { "loadBalancer": { "ingress": [ { "hostname": "localhost" } ] } }
+    },
+    {
+      "metadata": {
+        "name": "webapp4",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/webapp4",
+        "uid": "86ab7a5b-043e-11e9-a5ae-00155d020f0d",
+        "resourceVersion": "6144",
+        "creationTimestamp": "2018-12-20T10:03:40Z",
+        "labels": { "HealthChecks": "true" },
+        "annotations": { "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"name\":\"webapp4\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":80,\"targetPort\":24000}],\"selector\":{\"app\":\"webapp4\"},\"type\":\"ClusterIP\"}}\n" }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 24000
+          }
+        ],
+        "selector": { "app": "webapp4" },
+        "clusterIP": "10.97.1.153",
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      },
+      "status": { "loadBalancer": {} }
+    }
+  ]
+}

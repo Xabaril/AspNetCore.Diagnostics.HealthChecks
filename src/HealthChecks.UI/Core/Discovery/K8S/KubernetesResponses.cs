@@ -52,7 +52,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
     {
         public string Protocol { get; set; }
         [JsonProperty("Port")]
-        public short PortNumber { get; set; }
+        public int PortNumber { get; set; }
         public int NodePort { get; set; }
         public int TargetPort { get; set; }
 

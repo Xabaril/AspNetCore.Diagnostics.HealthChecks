@@ -1,0 +1,162 @@
+{
+  "kind": "ServiceList",
+  "apiVersion": "v1",
+  "metadata": {
+    "selfLink": "/api/v1/services",
+    "resourceVersion": "281313"
+  },
+  "items": [
+    {
+      "metadata": {
+        "name": "app-orders-host",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/app-orders-host",
+        "uid": "3ee4b7a8-0251-11e9-83da-ce83efb6cd40",
+        "resourceVersion": "156789",
+        "creationTimestamp": "2018-12-17T23:12:38Z",
+        "labels": {
+          "HealthChecks": "true",
+          "name": "app-orders-host"
+        },
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"name\":\"app-orders-host\"},\"name\":\"app-orders-host\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":80,\"protocol\":\"TCP\",\"targetPort\":80}],\"selector\":{\"app\":\"app-orders-host\"},\"type\":\"LoadBalancer\"}}\n"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80,
+            "nodePort": 31891
+          }
+        ],
+        "selector": {
+          "app": "app-orders-host"
+        },
+        "clusterIP": "12.0.0.4",
+        "type": "LoadBalancer",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {
+          "ingress": [
+            {
+              "ip": "13.73.139.23"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "metadata": {
+        "name": "app-orders-lb",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/app-orders-lb",
+        "uid": "02818ec2-0449-11e9-83da-ce83efb6cd40",
+        "resourceVersion": "281046",
+        "creationTimestamp": "2018-12-20T11:18:43Z",
+        "labels": {
+          "HealthChecks": "true",
+          "name": "app-orders-host"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 51000,
+            "targetPort": 80,
+            "nodePort": 32150
+          }
+        ],
+        "selector": {
+          "app": "app-orders-host"
+        },
+        "clusterIP": "12.0.0.19",
+        "type": "LoadBalancer",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {
+          "ingress": [
+            {
+              "ip": "13.80.181.10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "metadata": {
+        "name": "rabbitmq",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/rabbitmq",
+        "uid": "3f24a155-0251-11e9-83da-ce83efb6cd40",
+        "resourceVersion": "280705",
+        "creationTimestamp": "2018-12-17T23:12:38Z",
+        "labels": {
+          "HealthChecks": "true",
+          "name": "rabbitmq"
+        },
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"name\":\"rabbitmq\"},\"name\":\"rabbitmq\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"port\":5672,\"protocol\":\"TCP\",\"targetPort\":5672}],\"selector\":{\"app\":\"rabbitmq\"},\"type\":\"ClusterIP\"}}\n"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 5672,
+            "targetPort": 5672
+          }
+        ],
+        "selector": {
+          "app": "rabbitmq"
+        },
+        "clusterIP": "12.0.0.190",
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "rabbitmqsvc",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/rabbitmqsvc",
+        "uid": "1898edc3-0448-11e9-83da-ce83efb6cd40",
+        "resourceVersion": "280661",
+        "creationTimestamp": "2018-12-20T11:12:10Z",
+        "labels": {
+          "HealthChecks": "true",
+          "name": "rabbitmq"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 5672,
+            "targetPort": 5672,
+            "nodePort": 30478
+          }
+        ],
+        "selector": {
+          "app": "rabbitmq"
+        },
+        "clusterIP": "12.0.0.168",
+        "type": "NodePort",
+        "sessionAffinity": "None",
+        "externalTrafficPolicy": "Cluster"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ]
+}

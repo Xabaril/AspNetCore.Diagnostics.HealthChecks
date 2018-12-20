@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions> setup)
         {
-            SeqOptions options = new SeqOptions();
+            var options = new SeqOptions();
             setup(options);
 
             builder.Services.AddSingleton<IHealthCheckPublisher>(sp =>

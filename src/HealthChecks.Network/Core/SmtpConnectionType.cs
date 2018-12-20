@@ -4,6 +4,7 @@
     {
         AUTO,
         SSL,
-        TLS
+        TLS,
+        PLAIN
     }
 }

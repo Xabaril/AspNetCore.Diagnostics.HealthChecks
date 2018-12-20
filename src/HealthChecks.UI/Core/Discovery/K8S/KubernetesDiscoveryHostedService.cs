@@ -72,7 +72,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                         var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
                         foreach (var item in services.Items)
                         {
-
                             try
                             {
                                 var serviceAddress = _addressFactory.CreateAddress(item);

@@ -47,7 +47,6 @@ namespace Microsoft.Extensions.DependencyInjection
             if (kubernetesDiscoveryOptions.Enabled)
             {
                 services.AddSingleton(kubernetesDiscoveryOptions)
-                        
                         .AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME,
                                 (provider, client) => client.ConfigureKubernetesClient(provider))
                                 .ConfigureKubernetesMessageHandler()

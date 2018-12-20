@@ -53,7 +53,7 @@ namespace UnitTests.UI.Kubernetes
             }
 
             serviceAddresses[0].Should().Be("http://13.73.139.23:80/healthz");
-            serviceAddresses[1].Should().Be("http://13.80.181.10:51000");
+            serviceAddresses[1].Should().Be("http://13.80.181.10:51000/healthz");
             serviceAddresses[2].Should().Be("http://12.0.0.190:5672/healthz");
             serviceAddresses[3].Should().Be("http://12.0.0.168:30478/healthz");
 

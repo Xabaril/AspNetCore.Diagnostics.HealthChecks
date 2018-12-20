@@ -5,9 +5,9 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HealthChecks.UI.Core.Discovery.K8S
+namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
 {
-    internal static class KubternetesHttpClientExtensions
+    internal static class KubernetesHttpClientExtensions
     {
         internal static void ConfigureKubernetesClient(this HttpClient client, IServiceProvider serviceProvider)
         {
@@ -23,7 +23,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             client.BaseAddress = host;
                     
-            if (!string.IsNullOrEmpty(options.Token))
+             if (!string.IsNullOrEmpty(options.Token))
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Token);
             }

@@ -35,7 +35,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         private string GetLoadBalancerAddress(Service service)
         {
-            var ingress = service.Status?.LoadBalancer?.Ingress.FirstOrDefault();
+            var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
             if (ingress != null)
             {
                 return ingress.Ip ?? ingress.HostName;

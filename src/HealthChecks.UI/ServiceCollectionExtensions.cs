@@ -2,6 +2,7 @@
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
+using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +12,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -30,27 +29,32 @@ namespace Microsoft.Extensions.DependencyInjection
                 configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
             });
 
-            services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
-
-            services.AddSingleton<IHostedService, HealthCheckCollectorHostedService>();
-            services.AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
-            services.AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
-            services.AddDbContext<HealthChecksDb>(db =>
-            {
-                var contentRoot = configuration[HostDefaults.ContentRootKey];
-                var path = Path.Combine(Path.GetDirectoryName(contentRoot), databaseName);
-                db.UseSqlite($"Data Source={path}");
-            });
+            services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME)
+                    .Services
+                    .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
+                    .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
+                    .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
+                    .AddDbContext<HealthChecksDb>(db =>
+                    {
+                        var contentRoot = configuration[HostDefaults.ContentRootKey];
+                        var path = Path.Combine(Path.GetDirectoryName(contentRoot), databaseName);
+                        db.UseSqlite($"Data Source={path}");
+                    });
 
             var kubernetesDiscoveryOptions = new KubernetesDiscoveryOptions();
             configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, kubernetesDiscoveryOptions);
 
             if (kubernetesDiscoveryOptions.Enabled)
             {
-                services.AddSingleton(kubernetesDiscoveryOptions);
-                services.AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) => client.ConfigureKubernetesClient(provider));
-                services.AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
-                services.AddHostedService<KubernetesDiscoveryHostedService>();
+                services.AddSingleton(kubernetesDiscoveryOptions)
+                        
+                        .AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME,
+                                (provider, client) => client.ConfigureKubernetesClient(provider))
+                                .ConfigureKubernetesMessageHandler()
+                        .Services
+                        .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME)
+                        .Services
+                        .AddHostedService<KubernetesDiscoveryHostedService>();
             }
 
             var serviceProvider = services.BuildServiceProvider();

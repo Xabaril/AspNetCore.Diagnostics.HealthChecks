@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly HttpClient _discoveryClient;
         private readonly HttpClient _clusterServiceClient;
         private readonly KubernetesAddressFactory _addressFactory;
-        
+
         private Task _executingTask;
 
         public KubernetesDiscoveryHostedService(
@@ -70,19 +71,28 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                     {
                         var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
                         foreach (var item in services.Items)
-                        {                        
+                        {
 
-                            var serviceAddress = _addressFactory.CreateAddress(item);
-
-                            if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
+                            try
                             {
-                                var statusCode = await CallClusterService(serviceAddress);
-                                if (IsValidHealthChecksStatusCode(statusCode))
+                                var serviceAddress = _addressFactory.CreateAddress(item);
+
+                                if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                                 {
-                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
-                                    _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
+                                    var statusCode = await CallClusterService(serviceAddress);
+                                    if (IsValidHealthChecksStatusCode(statusCode))
+                                    {
+                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                        _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
+                                    }
                                 }
                             }
+                            catch (Exception ex)
+                            {
+
+                                _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
+                            }
+
                         }
                     }
                     catch (Exception ex)
@@ -105,7 +115,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
-               
+
 
         async Task<HttpStatusCode> CallClusterService(string host)
         {

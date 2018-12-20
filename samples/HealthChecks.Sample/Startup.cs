@@ -42,7 +42,7 @@ namespace HealthChecks.Sample
                 Predicate = _ => true
             });
 
-            app.UseHealthChecks("/health-ui", new HealthCheckOptions()
+            app.UseHealthChecks("/healthz", new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

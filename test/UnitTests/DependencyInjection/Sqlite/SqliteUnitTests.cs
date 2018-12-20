@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.SqlServer
+namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
 {
     public class sqlite_registration_should
     {

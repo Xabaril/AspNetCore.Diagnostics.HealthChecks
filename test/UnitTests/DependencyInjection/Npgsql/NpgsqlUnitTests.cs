@@ -1,21 +1,21 @@
 ﻿using FluentAssertions;
-using HealthChecks.RabbitMQ;
+using HealthChecks.NpgSql;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
+namespace UnitTests.HealthChecks.DependencyInjection.Npgsql
 {
-    public class rabbitmq_registration_should
+    public class npgsql_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRabbitMQ("connectionstring");
+                .AddNpgSql("connectionstring");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -23,8 +23,9 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("rabbitmq");
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.Should().Be("npgsql");
+            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
+
         }
 
         [Fact]
@@ -32,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRabbitMQ("connectionstring", name: "my-rabbitmq");
+                .AddNpgSql("connectionstring",name:"my-npg-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -40,8 +41,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-rabbitmq");
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.Should().Be("my-npg-1");
+            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
         }
     }
 }

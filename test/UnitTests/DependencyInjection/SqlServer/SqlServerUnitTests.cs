@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.SqlServer
+namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
 {
     public class sql_server_registration_should
     {

@@ -32,11 +32,10 @@ namespace HealthChecks.UI.Middleware
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
+            using (var db = scope.ServiceProvider.GetService<HealthChecksDb>())
             {
-                var db = scope.ServiceProvider.GetService<HealthChecksDb>();
-
                 var healthChecks = await db.Configurations
-                    .ToListAsync();
+                      .ToListAsync();
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 
@@ -46,6 +45,7 @@ namespace HealthChecks.UI.Middleware
                         .Include(le => le.History)
                         .Include(le => le.Entries)
                         .Where(le => le.Name.Equals(item.Name, StringComparison.InvariantCultureIgnoreCase))
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
 
                     if (execution != null)

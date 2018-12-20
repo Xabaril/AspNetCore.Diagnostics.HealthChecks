@@ -16,7 +16,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
         private Task _executingTask;
-        public HealthCheckCollectorHostedService(IServiceProvider provider,IOptions<Settings> settings, ILogger<HealthCheckCollectorHostedService> logger)
+        public HealthCheckCollectorHostedService(IServiceProvider provider, IOptions<Settings> settings, ILogger<HealthCheckCollectorHostedService> logger)
         {
             _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(provider));
@@ -46,10 +46,8 @@ namespace HealthChecks.UI.Core.HostedService
                 _logger.LogDebug("Executing HealthCheck collector HostedService.");
 
                 using (var scope = scopeFactory.CreateScope())
+                using (var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>())
                 {
-                    var runner = scope.ServiceProvider
-                        .GetRequiredService<IHealthCheckReportCollector>();
-
                     try
                     {
                         await runner.Collect(cancellationToken);
@@ -59,9 +57,8 @@ namespace HealthChecks.UI.Core.HostedService
                     catch (Exception ex)
                     {
                         _logger.LogError("HealthCheck collector HostedService throw a error:", ex);
-                    }  
+                    }
                 }
-
                 await Task.Delay(_settings.EvaluationTimeOnSeconds * 1000);
             }
         }

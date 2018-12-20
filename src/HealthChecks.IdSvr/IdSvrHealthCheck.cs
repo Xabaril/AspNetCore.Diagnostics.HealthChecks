@@ -10,26 +10,25 @@ namespace HealthChecks.IdSvr
         : IHealthCheck
     {
         const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
-        private readonly Uri _idSvrUri;
-        public IdSvrHealthCheck(Uri idSvrUri)
+
+        private readonly Func<HttpClient> _httpClientFactory;
+        public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
         {
-            _idSvrUri = idSvrUri ?? throw new ArgumentNullException(nameof(idSvrUri));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var httpClient = new HttpClient() { BaseAddress = _idSvrUri })
+                var httpClient = _httpClientFactory();
+                var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT);
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
                 }
+
+                return HealthCheckResult.Healthy();       
             }
             catch (Exception ex)
             {

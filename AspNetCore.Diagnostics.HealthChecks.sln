@@ -77,7 +77,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Seq"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureKeyVault", "src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj", "{A6414860-EBAE-43E4-8109-DE745DA15C43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{300A1B42-EA00-480A-AC43-007EBC7CE472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{300A1B42-EA00-480A-AC43-007EBC7CE472}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UIAndApi", "samples\HealthChecks.UIAndApi\HealthChecks.UIAndApi.csproj", "{91DF8A73-8174-4EA2-ABFA-2557B71EE090}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,6 +207,10 @@ Global
 		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -240,6 +246,7 @@ Global
 		{60C84400-DF56-49BE-B26F-D1F70003A1B4} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{A6414860-EBAE-43E4-8109-DE745DA15C43} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{300A1B42-EA00-480A-AC43-007EBC7CE472} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

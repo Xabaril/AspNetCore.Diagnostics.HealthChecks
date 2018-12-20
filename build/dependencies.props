@@ -18,6 +18,7 @@
   <PropertyGroup Label="Package Versions">
     <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0</MicrosoftExtensionsDiagnosticsHealthChecks>
     <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0</MicrosoftAspNetCoreDiagnosticsHealthChecks>
+    <MicrosoftExtensionsHttp>2.2.0</MicrosoftExtensionsHttp>
     <FluentAssertions>5.4.2</FluentAssertions>
     <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
     <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>
@@ -25,7 +26,7 @@
     <xunitrunnervisualstudio>2.4.0</xunitrunnervisualstudio>
     <SystemDataSqlClient>4.4.2</SystemDataSqlClient>
     <MicrosoftDataSqlite>2.0.1</MicrosoftDataSqlite>
-    <StackExchangeRedisStrongName>1.2.6</StackExchangeRedisStrongName>
+    <StackExchangeRedis>2.0.513</StackExchangeRedis>
     <RabbitMQClient>5.0.1</RabbitMQClient>
     <OracleManagedDataAccessCore>2.18.3</OracleManagedDataAccessCore>
     <Npgsql>3.2.6</Npgsql>
@@ -47,7 +48,7 @@
     <MicrosoftEntityFrameworkCoreDesign>2.1.1</MicrosoftEntityFrameworkCoreDesign>
     <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
-    <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationBinder>2.2.0</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftExtensionsDependencyInjection>2.1.1</MicrosoftExtensionsDependencyInjection>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
@@ -63,17 +64,17 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>2.2.1</HealthCheckIdSvr>
+    <HealthCheckIdSvr>2.2.2</HealthCheckIdSvr>
     <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
-    <HealthCheckUri>2.2.0</HealthCheckUri>
-    <HealthCheckRedis>2.2.1</HealthCheckRedis>
+    <HealthCheckUri>2.2.1</HealthCheckUri>
+    <HealthCheckRedis>2.2.2</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.0</HealthCheckElasticsearch> 
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
-    <HealthCheckMongoDB>2.2.0</HealthCheckMongoDB>
+    <HealthCheckMongoDB>2.2.1</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
     <HealthCheckKafka>2.2.0</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
@@ -82,7 +83,7 @@
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.1</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.4</HealthCheckUI>
+    <HealthCheckUI>2.2.5</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>

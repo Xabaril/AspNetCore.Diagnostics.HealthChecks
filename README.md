@@ -51,7 +51,7 @@ Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.RabbitMQ
-Install-Package AspNetCore.HealthChecks.IdSvr
+Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
 Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris
@@ -109,9 +109,9 @@ services.AddHealthChecks()
 
 ## HealthCheckUI and failure notifications
 
-The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris. 
+The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
 
-To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares.
+To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**
 
 ```csharp
 public class Startup
@@ -148,7 +148,7 @@ When we target applications to be tested and shown on the UI interface, those en
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
- app.UseHealthChecks("/health", new HealthCheckOptions()
+ app.UseHealthChecks("/healthz", new HealthCheckOptions()
 {
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -165,7 +165,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",
-        "Uri": "http://localhost:6457/health"
+        "Uri": "http://localhost:6457/healthz"
       }
     ],
     "Webhooks": [
@@ -187,8 +187,31 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
-All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name.
+All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name. This database is created on the WebContentRoot, *HostDefaults.ContentRootKey*, directory by default. Optionally you can specify the Sqlite connection string using the setting *HealthCheckDatabaseConnectionString*.
 
+```json
+{
+  "HealthChecks-UI": {
+    "HealthChecks": [
+      {
+        "Name": "HTTP-Api-Basic",
+        "Uri": "http://localhost:6457/healthz"
+      }
+    ],
+    "Webhooks": [
+      {
+        "Name": "",
+        "Uri": "",
+        "Payload": "",
+        "RestoredPayload":""
+      }
+    ],
+    "EvaluationTimeOnSeconds": 10,
+    "MinimumSecondsBetweenFailureNotifications":60,
+    "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
+  }
+}
+```
 ### Failure Notifications
 
 If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:
@@ -199,16 +222,19 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
-## Liveness and readiness probes with kubernetes and HealthChecks
+## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
-Asp.Net Core Healthchecks becomes really useful to configure our liveness and readiness probes in kubernetes deployments. You can read more on the [liveness
-probes section samples](./doc/kubernetes-liveness.md)
+   - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness by Carlos Landeras](./doc/kubernetes-liveness.md)
+   - [ASP.NET Core HealthChecks features video by @condrong](https://t.co/YriQ6cLWVm)
+   - [How to set up ASP.NET Core 2.2 Health Checks with BeatPulse's AspNetCore.Diagnostics.HealthChecks by Scott Hanselman](https://www.hanselman.com/blog/HowToSetUpASPNETCore22HealthChecksWithBeatPulsesAspNetCoreDiagnosticsHealthChecks.aspx)
+   - [ASP.NET Core HealthChecks announcement](https://t.co/47M9FBfpWF)
+   - [ASP.NET Core 2.2 HealthChecks Explained by Thomas Ardal](https://blog.elmah.io/asp-net-core-2-2-health-checks-explained/)
 
 ## Contributing
 
 AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
 
-*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup.
+*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks. 
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

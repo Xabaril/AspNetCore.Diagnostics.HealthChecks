@@ -9,16 +9,16 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
+namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 {
-    public class azure_service_bus_topic_registration_should
+    public class azure_event_hub_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusTopic("cnn", "topicName");
+                .AddAzureEventHub("cnn", "hubName");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -26,8 +26,8 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopic");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            registration.Name.Should().Be("azureeventhub");
+            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
         }
 
         [Fact]
@@ -35,8 +35,8 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusTopic("cnn", "topic",
-                name: "azuretopiccheck");
+                .AddAzureEventHub("cnn", "hubName",
+                name: "azureeventhubcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -44,8 +44,8 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopiccheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            registration.Name.Should().Be("azureeventhubcheck");
+            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace UnitTests.HeathChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusTopic(string.Empty, string.Empty);
+                .AddAzureEventHub(string.Empty, string.Empty);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

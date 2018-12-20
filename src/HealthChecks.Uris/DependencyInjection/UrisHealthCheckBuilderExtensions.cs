@@ -24,16 +24,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            builder.Services.AddHttpClient();
+
             var options = new UriHealthCheckOptions();
             options.AddUri(uri);
 
+            var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new UriHealthCheck(options),
+                registrationName,
+                sp => CreateHealthCheck(sp, registrationName, options),
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for single uri.
         /// </summary>
@@ -49,17 +51,19 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            builder.Services.AddHttpClient();
+
             var options = new UriHealthCheckOptions();
             options.AddUri(uri);
             options.UseHttpMethod(httpMethod);
 
+            var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new UriHealthCheck(options),
+                registrationName,
+                sp => CreateHealthCheck(sp, registrationName, options),
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -73,15 +77,17 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            builder.Services.AddHttpClient();
+
             var options = UriHealthCheckOptions.CreateFromUris(uris);
 
+            var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new UriHealthCheck(options),
+                registrationName,
+                sp => CreateHealthCheck(sp, registrationName, options),
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -96,16 +102,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            builder.Services.AddHttpClient();
+
             var options = UriHealthCheckOptions.CreateFromUris(uris);
             options.UseHttpMethod(httpMethod);
 
+            var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new UriHealthCheck(options),
+                registrationName,
+                sp => CreateHealthCheck(sp, registrationName, options),
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -119,14 +127,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Action<UriHealthCheckOptions> uriOptions, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            builder.Services.AddHttpClient();
+
             var options = new UriHealthCheckOptions();
             uriOptions?.Invoke(options);
 
+            var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new UriHealthCheck(options),
+                registrationName,
+                sp => CreateHealthCheck(sp, registrationName, options),
                 failureStatus,
                 tags));
+        }
+        static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
+        {
+            var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+            return new UriHealthCheck(options, () => httpClientFactory.CreateClient(name));
         }
     }
 }

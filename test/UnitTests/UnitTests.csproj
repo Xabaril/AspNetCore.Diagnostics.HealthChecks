@@ -34,8 +34,8 @@
     <None Update="UI\Kubernetes\SampleData\local-cluster-discovery-sample.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="UI\Kubernetes\SampleData\remote-cluster-discovery.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="UI\Kubernetes\SampleData\remote-cluster-discovery-sample.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

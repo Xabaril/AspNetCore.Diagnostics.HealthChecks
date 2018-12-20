@@ -67,6 +67,6 @@ Change `HealthChecks=true` by your configured ServiceLabel if you gave another v
 
 The kubernetes service discovery will retrieve from the k8s api all the labelled services and from the metadata it will try to build the target url to query for health.
 
-If you have exposed a deployment using for example a LoadBalancer on port 50000 and your configured  HealthPath is "healthz" the target url to be queried would be : <host>:50000/healthz
+If you have exposed a deployment using for example a LoadBalancer on port 50000 and your configured  HealthPath is "healthz" the target url to be queried would be : (ip/host):50000/healthz
 
 **NOTE**: Remember if you are using `kubectl proxy` you can configure your cluster address as http://localhost:8001.

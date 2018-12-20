@@ -35,11 +35,10 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         private string GetLoadBalancerAddress(Service service)
         {
-            var ingress = service.Status?.LoadBalancer?.Ingress;
+            var ingress = service.Status?.LoadBalancer?.Ingress.FirstOrDefault();
             if (ingress != null)
             {
-                return service.Status?.LoadBalancer?.Ingress?.First().Ip ??
-                       service.Status?.LoadBalancer?.Ingress?.First().HostName;
+                return ingress.Ip ?? ingress.HostName;
             }
 
             return service.Spec.ClusterIP;

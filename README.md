@@ -223,6 +223,10 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
 ## UI Kubernetes automatic services discovery
+
+![k8s-discovery](./doc/images/k8s-discovery-service.png)
+
+
 HealthChecks UI supports automatic discovery of k8s services exposing pods that have health checks endpoints. This means, you can benefit from it and avoid registering all the endpoints you want to check and let the UI discover them using the k8s api.
 
 You can get more information [here](./doc/k8s-ui-discovery.md)

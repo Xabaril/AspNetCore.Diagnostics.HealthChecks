@@ -24,6 +24,10 @@ namespace HealthChecks.Elasticsearch
                 {
                     settings = settings.BasicAuthentication(_options.UserName, _options.Password);
                 }
+                else if (_options.AuthenticateWithCertificate)
+                {
+                    settings = settings.ClientCertificate(_options.Certificate);
+                }
 
                 var lowlevelClient = new ElasticClient(settings);
                 

@@ -6,7 +6,7 @@
         <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
         <PackageTags>HealthCheck;Publisher;Seq</PackageTags>
         <Description>HealthChecks.Publisher.Seq is the health check publisher for Seq.</Description>
-        <Version>$(HealthCheckPublisherPrometheus)</Version>
+        <Version>$(HealthCheckPublisherSeq)</Version>
         <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
         <Company>$(Company)</Company>
         <Authors>$(Authors)</Authors>

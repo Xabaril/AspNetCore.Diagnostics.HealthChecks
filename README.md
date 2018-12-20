@@ -1,5 +1,5 @@
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks) 
+[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g/branch/master?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks) 
 
 [![Build history](https://buildstats.info/appveyor/chart/xabaril/aspnetcore-diagnostics-healthchecks)](https://ci.appveyor.com/project/xabaril/aspnetcore-diagnostics-healthchecks/history)
 
@@ -187,8 +187,31 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
-All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name.
+All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name. This database is created on the WebContentRoot, *HostDefaults.ContentRootKey*, directory by default. Optionally you can specify the Sqlite connection string using the setting *HealthCheckDatabaseConnectionString*.
 
+```json
+{
+  "HealthChecks-UI": {
+    "HealthChecks": [
+      {
+        "Name": "HTTP-Api-Basic",
+        "Uri": "http://localhost:6457/healthz"
+      }
+    ],
+    "Webhooks": [
+      {
+        "Name": "",
+        "Uri": "",
+        "Payload": "",
+        "RestoredPayload":""
+      }
+    ],
+    "EvaluationTimeOnSeconds": 10,
+    "MinimumSecondsBetweenFailureNotifications":60,
+    "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
+  }
+}
+```
 ### Failure Notifications
 
 If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:

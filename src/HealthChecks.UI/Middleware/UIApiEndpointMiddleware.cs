@@ -45,6 +45,7 @@ namespace HealthChecks.UI.Middleware
                         .Include(le => le.History)
                         .Include(le => le.Entries)
                         .Where(le => le.Name.Equals(item.Name, StringComparison.InvariantCultureIgnoreCase))
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
 
                     if (execution != null)

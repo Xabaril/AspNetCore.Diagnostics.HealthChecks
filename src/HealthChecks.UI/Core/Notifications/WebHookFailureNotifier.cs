@@ -117,5 +117,13 @@ namespace HealthChecks.UI.Core.Notifications
 
             return $"There is at least {failedChecks} HealthChecks failing.";
         }
+
+        public void Dispose()
+        {
+            if (_db != null)
+            {
+                _db.Dispose();
+            }
+        }
     }
 }

@@ -32,8 +32,8 @@ namespace HealthChecks.UI.Core
                 var segments = file.Split(SPLIT_SEPARATOR);
                 var fileName = segments[segments.Length - 2];
                 var extension = segments[segments.Length - 1];
-                var contentStream = _assembly.GetManifestResourceStream(file);
 
+                using (var contentStream = _assembly.GetManifestResourceStream(file))
                 using (var reader = new StreamReader(contentStream))
                 {
                     string result = reader.ReadToEnd();

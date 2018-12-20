@@ -8,6 +8,7 @@ namespace HealthChecks.UI.Configuration
         public List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
         public int EvaluationTimeOnSeconds { get; set; } = 10;
         public int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        public string HealthCheckDatabaseConnectionString { get; set; }
     }
 
     internal class HealthCheckSetting

@@ -11,7 +11,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
     {
         internal static void ConfigureKubernetesClient(this HttpClient client, IServiceProvider serviceProvider)
         {
-            var options = serviceProvider.GetRequiredService<KubernetesDiscoveryOptions>();
+            var options = serviceProvider.GetRequiredService<KubernetesDiscoverySettings>();
             
             var validHttpEndpoint = Uri.TryCreate(options.ClusterHost, UriKind.Absolute, out var host)
                 && (host.Scheme == Uri.UriSchemeHttp || host.Scheme == Uri.UriSchemeHttps);

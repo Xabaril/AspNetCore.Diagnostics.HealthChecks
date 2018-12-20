@@ -12,30 +12,19 @@ using Newtonsoft.Json;
 
 namespace HealthChecks.Publisher.Seq
 {
-    public class SeqPublisher : IHealthCheckPublisher, IDisposable
+    public class SeqPublisher : IHealthCheckPublisher
     {
         private const string EVENT_NAME = "AspNetCoreHealthCheck";
         private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
         private const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
 
         private readonly SeqOptions _options;
-        private readonly HttpClient _httpClient;
+        private readonly Func<HttpClient> _httpClientFactory;
 
-        public SeqPublisher(SeqOptions options)
+        public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
         {
             _options = options;
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(options.Endpoint)
-            };
-        }
-
-        public void Dispose()
-        {
-            if (_httpClient != null)
-            {
-                _httpClient.Dispose();
-            }
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -58,7 +47,7 @@ namespace HealthChecks.Publisher.Seq
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.Now,
-                        MessageTemplate = $"{EVENT_NAME}", // ToDo: Add a proper message template. Unsure what I should write :-/
+                        MessageTemplate = $"{EVENT_NAME}",
                         Level = level,
                         Properties = new Dictionary<string, object>()
                         {
@@ -77,7 +66,8 @@ namespace HealthChecks.Publisher.Seq
         {
             try
             {
-                var response = await _httpClient.PostAsync($"/api/events/raw?apiKey={_options.ApiKey}", new StringContent(json, Encoding.UTF8, "application/json"));
+                var httpClient = _httpClientFactory();
+                var response = await httpClient.PostAsync($"/api/events/raw?apiKey={_options.ApiKey}", new StringContent(json, Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))

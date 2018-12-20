@@ -9,17 +9,26 @@ namespace HealthChecks.Elasticsearch
     public class ElasticsearchHealthCheck
         : IHealthCheck
     {
-        private readonly string _elasticsearchUri;
-        public ElasticsearchHealthCheck(string elasticsearchUri)
+        private readonly ElasticsearchOptions _options;
+        public ElasticsearchHealthCheck(ElasticsearchOptions options)
         {
-            _elasticsearchUri = elasticsearchUri ?? throw new ArgumentNullException(nameof(elasticsearchUri));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var lowlevelClient = new ElasticClient(new Uri(_elasticsearchUri));
+                var settings = new ConnectionSettings(new Uri(_options.Uri));
+
+                if (_options.AuthenticateWithBasicCredentials)
+                {
+                    settings = settings.BasicAuthentication(_options.UserName, _options.Password);
+                }
+
+                var lowlevelClient = new ElasticClient(settings);
+                
                 var pingResult = await lowlevelClient.PingAsync(cancellationToken: cancellationToken);
+                
                 var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
                 return isSuccess

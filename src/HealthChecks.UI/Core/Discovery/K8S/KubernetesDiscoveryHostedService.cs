@@ -86,9 +86,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                                     }
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
-
                                 _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
                             }
 

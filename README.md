@@ -199,6 +199,11 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
+## UI Kubernetes automatic services discovery
+HealthChecks UI supports automatic discovery of k8s services exposing pods that have health checks endpoints. This means, you can benefit from it and avoid registering all the endpoints you want to check and let the UI discover them using the k8s api.
+
+You can get more information [here](./doc/k8s-ui-discovery.md)
+
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
    - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness by Carlos Landeras](./doc/kubernetes-liveness.md)

@@ -8,6 +8,17 @@
 
 This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI *port* to new *Microsoft Health Checks* feature included on **ASP.NET Core 2.2**.
 
+## Sections
+[Health Checks](#health-checks)
+
+[Publishers](#HealthCheck-push-results)
+
+[UI](#HealthChecksUI)
+
+[UI- Failure notifications](#Failure-Notifications)
+
+[UI - Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
+
 ## Health Checks
 
 HealthChecks packages include health checks for:
@@ -108,7 +119,7 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
-## HealthCheckUI and failure notifications
+## HealthChecksUI
 
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
 

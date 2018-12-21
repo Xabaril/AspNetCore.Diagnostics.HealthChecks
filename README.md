@@ -15,7 +15,7 @@ This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and 
 
 [UI](#HealthChecksUI)
 
-[UI- Failure notifications](#Failure-Notifications)
+[UI - Failure notifications](#Failure-Notifications)
 
 [UI - Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
 

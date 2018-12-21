@@ -13,7 +13,7 @@ This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and 
 
 [Publishers](#HealthCheck-push-results)
 
-[UI](#HealthChecksUI)
+[UI](#HealthChecks-UI)
 
 [UI - Failure notifications](#Failure-Notifications)
 
@@ -119,7 +119,7 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
-## HealthChecksUI
+## HealthChecks UI
 
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
 

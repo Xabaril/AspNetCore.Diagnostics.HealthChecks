@@ -53,11 +53,11 @@ Here are all the available parameters detailed:
 | ServicesLabel | The labeled services the UI will look for in k8s | HealtChecks
 | RefreshTimeOnSeconds | Healthchecks refresh time in seconds | 300
 
-## Labeling Services for discovery
+## Labeling Services for discovery in Kubernetes
 
-The ServicesLabel option provided in the discovery settings (by default HealthChecks) is the label that will be used to filter k8s services.
+The `ServicesLabel` option provided in the discovery settings (by default HealthChecks) is the label that will be used to filter k8s services.
 
-If you want to tag a service just execute
+If you want to tag a service just execute the k8s command line tool (kubectl) using the following command:
 
 `kubectl label service service-name HealthChecks=true`
 

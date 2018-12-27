@@ -18,7 +18,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureEventHub("cnn", "hubName");
+                .AddAzureEventHub("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", 
+                    "hubName");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -35,8 +36,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureEventHub("cnn", "hubName",
-                name: "azureeventhubcheck");
+                .AddAzureEventHub("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", 
+                    "hubName", name: "azureeventhubcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

@@ -165,18 +165,5 @@ namespace HealthChecks.UI.Core.HostedService
 
             await _db.SaveChangesAsync();
         }
-
-        public void Dispose()
-        {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
-
-            if (_healthCheckFailureNotifier != null)
-            {
-                _healthCheckFailureNotifier.Dispose();
-            }
-        }
     }
 }

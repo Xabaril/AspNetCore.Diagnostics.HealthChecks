@@ -46,10 +46,10 @@ namespace HealthChecks.UI.Core.HostedService
                 _logger.LogDebug("Executing HealthCheck collector HostedService.");
 
                 using (var scope = scopeFactory.CreateScope())
-                using (var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>())
                 {
                     try
                     {
+                        var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>();
                         await runner.Collect(cancellationToken);
 
                         _logger.LogDebug("HealthCheck collector HostedService executed succesfully.");

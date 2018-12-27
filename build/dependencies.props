@@ -19,11 +19,12 @@
     <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0</MicrosoftExtensionsDiagnosticsHealthChecks>
     <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0</MicrosoftAspNetCoreDiagnosticsHealthChecks>
     <MicrosoftExtensionsHttp>2.2.0</MicrosoftExtensionsHttp>
-    <FluentAssertions>5.4.2</FluentAssertions>
-    <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
-    <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>
-    <xunit>2.4.0</xunit>
-    <xunitrunnervisualstudio>2.4.0</xunitrunnervisualstudio>
+    <MicrosoftExtensionsDependencyInjection>2.2.0</MicrosoftExtensionsDependencyInjection>
+    <FluentAssertions>5.5.3</FluentAssertions>
+    <MicrosoftAspNetCoreTestHost>2.2.0</MicrosoftAspNetCoreTestHost>
+    <MicrosoftNETTestSdk>15.9.0</MicrosoftNETTestSdk>
+    <xunit>2.4.1</xunit>
+    <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
     <SystemDataSqlClient>4.4.2</SystemDataSqlClient>
     <MicrosoftDataSqlite>2.0.1</MicrosoftDataSqlite>
     <StackExchangeRedis>2.0.513</StackExchangeRedis>
@@ -43,13 +44,12 @@
     <AWSSDKDynamoDBv2>3.3.9</AWSSDKDynamoDBv2>
     <NewtonsoftJson>11.0.2</NewtonsoftJson>
     <EventStoreClientAPINetCore>4.1.0.23</EventStoreClientAPINetCore>
-    <MicrosoftAspNetCoreHostingAbstractions>2.1.1</MicrosoftAspNetCoreHostingAbstractions>
-    <MicrosoftEntityFrameworkCore>2.1.1</MicrosoftEntityFrameworkCore>
-    <MicrosoftEntityFrameworkCoreDesign>2.1.1</MicrosoftEntityFrameworkCoreDesign>
-    <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
-    <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
+    <MicrosoftAspNetCoreHostingAbstractions>2.2.0</MicrosoftAspNetCoreHostingAbstractions>
+    <MicrosoftEntityFrameworkCore>2.2.0</MicrosoftEntityFrameworkCore>
+    <MicrosoftEntityFrameworkCoreDesign>2.2.0</MicrosoftEntityFrameworkCoreDesign>
+    <MicrosoftEntityFrameworkCoreSqlite>2.2.0</MicrosoftEntityFrameworkCoreSqlite>
+    <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.6</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.2.0</MicrosoftExtensionsConfigurationBinder>
-    <MicrosoftExtensionsDependencyInjection>2.1.1</MicrosoftExtensionsDependencyInjection>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
@@ -83,7 +83,7 @@
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.2</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.6</HealthCheckUI>
+    <HealthCheckUI>2.2.7</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>

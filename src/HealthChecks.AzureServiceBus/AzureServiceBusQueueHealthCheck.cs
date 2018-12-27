@@ -12,37 +12,36 @@ namespace HealthChecks.AzureServiceBus
         : IHealthCheck
     {
         private const string TEST_MESSAGE = "HealthCheckTest";
+        private static readonly ConcurrentDictionary<string, QueueClient> _queueClientConnections = new ConcurrentDictionary<string, QueueClient>();
+
         private readonly string _connectionString;
         private readonly string _queueName;
-        private static readonly ConcurrentDictionary<string, ServiceBusConnection> ServiceBusConnections = new ConcurrentDictionary<string, ServiceBusConnection>();
-
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
         {
-            if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
-            if (string.IsNullOrEmpty(queueName)) throw new ArgumentNullException(nameof(queueName));
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+            if (string.IsNullOrEmpty(queueName))
+            {
+                throw new ArgumentNullException(nameof(queueName));
+            }
             _connectionString = connectionString;
             _queueName = queueName;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (ServiceBusConnections.TryGetValue(_connectionString, out var serviceBusConnection))
+                if (!_queueClientConnections.TryGetValue(_connectionString, out var queueClient))
                 {
-                    serviceBusConnection = new ServiceBusConnection(_connectionString);
+                    queueClient = new QueueClient(_connectionString, _queueName,ReceiveMode.PeekLock, RetryPolicy.NoRetry);
 
-                    if (!ServiceBusConnections.TryAdd(_connectionString, serviceBusConnection))
+                    if (!_queueClientConnections.TryAdd(_connectionString, queueClient))
                     {
-                        return
-                            new HealthCheckResult(context.Registration.FailureStatus, description: "New service bus connection can't be added into dictionary.");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New QueueClient connection can't be added into dictionary.");
                     }
                 }
-
-                var queueClient = new QueueClient(serviceBusConnection,
-                    _queueName,
-                    ReceiveMode.PeekLock,
-                    RetryPolicy.NoRetry);
 
                 var scheduledMessageId = await queueClient.ScheduleMessageAsync(
                     new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE)),

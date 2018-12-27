@@ -14,12 +14,18 @@ namespace HealthChecks.AzureServiceBus
         private const string TEST_MESSAGE = "HealthCheckTestMessage";
         private readonly string _connectionString;
         private readonly string _topicName;
-        private static readonly ConcurrentDictionary<string, ServiceBusConnection> ServiceBusConnections = new ConcurrentDictionary<string, ServiceBusConnection>();
+        private static readonly ConcurrentDictionary<string, TopicClient> _topicClient = new ConcurrentDictionary<string, TopicClient>();
 
         public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
         {
-            if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
-            if (string.IsNullOrEmpty(topicName)) throw new ArgumentNullException(nameof(topicName));
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+            if (string.IsNullOrEmpty(topicName))
+            {
+                throw new ArgumentNullException(nameof(topicName));
+            }
 
             _connectionString = connectionString;
             _topicName = topicName;
@@ -28,18 +34,15 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (ServiceBusConnections.TryGetValue(_connectionString, out var serviceBusConnection))
+                if (!_topicClient.TryGetValue(_connectionString, out var topicClient))
                 {
-                    serviceBusConnection = new ServiceBusConnection(_connectionString);
+                    topicClient = new TopicClient(_connectionString, _topicName, RetryPolicy.NoRetry);
 
-                    if (!ServiceBusConnections.TryAdd(_connectionString, serviceBusConnection))
+                    if (!_topicClient.TryAdd(_connectionString, topicClient))
                     {
-                        return
-                            new HealthCheckResult(context.Registration.FailureStatus, description: "New service bus connection can't be added into dictionary.");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New TopicClient can't be added into dictionary.");
                     }
                 }
-
-                var topicClient = new TopicClient(serviceBusConnection, _topicName, RetryPolicy.NoRetry);
 
                 var scheduledMessageId = await topicClient.ScheduleMessageAsync(
                     new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE)),

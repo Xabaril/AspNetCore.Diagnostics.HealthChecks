@@ -44,13 +44,13 @@ export class App extends React.Component<AppProps, AppState> {
                         <img className="menu-icon" src={WhiteHeartIcon} />
                         <div>Health Checks</div>
                     </Link>
-                    <Link to="/webhooks" className="menu-item" onClick={this.toggleMenu}>
+                    <Link to={`${this.props.mountPath}/webhooks`} className="menu-item" onClick={this.toggleMenu}>
                         <img className="menu-icon" src={WhiteGearIcon} />
                         <div>Webhooks</div>
                     </Link>
                 </Menu>
                 <Route exact path={this.props.mountPath} render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />
-                <Route path="/webhooks" render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
+                <Route path={`${this.props.mountPath}/webhooks`} render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
             </div>
             <Footer />
         </React.Fragment>

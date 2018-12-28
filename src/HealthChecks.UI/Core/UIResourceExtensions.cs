@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,12 +18,13 @@ namespace HealthChecks.UI.Core
                 .FirstOrDefault(r => r.FileName == Keys.HEALTHCHECKSUI_MAIN_UI_RESOURCE);
 
             resource.Content = resource.Content
-                .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_API_TARGET, options.ApiPath);
+                .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_API_TARGET, options.ApiPath.AsRelativeResource());
 
             resource.Content = resource.Content
-                .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath);
+                .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath.AsRelativeResource());
 
-            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET,options.ResourcesPath);
+
+            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET,options.ResourcesPath.AsRelativeResource());
 
             return resource;
         }

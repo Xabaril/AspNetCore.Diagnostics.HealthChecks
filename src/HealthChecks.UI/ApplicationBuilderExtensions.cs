@@ -39,7 +39,7 @@ namespace Microsoft.AspNetCore.Builder
              {
                  if (string.IsNullOrEmpty(path) || !path.StartsWith("/"))
                  {
-                     throw new ArgumentNullException(argument);
+                     throw new ArgumentException("The value for customized path can't be null and need to start with / characater.");
                  }
              };
 

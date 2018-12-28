@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.MySql
+namespace UnitTests.HealthChecks.DependencyInjection.MongoDb
 {
     public class mongodb_registration_should
     {

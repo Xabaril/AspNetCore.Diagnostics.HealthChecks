@@ -16,7 +16,7 @@ namespace HealthChecks.UI.Core
         public void Map(IApplicationBuilder app, Options options)
         {
             var resources = _reader.UIResources;
-            var UIMain = resources.GetMainUI(options);
+            var ui = resources.GetMainUI(options);
 
             foreach (var resource in resources)
             {
@@ -47,8 +47,8 @@ namespace HealthChecks.UI.Core
                         return Task.CompletedTask;
                     });
 
-                    context.Response.ContentType = UIMain.ContentType;
-                    await context.Response.WriteAsync(UIMain.Content);
+                    context.Response.ContentType = ui.ContentType;
+                    await context.Response.WriteAsync(ui.Content);
                 });
             });
         }

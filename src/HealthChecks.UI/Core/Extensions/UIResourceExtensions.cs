@@ -1,14 +1,28 @@
-﻿using System;
+﻿using HealthChecks.UI.Configuration;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
-namespace HealthChecks.UI.Core.Extensions
+namespace HealthChecks.UI.Core
 {
-    public static class UIResourceExtensions
+    internal static class UIResourceExtensions
     {
-        public static string AsRelativeResource(this string resourcePath)
+        public static UIResource GetMainUI(this IEnumerable<UIResource> resources, Options options)
         {
-            return resourcePath.StartsWith("/") ? resourcePath.Substring(1) : resourcePath;
+            var resource = resources
+                .Where(r => r.ContentType == ContentType.HTML && r.FileName == Keys.HEALTHCHECKSUI_MAIN_UI_RESOURCE)
+                .FirstOrDefault();
+
+            resource.Content = resource.Content
+                .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_API_TARGET, options.ApiPath.AsRelativeResource());
+
+            resource.Content = resource.Content
+                .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath.AsRelativeResource());
+
+            resource.Content = resource.Content
+                .Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET,options.ResourcesPath.AsRelativeResource());
+
+            return resource;
         }
     }
 }

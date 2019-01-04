@@ -78,7 +78,7 @@
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
     <HealthCheckKafka>2.2.0</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
-    <HealthCheckNetwork>2.2.1-beta1</HealthCheckNetwork>
+    <HealthCheckNetwork>2.2.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>

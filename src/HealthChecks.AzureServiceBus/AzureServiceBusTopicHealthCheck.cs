@@ -34,7 +34,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (!_topicClient.TryGetValue(_connectionString, out var topicClient))
+                if (!_topicClient.TryGetValue($"{_connectionString}_{_topicName}", out var topicClient))
                 {
                     topicClient = new TopicClient(_connectionString, _topicName, RetryPolicy.NoRetry);
 

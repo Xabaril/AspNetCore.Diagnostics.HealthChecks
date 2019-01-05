@@ -33,7 +33,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (!_queueClientConnections.TryGetValue(_connectionString, out var queueClient))
+                if (!_queueClientConnections.TryGetValue($"{_connectionString}_{_queueName}", out var queueClient))
                 {
                     queueClient = new QueueClient(_connectionString, _queueName,ReceiveMode.PeekLock, RetryPolicy.NoRetry);
 

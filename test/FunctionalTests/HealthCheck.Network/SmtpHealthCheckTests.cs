@@ -252,7 +252,6 @@ namespace FunctionalTests.HealthChecks.Network
         }
 
         [Fact(Skip = "Fact only meant to run on development because it uses a external server")]
-        //[Fact]
         public async Task be_healthty_when_login_with_plain_smtp()
         {
             /* We use test.smtp.org service to test raw smtp connections as nowadays

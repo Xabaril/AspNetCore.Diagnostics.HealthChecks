@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
+    <NetCoreTargetVersion>netcoreapp2.2</NetCoreTargetVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -83,7 +83,7 @@
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.3</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.8</HealthCheckUI>
+    <HealthCheckUI>2.2.9</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>

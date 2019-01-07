@@ -25,7 +25,8 @@ namespace HealthChecks.UI.Middleware
             _jsonSerializationSettings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Converters = new[] { new StringEnumConverter() }
+                Converters = new[] { new StringEnumConverter() },
+                DateTimeZoneHandling = DateTimeZoneHandling.Local
             };
         }
 

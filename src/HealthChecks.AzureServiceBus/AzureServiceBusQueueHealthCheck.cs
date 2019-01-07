@@ -33,11 +33,12 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (!_queueClientConnections.TryGetValue($"{_connectionString}_{_queueName}", out var queueClient))
+                var connectionKey = $"{_connectionString}_{_queueName}";
+                if (!_queueClientConnections.TryGetValue(connectionKey, out var queueClient))
                 {
                     queueClient = new QueueClient(_connectionString, _queueName,ReceiveMode.PeekLock, RetryPolicy.NoRetry);
 
-                    if (!_queueClientConnections.TryAdd(_connectionString, queueClient))
+                    if (!_queueClientConnections.TryAdd(connectionKey, queueClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "New QueueClient connection can't be added into dictionary.");
                     }

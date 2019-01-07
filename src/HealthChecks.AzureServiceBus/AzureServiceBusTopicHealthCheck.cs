@@ -34,11 +34,12 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (!_topicClient.TryGetValue($"{_connectionString}_{_topicName}", out var topicClient))
+                var connectionKey = $"{_connectionString}_{_topicName}";
+                if (!_topicClient.TryGetValue(connectionKey, out var topicClient))
                 {
                     topicClient = new TopicClient(_connectionString, _topicName, RetryPolicy.NoRetry);
 
-                    if (!_topicClient.TryAdd(_connectionString, topicClient))
+                    if (!_topicClient.TryAdd(connectionKey, topicClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "New TopicClient can't be added into dictionary.");
                     }

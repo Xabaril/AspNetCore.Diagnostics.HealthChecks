@@ -10,7 +10,8 @@ namespace HealthChecks.UI.Core.Data.Configuration
         public void Configure(EntityTypeBuilder<HealthCheckExecution> builder)
         {
             builder.Property(le => le.OnStateFrom)
-                .IsRequired(true);
+                .IsRequired(true)
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
             builder.Property(le => le.LastExecuted)
                 .IsRequired(true)

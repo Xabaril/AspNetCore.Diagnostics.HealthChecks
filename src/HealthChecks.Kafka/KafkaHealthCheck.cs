@@ -20,9 +20,9 @@ namespace HealthChecks.Kafka
         {
             try
             {
-                using (var producer = new Producer<Null, string>(_configuration, null, new StringSerializer(Encoding.UTF8)))
+                using (var producer = new Producer<string, string>(_configuration, new StringSerializer(Encoding.UTF8), new StringSerializer(Encoding.UTF8)))
                 {
-                    var result = await producer.ProduceAsync("beatpulse-topic", null, $"Check Kafka healthy on {DateTime.UtcNow}");
+                    var result = await producer.ProduceAsync("beatpulse-topic", "beatpulse-key", $"Check Kafka healthy on {DateTime.UtcNow}");
 
                     if (result.Error.Code != ErrorCode.NoError)
                     {

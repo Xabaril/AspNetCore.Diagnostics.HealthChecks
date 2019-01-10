@@ -76,7 +76,7 @@
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.1</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
-    <HealthCheckKafka>2.2.0</HealthCheckKafka>
+    <HealthCheckKafka>2.2.1</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
     <HealthCheckNetwork>2.2.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>

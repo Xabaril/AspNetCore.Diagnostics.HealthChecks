@@ -235,6 +235,7 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
    - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness by Carlos Landeras](./doc/kubernetes-liveness.md)
+   - [ASP.NET Core HealthChecks, BeatPulse UI, Webhooks and Kubernetes Liveness / Readiness probes demos at SDN.nl live WebCast by Carlos Landeras](https://www.youtube.com/watch?v=kzRKGCmGbqo)
    - [ASP.NET Core HealthChecks features video by @condrong](https://t.co/YriQ6cLWVm)
    - [How to set up ASP.NET Core 2.2 Health Checks with BeatPulse's AspNetCore.Diagnostics.HealthChecks by Scott Hanselman](https://www.hanselman.com/blog/HowToSetUpASPNETCore22HealthChecksWithBeatPulsesAspNetCoreDiagnosticsHealthChecks.aspx)
    - [ASP.NET Core HealthChecks announcement](https://t.co/47M9FBfpWF)

@@ -38,6 +38,7 @@
     <NEST>6.1.0</NEST> 
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
+    <HangfireCore>1.6.21</HangfireCore>
     <WindowsAzureStorage>9.1.0</WindowsAzureStorage>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
@@ -81,6 +82,7 @@
     <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
+    <HealthCheckHangfire>2.2.0</HealthCheckHangfire>
     <HealthCheckAzureStorage>2.2.0</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckUI>2.2.10</HealthCheckUI>

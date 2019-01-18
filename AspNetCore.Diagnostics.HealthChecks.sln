@@ -83,6 +83,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UIAndApi", "sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UIAndApiCustomization", "samples\HealthChecks.UIAndApiCustomization\HealthChecks.UIAndApiCustomization.csproj", "{B7C5C213-677D-4B03-ADA9-101299BCA047}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Hangfire", "src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj", "{598E178A-6943-45D4-BAEA-CBA1E7425FCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -217,6 +219,10 @@ Global
 		{B7C5C213-677D-4B03-ADA9-101299BCA047}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7C5C213-677D-4B03-ADA9-101299BCA047}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7C5C213-677D-4B03-ADA9-101299BCA047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{598E178A-6943-45D4-BAEA-CBA1E7425FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{598E178A-6943-45D4-BAEA-CBA1E7425FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{598E178A-6943-45D4-BAEA-CBA1E7425FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{598E178A-6943-45D4-BAEA-CBA1E7425FCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -254,6 +260,7 @@ Global
 		{300A1B42-EA00-480A-AC43-007EBC7CE472} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{91DF8A73-8174-4EA2-ABFA-2557B71EE090} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 		{B7C5C213-677D-4B03-ADA9-101299BCA047} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
+		{598E178A-6943-45D4-BAEA-CBA1E7425FCC} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

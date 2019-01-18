@@ -203,6 +203,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
             check.GetType().Should().Be(typeof(SmtpHealthCheck));
         }
 
+        [Fact]
         public void add_named_tcp_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();

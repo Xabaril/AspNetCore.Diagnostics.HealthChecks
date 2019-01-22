@@ -14,7 +14,7 @@ namespace UnitTests.DependencyInjection.AzureStorage
     public class azureblobstorage_registration_should
     {
         [Fact]
-        public void not_thrown_when_connectionstring_is_invalid()
+        public void not_throw_when_connectionstring_is_invalid()
         {
             var connectionString = "bla";
             var services = new ServiceCollection();

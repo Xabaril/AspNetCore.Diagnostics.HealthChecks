@@ -11,21 +11,35 @@ namespace UnitTests.DependencyInjection.AzureStorage
     public class azuretabletorage_registration_should
     {
         [Fact]
-        public void not_throw_when_connectionstring_is_invalid()
+        public void add_health_check_when_properly_configured()
         {
-            var connectionString = "bla";
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                    .AddAzureTableStorage(connectionString);
+                .AddAzureTableStorage("the-connection-string");
 
             var serviceProvider = services.BuildServiceProvider();
-
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azuretable");
+            check.GetType().Should().Be(typeof(AzureTableStorageHealthCheck));
+        }
+        [Fact]
+        public void add_named_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureTableStorage("the-connection-string", name: "my-azuretable-group");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("my-azuretable-group");
             check.GetType().Should().Be(typeof(AzureTableStorageHealthCheck));
         }
     }

@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsDependencyInjection)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
   </ItemGroup>
 
   <ItemGroup>    
@@ -34,9 +35,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
-  </ItemGroup>
+ 
   <ItemGroup>
     <None Update="UI\Kubernetes\SampleData\local-cluster-discovery-sample.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -44,9 +43,6 @@
     <None Update="UI\Kubernetes\SampleData\remote-cluster-discovery-sample.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DependencyInjection\AzureStorage\" />
   </ItemGroup>
 
 </Project>

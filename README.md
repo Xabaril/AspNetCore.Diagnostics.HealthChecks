@@ -33,11 +33,9 @@ HealthChecks packages include health checks for:
 - Kafka
 - Identity Server
 - Uri: single uri and uri groups
-<<<<<<< HEAD
 - Consul
-=======
 - Hangfire
->>>>>>> 8518ff644abdd0ecdbcd41b2b2b7fecd716e2ae9
+
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -61,11 +59,8 @@ Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
-<<<<<<< HEAD
 Install-Package AspNetCore.HealthChecks.Consul
-=======
 Install-Package AspNetCore.HealthChecks.Hangfire
->>>>>>> 8518ff644abdd0ecdbcd41b2b2b7fecd716e2ae9
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

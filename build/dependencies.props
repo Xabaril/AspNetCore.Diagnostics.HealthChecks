@@ -83,6 +83,7 @@
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.1</HealthCheckAzureStorage>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
+    <HealthCheckConsul>2.2.0</HealthCheckConsul>
     <HealthCheckUI>2.2.10</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.1</HealthCheckPublisherAppplicationInsights>

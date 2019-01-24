@@ -24,6 +24,12 @@ namespace HealthChecks.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*
+             * If you have different hosted services, please check this open bug on 2.2 HealthChecks
+             * https://github.com/aspnet/Extensions/issues/639 and the workaround proposed by @NatMarchand
+             * or register all hosted service before call AddHealthChecks.
+             */
+
             services.AddHealthChecks()
                 //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random")

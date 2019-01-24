@@ -10,29 +10,40 @@ namespace HealthChecks.MySql
         : IHealthCheck
     {
         private readonly string _connectionString;
-        public MySqlHealthCheck(string connectionString)
+        private readonly TimeSpan _timeout;
+
+        public MySqlHealthCheck(string connectionString, TimeSpan timeout)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _timeout = timeout;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                using (var connection = new MySqlConnection(_connectionString))
+                try
                 {
-                    await connection.OpenAsync(cancellationToken);
-
-                    if (!await connection.PingAsync(cancellationToken))
+                    using (var connection = new MySqlConnection(_connectionString))
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
-                    }
+                        await connection.OpenAsync(timeoutCancellationTokenSource.Token);
 
-                    return HealthCheckResult.Healthy();
+                        if (!await connection.PingAsync(timeoutCancellationTokenSource.Token))
+                        {
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
+                        }
+
+                        return HealthCheckResult.Healthy();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
     }

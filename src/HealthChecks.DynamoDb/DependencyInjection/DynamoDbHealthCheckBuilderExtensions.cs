@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -20,15 +21,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddDynamoDb(this IHealthChecksBuilder builder, Action<DynamoDBOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">The timeout after which the health check is considered failed. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddDynamoDb(this IHealthChecksBuilder builder, Action<DynamoDBOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new DynamoDBOptions();
             setup?.Invoke(options);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new DynamoDbHealthCheck(options),
+                sp => new DynamoDbHealthCheck(options, timeout ?? Timeout.InfiniteTimeSpan),
                 failureStatus,
                 tags));
         }

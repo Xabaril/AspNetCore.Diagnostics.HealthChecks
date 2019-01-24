@@ -11,33 +11,43 @@ namespace HealthChecks.Oracle
     {
         private readonly string _connectionString;
         private readonly string _sql;
+        private readonly TimeSpan _timeout;
 
-        public OracleHealthCheck(string connectionString, string sql)
+        public OracleHealthCheck(string connectionString, string sql, TimeSpan timeout)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            _timeout = timeout;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                using (var connection = new OracleConnection(_connectionString))
+                try
                 {
-                    await connection.OpenAsync();
-
-                    using (var command = connection.CreateCommand())
+                    using (var connection = new OracleConnection(_connectionString))
                     {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync();
-                    }
+                        await connection.OpenAsync(timeoutCancellationTokenSource.Token);
 
-                    return HealthCheckResult.Healthy();
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = _sql;
+                            await command.ExecuteScalarAsync(timeoutCancellationTokenSource.Token);
+                        }
+
+                        return HealthCheckResult.Healthy();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
     }

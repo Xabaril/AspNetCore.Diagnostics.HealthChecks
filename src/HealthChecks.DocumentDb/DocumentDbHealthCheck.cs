@@ -6,30 +6,41 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.DocumentDb
 {
-    public class DocumentDbHealthCheck 
+    public class DocumentDbHealthCheck
         : IHealthCheck
     {
         private readonly DocumentDbOptions _documentDbOptions = new DocumentDbOptions();
-        public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions)
+        private readonly TimeSpan _timeout;
+
+        public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions, TimeSpan timeout)
         {
+            _timeout = timeout;
             _documentDbOptions.UriEndpoint = documentDbOptions.UriEndpoint ?? throw new ArgumentNullException(nameof(documentDbOptions.UriEndpoint));
             _documentDbOptions.PrimaryKey = documentDbOptions.PrimaryKey ?? throw new ArgumentNullException(nameof(documentDbOptions.PrimaryKey));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
-            { 
-                using (var documentDbClient = new DocumentClient(
-                    new Uri(_documentDbOptions.UriEndpoint),
-                    _documentDbOptions.PrimaryKey))
-                {
-                    await documentDbClient.OpenAsync();
-                    return HealthCheckResult.Healthy();
-                }
-            }
-            catch (Exception ex)
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                try
+                {
+                    using (var documentDbClient = new DocumentClient(
+                        new Uri(_documentDbOptions.UriEndpoint),
+                        _documentDbOptions.PrimaryKey))
+                    {
+                        await documentDbClient.OpenAsync(timeoutCancellationTokenSource.Token);
+                        return HealthCheckResult.Healthy();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
     }

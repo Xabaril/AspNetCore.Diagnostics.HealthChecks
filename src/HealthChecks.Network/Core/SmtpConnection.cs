@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HealthChecks.Network.Core
@@ -54,33 +55,33 @@ namespace HealthChecks.Network.Core
             }
         }
 
-        public new async Task<bool> ConnectAsync()
+        public new async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
         {
-            await base.ConnectAsync();
-            var result = await ExecuteCommand(SmtpCommands.EHLO(Host));
+            await base.ConnectAsync(cancellationToken);
+            var result = await ExecuteCommand(SmtpCommands.EHLO(Host), cancellationToken);
             return result.Contains(SmtpResponse.ACTION_OK);
         }
 
-        public async Task<bool> AuthenticateAsync(string userName, string password)
+        public async Task<bool> AuthenticateAsync(string userName, string password, CancellationToken cancellationToken = default)
         {
             if (ShouldUpgradeConnection)
             {
-                await UpgradeToSecureConnection();
+                await UpgradeToSecureConnection(cancellationToken);
             }
-            await ExecuteCommand(SmtpCommands.EHLO(Host));
-            await ExecuteCommand(SmtpCommands.AUTHLOGIN());
-            await ExecuteCommand($"{ ToBase64(userName)}\r\n");
+            await ExecuteCommand(SmtpCommands.EHLO(Host), cancellationToken);
+            await ExecuteCommand(SmtpCommands.AUTHLOGIN(), cancellationToken);
+            await ExecuteCommand($"{ ToBase64(userName)}\r\n", cancellationToken);
 
             password = password?.Length > 0 ? ToBase64(password) : "";
 
-            var result = await ExecuteCommand($"{password}\r\n");
+            var result = await ExecuteCommand($"{password}\r\n", cancellationToken);
             return result.Contains(SmtpResponse.AUTHENTICATION_SUCCESS);
         }
 
 
-        private async Task<bool> UpgradeToSecureConnection()
+        private async Task<bool> UpgradeToSecureConnection(CancellationToken cancellationToken)
         {
-            var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS());
+            var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS(), cancellationToken);
             if (upgradeResult.Contains(SmtpResponse.SERVICE_READY))
             {
                 UseSSL = true;

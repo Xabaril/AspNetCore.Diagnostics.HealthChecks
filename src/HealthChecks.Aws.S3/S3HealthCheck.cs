@@ -10,7 +10,9 @@ namespace HealthChecks.Aws.S3
     public class S3HealthCheck : IHealthCheck
     {
         private readonly S3BucketOptions _bucketOptions;
-        public S3HealthCheck(S3BucketOptions bucketOptions)
+        private readonly TimeSpan _timeout;
+
+        public S3HealthCheck(S3BucketOptions bucketOptions, TimeSpan timeout)
         {
             if (string.IsNullOrEmpty(bucketOptions.AccessKey))
             {
@@ -28,28 +30,38 @@ namespace HealthChecks.Aws.S3
             }
 
             _bucketOptions = bucketOptions;
+            _timeout = timeout;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                var credentials = new BasicAWSCredentials(_bucketOptions.AccessKey, _bucketOptions.SecretKey);
-                var client = new AmazonS3Client(credentials, _bucketOptions.S3Config);
-
-                var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
-
-                if (_bucketOptions.CustomResponseCheck != null)
+                try
                 {
-                    return _bucketOptions.CustomResponseCheck.Invoke(response)
-                        ? HealthCheckResult.Healthy()
-                        : new HealthCheckResult(context.Registration.FailureStatus, description:"Custom response check is not satisfied.");
-                }
+                    var credentials = new BasicAWSCredentials(_bucketOptions.AccessKey, _bucketOptions.SecretKey);
+                    using (var client = new AmazonS3Client(credentials, _bucketOptions.S3Config))
+                    {
+                        var response = await client.ListObjectsAsync(_bucketOptions.BucketName, timeoutCancellationTokenSource.Token);
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                        if (_bucketOptions.CustomResponseCheck != null)
+                        {
+                            return _bucketOptions.CustomResponseCheck.Invoke(response)
+                                ? HealthCheckResult.Healthy()
+                                : new HealthCheckResult(context.Registration.FailureStatus, description: "Custom response check is not satisfied.");
+                        }
+
+                        return HealthCheckResult.Healthy();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
     }

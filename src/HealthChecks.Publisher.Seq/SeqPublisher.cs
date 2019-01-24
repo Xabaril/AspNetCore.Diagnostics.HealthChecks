@@ -59,19 +59,23 @@ namespace HealthChecks.Publisher.Seq
                 }
             };
 
-            await PushMetrics(JsonConvert.SerializeObject(events));
+            await PushMetrics(JsonConvert.SerializeObject(events), cancellationToken);
         }
-        private async Task PushMetrics(string json)
+        private async Task PushMetrics(string json, CancellationToken cancellationToken)
         {
             try
             {
                 var httpClient = _httpClientFactory();
 
-                var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}");
-                pushMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}"))
+                {
+                    pushMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                (await httpClient.SendAsync(pushMessage))
-                    .EnsureSuccessStatusCode();
+                    using (var response = await httpClient.SendAsync(pushMessage, cancellationToken))
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                }
             }
             catch (Exception ex)
             {

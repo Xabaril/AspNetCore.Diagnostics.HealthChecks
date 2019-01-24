@@ -1,6 +1,8 @@
 ﻿using HealthChecks.AzureStorage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -21,12 +23,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddAzureBlobStorage(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">The timeout after which the health check is considered failed. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureBlobStorage(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZURESTORAGE_NAME,
-               sp => new AzureBlobStorageHealthCheck(connectionString),
+               sp => new AzureBlobStorageHealthCheck(connectionString, timeout ?? Timeout.InfiniteTimeSpan),
                failureStatus,
                tags));
         }
@@ -42,12 +45,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddAzureTableStorage(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">The timeout after which the health check is considered failed. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureTableStorage(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZURETABLE_NAME,
-               sp => new AzureTableStorageHealthCheck(connectionString),
+               sp => new AzureTableStorageHealthCheck(connectionString, timeout ?? Timeout.InfiniteTimeSpan),
                failureStatus,
                tags));
         }
@@ -63,12 +67,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddAzureQueueStorage(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">The timeout after which the health check is considered failed. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureQueueStorage(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREQUEUE_NAME,
-               sp => new AzureQueueStorageHealthCheck(connectionString),
+               sp => new AzureQueueStorageHealthCheck(connectionString, timeout ?? Timeout.InfiniteTimeSpan),
                null,
                new string[] { AZUREQUEUE_NAME }));
         }

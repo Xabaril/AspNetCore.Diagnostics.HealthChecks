@@ -29,7 +29,7 @@ namespace HealthChecks.Publisher.Prometheus
             }
         }
 
-        public PrometheusGatewayPublisher(HttpClient httpClient, string endpoint, string job, string instance) 
+        public PrometheusGatewayPublisher(HttpClient httpClient, string endpoint, string job, string instance)
             : this(endpoint, job, instance)
         {
             _httpClient = httpClient;
@@ -45,18 +45,17 @@ namespace HealthChecks.Publisher.Prometheus
         {
             WriteMetricsFromHealthReport(report);
 
-            await PushMetrics();
+            await PushMetrics(cancellationToken);
         }
 
-        private async Task PushMetrics()
+        private async Task PushMetrics(CancellationToken cancellationToken)
         {
             try
             {
                 using (var outStream = CollectionToStreamWriter(Registry))
+                using (var response = await _httpClient
+                    .PostAsync(_targetUrl, new StreamContent(outStream), cancellationToken))
                 {
-                    var response = await _httpClient
-                        .PostAsync(_targetUrl, new StreamContent(outStream));
-
                     response.EnsureSuccessStatusCode();
                 }
             }

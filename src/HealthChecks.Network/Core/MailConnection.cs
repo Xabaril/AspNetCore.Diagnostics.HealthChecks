@@ -5,6 +5,7 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HealthChecks.Network.Core
@@ -14,7 +15,7 @@ namespace HealthChecks.Network.Core
         public int Port { get; protected set; }
         public string Host { get; protected set; }
         protected bool UseSSL { get; set; } = true;
-        
+
         protected TcpClient _tcpClient = null;
         protected Stream _stream = null;
         protected Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
@@ -30,13 +31,13 @@ namespace HealthChecks.Network.Core
             _allowInvalidCertificates = allowInvalidCertificates;
         }
 
-        public async Task<bool> ConnectAsync()
+        public async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
         {
             _tcpClient = new TcpClient();
             await _tcpClient.ConnectAsync(Host, Port);
 
             _stream = GetStream();
-            await ExecuteCommand(string.Empty);
+            await ExecuteCommand(string.Empty, cancellationToken);
 
             return _tcpClient.Connected;
         }
@@ -68,13 +69,13 @@ namespace HealthChecks.Network.Core
             }
         }
 
-        protected async Task<string> ExecuteCommand(string command)
+        protected async Task<string> ExecuteCommand(string command, CancellationToken cancellationToken)
         {
             var buffer = Encoding.ASCII.GetBytes(command);
-            await _stream.WriteAsync(buffer, 0, buffer.Length);
+            await _stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
 
             var readBuffer = ArrayPool<byte>.Shared.Rent(512);
-            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length);
+            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length, cancellationToken);
             var output = Encoding.UTF8.GetString(readBuffer);
 
             ArrayPool<byte>.Shared.Return(readBuffer);

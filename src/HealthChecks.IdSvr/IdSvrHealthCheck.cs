@@ -12,27 +12,38 @@ namespace HealthChecks.IdSvr
         const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
 
         private readonly Func<HttpClient> _httpClientFactory;
-        public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
+        private readonly TimeSpan _timeout;
+
+        public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, TimeSpan timeout)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _timeout = timeout;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                var httpClient = _httpClientFactory();
-                var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, cancellationToken);
-
-                if (!response.IsSuccessStatusCode)
+                try
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
-                }
+                    var httpClient = _httpClientFactory();
+                    var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, timeoutCancellationTokenSource.Token);
 
-                return HealthCheckResult.Healthy();       
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
+                    }
+
+                    return HealthCheckResult.Healthy();
+                }
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
     }

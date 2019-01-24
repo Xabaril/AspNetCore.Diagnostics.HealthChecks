@@ -11,36 +11,47 @@ namespace HealthChecks.MongoDb
     {
         private readonly string _connectionString;
         private readonly string _specifiedDatabase;
-        public MongoDbHealthCheck(string connectionString, string databaseName = default)
+        private readonly TimeSpan _timeout;
+
+        public MongoDbHealthCheck(string connectionString, TimeSpan timeout, string databaseName = default)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _timeout = timeout;
             _specifiedDatabase = databaseName;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                if (!string.IsNullOrEmpty(_specifiedDatabase))
+                try
                 {
-                    // some users can't list all databases depending on database privileges, with
-                    // this you can list only collection on specified database.
-                    // Related with issue #43
+                    if (!string.IsNullOrEmpty(_specifiedDatabase))
+                    {
+                        // some users can't list all databases depending on database privileges, with
+                        // this you can list only collection on specified database.
+                        // Related with issue #43
 
-                    await new MongoClient(_connectionString)
-                        .GetDatabase(_specifiedDatabase)
-                        .ListCollectionsAsync();
+                        await new MongoClient(_connectionString)
+                            .GetDatabase(_specifiedDatabase)
+                            .ListCollectionsAsync(cancellationToken: timeoutCancellationTokenSource.Token);
+                    }
+                    else
+                    {
+                        await new MongoClient(_connectionString)
+                            .ListDatabasesAsync(timeoutCancellationTokenSource.Token);
+                    }
+
+                    return HealthCheckResult.Healthy();
                 }
-                else
+                catch (Exception ex)
                 {
-                    await new MongoClient(_connectionString)
-                        .ListDatabasesAsync(cancellationToken);
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
                 }
-
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

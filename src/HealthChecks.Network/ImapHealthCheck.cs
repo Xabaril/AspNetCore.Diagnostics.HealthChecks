@@ -10,10 +10,12 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly ImapHealthCheckOptions _options;
-        private ImapConnection _imapConnection = null;
-        public ImapHealthCheck(ImapHealthCheckOptions options)
+        private readonly TimeSpan _timeout;
+
+        public ImapHealthCheck(ImapHealthCheckOptions options, TimeSpan timeout)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _timeout = timeout;
 
             if (string.IsNullOrEmpty(_options.Host))
             {
@@ -27,42 +29,49 @@ namespace HealthChecks.Network
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                _imapConnection = new ImapConnection(_options);
-
-                if (await _imapConnection.ConnectAsync())
+                try
                 {
-                    if (_options.AccountOptions.Login)
+                    using (var imapConnection = new ImapConnection(_options))
                     {
-                        return await ExecuteAuthenticatedUserActions(context);
+
+                        if (await imapConnection.ConnectAsync(timeoutCancellationTokenSource.Token))
+                        {
+                            if (_options.AccountOptions.Login)
+                            {
+                                return await ExecuteAuthenticatedUserActions(imapConnection, context, timeoutCancellationTokenSource.Token);
+                            }
+                        }
+                        else
+                        {
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to server {_options.Host} has failed - SSL Enabled : {_options.ConnectionType}");
+                        }
+
+                        return HealthCheckResult.Healthy();
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to server {_options.Host} has failed - SSL Enabled : {_options.ConnectionType}");
-                }
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
-            finally
-            {
-                _imapConnection.Dispose();
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
 
-        private async Task<HealthCheckResult> ExecuteAuthenticatedUserActions(HealthCheckContext context)
+        private async Task<HealthCheckResult> ExecuteAuthenticatedUserActions(ImapConnection imapConnection, HealthCheckContext context, CancellationToken cancellationToken)
         {
             var (User, Password) = _options.AccountOptions.Account;
 
-            if (await _imapConnection.AuthenticateAsync(User, Password))
+            if (await imapConnection.AuthenticateAsync(User, Password, cancellationToken))
             {
                 if (_options.FolderOptions.CheckFolder
-                    && !await _imapConnection.SelectFolder(_options.FolderOptions.FolderName))
+                    && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName, cancellationToken))
                 {
                     return new HealthCheckResult(context.Registration.FailureStatus, description: $"Folder {_options.FolderOptions.FolderName} check failed.");
                 }

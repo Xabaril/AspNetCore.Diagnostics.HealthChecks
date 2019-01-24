@@ -11,28 +11,39 @@ namespace HealthChecks.AzureKeyVault
     public class AzureKeyVaultHealthCheck : IHealthCheck
     {
         private readonly AzureKeyVaultOptions _options;
+        private readonly TimeSpan _timeout;
 
-        public AzureKeyVaultHealthCheck(AzureKeyVaultOptions options)
+        public AzureKeyVaultHealthCheck(AzureKeyVaultOptions options, TimeSpan timeout)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _timeout = timeout;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var currentSecret = string.Empty;
-
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                var client = CreateClient();
-                foreach (var item in _options.Secrets)
+                try
                 {
-                    await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
-                }
+                    using (var client = CreateClient())
+                    {
+                        foreach (var item in _options.Secrets)
+                        {
+                            await client.GetSecretAsync(_options.KeyVaultUrlBase, item, timeoutCancellationTokenSource.Token);
+                        }
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                        return HealthCheckResult.Healthy();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
 
@@ -59,7 +70,7 @@ namespace HealthChecks.AzureKeyVault
             {
                 throw new InvalidOperationException($"[{nameof(AzureKeyVaultHealthCheck)}] - Failed to obtain the JWT token");
             }
-             
+
             return result.AccessToken;
         }
     }

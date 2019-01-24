@@ -10,23 +10,36 @@ namespace HealthChecks.Consul
     {
         private readonly ConsulOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
-        public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory)
+        private readonly TimeSpan _timeout;
+
+        public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory, TimeSpan timeout)
         {
             _options = options;
             _httpClientFactory = httpClientFactory;
+            _timeout = timeout;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource(_timeout))
+            using (cancellationToken.Register(() => timeoutCancellationTokenSource.Cancel()))
             {
-                var result = await _httpClientFactory()
-                    .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", cancellationToken);
+                try
+                {
+                    using (var result = await _httpClientFactory()
+                        .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", timeoutCancellationTokenSource.Token))
+                    {
 
-                return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                        return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (timeoutCancellationTokenSource.IsCancellationRequested)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, "Timeout");
+                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                }
             }
         }
     }

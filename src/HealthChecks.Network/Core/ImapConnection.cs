@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HealthChecks.Network.Core
@@ -51,21 +52,21 @@ namespace HealthChecks.Network.Core
             }
         }
 
-        public async Task<bool> AuthenticateAsync(string user, string password)
+        public async Task<bool> AuthenticateAsync(string user, string password, CancellationToken cancellationToken = default)
         {
             if (ConnectionType == ImapConnectionType.STARTTLS)
             {
-                await UpgradeToSecureConnection();
+                await UpgradeToSecureConnection(cancellationToken);
             }
 
-            var result = await ExecuteCommand(ImapCommands.Login(user, password));
+            var result = await ExecuteCommand(ImapCommands.Login(user, password), cancellationToken);
             IsAuthenticated = !result.Contains(ImapResponse.AUTHFAILED);
             return IsAuthenticated;
         }
 
-        private async Task<bool> UpgradeToSecureConnection()
+        private async Task<bool> UpgradeToSecureConnection(CancellationToken cancellationToken)
         {
-            var commandResult = await ExecuteCommand(ImapCommands.StartTLS());
+            var commandResult = await ExecuteCommand(ImapCommands.StartTLS(), cancellationToken);
             var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
             if (upgradeSuccess)
             {
@@ -79,17 +80,17 @@ namespace HealthChecks.Network.Core
             }
         }
 
-        public async Task<bool> SelectFolder(string folder)
+        public async Task<bool> SelectFolder(string folder, CancellationToken cancellationToken = default)
         {
-            var result = await ExecuteCommand(ImapCommands.SelectFolder(folder));
+            var result = await ExecuteCommand(ImapCommands.SelectFolder(folder), cancellationToken);
 
             //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
             return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
         }
 
-        public async Task<string> GetFolders()
+        public async Task<string> GetFolders(CancellationToken cancellationToken = default)
         {
-            return await ExecuteCommand(ImapCommands.ListFolders());
+            return await ExecuteCommand(ImapCommands.ListFolders(), cancellationToken);
         }
     }
 }

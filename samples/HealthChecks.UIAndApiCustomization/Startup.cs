@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -11,19 +10,12 @@ namespace HealthChecks.UIAndApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
             //
             //  This project configure health checks for asp.net core project and UI
             //  in the same project with some ui path customizations. 
-            //
+            // 
 
             services
                 .AddHealthChecksUI()
@@ -33,21 +25,18 @@ namespace HealthChecks.UIAndApi
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           app.UseHealthChecks("/healthz",new HealthCheckOptions()
-           {
-               Predicate = _=>true,
-               ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-           })
-           .UseHealthChecksUI(setup=>
-           {
-               setup.UIPath = "/show-health-ui"; // this is ui path in your browser
-               setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
-           })
-           .UseMvc();
+            app.UseHealthChecks("/healthz", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            })
+            .UseHealthChecksUI(setup =>
+            {
+                setup.UIPath = "/show-health-ui"; // this is ui path in your browser
+                setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
+            }).UseMvc();
         }
     }
 }

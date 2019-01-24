@@ -24,12 +24,18 @@ namespace HealthChecks.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*
+             * If you have different hosted services, please check this open bug on 2.2 HealthChecks
+             * https://github.com/aspnet/Extensions/issues/639 and the workaround proposed by @NatMarchand
+             * or register all hosted service before call AddHealthChecks.
+             */
+
             services.AddHealthChecks()
-                .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
+                //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random")
                 //.AddIdentityServer(new Uri("http://localhost:6060"))
-                .AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
-                .AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=olicy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
+                //.AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
+                //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
                 .AddApplicationInsightsPublisher();
 
             services.AddMvc()

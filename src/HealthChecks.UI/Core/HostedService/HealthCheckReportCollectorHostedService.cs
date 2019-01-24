@@ -56,7 +56,7 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError("HealthCheck collector HostedService throw a error:", ex);
+                        _logger.LogError(ex, $"HealthCheck collector HostedService throw a error: {ex.Message}");
                     }
                 }
                 await Task.Delay(_settings.EvaluationTimeOnSeconds * 1000);

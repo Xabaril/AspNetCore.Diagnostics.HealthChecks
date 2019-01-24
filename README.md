@@ -33,6 +33,11 @@ HealthChecks packages include health checks for:
 - Kafka
 - Identity Server
 - Uri: single uri and uri groups
+<<<<<<< HEAD
+- Consul
+=======
+- Hangfire
+>>>>>>> 8518ff644abdd0ecdbcd41b2b2b7fecd716e2ae9
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -56,6 +61,11 @@ Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
+<<<<<<< HEAD
+Install-Package AspNetCore.HealthChecks.Consul
+=======
+Install-Package AspNetCore.HealthChecks.Hangfire
+>>>>>>> 8518ff644abdd0ecdbcd41b2b2b7fecd716e2ae9
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -235,6 +245,7 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
    - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness by Carlos Landeras](./doc/kubernetes-liveness.md)
+   - [ASP.NET Core HealthChecks, BeatPulse UI, Webhooks and Kubernetes Liveness / Readiness probes demos at SDN.nl live WebCast by Carlos Landeras](https://www.youtube.com/watch?v=kzRKGCmGbqo)
    - [ASP.NET Core HealthChecks features video by @condrong](https://t.co/YriQ6cLWVm)
    - [How to set up ASP.NET Core 2.2 Health Checks with BeatPulse's AspNetCore.Diagnostics.HealthChecks by Scott Hanselman](https://www.hanselman.com/blog/HowToSetUpASPNETCore22HealthChecksWithBeatPulsesAspNetCoreDiagnosticsHealthChecks.aspx)
    - [ASP.NET Core HealthChecks announcement](https://t.co/47M9FBfpWF)

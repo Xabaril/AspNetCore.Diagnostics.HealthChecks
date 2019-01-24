@@ -116,4 +116,8 @@ services:
         volumes:
         - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
         - "/var/run/docker.sock:/var/run/docker.sock"   
-        
+    consul:
+        image: consul:latest
+        ports:
+          - "8500:8500"
+          - "8600:8600"   

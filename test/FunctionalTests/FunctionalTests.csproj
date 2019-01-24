@@ -17,6 +17,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Consul\HealthChecks.Consul.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />

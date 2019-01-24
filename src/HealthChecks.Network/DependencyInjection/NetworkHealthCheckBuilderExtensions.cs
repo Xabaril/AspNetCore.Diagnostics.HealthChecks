@@ -13,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string DNS_NAME = "dns";
         const string IMAP_NAME = "imap";
         const string SMTP_NAME = "smtp";
+        const string TCP_NAME = "tcp";
 
         /// <summary>
         /// Add a health check for network ping.
@@ -155,6 +156,30 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                name ?? SMTP_NAME,
                sp => new SmtpHealthCheck(options),
+               failureStatus,
+               tags));
+        }
+
+        /// <summary>
+        /// Add a health check for network SMTP connection.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">The action to configure TCP connection parameters.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'tcp' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddTcpHealthCheck(this IHealthChecksBuilder builder, Action<TcpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        {
+            var options = new TcpHealthCheckOptions();
+            setup?.Invoke(options);
+
+            return builder.Add(new HealthCheckRegistration(
+               name ?? TCP_NAME,
+               sp => new TcpHealthCheck(options),
                failureStatus,
                tags));
         }

@@ -3,8 +3,8 @@
 *HealthChecks* is available as a docker image on [DockerHub](https://hub.docker.com/r/xabarilcoding/healthchecksui/). This image is a simple ASP.NET Core project with the *HealthCheckUI* middleware.
 
 ```bash
-docker pull xabarilcoding/healthchecksui 
-docker run --name ui -p 5000:80 -d healthchecksui:latest
+docker pull xabarilcoding/healthchecksui
+docker run --name ui -p 5000:80 -d xabarilcoding/healthchecksui:latest
 ```
 
 You can use environment variables to configure all properties on *HealthChecksUI*. 

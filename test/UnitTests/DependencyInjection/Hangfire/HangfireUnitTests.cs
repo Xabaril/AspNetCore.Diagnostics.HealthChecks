@@ -23,7 +23,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Hangfire
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("hangfire-failed");
+            registration.Name.Should().Be("hangfire");
             check.GetType().Should().Be(typeof(HangfireHealthCheck));
         }
         [Fact]

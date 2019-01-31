@@ -23,7 +23,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_ravendb_is_available()
         {
 
@@ -52,7 +52,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_ravendb_is_available_and_contains_specific_database()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -80,7 +80,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_ravendb_isnot_available()
         {
             var connectionString = "http://localhost:9999";
@@ -110,7 +110,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_ravendb_is_available_but_database_doesnot_exist()
         {
             var webHostBuilder = new WebHostBuilder()

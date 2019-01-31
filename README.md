@@ -1,5 +1,5 @@
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g/branch/master?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks) 
+[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g/branch/master?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks)
 
 [![Build history](https://buildstats.info/appveyor/chart/xabaril/aspnetcore-diagnostics-healthchecks)](https://ci.appveyor.com/project/xabaril/aspnetcore-diagnostics-healthchecks/history)
 
@@ -16,11 +16,11 @@ HealthChecks packages include health checks for:
 - MySql
 - Oracle
 - Sqlite
-- Postgres 
+- Postgres
 - EventStore
 - RabbitMQ
 - Elasticsearch
-- Redis 
+- Redis
 - System: Disk Storage, Private Memory, Virtual Memory
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
@@ -35,6 +35,7 @@ HealthChecks packages include health checks for:
 - Uri: single uri and uri groups
 - Consul
 - Hangfire
+- RavenDB
 
 
 ``` PowerShell
@@ -61,6 +62,7 @@ Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.Hangfire
+Install-Package AspNetCore.HealthChecks.RavenDB
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -85,7 +87,7 @@ public void ConfigureServices(IServiceCollection services)
           .AddSqlServer(
               connectionString: Configuration["Data:ConnectionStrings:Sql"],
               healthQuery: "SELECT 1;",
-              name: "sql", 
+              name: "sql",
               failureStatus: HealthStatus.Degraded,
               tags: new string[] { "db", "sql", "sqlserver" });
 }
@@ -121,7 +123,7 @@ To integrate HealthChecks.UI in your project you just need to add the HealthChec
 
 ```csharp
 public class Startup
-{       
+{
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddHealthChecksUI();
@@ -134,7 +136,7 @@ public class Startup
 }
 ```
 
-This automatically registers a new interface on **/healthchecks-ui** where the spa will be served. 
+This automatically registers a new interface on **/healthchecks-ui** where the spa will be served.
 
 > Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
@@ -163,7 +165,7 @@ By default HealthChecks returns a simple Status Code (200 or 503) without the He
 
 > *WriteHealthCheckUIResponse* is defined on HealthChecks.UI.Client nuget package.
 
-To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings. 
+To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings.
 
 ```json
 {

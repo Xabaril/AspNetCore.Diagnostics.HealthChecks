@@ -14,15 +14,18 @@ namespace HealthChecks.RavenDB
     /// <seealso cref="Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck" />
     public class RavenDBHealthCheck : IHealthCheck
     {
-        private readonly string[] _ravenUrls;
+        private readonly string _connectionString;
         private readonly string _specifiedDatabase;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RavenDbHealthCheck"/> class.
+        /// Initializes a new instance of the <see cref="RavenDBHealthCheck"/> class.
         /// </summary>
-        public RavenDBHealthCheck(string[] ravenUrls, string databaseName = default)
+        /// <param name="connectionString">The connection string to RavenDB.</param>
+        /// <param name="databaseName">Name of the database.</param>
+        /// <exception cref="System.ArgumentNullException">connectionString</exception>
+        public RavenDBHealthCheck(string connectionString, string databaseName = default)
         {
-            _ravenUrls = ravenUrls ?? throw new ArgumentNullException(nameof(ravenUrls));
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _specifiedDatabase = databaseName;
         }
 
@@ -45,7 +48,7 @@ namespace HealthChecks.RavenDB
             {
                 using (var store = new DocumentStore
                 {
-                    Urls = _ravenUrls
+                    Urls = new string[] { _connectionString }
                 })
                 {
                     store.Initialize();

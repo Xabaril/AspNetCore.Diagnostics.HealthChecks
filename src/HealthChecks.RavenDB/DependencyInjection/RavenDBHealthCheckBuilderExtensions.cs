@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="rabbitMQConnectionString">The RabbitMQ connection string to be used.</param>
-        /// <param name="ravenUrls">Urls to RavenDB.</param>
+        /// <param name="connectionString">Connection string to RavenDB.</param>
         /// <param name="name">
         /// The health check name. Optional. If <see langword="null"/> the type name 'ravendb' will be used for the name.
         /// </param>
@@ -25,14 +25,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddRavenDB(
             this IHealthChecksBuilder builder,
-            string[] ravenUrls,
+            string connectionString,
             string databaseName = default,
             string name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default)
             => builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RavenDBHealthCheck(ravenUrls, databaseName),
+                sp => new RavenDBHealthCheck(connectionString, databaseName),
                 failureStatus,
                 tags));
     }

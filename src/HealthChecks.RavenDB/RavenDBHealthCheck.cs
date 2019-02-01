@@ -17,12 +17,6 @@ namespace HealthChecks.RavenDB
         private readonly string _connectionString;
         private readonly string _specifiedDatabase;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RavenDBHealthCheck"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string to RavenDB.</param>
-        /// <param name="databaseName">Name of the database.</param>
-        /// <exception cref="System.ArgumentNullException">connectionString</exception>
         public RavenDBHealthCheck(string connectionString, string databaseName = default)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));

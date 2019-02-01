@@ -44,7 +44,9 @@ namespace HealthChecks.RavenDB
                     if (!string.IsNullOrWhiteSpace(_specifiedDatabase)
                         && !databases.Contains(_specifiedDatabase, StringComparer.OrdinalIgnoreCase))
                     {
-                        return HealthCheckResult.Unhealthy($"RavenDB doesn't contains '{_specifiedDatabase}' database.");
+                        return new HealthCheckResult(
+                            context.Registration.FailureStatus,
+                            $"RavenDB doesn't contains '{_specifiedDatabase}' database.");
                     }
                     else
                     {

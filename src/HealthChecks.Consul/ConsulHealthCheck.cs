@@ -22,7 +22,7 @@ namespace HealthChecks.Consul
                 var result = await _httpClientFactory()
                     .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", cancellationToken);
 
-                return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
+                return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus, description: "Consul is not responding successfull status code.");
             }
             catch (Exception ex)
             {

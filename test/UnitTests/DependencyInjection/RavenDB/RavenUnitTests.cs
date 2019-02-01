@@ -15,7 +15,7 @@ namespace UnitTests.DependencyInjection.RavenDB
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRavenDB(new string[] { "http://localhost:8080" });
+                .AddRavenDB("http://localhost:8080");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -32,7 +32,7 @@ namespace UnitTests.DependencyInjection.RavenDB
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRavenDB(new string[] { "http://localhost:8080" }, name: "my-ravendb");
+                .AddRavenDB("http://localhost:8080", name: "my-ravendb");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

@@ -20,6 +20,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RavenDB.Client" Version="$(PublishRepositoryUrl)" />
+    <PackageReference Include="RavenDB.Client" Version="$(RavenDBClient)" />
   </ItemGroup>
 </Project>

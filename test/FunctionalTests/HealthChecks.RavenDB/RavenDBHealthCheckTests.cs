@@ -81,7 +81,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
         }
 
         [Fact]
-        public async Task be_healthy_if_ravendb_isnot_available()
+        public async Task be_healthy_if_ravendb_is_not_available()
         {
             var connectionString = "http://localhost:9999";
 

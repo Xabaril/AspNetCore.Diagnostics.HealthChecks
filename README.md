@@ -16,6 +16,7 @@ HealthChecks packages include health checks for:
 - MySql
 - Oracle
 - Sqlite
+- RavenDB
 - Postgres
 - EventStore
 - RabbitMQ
@@ -35,7 +36,6 @@ HealthChecks packages include health checks for:
 - Uri: single uri and uri groups
 - Consul
 - Hangfire
-- RavenDB
 
 
 ``` PowerShell
@@ -53,6 +53,7 @@ Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
+Install-Package AspNetCore.HealthChecks.RavenDB
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.RabbitMQ
 Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
@@ -62,7 +63,6 @@ Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.Hangfire
-Install-Package AspNetCore.HealthChecks.RavenDB
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

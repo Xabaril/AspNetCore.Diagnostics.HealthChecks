@@ -81,7 +81,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
         }
 
         [Fact]
-        public async Task be_healthy_if_ravendb_is_not_available()
+        public async Task be_unhealthy_if_ravendb_is_not_available()
         {
             var connectionString = "http://localhost:9999";
 
@@ -111,7 +111,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
         }
 
         [Fact]
-        public async Task be_healthy_if_ravendb_is_available_but_database_doesnot_exist()
+        public async Task be_unhealthy_if_ravendb_is_available_but_database_doesnot_exist()
         {
             var webHostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()

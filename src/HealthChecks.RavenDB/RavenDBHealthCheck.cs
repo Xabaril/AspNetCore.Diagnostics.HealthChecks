@@ -8,10 +8,6 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.RavenDB
 {
-    /// <summary>
-    /// Health check for RavenDB.
-    /// </summary>
-    /// <seealso cref="Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck" />
     public class RavenDBHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
@@ -22,7 +18,6 @@ namespace HealthChecks.RavenDB
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _specifiedDatabase = databaseName;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -33,7 +28,7 @@ namespace HealthChecks.RavenDB
                 })
                 {
                     store.Initialize();
-                    var databases = await store.Maintenance.Server.SendAsync(new GetDatabaseNamesOperation(0, 100));
+                    var databases = await store.Maintenance.Server.SendAsync(new GetDatabaseNamesOperation(start: 0, pageSize: 100));
 
                     if (!string.IsNullOrWhiteSpace(_specifiedDatabase)
                         && !databases.Contains(_specifiedDatabase, StringComparer.OrdinalIgnoreCase))

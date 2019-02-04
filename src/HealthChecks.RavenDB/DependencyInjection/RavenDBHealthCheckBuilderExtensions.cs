@@ -9,11 +9,11 @@ namespace Microsoft.Extensions.DependencyInjection
         const string NAME = "ravendb";
 
         /// <summary>
-        /// Add a health check for RabbitMQ services.
+        /// Add a health check for RavenDB.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="rabbitMQConnectionString">The RabbitMQ connection string to be used.</param>
         /// <param name="connectionString">Connection string to RavenDB.</param>
+        /// <param name="databaseName">The specified database to check.</param>
         /// <param name="name">
         /// The health check name. Optional. If <see langword="null"/> the type name 'ravendb' will be used for the name.
         /// </param>

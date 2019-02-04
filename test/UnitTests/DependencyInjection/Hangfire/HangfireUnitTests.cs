@@ -15,7 +15,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Hangfire
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddHangfire(setup => setup.MaximumFailed = 3);
+                .AddHangfire(setup => setup.MaximumJobsFailed = 3);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -31,7 +31,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Hangfire
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddHangfire(setup => setup.MaximumFailed = 3, name: "my-hangfire-group");
+                .AddHangfire(setup => setup.MaximumJobsFailed = 3, name: "my-hangfire-group");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

@@ -2,7 +2,7 @@
 {
     public class HangfireOptions
     {
-        public int? MaximumFailed { get; set; }
-        public int? MinimumServers { get; set; }
+        public int? MaximumJobsFailed { get; set; }
+        public int? MinimumAvailableServers { get; set; }
     }
 }

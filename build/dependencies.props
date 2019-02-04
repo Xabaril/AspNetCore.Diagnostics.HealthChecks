@@ -84,7 +84,7 @@
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.1</HealthCheckAzureStorage>
-    <HealthCheckHangfire>2.3.0</HealthCheckHangfire>
+    <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckConsul>2.2.1</HealthCheckConsul>
     <HealthCheckUI>2.2.10</HealthCheckUI>

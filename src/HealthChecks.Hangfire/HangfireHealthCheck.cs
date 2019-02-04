@@ -22,27 +22,29 @@ namespace HealthChecks.Hangfire
                 var errorList = new List<string>();
                 var hangfireMonitoringApi = global::Hangfire.JobStorage.Current.GetMonitoringApi();
 
-                // Check for maximum failed jobs
-                if (_hangfireOptions.MaximumFailed.HasValue)
+                if (_hangfireOptions.MaximumJobsFailed.HasValue)
                 {
                     var failedJobsCount = hangfireMonitoringApi.FailedCount();
-                    if (failedJobsCount > _hangfireOptions.MaximumFailed)
-                        errorList.Add($"#{failedJobsCount} failed jobs.");
+                    if (failedJobsCount >= _hangfireOptions.MaximumJobsFailed)
+                    {
+                        errorList.Add($"Hangfire have #{failedJobsCount} failed jobs and the maximun available is {_hangfireOptions.MaximumJobsFailed}.");
+                    }
                 }
 
-                // Check for minimum servers
-                if (_hangfireOptions.MinimumServers.HasValue)
+                if (_hangfireOptions.MinimumAvailableServers.HasValue)
                 {
                     var serversCount = hangfireMonitoringApi.Servers().Count;
-                    if (serversCount < _hangfireOptions.MinimumServers)
-                        errorList.Add($"{serversCount} server registered. Expected minimum {_hangfireOptions.MinimumServers}");                    
+                    if (serversCount < _hangfireOptions.MinimumAvailableServers)
+                    {
+                        errorList.Add($"{serversCount} server registered. Expected minimum {_hangfireOptions.MinimumAvailableServers}.");
+                    }
                 }
 
-                // If any error, set healt check status
                 if (errorList.Any())
+                {
                     return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join(" + ", errorList)));
-
-                // Hangfire is healthy
+                }
+                    
                 return Task.FromResult(HealthCheckResult.Healthy());
             }
             catch (Exception ex)

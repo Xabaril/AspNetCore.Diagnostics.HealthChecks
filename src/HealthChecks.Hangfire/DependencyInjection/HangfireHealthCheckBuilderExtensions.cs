@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string NAME = "hangfire";
 
         /// <summary>
-        /// Add a health check for Hangfire
+        /// Add a health check for Hangfire.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup">The action to configure the Hangfire parameters.</param>

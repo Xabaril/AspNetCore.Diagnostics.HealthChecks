@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class HealthCheckBuilderExtensions
+    public static class EventStoreHealthCheckBuilderExtensions
     {
         const string NAME = "eventstore";
 
@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new EventStoreHealthCheck(eventStoreConnection, login, password), 
+                sp => new EventStoreHealthCheck(eventStoreConnection, login, password),
                 failureStatus,
                 tags));
         }

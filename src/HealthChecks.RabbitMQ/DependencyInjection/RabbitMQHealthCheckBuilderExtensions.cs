@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class HealthCheckBuilderExtensions
+    public static class RabbitMQHealthCheckBuilderExtensions
     {
         const string NAME = "rabbitmq";
 

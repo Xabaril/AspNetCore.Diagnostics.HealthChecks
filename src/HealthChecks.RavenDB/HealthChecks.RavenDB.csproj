@@ -3,7 +3,7 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>HealthCheck;Health;MongoDb</PackageTags>
+    <PackageTags>HealthCheck;Health;RavenDB</PackageTags>
     <Description>HealthChecks.RavenDB is the health check package for RavenDB.</Description>
     <Version>$(HealthCheckRavenDB)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>

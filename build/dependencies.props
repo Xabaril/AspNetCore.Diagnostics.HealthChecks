@@ -94,6 +94,6 @@
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
-    <HealthCheckRavenDB>2.2.0</HealthCheckRavenDB>
+    <HealthCheckRavenDB>2.2.1</HealthCheckRavenDB>
   </PropertyGroup>
 </Project>

@@ -32,7 +32,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.MongoDb
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddMongoDb(new MongoClient("mongodb://connectionstring").Settings.Clone());
+                .AddMongoDb(MongoClientSettings.FromUrl(MongoUrl.Create("mongodb://connectionstring")));
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -64,7 +64,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.MongoDb
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddMongoDb(new MongoClient("mongodb://connectionstring").Settings.Clone(), name: "my-mongodb-group");
+                .AddMongoDb(MongoClientSettings.FromUrl(MongoUrl.Create("mongodb://connectionstring")), name: "my-mongodb-group");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

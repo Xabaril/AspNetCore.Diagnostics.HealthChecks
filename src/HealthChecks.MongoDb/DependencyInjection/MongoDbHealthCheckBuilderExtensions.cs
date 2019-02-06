@@ -23,9 +23,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, string mongodbConnectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            var mongoDbHealthCheck = new MongoDbHealthCheck(mongodbConnectionString);
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new MongoDbHealthCheck(mongodbConnectionString),
+                sp => mongoDbHealthCheck,
                 failureStatus,
                 tags));
         }
@@ -45,9 +46,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, string mongodbConnectionString, string mongoDatabaseName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            var mongoDbHealthCheck = new MongoDbHealthCheck(mongodbConnectionString, mongoDatabaseName);
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new MongoDbHealthCheck(mongodbConnectionString, mongoDatabaseName),
+                sp => mongoDbHealthCheck,
                 failureStatus,
                 tags));
         }
@@ -66,9 +68,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, MongoClientSettings mongoClientSettings, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            var mongoDbHealthCheck = new MongoDbHealthCheck(mongoClientSettings);
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new MongoDbHealthCheck(mongoClientSettings),
+                sp => mongoDbHealthCheck,
                 failureStatus,
                 tags));
         }
@@ -88,9 +91,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, MongoClientSettings mongoClientSettings, string mongoDatabaseName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            var mongoDbHealthCheck = new MongoDbHealthCheck(mongoClientSettings, mongoDatabaseName);
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new MongoDbHealthCheck(mongoClientSettings, mongoDatabaseName),
+                sp => mongoDbHealthCheck,
                 failureStatus,
                 tags));
         }

@@ -10,20 +10,17 @@ namespace HealthChecks.MongoDb
         : IHealthCheck
     {
         private readonly string _specifiedDatabase;
-        private readonly MongoClientSettings _clientSettings;
-        public MongoDbHealthCheck(string connectionString, string databaseName = default)
-        {
-            if (connectionString == null)
-                throw new ArgumentNullException(nameof(connectionString));
+        private readonly IMongoClient _mongoClient;
 
-            _clientSettings = new MongoClient(connectionString).Settings.Clone();
-            _specifiedDatabase = databaseName;
+        public MongoDbHealthCheck(string connectionString, string databaseName = default) : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
+        {
         }
         public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)
         {
-            _clientSettings = clientSettings;
             _specifiedDatabase = databaseName;
+            _mongoClient = new MongoClient(clientSettings);
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -34,13 +31,13 @@ namespace HealthChecks.MongoDb
                     // this you can list only collection on specified database.
                     // Related with issue #43
 
-                    await new MongoClient(_clientSettings)
+                    await _mongoClient
                         .GetDatabase(_specifiedDatabase)
                         .ListCollectionsAsync();
                 }
                 else
                 {
-                    await new MongoClient(_clientSettings)
+                    await _mongoClient
                         .ListDatabasesAsync(cancellationToken);
                 }
 

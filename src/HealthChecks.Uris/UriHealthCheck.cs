@@ -44,7 +44,19 @@ namespace HealthChecks.Uris
                         requestMessage.Headers.Add(header.Name, header.Value);
                     }
 
-                    var response = await httpClient.SendAsync(requestMessage);
+                    HttpResponseMessage response;
+                    if (_options.Timeout != TimeSpan.Zero)
+                    {
+                        using (var timeoutSource = new CancellationTokenSource(_options.Timeout))
+                        using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
+                        {
+                            response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
+                        }
+                    }
+                    else
+                    {
+                        response = await httpClient.SendAsync(requestMessage, cancellationToken);
+                    }
 
                     if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
                     {

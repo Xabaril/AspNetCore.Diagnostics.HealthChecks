@@ -9,6 +9,7 @@ namespace HealthChecks.Uris
         IUriOptions UseGet();
         IUriOptions UsePost();
         IUriOptions UseHttpMethod(HttpMethod methodToUse);
+        IUriOptions UseTimeout(TimeSpan timeout);
         IUriOptions ExpectHttpCode(int codeToExpect);
         IUriOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect);
         IUriOptions AddCustomHeader(string name, string value);
@@ -17,6 +18,8 @@ namespace HealthChecks.Uris
     public class UriOptions : IUriOptions
     {
         public HttpMethod HttpMethod { get; private set; }
+
+        public TimeSpan Timeout { get; private set; }
 
         public (int Min, int Max)? ExpectedHttpCodes { get; private set; }
 
@@ -31,6 +34,7 @@ namespace HealthChecks.Uris
             Uri = uri;
             ExpectedHttpCodes = null;
             HttpMethod = null;
+            Timeout = TimeSpan.Zero;
         }
 
         public IUriOptions AddCustomHeader(string name, string value)
@@ -68,6 +72,12 @@ namespace HealthChecks.Uris
             HttpMethod = methodToUse;
             return this;
         }
+
+        IUriOptions IUriOptions.UseTimeout(TimeSpan timeout)
+        {
+            Timeout = timeout;
+            return this;
+        }
     }
 
     public class UriHealthCheckOptions
@@ -78,12 +88,15 @@ namespace HealthChecks.Uris
 
         internal HttpMethod HttpMethod { get; private set; }
 
+        internal TimeSpan Timeout { get; private set; }
+
         internal (int Min, int Max) ExpectedHttpCodes { get; private set; }
 
         public UriHealthCheckOptions()
         {
             ExpectedHttpCodes = (200, 299);              // DEFAULT  = HTTP Succesful status codes
             HttpMethod = HttpMethod.Get;
+            Timeout = TimeSpan.FromSeconds(10);
         }
 
         public UriHealthCheckOptions UseGet()
@@ -101,6 +114,12 @@ namespace HealthChecks.Uris
         public UriHealthCheckOptions UseHttpMethod(HttpMethod methodToUse)
         {
             HttpMethod = methodToUse;
+            return this;
+        }
+
+        public UriHealthCheckOptions UseTimeout(TimeSpan timeout)
+        {
+            Timeout = timeout;
             return this;
         }
 

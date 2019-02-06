@@ -20,23 +20,25 @@ namespace HealthChecks.Uris
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var defaultHttpMethod = _options.HttpMethod;
-            var defaultCodes = _options.ExpectedHttpCodes;
+            var defaultExpectedStatusCodes = _options.ExpectedHttpCodes;
+            var defaultTimeout = _options.Timeout;
             var idx = 0;
 
             try
             {
                 foreach (var item in _options.UrisOptions)
                 {
-                    var method = item.HttpMethod ?? defaultHttpMethod;
-                    var expectedCodes = item.ExpectedHttpCodes ?? defaultCodes;
-
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"{nameof(UriHealthCheck)} execution is cancelled.");
                     }
 
+                    var method = item.HttpMethod ?? defaultHttpMethod;
+                    var expectedStatusCodes = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
+                    var timeout = item.Timeout != TimeSpan.Zero ? item.Timeout : defaultTimeout;
+
                     var httpClient = _httpClientFactory();
-                    
+
                     var requestMessage = new HttpRequestMessage(method, item.Uri);
 
                     foreach (var header in item.Headers)
@@ -44,28 +46,19 @@ namespace HealthChecks.Uris
                         requestMessage.Headers.Add(header.Name, header.Value);
                     }
 
-                    HttpResponseMessage response;
-                    if (_options.Timeout != TimeSpan.Zero)
+                    using (var timeoutSource = new CancellationTokenSource(timeout))
+                    using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
                     {
-                        using (var timeoutSource = new CancellationTokenSource(_options.Timeout))
-                        using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
+                        var response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
+
+                        if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {
-                            response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
                         }
-                    }
-                    else
-                    {
-                        response = await httpClient.SendAsync(requestMessage, cancellationToken);
-                    }
 
-                    if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
+                        ++idx;
                     }
-
-                    ++idx;
                 }
-
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

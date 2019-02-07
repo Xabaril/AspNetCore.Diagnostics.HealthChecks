@@ -14,7 +14,8 @@ namespace HealthChecks.MongoDb
         private readonly MongoClientSettings _mongoClientSettings;
         private readonly string _specifiedDatabase;
 
-        public MongoDbHealthCheck(string connectionString, string databaseName = default) : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
+        public MongoDbHealthCheck(string connectionString, string databaseName = default)
+            : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {
         }
         public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)

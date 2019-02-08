@@ -1,4 +1,5 @@
-﻿using HealthChecks.UI.Core.Data;
+﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Core.Data;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace Microsoft.Extensions.Diagnostics.HealthChecks
 {
     public static class HealthReportExtensions
     {
-        public static List<HealthCheckExecutionEntry> ToExecutionEntries(this HealthReport report)
+        public static List<HealthCheckExecutionEntry> ToExecutionEntries(this UIHealthReport report)
         {
             return report.Entries
                 .Select(item =>

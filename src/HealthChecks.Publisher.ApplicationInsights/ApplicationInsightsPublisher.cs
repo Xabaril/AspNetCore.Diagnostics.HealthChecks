@@ -18,6 +18,8 @@ namespace HealthChecks.Publisher.ApplicationInsights
         const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
 
         private readonly string _instrumentationKey;
+        private static TelemetryClient _client;
+        private static object sync_root = new object();
         private readonly bool _saveDetailedReport;
 
         public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false)
@@ -34,7 +36,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 ? TelemetryConfiguration.Active
                 : new TelemetryConfiguration(_instrumentationKey);
 
-            var client = new TelemetryClient(configuration);
+            var client = GetOrCreateTelemetryClient();
 
             if (_saveDetailedReport)
             {
@@ -79,6 +81,29 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     { METRIC_STATUS_NAME ,report.Status == HealthStatus.Healthy ? 1 :0},
                     { METRIC_DURATION_NAME,report.TotalDuration.TotalMilliseconds}
                 });
+        }
+
+        TelemetryClient GetOrCreateTelemetryClient()
+        {
+            if (_client == null)
+            {
+                lock (sync_root)
+                {
+                    if (_client == null)
+                    {
+                        //override instrumentation key or use default instrumentation 
+                        //key active on the project.
+
+                        var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
+                            ? TelemetryConfiguration.Active
+                            : new TelemetryConfiguration(_instrumentationKey);
+
+                        _client = new TelemetryClient(configuration);
+                    }
+                }
+            }
+
+            return _client;
         }
     }
 }

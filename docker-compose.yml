@@ -12,6 +12,11 @@ services:
         image: redis:alpine
         ports:
             - ${REDIS_PORT}:6379
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        ports:
+          - "9300:9300"
+          - ${ELASTICSEARCH_PORT}:9200
     postgres:
         image: postgres
         environment:
@@ -19,6 +24,11 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         ports:
             - ${POSTGRES_PORT}:5432
+    eventstore: 
+        image: eventstore/eventstore
+        ports: 
+          - "2113:2113"
+          - ${EVENTSTORE_PORT}:1113
     mongodb:
         image: mongo
         ports:
@@ -90,5 +100,24 @@ services:
             - DMS_DEBUG=1
         volumes:
             - ./build/docker-services/mail/:/tmp/docker-mailserver/
-        
-        
+    localstack:
+        image: localstack/localstack
+        ports:
+        - "4567-4584:4567-4584"
+        - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+        environment:
+        - SERVICES=${SERVICES- }
+        - DEBUG=${DEBUG- }
+        - DATA_DIR=${DATA_DIR- }
+        - PORT_WEB_UI=${PORT_WEB_UI- }
+        - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+        - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+        - DOCKER_HOST=unix:///var/run/docker.sock
+        volumes:
+        - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+        - "/var/run/docker.sock:/var/run/docker.sock"   
+    consul:
+        image: consul:latest
+        ports:
+          - "8500:8500"
+          - "8600:8600"   

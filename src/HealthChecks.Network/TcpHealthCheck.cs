@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Network
 {
-    public class TcpHealthCheck 
+    public class TcpHealthCheck
         : IHealthCheck
     {
         private readonly TcpHealthCheckOptions _options;
-
         public TcpHealthCheck(TcpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -28,16 +26,16 @@ namespace HealthChecks.Network
 
                         if (!tcpClient.Connected)
                         {
-                            return HealthCheckResult.Failed($"Connection to host {host}:{port} failed");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
                         }
                     }
                 }
 
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

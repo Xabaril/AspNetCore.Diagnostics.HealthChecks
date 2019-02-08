@@ -30,23 +30,23 @@ namespace HealthChecks.System
                         if (systemDriveInfo.ActualFreeMegabytes < item.MinimumFreeMegabytes)
                         {
                             return Task.FromResult(
-                                HealthCheckResult.Failed($"Minimum configured megabytes for disk {item.DriveName} is {item.MinimumFreeMegabytes} but actual free space are {systemDriveInfo.ActualFreeMegabytes} megabytes"));
+                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Minimum configured megabytes for disk {item.DriveName} is {item.MinimumFreeMegabytes} but actual free space are {systemDriveInfo.ActualFreeMegabytes} megabytes"));
                         }
                     }
                     else
                     {
                         return Task.FromResult(
-                            HealthCheckResult.Failed($"Configured drive {item.DriveName} is not present on system"));
+                            new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {item.DriveName} is not present on system"));
                     }
                 }
 
                 return Task.FromResult(
-                    HealthCheckResult.Passed());
+                    HealthCheckResult.Healthy());
             }
             catch (Exception ex)
             {
                 return Task.FromResult(
-                    HealthCheckResult.Failed(exception:ex));
+                     new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
 

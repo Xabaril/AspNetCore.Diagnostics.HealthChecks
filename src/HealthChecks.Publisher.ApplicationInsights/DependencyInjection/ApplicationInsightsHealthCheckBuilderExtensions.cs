@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using HealthChecks.Publisher.ApplicationInsights;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Publisher.ApplicationInsights.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
-    
+
     public static class ApplicationInsightsHealthCheckBuilderExtensions
     {
         /// <summary>

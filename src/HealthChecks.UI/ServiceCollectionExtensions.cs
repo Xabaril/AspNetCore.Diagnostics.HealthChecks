@@ -2,6 +2,7 @@
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
+using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,27 +23,36 @@ namespace Microsoft.Extensions.DependencyInjection
             var configuration = services.BuildServiceProvider()
                 .GetService<IConfiguration>();
 
-            services.AddOptions();
-            services.Configure<Settings>((settings) =>
-            {
-                configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
-            });
+            var healthCheckSettings = new Settings();
+            var kubernetesDiscoverySettings = new KubernetesDiscoverySettings();
+            configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, healthCheckSettings);
+            configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, kubernetesDiscoverySettings);
 
-            services.AddSingleton<IHostedService, HealthCheckCollectorHostedService>();
-            services.AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
-            services.AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
+            services
+                .AddOptions()
+                .Configure<Settings>(settings => configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings))
+                .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
+                .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
+                .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
+                .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+
             services.AddDbContext<HealthChecksDb>(db =>
             {
-                db.UseSqlite($"Data Source={databaseName}");
+                var contentRoot = configuration[HostDefaults.ContentRootKey];
+                var path = Path.Combine(contentRoot, databaseName);
+                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString ?? $"Data Source={path}";
+
+                db.UseSqlite(connectionString);
             });
 
-            var kubernetesDiscoveryOptions = new KubernetesDiscoveryOptions();
-            configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, kubernetesDiscoveryOptions);
-
-            if (kubernetesDiscoveryOptions.Enabled)
+            if (kubernetesDiscoverySettings.Enabled)
             {
-                services.AddSingleton(kubernetesDiscoveryOptions);
-                services.AddHostedService<KubernetesDiscoveryHostedService>();
+                services.AddSingleton(kubernetesDiscoverySettings)
+                    .AddHostedService<KubernetesDiscoveryHostedService>()
+                    .AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) => client.ConfigureKubernetesClient(provider))
+                        .ConfigureKubernetesMessageHandler()
+                    .Services
+                    .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
             }
 
             var serviceProvider = services.BuildServiceProvider();
@@ -50,7 +61,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
-
         static async Task CreateDatabase(IServiceProvider serviceProvider)
         {
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
@@ -67,10 +77,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     .GetService<IOptions<Settings>>();
 
                 await db.Database.EnsureDeletedAsync();
-
                 await db.Database.MigrateAsync();
 
-                var liveness = settings.Value?
+                var healthCheckConfigurations = settings.Value?
                     .HealthChecks?
                     .Select(s => new HealthCheckConfiguration()
                     {
@@ -78,13 +87,12 @@ namespace Microsoft.Extensions.DependencyInjection
                         Uri = s.Uri
                     });
 
-                if (liveness != null
+                if (healthCheckConfigurations != null
                     &&
-                    liveness.Any())
+                    healthCheckConfigurations.Any())
                 {
-
                     await db.Configurations
-                        .AddRangeAsync(liveness);
+                        .AddRangeAsync(healthCheckConfigurations);
 
                     await db.SaveChangesAsync();
                 }

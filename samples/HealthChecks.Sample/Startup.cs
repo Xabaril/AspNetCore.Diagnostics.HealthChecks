@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using HealthChecks.UI.Client;
+﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -11,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HealthChecks.Sample
 {
@@ -28,9 +24,19 @@ namespace HealthChecks.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*
+             * If you have different hosted services, please check this open bug on 2.2 HealthChecks
+             * https://github.com/aspnet/Extensions/issues/639 and the workaround proposed by @NatMarchand
+             * or register all hosted service before call AddHealthChecks.
+             */
+
             services.AddHealthChecks()
-                .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
-                .AddCheck<RandomHealthCheck>("random");
+                //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
+                .AddCheck<RandomHealthCheck>("random")
+                //.AddIdentityServer(new Uri("http://localhost:6060"))
+                //.AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
+                //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
+                .AddApplicationInsightsPublisher();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -44,7 +50,7 @@ namespace HealthChecks.Sample
                 Predicate = _ => true
             });
 
-            app.UseHealthChecks("/health-ui", new HealthCheckOptions()
+            app.UseHealthChecks("/healthz", new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -61,10 +67,10 @@ namespace HealthChecks.Sample
         {
             if (DateTime.UtcNow.Minute % 2 == 0)
             {
-                return Task.FromResult(HealthCheckResult.Passed());
+                return Task.FromResult(HealthCheckResult.Healthy());
             }
 
-            return Task.FromResult(HealthCheckResult.Failed(description: "failed"));
+            return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed"));
         }
     }
 }

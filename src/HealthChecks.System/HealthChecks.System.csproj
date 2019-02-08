@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">  <PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
@@ -9,8 +10,15 @@
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <LangVersion>latest</LangVersion>
+    <PackageId>AspNetCore.HealthChecks.System</PackageId>
+    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-    <ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

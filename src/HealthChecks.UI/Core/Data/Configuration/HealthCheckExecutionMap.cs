@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace HealthChecks.UI.Core.Data.Configuration
 {
@@ -9,10 +10,12 @@ namespace HealthChecks.UI.Core.Data.Configuration
         public void Configure(EntityTypeBuilder<HealthCheckExecution> builder)
         {
             builder.Property(le => le.OnStateFrom)
-                .IsRequired(true);
+                .IsRequired(true)
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
             builder.Property(le => le.LastExecuted)
-                .IsRequired(true);
+                .IsRequired(true)
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
             builder.Property(le => le.Uri)
                 .HasMaxLength(500)

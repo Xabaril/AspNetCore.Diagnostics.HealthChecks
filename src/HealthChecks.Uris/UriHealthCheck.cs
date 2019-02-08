@@ -10,53 +10,60 @@ namespace HealthChecks.Uris
         : IHealthCheck
     {
         private readonly UriHealthCheckOptions _options;
-        public UriHealthCheck(UriHealthCheckOptions options)
+        private readonly Func<HttpClient> _httpClientFactory;
+
+        public UriHealthCheck(UriHealthCheckOptions options, Func<HttpClient> httpClientFactory)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var defaultHttpMethod = _options.HttpMethod;
-            var defaultCodes = _options.ExpectedHttpCodes;
+            var defaultExpectedStatusCodes = _options.ExpectedHttpCodes;
+            var defaultTimeout = _options.Timeout;
             var idx = 0;
 
             try
             {
                 foreach (var item in _options.UrisOptions)
                 {
-                    var method = item.HttpMethod ?? defaultHttpMethod;
-                    var expectedCodes = item.ExpectedHttpCodes ?? defaultCodes;
-
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        return HealthCheckResult.Failed($"Liveness execution is cancelled.");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"{nameof(UriHealthCheck)} execution is cancelled.");
                     }
 
-                    using (var httpClient = new HttpClient())
+                    var method = item.HttpMethod ?? defaultHttpMethod;
+                    var expectedStatusCodes = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
+                    var timeout = item.Timeout != TimeSpan.Zero ? item.Timeout : defaultTimeout;
+
+                    var httpClient = _httpClientFactory();
+
+                    var requestMessage = new HttpRequestMessage(method, item.Uri);
+
+                    foreach (var header in item.Headers)
                     {
-                        var requestMessage = new HttpRequestMessage(method, item.Uri);
+                        requestMessage.Headers.Add(header.Name, header.Value);
+                    }
 
-                        foreach (var header in item.Headers)
+                    using (var timeoutSource = new CancellationTokenSource(timeout))
+                    using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
+                    {
+                        var response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
+
+                        if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {
-                            requestMessage.Headers.Add(header.Name, header.Value);
-                        }
-
-                        var response = await httpClient.SendAsync(requestMessage);
-
-                        if (!((int)response.StatusCode >= expectedCodes.Min && (int)response.StatusCode <= expectedCodes.Max))
-                        {
-                            return HealthCheckResult.Failed($"Discover endpoint #{idx} is not responding with code in {expectedCodes.Min}...{expectedCodes.Max} range, the current status is {response.StatusCode}.");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
                         }
 
                         ++idx;
                     }
                 }
-
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception:ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

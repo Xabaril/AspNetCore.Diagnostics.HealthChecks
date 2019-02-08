@@ -11,12 +11,10 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly DnsResolveOptions _options;
-
         public DnsResolveHealthCheck(DnsResolveOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options)); ;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -29,16 +27,16 @@ namespace HealthChecks.Network
                     {
                         if (!item.Resolutions.Contains(ipAddress.ToString()))
                         {
-                            return HealthCheckResult.Failed("Ip Address {ipAddress} was not resolved from host {item.Host}");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: "Ip Address {ipAddress} was not resolved from host {item.Host}");
                         }
                     }
                 }
 
-                return HealthCheckResult.Passed();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Failed(exception: ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

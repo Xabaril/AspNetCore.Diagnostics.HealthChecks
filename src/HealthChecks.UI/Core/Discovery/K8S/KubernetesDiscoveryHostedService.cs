@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -13,19 +14,29 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesDiscoveryHostedService : IHostedService
     {
-        private readonly KubernetesDiscoveryOptions _discoveryOptions;
+        private readonly KubernetesDiscoverySettings _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly HttpClient _discoveryClient;
+        private readonly HttpClient _clusterServiceClient;
+        private readonly KubernetesAddressFactory _addressFactory;
+
         private Task _executingTask;
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
-            KubernetesDiscoveryOptions discoveryOptions,
+            KubernetesDiscoverySettings discoveryOptions,
+            IHttpClientFactory httpClientFactory,
             ILogger<KubernetesDiscoveryHostedService> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _discoveryClient = httpClientFactory.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME);
+            _clusterServiceClient = httpClientFactory.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+            _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath);
+
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -53,29 +64,33 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    
+
                     var livenessDbContext = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
 
                     try
                     {
-                        using (var kubernetesClient = new KubernetesClient(_discoveryOptions.ClusterHost, _discoveryOptions.Token))
+                        var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
+                        foreach (var item in services.Items)
                         {
-
-                            var services = await kubernetesClient.GetServices(_discoveryOptions.ServicesLabel);
-                            foreach (var item in services.Items)
+                            try
                             {
-                                var serviceAddress = ComposeBeatpulseServiceAddress(item);
+                                var serviceAddress = _addressFactory.CreateAddress(item);
 
                                 if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                                 {
                                     var statusCode = await CallClusterService(serviceAddress);
-                                    if (IsValidBeatpulseStatusCode(statusCode))
-                                    {    
+                                    if (IsValidHealthChecksStatusCode(statusCode))
+                                    {
                                         await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
                                         _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
                                     }
                                 }
                             }
+                            catch (Exception)
+                            {
+                                _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
+                            }
+
                         }
                     }
                     catch (Exception ex)
@@ -94,29 +109,16 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 .Any(lc => lc.Uri.Equals(host, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        bool IsValidBeatpulseStatusCode(HttpStatusCode statusCode)
+        bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
 
-        string ComposeBeatpulseServiceAddress(Service service)
-        {
-            var serviceAddress = service.Status?.LoadBalancer?.Ingress?.First().Ip ?? null;
 
-            if (!string.IsNullOrEmpty(serviceAddress))
-            {
-                serviceAddress = $"http://{serviceAddress}/{_discoveryOptions.BeatpulsePath}";
-            }
-
-            return serviceAddress;
-        }
         async Task<HttpStatusCode> CallClusterService(string host)
         {
-            using (var client = new HttpClient())
-            {
-                var response = await client.GetAsync(host);
-                return response.StatusCode;
-            }
+            var response = await _clusterServiceClient.GetAsync(host);
+            return response.StatusCode;
         }
 
         Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)

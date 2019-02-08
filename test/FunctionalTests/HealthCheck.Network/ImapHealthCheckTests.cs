@@ -12,7 +12,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.BeatPulse.Network
+namespace FunctionalTests.HealthChecks.Network
 {
     [Collection("execution")]
     public class imap_healthcheck_should
@@ -304,7 +304,7 @@ namespace FunctionalTests.BeatPulse.Network
                  {
                      Predicate = r => r.Tags.Contains("imap")
                  };
-                 options.ResultStatusCodes[HealthStatus.Failed] = (int)HttpStatusCode.ServiceUnavailable;
+                 options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.ServiceUnavailable;
 
                  app.UseHealthChecks("/health", options);
              });

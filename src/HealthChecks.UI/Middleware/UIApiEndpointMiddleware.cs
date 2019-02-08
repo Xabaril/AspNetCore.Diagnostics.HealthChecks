@@ -24,18 +24,19 @@ namespace HealthChecks.UI.Middleware
             _serviceScopeFactory = serviceScopeFactory;
             _jsonSerializationSettings = new JsonSerializerSettings()
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Converters = new[] { new StringEnumConverter() },
+                DateTimeZoneHandling = DateTimeZoneHandling.Local
             };
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
+            using (var db = scope.ServiceProvider.GetService<HealthChecksDb>())
             {
-                var db = scope.ServiceProvider.GetService<HealthChecksDb>();
-
                 var healthChecks = await db.Configurations
-                    .ToListAsync();
+                      .ToListAsync();
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 
@@ -45,6 +46,7 @@ namespace HealthChecks.UI.Middleware
                         .Include(le => le.History)
                         .Include(le => le.Entries)
                         .Where(le => le.Name.Equals(item.Name, StringComparison.InvariantCultureIgnoreCase))
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
 
                     if (execution != null)
@@ -53,13 +55,9 @@ namespace HealthChecks.UI.Middleware
                     }
                 }
 
-                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, new JsonSerializerSettings()
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    Converters = new[] { new StringEnumConverter() }
-                });
-
+                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
+
                 await context.Response.WriteAsync(responseContent);
             }
         }

@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.RabbitMQ
 {
-    public class RabbitMQHealthCheck 
+    public class RabbitMQHealthCheck
         : IHealthCheck
     {
         private readonly string _rabbitMqConnectionString;
-
         public RabbitMQHealthCheck(string rabbitMqConnectionString)
         {
             _rabbitMqConnectionString = rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString));
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -29,13 +27,13 @@ namespace HealthChecks.RabbitMQ
                 using (var channel = connection.CreateModel())
                 {
                     return Task.FromResult(
-                        HealthCheckResult.Passed());
+                        HealthCheckResult.Healthy());
                 }
             }
             catch (Exception ex)
             {
                 return Task.FromResult(
-                        HealthCheckResult.Failed(exception: ex));
+                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
     }

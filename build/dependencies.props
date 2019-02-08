@@ -1,50 +1,63 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
+    <NetCoreTargetVersion>netcoreapp2.2</NetCoreTargetVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
-    <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks /blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks </PackageProjectUrl>
-    <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks </RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>true</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <PropertyGroup Label="Package Versions">
-    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0-preview3-35497</MicrosoftExtensionsDiagnosticsHealthChecks>
-    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0-preview3-35497</MicrosoftAspNetCoreDiagnosticsHealthChecks>
-    <FluentAssertions>5.4.2</FluentAssertions>
-    <MicrosoftAspNetCoreTestHost>2.1.1</MicrosoftAspNetCoreTestHost>
-    <MicrosoftNETTestSdk>15.8.0</MicrosoftNETTestSdk>
-    <xunit>2.4.0</xunit>
-    <xunitrunnervisualstudio>2.4.0</xunitrunnervisualstudio>
+    <MicrosoftExtensionsDiagnosticsHealthChecks>2.2.0</MicrosoftExtensionsDiagnosticsHealthChecks>
+    <MicrosoftAspNetCoreDiagnosticsHealthChecks>2.2.0</MicrosoftAspNetCoreDiagnosticsHealthChecks>
+    <MicrosoftExtensionsHttp>2.2.0</MicrosoftExtensionsHttp>
+    <MicrosoftExtensionsDependencyInjection>2.2.0</MicrosoftExtensionsDependencyInjection>
+    <FluentAssertions>5.5.3</FluentAssertions>
+    <MicrosoftAspNetCoreTestHost>2.2.0</MicrosoftAspNetCoreTestHost>
+    <MicrosoftNETTestSdk>15.9.0</MicrosoftNETTestSdk>
+    <xunit>2.4.1</xunit>
+    <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
     <SystemDataSqlClient>4.4.2</SystemDataSqlClient>
     <MicrosoftDataSqlite>2.0.1</MicrosoftDataSqlite>
-    <StackExchangeRedisStrongName>1.2.6</StackExchangeRedisStrongName>
+    <StackExchangeRedis>2.0.513</StackExchangeRedis>
     <RabbitMQClient>5.0.1</RabbitMQClient>
+    <RavenDBClient>4.1.3</RavenDBClient>
     <OracleManagedDataAccessCore>2.18.3</OracleManagedDataAccessCore>
     <Npgsql>3.2.6</Npgsql>
     <MongoDBDriver>2.5.0</MongoDBDriver>
     <MySqlConnector>0.40.4</MySqlConnector>
     <ConfluentKafka>0.11.4</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
+    <NEST>6.1.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
+    <HangfireCore>1.6.21</HangfireCore>
     <WindowsAzureStorage>9.1.0</WindowsAzureStorage>
-    <MicrosoftAzureEventHubs>2.0.0</MicrosoftAzureEventHubs>
-    <MicrosoftAzureServiceBus>2.0.0</MicrosoftAzureServiceBus>
+    <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
+    <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.9</AWSSDKDynamoDBv2>
     <NewtonsoftJson>11.0.2</NewtonsoftJson>
-    <MicrosoftAspNetCoreHostingAbstractions>2.1.1</MicrosoftAspNetCoreHostingAbstractions>
-    <MicrosoftEntityFrameworkCore>2.1.1</MicrosoftEntityFrameworkCore>
-    <MicrosoftEntityFrameworkCoreDesign>2.1.1</MicrosoftEntityFrameworkCoreDesign>
-    <MicrosoftEntityFrameworkCoreSqlite>2.1.1</MicrosoftEntityFrameworkCoreSqlite>
-    <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.5</MicrosoftEntityFrameworkCoreSqliteDesign>
-    <MicrosoftExtensionsConfigurationBinder>2.1.1</MicrosoftExtensionsConfigurationBinder>
+    <EventStoreClientAPINetCore>4.1.0.23</EventStoreClientAPINetCore>
+    <MicrosoftAspNetCoreHostingAbstractions>2.2.0</MicrosoftAspNetCoreHostingAbstractions>
+    <MicrosoftEntityFrameworkCore>2.2.0</MicrosoftEntityFrameworkCore>
+    <MicrosoftEntityFrameworkCoreDesign>2.2.0</MicrosoftEntityFrameworkCoreDesign>
+    <MicrosoftEntityFrameworkCoreSqlite>2.2.0</MicrosoftEntityFrameworkCoreSqlite>
+    <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.6</MicrosoftEntityFrameworkCoreSqliteDesign>
+    <MicrosoftExtensionsConfigurationBinder>2.2.0</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
+    <PrometheusNet>2.1.3</PrometheusNet>
+    <AWSSKDS3>3.3.29</AWSSKDS3>
+    <MicrosoftAzureKeyVault>3.0.2</MicrosoftAzureKeyVault>
+    <MicrosoftIdentityModelClientsActiveDirectory>4.4.1</MicrosoftIdentityModelClientsActiveDirectory>
+    <MicrosoftAzureServicesAppAuthentication>1.0.3</MicrosoftAzureServicesAppAuthentication>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -53,24 +66,34 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>2.2.0-preview3-35497</HealthCheckIdSvr>
-    <HealthCheckSqlServer>2.2.0-preview3-35497</HealthCheckSqlServer>
-    <HealthCheckSqlite>2.2.0-preview3-35497</HealthCheckSqlite>
-    <HealthCheckUri>2.2.0-preview3-35497</HealthCheckUri>
-    <HealthCheckRedis>2.2.0-preview3-35497</HealthCheckRedis>
-    <HealthCheckOracle>2.2.0-preview3-35497</HealthCheckOracle>
-    <HealthCheckNpgSql>2.2.0-preview3-35497</HealthCheckNpgSql>
-    <HealthCheckMongoDB>2.2.0-preview3-35497</HealthCheckMongoDB>
-    <HealthCheckMySql>2.2.0-preview3-35497</HealthCheckMySql>
-    <HealthCheckKafka>2.2.0-preview3-35497</HealthCheckKafka>
-    <HealthCheckSystem>2.2.0-preview3-35497</HealthCheckSystem>
-    <HealthCheckNetwork>2.2.0-preview3-35497</HealthCheckNetwork>
-    <HealthCheckDynamoDb>2.2.0-preview3-35497</HealthCheckDynamoDb>
-    <HealthCheckDocumentDb>2.2.0-preview3-35497</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>2.2.0-preview3-35497</HealthCheckAzureStorage>
-    <HealthCheckAzureServiceBus>2.2.0-preview3-35497</HealthCheckAzureServiceBus>
-    <HealthCheckUI>2.2.0-preview3-35497</HealthCheckUI>
-    <HealthCheckUIClient>2.2.0-preview3-35497</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.2.0-preview3-35497</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckIdSvr>2.2.2</HealthCheckIdSvr>
+    <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
+    <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
+    <HealthCheckUri>2.2.2</HealthCheckUri>
+    <HealthCheckRedis>2.2.2</HealthCheckRedis>
+    <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
+    <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
+    <HealthCheckElasticsearch>2.2.1</HealthCheckElasticsearch>
+    <HealthCheckOracle>2.2.0</HealthCheckOracle>
+    <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
+    <HealthCheckMongoDB>2.2.2</HealthCheckMongoDB>
+    <HealthCheckMySql>2.2.0</HealthCheckMySql>
+    <HealthCheckKafka>2.2.1</HealthCheckKafka>
+    <HealthCheckSystem>2.2.1</HealthCheckSystem>
+    <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
+    <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
+    <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>2.2.1</HealthCheckAzureStorage>
+    <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
+    <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
+    <HealthCheckConsul>2.2.1</HealthCheckConsul>
+    <HealthCheckUI>2.2.10</HealthCheckUI>
+    <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
+    <HealthCheckPublisherAppplicationInsights>2.2.1</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
+    <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
+    <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
+    <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
+    <HealthCheckRavenDB>2.2.1</HealthCheckRavenDB>
   </PropertyGroup>
 </Project>

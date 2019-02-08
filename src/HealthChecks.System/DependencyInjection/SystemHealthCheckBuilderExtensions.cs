@@ -41,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for process private memory.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="maximumMemoryBytes">The maximun private memory bytes on the process.</param>
+        /// <param name="maximumMemoryBytes">The maximum private memory bytes on the process.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'privatememory' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for process working set.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="maximumMemoryBytes">The maximun working set memory bytes on the process.</param>
+        /// <param name="maximumMemoryBytes">The maximum working set memory bytes on the process.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'workingset' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -83,7 +83,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for process virtual memory.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="maximumMemoryBytes">The maximun virtual memory bytes on the process.</param>
+        /// <param name="maximumMemoryBytes">The maximum virtual memory bytes on the process.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'virtualmemory' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

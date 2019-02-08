@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 
-namespace FunctionalTests.BeatPulse.Network
+namespace FunctionalTests.HealthChecks.Network
 {
     [Collection("execution")]
     public class ping_healthcheck_should

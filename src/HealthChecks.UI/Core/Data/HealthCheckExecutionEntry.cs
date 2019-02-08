@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using HealthChecks.UI.Client;
 using System;
 
 namespace HealthChecks.UI.Core.Data
@@ -9,7 +9,7 @@ namespace HealthChecks.UI.Core.Data
 
         public string Name { get; set; }
 
-        public HealthStatus Status { get; set; }
+        public UIHealthStatus Status { get; set; }
 
         public string Description { get; set; }
 

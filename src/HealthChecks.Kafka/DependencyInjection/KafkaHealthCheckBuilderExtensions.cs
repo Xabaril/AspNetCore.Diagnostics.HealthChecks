@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Dictionary<string, object> config, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(

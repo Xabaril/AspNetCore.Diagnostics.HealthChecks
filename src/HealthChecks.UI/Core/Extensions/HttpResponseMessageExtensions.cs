@@ -9,14 +9,20 @@ namespace System.Net.Http
         {
             if (response != null)
             {
-                var content = await response.Content
+                var body = await response.Content
                     .ReadAsStringAsync();
 
-                if (content != null)
+                if (body != null)
                 {
-                    return JsonConvert.DeserializeObject<TContent>(content);
+                    var content = JsonConvert.DeserializeObject<TContent>(body);
+
+                    if (content != null)
+                    {
+                        return content;
+                    }
                 }
             }
+
             throw new InvalidOperationException($"Response is null or message can't be deserialized as {typeof(TContent).FullName}.");
         }
     }

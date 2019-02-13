@@ -6,6 +6,7 @@ using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -42,6 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 var path = Path.Combine(contentRoot, databaseName);
                 var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString ?? $"Data Source={path}";
 
+                //db.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.QueryClientEvaluationWarning));
                 db.UseSqlite(connectionString);
             });
 

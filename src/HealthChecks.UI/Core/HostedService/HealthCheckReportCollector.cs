@@ -107,7 +107,7 @@ namespace HealthChecks.UI.Core.HostedService
             return await _db.Executions
                 .Include(le => le.History)
                 .Include(le => le.Entries)
-                .Where(le => le.Name.Equals(configuration.Name, StringComparison.InvariantCultureIgnoreCase))
+                .Where(le => le.Name == configuration.Name)
                 .SingleOrDefaultAsync();
         }
         private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, UIHealthReport healthReport)

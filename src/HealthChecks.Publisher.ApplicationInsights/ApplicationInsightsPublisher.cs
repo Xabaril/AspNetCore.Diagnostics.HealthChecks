@@ -27,7 +27,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
         }
-
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             //override instrumentation key or use default instrumentation 
@@ -48,7 +47,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
             }
             return Task.CompletedTask;
         }
-
         private static void SaveDetailedReport(HealthReport report, TelemetryClient client)
         {
             foreach (var reportEntry in report.Entries)
@@ -67,7 +65,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     });
             }
         }
-
         private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
         {
             client.TrackEvent(EVENT_NAME,
@@ -82,7 +79,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     { METRIC_DURATION_NAME,report.TotalDuration.TotalMilliseconds}
                 });
         }
-
         TelemetryClient GetOrCreateTelemetryClient()
         {
             if (_client == null)

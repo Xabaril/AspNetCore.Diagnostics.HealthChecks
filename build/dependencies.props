@@ -89,7 +89,7 @@
     <HealthCheckConsul>2.2.1</HealthCheckConsul>
     <HealthCheckUI>2.2.10</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.3.0</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherAppplicationInsights>2.2.2</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>

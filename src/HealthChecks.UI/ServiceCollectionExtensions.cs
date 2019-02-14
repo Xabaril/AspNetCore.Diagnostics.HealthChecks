@@ -43,7 +43,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 var path = Path.Combine(contentRoot, databaseName);
                 var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString ?? $"Data Source={path}";
 
-                //db.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.QueryClientEvaluationWarning));
                 db.UseSqlite(connectionString);
             });
 

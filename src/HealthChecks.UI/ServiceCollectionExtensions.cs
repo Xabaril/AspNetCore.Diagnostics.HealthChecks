@@ -39,10 +39,17 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddDbContext<HealthChecksDb>(db =>
             {
-                var contentRoot = configuration[HostDefaults.ContentRootKey];
-                var path = Path.Combine(contentRoot, databaseName);
-                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString ?? $"Data Source={path}";
-
+                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString;
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    var contentRoot = configuration[HostDefaults.ContentRootKey];
+                    var path = Path.Combine(contentRoot, databaseName);
+                    connectionString = $"Data Source={path}";
+                }
+                else 
+                {
+                    connectionString = Environment.ExpandEnvironmentVariables(connectionString);
+                }
                 db.UseSqlite(connectionString);
             });
 

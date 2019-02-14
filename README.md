@@ -195,7 +195,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
-All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name. This database is created on the WebContentRoot, *HostDefaults.ContentRootKey*, directory by default. Optionally you can specify the Sqlite connection string using the setting *HealthCheckDatabaseConnectionString*.
+All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name. This database is created on the WebContentRoot, *HostDefaults.ContentRootKey*, directory by default. Optionally you can specify the Sqlite connection string using the setting *HealthCheckDatabaseConnectionString*. Environment variables in *HealthCheckDatabaseConnectionString* are automatically expanded, for example, *%APPDATA%\\healthchecksdb*.
 
 ```json
 {

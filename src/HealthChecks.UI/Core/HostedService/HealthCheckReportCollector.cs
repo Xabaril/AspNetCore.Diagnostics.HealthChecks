@@ -120,8 +120,23 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
-                execution.Entries.Clear();
-                execution.Entries = healthReport.ToExecutionEntries();
+                foreach (var item in healthReport.ToExecutionEntries())
+                {
+                    var existing = execution.Entries
+                        .Where(e => e.Name == item.Name)
+                        .SingleOrDefault();
+
+                    if (existing != null)
+                    {
+                        existing.Status = item.Status;
+                        existing.Description = item.Description;
+                        existing.Duration = item.Duration;
+                    }
+                    else
+                    {
+                        execution.Entries.Add(item);
+                    }
+                }
 
                 if (execution.Status == healthReport.Status)
                 {
@@ -158,6 +173,7 @@ namespace HealthChecks.UI.Core.HostedService
                     Uri = configuration.Uri,
                     DiscoveryService = configuration.DiscoveryService
                 };
+
 
                 await _db.Executions
                     .AddAsync(execution);

@@ -16,7 +16,7 @@ namespace HealthChecks.Kubernetes
         public KubernetesChecksExecutor(k8s.Kubernetes client)
         {
             _client = client;
-            _handlers = new Dictionary<Type, Func<KubernetesResourceCheck, Task<(bool,string)>>>()
+            _handlers = new Dictionary<Type, Func<KubernetesResourceCheck, Task<(bool, string)>>>()
             {
                 [typeof(V1Deployment)] = CheckDeploymentAsync,
                 [typeof(V1Service)] = CheckServiceAsync,
@@ -34,26 +34,62 @@ namespace HealthChecks.Kubernetes
 
         private async Task<(bool, string)> CheckDeploymentAsync(KubernetesResourceCheck resourceCheck)
         {
-            var result = await _client.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
-                resourceCheck.Namespace);
+            var tsc = new TaskCompletionSource<(bool, string)>();
 
-            return (resourceCheck.Check(result.Body), resourceCheck.Name);
+            try
+            {
+                var result = await _client.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
+                    resourceCheck.Namespace);
+                
+                tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
+            }
+            catch (Exception ex)
+            {
+                tsc.SetException(
+                    new Exception($"The Deployment {resourceCheck.Name} failed with error: {ex.Message}"));
+            }
+
+            return await tsc.Task;
         }
 
-        private async  Task<(bool, string)> CheckPodAsync(KubernetesResourceCheck resourceCheck)
+        private async Task<(bool, string)> CheckPodAsync(KubernetesResourceCheck resourceCheck)
         {
-            var result = await _client.ReadNamespacedPodStatusWithHttpMessagesAsync(resourceCheck.Name,
-                resourceCheck.Namespace);
+            var tsc = new TaskCompletionSource<(bool, string)>();
+            try
+            {
+                var result = await _client.ReadNamespacedPodStatusWithHttpMessagesAsync(resourceCheck.Name,
+                    resourceCheck.Namespace);
 
-            return (resourceCheck.Check(result.Body), resourceCheck.Name);
+                tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
+            }
+            catch (Exception ex)
+            {
+                tsc.SetException(
+                    new Exception($"The pod {resourceCheck.Name} failed with error: {ex.Message}"));
+            }
+
+            return await tsc.Task;
+
         }
 
-        private async  Task<(bool, string)> CheckServiceAsync(KubernetesResourceCheck resourceCheck)
+        private async Task<(bool, string)> CheckServiceAsync(KubernetesResourceCheck resourceCheck)
         {
-            var result = await _client.ReadNamespacedServiceStatusWithHttpMessagesAsync(resourceCheck.Name,
-                resourceCheck.Namespace);
+            var tsc = new TaskCompletionSource<(bool, string)>();
+            try
+            {
+                var result = await _client.ReadNamespacedServiceStatusWithHttpMessagesAsync(resourceCheck.Name,
+                    resourceCheck.Namespace);
 
-            return (resourceCheck.Check(result.Body), resourceCheck.Name);
+                tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
+            }
+            catch (Exception ex)
+            {
+                tsc.SetException(
+                    new Exception($"The service {resourceCheck.Name} failed with error: {ex.Message}"));
+            }
+
+            return await tsc.Task;
+
         }
     }
 }

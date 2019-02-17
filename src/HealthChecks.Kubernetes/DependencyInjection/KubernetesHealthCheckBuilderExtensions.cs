@@ -23,20 +23,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddKubernetes(this IHealthChecksBuilder builder, Action<KubernetesHealthCheckBuilder> setup,  string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddKubernetes(this IHealthChecksBuilder builder, Action<KubernetesHealthCheckBuilder> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             
             var kubernetesHealthCheckBuilder = new KubernetesHealthCheckBuilder();
             setup?.Invoke(kubernetesHealthCheckBuilder);
 
-            builder.Services.TryAddSingleton(sp => new Kubernetes(kubernetesHealthCheckBuilder.Configuration));
-            builder.Services.TryAddSingleton<KubernetesChecksExecutor>();
-            builder.Services.TryAddSingleton(kubernetesHealthCheckBuilder);
-            builder.Services.TryAddTransient<KubernetesHealthCheck>();
+            var client = new Kubernetes(kubernetesHealthCheckBuilder.Configuration);
+            var kubernetesChecksExecutor = new KubernetesChecksExecutor(client);
             
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => sp.GetService<KubernetesHealthCheck>(),
+                sp => new KubernetesHealthCheck(kubernetesHealthCheckBuilder, kubernetesChecksExecutor), 
                 failureStatus,
                 tags));
         }

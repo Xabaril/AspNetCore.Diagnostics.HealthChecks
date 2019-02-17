@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Generic;
 using HealthChecks.Kubernetes;
+using k8s;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -23,12 +24,17 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddKubernetes(this IHealthChecksBuilder builder, Action<KubernetesHealthCheckBuilder> setup,  string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
+            
             var kubernetesHealthCheckBuilder = new KubernetesHealthCheckBuilder();
             setup?.Invoke(kubernetesHealthCheckBuilder);
+
+            builder.Services.AddSingleton(sp => new Kubernetes(kubernetesHealthCheckBuilder.Configuration));
+            builder.Services.AddSingleton<KubernetesChecksExecutor>();
+            builder.Services.AddSingleton(kubernetesHealthCheckBuilder);
             
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new KubernetesHealthCheck(kubernetesHealthCheckBuilder),
+                sp => sp.GetService<KubernetesHealthCheck>(),
                 failureStatus,
                 tags));
         }

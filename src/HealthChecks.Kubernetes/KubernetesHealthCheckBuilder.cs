@@ -14,5 +14,4 @@ namespace HealthChecks.Kubernetes
             return Options;
         }
     }
-
 }

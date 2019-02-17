@@ -31,6 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddSingleton(sp => new Kubernetes(kubernetesHealthCheckBuilder.Configuration));
             builder.Services.AddSingleton<KubernetesChecksExecutor>();
             builder.Services.AddSingleton(kubernetesHealthCheckBuilder);
+            builder.Services.AddTransient<KubernetesHealthCheck>();
             
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

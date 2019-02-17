@@ -38,9 +38,9 @@ namespace HealthChecks.Kubernetes
 
                 if (results.Any(r => !r.result))
                 {
-                    var resultWithNotMetConditions = results.Where(r => !r.result).Select(r => r.name);
+                    var resultsNotMeetingConditions = results.Where(r => !r.result).Select(r => r.name);
                     return new HealthCheckResult(context.Registration.FailureStatus,
-                        $"Kubernetes resources with failed conditions: {string.Join(",", resultWithNotMetConditions)}");
+                        $"Kubernetes resources with failed conditions: {string.Join(",", resultsNotMeetingConditions)}");
                 }
 
                 return HealthCheckResult.Healthy();

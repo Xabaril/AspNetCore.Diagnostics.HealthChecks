@@ -11,9 +11,8 @@ namespace HealthChecks.Kubernetes
     {
         private const string DefaultNamespace = "default";
 
-        internal KubernetesHealthCheckOptions()
-        {
-        }
+        internal KubernetesHealthCheckOptions(){}
+      
 
         internal List<KubernetesResourceCheck> Registrations { get; } = new List<KubernetesResourceCheck>();
 

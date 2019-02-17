@@ -35,7 +35,6 @@ namespace HealthChecks.Kubernetes
 
                 var results = await Task.WhenAll(checks);
 
-
                 if (results.Any(r => !r.result))
                 {
                     var resultsNotMeetingConditions = results.Where(r => !r.result).Select(r => r.name);

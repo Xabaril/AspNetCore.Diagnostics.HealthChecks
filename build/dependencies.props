@@ -95,5 +95,6 @@
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>2.2.1</HealthCheckRavenDB>
+    <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
   </PropertyGroup>
 </Project>

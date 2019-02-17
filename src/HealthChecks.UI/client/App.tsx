@@ -1,8 +1,7 @@
 import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 import { LivenessPage } from "./components/LivenessPage";
 import { WebhooksPage } from "./components/WebhooksPage";
-import { Footer } from "./components/Footer";
 import { scaleRotate as Menu } from "react-burger-menu";
 
 interface AppProps {
@@ -23,7 +22,7 @@ export class App extends React.Component<AppProps, AppState> {
         super(props);
         this.state = {
             menuOpen: false
-        }
+        };
 
         this.toggleMenu = this.toggleMenu.bind(this);
     }
@@ -51,8 +50,7 @@ export class App extends React.Component<AppProps, AppState> {
                 </Menu>
                 <Route exact path={this.props.mountPath} render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />
                 <Route path={`${this.props.mountPath}/webhooks`} render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
-            </div>
-            <Footer />
+            </div>            
         </React.Fragment>
     }
 }

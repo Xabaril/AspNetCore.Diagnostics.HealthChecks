@@ -37,7 +37,7 @@ namespace UnitTests.DependencyInjection.Kubernetes
         }
         
         [Fact]
-        public void register_necessary_services_to_service_provider()
+        public void add_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
@@ -48,19 +48,16 @@ namespace UnitTests.DependencyInjection.Kubernetes
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
                     }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer");
-                });
+                }, name: "second-k8s-cluster");
 
             var serviceProvider = services.BuildServiceProvider();
-            
-            var kubernetesChecksExecutor = serviceProvider.GetService<KubernetesChecksExecutor>();
-            var kubernetesHealthCheckBuilder = serviceProvider.GetService<KubernetesHealthCheckBuilder>();
-            var kubernetesClient = serviceProvider.GetService<KubernetesHealthCheck>();
-            var kubernetesHealthCheck = serviceProvider.GetService<KubernetesHealthCheck>();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            kubernetesChecksExecutor.Should().NotBeNull();
-            kubernetesHealthCheckBuilder.Should().NotBeNull();
-            kubernetesClient.Should().NotBeNull();
-            kubernetesHealthCheck.Should().NotBeNull();
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("second-k8s-cluster");
+            check.GetType().Should().Be(typeof(KubernetesHealthCheck));
         }
     }
 }

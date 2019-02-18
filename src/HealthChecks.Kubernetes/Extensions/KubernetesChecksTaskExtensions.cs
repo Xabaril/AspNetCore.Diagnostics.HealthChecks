@@ -16,7 +16,7 @@ namespace System.Threading.Tasks
                         tcs.SetResult(t.Result);
                         break;
                     case TaskStatus.Faulted:
-                        tcs.SetException(task.Exception);
+                        tcs.SetException(t.Exception);
                         break;
                 }
             }, TaskContinuationOptions.ExecuteSynchronously);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
@@ -10,13 +11,13 @@ namespace HealthChecks.Kubernetes
     {
         private readonly k8s.Kubernetes _client;
 
-        private Dictionary<Type, Func<KubernetesResourceCheck, Task<(bool, string)>>> _handlers;
+        private Dictionary<Type, Func<KubernetesResourceCheck, CancellationToken, Task<(bool, string)>>> _handlers;
 
 
         public KubernetesChecksExecutor(k8s.Kubernetes client)
         {
             _client = client;
-            _handlers = new Dictionary<Type, Func<KubernetesResourceCheck, Task<(bool, string)>>>()
+            _handlers = new Dictionary<Type, Func<KubernetesResourceCheck, CancellationToken, Task<(bool, string)>>>()
             {
                 [typeof(V1Deployment)] = CheckDeploymentAsync,
                 [typeof(V1Service)] = CheckServiceAsync,
@@ -24,22 +25,22 @@ namespace HealthChecks.Kubernetes
             };
         }
 
-        public Task<(bool, string)> CheckAsync(KubernetesResourceCheck resourceCheck)
+        public Task<(bool, string)> CheckAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
         {
             var handler = _handlers[resourceCheck.ResourceType];
-            return handler?.Invoke(resourceCheck) ??
+            return handler?.Invoke(resourceCheck, cancellationToken) ??
                    throw new InvalidOperationException(
                        $"No handler registered for type {resourceCheck.ResourceType.Name}");
         }
 
-        private async Task<(bool, string)> CheckDeploymentAsync(KubernetesResourceCheck resourceCheck)
+        private async Task<(bool, string)> CheckDeploymentAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
         {
             var tsc = new TaskCompletionSource<(bool, string)>();
 
             try
             {
                 var result = await _client.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
-                    resourceCheck.Namespace);
+                    resourceCheck.Namespace, cancellationToken: cancellationToken);
                 
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }
@@ -52,13 +53,13 @@ namespace HealthChecks.Kubernetes
             return await tsc.Task;
         }
 
-        private async Task<(bool, string)> CheckPodAsync(KubernetesResourceCheck resourceCheck)
+        private async Task<(bool, string)> CheckPodAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
         {
             var tsc = new TaskCompletionSource<(bool, string)>();
             try
             {
                 var result = await _client.ReadNamespacedPodStatusWithHttpMessagesAsync(resourceCheck.Name,
-                    resourceCheck.Namespace);
+                    resourceCheck.Namespace, cancellationToken: cancellationToken);
 
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }
@@ -72,13 +73,13 @@ namespace HealthChecks.Kubernetes
 
         }
 
-        private async Task<(bool, string)> CheckServiceAsync(KubernetesResourceCheck resourceCheck)
+        private async Task<(bool, string)> CheckServiceAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
         {
             var tsc = new TaskCompletionSource<(bool, string)>();
             try
             {
                 var result = await _client.ReadNamespacedServiceStatusWithHttpMessagesAsync(resourceCheck.Name,
-                    resourceCheck.Namespace);
+                    resourceCheck.Namespace, cancellationToken: cancellationToken);
 
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }

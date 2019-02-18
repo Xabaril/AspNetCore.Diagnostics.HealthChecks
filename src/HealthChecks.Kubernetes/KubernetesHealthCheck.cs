@@ -30,11 +30,11 @@ namespace HealthChecks.Kubernetes
             {
                 foreach (var item in _builder.Options.Registrations)
                 {
-                    checks.Add(_kubernetesChecksExecutor.CheckAsync(item));
+                    checks.Add(_kubernetesChecksExecutor.CheckAsync(item, cancellationToken));
                 }
 
-                var results = await Task.WhenAll(checks);
-
+                var results = await Task.WhenAll(checks).PreserveMultipleExceptions();
+                
                 if (results.Any(r => !r.result))
                 {
                     var resultsNotMeetingConditions = results.Where(r => !r.result).Select(r => r.name);
@@ -44,10 +44,16 @@ namespace HealthChecks.Kubernetes
 
                 return HealthCheckResult.Healthy();
             }
+            catch(AggregateException ex)
+            {
+                return new HealthCheckResult(context.Registration.FailureStatus, string.Join(",", ex.InnerExceptions.Select(s=> s.Message)));
+            }
             catch (Exception ex)
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, ex.Message);
             }
         }
+
+       
     }
 }

@@ -39,6 +39,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Update="HealthChecks.RavenDB\cluster.server.certificate.securesandbox.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="id_rsa">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

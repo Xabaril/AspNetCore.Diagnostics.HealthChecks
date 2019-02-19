@@ -33,6 +33,10 @@ services:
         image: mongo
         ports:
             - ${MONGODB_PORT}:27017
+    ravendb:
+        image: garrmark/ravendb-secure
+        ports:
+            - ${RAVENDB_PORT}:8080
     mysql:
         image: mysql
         environment:

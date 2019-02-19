@@ -1,6 +1,7 @@
 ﻿using HealthChecks.RavenDB;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -27,12 +28,13 @@ namespace Microsoft.Extensions.DependencyInjection
             this IHealthChecksBuilder builder,
             string connectionString,
             string databaseName = default,
+            X509Certificate2 clientCertificate = default,
             string name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default)
             => builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RavenDBHealthCheck(connectionString, databaseName),
+                sp => new RavenDBHealthCheck(connectionString, databaseName, clientCertificate),
                 failureStatus,
                 tags));
     }

@@ -25,7 +25,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var healthCheckSettings = new Settings();
             var kubernetesDiscoverySettings = new KubernetesDiscoverySettings();
-
             BindHealthChecksUISettings(setupSettings, configuration, healthCheckSettings);
             configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, kubernetesDiscoverySettings);
 

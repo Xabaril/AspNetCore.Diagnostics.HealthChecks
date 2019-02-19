@@ -3,6 +3,7 @@
 src/HealthChecks.UI/assets/healthchecks-bundle.js
 src/HealthChecks.UI/assets/vendors-dll.js
 src/HealthChecks.UI/assets/vendors-manifest.json
+src/HealthChecks.UI/assets/healthchecksui-min.css
 build/docker-services/mail/chksum
 build/docker-services/mail/postfix-aliases.cf
 

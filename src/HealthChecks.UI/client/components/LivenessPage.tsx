@@ -119,7 +119,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
     render() {
         return <div id="wrapper" style={{ height: '100%', overflow: 'auto' }}>
             <div className="container liveness-container">
-                <div className="row top-buffer-40">
+                <div className="row top-buffer-100">
                     <div className="header-logo">
                         <img src={DarkHeartIcon} className="logo-icon" /><h2 className="title">Health Checks status</h2>
                     </div>
@@ -138,7 +138,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
                         <img className="collapse-button" src={CollapseIcon} title="Collapse all" onClick={this.collapseAll} />
                     </div>
                 </div>
-                <div className="row" ref={(lt) => this._lifenessTable = lt}>
+                <div className="row bottom-buffer-60" ref={(lt) => this._lifenessTable = lt}>
                     <LivenessTable livenessData={this.state.livenessData} />
                     {this.state.error ?
                         <div className="w-100 alert alert-danger" role="alert">{this.state.error}</div>

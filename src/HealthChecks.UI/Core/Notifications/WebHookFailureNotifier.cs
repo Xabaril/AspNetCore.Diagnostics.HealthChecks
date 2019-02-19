@@ -34,28 +34,27 @@ namespace HealthChecks.UI.Core.Notifications
         }
         private async Task Notify(string name, string failure = "", bool isHealthy = false)
         {
-            foreach (var webHook in _settings.Webhooks)
+            if (!await IsNotifiedOnWindowTime(name, isHealthy))
             {
-                var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
-                payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name);
-
-                if (!await IsNotifiedOnWindowTime(name, isHealthy))
+                await SaveNotification(new HealthCheckFailureNotification()
                 {
-                    payload = payload.Replace(Keys.FAILURE_BOOKMARK, failure);
+                    LastNotified = DateTime.UtcNow,
+                    HealthCheckName = name,
+                    IsUpAndRunning = isHealthy
+                });
 
-                    await SaveNotification(new HealthCheckFailureNotification()
-                    {
-                        LastNotified = DateTime.UtcNow,
-                        HealthCheckName = name,
-                        IsUpAndRunning = isHealthy
-                    });
+                foreach (var webHook in _settings.Webhooks)
+                {
+                    var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
+                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name);
+                    payload = payload.Replace(Keys.FAILURE_BOOKMARK, failure);
 
                     await SendRequest(webHook.Uri, webHook.Name, payload);
                 }
-                else
-                {
-                    _logger.LogInformation("Notification is sent on same window time.");
-                }
+            }
+            else
+            {
+                _logger.LogInformation("Notification is sent on same window time.");
             }
         }
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)

@@ -69,9 +69,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static void BindHealthChecksUISettings(Action<Settings> passedInSettings, IConfiguration configuration, Settings healthCheckSettings)
+        private static void BindHealthChecksUISettings(Action<Settings> setupSettings, IConfiguration configuration, Settings healthCheckSettings)
         {
-            passedInSettings?.Invoke(healthCheckSettings);
+            setupSettings?.Invoke(healthCheckSettings);
             configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, healthCheckSettings);
         }
 

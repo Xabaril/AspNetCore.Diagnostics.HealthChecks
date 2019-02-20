@@ -71,8 +71,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void BindHealthChecksUISettings(Action<Settings> setupSettings, IConfiguration configuration, Settings healthCheckSettings)
         {
-            setupSettings?.Invoke(healthCheckSettings);
             configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, healthCheckSettings);
+            setupSettings?.Invoke(healthCheckSettings);
         }
 
         static async Task CreateDatabase(IServiceProvider serviceProvider)

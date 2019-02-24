@@ -23,7 +23,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_healthy_if_ravendb_is_available()
         {
 
@@ -52,7 +52,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_healthy_if_ravendb_is_available_and_contains_specific_database()
         {
             var webHostBuilder = new WebHostBuilder()

@@ -27,7 +27,7 @@ namespace HealthChecks.RabbitMQ
                     Uri = new Uri(_rabbitMqConnectionString)
                 };
 
-                using (var connection = CreateConnectionWithSslOption(factory, _sslOption))
+                using (var connection = CreateConnection(factory, _sslOption))
                 using (var channel = connection.CreateModel())
                 {
                     return Task.FromResult(
@@ -40,9 +40,9 @@ namespace HealthChecks.RabbitMQ
                     new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
-        
-        private static IConnection CreateConnectionWithSslOption(IConnectionFactory connectionFactory, SslOption sslOption) =>
-            connectionFactory.CreateConnection(new List<AmqpTcpEndpoint>
-                {new AmqpTcpEndpoint(connectionFactory.Uri, sslOption)});
+        private static IConnection CreateConnection(IConnectionFactory connectionFactory, SslOption sslOption)
+        {
+            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint>{new AmqpTcpEndpoint(connectionFactory.Uri, sslOption)});
+        }
     }
 }

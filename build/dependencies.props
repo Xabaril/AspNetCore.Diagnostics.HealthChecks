@@ -71,7 +71,7 @@
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.2</HealthCheckUri>
     <HealthCheckRedis>2.2.2</HealthCheckRedis>
-    <HealthCheckRabbitMQ>2.2.0</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.1</HealthCheckElasticsearch>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>

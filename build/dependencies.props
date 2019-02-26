@@ -87,7 +87,7 @@
     <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckConsul>2.2.1</HealthCheckConsul>
-    <HealthCheckUI>2.2.16</HealthCheckUI>
+    <HealthCheckUI>2.2.17</HealthCheckUI>
     <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.2</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>

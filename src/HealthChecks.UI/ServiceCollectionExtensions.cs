@@ -23,18 +23,29 @@ namespace Microsoft.Extensions.DependencyInjection
             var configuration = services.BuildServiceProvider()
                 .GetService<IConfiguration>();
 
-            var healthCheckSettings = new Settings();
-            var kubernetesDiscoverySettings = new KubernetesDiscoverySettings();
-            BindHealthChecksUISettings(setupSettings, configuration, healthCheckSettings);
-            configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, kubernetesDiscoverySettings);
-
             services
                 .AddOptions()
-                .Configure<Settings>(settings => BindHealthChecksUISettings(setupSettings, configuration, settings))
+                .Configure<Settings>(settings =>
+                {
+                    configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
+                    setupSettings?.Invoke(settings);
+                })
+                .Configure<KubernetesDiscoverySettings>(settings=>
+                {
+                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
+                })
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
                 .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+
+            var healthCheckSettings = services.BuildServiceProvider()
+                .GetService<IOptions<Settings>>()
+                .Value ?? new Settings();
+
+            var kubernetesDiscoverySettings = services.BuildServiceProvider()
+                .GetService<IOptions<KubernetesDiscoverySettings>>()
+                .Value ?? new KubernetesDiscoverySettings();
 
             services.AddDbContext<HealthChecksDb>(db =>
             {
@@ -68,13 +79,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
-
-        private static void BindHealthChecksUISettings(Action<Settings> setupSettings, IConfiguration configuration, Settings healthCheckSettings)
-        {
-            configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, healthCheckSettings);
-            setupSettings?.Invoke(healthCheckSettings);
-        }
-
         static async Task CreateDatabase(IServiceProvider serviceProvider)
         {
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();

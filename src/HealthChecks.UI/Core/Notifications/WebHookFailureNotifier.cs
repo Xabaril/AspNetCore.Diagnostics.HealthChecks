@@ -115,15 +115,17 @@ namespace HealthChecks.UI.Core.Notifications
             var failedChecks = healthReport.Entries.Values
                 .Count(c => c.Status != UIHealthStatus.Healthy);
 
-            return $"There is at least {failedChecks} HealthChecks failing.";
+            return $"There are at least {failedChecks} HealthChecks failing.";
         }
 
         private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Values
-                .Where(c => c.Status != UIHealthStatus.Healthy);
+                .Where(c => c.Status != UIHealthStatus.Healthy)
+                .Select(x => x.Description)
+                .Aggregate((i, j) => i + "|" + j);
 
-            return string.Join("|", failedChecks.Select(x => x.Description));
+            return failedChecks;
         }
 
         public void Dispose()

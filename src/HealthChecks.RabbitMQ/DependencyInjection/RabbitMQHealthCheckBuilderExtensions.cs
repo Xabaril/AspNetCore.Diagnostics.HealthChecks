@@ -1,7 +1,7 @@
 ﻿using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Collections.Generic;
 using RabbitMQ.Client;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -33,7 +33,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddRabbitMQ(connectionString, sslOption: new SslOption("disable", enabled: false), tags: new string[] { "rabbitmq" });
+                 .AddRabbitMQ(connectionString, sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
             })
             .Configure(app =>
             {
@@ -60,7 +60,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                .AddRabbitMQ("amqp://nonexistingdomain:5672", sslOption: new SslOption("disable", enabled: false), tags: new string[] { "rabbitmq" });
+                .AddRabbitMQ("amqp://nonexistingdomain:5672", sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
            })
            .Configure(app =>
            {

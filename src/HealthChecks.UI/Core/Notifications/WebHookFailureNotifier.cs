@@ -46,9 +46,9 @@ namespace HealthChecks.UI.Core.Notifications
                 foreach (var webHook in _settings.Webhooks)
                 {
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
-                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name);
-                    payload = payload.Replace(Keys.FAILURE_BOOKMARK, failure);
-                    payload = payload.Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
+                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
+                        .Replace(Keys.FAILURE_BOOKMARK, failure)
+                        .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
 
                     await SendRequest(webHook.Uri, webHook.Name, payload);
                 }
@@ -120,12 +120,14 @@ namespace HealthChecks.UI.Core.Notifications
 
         private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
         {
-            var failedChecks = healthReport.Entries.Values
+            const string JOIN_SYMBOL = "|";
+
+            var failedChecksDescription = healthReport.Entries.Values
                 .Where(c => c.Status != UIHealthStatus.Healthy)
                 .Select(x => x.Description)
-                .Aggregate((i, j) => i + "|" + j);
+                .Aggregate((first, after) => $"{first} {JOIN_SYMBOL} {after}");
 
-            return failedChecks;
+            return failedChecksDescription;
         }
 
         public void Dispose()

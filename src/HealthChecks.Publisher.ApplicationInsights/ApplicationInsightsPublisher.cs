@@ -29,12 +29,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
         }
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
-            //override instrumentation key or use default instrumentation 
-            //key active on the project.
-            var configuration = String.IsNullOrWhiteSpace(_instrumentationKey)
-                ? TelemetryConfiguration.Active
-                : new TelemetryConfiguration(_instrumentationKey);
-
             var client = GetOrCreateTelemetryClient();
 
             if (_saveDetailedReport)
@@ -94,6 +88,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                             ? TelemetryConfiguration.Active
                             : new TelemetryConfiguration(_instrumentationKey);
 
+                        
                         _client = new TelemetryClient(configuration);
                     }
                 }

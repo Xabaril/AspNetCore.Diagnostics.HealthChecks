@@ -84,7 +84,7 @@ namespace HealthChecks.UI.Core.HostedService
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "GetHealthReport threw an exception.");
+                _logger.LogError(exception, $"GetHealthReport threw an exception when trying to get report from {uri} configured with name {name}.");
 
                 return new UIHealthReport(
                     entries: new Dictionary<string, UIHealthReportEntry>(),

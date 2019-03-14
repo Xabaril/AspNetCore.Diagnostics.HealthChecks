@@ -16,7 +16,7 @@ namespace HealthChecks.RabbitMQ
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
             _rabbitMqConnectionString = rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString));
-            _sslOption = sslOption ?? new SslOption("not_enabled", enabled: false);
+            _sslOption = sslOption ?? new SslOption(serverName: "localhost", enabled: false);
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -26,7 +26,6 @@ namespace HealthChecks.RabbitMQ
                 {
                     Uri = new Uri(_rabbitMqConnectionString)
                 };
-
                 using (var connection = CreateConnection(factory, _sslOption))
                 using (var channel = connection.CreateModel())
                 {
@@ -42,7 +41,7 @@ namespace HealthChecks.RabbitMQ
         }
         private static IConnection CreateConnection(IConnectionFactory connectionFactory, SslOption sslOption)
         {
-            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint>{new AmqpTcpEndpoint(connectionFactory.Uri, sslOption)});
+            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint> { new AmqpTcpEndpoint(connectionFactory.Uri, sslOption) });
         }
     }
 }

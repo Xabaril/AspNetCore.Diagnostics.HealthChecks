@@ -52,16 +52,14 @@ namespace HealthChecks.UI.Client
 
             return uiReport;
         }
-        public static UIHealthReport CreateFrom(Exception exception)
+        public static UIHealthReport CreateFrom(Exception exception, string entryName = "Endpoint")
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), TimeSpan.FromSeconds(0))
             {
                 Status = UIHealthStatus.Unhealthy,
             };
 
-            const string SERVICE_NAME = "Endpoint";
-
-            uiReport.Entries.Add(SERVICE_NAME, new UIHealthReportEntry()
+            uiReport.Entries.Add(entryName, new UIHealthReportEntry()
             {
                 Exception = exception.Message,
                 Description = exception.Message,

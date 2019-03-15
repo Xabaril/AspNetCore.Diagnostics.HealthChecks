@@ -52,15 +52,32 @@ namespace HealthChecks.UI.Client
 
             return uiReport;
         }
-    }
+        public static UIHealthReport CreateFrom(Exception exception)
+        {
+            var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), TimeSpan.FromSeconds(0))
+            {
+                Status = UIHealthStatus.Unhealthy,
+            };
 
+            const string SERVICE_NAME = "Endpoint";
+
+            uiReport.Entries.Add(SERVICE_NAME, new UIHealthReportEntry()
+            {
+                Exception = exception.Message,
+                Description = exception.Message,
+                Duration = TimeSpan.FromSeconds(0),
+                Status = UIHealthStatus.Unhealthy
+            });
+
+            return uiReport;
+        }
+    }
     public enum UIHealthStatus
     {
         Unhealthy = 0,
         Degraded = 1,
         Healthy = 2
     }
-
     public class UIHealthReportEntry
     {
         public IReadOnlyDictionary<string, object> Data { get; set; }

@@ -86,9 +86,7 @@ namespace HealthChecks.UI.Core.HostedService
             {
                 _logger.LogError(exception, $"GetHealthReport threw an exception when trying to get report from {uri} configured with name {name}.");
 
-                return new UIHealthReport(
-                    entries: new Dictionary<string, UIHealthReportEntry>(),
-                    totalDuration: TimeSpan.FromSeconds(0));
+                return UIHealthReport.CreateFrom(exception);
             }
         }
         private async Task<bool> HasLivenessRecoveredFromFailure(HealthCheckConfiguration configuration)

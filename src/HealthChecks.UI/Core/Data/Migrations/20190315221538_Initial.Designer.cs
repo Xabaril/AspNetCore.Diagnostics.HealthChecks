@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthChecks.UI.Core.Data.Migrations
 {
     [DbContext(typeof(HealthChecksDb))]
-    [Migration("20181012110222_InitialModel")]
-    partial class InitialModel
+    [Migration("20190315221538_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
             modelBuilder.Entity("HealthChecks.UI.Core.Data.HealthCheckConfiguration", b =>
                 {
@@ -87,7 +87,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
 
                     b.HasIndex("HealthCheckExecutionId");
 
-                    b.ToTable("HealthCheckExecutionEntry");
+                    b.ToTable("HealthCheckExecutionEntries");
                 });
 
             modelBuilder.Entity("HealthChecks.UI.Core.Data.HealthCheckExecutionHistory", b =>
@@ -106,7 +106,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
 
                     b.HasIndex("HealthCheckExecutionId");
 
-                    b.ToTable("HealthCheckExecutionHistory");
+                    b.ToTable("HealthCheckExecutionHistories");
                 });
 
             modelBuilder.Entity("HealthChecks.UI.Core.Data.HealthCheckFailureNotification", b =>

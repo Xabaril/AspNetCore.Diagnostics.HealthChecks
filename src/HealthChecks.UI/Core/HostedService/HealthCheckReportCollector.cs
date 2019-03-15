@@ -118,6 +118,8 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
+                //update existing entries from new health report
+
                 foreach (var item in healthReport.ToExecutionEntries())
                 {
                     var existing = execution.Entries
@@ -133,6 +135,24 @@ namespace HealthChecks.UI.Core.HostedService
                     else
                     {
                         execution.Entries.Add(item);
+                    }
+                }
+
+                //remove old entries in existing execution not present in new health report
+
+                foreach (var item in execution.Entries)
+                {
+                    var existing = healthReport.Entries
+                        .ContainsKey(item.Name);
+
+                    if (!existing)
+                    {
+                        var oldEntry = execution.Entries
+                            .Where(t => t.Name == item.Name)
+                            .SingleOrDefault();
+
+                        _db.HealthCheckExecutionEntries
+                            .Remove(oldEntry);
                     }
                 }
 

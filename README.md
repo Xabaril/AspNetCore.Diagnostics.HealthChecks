@@ -1,5 +1,5 @@
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g/branch/master?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks) 
+[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g/branch/master?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks)
 
 [![Build history](https://buildstats.info/appveyor/chart/xabaril/aspnetcore-diagnostics-healthchecks)](https://ci.appveyor.com/project/xabaril/aspnetcore-diagnostics-healthchecks/history)
 
@@ -16,11 +16,12 @@ HealthChecks packages include health checks for:
 - MySql
 - Oracle
 - Sqlite
-- Postgres 
+- RavenDB
+- Postgres
 - EventStore
 - RabbitMQ
 - Elasticsearch
-- Redis 
+- Redis
 - System: Disk Storage, Private Memory, Virtual Memory
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
@@ -33,6 +34,9 @@ HealthChecks packages include health checks for:
 - Kafka
 - Identity Server
 - Uri: single uri and uri groups
+- Consul
+- Hangfire
+
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -49,6 +53,7 @@ Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
+Install-Package AspNetCore.HealthChecks.RavenDB
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.RabbitMQ
 Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
@@ -56,6 +61,8 @@ Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
+Install-Package AspNetCore.HealthChecks.Consul
+Install-Package AspNetCore.HealthChecks.Hangfire
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -80,7 +87,7 @@ public void ConfigureServices(IServiceCollection services)
           .AddSqlServer(
               connectionString: Configuration["Data:ConnectionStrings:Sql"],
               healthQuery: "SELECT 1;",
-              name: "sql", 
+              name: "sql",
               failureStatus: HealthStatus.Degraded,
               tags: new string[] { "db", "sql", "sqlserver" });
 }
@@ -116,7 +123,7 @@ To integrate HealthChecks.UI in your project you just need to add the HealthChec
 
 ```csharp
 public class Startup
-{       
+{
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddHealthChecksUI();
@@ -129,7 +136,7 @@ public class Startup
 }
 ```
 
-This automatically registers a new interface on **/healthchecks-ui** where the spa will be served. 
+This automatically registers a new interface on **/healthchecks-ui** where the spa will be served.
 
 > Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
@@ -158,7 +165,7 @@ By default HealthChecks returns a simple Status Code (200 or 503) without the He
 
 > *WriteHealthCheckUIResponse* is defined on HealthChecks.UI.Client nuget package.
 
-To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings. 
+To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings.
 
 ```json
 {
@@ -188,7 +195,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
-All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name. This database is created on the WebContentRoot, *HostDefaults.ContentRootKey*, directory by default. Optionally you can specify the Sqlite connection string using the setting *HealthCheckDatabaseConnectionString*.
+All health checks results are stored into a SqLite database persisted to disk with *healthcheckdb* name. This database is created on the WebContentRoot, *HostDefaults.ContentRootKey*, directory by default. Optionally you can specify the Sqlite connection string using the setting *HealthCheckDatabaseConnectionString*. Environment variables in *HealthCheckDatabaseConnectionString* are automatically expanded, for example, *%APPDATA%\\healthchecksdb*.
 
 ```json
 {
@@ -235,16 +242,18 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
    - [ASP.NET Core HealthChecks and Kubernetes Liveness / Readiness by Carlos Landeras](./doc/kubernetes-liveness.md)
+   - [ASP.NET Core HealthChecks, BeatPulse UI, Webhooks and Kubernetes Liveness / Readiness probes demos at SDN.nl live WebCast by Carlos Landeras](https://www.youtube.com/watch?v=kzRKGCmGbqo)
    - [ASP.NET Core HealthChecks features video by @condrong](https://t.co/YriQ6cLWVm)
    - [How to set up ASP.NET Core 2.2 Health Checks with BeatPulse's AspNetCore.Diagnostics.HealthChecks by Scott Hanselman](https://www.hanselman.com/blog/HowToSetUpASPNETCore22HealthChecksWithBeatPulsesAspNetCoreDiagnosticsHealthChecks.aspx)
    - [ASP.NET Core HealthChecks announcement](https://t.co/47M9FBfpWF)
    - [ASP.NET Core 2.2 HealthChecks Explained by Thomas Ardal](https://blog.elmah.io/asp-net-core-2-2-health-checks-explained/)
+   - [Health Monitoring on ASP.NET Core 2.2 / eShopOnContainers](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/implement-resilient-applications/monitor-app-health)
 
 ## Contributing
 
 AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
 
-*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89.
+*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23.
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

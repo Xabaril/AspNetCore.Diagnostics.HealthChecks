@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build:dll": "webpack-cli --mode production --config ./build/webpack.dll.js",
-    "buildcss:prod": "uglifycss ./assets/healthchecksui.css --output ./assets/healthchecksui.css",
+    "buildcss:prod": "uglifycss ./assets/healthchecksui.css --output ./assets/healthchecksui-min.css",
     "build:prod": "webpack-cli --mode production --config ./build/webpack.config.js",
     "build": "npm run build:dll && npm run build:prod"
   },

@@ -202,5 +202,22 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
             registration.Name.Should().Be("my-smtp-1");
             check.GetType().Should().Be(typeof(SmtpHealthCheck));
         }
+
+        [Fact]
+        public void add_named_tcp_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddTcpHealthCheck(_ => { }, name: "tcp-1");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("tcp-1");
+            check.GetType().Should().Be(typeof(TcpHealthCheck));
+        }
     }
 }

@@ -106,7 +106,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
         {
             return livenessDb.Configurations
-                .Any(lc => lc.Uri.Equals(host, StringComparison.InvariantCultureIgnoreCase));
+                .Any(lc => lc.Uri == host);
         }
 
         bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)

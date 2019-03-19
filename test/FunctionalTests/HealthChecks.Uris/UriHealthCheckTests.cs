@@ -140,5 +140,132 @@ namespace FunctionalTests.HealthChecks.Uris
             response.StatusCode
                     .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
+
+        [Fact]
+        public async Task be_unhealthy_if_request_is_timeout()
+        {
+            var uri = new Uri($"https://httpbin.org/delay/2");
+
+            var webHostBuilder = new WebHostBuilder()
+              .UseStartup<DefaultStartup>()
+              .ConfigureServices(services =>
+              {
+                  services.AddHealthChecks()
+                   .AddUrlGroup(opt=>
+                   {
+                       opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(1)));
+                   }, tags: new string[] { "uris" });
+              })
+              .Configure(app =>
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  {
+                      Predicate = r => r.Tags.Contains("uris")
+                  });
+              });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                    .Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
+        [Fact]
+        public async Task be_unhealthy_if_request_is_timeout_using_default_timeout()
+        {
+            var uri = new Uri($"https://httpbin.org/delay/3");
+
+            var webHostBuilder = new WebHostBuilder()
+              .UseStartup<DefaultStartup>()
+              .ConfigureServices(services =>
+              {
+                  services.AddHealthChecks()
+                   .AddUrlGroup(setup =>
+                   {
+                       setup.UseTimeout(TimeSpan.FromSeconds(1));
+                       setup.AddUri(uri);
+                   }, tags: new string[] { "uris" });
+              })
+              .Configure(app =>
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  {
+                      Predicate = r => r.Tags.Contains("uris")
+                  });
+              });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                    .Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
+        [Fact]
+        public async Task be_healthy_if_request_sucess_and_default_timeout_is_configured()
+        {
+            var uri = new Uri($"https://httpbin.org/delay/2");
+
+            var webHostBuilder = new WebHostBuilder()
+              .UseStartup<DefaultStartup>()
+              .ConfigureServices(services =>
+              {
+                  services.AddHealthChecks()
+                   .AddUrlGroup(setup =>
+                   {
+                       setup.UseTimeout(TimeSpan.FromSeconds(3));
+                       setup.AddUri(uri);
+                   }, tags: new string[] { "uris" });
+              })
+              .Configure(app =>
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  {
+                      Predicate = r => r.Tags.Contains("uris")
+                  });
+              });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                    .Should().Be(HttpStatusCode.OK);
+        }
+        [Fact]
+        public async Task be_healthy_if_request_sucess_and_timeout_is_configured()
+        {
+            var uri = new Uri($"https://httpbin.org/delay/2");
+
+            var webHostBuilder = new WebHostBuilder()
+              .UseStartup<DefaultStartup>()
+              .ConfigureServices(services =>
+              {
+                  services.AddHealthChecks()
+                   .AddUrlGroup(opt =>
+                   {
+                       opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3)));
+                   }, tags: new string[] { "uris" });
+              })
+              .Configure(app =>
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  {
+                      Predicate = r => r.Tags.Contains("uris")
+                  });
+              });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                    .Should().Be(HttpStatusCode.OK);
+        }
     }
 }

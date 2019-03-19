@@ -12,6 +12,10 @@ namespace HealthChecks.UI.Core.Data
 
         public DbSet<HealthCheckFailureNotification> Failures { get; set; }
 
+        public DbSet<HealthCheckExecutionEntry> HealthCheckExecutionEntries { get; set; }
+
+        public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
+
         public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

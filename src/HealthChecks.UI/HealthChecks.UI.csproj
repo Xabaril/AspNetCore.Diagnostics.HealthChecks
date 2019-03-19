@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <!--<TargetFramework>netcoreapp2.1</TargetFramework>-->
+    <!--<TargetFramework>netcoreapp2.2</TargetFramework>-->
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="assets\index.html" />
-    <EmbeddedResource Include="assets\healthchecksui.css" />
+    <EmbeddedResource Include="assets\healthchecksui-min.css" />
     <EmbeddedResource Include="assets\bootstrap-min.css" />
     <EmbeddedResource Include="assets\vendors-dll.js" />    
     <EmbeddedResource Include="assets\healthchecks-bundle.js" /> 

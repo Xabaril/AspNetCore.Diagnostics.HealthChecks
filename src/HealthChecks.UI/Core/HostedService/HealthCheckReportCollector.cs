@@ -84,11 +84,9 @@ namespace HealthChecks.UI.Core.HostedService
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "GetHealthReport threw an exception.");
+                _logger.LogError(exception, $"GetHealthReport threw an exception when trying to get report from {uri} configured with name {name}.");
 
-                return new UIHealthReport(
-                    entries: new Dictionary<string, UIHealthReportEntry>(),
-                    totalDuration: TimeSpan.FromSeconds(0));
+                return UIHealthReport.CreateFrom(exception);
             }
         }
         private async Task<bool> HasLivenessRecoveredFromFailure(HealthCheckConfiguration configuration)
@@ -107,7 +105,7 @@ namespace HealthChecks.UI.Core.HostedService
             return await _db.Executions
                 .Include(le => le.History)
                 .Include(le => le.Entries)
-                .Where(le => le.Name.Equals(configuration.Name, StringComparison.InvariantCultureIgnoreCase))
+                .Where(le => le.Name == configuration.Name)
                 .SingleOrDefaultAsync();
         }
         private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, UIHealthReport healthReport)
@@ -120,8 +118,43 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
-                execution.Entries.Clear();
-                execution.Entries = healthReport.ToExecutionEntries();
+                //update existing entries from new health report
+
+                foreach (var item in healthReport.ToExecutionEntries())
+                {
+                    var existing = execution.Entries
+                        .Where(e => e.Name == item.Name)
+                        .SingleOrDefault();
+
+                    if (existing != null)
+                    {
+                        existing.Status = item.Status;
+                        existing.Description = item.Description;
+                        existing.Duration = item.Duration;
+                    }
+                    else
+                    {
+                        execution.Entries.Add(item);
+                    }
+                }
+
+                //remove old entries in existing execution not present in new health report
+
+                foreach (var item in execution.Entries)
+                {
+                    var existing = healthReport.Entries
+                        .ContainsKey(item.Name);
+
+                    if (!existing)
+                    {
+                        var oldEntry = execution.Entries
+                            .Where(t => t.Name == item.Name)
+                            .SingleOrDefault();
+
+                        _db.HealthCheckExecutionEntries
+                            .Remove(oldEntry);
+                    }
+                }
 
                 if (execution.Status == healthReport.Status)
                 {
@@ -158,6 +191,7 @@ namespace HealthChecks.UI.Core.HostedService
                     Uri = configuration.Uri,
                     DiscoveryService = configuration.DiscoveryService
                 };
+
 
                 await _db.Executions
                     .AddAsync(execution);

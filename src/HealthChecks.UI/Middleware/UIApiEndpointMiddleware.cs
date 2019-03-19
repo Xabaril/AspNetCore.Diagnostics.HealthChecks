@@ -29,7 +29,6 @@ namespace HealthChecks.UI.Middleware
                 DateTimeZoneHandling = DateTimeZoneHandling.Local
             };
         }
-
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
@@ -45,7 +44,7 @@ namespace HealthChecks.UI.Middleware
                     var execution = await db.Executions
                         .Include(le => le.History)
                         .Include(le => le.Entries)
-                        .Where(le => le.Name.Equals(item.Name, StringComparison.InvariantCultureIgnoreCase))
+                        .Where(le => le.Name == item.Name)
                         .AsNoTracking()
                         .SingleOrDefaultAsync();
 

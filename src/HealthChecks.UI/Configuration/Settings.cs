@@ -2,7 +2,7 @@
 
 namespace HealthChecks.UI.Configuration
 {
-    internal class Settings
+    public class Settings
     {
         public List<HealthCheckSetting> HealthChecks { get; set; }
         public List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
@@ -11,13 +11,13 @@ namespace HealthChecks.UI.Configuration
         public string HealthCheckDatabaseConnectionString { get; set; }
     }
 
-    internal class HealthCheckSetting
+    public class HealthCheckSetting
     {
         public string Name { get; set; }
         public string Uri { get; set; }
     }
 
-    internal class WebHookNotification
+    public class WebHookNotification
     {
         public string Name { get; set; }
         public string Uri { get; set; }

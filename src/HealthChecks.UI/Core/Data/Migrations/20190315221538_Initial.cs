@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HealthChecks.UI.Core.Data.Migrations
 {
-    public partial class InitialModel : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HealthCheckExecutionEntry",
+                name: "HealthCheckExecutionEntries",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -69,9 +69,9 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HealthCheckExecutionEntry", x => x.Id);
+                    table.PrimaryKey("PK_HealthCheckExecutionEntries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HealthCheckExecutionEntry_Executions_HealthCheckExecutionId",
+                        name: "FK_HealthCheckExecutionEntries_Executions_HealthCheckExecutionId",
                         column: x => x.HealthCheckExecutionId,
                         principalTable: "Executions",
                         principalColumn: "Id",
@@ -79,7 +79,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HealthCheckExecutionHistory",
+                name: "HealthCheckExecutionHistories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -90,9 +90,9 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HealthCheckExecutionHistory", x => x.Id);
+                    table.PrimaryKey("PK_HealthCheckExecutionHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HealthCheckExecutionHistory_Executions_HealthCheckExecutionId",
+                        name: "FK_HealthCheckExecutionHistories_Executions_HealthCheckExecutionId",
                         column: x => x.HealthCheckExecutionId,
                         principalTable: "Executions",
                         principalColumn: "Id",
@@ -100,13 +100,13 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthCheckExecutionEntry_HealthCheckExecutionId",
-                table: "HealthCheckExecutionEntry",
+                name: "IX_HealthCheckExecutionEntries_HealthCheckExecutionId",
+                table: "HealthCheckExecutionEntries",
                 column: "HealthCheckExecutionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthCheckExecutionHistory_HealthCheckExecutionId",
-                table: "HealthCheckExecutionHistory",
+                name: "IX_HealthCheckExecutionHistories_HealthCheckExecutionId",
+                table: "HealthCheckExecutionHistories",
                 column: "HealthCheckExecutionId");
         }
 
@@ -119,10 +119,10 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 name: "Failures");
 
             migrationBuilder.DropTable(
-                name: "HealthCheckExecutionEntry");
+                name: "HealthCheckExecutionEntries");
 
             migrationBuilder.DropTable(
-                name: "HealthCheckExecutionHistory");
+                name: "HealthCheckExecutionHistories");
 
             migrationBuilder.DropTable(
                 name: "Executions");

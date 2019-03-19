@@ -18,30 +18,48 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddHealthChecksUI(this IServiceCollection services, string databaseName = "healthchecksdb")
+        public static IServiceCollection AddHealthChecksUI(this IServiceCollection services, string databaseName = "healthchecksdb", Action<Settings> setupSettings = null)
         {
             var configuration = services.BuildServiceProvider()
                 .GetService<IConfiguration>();
 
-            var healthCheckSettings = new Settings();
-            var kubernetesDiscoverySettings = new KubernetesDiscoverySettings();
-            configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, healthCheckSettings);
-            configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, kubernetesDiscoverySettings);
-
             services
                 .AddOptions()
-                .Configure<Settings>(settings => configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings))
+                .Configure<Settings>(settings =>
+                {
+                    configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
+                    setupSettings?.Invoke(settings);
+                })
+                .Configure<KubernetesDiscoverySettings>(settings=>
+                {
+                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
+                })
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
                 .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
 
+            var healthCheckSettings = services.BuildServiceProvider()
+                .GetService<IOptions<Settings>>()
+                .Value ?? new Settings();
+
+            var kubernetesDiscoverySettings = services.BuildServiceProvider()
+                .GetService<IOptions<KubernetesDiscoverySettings>>()
+                .Value ?? new KubernetesDiscoverySettings();
+
             services.AddDbContext<HealthChecksDb>(db =>
             {
-                var contentRoot = configuration[HostDefaults.ContentRootKey];
-                var path = Path.Combine(contentRoot, databaseName);
-                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString ?? $"Data Source={path}";
-
+                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString;
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    var contentRoot = configuration[HostDefaults.ContentRootKey];
+                    var path = Path.Combine(contentRoot, databaseName);
+                    connectionString = $"Data Source={path}";
+                }
+                else
+                {
+                    connectionString = Environment.ExpandEnvironmentVariables(connectionString);
+                }
                 db.UseSqlite(connectionString);
             });
 

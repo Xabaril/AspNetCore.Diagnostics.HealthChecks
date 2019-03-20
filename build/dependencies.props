@@ -58,6 +58,7 @@
     <MicrosoftAzureKeyVault>3.0.2</MicrosoftAzureKeyVault>
     <MicrosoftIdentityModelClientsActiveDirectory>4.4.1</MicrosoftIdentityModelClientsActiveDirectory>
     <MicrosoftAzureServicesAppAuthentication>1.0.3</MicrosoftAzureServicesAppAuthentication>
+    <KubernetesClient>1.2.0</KubernetesClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -95,5 +96,6 @@
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>2.2.1</HealthCheckRavenDB>
+    <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
   </PropertyGroup>
 </Project>

@@ -39,7 +39,7 @@ namespace HealthChecks.UI.Middleware
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 
-                foreach (var item in healthChecks)
+                foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
                     var execution = await db.Executions
                         .Include(le => le.History)

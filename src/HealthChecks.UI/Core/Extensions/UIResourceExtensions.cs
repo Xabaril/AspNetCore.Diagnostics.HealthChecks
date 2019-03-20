@@ -17,7 +17,7 @@ namespace HealthChecks.UI.Core
                 .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_API_TARGET, options.ApiPath.AsRelativeResource());
 
             resource.Content = resource.Content
-                .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath.AsRelativeResource());
+                .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, options.WebhookPath);
 
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET,options.ResourcesPath.AsRelativeResource());

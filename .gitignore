@@ -332,3 +332,6 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# Azure DevOps tasks ignores
+AzureDevOpsTasks/**/*.vsix

@@ -24,7 +24,10 @@
 		"theme": "dark"
 	},
 	"screenshots": [{
-		"path": "images/AspNetCoreSample.png"
+		"path": "images/AspNetCoreHealthCheckBasic.png"
+	},
+	{
+		"path": "images/AspNetCoreHealthCheckParticularCheck.png"
 	}],
 	"files": [
 	{

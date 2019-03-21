@@ -44,7 +44,7 @@ namespace HealthChecks.UI.Core.HostedService
                 var healthChecks = await _db.Configurations
                    .ToListAsync();
 
-                foreach (var item in healthChecks)
+                foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {

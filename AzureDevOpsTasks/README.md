@@ -43,12 +43,9 @@ app.UseHealthChecks("/healthz", new HealthCheckOptions()
 });
 ```
 
- > **IMPORTANT**: If you plan to use this along with basic general check for different purposes you will need another endpoint with the default configuration on *ResultStatusCodes* so it returns HTTP 503 Error when one of them fails.
-
 The tasks configuration will be like this:
- ![Gate basic snapshot](images/AspNetCoreHealthCheckParticularCheck.png)
+ ![Gate specific check snapshot](images/AspNetCoreHealthCheckParticularCheck.png)
  - *Display name*: Name for the Release Gate.
  - *Url for Asp.Net Core Health Check*: Full url for your Asp.Net Core Health Check (i.e.: https://mywebsite.com/health).
  - *Name of check to verify*: Name of the check configured in **Health Checks** to verify. (i.e.: sqlserver).
  - *Value of healthy response for the check to verify*: By default, when using [**Health Check UI**](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks) it is *Healthy*, but it can be changed in the [**Health Checks Response Writer**](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2#customize-output) so review it when configuring it.
-

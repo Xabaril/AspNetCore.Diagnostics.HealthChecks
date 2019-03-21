@@ -44,7 +44,7 @@ app.UseHealthChecks("/healthz", new HealthCheckOptions()
 ```
 
 The tasks configuration will be like this:
- ![Gate basic snapshot](images/AspNetCoreHealthCheckParticularCheck.png)
+ ![Gate specific check snapshot](images/AspNetCoreHealthCheckParticularCheck.png)
  - *Display name*: Name for the Release Gate.
  - *Url for Asp.Net Core Health Check*: Full url for your Asp.Net Core Health Check (i.e.: https://mywebsite.com/health).
  - *Name of check to verify*: Name of the check configured in **Health Checks** to verify. (i.e.: sqlserver).

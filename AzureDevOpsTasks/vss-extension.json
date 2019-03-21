@@ -3,7 +3,7 @@
 	"id": "vss-services-aspnetcorehealthcheck-extensions",
 	"name": "Asp.Net Core Health Check extensions",
 	"publisher": "luisfraile",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"public": false,
     "description": "Azure DevOps Asp.Net Core Health Check extensions.",    
 	"categories": ["Azure Pipelines"],
@@ -61,7 +61,7 @@
 		"type": "ms.vss-distributed-task.task",
 		"targets": ["ms.vss-distributed-task.tasks"],
 		"properties": {
-			"name": "AspNetCoreHealthCheckGate"
+			"name": "AspNetCoreHealthCheckReleaseGate"
 		}
 	}]
 }

@@ -15,8 +15,8 @@
 		"ServerGate"
 	],
 	"version": {
-		"Major": 0,
-		"Minor": 4,
+		"Major": 1,
+		"Minor": 0,
 		"Patch": 0
 	},
 	"instanceNameFormat": "Asp.Net Core Health Check Release Gate",

@@ -31,7 +31,7 @@
 	}],
 	"files": [
 	{
-		"path": "AspNetCoreHealthCheckGate"
+		"path": "AspNetCoreHealthCheckReleaseGate"
 	},
 	{
 		"path": "images/aspnethealth-task.png",

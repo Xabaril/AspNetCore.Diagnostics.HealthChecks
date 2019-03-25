@@ -4,7 +4,7 @@ namespace HealthChecks.UI.Configuration
 {
     public class Settings
     {
-        public List<HealthCheckSetting> HealthChecks { get; set; }
+        public List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
         public List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
         public int EvaluationTimeOnSeconds { get; set; } = 10;
         public int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;

@@ -27,7 +27,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddOptions()
                 .Configure<Settings>(settings =>
                 {
-                    configuration.Bind(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY, settings);
+                    configuration.GetSection(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY)
+                        .Bind(settings, c => c.BindNonPublicProperties = true);
+                    
                     setupSettings?.Invoke(settings);
                 })
                 .Configure<KubernetesDiscoverySettings>(settings=>

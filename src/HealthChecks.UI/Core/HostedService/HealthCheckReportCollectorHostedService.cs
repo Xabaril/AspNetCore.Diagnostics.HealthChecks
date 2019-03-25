@@ -66,7 +66,7 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                 }
 
-                await Task.Delay(_settings.EvaluationTimeOnSeconds * 1000, cancellationToken);
+                await Task.Delay(_settings.EvaluationTimeInSeconds * 1000, cancellationToken);
             }
         }
     }

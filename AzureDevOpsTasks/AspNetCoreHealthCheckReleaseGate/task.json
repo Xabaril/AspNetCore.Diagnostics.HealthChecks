@@ -1,0 +1,75 @@
+{
+	"id": "8ED8698B-C924-4C07-A340-A040778B4FDD",
+	"name": "AspNetCoreHealthCheckReleaseGate",
+	"friendlyName": "Asp.Net Core Health Check Release Gate",
+	"description": "Azure DevOps release gate based on Asp.Net Core Health Checks.",
+	"author": "lfraile",
+	"helpMarkDown": "[More Information](https://github.com/lfraile/AspNetCore.Diagnostics.HealthChecks/blob/master/AzureDevOpsTasks/README.md)",
+	"category": "Utility",
+	"preview": "true",
+	"visibility": [
+		"Release"
+	],
+	"runsOn": [
+		"Server",
+		"ServerGate"
+	],
+	"version": {
+		"Major": 1,
+		"Minor": 0,
+		"Patch": 0
+	},
+	"instanceNameFormat": "Asp.Net Core Health Check Release Gate",
+	"groups": [
+		{
+			"name": "aspNetCoreHealthCheckEndpoint",
+			"displayName": "Asp.Net Core Health Check endpoint information",
+			"isExpanded": true
+		},
+		{
+			"name": "aspNetCoreHealthChecks",
+			"displayName": "Asp.Net Core Health Checks information",
+			"isExpanded": true
+		}
+	],
+	"inputs": [{
+			"name": "aspNetCoreHealthCheckUri",
+			"type": "string",
+			"label": "Url configured for Asp.Net Core Health Check ",
+			"defaultValue": "",
+			"required": true,
+			"groupName":"aspNetCoreHealthCheckEndpoint",
+			"helpMarkDown": "Url configured in Asp.Net Core Health Check to get general checks"
+		},{
+			"name": "aspNetCoreHealthCheckText",
+			"type": "string",
+			"label": "Value of healthy response for the check to verify",
+			"required": true,
+			"defaultValue": "Healthy",
+			"groupName":"aspNetCoreHealthChecks",
+			"helpMarkDown": "Text to check when for **Healthy** Health Check when verifying particular checks. By default is **Healthy**. Needs [AspNetCore.HealthChecks.UI](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI/) package."
+		}, {
+			"name": "aspNetCoreHealthCheckCheck",
+			"type": "string",
+			"label": "Name of check to verify",
+			"required": false,
+			"defaultValue": "",
+			"groupName":"aspNetCoreHealthChecks",
+			"helpMarkDown": "Name of the configured check in Asp.Net Core Health Check to verify. Needs [AspNetCore.HealthChecks.UI](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI/) package."
+		}
+	],
+
+	"execution": {
+		"HttpRequest": {
+			"Execute": {
+				"EndpointId": "",
+				"EndpointUrl": "$(aspNetCoreHealthCheckUri)",
+				"Method": "GET",
+				"Body": "",
+				"Headers": "{\"Content-Type\":\"application/json\"}",
+				"WaitForCompletion": "false",
+				"Expression": "or(eq('$(aspNetCoreHealthCheckCheck)', ''), eq(jsonpath('$.entries.$(aspNetCoreHealthCheckCheck).status')[0],'$(aspNetCoreHealthCheckText)'))"
+			}
+		}
+	}
+}

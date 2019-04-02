@@ -10,37 +10,49 @@ namespace HealthChecks.RavenDB
 {
     public class RavenDBHealthCheck : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string _specifiedDatabase;
+        private readonly RavenDBOptions _options;
 
-        public RavenDBHealthCheck(string connectionString, string databaseName = default)
+        public RavenDBHealthCheck(RavenDBOptions options)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _specifiedDatabase = databaseName;
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+            
+            if (options.Urls == null)
+            {
+                throw new ArgumentNullException(nameof(options.Urls));
+            }
+
+            _options = options;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 using (var store = new DocumentStore
                 {
-                    Urls = new string[] { _connectionString }
+                    Urls = _options.Urls,
                 })
                 {
+                    if (_options.Certificate != null)
+                    {
+                        store.Certificate = _options.Certificate;
+                    }
+
                     store.Initialize();
                     var databases = await store.Maintenance.Server.SendAsync(new GetDatabaseNamesOperation(start: 0, pageSize: 100));
 
-                    if (!string.IsNullOrWhiteSpace(_specifiedDatabase)
-                        && !databases.Contains(_specifiedDatabase, StringComparer.OrdinalIgnoreCase))
+                    if (!string.IsNullOrWhiteSpace(_options.Database)
+                        && !databases.Contains(_options.Database, StringComparer.OrdinalIgnoreCase))
                     {
                         return new HealthCheckResult(
                             context.Registration.FailureStatus,
-                            $"RavenDB doesn't contains '{_specifiedDatabase}' database.");
+                            $"RavenDB does not contain '{_options.Database}' database.");
                     }
-                    else
-                    {
-                        return HealthCheckResult.Healthy();
-                    }
+
+                    return HealthCheckResult.Healthy();
                 }
             }
             catch (Exception ex)

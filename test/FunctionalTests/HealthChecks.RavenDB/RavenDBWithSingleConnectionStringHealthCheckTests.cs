@@ -13,12 +13,12 @@ using Xunit;
 namespace FunctionalTests.HealthChecks.RavenDB
 {
     [Collection("execution")]
-    public class ravendb_healthcheck_should
+    public class ravendb_with_single_connection_string_healthcheck_should
     {
         private readonly ExecutionFixture _fixture;
         private const string ConnectionString = "http://live-test.ravendb.net:80";
 
-        public ravendb_healthcheck_should(ExecutionFixture fixture)
+        public ravendb_with_single_connection_string_healthcheck_should(ExecutionFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }

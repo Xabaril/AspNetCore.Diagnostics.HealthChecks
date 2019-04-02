@@ -11,6 +11,7 @@ namespace HealthChecks.RavenDB
     public class RavenDBHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
+        private readonly string[] _urls;
         private readonly string _specifiedDatabase;
 
         public RavenDBHealthCheck(string connectionString, string databaseName = default)
@@ -18,13 +19,25 @@ namespace HealthChecks.RavenDB
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _specifiedDatabase = databaseName;
         }
+
+        public RavenDBHealthCheck(string[] urls, string databaseName = default)
+        {
+            if (urls.Length == 0)
+            {
+                throw new ArgumentException("At least 1 Raven url connection string is required.", nameof(urls));
+            }
+
+            _urls = urls;
+            _specifiedDatabase = databaseName;
+        }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 using (var store = new DocumentStore
                 {
-                    Urls = new string[] { _connectionString }
+                    Urls = _urls ?? new string[] { _connectionString }
                 })
                 {
                     store.Initialize();

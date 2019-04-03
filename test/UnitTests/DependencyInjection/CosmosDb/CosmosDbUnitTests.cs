@@ -8,7 +8,7 @@ using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.CosmosDb
 {
-    public class documentdb_registration_should
+    public class cosmosdb_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()

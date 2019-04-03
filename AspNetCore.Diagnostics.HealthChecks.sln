@@ -91,7 +91,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RavenDB", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Kubernetes", "src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj", "{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecksCosmosDb", "src\HealthChecks.CosmosDb\HealthChecksCosmosDb.csproj", "{08FE3B71-2C9C-459B-9943-0C141191453C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.CosmosDb", "src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj", "{08FE3B71-2C9C-459B-9943-0C141191453C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

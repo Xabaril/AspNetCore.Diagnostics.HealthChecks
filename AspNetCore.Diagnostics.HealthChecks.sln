@@ -91,6 +91,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RavenDB", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Kubernetes", "src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj", "{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecksCosmosDb", "src\HealthChecks.CosmosDb\HealthChecksCosmosDb.csproj", "{08FE3B71-2C9C-459B-9943-0C141191453C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +243,10 @@ Global
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -282,6 +288,7 @@ Global
 		{439DF9B7-5D0F-4531-BA19-F1BD01B244DB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E91924B0-BE65-4CF8-A43A-2F22EEFE53F2} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{08FE3B71-2C9C-459B-9943-0C141191453C} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

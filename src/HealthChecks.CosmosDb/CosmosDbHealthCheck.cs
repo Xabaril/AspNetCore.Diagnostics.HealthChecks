@@ -9,19 +9,16 @@ namespace HealthChecks.CosmosDb
     public class CosmosDbHealthCheck 
         : IHealthCheck
     {
-        private readonly CosmosDbOptions _cosmosDbOptions = new CosmosDbOptions();
-        public CosmosDbHealthCheck(CosmosDbOptions cosmosDbOptions)
+        private readonly string _connectionString;
+        public CosmosDbHealthCheck(string connectionString)
         {
-            _cosmosDbOptions.UriEndpoint = cosmosDbOptions.UriEndpoint ?? throw new ArgumentNullException(nameof(cosmosDbOptions.UriEndpoint));
-            _cosmosDbOptions.PrimaryKey = cosmosDbOptions.PrimaryKey ?? throw new ArgumentNullException(nameof(cosmosDbOptions.PrimaryKey));
+            _connectionString = connectionString;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             { 
-                using (var cosmosDbClient = new CosmosClient(
-                    _cosmosDbOptions.UriEndpoint,
-                    _cosmosDbOptions.PrimaryKey))
+                using (var cosmosDbClient = new CosmosClient(_connectionString))
                 {
                     await cosmosDbClient.GetAccountSettingsAsync();
                     return HealthCheckResult.Healthy();

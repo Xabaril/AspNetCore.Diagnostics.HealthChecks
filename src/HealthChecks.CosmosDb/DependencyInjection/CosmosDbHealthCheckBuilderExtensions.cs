@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb database.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="setup">The action to configure the CosmosDb connection parameters.</param>
+        /// <param name="connectionString">CosmosDb full connection string.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -21,14 +21,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddCosmosDb(this IHealthChecksBuilder builder, Action<CosmosDbOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddCosmosDb(this IHealthChecksBuilder builder, string connectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
-            var cosmosDbOptions = new CosmosDbOptions();
-            setup?.Invoke(cosmosDbOptions);
-
             return builder.Add(new HealthCheckRegistration(
                name ?? NAME,
-               sp => new CosmosDbHealthCheck(cosmosDbOptions),
+               sp => new CosmosDbHealthCheck(connectionString),
                failureStatus,
                tags));
         }

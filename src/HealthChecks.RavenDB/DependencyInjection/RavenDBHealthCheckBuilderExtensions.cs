@@ -1,5 +1,6 @@
 ﻿using HealthChecks.RavenDB;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -9,7 +10,6 @@ namespace Microsoft.Extensions.DependencyInjection
         const string NAME = "ravendb";
 
         /// <summary>
-        /// Add a health check for RavenDB.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">Connection string to RavenDB.</param>
@@ -22,7 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        [Obsolete("This method is deprecated. Use RavenDBOptions overload.")]
         public static IHealthChecksBuilder AddRavenDB(
             this IHealthChecksBuilder builder,
             string connectionString,
@@ -30,19 +31,29 @@ namespace Microsoft.Extensions.DependencyInjection
             string name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default)
-            => builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new RavenDBHealthCheck(connectionString, databaseName),
+        {
+            if (connectionString == null)
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+
+            return builder.AddRavenDB(
+                _ =>
+                {
+                    _.Urls = new[] {connectionString};
+                    _.Database = databaseName;
+                },
+                name,
                 failureStatus,
-                tags));
+                tags);
+        }
 
 
         /// <summary>
         /// Add a health check for RavenDB.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="urls">The list of URL addresses that point to RavenDB server nodes.</param>
-        /// <param name="databaseName">The specified database to check.</param>
+        /// <param name="setup">The action to configure the RavenDB setup.</param>
         /// <param name="name">
         /// The health check name. Optional. If <see langword="null"/> the type name 'ravendb' will be used for the name.
         /// </param>
@@ -51,18 +62,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRavenDB(
             this IHealthChecksBuilder builder,
-            string[] urls,
-            string databaseName = default,
+            Action<RavenDBOptions> setup,
             string name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default)
-            => builder.Add(new HealthCheckRegistration(
+        {
+            var options = new RavenDBOptions();
+            setup?.Invoke(options);
+
+            return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RavenDBHealthCheck(urls, databaseName),
+                sp => new RavenDBHealthCheck(options),
                 failureStatus,
                 tags));
+        }
     }
 }

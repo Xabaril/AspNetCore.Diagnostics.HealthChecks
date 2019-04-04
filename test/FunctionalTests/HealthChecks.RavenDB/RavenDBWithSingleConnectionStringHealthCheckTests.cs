@@ -9,6 +9,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+#pragma warning disable 618
 
 namespace FunctionalTests.HealthChecks.RavenDB
 {

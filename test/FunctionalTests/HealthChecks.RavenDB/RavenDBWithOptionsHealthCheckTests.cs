@@ -13,12 +13,12 @@ using Xunit;
 namespace FunctionalTests.HealthChecks.RavenDB
 {
     [Collection("execution")]
-    public class ravendb_with_url_array_healthcheck_should
+    public class ravendb_with_options_healthcheck_should
     {
         private readonly ExecutionFixture _fixture;
-        private readonly string[] _urls = new[] { "http://live-test.ravendb.net:80" };
+        private readonly string[] _urls = new[] {"http://live-test.ravendb.net:80"};
 
-        public ravendb_with_url_array_healthcheck_should(ExecutionFixture fixture)
+        public ravendb_with_options_healthcheck_should(ExecutionFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
@@ -32,8 +32,8 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddHealthChecks()
-                    .AddRavenDB(_urls, tags: new string[] { "ravendb" });
+                        .AddHealthChecks()
+                        .AddRavenDB(_ => { _.Urls = _urls; }, tags: new string[] {"ravendb"});
                 })
                 .Configure(app =>
                 {
@@ -60,8 +60,12 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddHealthChecks()
-                    .AddRavenDB(_urls, "Demo", tags: new string[] { "ravendb" });
+                        .AddHealthChecks()
+                        .AddRavenDB(_ =>
+                        {
+                            _.Urls = _urls;
+                            _.Database = "Demo";
+                        }, tags: new string[] {"ravendb"});
                 })
                 .Configure(app =>
                 {
@@ -90,8 +94,8 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddHealthChecks()
-                    .AddRavenDB(connectionString, tags: new string[] { "ravendb" });
+                        .AddHealthChecks()
+                        .AddRavenDB(_ => { _.Urls = new string[] {connectionString}; }, tags: new string[] {"ravendb"});
                 })
                 .Configure(app =>
                 {
@@ -118,8 +122,12 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddHealthChecks()
-                    .AddRavenDB(_urls, "ThisDatabaseReallyDoesnExist", tags: new string[] { "ravendb" });
+                        .AddHealthChecks()
+                        .AddRavenDB(_ =>
+                        {
+                            _.Urls = _urls;
+                            _.Database = "ThisDatabaseReallyDoesnExist";
+                        }, tags: new string[] {"ravendb"});
                 })
                 .Configure(app =>
                 {

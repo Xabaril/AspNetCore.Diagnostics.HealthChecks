@@ -5,18 +5,17 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
-#pragma warning disable 618
 
 namespace UnitTests.DependencyInjection.RavenDB
 {
-    public class ravendb_with_single_conection_string_registration_should
+    public class ravendb_with_options_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRavenDB("http://localhost:8080");
+                .AddRavenDB(_ => { _.Urls = new[] {"http://localhost:8080", "http://localhost:8081"}; });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -33,7 +32,8 @@ namespace UnitTests.DependencyInjection.RavenDB
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRavenDB("http://localhost:8080", name: "my-ravendb");
+                .AddRavenDB(_ => { _.Urls = new[] {"http://localhost:8080", "http://localhost:8081"}; },
+                    name: "my-ravendb");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

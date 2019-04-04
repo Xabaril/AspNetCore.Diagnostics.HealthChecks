@@ -3,6 +3,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,14 +22,20 @@ namespace HealthChecks.Publisher.ApplicationInsights
         private static TelemetryClient _client;
         private static object sync_root = new object();
         private readonly bool _saveDetailedReport;
+        private readonly bool _excludeHealthyReports;
 
-        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false)
+        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false)
         {
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
+            _excludeHealthyReports = excludeHealthyReports;
         }
+
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
+            if (report.Status == HealthStatus.Healthy && _excludeHealthyReports)
+                return Task.CompletedTask;
+
             var client = GetOrCreateTelemetryClient();
 
             if (_saveDetailedReport)
@@ -39,11 +46,13 @@ namespace HealthChecks.Publisher.ApplicationInsights
             {
                 SaveGeneralizedReport(report, client);
             }
+
             return Task.CompletedTask;
         }
-        private static void SaveDetailedReport(HealthReport report, TelemetryClient client)
+
+        private void SaveDetailedReport(HealthReport report, TelemetryClient client)
         {
-            foreach (var reportEntry in report.Entries)
+            foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
             {
                 client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
                     properties: new Dictionary<string, string>()
@@ -59,6 +68,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     });
             }
         }
+
         private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
         {
             client.TrackEvent(EVENT_NAME,
@@ -73,6 +83,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     { METRIC_DURATION_NAME,report.TotalDuration.TotalMilliseconds}
                 });
         }
+
         TelemetryClient GetOrCreateTelemetryClient()
         {
             if (_client == null)

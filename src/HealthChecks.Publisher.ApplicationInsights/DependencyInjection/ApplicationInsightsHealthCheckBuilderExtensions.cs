@@ -1,5 +1,4 @@
 ﻿using HealthChecks.Publisher.ApplicationInsights;
-using Microsoft.ApplicationInsights.Channel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection

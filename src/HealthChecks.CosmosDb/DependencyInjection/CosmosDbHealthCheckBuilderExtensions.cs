@@ -1,6 +1,5 @@
 ﻿using HealthChecks.CosmosDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection

@@ -34,14 +34,14 @@ namespace HealthChecks.UIAndApi
                 .AddHealthChecks()
                 .AddCheck<RandomHealthCheck>("random")
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"))
-                .AddKubernetes(setup =>
-                {
-                    setup.WithConfiguration(k8s.KubernetesClientConfiguration.BuildConfigFromConfigFile())
-                        .CheckDeployment("wordpress-one-wordpress",
-                            d => d.Status.Replicas == 2 && d.Status.ReadyReplicas == 2)
-                        .CheckService("wordpress-one-wordpress", s => s.Spec.Type == "LoadBalancer")
-                        .CheckPod("myapp-pod", p =>  p.Metadata.Labels["app"] == "myapp" );
-                })
+                //.AddKubernetes(setup =>
+                //{
+                //    setup.WithConfiguration(k8s.KubernetesClientConfiguration.BuildConfigFromConfigFile())
+                //        .CheckDeployment("wordpress-one-wordpress",
+                //            d => d.Status.Replicas == 2 && d.Status.ReadyReplicas == 2)
+                //        .CheckService("wordpress-one-wordpress", s => s.Spec.Type == "LoadBalancer")
+                //        .CheckPod("myapp-pod", p =>  p.Metadata.Labels["app"] == "myapp" );
+                //})
                 .Services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

@@ -74,6 +74,7 @@ if ($suffix -eq "") {
 	exec { & dotnet pack .\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.MySql\HealthChecks.MySql.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
@@ -106,6 +107,7 @@ else {
 	exec { & dotnet pack .\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.MySql\HealthChecks.MySql.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }

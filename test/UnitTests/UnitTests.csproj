@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Consul\HealthChecks.Consul.csproj" />    
+    <ProjectReference Include="..\..\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />    

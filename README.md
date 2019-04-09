@@ -259,7 +259,7 @@ Check this [README](./AzureDevOpsTasks/README.md) on how to configure it.
 
 AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
 
-*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23.
+*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy.
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

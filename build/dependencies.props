@@ -88,7 +88,7 @@
     <HealthCheckAzureStorage>2.2.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
-    <HealthCheckConsul>2.2.1</HealthCheckConsul>
+    <HealthCheckConsul>2.2.2</HealthCheckConsul>
     <HealthCheckUI>2.2.27</HealthCheckUI>
     <HealthCheckUIClient>2.2.3</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.4</HealthCheckPublisherAppplicationInsights>

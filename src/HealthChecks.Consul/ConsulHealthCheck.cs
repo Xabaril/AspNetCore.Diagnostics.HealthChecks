@@ -2,6 +2,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,9 +23,13 @@ namespace HealthChecks.Consul
             {
                 var client = _httpClientFactory();
 
-                if (_options.RequireBasicAuthentication) {
-                    var authHeaderValue = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", _options.Username, _options.Password)));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
+                if (_options.RequireBasicAuthentication)
+                {
+                    var credentials = ASCIIEncoding.ASCII.GetBytes($"{_options.Username}:{_options.Password}");
+                    var authHeaderValue = Convert.ToBase64String(credentials);
+
+                    client.DefaultRequestHeaders
+                        .Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
                 }
 
                 var result = await client

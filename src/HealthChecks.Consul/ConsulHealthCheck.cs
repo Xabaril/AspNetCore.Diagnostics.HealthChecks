@@ -22,7 +22,7 @@ namespace HealthChecks.Consul
             {
                 var client = _httpClientFactory();
 
-                if (!String.IsNullOrEmpty(_options.Username) && !String.IsNullOrEmpty(_options.Password)) {
+                if (_options.RequireBasicAuthentication) {
                     var authHeaderValue = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", _options.Username, _options.Password)));
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
                 }

@@ -36,6 +36,7 @@ HealthChecks packages include health checks for:
 - Uri: single uri and uri groups
 - Consul
 - Hangfire
+- SignalR
 
 
 ``` PowerShell
@@ -63,6 +64,7 @@ Install-Package AspNetCore.HealthChecks.Uris
 Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.Hangfire
+Install-Package AspNetCore.HealthChecks.SignalR
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

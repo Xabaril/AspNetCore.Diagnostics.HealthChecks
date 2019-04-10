@@ -37,6 +37,18 @@ namespace Microsoft.Extensions.DependencyInjection
                     tags));
         }
 
+        /// <summary>
+        /// Add a health check for SignalR.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="hubConnectionBuilder">The SignalR hub connection builder to be used.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'signalr' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, Func<HubConnection> hubConnectionBuilder, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(

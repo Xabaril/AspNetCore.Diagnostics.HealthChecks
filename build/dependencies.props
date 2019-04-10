@@ -51,6 +51,8 @@
     <MicrosoftEntityFrameworkCoreDesign>2.2.0</MicrosoftEntityFrameworkCoreDesign>
     <MicrosoftEntityFrameworkCoreSqlite>2.2.0</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.6</MicrosoftEntityFrameworkCoreSqliteDesign>
+    <MicrosoftEntityFrameworkCoreInMemory>2.2.0</MicrosoftEntityFrameworkCoreInMemory>
+    <MicrosoftEntityFrameworkCoreSqlServer>2.2.0</MicrosoftEntityFrameworkCoreSqlServer>
     <MicrosoftExtensionsConfigurationBinder>2.2.0</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftExtensionsConfigurationJson>2.2.0</MicrosoftExtensionsConfigurationJson>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>

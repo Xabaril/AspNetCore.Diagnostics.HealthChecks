@@ -22,7 +22,8 @@ namespace HealthChecks.UI.Core.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("Data Source=healthchecksdb");
+                string databaseName = "healthchecksdb";
+                optionsBuilder.UseInMemoryDatabase(databaseName);
             }
         }
 

@@ -8,7 +8,7 @@ namespace HealthChecks.UI.Configuration
         internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
-        internal string HealthCheckDatabaseConnectionString { get; set; }
+        internal DataSetting Data { get; set; } = new DataSetting { Provider = StorageProvider.InMemory };
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
         {
@@ -20,7 +20,7 @@ namespace HealthChecks.UI.Configuration
 
             return this;
         }
-        
+
         public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "")
         {
             Webhooks.Add(new WebHookNotification
@@ -38,16 +38,20 @@ namespace HealthChecks.UI.Configuration
             EvaluationTimeInSeconds = seconds;
             return this;
         }
-        
+
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;
             return this;
         }
 
-        public Settings SetHealthCheckDatabaseConnectionString(string connectionString)
+        public Settings SetHealthCheckData(StorageProvider provider, string connectionString = null)
         {
-            HealthCheckDatabaseConnectionString = connectionString;
+            Data = new DataSetting
+            {
+                Provider = provider,
+                ConnectionString = connectionString
+            };
             return this;
         }
     }
@@ -64,5 +68,18 @@ namespace HealthChecks.UI.Configuration
         public string Uri { get; set; }
         public string Payload { get; set; }
         public string RestoredPayload { get; set; }
+    }
+
+    public class DataSetting
+    {
+        public StorageProvider Provider { get; set; }
+        public string ConnectionString { get; set; }
+    }
+
+    public enum StorageProvider
+    {
+        InMemory,
+        Sqlite,
+        SqlServer
     }
 }

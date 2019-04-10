@@ -51,18 +51,35 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddDbContext<HealthChecksDb>(db =>
             {
-                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString;
-                if (string.IsNullOrWhiteSpace(connectionString))
+                var dataSettings = healthCheckSettings.Data;
+
+                if (dataSettings.Provider == StorageProvider.Sqlite)
                 {
-                    var contentRoot = configuration[HostDefaults.ContentRootKey];
-                    var path = Path.Combine(contentRoot, databaseName);
-                    connectionString = $"Data Source={path}";
+                    if (string.IsNullOrWhiteSpace(dataSettings.ConnectionString))
+                    {
+                        var contentRoot = configuration[HostDefaults.ContentRootKey];
+                        var path = Path.Combine(contentRoot, databaseName);
+                        db.UseSqlite($"Data Source={path}");
+                    }
+                    else
+                    {
+                        db.UseSqlite(
+                            Environment.ExpandEnvironmentVariables(dataSettings.ConnectionString)
+                        );
+                    }
+                    return;
                 }
-                else
+
+                if (dataSettings.Provider == StorageProvider.SqlServer)
                 {
-                    connectionString = Environment.ExpandEnvironmentVariables(connectionString);
+                    if (!string.IsNullOrWhiteSpace(dataSettings.ConnectionString))
+                    {
+                        db.UseSqlServer(dataSettings.ConnectionString);
+                    }
+                    return;
                 }
-                db.UseSqlite(connectionString);
+
+                db.UseInMemoryDatabase(databaseName);
             });
 
             if (kubernetesDiscoverySettings.Enabled)

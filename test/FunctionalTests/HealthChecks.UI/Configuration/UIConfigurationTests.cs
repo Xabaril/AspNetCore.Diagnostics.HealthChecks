@@ -21,6 +21,7 @@ namespace FunctionalTests.UI.Configuration
             var webhookUri = "http://webhook1/sample";
             var webhookPayload = "payload1";
             var webhookRestorePayload = "restoredpayload1";
+            var storageProvider = StorageProvider.Sqlite;
             var databaseConnection = "Data Source=healthchecksdb";
             var evaluationTimeInSeconds = 180;
             var minimumSeconds = 30;
@@ -37,7 +38,7 @@ namespace FunctionalTests.UI.Configuration
                                 restorePayload: webhookRestorePayload)
                             .SetEvaluationTimeInSeconds(evaluationTimeInSeconds)
                             .SetMinimumSecondsBetweenFailureNotifications(minimumSeconds)
-                            .SetHealthCheckDatabaseConnectionString(databaseConnection);
+                            .SetHealthCheckData(storageProvider, databaseConnection);
                     });
                 });
             
@@ -45,7 +46,8 @@ namespace FunctionalTests.UI.Configuration
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
 
             UISettings.EvaluationTimeInSeconds.Should().Be(evaluationTimeInSeconds);
-            UISettings.HealthCheckDatabaseConnectionString.Should().Be(databaseConnection);
+            UISettings.Data.Provider.Should().Be(storageProvider);
+            UISettings.Data.ConnectionString.Should().Be(databaseConnection);
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(minimumSeconds);
 
             UISettings.Webhooks.Count.Should().Be(1);
@@ -82,7 +84,8 @@ namespace FunctionalTests.UI.Configuration
 
             UISettings.EvaluationTimeInSeconds.Should().Be(20);
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(120);
-            UISettings.HealthCheckDatabaseConnectionString.Should().Be("Data Source=healthchecksdb");
+            UISettings.Data.Provider.Should().Be(StorageProvider.Sqlite);
+            UISettings.Data.ConnectionString.Should().Be("Data Source=healthchecksdb");
 
             UISettings.HealthChecks.Count.Should().Be(1);
             UISettings.Webhooks.Count.Should().Be(1);
@@ -131,7 +134,8 @@ namespace FunctionalTests.UI.Configuration
 
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(200);
             UISettings.EvaluationTimeInSeconds.Should().Be(20);
-            UISettings.HealthCheckDatabaseConnectionString.Should().NotBeEmpty();
+            UISettings.Data.Provider.Should().Be(StorageProvider.Sqlite);
+            UISettings.Data.ConnectionString.Should().Be("Data Source=healthchecksdb");
             UISettings.Webhooks.Count.Should().Be(2);
             UISettings.HealthChecks.Count.Should().Be((2));
 

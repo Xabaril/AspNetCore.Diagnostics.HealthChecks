@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28809.33
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB8-43CF-B3A2-B70E648259D4}"
 EndProject
@@ -89,7 +89,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Hangfire", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RavenDB", "src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj", "{E91924B0-BE65-4CF8-A43A-2F22EEFE53F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Kubernetes", "src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj", "{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Kubernetes", "src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj", "{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Gcp.CloudFirestore", "HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj", "{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,6 +243,10 @@ Global
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -282,6 +288,7 @@ Global
 		{439DF9B7-5D0F-4531-BA19-F1BD01B244DB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E91924B0-BE65-4CF8-A43A-2F22EEFE53F2} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

@@ -98,5 +98,6 @@
     <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>2.2.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
+    <HealthCheckCloudFirestore>2.2.0</HealthCheckCloudFirestore>
   </PropertyGroup>
 </Project>

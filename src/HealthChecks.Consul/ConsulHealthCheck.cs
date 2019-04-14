@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +21,18 @@ namespace HealthChecks.Consul
         {
             try
             {
-                var result = await _httpClientFactory()
+                var client = _httpClientFactory();
+
+                if (_options.RequireBasicAuthentication)
+                {
+                    var credentials = ASCIIEncoding.ASCII.GetBytes($"{_options.Username}:{_options.Password}");
+                    var authHeaderValue = Convert.ToBase64String(credentials);
+
+                    client.DefaultRequestHeaders
+                        .Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
+                }
+
+                var result = await client
                     .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", cancellationToken);
 
                 return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus, description: "Consul response was not a successful HTTP status code");

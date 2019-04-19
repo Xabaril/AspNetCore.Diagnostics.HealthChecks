@@ -26,13 +26,13 @@ namespace HealthChecks.UI.Core.Notifications
         }
         public async Task NotifyDown(string name, UIHealthReport report)
         {
-            await Notify(name, failure: GetFailedMessageFromContent(report), isHealthy: false);
+            await Notify(name, failure: GetFailedMessageFromContent(report), isHealthy: false, description: GetFailedDescriptionsFromContent(report));
         }
         public async Task NotifyWakeUp(string name)
         {
             await Notify(name, isHealthy: true);
         }
-        private async Task Notify(string name, string failure = "", bool isHealthy = false)
+        private async Task Notify(string name, string failure = "", bool isHealthy = false, string description = null)
         {
             if (!await IsNotifiedOnWindowTime(name, isHealthy))
             {
@@ -46,8 +46,9 @@ namespace HealthChecks.UI.Core.Notifications
                 foreach (var webHook in _settings.Webhooks)
                 {
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
-                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name);
-                    payload = payload.Replace(Keys.FAILURE_BOOKMARK, failure);
+                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
+                        .Replace(Keys.FAILURE_BOOKMARK, failure)
+                        .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
 
                     await SendRequest(webHook.Uri, webHook.Name, payload);
                 }
@@ -108,13 +109,25 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
             }
         }
+
         private string GetFailedMessageFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Values
-                .Where(c => c.Status != UIHealthStatus.Healthy)
-                .Count();
+                .Count(c => c.Status != UIHealthStatus.Healthy);
 
-            return $"There is at least {failedChecks} HealthChecks failing.";
+            return $"There are at least {failedChecks} HealthChecks failing.";
+        }
+
+        private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
+        {
+            const string JOIN_SYMBOL = "|";
+
+            var failedChecksDescription = healthReport.Entries.Values
+                .Where(c => c.Status != UIHealthStatus.Healthy)
+                .Select(x => x.Description)
+                .Aggregate((first, after) => $"{first} {JOIN_SYMBOL} {after}");
+
+            return failedChecksDescription;
         }
 
         public void Dispose()

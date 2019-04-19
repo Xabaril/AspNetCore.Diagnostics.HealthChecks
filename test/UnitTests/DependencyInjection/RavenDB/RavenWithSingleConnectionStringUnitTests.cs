@@ -5,10 +5,11 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
+#pragma warning disable 618
 
 namespace UnitTests.DependencyInjection.RavenDB
 {
-    public class ravendb_registration_should
+    public class ravendb_with_single_conection_string_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()

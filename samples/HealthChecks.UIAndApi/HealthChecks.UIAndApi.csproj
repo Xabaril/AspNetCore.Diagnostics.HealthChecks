@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />

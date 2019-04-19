@@ -19,6 +19,13 @@ namespace HealthChecks.UIAndApi
 
             services
                 .AddHealthChecksUI()
+//                .AddHealthChecksUI(setupSettings: settings =>
+//                {
+//                    settings
+//                        .AddHealthCheckEndpoint("api1", "http://localhost:8001/custom/healthz")
+//                        .AddWebhookNotification("webhook1", "http://webhook", "mypayload")
+//                        .SetEvaluationTimeInSeconds(16);
+//                })
                 .AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-1")
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-2")

@@ -1,0 +1,67 @@
+{
+	"manifestVersion": 1.0,
+	"id": "vss-services-aspnetcorehealthcheck-extensions",
+	"name": "Asp.Net Core Health Check extensions",
+	"publisher": "luisfraile",
+	"version": "1.0.0",
+	"public": false,
+    "description": "Azure DevOps Asp.Net Core Health Check extensions.",    
+	"categories": ["Azure Pipelines"],
+	"Tags": ["AspNetCoreHealthCheck",
+	"Liveness",
+	"Release",
+	"ReleaseGates",
+	"DevOps"],
+	"targets": [{
+		"id": "Microsoft.VisualStudio.Services.Cloud"
+	}],
+	"demands": [],
+	"icons": {
+		"default": "images/aspnethealth-task.png"
+	},
+	"branding": {
+		"color": "#3B3E43",
+		"theme": "dark"
+	},
+	"screenshots": [{
+		"path": "images/AspNetCoreHealthCheckBasic.png"
+	},
+	{
+		"path": "images/AspNetCoreHealthCheckParticularCheck.png"
+	}],
+	"files": [
+	{
+		"path": "AspNetCoreHealthCheckReleaseGate"
+	},
+	{
+		"path": "images/aspnethealth-task.png",
+		"addressable": true
+	},
+	{
+		"path": "images/AspNetCoreHealthCheckBasic.png",
+		"addressable": true
+	},
+	{
+		"path": "images/AspNetCoreHealthCheckParticularCheck.png",
+		"addressable": true
+	}
+],
+	"content": {
+		"details": {
+			"path": "readme.md"
+		}
+	},
+	"links": {
+		"license": {
+			"uri": "https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE"
+		}
+	},
+	"contributions": [{
+		"id": "aspnetcorehealthcheck-gate-task",
+		"type": "ms.vss-distributed-task.task",
+		"targets": ["ms.vss-distributed-task.tasks"],
+		"properties": {
+			"name": "AspNetCoreHealthCheckReleaseGate"
+		}
+	}]
+}

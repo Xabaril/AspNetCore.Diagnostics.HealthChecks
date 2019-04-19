@@ -4,11 +4,52 @@ namespace HealthChecks.UI.Configuration
 {
     public class Settings
     {
-        public List<HealthCheckSetting> HealthChecks { get; set; }
-        public List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
-        public int EvaluationTimeOnSeconds { get; set; } = 10;
-        public int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
-        public string HealthCheckDatabaseConnectionString { get; set; }
+        internal List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
+        internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
+        internal int EvaluationTimeInSeconds { get; set; } = 10;
+        internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        internal string HealthCheckDatabaseConnectionString { get; set; }
+
+        public Settings AddHealthCheckEndpoint(string name, string uri)
+        {
+            HealthChecks.Add(new HealthCheckSetting
+            {
+                Name = name,
+                Uri = uri
+            });
+
+            return this;
+        }
+        
+        public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "")
+        {
+            Webhooks.Add(new WebHookNotification
+            {
+                Name = name,
+                Uri = uri,
+                Payload = payload,
+                RestoredPayload = restorePayload
+            });
+            return this;
+        }
+
+        public Settings SetEvaluationTimeInSeconds(int seconds)
+        {
+            EvaluationTimeInSeconds = seconds;
+            return this;
+        }
+        
+        public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
+        {
+            MinimumSecondsBetweenFailureNotifications = seconds;
+            return this;
+        }
+
+        public Settings SetHealthCheckDatabaseConnectionString(string connectionString)
+        {
+            HealthCheckDatabaseConnectionString = connectionString;
+            return this;
+        }
     }
 
     public class HealthCheckSetting

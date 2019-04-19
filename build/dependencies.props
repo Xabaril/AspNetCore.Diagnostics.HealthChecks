@@ -39,25 +39,30 @@
     <NEST>6.1.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
+    <MicrosoftAzureCosmosDB>3.0.0.9-preview</MicrosoftAzureCosmosDB>
     <HangfireCore>1.6.21</HangfireCore>
     <WindowsAzureStorage>9.1.0</WindowsAzureStorage>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.9</AWSSDKDynamoDBv2>
     <NewtonsoftJson>11.0.2</NewtonsoftJson>
-    <EventStoreClientAPINetCore>4.1.0.23</EventStoreClientAPINetCore>
+    <EventStoreClient>5.0.1</EventStoreClient>
     <MicrosoftAspNetCoreHostingAbstractions>2.2.0</MicrosoftAspNetCoreHostingAbstractions>
     <MicrosoftEntityFrameworkCore>2.2.0</MicrosoftEntityFrameworkCore>
     <MicrosoftEntityFrameworkCoreDesign>2.2.0</MicrosoftEntityFrameworkCoreDesign>
     <MicrosoftEntityFrameworkCoreSqlite>2.2.0</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.6</MicrosoftEntityFrameworkCoreSqliteDesign>
     <MicrosoftExtensionsConfigurationBinder>2.2.0</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationJson>2.2.0</MicrosoftExtensionsConfigurationJson>
     <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
     <MicrosoftAzureKeyVault>3.0.2</MicrosoftAzureKeyVault>
     <MicrosoftIdentityModelClientsActiveDirectory>4.4.1</MicrosoftIdentityModelClientsActiveDirectory>
     <MicrosoftAzureServicesAppAuthentication>1.0.3</MicrosoftAzureServicesAppAuthentication>
+    <KubernetesClient>1.2.0</KubernetesClient>
+    <MicrosoftAspNetCoreSignalRClient>1.1.0</MicrosoftAspNetCoreSignalRClient>
+    <MicrosoftAspNetCoreSignalR>1.1.0</MicrosoftAspNetCoreSignalR>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -72,7 +77,7 @@
     <HealthCheckUri>2.2.3</HealthCheckUri>
     <HealthCheckRedis>2.2.2</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
-    <HealthCheckEventStore>2.2.0</HealthCheckEventStore>
+    <HealthCheckEventStore>2.2.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.1</HealthCheckElasticsearch>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
@@ -82,18 +87,21 @@
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
     <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
+    <HealthCheckCosmosDb>2.2.0-preview</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>2.2.1</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>2.2.2</HealthCheckAzureStorage>
     <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
-    <HealthCheckConsul>2.2.1</HealthCheckConsul>
-    <HealthCheckUI>2.2.17</HealthCheckUI>
-    <HealthCheckUIClient>2.2.2</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>2.2.2</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckConsul>2.2.2</HealthCheckConsul>
+    <HealthCheckUI>2.2.27</HealthCheckUI>
+    <HealthCheckUIClient>2.2.3</HealthCheckUIClient>
+    <HealthCheckPublisherAppplicationInsights>2.2.4</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
-    <HealthCheckRavenDB>2.2.1</HealthCheckRavenDB>
+    <HealthCheckRavenDB>2.2.2</HealthCheckRavenDB>
+    <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
+    <HealthCheckSignalR>2.2.0</HealthCheckSignalR>
   </PropertyGroup>
 </Project>

@@ -14,7 +14,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EventStore.ClientAPI.NetCore" Version="$(EventStoreClientAPINetCore)" />
+    <PackageReference Include="EventStore.Client" Version="$(EventStoreClient)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
       <PrivateAssets>all</PrivateAssets>

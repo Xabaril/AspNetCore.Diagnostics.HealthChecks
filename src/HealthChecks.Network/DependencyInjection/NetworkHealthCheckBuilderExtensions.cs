@@ -85,7 +85,6 @@ namespace Microsoft.Extensions.DependencyInjection
                sp => new FtpHealthCheck(options),
                failureStatus,
                tags));
-
         }
 
         /// <summary>
@@ -161,7 +160,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for network SMTP connection.
+        /// Add a health check for network TCP connection.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup">The action to configure TCP connection parameters.</param>

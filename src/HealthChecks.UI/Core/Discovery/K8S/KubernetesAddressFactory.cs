@@ -13,6 +13,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         {
             _healthPath = healthPath;
         }
+
         public string CreateAddress(Service service)
         {
             string address = string.Empty;

@@ -10,10 +10,12 @@ namespace HealthChecks.MySql
         : IHealthCheck
     {
         private readonly string _connectionString;
+
         public MySqlHealthCheck(string connectionString)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

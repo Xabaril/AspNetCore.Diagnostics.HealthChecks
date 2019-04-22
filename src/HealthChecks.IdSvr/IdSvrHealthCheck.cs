@@ -12,10 +12,12 @@ namespace HealthChecks.IdSvr
         const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
 
         private readonly Func<HttpClient> _httpClientFactory;
+
         public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -25,7 +27,7 @@ namespace HealthChecks.IdSvr
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { (await response.Content.ReadAsStringAsync())}");
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
                 }
 
                 return HealthCheckResult.Healthy();       

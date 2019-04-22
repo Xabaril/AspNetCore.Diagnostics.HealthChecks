@@ -18,20 +18,24 @@ namespace HealthChecks.UI.Core.Notifications
         private readonly ILogger<WebHookFailureNotifier> _logger;
         private readonly Settings _settings;
         private readonly HealthChecksDb _db;
+
         public WebHookFailureNotifier(HealthChecksDb db, IOptions<Settings> settings, ILogger<WebHookFailureNotifier> logger)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _settings = settings.Value ?? new Settings();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public async Task NotifyDown(string name, UIHealthReport report)
         {
             await Notify(name, failure: GetFailedMessageFromContent(report), isHealthy: false, description: GetFailedDescriptionsFromContent(report));
         }
+
         public async Task NotifyWakeUp(string name)
         {
             await Notify(name, isHealthy: true);
         }
+
         private async Task Notify(string name, string failure = "", bool isHealthy = false, string description = null)
         {
             if (!await IsNotifiedOnWindowTime(name, isHealthy))
@@ -58,6 +62,7 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogInformation("Notification is sent on same window time.");
             }
         }
+
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
         {
             var lastNotification = await _db.Failures
@@ -88,7 +93,7 @@ namespace HealthChecks.UI.Core.Notifications
         {
             if (uri == null || !Uri.TryCreate(uri, UriKind.Absolute, out Uri webHookUri))
             {
-                _logger.LogWarning($"The web hook notification uri is not stablished or is not an absolute Uri ({name}). Set the webhook uri value on BeatPulse setttings.");
+                _logger.LogWarning($"The web hook notification uri is not established or is not an absolute Uri ({name}). Set the webhook uri value on BeatPulse settings.");
 
                 return;
             }

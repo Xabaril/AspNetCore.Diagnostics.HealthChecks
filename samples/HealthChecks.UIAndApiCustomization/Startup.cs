@@ -36,7 +36,7 @@ namespace HealthChecks.UIAndApi
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseHealthChecks("/healthz", new HealthCheckOptions()
+            app.UseHealthChecks("/healthz", new HealthCheckOptions
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

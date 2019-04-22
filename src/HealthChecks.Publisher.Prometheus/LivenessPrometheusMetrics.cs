@@ -38,7 +38,7 @@ namespace HealthChecks.Publisher.Prometheus
             foreach (var reportEntry in report.Entries)
             {
                 _healthChecksResult.Labels(reportEntry.Key).
-                    Set((double) reportEntry.Value.Status);
+                    Set((double)reportEntry.Value.Status);
 
                 _healthChecksDuration.Labels(reportEntry.Key)
                     .Set(reportEntry.Value.Duration.TotalSeconds);

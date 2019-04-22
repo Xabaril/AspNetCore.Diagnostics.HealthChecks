@@ -77,7 +77,6 @@ namespace HealthChecks.Network.Core
             return result.Contains(SmtpResponse.AUTHENTICATION_SUCCESS);
         }
 
-
         private async Task<bool> UpgradeToSecureConnection()
         {
             var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS());

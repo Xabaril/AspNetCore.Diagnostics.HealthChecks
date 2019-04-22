@@ -9,10 +9,12 @@ namespace HealthChecks.UI.Core
     internal class UIResourcesMapper
     {
         private readonly IUIResourcesReader _reader;
+
         public UIResourcesMapper(IUIResourcesReader reader)
         {
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
         }
+
         public void Map(IApplicationBuilder app, Options options)
         {
             var resources = _reader.UIResources;

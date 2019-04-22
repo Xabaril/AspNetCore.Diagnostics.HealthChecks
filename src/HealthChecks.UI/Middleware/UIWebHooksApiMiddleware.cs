@@ -15,6 +15,7 @@ namespace HealthChecks.UI.Core
     {
         private readonly JsonSerializerSettings _jsonSerializationSettings;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+
         public UIWebHooksApiMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {
             _jsonSerializationSettings = new JsonSerializerSettings()
@@ -23,6 +24,7 @@ namespace HealthChecks.UI.Core
             };
             _serviceScopeFactory = serviceScopeFactory;
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())

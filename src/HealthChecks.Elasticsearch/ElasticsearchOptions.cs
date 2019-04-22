@@ -33,6 +33,7 @@ namespace HealthChecks.Elasticsearch
             AuthenticateWithCertificate = true;
             return this;
         }
+
         public ElasticsearchOptions UseServer(string uri)
         {
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));

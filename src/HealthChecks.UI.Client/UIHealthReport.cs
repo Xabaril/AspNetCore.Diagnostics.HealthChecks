@@ -6,7 +6,7 @@ namespace HealthChecks.UI.Client
 {
     /*
      * Models for UI Client. This models represent a indirection between HealthChecks API and 
-     * UI Client in order to implement some features not present on HealthChecks of substiture 
+     * UI Client in order to implement some features not present on HealthChecks of substitute 
      * some properties etc.
      */
     public class UIHealthReport
@@ -20,6 +20,7 @@ namespace HealthChecks.UI.Client
             Entries = entries;
             TotalDuration = totalDuration;
         }
+
         public static UIHealthReport CreateFrom(HealthReport report)
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), report.TotalDuration)
@@ -29,7 +30,7 @@ namespace HealthChecks.UI.Client
 
             foreach (var item in report.Entries)
             {
-                var entry = new UIHealthReportEntry()
+                var entry = new UIHealthReportEntry
                 {
                     Data = item.Value.Data,
                     Description = item.Value.Description,
@@ -52,6 +53,7 @@ namespace HealthChecks.UI.Client
 
             return uiReport;
         }
+
         public static UIHealthReport CreateFrom(Exception exception, string entryName = "Endpoint")
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), TimeSpan.FromSeconds(0))
@@ -59,7 +61,7 @@ namespace HealthChecks.UI.Client
                 Status = UIHealthStatus.Unhealthy,
             };
 
-            uiReport.Entries.Add(entryName, new UIHealthReportEntry()
+            uiReport.Entries.Add(entryName, new UIHealthReportEntry
             {
                 Exception = exception.Message,
                 Description = exception.Message,
@@ -70,12 +72,14 @@ namespace HealthChecks.UI.Client
             return uiReport;
         }
     }
+
     public enum UIHealthStatus
     {
         Unhealthy = 0,
         Degraded = 1,
         Healthy = 2
     }
+
     public class UIHealthReportEntry
     {
         public IReadOnlyDictionary<string, object> Data { get; set; }

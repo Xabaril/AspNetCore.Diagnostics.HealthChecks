@@ -1,5 +1,4 @@
 ﻿using HealthChecks.UI.Client;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 
 namespace HealthChecks.UI.Core.Data

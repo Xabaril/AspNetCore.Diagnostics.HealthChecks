@@ -14,10 +14,12 @@ namespace Microsoft.AspNetCore.Builder
 
             return ConfigurePipeline(app, options);
         }
+
         public static IApplicationBuilder UseHealthChecksUI(this IApplicationBuilder app)
         {
             return ConfigurePipeline(app, new Options());
         }
+
         private static IApplicationBuilder ConfigurePipeline(IApplicationBuilder app, Options options)
         {
             EnsureValidApiOptions(options);
@@ -33,15 +35,16 @@ namespace Microsoft.AspNetCore.Builder
 
             return app;
         }
+
         private static void EnsureValidApiOptions(Options options)
         {
             Action<string, string> ensureValidPath = (string path, string argument) =>
-             {
-                 if (string.IsNullOrEmpty(path) || !path.StartsWith("/"))
-                 {
-                     throw new ArgumentException("The value for customized path can't be null and need to start with / characater.");
-                 }
-             };
+            {
+                if (string.IsNullOrEmpty(path) || !path.StartsWith("/"))
+                {
+                    throw new ArgumentException("The value for customized path can't be null and need to start with / character.", argument);
+                }
+            };
 
             ensureValidPath(options.ApiPath, nameof(Options.ApiPath));
             ensureValidPath(options.UIPath, nameof(Options.UIPath));

@@ -11,32 +11,34 @@ namespace HealthChecks.System
         : IHealthCheck
     {
         private readonly DiskStorageOptions _options;
+
         public DiskStorageHealthCheck(DiskStorageOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 var configuredDrives = _options.ConfiguredDrives.Values;
 
-                foreach (var item in configuredDrives)
+                foreach (var (DriveName, MinimumFreeMegabytes) in configuredDrives)
                 {
-                    var systemDriveInfo = GetSystemDriveInfo(item.DriveName);
+                    var (Exists, ActualFreeMegabytes) = GetSystemDriveInfo(DriveName);
 
-                    if (systemDriveInfo.Exists)
+                    if (Exists)
                     {
-                        if (systemDriveInfo.ActualFreeMegabytes < item.MinimumFreeMegabytes)
+                        if (ActualFreeMegabytes < MinimumFreeMegabytes)
                         {
                             return Task.FromResult(
-                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Minimum configured megabytes for disk {item.DriveName} is {item.MinimumFreeMegabytes} but actual free space are {systemDriveInfo.ActualFreeMegabytes} megabytes"));
+                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Minimum configured megabytes for disk {DriveName} is {MinimumFreeMegabytes} but actual free space are {ActualFreeMegabytes} megabytes"));
                         }
                     }
                     else
                     {
                         return Task.FromResult(
-                            new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {item.DriveName} is not present on system"));
+                            new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {DriveName} is not present on system"));
                     }
                 }
 
@@ -50,10 +52,10 @@ namespace HealthChecks.System
             }
         }
 
-        private (bool Exists, long ActualFreeMegabytes) GetSystemDriveInfo(string driveName)
+        private static (bool Exists, long ActualFreeMegabytes) GetSystemDriveInfo(string driveName)
         {
             var driveInfo = DriveInfo.GetDrives()
-                .FirstOrDefault(drive => String.Equals(drive.Name, driveName, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(drive => string.Equals(drive.Name, driveName, StringComparison.InvariantCultureIgnoreCase));
 
             if (driveInfo != null)
             {

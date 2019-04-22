@@ -20,7 +20,6 @@ namespace HealthChecks.UI.Client
             Entries = entries;
             TotalDuration = totalDuration;
         }
-
         public static UIHealthReport CreateFrom(HealthReport report)
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), report.TotalDuration)
@@ -53,7 +52,6 @@ namespace HealthChecks.UI.Client
 
             return uiReport;
         }
-
         public static UIHealthReport CreateFrom(Exception exception, string entryName = "Endpoint")
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), TimeSpan.FromSeconds(0))
@@ -72,14 +70,12 @@ namespace HealthChecks.UI.Client
             return uiReport;
         }
     }
-
     public enum UIHealthStatus
     {
         Unhealthy = 0,
         Degraded = 1,
         Healthy = 2
     }
-
     public class UIHealthReportEntry
     {
         public IReadOnlyDictionary<string, object> Data { get; set; }

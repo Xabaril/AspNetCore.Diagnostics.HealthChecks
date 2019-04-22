@@ -10,9 +10,7 @@ namespace HealthChecks.Kubernetes
         private const string DefaultNamespace = "default";
 
         internal KubernetesHealthCheckOptions() { }
-
         internal List<KubernetesResourceCheck> Registrations { get; } = new List<KubernetesResourceCheck>();
-
         public KubernetesHealthCheckOptions CheckDeployment(string name, Func<V1Deployment, bool> condition,
             string @namespace = DefaultNamespace)
         {
@@ -25,7 +23,6 @@ namespace HealthChecks.Kubernetes
 
             return this;
         }
-
         public KubernetesHealthCheckOptions CheckPod(string name, Func<V1Pod, bool> condition,
             string @namespace = DefaultNamespace)
         {
@@ -38,7 +35,6 @@ namespace HealthChecks.Kubernetes
 
             return this;
         }
-
         public KubernetesHealthCheckOptions CheckService(string name, Func<V1Service, bool> condition,
             string @namespace = DefaultNamespace)
         {

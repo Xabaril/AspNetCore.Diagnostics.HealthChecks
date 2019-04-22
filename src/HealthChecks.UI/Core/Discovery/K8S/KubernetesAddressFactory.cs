@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesAddressFactory
     {
         private readonly string _healthPath;
-
         public KubernetesAddressFactory(string healthPath)
         {
             _healthPath = healthPath;
         }
-
         public string CreateAddress(Service service)
         {
             string address = string.Empty;
@@ -33,7 +28,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return $"http://{address}{port}/{_healthPath}";
         }
-
         private string GetLoadBalancerAddress(Service service)
         {
             var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
@@ -44,7 +38,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return service.Spec.ClusterIP;
         }
-
         private string GetServicePort(Service service)
         {
             string port = string.Empty;

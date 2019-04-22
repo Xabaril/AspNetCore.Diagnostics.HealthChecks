@@ -11,12 +11,10 @@ namespace HealthChecks.System
         : IHealthCheck
     {
         private readonly DiskStorageOptions _options;
-
         public DiskStorageHealthCheck(DiskStorageOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -41,7 +39,6 @@ namespace HealthChecks.System
                             new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {DriveName} is not present on system"));
                     }
                 }
-
                 return Task.FromResult(
                     HealthCheckResult.Healthy());
             }
@@ -51,7 +48,6 @@ namespace HealthChecks.System
                      new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
-
         private static (bool Exists, long ActualFreeMegabytes) GetSystemDriveInfo(string driveName)
         {
             var driveInfo = DriveInfo.GetDrives()

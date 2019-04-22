@@ -11,7 +11,6 @@ namespace HealthChecks.RavenDB
     public class RavenDBHealthCheck : IHealthCheck
     {
         private readonly RavenDBOptions _options;
-
         public RavenDBHealthCheck(RavenDBOptions options)
         {
             if (options == null)
@@ -26,7 +25,6 @@ namespace HealthChecks.RavenDB
 
             _options = options;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -43,7 +41,10 @@ namespace HealthChecks.RavenDB
 
                     store.Initialize();
 
-                    var databases = await store.Maintenance.Server.SendAsync(new GetDatabaseNamesOperation(start: 0, pageSize: 100), cancellationToken);
+                    var databases = await store
+                        .Maintenance
+                        .Server
+                        .SendAsync(new GetDatabaseNamesOperation(start: 0, pageSize: 100), cancellationToken);
 
                     if (!string.IsNullOrWhiteSpace(_options.Database)
                         && !databases.Contains(_options.Database, StringComparer.OrdinalIgnoreCase))

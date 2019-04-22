@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SqliteHealthCheckBuilderExtensions
     {
         const string NAME = "sqlite";
-
         /// <summary>
         /// Add a health check for Sqlite services.
         /// </summary>

@@ -30,7 +30,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
         }
-
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             if (report.Status == HealthStatus.Healthy && _excludeHealthyReports)
@@ -51,7 +50,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
 
             return Task.CompletedTask;
         }
-
         private void SaveDetailedReport(HealthReport report, TelemetryClient client)
         {
             foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
@@ -70,7 +68,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     });
             }
         }
-
         private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
         {
             client.TrackEvent(EVENT_NAME,
@@ -85,7 +82,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
                 });
         }
-
         private TelemetryClient GetOrCreateTelemetryClient()
         {
             if (_client == null)

@@ -12,7 +12,6 @@ namespace Microsoft.Extensions.DependencyInjection
         const string MEMORY_NAME = "privatememory";
         const string WORKINGSET_NAME = "workingset";
         const string VIRTUALMEMORYSIZE_NAME = "virtualmemory";
-
         /// <summary>
         /// Add a health check for disk storage.
         /// </summary>
@@ -36,7 +35,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for process private memory.
         /// </summary>
@@ -57,7 +55,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for process working set.
         /// </summary>
@@ -78,7 +75,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for process virtual memory.
         /// </summary>

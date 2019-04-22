@@ -11,12 +11,10 @@ namespace HealthChecks.Hangfire
         : IHealthCheck
     {
         private readonly HangfireOptions _hangfireOptions;
-
         public HangfireHealthCheck(HangfireOptions hangfireOptions)
         {
             _hangfireOptions = hangfireOptions ?? throw new ArgumentNullException(nameof(hangfireOptions));
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -46,7 +44,7 @@ namespace HealthChecks.Hangfire
                 {
                     return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join(" + ", errorList)));
                 }
-                    
+
                 return Task.FromResult(HealthCheckResult.Healthy());
             }
             catch (Exception ex)

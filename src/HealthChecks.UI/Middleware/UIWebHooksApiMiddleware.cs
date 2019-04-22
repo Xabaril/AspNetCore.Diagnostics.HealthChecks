@@ -24,7 +24,6 @@ namespace HealthChecks.UI.Core
             };
             _serviceScopeFactory = serviceScopeFactory;
         }
-
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())

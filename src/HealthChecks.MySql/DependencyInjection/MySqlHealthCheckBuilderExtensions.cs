@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class MySqlHealthCheckBuilderExtensions
     {
         const string NAME = "mysql";
-
         /// <summary>
         /// Add a health check for MySql databases.
         /// </summary>

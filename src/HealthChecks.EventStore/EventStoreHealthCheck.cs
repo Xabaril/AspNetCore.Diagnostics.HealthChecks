@@ -11,18 +11,15 @@ namespace HealthChecks.EventStore
         : IHealthCheck
     {
         const string CONNECTION_NAME = "AspNetCore HealthCheck Connection";
-
         private readonly string _eventStoreConnection;
         private readonly string _login;
         private readonly string _password;
-
         public EventStoreHealthCheck(string eventStoreConnection, string login, string password)
         {
             _eventStoreConnection = eventStoreConnection ?? throw new ArgumentNullException(nameof(eventStoreConnection));
             _login = login;
             _password = password;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

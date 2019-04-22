@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class KafkaHealthCheckBuilderExtensions
     {
         const string NAME = "kafka";
-
         /// <summary>
         /// Add a health check for Kafka cluster.
         /// </summary>
@@ -29,7 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for Kafka cluster.
         /// </summary>

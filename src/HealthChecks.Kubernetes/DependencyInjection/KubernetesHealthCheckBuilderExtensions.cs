@@ -9,7 +9,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class KubernetesHealthCheckBuilderExtensions
     {
         const string NAME = "k8s";
-
         /// <summary>
         /// Add the Kubernetes Health Check
         /// </summary>

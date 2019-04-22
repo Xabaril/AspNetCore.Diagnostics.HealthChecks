@@ -38,7 +38,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath);
 
         }
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteAsync(cancellationToken);
@@ -50,12 +49,10 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return Task.CompletedTask;
         }
-
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
-
         private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
@@ -100,24 +97,20 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 await Task.Delay(_discoveryOptions.RefreshTimeOnSeconds * 1000);
             }
         }
-
         bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
         {
             return livenessDb.Configurations
                 .Any(lc => lc.Uri == host);
         }
-
         bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
-
         async Task<HttpStatusCode> CallClusterService(string host)
         {
             var response = await _clusterServiceClient.GetAsync(host);
             return response.StatusCode;
         }
-
         Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
         {
             livenessDb.Configurations.Add(new HealthCheckConfiguration()

@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class HangfireHealthCheckBuilderExtensions
     {
         const string NAME = "hangfire";
-
         /// <summary>
         /// Add a health check for Hangfire.
         /// </summary>

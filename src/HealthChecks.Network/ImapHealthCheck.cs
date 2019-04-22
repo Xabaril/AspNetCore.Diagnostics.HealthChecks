@@ -10,7 +10,6 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly ImapHealthCheckOptions _options;
-
         public ImapHealthCheck(ImapHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -25,7 +24,6 @@ namespace HealthChecks.Network
                 throw new ArgumentNullException(nameof(_options.Port));
             }
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -52,7 +50,6 @@ namespace HealthChecks.Network
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-
         private async Task<HealthCheckResult> ExecuteAuthenticatedUserActions(HealthCheckContext context, ImapConnection imapConnection)
         {
             var (User, Password) = _options.AccountOptions.Account;

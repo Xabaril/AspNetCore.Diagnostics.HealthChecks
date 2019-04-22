@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SqlServerHealthCheckBuilderExtensions
     {
         const string NAME = "sqlserver";
-
         /// <summary>
         /// Add a health check for SqlServer services.
         /// </summary>

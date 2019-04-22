@@ -11,16 +11,13 @@ namespace HealthChecks.AzureKeyVault
     public class AzureKeyVaultHealthCheck : IHealthCheck
     {
         private readonly AzureKeyVaultOptions _options;
-
         public AzureKeyVaultHealthCheck(AzureKeyVaultOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var currentSecret = string.Empty;
-
             try
             {
                 using (var client = CreateClient())
@@ -30,7 +27,6 @@ namespace HealthChecks.AzureKeyVault
                         await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
                     }
                 }
-
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
@@ -38,7 +34,6 @@ namespace HealthChecks.AzureKeyVault
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-
         private KeyVaultClient CreateClient()
         {
             if (_options.UseManagedServiceIdentity)
@@ -51,7 +46,6 @@ namespace HealthChecks.AzureKeyVault
                 return new KeyVaultClient(GetToken);
             }
         }
-
         private async Task<string> GetToken(string authority, string resource, string scope)
         {
             var authContext = new AuthenticationContext(authority);
@@ -62,7 +56,6 @@ namespace HealthChecks.AzureKeyVault
             {
                 throw new InvalidOperationException($"[{nameof(AzureKeyVaultHealthCheck)}] - Failed to obtain the JWT token");
             }
-             
             return result.AccessToken;
         }
     }

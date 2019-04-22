@@ -28,7 +28,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Token);
             }
         }
-
         internal static async Task<ServiceList> GetServices(this HttpClient client, string label = "")
         {
             var response = await client.GetAsync($"{client.BaseAddress.AbsoluteUri}{KubernetesApiEndpoints.ServicesV1}?labelSelector={label}");

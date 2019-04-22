@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class CosmosDbHealthCheckBuilderExtensions
     {
         const string NAME = "cosmosdb";
-
         /// <summary>
         /// Add a health check for Azure CosmosDb database.
         /// </summary>

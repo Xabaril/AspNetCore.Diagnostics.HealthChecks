@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SeqHealthCheckBuilderExtensions
     {
         const string NAME = "seq";
-
         /// <summary>
         ///     Add a health check publisher for Seq.
         /// </summary>

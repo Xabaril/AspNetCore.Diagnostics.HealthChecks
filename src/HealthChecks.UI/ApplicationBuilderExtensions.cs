@@ -14,12 +14,10 @@ namespace Microsoft.AspNetCore.Builder
 
             return ConfigurePipeline(app, options);
         }
-
         public static IApplicationBuilder UseHealthChecksUI(this IApplicationBuilder app)
         {
             return ConfigurePipeline(app, new Options());
         }
-
         private static IApplicationBuilder ConfigurePipeline(IApplicationBuilder app, Options options)
         {
             EnsureValidApiOptions(options);
@@ -35,7 +33,6 @@ namespace Microsoft.AspNetCore.Builder
 
             return app;
         }
-
         private static void EnsureValidApiOptions(Options options)
         {
             Action<string, string> ensureValidPath = (string path, string argument) =>

@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureBlobStorageHealthCheck 
+    public class AzureBlobStorageHealthCheck
         : IHealthCheck
     {
         private readonly string _connectionString;
-
         public AzureBlobStorageHealthCheck(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
@@ -20,7 +19,6 @@ namespace HealthChecks.AzureStorage
             }
             _connectionString = connectionString;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

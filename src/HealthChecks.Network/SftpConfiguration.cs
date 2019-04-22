@@ -15,7 +15,6 @@ namespace HealthChecks.Network
         private (bool createFile, string remotePath) _fileCreationOptions = (false, string.Empty);
 
         internal List<AuthenticationMethod> AuthenticationMethods { get; } = new List<AuthenticationMethod>();
-
         public SftpConfigurationBuilder(string host, int port, string userName)
         {
             _host = host ?? throw new ArgumentNullException(nameof(host));
@@ -24,14 +23,12 @@ namespace HealthChecks.Network
             if (port == default) port = 22;
             _port = port;
         }
-
         public SftpConfigurationBuilder AddPasswordAuthentication(string password)
         {   
             AuthenticationMethods.Add(new PasswordAuthenticationMethod(_userName, password));
 
             return this;
         }
-
         public SftpConfigurationBuilder AddPrivateKeyAuthentication(string privateKey, string passphrase)
         {            
             if (string.IsNullOrEmpty(privateKey)) throw new ArgumentNullException(nameof(privateKey));
@@ -51,13 +48,11 @@ namespace HealthChecks.Network
 
             return this;
         }
-
         public SftpConfigurationBuilder CreateFileOnConnect(string remoteFilePath)
         {
             _fileCreationOptions = (true, remoteFilePath);
             return this;
         }
-
         public SftpConfiguration Build()
         {
             if (!AuthenticationMethods.Any())
@@ -74,7 +69,6 @@ namespace HealthChecks.Network
             return sftpConfiguration;
         }
     }
-
     public class SftpConfiguration
     {
         internal string Host { get; }
@@ -90,7 +84,6 @@ namespace HealthChecks.Network
             UserName = userName;
             AuthenticationMethods = authenticationMethods;
         }
-
         internal void CreateRemoteFile(string remoteFilePath)
         {
             FileCreationOptions = (true, remoteFilePath);

@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ElasticsearchHealthCheckBuilderExtensions
     {
         const string NAME = "elasticsearch";
-
         /// <summary>
         /// Add a health check for Elasticsearch databases.
         /// </summary>
@@ -32,7 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for Elasticsearch databases.
         /// </summary>

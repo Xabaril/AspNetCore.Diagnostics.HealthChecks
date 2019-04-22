@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class RavenDBHealthCheckBuilderExtensions
     {
         const string NAME = "ravendb";
-
         /// <summary>
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
@@ -47,8 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags);
         }
-
-
         /// <summary>
         /// Add a health check for RavenDB.
         /// </summary>

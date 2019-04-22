@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class NpgSqlHealthCheckBuilderExtensions
     {
         const string NAME = "npgsql";
-
         /// <summary>
         /// Add a health check for Postgres databases.
         /// </summary>

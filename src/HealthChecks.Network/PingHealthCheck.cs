@@ -10,12 +10,10 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly PingHealthCheckOptions _options;
-
         public PingHealthCheck(PingHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var configuredHosts = _options.ConfiguredHosts.Values;

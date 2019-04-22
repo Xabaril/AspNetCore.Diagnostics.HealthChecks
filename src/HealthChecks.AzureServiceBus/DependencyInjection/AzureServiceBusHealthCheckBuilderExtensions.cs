@@ -31,7 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for specified Azure Service Bus Queue.
         /// </summary>
@@ -53,7 +52,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for Azure Service Bus Topic.
         /// </summary>

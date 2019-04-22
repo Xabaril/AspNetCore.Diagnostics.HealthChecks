@@ -11,13 +11,11 @@ namespace HealthChecks.System
     {
         private readonly T _maximumValue;
         private readonly Func<T> _currentValueFunc;
-
         public MaximumValueHealthCheck(T maximumValue, Func<T> currentValueFunc)
         {
             _maximumValue = maximumValue;
             _currentValueFunc = currentValueFunc ?? throw new ArgumentNullException(nameof(currentValueFunc));
         }
-
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var currentValue = _currentValueFunc();

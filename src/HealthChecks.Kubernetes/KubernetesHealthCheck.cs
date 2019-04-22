@@ -11,7 +11,6 @@ namespace HealthChecks.Kubernetes
     {
         private readonly KubernetesHealthCheckBuilder _builder;
         private readonly KubernetesChecksExecutor _kubernetesChecksExecutor;
-
         public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder,
             KubernetesChecksExecutor kubernetesChecksExecutor)
         {
@@ -19,7 +18,6 @@ namespace HealthChecks.Kubernetes
             _kubernetesChecksExecutor = kubernetesChecksExecutor ??
                                         throw new ArgumentNullException(nameof(kubernetesChecksExecutor));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
             CancellationToken cancellationToken = new CancellationToken())
         {

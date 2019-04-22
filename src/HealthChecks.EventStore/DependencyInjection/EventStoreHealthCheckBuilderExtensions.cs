@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class EventStoreHealthCheckBuilderExtensions
     {
         const string NAME = "eventstore";
-
         /// <summary>
         /// Add a health check for EventStore services.
         /// </summary>

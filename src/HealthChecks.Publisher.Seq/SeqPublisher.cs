@@ -26,7 +26,6 @@ namespace HealthChecks.Publisher.Seq
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
-
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             var level = "Information";
@@ -79,12 +78,10 @@ namespace HealthChecks.Publisher.Seq
                 Trace.WriteLine($"Exception is throwed publishing metrics to Seq with message: {ex.Message}");
             }
         }
-
         private class RawEvents
         {
             public RawEvent[] Events { get; set; }
         }
-
         private class RawEvent
         {
             public DateTimeOffset Timestamp { get; set; }

@@ -1,6 +1,6 @@
-﻿using System.Net.Http;
-using HealthChecks.Publisher.Prometheus;
+﻿using HealthChecks.Publisher.Prometheus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -26,7 +26,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder;
         }
-
         internal static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder,
             HttpClient client, string endpoint, string job, string instance = null)
         {

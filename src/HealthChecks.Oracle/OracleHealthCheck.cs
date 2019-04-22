@@ -11,13 +11,11 @@ namespace HealthChecks.Oracle
     {
         private readonly string _connectionString;
         private readonly string _sql;
-
         public OracleHealthCheck(string connectionString, string sql)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -25,13 +23,11 @@ namespace HealthChecks.Oracle
                 using (var connection = new OracleConnection(_connectionString))
                 {
                     await connection.OpenAsync(cancellationToken);
-
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
                         await command.ExecuteScalarAsync(cancellationToken);
                     }
-
                     return HealthCheckResult.Healthy();
                 }
             }

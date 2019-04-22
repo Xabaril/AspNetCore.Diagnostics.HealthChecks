@@ -11,7 +11,6 @@ namespace HealthChecks.AzureStorage
         : IHealthCheck
     {
         private readonly string _connectionString;
-
         public AzureTableStorageHealthCheck(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
@@ -20,7 +19,6 @@ namespace HealthChecks.AzureStorage
             }
             _connectionString = connectionString;
         }
-
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

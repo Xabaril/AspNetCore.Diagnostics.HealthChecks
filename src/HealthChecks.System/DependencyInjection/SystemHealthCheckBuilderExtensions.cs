@@ -31,10 +31,10 @@ namespace Microsoft.Extensions.DependencyInjection
             setup?.Invoke(options);
 
             return builder.Add(new HealthCheckRegistration(
-              name ?? DISK_NAME,
-              sp => new DiskStorageHealthCheck(options),
-              failureStatus,
-              tags));
+                name ?? DISK_NAME,
+                sp => new DiskStorageHealthCheck(options),
+                failureStatus,
+                tags));
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddPrivateMemoryHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
-             name ?? MEMORY_NAME,
-             sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().PrivateMemorySize64),
-             failureStatus,
-             tags));
+                name ?? MEMORY_NAME,
+                sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().PrivateMemorySize64),
+                failureStatus,
+                tags));
         }
 
         /// <summary>
@@ -73,10 +73,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddWorkingSetHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
-             name ?? WORKINGSET_NAME,
-             sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().WorkingSet64),
-             failureStatus,
-             tags));
+                name ?? WORKINGSET_NAME,
+                sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().WorkingSet64),
+                failureStatus,
+                tags));
         }
 
         /// <summary>
@@ -94,10 +94,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddVirtualMemorySizeHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
-            name ?? VIRTUALMEMORYSIZE_NAME,
-            sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().VirtualMemorySize64),
-            failureStatus,
-            tags));
+                name ?? VIRTUALMEMORYSIZE_NAME,
+                sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().VirtualMemorySize64),
+                failureStatus,
+                tags));
         }
     }
 }

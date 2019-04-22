@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using k8s.Models;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Kubernetes
@@ -44,7 +43,7 @@ namespace HealthChecks.Kubernetes
 
                 return HealthCheckResult.Healthy();
             }
-            catch(AggregateException ex)
+            catch (AggregateException ex)
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, string.Join(",", ex.InnerExceptions.Select(s=> s.Message)));
             }
@@ -53,7 +52,5 @@ namespace HealthChecks.Kubernetes
                 return new HealthCheckResult(context.Registration.FailureStatus, ex.Message);
             }
         }
-
-       
     }
 }

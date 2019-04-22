@@ -11,11 +11,13 @@ namespace HealthChecks.NpgSql
     {
         private readonly string _connectionString;
         private readonly string _sql;
+
         public NpgSqlHealthCheck(string npgsqlConnectionString, string sql)
         {
             _connectionString = npgsqlConnectionString ?? throw new ArgumentNullException(nameof(npgsqlConnectionString));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -27,7 +29,7 @@ namespace HealthChecks.NpgSql
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-                        await command.ExecuteScalarAsync();
+                        await command.ExecuteScalarAsync(cancellationToken);
                     }
 
                     return HealthCheckResult.Healthy();

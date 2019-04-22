@@ -30,9 +30,7 @@ namespace HealthChecks.Redis
                     if (!_connections.TryAdd(_redisConnectionString, connection))
                     {
                         // Dispose new connection which we just created, because we don't need it.
-                        connection.Dispose();        
-                        
-                        // Re-use existing connection for PING           
+                        connection.Dispose();
                         connection = _connections[_redisConnectionString];
                     }
                 }

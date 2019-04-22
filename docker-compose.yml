@@ -1,7 +1,7 @@
 version: '3'
 services:
     sqlserver:
-        image: microsoft/mssql-server-linux
+        image: mcr.microsoft.com/mssql/server
         restart: always
         ports:
             - ${SQLSERVER_PORT}:1433

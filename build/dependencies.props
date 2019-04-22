@@ -75,7 +75,7 @@
     <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.2</HealthCheckUri>
-    <HealthCheckRedis>2.2.2</HealthCheckRedis>
+    <HealthCheckRedis>2.2.3</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.1</HealthCheckElasticsearch>
@@ -99,7 +99,7 @@
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>
-    <HealthCheckPublisherSeq>2.2.0</HealthCheckPublisherSeq>
+    <HealthCheckPublisherSeq>2.2.2</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>2.2.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
     <HealthCheckSignalR>2.2.0</HealthCheckSignalR>

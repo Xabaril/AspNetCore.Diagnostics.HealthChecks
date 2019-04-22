@@ -186,14 +186,14 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
         "RestoredPayload":""
       }
     ],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications":60
   }
 }
 ```
 
     1.- HealthChecks: The collection of health checks uris to evaluate.
-    2.- EvaluationTimeOnSeconds: Number of elapsed seconds between health checks.
+    2.- EvaluationTimeInSeconds: Number of elapsed seconds between health checks.
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
@@ -216,7 +216,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
         "RestoredPayload":""
       }
     ],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications":60,
     "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
   }

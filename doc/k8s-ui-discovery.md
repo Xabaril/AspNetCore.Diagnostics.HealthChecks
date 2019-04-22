@@ -18,7 +18,7 @@ The default mechanism to register the target endpoints to be queried for health 
       }
     ],
     "Webhooks": [],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications": 60
   }
 }
@@ -33,8 +33,8 @@ To enable Kubernetes discovery you just need to configure some settings inside t
     "KubernetesDiscoveryService": {
           "Enabled": true,
           "ClusterHost": "https://myaks-962d02ba.hcp.westeurope.azmk8s.io:443",
-          "Token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3M...",      
-          "HealthPath": "healthz"      
+          "Token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3M...",
+          "HealthPath": "healthz"
     }
   }
 }
@@ -49,7 +49,7 @@ Here are all the available parameters detailed:
 |  Enabled | Establishes if the k8s discovery service is enabled of disabled  | false  |
 | ClusterHost | The uri of the kubernetes cluster |   |
 | Token | The token that will be sent to the cluster for authentication | |
-| HealthPath | The url path where the UI will call once the service is discovered |  hc | 
+| HealthPath | The url path where the UI will call once the service is discovered |  hc |
 | ServicesLabel | The labeled services the UI will look for in k8s | HealtChecks
 | RefreshTimeOnSeconds | Healthchecks refresh time in seconds | 300
 

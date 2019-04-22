@@ -46,14 +46,14 @@ You must escape the json before setting the **Payload** property in the configur
         "RestoredPayload": "{\"text\":\"The HealthCheck [[LIVENESS]] is recovered. All is up and running\",\"channel\":\"#general\",\"link_names\": 1,\"username\":\"monkey-bot\",\"icon_emoji\":\":monkey_face\" }"
       }
     ],
-    "EvaluationTimeOnSeconds": 10
+    "EvaluationTimeInSeconds": 10
   }
 }
 ```
 
 ## Azure Functions
 
-You can use [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) to receive *HealthCheckUI* notifications and perform any action. 
+You can use [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) to receive *HealthCheckUI* notifications and perform any action.
 
 Next samples show AF integration with Twilio to send SMS / SendGrid for HealthCheckUI failure notifications.
 
@@ -81,7 +81,7 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<SMSMessage>
 
 ```
 
-```c# 
+```c#
 #r "SendGrid"
 using System;
 using SendGrid.Helpers.Mail;
@@ -132,7 +132,7 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<Mail> messa
         "Payload": "{\"HealthCheck\": \"[[LIVENESS]]\",\"message\": \"[[FAILURE]]\"}"
       }
     ],
-    "EvaluationTimeOnSeconds": 10
+    "EvaluationTimeInSeconds": 10
   }
 }
 ```
@@ -172,7 +172,7 @@ And the HealthChecksUI configuration:
         "RestoredPayload": "{\"text\":\"The HealthCheck [[LIVENESS]] is recovered. All is up and running\",\"channel\":\"#general\",\"link_names\": 1,\"username\":\"monkey-bot\",\"icon_emoji\":\":monkey_face\" }"
       }
     ],
-    "EvaluationTimeOnSeconds": 10
+    "EvaluationTimeInSeconds": 10
   }
 }
 ```

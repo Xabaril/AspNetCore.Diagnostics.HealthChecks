@@ -29,6 +29,7 @@ namespace HealthChecks.UI.Middleware
                 DateTimeZoneHandling = DateTimeZoneHandling.Local
             };
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())

@@ -24,12 +24,12 @@ namespace HealthChecks.Oracle
             {
                 using (var connection = new OracleConnection(_connectionString))
                 {
-                    await connection.OpenAsync();
+                    await connection.OpenAsync(cancellationToken);
 
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-                        await command.ExecuteScalarAsync();
+                        await command.ExecuteScalarAsync(cancellationToken);
                     }
 
                     return HealthCheckResult.Healthy();

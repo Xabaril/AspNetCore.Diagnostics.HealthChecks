@@ -12,11 +12,13 @@ namespace HealthChecks.Consul
     {
         private readonly ConsulOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
+
         public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory)
         {
-            _options = options;
-            _httpClientFactory = httpClientFactory;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

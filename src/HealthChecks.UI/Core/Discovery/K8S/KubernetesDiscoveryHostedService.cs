@@ -38,6 +38,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath);
 
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteAsync(cancellationToken);
@@ -57,14 +58,12 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 _logger.LogInformation($"Starting kubernetes service discovery on cluster {_discoveryOptions.ClusterHost}");
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
-
                     var livenessDbContext = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
 
                     try
@@ -90,12 +89,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                             {
                                 _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
                             }
-
                         }
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "An error ocurred on kubernetes service discovery");
+                        _logger.LogError(ex, "An error occurred on kubernetes service discovery");
                     }
                 }
 
@@ -114,7 +112,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
 
-
         async Task<HttpStatusCode> CallClusterService(string host)
         {
             var response = await _clusterServiceClient.GetAsync(host);
@@ -132,6 +129,5 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return livenessDb.SaveChangesAsync();
         }
-
     }
 }

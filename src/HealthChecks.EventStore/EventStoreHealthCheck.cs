@@ -22,6 +22,7 @@ namespace HealthChecks.EventStore
             _login = login;
             _password = password;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

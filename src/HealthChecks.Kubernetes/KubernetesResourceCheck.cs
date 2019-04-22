@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using k8s;
 
 namespace HealthChecks.Kubernetes
@@ -12,7 +10,6 @@ namespace HealthChecks.Kubernetes
         public Type ResourceType { get; }
         public string Name { get; }
         public string Namespace { get; }
-        
 
         private KubernetesResourceCheck(Type type, string name, string @namespace, Func<IKubernetesObject, bool> condition)
         {

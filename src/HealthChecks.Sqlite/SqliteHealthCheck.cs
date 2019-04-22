@@ -11,11 +11,13 @@ namespace HealthChecks.Sqlite
     {
         private readonly string _connectionString;
         private readonly string _sql;
+
         public SqliteHealthCheck(string connectionString, string sql)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _sql = sql ?? throw new ArgumentException(nameof(sql));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -27,7 +29,7 @@ namespace HealthChecks.Sqlite
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-                        await command.ExecuteScalarAsync();
+                        await command.ExecuteScalarAsync(cancellationToken);
                     }
 
                     return HealthCheckResult.Healthy();

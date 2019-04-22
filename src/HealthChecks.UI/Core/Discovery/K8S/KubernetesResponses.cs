@@ -18,7 +18,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
     internal class Metadata
     {
-        
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string Uid { get; set; }
@@ -55,6 +54,5 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         public int PortNumber { get; set; }
         public int NodePort { get; set; }
         public int TargetPort { get; set; }
-
     }
 }

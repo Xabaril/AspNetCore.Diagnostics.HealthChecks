@@ -2,8 +2,6 @@
 using HealthChecks.Publisher.Prometheus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class PrometheusGatewayHealthCheckBuilderExtensions
@@ -12,8 +10,8 @@ namespace Microsoft.Extensions.DependencyInjection
         ///     Add a health check publisher for Prometheus Gateway.
         /// </summary>
         /// <remarks>
-        ///     For each <see cref="HealthReport" /> published a new metric value indicating the health check status ( 2 Healthy, 1
-        ///     Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds./>
+        ///     For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
+        ///     Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
         /// <param name="endpoint">Endpoint url e.g. http://myendpoint:9091</param>

@@ -18,11 +18,13 @@ namespace HealthChecks.MongoDb
             : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {
         }
+
         public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)
         {
             _specifiedDatabase = databaseName;
             _mongoClientSettings = clientSettings;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

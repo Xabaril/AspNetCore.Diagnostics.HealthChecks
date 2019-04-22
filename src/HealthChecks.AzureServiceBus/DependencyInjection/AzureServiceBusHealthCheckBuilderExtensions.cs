@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
-                 name ?? AZUREQUEUE_NAME,
+                name ?? AZUREQUEUE_NAME,
                 sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName),
                 failureStatus,
                 tags));
@@ -70,7 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
-                 name ?? AZURETOPIC_NAME,
+                name ?? AZURETOPIC_NAME,
                 sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName),
                 failureStatus,
                 tags));

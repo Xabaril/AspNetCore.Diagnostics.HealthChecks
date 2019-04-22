@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using k8s;
 using k8s.Models;
 
 namespace HealthChecks.Kubernetes
@@ -11,12 +10,11 @@ namespace HealthChecks.Kubernetes
     {
         private readonly k8s.Kubernetes _client;
 
-        private Dictionary<Type, Func<KubernetesResourceCheck, CancellationToken, Task<(bool, string)>>> _handlers;
-
+        private readonly Dictionary<Type, Func<KubernetesResourceCheck, CancellationToken, Task<(bool, string)>>> _handlers;
 
         public KubernetesChecksExecutor(k8s.Kubernetes client)
         {
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _handlers = new Dictionary<Type, Func<KubernetesResourceCheck, CancellationToken, Task<(bool, string)>>>()
             {
                 [typeof(V1Deployment)] = CheckDeploymentAsync,
@@ -70,7 +68,6 @@ namespace HealthChecks.Kubernetes
             }
 
             return await tsc.Task;
-
         }
 
         private async Task<(bool, string)> CheckServiceAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
@@ -90,7 +87,6 @@ namespace HealthChecks.Kubernetes
             }
 
             return await tsc.Task;
-
         }
     }
 }

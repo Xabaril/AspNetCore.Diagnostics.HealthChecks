@@ -22,7 +22,7 @@ namespace FunctionalTests.HealthChecks.System
 
         public disk_storage_healthcheck_should(ExecutionFixture fixture)
         {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture)); ;
+            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
         [Fact]

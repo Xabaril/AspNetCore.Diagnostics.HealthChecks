@@ -32,9 +32,6 @@ namespace HealthChecks.Uris
         public UriOptions(Uri uri)
         {
             Uri = uri;
-            ExpectedHttpCodes = null;
-            HttpMethod = null;
-            Timeout = TimeSpan.Zero;
         }
 
         public IUriOptions AddCustomHeader(string name, string value)
@@ -94,7 +91,7 @@ namespace HealthChecks.Uris
 
         public UriHealthCheckOptions()
         {
-            ExpectedHttpCodes = (200, 299);              // DEFAULT  = HTTP Succesful status codes
+            ExpectedHttpCodes = (200, 299);              // DEFAULT  = HTTP Successful status codes
             HttpMethod = HttpMethod.Get;
             Timeout = TimeSpan.FromSeconds(10);
         }

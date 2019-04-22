@@ -15,10 +15,10 @@ namespace HealthChecks.Network.Core
         public string Host { get; protected set; }
         protected bool UseSSL { get; set; } = true;
         
-        protected TcpClient _tcpClient = null;
-        protected Stream _stream = null;
+        protected TcpClient _tcpClient;
+        protected Stream _stream;
         protected Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
-        private bool _disposed = false;
+        private bool _disposed;
         private readonly bool _allowInvalidCertificates;
 
         public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false)
@@ -40,6 +40,7 @@ namespace HealthChecks.Network.Core
 
             return _tcpClient.Connected;
         }
+
         protected Stream GetStream()
         {
             var stream = _tcpClient.GetStream();
@@ -100,6 +101,5 @@ namespace HealthChecks.Network.Core
             }
             _disposed = true;
         }
-
     }
 }

@@ -9,10 +9,12 @@ namespace HealthChecks.UI.Core
         : IUIResourcesReader
     {
         private readonly Assembly _assembly;
+
         public UIEmbeddedResourcesReader(Assembly assembly)
         {
             _assembly = assembly ?? throw new ArgumentNullException(nameof(assembly));
         }
+
         public IEnumerable<UIResource> UIResources
         {
             get
@@ -21,6 +23,7 @@ namespace HealthChecks.UI.Core
                 return ParseEmbeddedResources(embeddedResources);
             }
         }
+
         private IEnumerable<UIResource> ParseEmbeddedResources(string[] embeddedFiles)
         {
             const char SPLIT_SEPARATOR = '.';

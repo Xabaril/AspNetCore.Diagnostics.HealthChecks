@@ -10,10 +10,12 @@ namespace HealthChecks.Elasticsearch
         : IHealthCheck
     {
         private readonly ElasticsearchOptions _options;
+
         public ElasticsearchHealthCheck(ElasticsearchOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

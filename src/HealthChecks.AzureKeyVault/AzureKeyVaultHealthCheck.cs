@@ -16,16 +16,19 @@ namespace HealthChecks.AzureKeyVault
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var currentSecret = string.Empty;
 
             try
             {
-                var client = CreateClient();
-                foreach (var item in _options.Secrets)
+                using (var client = CreateClient())
                 {
-                    await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
+                    foreach (var item in _options.Secrets)
+                    {
+                        await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
+                    }
                 }
 
                 return HealthCheckResult.Healthy();

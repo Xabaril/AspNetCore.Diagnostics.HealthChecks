@@ -16,6 +16,8 @@ namespace HealthChecks.Publisher.Prometheus
 
         public PrometheusGatewayPublisher(string endpoint, string job, string instance = null)
         {
+            if (endpoint == null) throw new ArgumentNullException(nameof(endpoint));
+
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
 
             if (!string.IsNullOrEmpty(instance))
@@ -32,14 +34,13 @@ namespace HealthChecks.Publisher.Prometheus
         public PrometheusGatewayPublisher(HttpClient httpClient, string endpoint, string job, string instance) 
             : this(endpoint, job, instance)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         public void Dispose()
         {
             _httpClient?.Dispose();
         }
-
 
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {

@@ -3,7 +3,7 @@
 <#
 .SYNOPSIS
   This is a helper function that runs a scriptblock and checks the PS variable $lastexitcode
-  to see if an error occcured. If an error is detected then an exception is thrown.
+  to see if an error occured. If an error is detected then an exception is thrown.
   This function allows you to run command-line programs without having to
   explicitly check the $lastexitcode variable.
 .EXAMPLE
@@ -22,7 +22,7 @@ function Exec
     }
 }
 
-if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
+if (Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
 
 exec { & dotnet restore }
 

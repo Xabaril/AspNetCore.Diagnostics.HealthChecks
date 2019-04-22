@@ -17,6 +17,7 @@ namespace HealthChecks.Uris
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var defaultHttpMethod = _options.HttpMethod;
@@ -41,9 +42,9 @@ namespace HealthChecks.Uris
 
                     var requestMessage = new HttpRequestMessage(method, item.Uri);
 
-                    foreach (var header in item.Headers)
+                    foreach (var (Name, Value) in item.Headers)
                     {
-                        requestMessage.Headers.Add(header.Name, header.Value);
+                        requestMessage.Headers.Add(Name, Value);
                     }
 
                     using (var timeoutSource = new CancellationTokenSource(timeout))

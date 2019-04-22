@@ -10,10 +10,12 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly TcpHealthCheckOptions _options;
+
         public TcpHealthCheck(TcpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

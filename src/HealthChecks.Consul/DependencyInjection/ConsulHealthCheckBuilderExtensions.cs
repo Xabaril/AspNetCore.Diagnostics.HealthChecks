@@ -33,12 +33,13 @@ namespace Microsoft.Extensions.DependencyInjection
             var registrationName = name ?? NAME;
 
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
+                registrationName,
                 sp => CreateHealthCheck(sp, options, registrationName),
                 failureStatus,
                 tags));
         }
-        static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, ConsulOptions options, string name)
+
+        private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, ConsulOptions options, string name)
         {
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             return new ConsulHealthCheck(options, () => httpClientFactory.CreateClient(name));

@@ -12,10 +12,12 @@ namespace HealthChecks.Kafka
     public class KafkaHealthCheck : IHealthCheck
     {
         private readonly Dictionary<string, object> _configuration;
+
         public KafkaHealthCheck(Dictionary<string, object> configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

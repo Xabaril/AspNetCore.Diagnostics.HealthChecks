@@ -3,7 +3,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-
     public static class ApplicationInsightsHealthCheckBuilderExtensions
     {
         /// <summary>

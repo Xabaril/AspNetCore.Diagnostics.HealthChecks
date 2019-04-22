@@ -17,13 +17,12 @@ namespace HealthChecks.Redis
         {
             _redisConnectionString = redisConnectionString ?? throw new ArgumentNullException(nameof(redisConnectionString));
         }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                ConnectionMultiplexer connection;
-
-                if (!_connections.TryGetValue(_redisConnectionString, out connection))
+                if (!_connections.TryGetValue(_redisConnectionString, out ConnectionMultiplexer connection))
                 {
                     connection = ConnectionMultiplexer.Connect(_redisConnectionString);
 

@@ -23,9 +23,10 @@ namespace HealthChecks.Publisher.Seq
 
         public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
         {
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
+
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             var level = "Information";
@@ -46,14 +47,14 @@ namespace HealthChecks.Publisher.Seq
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = $"{EVENT_NAME}",
+                        MessageTemplate = EVENT_NAME,
                         Level = level,
-                        Properties = new Dictionary<string, object>()
+                        Properties = new Dictionary<string, object>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },
                             { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
-                            { METRIC_STATUS_NAME , (int)report.Status },
-                            { METRIC_DURATION_NAME,report.TotalDuration.TotalMilliseconds}
+                            { METRIC_STATUS_NAME, (int)report.Status },
+                            { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
                         }
                     }
                 }
@@ -78,10 +79,12 @@ namespace HealthChecks.Publisher.Seq
                 Trace.WriteLine($"Exception is throwed publishing metrics to Seq with message: {ex.Message}");
             }
         }
+
         private class RawEvents
         {
             public RawEvent[] Events { get; set; }
         }
+
         private class RawEvent
         {
             public DateTimeOffset Timestamp { get; set; }

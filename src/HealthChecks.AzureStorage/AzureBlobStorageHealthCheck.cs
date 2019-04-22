@@ -11,10 +11,16 @@ namespace HealthChecks.AzureStorage
         : IHealthCheck
     {
         private readonly string _connectionString;
+
         public AzureBlobStorageHealthCheck(string connectionString)
         {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
             _connectionString = connectionString;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

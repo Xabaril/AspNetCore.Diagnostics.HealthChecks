@@ -107,7 +107,7 @@ services.AddHealthChecks()
 
 ```
 
-We are set!, we have the /self path to represent our application status. Think about what kind of code will you need to express the health of the app you are working on right now. Maybe a call to an MVC controller that shall be always responding?.
+We are set! We have the /self path to represent our application status. Think about what kind of code will you need to express the health of the app you are working on right now. Maybe a call to an MVC controller that shall be always responding?
 
 The next think we are going to do is using the Dockerfile that Visual studio 2017 has automatically created for us and build a docker image.
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28809.33
+# Visual Studio Version 15
+VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB8-43CF-B3A2-B70E648259D4}"
 EndProject
@@ -95,7 +95,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.SignalR", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.CosmosDb", "src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj", "{08FE3B71-2C9C-459B-9943-0C141191453C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Gcp.CloudFirestore", "HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj", "{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Gcp.CloudFirestore", "src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj", "{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

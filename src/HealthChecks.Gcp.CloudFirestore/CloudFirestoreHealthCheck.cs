@@ -9,17 +9,16 @@ namespace HealthChecks.Gcp.CloudFirestore
 {
     public class CloudFirestoreHealthCheck : IHealthCheck
     {
-        private readonly CloudFirestoreOptions _cloudFirestoreOptions = new CloudFirestoreOptions();
+        private readonly CloudFirestoreOptions _cloudFirestoreOptions;
         public CloudFirestoreHealthCheck(CloudFirestoreOptions cloudFirestoreOptions)
         {
-            _cloudFirestoreOptions = cloudFirestoreOptions;
+            _cloudFirestoreOptions = cloudFirestoreOptions ?? throw new ArgumentNullException(nameof(cloudFirestoreOptions));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 var currentRootCollections = await GetRootCollectionsAsync(cancellationToken);
-
                 if (_cloudFirestoreOptions.RequiredCollections != null)
                 {
                     var inexistantCollections = _cloudFirestoreOptions.RequiredCollections
@@ -41,7 +40,6 @@ namespace HealthChecks.Gcp.CloudFirestore
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-
         private async Task<List<string>> GetRootCollectionsAsync(CancellationToken cancellationToken)
         {
             var collections = new List<string>();
@@ -51,7 +49,6 @@ namespace HealthChecks.Gcp.CloudFirestore
             {
                 collections.Add(enumerator.Current.Id);
             }
-
             return collections;
         }
     }

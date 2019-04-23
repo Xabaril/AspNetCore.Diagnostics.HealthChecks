@@ -98,6 +98,7 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
 }
 
 else {
@@ -132,5 +133,6 @@ else {
     exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }
 

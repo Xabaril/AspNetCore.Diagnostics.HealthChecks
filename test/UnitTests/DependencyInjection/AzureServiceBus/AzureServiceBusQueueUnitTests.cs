@@ -28,7 +28,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azurequeue");
             check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-
         }
 
         [Fact]

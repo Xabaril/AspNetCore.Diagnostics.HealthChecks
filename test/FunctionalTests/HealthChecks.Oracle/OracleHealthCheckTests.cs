@@ -35,7 +35,7 @@ namespace FunctionalTests.HealthChecks.Oracle
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
@@ -63,7 +63,7 @@ namespace FunctionalTests.HealthChecks.Oracle
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
@@ -91,7 +91,7 @@ namespace FunctionalTests.HealthChecks.Oracle
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });

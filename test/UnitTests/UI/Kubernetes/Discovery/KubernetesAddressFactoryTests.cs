@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using HealthChecks.UI.Core.Discovery.K8S;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Xunit;
 
 namespace UnitTests.UI.Kubernetes
@@ -32,7 +30,6 @@ namespace UnitTests.UI.Kubernetes
             serviceAddresses[1].Should().Be("http://localhost:9000/healthz");
             serviceAddresses[2].Should().Be("http://localhost:30000/healthz");            
             serviceAddresses[3].Should().Be("http://10.97.1.153:80/healthz");
-
         }
 
         [Fact]
@@ -56,8 +53,6 @@ namespace UnitTests.UI.Kubernetes
             serviceAddresses[1].Should().Be("http://13.80.181.10:51000/healthz");
             serviceAddresses[2].Should().Be("http://12.0.0.190:5672/healthz");
             serviceAddresses[3].Should().Be("http://12.0.0.168:30478/healthz");
-
         }
-
     }
 }

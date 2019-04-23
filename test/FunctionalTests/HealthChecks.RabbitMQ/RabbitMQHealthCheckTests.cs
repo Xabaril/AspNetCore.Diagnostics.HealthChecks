@@ -37,7 +37,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("rabbitmq")
                 });
@@ -64,7 +64,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
            })
            .Configure(app =>
            {
-               app.UseHealthChecks("/health", new HealthCheckOptions()
+               app.UseHealthChecks("/health", new HealthCheckOptions
                {
                    Predicate = r => r.Tags.Contains("rabbitmq")
                });

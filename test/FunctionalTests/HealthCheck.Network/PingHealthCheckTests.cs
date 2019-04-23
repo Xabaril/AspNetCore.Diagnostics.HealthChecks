@@ -10,7 +10,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-
 namespace FunctionalTests.HealthChecks.Network
 {
     [Collection("execution")]
@@ -38,7 +37,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("ping")
                    });
@@ -68,7 +67,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("ping")
                    });

@@ -25,7 +25,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
 
             registration.Name.Should().Be("sqlserver");
             check.GetType().Should().Be(typeof(SqlServerHealthCheck));
-
         }
 
         [Fact]

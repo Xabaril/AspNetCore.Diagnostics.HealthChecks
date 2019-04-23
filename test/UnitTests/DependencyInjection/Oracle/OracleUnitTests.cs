@@ -25,7 +25,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.Oracle
 
             registration.Name.Should().Be("oracle");
             check.GetType().Should().Be(typeof(OracleHealthCheck));
-
         }
 
         [Fact]

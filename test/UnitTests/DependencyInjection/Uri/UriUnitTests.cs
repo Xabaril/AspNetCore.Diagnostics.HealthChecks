@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using HealthChecks.SqlServer;
 using HealthChecks.Uris;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -27,7 +26,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.UriGroup
 
             registration.Name.Should().Be("uri-group");
             check.GetType().Should().Be(typeof(UriHealthCheck));
-
         }
 
         [Fact]

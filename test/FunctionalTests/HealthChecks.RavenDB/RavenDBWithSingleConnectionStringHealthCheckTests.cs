@@ -27,7 +27,6 @@ namespace FunctionalTests.HealthChecks.RavenDB
         [SkipOnAppVeyor]
         public async Task be_healthy_if_ravendb_is_available()
         {
-
             var webHostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
@@ -38,7 +37,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });
@@ -66,7 +65,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });
@@ -96,7 +95,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });
@@ -124,7 +123,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });

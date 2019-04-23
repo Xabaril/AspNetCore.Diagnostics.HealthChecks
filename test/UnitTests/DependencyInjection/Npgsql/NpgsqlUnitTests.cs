@@ -25,7 +25,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.Npgsql
 
             registration.Name.Should().Be("npgsql");
             check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
-
         }
 
         [Fact]

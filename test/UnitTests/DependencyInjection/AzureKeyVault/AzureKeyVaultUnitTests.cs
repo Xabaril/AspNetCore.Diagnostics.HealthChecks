@@ -17,11 +17,11 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
             var services = new ServiceCollection();
             services.AddHealthChecks()
                 .AddAzureKeyVault(setup =>
-               {
-                   setup
-                   .UseKeyVaultUrl("https://keyvault")
-                   .AddSecret("supercret");
-               });
+                {
+                    setup
+                    .UseKeyVaultUrl("https://keyvault")
+                    .AddSecret("supercret");
+                });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -31,7 +31,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
 
             registration.Name.Should().Be("azurekeyvault");
             check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
-
         }
 
         [Fact]

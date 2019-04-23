@@ -33,7 +33,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("sqlite")
                    });
@@ -60,7 +60,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("sqlite")
                    });
@@ -87,7 +87,7 @@ namespace FunctionalTests.HealthChecks.Sqlite
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("sqlite")
                    });

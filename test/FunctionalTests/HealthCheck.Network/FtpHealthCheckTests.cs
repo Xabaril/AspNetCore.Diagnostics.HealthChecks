@@ -40,7 +40,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("ftp")
                    });
@@ -70,7 +70,7 @@ namespace FunctionalTests.HealthChecks.Network
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("ftp")
                   });

@@ -46,7 +46,7 @@ namespace FunctionalTests.HealthChecks.Network
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("imap")
                 });
@@ -77,7 +77,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("imap")
                    });
@@ -110,7 +110,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("imap")
                    });
@@ -142,7 +142,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("imap")
                    });
@@ -175,7 +175,7 @@ namespace FunctionalTests.HealthChecks.Network
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("imap")
                    });
@@ -206,7 +206,7 @@ namespace FunctionalTests.HealthChecks.Network
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("imap")
                   });
@@ -237,7 +237,7 @@ namespace FunctionalTests.HealthChecks.Network
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("imap")
                   });
@@ -271,7 +271,7 @@ namespace FunctionalTests.HealthChecks.Network
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("imap")
                   });
@@ -300,7 +300,7 @@ namespace FunctionalTests.HealthChecks.Network
              })
              .Configure(app =>
              {
-                 var options = new HealthCheckOptions()
+                 var options = new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("imap")
                  };

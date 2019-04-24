@@ -246,7 +246,7 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 
 HealthChecks can be used as [Release Gates for Azure DevOps](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/gates?view=azure-devops) using this [Visual Studio Market place Extension](https://marketplace.visualstudio.com/items?itemName=luisfraile.vss-services-aspnetcorehealthcheck-extensions).
 
-Check this [README](./AzureDevOpsTasks/README.md) on how to configure it.
+Check this [README](./extensions/README.md) on how to configure it.
 
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 

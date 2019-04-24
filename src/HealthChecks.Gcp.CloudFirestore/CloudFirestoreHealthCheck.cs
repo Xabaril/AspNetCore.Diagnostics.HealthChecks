@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Gcp.CloudFirestore
 {
@@ -43,7 +43,9 @@ namespace HealthChecks.Gcp.CloudFirestore
         private async Task<List<string>> GetRootCollectionsAsync(CancellationToken cancellationToken)
         {
             var collections = new List<string>();
-            var enumerator = _cloudFirestoreOptions.FirestoreDatabase.ListRootCollectionsAsync().GetEnumerator();
+
+            var enumerator = _cloudFirestoreOptions.FirestoreDatabase
+                .ListRootCollectionsAsync().GetEnumerator();
 
             while (await enumerator.MoveNext(cancellationToken))
             {

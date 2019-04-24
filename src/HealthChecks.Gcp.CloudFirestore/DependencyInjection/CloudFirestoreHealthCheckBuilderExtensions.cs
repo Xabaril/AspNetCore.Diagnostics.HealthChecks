@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class CloudFirestoreHealthCheckBuilderExtensions
     {
         const string NAME = "cloud firestore";
-
         /// <summary>
         /// Add a health check for Cloud Firestore (of the Firebase platform).
         /// </summary>

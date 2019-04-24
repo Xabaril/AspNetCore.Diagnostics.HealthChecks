@@ -19,9 +19,9 @@ namespace FunctionalTests.HealthChecks.Network
         private readonly ExecutionFixture _fixture;
 
         //Host and login account to fast switch tests against different server
-        private string _host = "localhost";
-        private string _validAccount = "admin@healthchecks.com";
-        private string _validPassword = "beatpulse";
+        private const string _host = "localhost";
+        private const string _validAccount = "admin@healthchecks.com";
+        private const string _validPassword = "beatpulse";
 
         public smtp_healthcheck_should(ExecutionFixture fixture)
         {

@@ -48,7 +48,7 @@
 .PARAMETER DryRun
     If set it will not perform installation but instead display what command line to use to consistently install
     currently requested version of dotnet cli. In example if you specify version 'latest' it will display a link
-    with specific version so that this command can be used deterministicly in a build script.
+    with specific version so that this command can be used deterministically in a build script.
     It also displays binaries location if you prefer to install or download it yourself.
 .PARAMETER NoPath
     By default this script will set environment variable PATH for the current process to the binaries folder inside installation folder.
@@ -199,11 +199,11 @@ function GetHTTPResponse([Uri] $Uri)
             # HttpClient is used vs Invoke-WebRequest in order to support Nano Server which doesn't support the Invoke-WebRequest cmdlet.
             Load-Assembly -Assembly System.Net.Http
 
-            if(-not $ProxyAddress) {
+            if (-not $ProxyAddress) {
                 try {
                     # Despite no proxy being explicitly specified, we may still be behind a default proxy
                     $DefaultProxy = [System.Net.WebRequest]::DefaultWebProxy;
-                    if($DefaultProxy -and (-not $DefaultProxy.IsBypassed($Uri))) {
+                    if ($DefaultProxy -and (-not $DefaultProxy.IsBypassed($Uri))) {
                         $ProxyAddress = $DefaultProxy.GetProxy($Uri).OriginalString
                         $ProxyUseDefaultCredentials = $true
                     }
@@ -215,7 +215,7 @@ function GetHTTPResponse([Uri] $Uri)
                 }
             }
 
-            if($ProxyAddress) {
+            if ($ProxyAddress) {
                 $HttpClientHandler = New-Object System.Net.Http.HttpClientHandler
                 $HttpClientHandler.Proxy =  New-Object System.Net.WebProxy -Property @{Address=$ProxyAddress;UseDefaultCredentials=$ProxyUseDefaultCredentials}
                 $HttpClient = New-Object System.Net.Http.HttpClient -ArgumentList $HttpClientHandler

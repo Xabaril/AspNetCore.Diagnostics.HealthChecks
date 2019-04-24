@@ -18,6 +18,7 @@ namespace HealthChecks.UI.Core.Notifications
         private readonly ILogger<WebHookFailureNotifier> _logger;
         private readonly Settings _settings;
         private readonly HealthChecksDb _db;
+
         public WebHookFailureNotifier(HealthChecksDb db, IOptions<Settings> settings, ILogger<WebHookFailureNotifier> logger)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -72,7 +73,6 @@ namespace HealthChecks.UI.Core.Notifications
                 &&
                 (DateTime.UtcNow - lastNotification.LastNotified).TotalSeconds < _settings.MinimumSecondsBetweenFailureNotifications;
         }
-
         private async Task SaveNotification(HealthCheckFailureNotification notification)
         {
             if (notification != null)
@@ -83,12 +83,11 @@ namespace HealthChecks.UI.Core.Notifications
                 await _db.SaveChangesAsync();
             }
         }
-
         private async Task SendRequest(string uri, string name, string payloadContent)
         {
             if (uri == null || !Uri.TryCreate(uri, UriKind.Absolute, out Uri webHookUri))
             {
-                _logger.LogWarning($"The web hook notification uri is not stablished or is not an absolute Uri ({name}). Set the webhook uri value on BeatPulse setttings.");
+                _logger.LogWarning($"The web hook notification uri is not established or is not an absolute Uri ({name}). Set the webhook uri value on BeatPulse settings.");
 
                 return;
             }
@@ -109,7 +108,6 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
             }
         }
-
         private string GetFailedMessageFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Values
@@ -117,7 +115,6 @@ namespace HealthChecks.UI.Core.Notifications
 
             return $"There are at least {failedChecks} HealthChecks failing.";
         }
-
         private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
         {
             const string JOIN_SYMBOL = "|";
@@ -129,7 +126,6 @@ namespace HealthChecks.UI.Core.Notifications
 
             return failedChecksDescription;
         }
-
         public void Dispose()
         {
             if (_db != null)

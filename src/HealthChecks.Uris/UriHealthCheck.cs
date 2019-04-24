@@ -11,7 +11,6 @@ namespace HealthChecks.Uris
     {
         private readonly UriHealthCheckOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
-
         public UriHealthCheck(UriHealthCheckOptions options, Func<HttpClient> httpClientFactory)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -41,9 +40,9 @@ namespace HealthChecks.Uris
 
                     var requestMessage = new HttpRequestMessage(method, item.Uri);
 
-                    foreach (var header in item.Headers)
+                    foreach (var (Name, Value) in item.Headers)
                     {
-                        requestMessage.Headers.Add(header.Name, header.Value);
+                        requestMessage.Headers.Add(Name, Value);
                     }
 
                     using (var timeoutSource = new CancellationTokenSource(timeout))

@@ -10,7 +10,6 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly ImapHealthCheckOptions _options;
-        private ImapConnection _imapConnection = null;
         public ImapHealthCheck(ImapHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -29,18 +28,19 @@ namespace HealthChecks.Network
         {
             try
             {
-                _imapConnection = new ImapConnection(_options);
-
-                if (await _imapConnection.ConnectAsync())
+                using (var imapConnection = new ImapConnection(_options))
                 {
-                    if (_options.AccountOptions.Login)
+                    if (await imapConnection.ConnectAsync())
                     {
-                        return await ExecuteAuthenticatedUserActions(context);
+                        if (_options.AccountOptions.Login)
+                        {
+                            return await ExecuteAuthenticatedUserActions(context, imapConnection);
+                        }
                     }
-                }
-                else
-                {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to server {_options.Host} has failed - SSL Enabled : {_options.ConnectionType}");
+                    else
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to server {_options.Host} has failed - SSL Enabled : {_options.ConnectionType}");
+                    }
                 }
 
                 return HealthCheckResult.Healthy();
@@ -49,20 +49,15 @@ namespace HealthChecks.Network
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
-            finally
-            {
-                _imapConnection.Dispose();
-            }
         }
-
-        private async Task<HealthCheckResult> ExecuteAuthenticatedUserActions(HealthCheckContext context)
+        private async Task<HealthCheckResult> ExecuteAuthenticatedUserActions(HealthCheckContext context, ImapConnection imapConnection)
         {
             var (User, Password) = _options.AccountOptions.Account;
 
-            if (await _imapConnection.AuthenticateAsync(User, Password))
+            if (await imapConnection.AuthenticateAsync(User, Password))
             {
                 if (_options.FolderOptions.CheckFolder
-                    && !await _imapConnection.SelectFolder(_options.FolderOptions.FolderName))
+                    && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName))
                 {
                     return new HealthCheckResult(context.Registration.FailureStatus, description: $"Folder {_options.FolderOptions.FolderName} check failed.");
                 }

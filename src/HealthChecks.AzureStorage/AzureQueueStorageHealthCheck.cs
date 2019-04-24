@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureQueueStorageHealthCheck 
+    public class AzureQueueStorageHealthCheck
         : IHealthCheck
     {
         private readonly string _connectionString;
         public AzureQueueStorageHealthCheck(string connectionString)
         {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
             _connectionString = connectionString;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

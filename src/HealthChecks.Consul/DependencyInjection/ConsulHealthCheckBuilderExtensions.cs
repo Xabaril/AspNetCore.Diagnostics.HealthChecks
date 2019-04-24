@@ -9,7 +9,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ConsulHealthCheckBuilderExtensions
     {
         private const string NAME = "consul";
-
         /// <summary>
         /// Add a health check for Consul services.
         /// </summary>
@@ -31,14 +30,13 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddHttpClient();
 
             var registrationName = name ?? NAME;
-
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
+                registrationName,
                 sp => CreateHealthCheck(sp, options, registrationName),
                 failureStatus,
                 tags));
         }
-        static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, ConsulOptions options, string name)
+        private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, ConsulOptions options, string name)
         {
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             return new ConsulHealthCheck(options, () => httpClientFactory.CreateClient(name));

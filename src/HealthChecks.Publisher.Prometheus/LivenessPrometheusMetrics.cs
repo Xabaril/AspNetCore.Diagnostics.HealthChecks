@@ -32,19 +32,17 @@ namespace HealthChecks.Publisher.Prometheus
 
             Registry = DefaultCollectorRegistry.Instance;
         }
-
         protected void WriteMetricsFromHealthReport(HealthReport report)
         {
             foreach (var reportEntry in report.Entries)
             {
                 _healthChecksResult.Labels(reportEntry.Key).
-                    Set((double) reportEntry.Value.Status);
+                    Set((double)reportEntry.Value.Status);
 
                 _healthChecksDuration.Labels(reportEntry.Key)
                     .Set(reportEntry.Value.Duration.TotalSeconds);
             }
         }
-
         protected static Stream CollectionToStreamWriter(ICollectorRegistry registry)
         {
             var metrics = registry.CollectAll();

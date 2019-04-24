@@ -38,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
+
         /// <summary>
         /// Add a health check for single uri.
         /// </summary>
@@ -68,6 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
+
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -90,6 +92,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
+
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -119,6 +122,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
+
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>

@@ -13,6 +13,10 @@ namespace HealthChecks.AzureStorage
         private readonly string _connectionString;
         public AzureTableStorageHealthCheck(string connectionString)
         {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
             _connectionString = connectionString;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

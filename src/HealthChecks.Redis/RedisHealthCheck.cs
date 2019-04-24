@@ -21,16 +21,15 @@ namespace HealthChecks.Redis
         {
             try
             {
-                ConnectionMultiplexer connection;
-
-                if (!_connections.TryGetValue(_redisConnectionString, out connection))
+                if (!_connections.TryGetValue(_redisConnectionString, out ConnectionMultiplexer connection))
                 {
                     connection = ConnectionMultiplexer.Connect(_redisConnectionString);
 
                     if (!_connections.TryAdd(_redisConnectionString, connection))
                     {
-                        return Task.FromResult(
-                             new HealthCheckResult(context.Registration.FailureStatus, description: "New redis connection can't be added into dictionary."));
+                        // Dispose new connection which we just created, because we don't need it.
+                        connection.Dispose();
+                        connection = _connections[_redisConnectionString];
                     }
                 }
 

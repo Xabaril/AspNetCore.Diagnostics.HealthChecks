@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class DocumentDbHealthCheckBuilderExtensions
     {
         const string NAME = "documentdb";
-
         /// <summary>
         /// Add a health check for Azure DocumentDb database.
         /// </summary>

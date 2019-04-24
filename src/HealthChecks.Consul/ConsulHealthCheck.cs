@@ -14,15 +14,14 @@ namespace HealthChecks.Consul
         private readonly Func<HttpClient> _httpClientFactory;
         public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory)
         {
-            _options = options;
-            _httpClientFactory = httpClientFactory;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 var client = _httpClientFactory();
-
                 if (_options.RequireBasicAuthentication)
                 {
                     var credentials = ASCIIEncoding.ASCII.GetBytes($"{_options.Username}:{_options.Password}");
@@ -31,7 +30,6 @@ namespace HealthChecks.Consul
                     client.DefaultRequestHeaders
                         .Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
                 }
-
                 var result = await client
                     .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", cancellationToken);
 

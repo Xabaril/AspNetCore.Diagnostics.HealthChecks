@@ -1,14 +1,13 @@
 ﻿using HealthChecks.MongoDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Collections.Generic;
 using MongoDB.Driver;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class MongoDbHealthCheckBuilderExtensions
     {
         const string NAME = "mongodb";
-
         /// <summary>
         /// Add a health check for MongoDb database that list all databases on the system.
         /// </summary>
@@ -29,7 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
         /// </summary>
@@ -51,7 +49,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
         /// </summary>
@@ -72,7 +69,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
         /// </summary>

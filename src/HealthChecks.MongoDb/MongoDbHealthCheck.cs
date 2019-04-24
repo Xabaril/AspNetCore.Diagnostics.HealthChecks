@@ -13,7 +13,6 @@ namespace HealthChecks.MongoDb
         private static readonly ConcurrentDictionary<MongoClientSettings, MongoClient> _mongoClient = new ConcurrentDictionary<MongoClientSettings, MongoClient>();
         private readonly MongoClientSettings _mongoClientSettings;
         private readonly string _specifiedDatabase;
-
         public MongoDbHealthCheck(string connectionString, string databaseName = default)
             : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {

@@ -13,7 +13,7 @@ namespace HealthChecks.Network
         private readonly DnsResolveOptions _options;
         public DnsResolveHealthCheck(DnsResolveOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options)); ;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

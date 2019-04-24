@@ -3,7 +3,7 @@
 <#
 .SYNOPSIS
   This is a helper function that runs a scriptblock and checks the PS variable $lastexitcode
-  to see if an error occcured. If an error is detected then an exception is thrown.
+  to see if an error occured. If an error is detected then an exception is thrown.
   This function allows you to run command-line programs without having to
   explicitly check the $lastexitcode variable.
 .EXAMPLE
@@ -22,7 +22,7 @@ function Exec
     }
 }
 
-if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
+if (Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
 
 exec { & dotnet restore }
 
@@ -94,6 +94,7 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
@@ -128,6 +129,7 @@ else {
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }

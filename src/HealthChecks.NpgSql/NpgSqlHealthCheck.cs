@@ -27,7 +27,7 @@ namespace HealthChecks.NpgSql
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-                        await command.ExecuteScalarAsync();
+                        await command.ExecuteScalarAsync(cancellationToken);
                     }
 
                     return HealthCheckResult.Healthy();

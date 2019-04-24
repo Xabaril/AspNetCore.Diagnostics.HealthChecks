@@ -20,7 +20,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
 
         private readonly string _instrumentationKey;
         private static TelemetryClient _client;
-        private static object sync_root = new object();
+        private static readonly object sync_root = new object();
         private readonly bool _saveDetailedReport;
         private readonly bool _excludeHealthyReports;
 
@@ -57,32 +57,32 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
                     properties: new Dictionary<string, string>()
                     {
-                        {nameof(Environment.MachineName), Environment.MachineName},
-                        {nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
-                        {HEALTHCHECK_NAME, reportEntry.Key }
+                        { nameof(Environment.MachineName), Environment.MachineName },
+                        { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                        { HEALTHCHECK_NAME, reportEntry.Key }
                     },
                     metrics: new Dictionary<string, double>()
                     {
-                        { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 :0},
-                        { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds}
+                        { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0 },
+                        { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
                     });
             }
         }
         private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
         {
             client.TrackEvent(EVENT_NAME,
-                properties: new Dictionary<string, string>()
+                properties: new Dictionary<string, string>
                 {
-                    {nameof(Environment.MachineName),Environment.MachineName},
-                    {nameof(Assembly),Assembly.GetEntryAssembly().GetName().Name }
+                    { nameof(Environment.MachineName), Environment.MachineName },
+                    { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name }
                 },
-                metrics: new Dictionary<string, double>()
+                metrics: new Dictionary<string, double>
                 {
-                    { METRIC_STATUS_NAME ,report.Status == HealthStatus.Healthy ? 1 :0},
-                    { METRIC_DURATION_NAME,report.TotalDuration.TotalMilliseconds}
+                    { METRIC_STATUS_NAME, report.Status == HealthStatus.Healthy ? 1 : 0 },
+                    { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
                 });
         }
-        TelemetryClient GetOrCreateTelemetryClient()
+        private TelemetryClient GetOrCreateTelemetryClient()
         {
             if (_client == null)
             {
@@ -96,7 +96,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
                         var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
                             ? TelemetryConfiguration.Active
                             : new TelemetryConfiguration(_instrumentationKey);
-
 
                         _client = new TelemetryClient(configuration);
                     }

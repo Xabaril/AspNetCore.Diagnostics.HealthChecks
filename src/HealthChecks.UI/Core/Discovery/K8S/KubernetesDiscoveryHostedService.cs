@@ -49,22 +49,18 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return Task.CompletedTask;
         }
-
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
-
         private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 _logger.LogInformation($"Starting kubernetes service discovery on cluster {_discoveryOptions.ClusterHost}");
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
-
                     var livenessDbContext = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
 
                     try
@@ -90,37 +86,31 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                             {
                                 _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
                             }
-
                         }
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "An error ocurred on kubernetes service discovery");
+                        _logger.LogError(ex, "An error occurred on kubernetes service discovery");
                     }
                 }
 
                 await Task.Delay(_discoveryOptions.RefreshTimeOnSeconds * 1000);
             }
         }
-
         bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
         {
             return livenessDb.Configurations
                 .Any(lc => lc.Uri == host);
         }
-
         bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
-
-
         async Task<HttpStatusCode> CallClusterService(string host)
         {
             var response = await _clusterServiceClient.GetAsync(host);
             return response.StatusCode;
         }
-
         Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
         {
             livenessDb.Configurations.Add(new HealthCheckConfiguration()
@@ -132,6 +122,5 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return livenessDb.SaveChangesAsync();
         }
-
     }
 }

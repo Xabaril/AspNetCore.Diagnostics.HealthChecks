@@ -30,15 +30,12 @@ namespace HealthChecks.Elasticsearch
                 }
 
                 var lowlevelClient = new ElasticClient(settings);
-                
                 var pingResult = await lowlevelClient.PingAsync(cancellationToken: cancellationToken);
-                
                 var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
                 return isSuccess
                     ? HealthCheckResult.Healthy()
                     : new HealthCheckResult(context.Registration.FailureStatus);
-
             }
             catch (Exception ex)
             {

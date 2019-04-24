@@ -10,7 +10,6 @@ namespace HealthChecks.UI.Client
     public static class UIResponseWriter
     {
         const string DEFAULT_CONTENT_TYPE = "application/json";
-
         public static Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
         {
             var response = "{}";

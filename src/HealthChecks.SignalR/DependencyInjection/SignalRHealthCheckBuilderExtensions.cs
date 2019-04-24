@@ -9,7 +9,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SignalRHealthCheckBuilderExtensions
     {
         const string NAME = "signalr";
-
         /// <summary>
         /// Add a health check for SignalR.
         /// </summary>
@@ -36,7 +35,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     failureStatus,
                     tags));
         }
-
         /// <summary>
         /// Add a health check for SignalR.
         /// </summary>

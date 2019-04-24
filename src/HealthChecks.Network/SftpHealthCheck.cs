@@ -50,7 +50,6 @@ namespace HealthChecks.Network
 
                 return Task.FromResult(
                     HealthCheckResult.Healthy());
-
             }
             catch (Exception ex)
             {

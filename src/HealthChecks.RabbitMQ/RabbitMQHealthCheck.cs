@@ -12,7 +12,6 @@ namespace HealthChecks.RabbitMQ
     {
         private readonly string _rabbitMqConnectionString;
         private readonly SslOption _sslOption;
-
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
             _rabbitMqConnectionString = rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString));

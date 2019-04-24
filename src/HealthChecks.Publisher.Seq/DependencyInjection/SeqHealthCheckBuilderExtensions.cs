@@ -8,13 +8,12 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SeqHealthCheckBuilderExtensions
     {
         const string NAME = "seq";
-
         /// <summary>
         ///     Add a health check publisher for Seq.
         /// </summary>
         /// <remarks>
-        ///     For each <see cref="HealthReport" /> published a new metric value indicating the health check status ( 2 Healthy, 1
-        ///     Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds./>
+        ///     For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
+        ///     Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
         /// <param name="setup">The Sql configuration options.</param>

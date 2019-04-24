@@ -7,7 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SqlServerHealthCheckBuilderExtensions
     {
         const string NAME = "sqlserver";
-
         /// <summary>
         /// Add a health check for SqlServer services.
         /// </summary>
@@ -24,10 +23,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder, string connectionString, string healthQuery = "SELECT 1;", string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
-               name ?? NAME,
-               sp => new SqlServerHealthCheck(connectionString, healthQuery),
-               failureStatus,
-               tags));
+                name ?? NAME,
+                sp => new SqlServerHealthCheck(connectionString, healthQuery),
+                failureStatus,
+                tags));
         }
     }
 }

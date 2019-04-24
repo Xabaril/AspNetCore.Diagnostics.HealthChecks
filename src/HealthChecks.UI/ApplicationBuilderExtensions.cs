@@ -36,12 +36,12 @@ namespace Microsoft.AspNetCore.Builder
         private static void EnsureValidApiOptions(Options options)
         {
             Action<string, string> ensureValidPath = (string path, string argument) =>
-             {
-                 if (string.IsNullOrEmpty(path) || !path.StartsWith("/"))
-                 {
-                     throw new ArgumentException("The value for customized path can't be null and need to start with / characater.");
-                 }
-             };
+            {
+                if (string.IsNullOrEmpty(path) || !path.StartsWith("/"))
+                {
+                    throw new ArgumentException("The value for customized path can't be null and need to start with / character.", argument);
+                }
+            };
 
             ensureValidPath(options.ApiPath, nameof(Options.ApiPath));
             ensureValidPath(options.UIPath, nameof(Options.UIPath));

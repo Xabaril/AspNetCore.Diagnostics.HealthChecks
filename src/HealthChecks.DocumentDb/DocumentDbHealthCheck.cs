@@ -23,7 +23,7 @@ namespace HealthChecks.DocumentDb
                     new Uri(_documentDbOptions.UriEndpoint),
                     _documentDbOptions.PrimaryKey))
                 {
-                    await documentDbClient.OpenAsync();
+                    await documentDbClient.OpenAsync(cancellationToken);
                     return HealthCheckResult.Healthy();
                 }
             }

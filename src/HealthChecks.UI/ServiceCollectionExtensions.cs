@@ -81,6 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
+
         static async Task CreateDatabase(IServiceProvider serviceProvider)
         {
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
@@ -101,7 +102,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 var healthCheckConfigurations = settings.Value?
                     .HealthChecks?
-                    .Select(s => new HealthCheckConfiguration()
+                    .Select(s => new HealthCheckConfiguration
                     {
                         Name = s.Name,
                         Uri = s.Uri

@@ -41,7 +41,10 @@ namespace HealthChecks.RavenDB
 
                     store.Initialize();
 
-                    var databases = await store.Maintenance.Server.SendAsync(new GetDatabaseNamesOperation(start: 0, pageSize: 100));
+                    var databases = await store
+                        .Maintenance
+                        .Server
+                        .SendAsync(new GetDatabaseNamesOperation(start: 0, pageSize: 100), cancellationToken);
 
                     if (!string.IsNullOrWhiteSpace(_options.Database)
                         && !databases.Contains(_options.Database, StringComparer.OrdinalIgnoreCase))

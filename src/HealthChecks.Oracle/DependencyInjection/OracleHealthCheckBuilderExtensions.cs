@@ -20,7 +20,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class OracleHealthCheckBuilderExtensions
     {
         const string NAME = "oracle";
-
         public static IHealthChecksBuilder AddOracle(this IHealthChecksBuilder builder, string connectionString, string healthQuery = "select * from v$version", string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         { 
             return builder.Add(new HealthCheckRegistration(

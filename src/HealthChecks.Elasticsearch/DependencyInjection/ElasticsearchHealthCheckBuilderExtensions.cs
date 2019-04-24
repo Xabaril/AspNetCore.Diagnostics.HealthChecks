@@ -8,13 +8,12 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ElasticsearchHealthCheckBuilderExtensions
     {
         const string NAME = "elasticsearch";
-
         /// <summary>
         /// Add a health check for Elasticsearch databases.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="elasticsearchUri">The Elasticsearchv connection string to be used.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
+        /// <param name="elasticsearchUri">The Elasticsearch connection string to be used.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'elasticsearch' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -32,13 +31,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-        
         /// <summary>
         /// Add a health check for Elasticsearch databases.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup">The Elasticsearch option setup.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'elasticsearch' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.

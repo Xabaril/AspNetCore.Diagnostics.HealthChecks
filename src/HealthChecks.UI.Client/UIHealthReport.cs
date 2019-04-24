@@ -6,7 +6,7 @@ namespace HealthChecks.UI.Client
 {
     /*
      * Models for UI Client. This models represent a indirection between HealthChecks API and 
-     * UI Client in order to implement some features not present on HealthChecks of substiture 
+     * UI Client in order to implement some features not present on HealthChecks of substitute 
      * some properties etc.
      */
     public class UIHealthReport
@@ -29,7 +29,7 @@ namespace HealthChecks.UI.Client
 
             foreach (var item in report.Entries)
             {
-                var entry = new UIHealthReportEntry()
+                var entry = new UIHealthReportEntry
                 {
                     Data = item.Value.Data,
                     Description = item.Value.Description,
@@ -59,7 +59,7 @@ namespace HealthChecks.UI.Client
                 Status = UIHealthStatus.Unhealthy,
             };
 
-            uiReport.Entries.Add(entryName, new UIHealthReportEntry()
+            uiReport.Entries.Add(entryName, new UIHealthReportEntry
             {
                 Exception = exception.Message,
                 Description = exception.Message,

@@ -23,6 +23,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly Settings _settings;
         private readonly HttpClient _httpClient;
         private readonly ILogger<HealthCheckReportCollector> _logger;
+
         public HealthCheckReportCollector(
             HealthChecksDb db,
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
@@ -191,7 +192,6 @@ namespace HealthChecks.UI.Core.HostedService
                     Uri = configuration.Uri,
                     DiscoveryService = configuration.DiscoveryService
                 };
-
 
                 await _db.Executions
                     .AddAsync(execution);

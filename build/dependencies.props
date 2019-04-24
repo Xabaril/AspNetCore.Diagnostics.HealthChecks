@@ -79,7 +79,7 @@
     <HealthCheckRedis>2.2.3</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.1</HealthCheckEventStore>
-    <HealthCheckElasticsearch>2.2.1</HealthCheckElasticsearch>
+    <HealthCheckElasticsearch>2.2.2</HealthCheckElasticsearch>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.2</HealthCheckMongoDB>

@@ -59,7 +59,7 @@ namespace FunctionalTests.HealthChecks.Elasticsearch
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                .AddRabbitMQ("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
+                .AddElasticsearch("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
            })
            .Configure(app =>
            {

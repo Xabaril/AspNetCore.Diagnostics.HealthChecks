@@ -40,6 +40,7 @@
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
     <MicrosoftAzureCosmosDB>3.0.0.9-preview</MicrosoftAzureCosmosDB>
+    <GoogleCloudFirestore>1.0.0-beta19</GoogleCloudFirestore>
     <HangfireCore>1.6.21</HangfireCore>
     <WindowsAzureStorage>9.1.0</WindowsAzureStorage>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
@@ -103,5 +104,6 @@
     <HealthCheckRavenDB>2.2.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
     <HealthCheckSignalR>2.2.0</HealthCheckSignalR>
+    <HealthCheckCloudFirestore>2.2.0-preview-beta19</HealthCheckCloudFirestore>
   </PropertyGroup>
 </Project>

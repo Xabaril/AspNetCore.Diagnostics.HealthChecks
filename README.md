@@ -65,6 +65,7 @@ Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.SignalR
+Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

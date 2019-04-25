@@ -1,47 +1,23 @@
-﻿using FluentAssertions;
-using HealthChecks.Kafka;
+﻿using HealthChecks.Kafka;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Kafka
 {
-    public class kafka_registration_should
+    public class kafka_registration_should : base_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddKafka(new Dictionary<string, object>());
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("kafka");
-            check.GetType().Should().Be(typeof(KafkaHealthCheck));
+            ShouldPass("kafka", typeof(KafkaHealthCheck), builder => builder.AddKafka(
+                new Dictionary<string, object>()));
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddKafka(new Dictionary<string, object>(), name: "my-kafka-group");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-kafka-group");
-            check.GetType().Should().Be(typeof(KafkaHealthCheck));
+            ShouldPass("my-kafka-group", typeof(KafkaHealthCheck), builder => builder.AddKafka(
+                new Dictionary<string, object>(), name: "my-kafka-group"));
         }
     }
 }

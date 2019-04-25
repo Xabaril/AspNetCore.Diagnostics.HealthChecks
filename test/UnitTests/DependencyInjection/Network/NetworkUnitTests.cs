@@ -1,223 +1,82 @@
-﻿using FluentAssertions;
-using HealthChecks.Network;
+﻿using HealthChecks.Network;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Network
 {
-    public class network_registration_should
+    public class network_registration_should : base_should
     {
         [Fact]
         public void add_ping_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddPingHealthCheck(_=> { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("ping");
-            check.GetType().Should().Be(typeof(PingHealthCheck));
+            ShouldPass("ping", typeof(PingHealthCheck), builder => builder.AddPingHealthCheck(_ => { }));
         }
         [Fact]
         public void add_named_ping_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddPingHealthCheck(_=> { }, name: "my-ping-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-ping-1");
-            check.GetType().Should().Be(typeof(PingHealthCheck));
+            ShouldPass("my-ping-1", typeof(PingHealthCheck), builder => builder.AddPingHealthCheck(_ => { }, name: "my-ping-1"));
         }
         [Fact]
         public void add_sftp_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddSftpHealthCheck(_ => { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("sftp");
-            check.GetType().Should().Be(typeof(SftpHealthCheck));
+            ShouldPass("sftp", typeof(SftpHealthCheck), builder => builder.AddSftpHealthCheck(_ => { }));
         }
         [Fact]
         public void add_named_sftp_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddSftpHealthCheck(_ => { }, name: "my-sftp-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-sftp-1");
-            check.GetType().Should().Be(typeof(SftpHealthCheck));
+            ShouldPass("my-sftp-1", typeof(SftpHealthCheck), builder => builder.AddSftpHealthCheck(_ => { }, name: "my-sftp-1"));
         }
         [Fact]
         public void add_ftp_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddFtpHealthCheck(_ => { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("ftp");
-            check.GetType().Should().Be(typeof(FtpHealthCheck));
+            ShouldPass("ftp", typeof(FtpHealthCheck), builder => builder.AddFtpHealthCheck(_ => { }));
         }
         [Fact]
         public void add_named_ftp_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddFtpHealthCheck(_ => { }, name: "my-ftp-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-ftp-1");
-            check.GetType().Should().Be(typeof(FtpHealthCheck));
+            ShouldPass("my-ftp-1", typeof(FtpHealthCheck), builder => builder.AddFtpHealthCheck(_ => { }, name: "my-ftp-1"));
         }
         [Fact]
         public void add_dns_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddDnsResolveHealthCheck(_ => { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("dns");
-            check.GetType().Should().Be(typeof(DnsResolveHealthCheck));
+            ShouldPass("dns", typeof(DnsResolveHealthCheck), builder => builder.AddDnsResolveHealthCheck(_ => { }));
         }
         [Fact]
         public void add_named_dns_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddDnsResolveHealthCheck(_ => {  }, name: "my-dns-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-dns-1");
-            check.GetType().Should().Be(typeof(DnsResolveHealthCheck));
+            ShouldPass("my-dns-1", typeof(DnsResolveHealthCheck), builder => builder.AddDnsResolveHealthCheck(_ => { }, name: "my-dns-1"));
         }
         [Fact]
         public void add_imap_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddImapHealthCheck(opt => { opt.Host = "the-host"; opt.Port = 111; });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("imap");
-            check.GetType().Should().Be(typeof(ImapHealthCheck));
+            ShouldPass("imap", typeof(ImapHealthCheck), builder => builder.AddImapHealthCheck(
+                opt => { opt.Host = "the-host"; opt.Port = 111; }));
         }
         [Fact]
         public void add_named_imap_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddImapHealthCheck(opt => { opt.Host = "the-host"; opt.Port = 111; }, name: "my-imap-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-imap-1");
-            check.GetType().Should().Be(typeof(ImapHealthCheck));
+            ShouldPass("my-imap-1", typeof(ImapHealthCheck), builder => builder.AddImapHealthCheck(
+                opt => { opt.Host = "the-host"; opt.Port = 111; }, name: "my-imap-1"));
         }
         [Fact]
         public void add_smpt_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddSmtpHealthCheck(_ => { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("smtp");
-            check.GetType().Should().Be(typeof(SmtpHealthCheck));
+            ShouldPass("smtp", typeof(SmtpHealthCheck), builder => builder.AddSmtpHealthCheck(_ => { }));
         }
         [Fact]
         public void add_named_smtp_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddSmtpHealthCheck(_ => { }, name: "my-smtp-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-smtp-1");
-            check.GetType().Should().Be(typeof(SmtpHealthCheck));
+            ShouldPass("my-smtp-1", typeof(SmtpHealthCheck), builder => builder.AddSmtpHealthCheck(_ => { }, name: "my-smtp-1"));
         }
-
+        [Fact]
+        public void add_tcp_check_when_properly_configured()
+        {
+            ShouldPass("tcp", typeof(TcpHealthCheck), builder => builder.AddTcpHealthCheck(_ => { }));
+        }
         [Fact]
         public void add_named_tcp_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddTcpHealthCheck(_ => { }, name: "tcp-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("tcp-1");
-            check.GetType().Should().Be(typeof(TcpHealthCheck));
+            ShouldPass("tcp-1", typeof(TcpHealthCheck), builder => builder.AddTcpHealthCheck(_ => { }, name: "tcp-1"));
         }
     }
 }

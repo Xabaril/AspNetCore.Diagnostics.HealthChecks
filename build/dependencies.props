@@ -104,6 +104,6 @@
     <HealthCheckRavenDB>2.2.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
     <HealthCheckSignalR>2.2.0</HealthCheckSignalR>
-    <HealthCheckCloudFirestore>2.2.0-preview-2-beta19</HealthCheckCloudFirestore>
+    <HealthCheckCloudFirestore>2.2.0-preview-3-beta19</HealthCheckCloudFirestore>
   </PropertyGroup>
 </Project>

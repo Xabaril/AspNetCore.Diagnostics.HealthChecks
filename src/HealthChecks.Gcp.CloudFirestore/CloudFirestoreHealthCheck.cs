@@ -44,12 +44,14 @@ namespace HealthChecks.Gcp.CloudFirestore
         {
             var collections = new List<string>();
 
-            var enumerator = _cloudFirestoreOptions.FirestoreDatabase
-                .ListRootCollectionsAsync().GetEnumerator();
-
-            while (await enumerator.MoveNext(cancellationToken))
+            using (var enumerator = _cloudFirestoreOptions.FirestoreDatabase
+                .ListRootCollectionsAsync()
+                .GetEnumerator())
             {
-                collections.Add(enumerator.Current.Id);
+                while (await enumerator.MoveNext(cancellationToken))
+                {
+                    collections.Add(enumerator.Current.Id);
+                }
             }
             return collections;
         }

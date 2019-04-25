@@ -28,7 +28,7 @@ namespace HealthChecks.Gcp.CloudFirestore
                     {
                         return new HealthCheckResult(
                             context.Registration.FailureStatus,
-                            description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => $"'{c}'"))
+                            description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'"))
                         );
                     }
                 }

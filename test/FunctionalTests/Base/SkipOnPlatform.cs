@@ -46,7 +46,7 @@ namespace FunctionalTests.Base
             
             return new[]
             {
-                new XunitTestCase(_diagnosticMessageSink, TestMethodDisplay.Method, TestMethodDisplayOptions.All ,testMethod)
+                new XunitTestCase(_diagnosticMessageSink, TestMethodDisplay.Method, TestMethodDisplayOptions.All, testMethod)
             };
         }
     }

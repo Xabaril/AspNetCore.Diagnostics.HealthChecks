@@ -65,6 +65,7 @@ Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.SignalR
+Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -245,7 +246,7 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 
 HealthChecks can be used as [Release Gates for Azure DevOps](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/gates?view=azure-devops) using this [Visual Studio Market place Extension](https://marketplace.visualstudio.com/items?itemName=luisfraile.vss-services-aspnetcorehealthcheck-extensions).
 
-Check this [README](./AzureDevOpsTasks/README.md) on how to configure it.
+Check this [README](./extensions/README.md) on how to configure it.
 
 ## Tutorials, demos and walkthroughs on ASP.NET Core HealthChecks
 
@@ -261,7 +262,7 @@ Check this [README](./AzureDevOpsTasks/README.md) on how to configure it.
 
 AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
 
-*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup,Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r.
+*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup, Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r, David Bottiau @odonno.
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

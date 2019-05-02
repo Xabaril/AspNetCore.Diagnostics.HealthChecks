@@ -62,7 +62,9 @@ services:
         ports:
           - ${IDSVR_PORT}:80
     oracle:
-        image: wnameless/oracle-xe-11g
+# Build image from src, pending legal issues with binary distribution https://github.com/wnameless/docker-oracle-xe-11g/issues/118
+        build:
+          context: https://github.com/wnameless/docker-oracle-xe-11g.git
         ports: 
             - ${ORACLE_PORT}:1521
         environment:

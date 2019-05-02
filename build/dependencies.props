@@ -91,7 +91,7 @@
     <HealthCheckCosmosDb>2.2.0-preview</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.2</HealthCheckAzureStorage>
-    <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
+    <HealthCheckHangfire>2.2.2</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckConsul>2.2.2</HealthCheckConsul>
     <HealthCheckUI>2.2.27</HealthCheckUI>

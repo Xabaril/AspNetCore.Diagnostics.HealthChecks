@@ -66,15 +66,5 @@ namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
             check.GetType().Should().Be(typeof(SqlServerHealthCheck));
             factoryCalled.Should().BeTrue();
         }
-
-        private class SqlServerConfig
-        {
-            public readonly string ConnectionString;
-
-            public SqlServerConfig(string connectionString)
-            {
-                ConnectionString = connectionString;
-            }
-        }
     }
 }

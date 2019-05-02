@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,6 +10,8 @@ namespace HealthChecks.CosmosDb
     public class CosmosDbHealthCheck
         : IHealthCheck
     {
+        private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new ConcurrentDictionary<string, CosmosClient>();
+
         private readonly string _connectionString;
         public CosmosDbHealthCheck(string connectionString)
         {
@@ -18,11 +21,21 @@ namespace HealthChecks.CosmosDb
         {
             try
             {
-                using (var cosmosDbClient = new CosmosClient(_connectionString))
+                CosmosClient cosmosDbClient;
+
+                if(!_connections.TryGetValue(_connectionString, out cosmosDbClient))
                 {
-                    await cosmosDbClient.GetAccountSettingsAsync();
-                    return HealthCheckResult.Healthy();
+                    cosmosDbClient = new CosmosClient(_connectionString);
+
+                    if (!_connections.TryAdd(_connectionString, cosmosDbClient))
+                    {
+                        cosmosDbClient.Dispose();
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New CosmosClient can't be added into dictionary.");
+                    }
                 }
+
+                await cosmosDbClient.GetAccountSettingsAsync();
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

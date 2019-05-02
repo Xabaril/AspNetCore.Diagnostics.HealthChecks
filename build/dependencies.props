@@ -75,7 +75,7 @@
     <HealthCheckIdSvr>2.2.2</HealthCheckIdSvr>
     <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
-    <HealthCheckUri>2.2.2</HealthCheckUri>
+    <HealthCheckUri>2.2.3</HealthCheckUri>
     <HealthCheckRedis>2.2.3</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.1</HealthCheckEventStore>

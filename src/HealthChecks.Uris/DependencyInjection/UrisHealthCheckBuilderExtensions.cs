@@ -26,13 +26,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddHttpClient();
 
-            var options = new UriHealthCheckOptions();
-            options.AddUri(uri);
-
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => CreateHealthCheck(sp, registrationName, options),
+                sp => {
+                    var options = new UriHealthCheckOptions()
+                        .AddUri(uri);
+
+                    return CreateHealthCheck(sp, registrationName, options);
+                },
                 failureStatus,
                 tags));
         }
@@ -54,14 +56,16 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddHttpClient();
 
-            var options = new UriHealthCheckOptions();
-            options.AddUri(uri);
-            options.UseHttpMethod(httpMethod);
-
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => CreateHealthCheck(sp, registrationName, options),
+                sp => {
+                    var options = new UriHealthCheckOptions()
+                        .AddUri(uri)
+                        .UseHttpMethod(httpMethod);
+
+                    return CreateHealthCheck(sp, registrationName, options);
+                },
                 failureStatus,
                 tags));
         }
@@ -81,12 +85,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddHttpClient();
 
-            var options = UriHealthCheckOptions.CreateFromUris(uris);
-
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => CreateHealthCheck(sp, registrationName, options),
+                sp => CreateHealthCheck(sp, registrationName, UriHealthCheckOptions.CreateFromUris(uris)),
                 failureStatus,
                 tags));
         }
@@ -107,13 +109,16 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddHttpClient();
 
-            var options = UriHealthCheckOptions.CreateFromUris(uris);
-            options.UseHttpMethod(httpMethod);
-
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => CreateHealthCheck(sp, registrationName, options),
+                sp => {
+                    var options = UriHealthCheckOptions
+                        .CreateFromUris(uris)
+                        .UseHttpMethod(httpMethod);
+
+                    return CreateHealthCheck(sp, registrationName, options);
+                },
                 failureStatus,
                 tags));
         }
@@ -133,13 +138,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddHttpClient();
 
-            var options = new UriHealthCheckOptions();
-            uriOptions?.Invoke(options);
-
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => CreateHealthCheck(sp, registrationName, options),
+                sp => {
+                    var options = new UriHealthCheckOptions();
+                    uriOptions?.Invoke(options);
+                    
+                    return CreateHealthCheck(sp, registrationName, options);
+                },
                 failureStatus,
                 tags));
         }

@@ -29,7 +29,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => {
+                sp =>
+                {
                     var options = new UriHealthCheckOptions()
                         .AddUri(uri);
 
@@ -38,7 +39,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for single uri.
         /// </summary>
@@ -59,7 +59,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => {
+                sp =>
+                {
                     var options = new UriHealthCheckOptions()
                         .AddUri(uri)
                         .UseHttpMethod(httpMethod);
@@ -69,7 +70,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -92,7 +92,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -112,7 +111,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => {
+                sp => 
+                {
                     var options = UriHealthCheckOptions
                         .CreateFromUris(uris)
                         .UseHttpMethod(httpMethod);
@@ -122,7 +122,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -141,7 +140,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => {
+                sp => 
+                {
                     var options = new UriHealthCheckOptions();
                     uriOptions?.Invoke(options);
                     
@@ -150,8 +150,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags));
         }
-
-        static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
+        private static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
         {
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             return new UriHealthCheck(options, () => httpClientFactory.CreateClient(name));

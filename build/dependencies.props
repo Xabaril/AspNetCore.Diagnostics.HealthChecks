@@ -89,7 +89,7 @@
     <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>2.2.0-preview</HealthCheckCosmosDb>
-    <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
+    <HealthCheckDocumentDb>2.2.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.2</HealthCheckAzureStorage>
     <HealthCheckHangfire>2.2.2</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>

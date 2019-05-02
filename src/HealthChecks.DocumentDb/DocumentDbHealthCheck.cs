@@ -1,14 +1,17 @@
 ﻿using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HealthChecks.DocumentDb
 {
-    public class DocumentDbHealthCheck 
+    public class DocumentDbHealthCheck
         : IHealthCheck
     {
+        private static readonly ConcurrentDictionary<string, DocumentClient> _connections = new ConcurrentDictionary<string, DocumentClient>();
+
         private readonly DocumentDbOptions _documentDbOptions = new DocumentDbOptions();
         public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions)
         {
@@ -18,14 +21,22 @@ namespace HealthChecks.DocumentDb
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
-            { 
-                using (var documentDbClient = new DocumentClient(
-                    new Uri(_documentDbOptions.UriEndpoint),
-                    _documentDbOptions.PrimaryKey))
+            {
+                DocumentClient documentDbClient;
+
+                if (!_connections.TryGetValue(_documentDbOptions.UriEndpoint, out documentDbClient))
                 {
-                    await documentDbClient.OpenAsync(cancellationToken);
-                    return HealthCheckResult.Healthy();
+                    documentDbClient = new DocumentClient(new Uri(_documentDbOptions.UriEndpoint), _documentDbOptions.PrimaryKey);
+
+                    if (!_connections.TryAdd(_documentDbOptions.UriEndpoint, documentDbClient))
+                    {
+                        documentDbClient.Dispose();
+                        documentDbClient = _connections[_documentDbOptions.UriEndpoint];
+                    }
                 }
+                await documentDbClient.OpenAsync(cancellationToken);
+
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

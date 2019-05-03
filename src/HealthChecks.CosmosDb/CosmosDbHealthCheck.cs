@@ -23,17 +23,16 @@ namespace HealthChecks.CosmosDb
             {
                 CosmosClient cosmosDbClient;
 
-                if(!_connections.TryGetValue(_connectionString, out cosmosDbClient))
+                if (!_connections.TryGetValue(_connectionString, out cosmosDbClient))
                 {
                     cosmosDbClient = new CosmosClient(_connectionString);
 
                     if (!_connections.TryAdd(_connectionString, cosmosDbClient))
                     {
                         cosmosDbClient.Dispose();
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New CosmosClient can't be added into dictionary.");
+                        cosmosDbClient = _connections[_connectionString];
                     }
                 }
-
                 await cosmosDbClient.GetAccountSettingsAsync();
                 return HealthCheckResult.Healthy();
             }

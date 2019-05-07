@@ -43,6 +43,12 @@ services:
         image: confluent/zookeeper
         ports:
             - ${ZOOKEEPER_PORT}:2181
+    raven:
+        image: ravendb/ravendb
+        ports:
+            - ${RAVENDB_PORT}:8080
+        environment:
+            - RAVEN_ARGS=--Setup.Mode=None
     kafka:
         image: confluent/kafka
         environment:

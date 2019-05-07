@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Raven.Client.Documents;
+using Raven.Client.ServerWide;
+using Raven.Client.ServerWide.Operations;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,13 +20,29 @@ namespace FunctionalTests.HealthChecks.RavenDB
     public class ravendb_with_single_connection_string_healthcheck_should
     {
         private readonly ExecutionFixture _fixture;
-        private const string ConnectionString = "http://live-test.ravendb.net:80";
+        private const string ConnectionString = "http://localhost:9030";
 
         public ravendb_with_single_connection_string_healthcheck_should(ExecutionFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
 
+            try
+            {
+                using (var store = new DocumentStore
+                {
+                    Urls = new string[] { ConnectionString },
+                })
+                {
+                    store.Initialize();
+
+
+                    store.Maintenance.Server.Send(
+                        new CreateDatabaseOperation(new DatabaseRecord("Demo")));
+                }
+
+            }
+            catch { }
+        }
         [SkipOnAppVeyor]
         public async Task be_healthy_if_ravendb_is_available()
         {

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Confluent.Kafka;
+using FluentAssertions;
 using HealthChecks.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -16,7 +17,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kafka
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddKafka(new Dictionary<string, object>());
+                .AddKafka(new ProducerConfig());
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -32,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kafka
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddKafka(new Dictionary<string, object>(), name: "my-kafka-group");
+                .AddKafka(new ProducerConfig(), name: "my-kafka-group");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

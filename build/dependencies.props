@@ -34,7 +34,7 @@
     <Npgsql>3.2.6</Npgsql>
     <MongoDBDriver>2.5.0</MongoDBDriver>
     <MySqlConnector>0.40.4</MySqlConnector>
-    <ConfluentKafka>0.11.4</ConfluentKafka>
+    <ConfluentKafka>1.0.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
     <NEST>6.1.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
@@ -84,7 +84,7 @@
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.2</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
-    <HealthCheckKafka>2.2.1</HealthCheckKafka>
+    <HealthCheckKafka>2.2.2</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
     <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>

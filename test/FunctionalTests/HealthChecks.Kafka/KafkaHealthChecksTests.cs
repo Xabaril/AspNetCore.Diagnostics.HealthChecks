@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Confluent.Kafka;
+using FluentAssertions;
 using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -26,15 +27,14 @@ namespace FunctionalTests.HealthChecks.Kafka
         [SkipOnAppVeyor]
         public async Task be_unhealthy_if_kafka_is_unavailable()
         {
-            var config = new Dictionary<string, object>()
+            var configuration = new ProducerConfig()
             {
-                { "bootstrap.servers", "localhost:0000"},
-                { "message.send.max.retries", 0 },
-                { "default.topic.config", new Dictionary<string, object>()
-                    {
-                        { "message.timeout.ms", 5000 }
-                    }
-                }
+                BootstrapServers = "localhost:0000",
+                MessageSendMaxRetries = 0,
+                MessageTimeoutMs = 1500,
+                RequestTimeoutMs = 1500,
+                SocketTimeoutMs = 1500,
+                MetadataRequestTimeoutMs = 1500,
             };
 
             var webHostBuilder = new WebHostBuilder()
@@ -42,7 +42,7 @@ namespace FunctionalTests.HealthChecks.Kafka
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddKafka(config, tags: new string[] { "kafka" });
+                    .AddKafka(configuration, tags: new string[] { "kafka" });
                 })
                 .Configure(app =>
                 {
@@ -64,9 +64,10 @@ namespace FunctionalTests.HealthChecks.Kafka
         [SkipOnAppVeyor]
         public async Task be_healthy_if_kafka_is_available()
         {
-            var config = new Dictionary<string, object>()
+            var configuration = new ProducerConfig()
             {
-                { "bootstrap.servers", "localhost:9092"}
+                BootstrapServers = "localhost:9092",
+                MessageSendMaxRetries = 0
             };
 
             var webHostBuilder = new WebHostBuilder()
@@ -74,7 +75,7 @@ namespace FunctionalTests.HealthChecks.Kafka
                  .ConfigureServices(services =>
                  {
                      services.AddHealthChecks()
-                     .AddKafka(config, tags: new string[] { "kafka" });
+                     .AddKafka(configuration, tags: new string[] { "kafka" });
                  })
                  .Configure(app =>
                  {

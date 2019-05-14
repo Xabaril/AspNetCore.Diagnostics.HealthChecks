@@ -1,4 +1,5 @@
-﻿using HealthChecks.Kafka;
+﻿using Confluent.Kafka;
+using HealthChecks.Kafka;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Dictionary<string, object> config, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, ProducerConfig config, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
@@ -40,9 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Action<Dictionary<string, object>> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Action<ProducerConfig> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
-            var config = new Dictionary<string, object>();
+            var config = new ProducerConfig();
             setup?.Invoke(config);
 
             return builder.Add(new HealthCheckRegistration(

@@ -1,9 +1,6 @@
 ﻿using Confluent.Kafka;
-using Confluent.Kafka.Serialization;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,8 +8,8 @@ namespace HealthChecks.Kafka
 {
     public class KafkaHealthCheck : IHealthCheck
     {
-        private readonly Dictionary<string, object> _configuration;
-        public KafkaHealthCheck(Dictionary<string, object> configuration)
+        private readonly ProducerConfig _configuration;
+        public KafkaHealthCheck(ProducerConfig configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -20,13 +17,21 @@ namespace HealthChecks.Kafka
         {
             try
             {
-                using (var producer = new Producer<string, string>(_configuration, new StringSerializer(Encoding.UTF8), new StringSerializer(Encoding.UTF8)))
+                using (var producer = new ProducerBuilder<string, string>(_configuration).Build())
                 {
-                    var result = await producer.ProduceAsync("beatpulse-topic", "beatpulse-key", $"Check Kafka healthy on {DateTime.UtcNow}");
-                    if (result.Error.Code != ErrorCode.NoError)
+                    var message = new Message<string, string>()
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"ErrorCode {result.Error.Code} with reason ('{result.Error.Reason}')");
+                        Key = "healtcheck-key",
+                        Value = $"Check Kafka healthy on {DateTime.UtcNow}"
+                    };
+
+                    var result = await producer.ProduceAsync("healthchecks-topic", message);
+
+                    if (result.Status == PersistenceStatus.NotPersisted)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.");
                     }
+
                     return HealthCheckResult.Healthy();
                 }
             }

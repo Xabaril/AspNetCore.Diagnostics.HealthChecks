@@ -34,7 +34,7 @@
     <Npgsql>3.2.6</Npgsql>
     <MongoDBDriver>2.5.0</MongoDBDriver>
     <MySqlConnector>0.40.4</MySqlConnector>
-    <ConfluentKafka>0.11.4</ConfluentKafka>
+    <ConfluentKafka>1.0.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
     <NEST>6.1.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
@@ -75,7 +75,7 @@
     <HealthCheckIdSvr>2.2.2</HealthCheckIdSvr>
     <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
-    <HealthCheckUri>2.2.2</HealthCheckUri>
+    <HealthCheckUri>2.2.3</HealthCheckUri>
     <HealthCheckRedis>2.2.3</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.1</HealthCheckEventStore>
@@ -84,14 +84,14 @@
     <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.2</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
-    <HealthCheckKafka>2.2.1</HealthCheckKafka>
+    <HealthCheckKafka>2.2.2</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
     <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>2.2.0-preview</HealthCheckCosmosDb>
-    <HealthCheckDocumentDb>2.2.0</HealthCheckDocumentDb>
+    <HealthCheckDocumentDb>2.2.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>2.2.2</HealthCheckAzureStorage>
-    <HealthCheckHangfire>2.2.1</HealthCheckHangfire>
+    <HealthCheckHangfire>2.2.2</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckConsul>2.2.2</HealthCheckConsul>
     <HealthCheckUI>2.2.27</HealthCheckUI>
@@ -104,6 +104,6 @@
     <HealthCheckRavenDB>2.2.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>2.2.1</HealthCheckKubernetes>
     <HealthCheckSignalR>2.2.0</HealthCheckSignalR>
-    <HealthCheckCloudFirestore>2.2.0-preview-2-beta19</HealthCheckCloudFirestore>
+    <HealthCheckCloudFirestore>2.2.0-preview-4-beta19</HealthCheckCloudFirestore>
   </PropertyGroup>
 </Project>

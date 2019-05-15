@@ -1,6 +1,6 @@
-﻿using HealthChecks.Kafka;
+﻿using Confluent.Kafka;
+using HealthChecks.Kafka;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Kafka
@@ -11,13 +11,13 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kafka
         public void add_health_check_when_properly_configured()
         {
             ShouldPass("kafka", typeof(KafkaHealthCheck), builder => builder.AddKafka(
-                new Dictionary<string, object>()));
+                new ProducerConfig()));
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
             ShouldPass("my-kafka-group", typeof(KafkaHealthCheck), builder => builder.AddKafka(
-                new Dictionary<string, object>(), name: "my-kafka-group"));
+                new ProducerConfig(), name: "my-kafka-group"));
         }
     }
 }

@@ -34,7 +34,7 @@ namespace FunctionalTests.HealthChecks.IdSvr
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("idsvr")
                     });
@@ -61,7 +61,7 @@ namespace FunctionalTests.HealthChecks.IdSvr
                 })
                 .Configure(app=>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("idsvr")
                     });

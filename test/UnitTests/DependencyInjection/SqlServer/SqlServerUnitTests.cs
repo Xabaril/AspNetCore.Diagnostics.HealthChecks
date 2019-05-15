@@ -1,48 +1,22 @@
-﻿using FluentAssertions;
-using HealthChecks.SqlServer;
+﻿using HealthChecks.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
 {
-    public class sql_server_registration_should
+    public class sql_server_registration_should : base_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddSqlServer("connectionstring");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("sqlserver");
-            check.GetType().Should().Be(typeof(SqlServerHealthCheck));
-
+            ShouldPass("sqlserver", typeof(SqlServerHealthCheck), builder => builder.AddSqlServer(
+                "connectionstring"));
         }
-
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddSqlServer("connectionstring",name:"my-sql-server-1");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-sql-server-1");
-            check.GetType().Should().Be(typeof(SqlServerHealthCheck));
+            ShouldPass("my-sql-server-1", typeof(SqlServerHealthCheck), builder => builder.AddSqlServer(
+                "connectionstring", name: "my-sql-server-1"));
         }
     }
 }

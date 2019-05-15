@@ -29,14 +29,11 @@ namespace FunctionalTests.Base
                 return Enumerable.Empty<IXunitTestCase>();
             }
 
-            return new[] { new XunitTestCase(_diagnosticMessageSink,TestMethodDisplay.Method,TestMethodDisplayOptions.All, testMethod) };
+            return new[] { new XunitTestCase(_diagnosticMessageSink, TestMethodDisplay.Method, TestMethodDisplayOptions.All, testMethod) };
         }
     }
 
-
-
     [XunitTestCaseDiscoverer("FunctionalTests.Base.SkipOnAppVeyorTestDiscoverer", "FunctionalTests")]
-
     public class SkipOnAppVeyorAttribute : FactAttribute
     {
 

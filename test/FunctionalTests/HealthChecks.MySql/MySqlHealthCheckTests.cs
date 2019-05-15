@@ -36,7 +36,7 @@ namespace FunctionalTests.HealthChecks.MySql
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("mysql")
                    });
@@ -65,7 +65,7 @@ namespace FunctionalTests.HealthChecks.MySql
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("mysql")
                     });

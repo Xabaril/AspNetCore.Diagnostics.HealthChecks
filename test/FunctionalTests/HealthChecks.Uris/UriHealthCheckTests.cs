@@ -37,7 +37,7 @@ namespace FunctionalTests.HealthChecks.Uris
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("uris")
                    });
@@ -66,7 +66,7 @@ namespace FunctionalTests.HealthChecks.Uris
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("uris")
                    });
@@ -95,7 +95,7 @@ namespace FunctionalTests.HealthChecks.Uris
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("uris")
                   });
@@ -126,7 +126,7 @@ namespace FunctionalTests.HealthChecks.Uris
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("uris")
                   });
@@ -158,7 +158,7 @@ namespace FunctionalTests.HealthChecks.Uris
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("uris")
                   });
@@ -190,7 +190,7 @@ namespace FunctionalTests.HealthChecks.Uris
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("uris")
                   });
@@ -222,7 +222,7 @@ namespace FunctionalTests.HealthChecks.Uris
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("uris")
                   });
@@ -253,7 +253,7 @@ namespace FunctionalTests.HealthChecks.Uris
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("uris")
                   });

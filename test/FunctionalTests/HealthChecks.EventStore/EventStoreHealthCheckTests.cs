@@ -36,7 +36,7 @@ namespace FunctionalTests.HealthChecks.EventStore
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("eventstore")
                 });
@@ -63,7 +63,7 @@ namespace FunctionalTests.HealthChecks.EventStore
            })
            .Configure(app =>
            {
-               app.UseHealthChecks("/health", new HealthCheckOptions()
+               app.UseHealthChecks("/health", new HealthCheckOptions
                {
                    Predicate = r => r.Tags.Contains("eventstore")
                });

@@ -1,46 +1,22 @@
-﻿using FluentAssertions;
-using HealthChecks.Hangfire;
+﻿using HealthChecks.Hangfire;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Hangfire
 {
-    public class hangfire_registration_should
+    public class hangfire_registration_should : base_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddHangfire(setup => setup.MaximumJobsFailed = 3);
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("hangfire");
-            check.GetType().Should().Be(typeof(HangfireHealthCheck));
+            ShouldPass("hangfire", typeof(HangfireHealthCheck), builder => builder.AddHangfire(
+                setup => setup.MaximumJobsFailed = 3));
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddHangfire(setup => setup.MaximumJobsFailed = 3, name: "my-hangfire-group");
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("my-hangfire-group");
-            check.GetType().Should().Be(typeof(HangfireHealthCheck));
+            ShouldPass("my-hangfire-group", typeof(HangfireHealthCheck), builder => builder.AddHangfire(
+                setup => setup.MaximumJobsFailed = 3, name: "my-hangfire-group"));
         }
     }
 }

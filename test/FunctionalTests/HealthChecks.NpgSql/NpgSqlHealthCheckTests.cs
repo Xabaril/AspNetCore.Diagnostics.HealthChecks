@@ -41,7 +41,7 @@ namespace FunctionalTests.HealthChecks.Npgsql
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
@@ -76,7 +76,7 @@ namespace FunctionalTests.HealthChecks.Npgsql
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("npgsql")
                    });
@@ -104,7 +104,7 @@ namespace FunctionalTests.HealthChecks.Npgsql
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("npgsql")
                   });

@@ -39,7 +39,7 @@ namespace FunctionalTests.HealthChecks.System
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("privatememory")
                     });
@@ -65,7 +65,7 @@ namespace FunctionalTests.HealthChecks.System
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("privatememory")
                     });
@@ -92,7 +92,7 @@ namespace FunctionalTests.HealthChecks.System
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("workingset")
                     });
@@ -118,7 +118,7 @@ namespace FunctionalTests.HealthChecks.System
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("privatememory")
                     });
@@ -144,7 +144,7 @@ namespace FunctionalTests.HealthChecks.System
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("virtualmemory")
                     });
@@ -170,7 +170,7 @@ namespace FunctionalTests.HealthChecks.System
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("virtualmemory")
                     });

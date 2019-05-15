@@ -39,7 +39,7 @@ namespace FunctionalTests.HealthChecks.Redis
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 app.UseHealthChecks("/health", new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("redis")
                  });
@@ -72,7 +72,7 @@ namespace FunctionalTests.HealthChecks.Redis
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 app.UseHealthChecks("/health", new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("redis")
                  });
@@ -99,7 +99,7 @@ namespace FunctionalTests.HealthChecks.Redis
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 app.UseHealthChecks("/health", new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("redis")
                  });

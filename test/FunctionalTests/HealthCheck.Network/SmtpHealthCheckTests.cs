@@ -47,7 +47,7 @@ namespace FunctionalTests.HealthChecks.Network
               })
               .Configure(app =>
               {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  app.UseHealthChecks("/health", new HealthCheckOptions
                   {
                       Predicate = r => r.Tags.Contains("smtp")
                   });
@@ -79,7 +79,7 @@ namespace FunctionalTests.HealthChecks.Network
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("smtp")
                     });
@@ -109,7 +109,7 @@ namespace FunctionalTests.HealthChecks.Network
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("smtp")
                     });
@@ -121,7 +121,6 @@ namespace FunctionalTests.HealthChecks.Network
 
             response.EnsureSuccessStatusCode();
         }
-
 
         [SkipOnAppVeyor]
         public async Task be_unhealthy_when_connecting_to_an_invalid_smtp_port_with_mode_auto()
@@ -140,7 +139,7 @@ namespace FunctionalTests.HealthChecks.Network
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("smtp")
                     });
@@ -172,7 +171,7 @@ namespace FunctionalTests.HealthChecks.Network
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("smtp")
                     });
@@ -184,7 +183,6 @@ namespace FunctionalTests.HealthChecks.Network
 
             response.EnsureSuccessStatusCode();
         }
-
 
         [SkipOnAppVeyor]
         public async Task be_healthy_when_connection_and_login_with_valid_account_using_tls_port_and_mode_auto()
@@ -204,7 +202,7 @@ namespace FunctionalTests.HealthChecks.Network
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("smtp")
                     });
@@ -215,9 +213,7 @@ namespace FunctionalTests.HealthChecks.Network
                 .GetAsync();
 
             response.EnsureSuccessStatusCode();
-
         }
-
 
         [SkipOnAppVeyor]
         public async Task be_unhealthy_when_connection_and_login_with_an_invalid_account()
@@ -237,7 +233,7 @@ namespace FunctionalTests.HealthChecks.Network
                  })
                  .Configure(app =>
                  {
-                     app.UseHealthChecks("/health", new HealthCheckOptions()
+                     app.UseHealthChecks("/health", new HealthCheckOptions
                      {
                          Predicate = r => r.Tags.Contains("smtp")
                      });
@@ -248,7 +244,6 @@ namespace FunctionalTests.HealthChecks.Network
                 .GetAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-
         }
 
         [Fact(Skip = "Fact only meant to run on development because it uses a external server")]
@@ -273,7 +268,7 @@ namespace FunctionalTests.HealthChecks.Network
                  })
                  .Configure(app =>
                  {
-                     app.UseHealthChecks("/health", new HealthCheckOptions()
+                     app.UseHealthChecks("/health", new HealthCheckOptions
                      {
                          Predicate = r => r.Tags.Contains("smtp")
                      });
@@ -284,7 +279,6 @@ namespace FunctionalTests.HealthChecks.Network
                 .GetAsync();
 
             response.EnsureSuccessStatusCode();
-
         }
     }
 }

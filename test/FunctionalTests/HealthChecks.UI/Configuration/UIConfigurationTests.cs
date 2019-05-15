@@ -60,7 +60,6 @@ namespace FunctionalTests.UI.Configuration
             webhook.Uri.Should().Be(webhookUri);
             webhook.Payload.Should().Be(webhookPayload);
             webhook.RestoredPayload.Should().Be(webhookRestorePayload);
-
         }
 
         [Fact]
@@ -149,7 +148,6 @@ namespace FunctionalTests.UI.Configuration
             webHook1.Uri.Should().Be("http://webhook1");
             webHook2.Name.Should().Be(webhookName);
             webHook2.Uri.Should().Be(webhookUri);
-
         }
     }
 }

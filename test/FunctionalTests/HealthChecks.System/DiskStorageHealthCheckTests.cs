@@ -45,7 +45,7 @@ namespace FunctionalTests.HealthChecks.System
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 app.UseHealthChecks("/health", new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("diskstorage")
                  });
@@ -78,7 +78,7 @@ namespace FunctionalTests.HealthChecks.System
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 app.UseHealthChecks("/health", new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("diskstorage")
                  });
@@ -106,7 +106,7 @@ namespace FunctionalTests.HealthChecks.System
              })
              .Configure(app =>
              {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
+                 app.UseHealthChecks("/health", new HealthCheckOptions
                  {
                      Predicate = r => r.Tags.Contains("diskstorage")
                  });

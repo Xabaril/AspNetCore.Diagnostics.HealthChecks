@@ -39,13 +39,13 @@ namespace FunctionalTests.HealthChecks.SignalR
                     .AddSignalRHub(
                         () => new HubConnectionBuilder()
                                 .WithUrl("http://localhost/test", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
-                                .Build(), 
+                                .Build(),
                         tags: new string[] { "signalr" });
              })
              .Configure(app =>
              {
                  app
-                     .UseHealthChecks("/health", new HealthCheckOptions()
+                     .UseHealthChecks("/health", new HealthCheckOptions
                      {
                          Predicate = r => r.Tags.Contains("signalr")
                      })
@@ -82,7 +82,7 @@ namespace FunctionalTests.HealthChecks.SignalR
              .Configure(app =>
              {
                  app
-                     .UseHealthChecks("/health", new HealthCheckOptions()
+                     .UseHealthChecks("/health", new HealthCheckOptions
                      {
                          Predicate = r => r.Tags.Contains("signalr")
                      })

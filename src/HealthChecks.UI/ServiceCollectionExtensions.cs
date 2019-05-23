@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HealthChecks.UI.Core.Discovery;
 using HealthChecks.UI.Core.Discovery.Docker;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -87,6 +88,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (dockerDiscoverySettings.Enabled)
             {
                 services.AddHostedService<DockerDiscoveryHostedService>()
+                    .AddScoped<IDiscoveryRegistryService, DiscoveryRegistryService>()
                     .AddSingleton<IDockerDiscoveryService>(x =>
                     {
                         var config = x.GetRequiredService<IOptions<DockerDiscoverySettings>>().Value;
@@ -96,7 +98,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                         return ActivatorUtilities.CreateInstance<DockerDiscoveryService>(x, uri, labelPrefix);
                     })
-                    .AddHttpClient(Keys.DOCKER_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+                    .AddHttpClient(Keys.DISCOVERY_SERVICE_HTTP_CLIENT_NAME);
             }
 
             var serviceProvider = services.BuildServiceProvider();

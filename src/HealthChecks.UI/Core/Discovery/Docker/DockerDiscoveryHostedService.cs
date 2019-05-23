@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using HealthChecks.UI.Core.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,14 +15,13 @@ namespace HealthChecks.UI.Core.Discovery.Docker
         private readonly ILogger<DockerDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly IDockerDiscoveryService _discoveryService;
-        private readonly HttpClient _clusterServiceClient;
+        private readonly CancellationTokenSource _executingTaskCancellationTokenSource;
 
         private Task _executingTask;
 
         public DockerDiscoveryHostedService(
             IServiceProvider serviceProvider,
             IOptions<DockerDiscoverySettings> discoveryOptions,
-            IHttpClientFactory httpClientFactory,
             IDockerDiscoveryService discoveryService,
             ILogger<DockerDiscoveryHostedService> logger)
         {
@@ -35,11 +30,11 @@ namespace HealthChecks.UI.Core.Discovery.Docker
             _discoveryOptions = discoveryOptions?.Value ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _clusterServiceClient = httpClientFactory.CreateClient(Keys.DOCKER_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+            _executingTaskCancellationTokenSource = new CancellationTokenSource();
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _executingTask = ExecuteAsync(cancellationToken);
+            _executingTask = ExecuteAsync(_executingTaskCancellationTokenSource.Token);
 
             if (_executingTask.IsCompleted)
                 return _executingTask;
@@ -48,13 +43,14 @@ namespace HealthChecks.UI.Core.Discovery.Docker
         }
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            _executingTaskCancellationTokenSource.Cancel();
+
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
         private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             var refreshTime = TimeSpan.FromSeconds(_discoveryOptions.RefreshTimeOnSeconds);
-            var defaultPath = $"/{_discoveryOptions.HealthPath}";
-            const int defaultPort = 80;
+            var defaultPath = _discoveryOptions.HealthPath;
             const string defaultScheme = "http";
 
             while (!cancellationToken.IsCancellationRequested)
@@ -63,7 +59,7 @@ namespace HealthChecks.UI.Core.Discovery.Docker
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
+                    var registrationService = scope.ServiceProvider.GetRequiredService<IDiscoveryRegistryService>();
 
                     try
                     {
@@ -79,30 +75,23 @@ namespace HealthChecks.UI.Core.Discovery.Docker
                                 {"ContainerName", container.Name}
                             }))
                             {
-                                Uri serviceAddress = new Uri($"{container.Scheme ?? defaultScheme}://{container.IP}:{container.Port ?? defaultPort}{container.Path ?? defaultPath}");
+                                UriBuilder builder = new UriBuilder();
+                                builder.Scheme = container.Scheme ?? defaultScheme;
+                                builder.Host = container.IP;
 
-                                _logger.LogDebug("Container {ContainerId} has service address {Uri}", container.Id, serviceAddress);
+                                if (container.Port.HasValue)
+                                    builder.Port = container.Port.Value;
 
-                                if (IsLivenessRegistered(db, serviceAddress))
-                                {
-                                    _logger.LogDebug("Skipping container, already registered");
-                                    continue;
-                                }
+                                if (container.Path != null)
+                                    builder.Path = container.Path;
+                                else
+                                    builder.Path = defaultPath;
 
-                                // Register it
-                                try
-                                {
-                                    if (await IsValidHealthChecksStatusCode(serviceAddress))
-                                    {
-                                        await RegisterDiscoveredLiveness(db, container.Name, serviceAddress);
+                                Uri uri = builder.Uri;
 
-                                        _logger.LogInformation("Registered discovered liveness on {Address} with name {name}", serviceAddress, container.Name);
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    _logger.LogError(e, "Error discovering service {Name}", container.Name);
-                                }
+                                _logger.LogDebug("Container {ContainerId} has service address {Uri}", container.Id, uri);
+
+                                await registrationService.RegisterService("docker", container.Name, uri, cancellationToken);
                             }
                         }
                     }
@@ -114,29 +103,6 @@ namespace HealthChecks.UI.Core.Discovery.Docker
 
                 await Task.Delay(refreshTime, cancellationToken);
             }
-        }
-
-        bool IsLivenessRegistered(HealthChecksDb livenessDb, Uri uri)
-        {
-            string strUri = uri.ToString();
-            return livenessDb.Configurations.Any(lc => lc.Uri == strUri);
-        }
-
-        async Task<bool> IsValidHealthChecksStatusCode(Uri uri)
-        {
-            using (var response = await _clusterServiceClient.GetAsync(uri))
-                return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.ServiceUnavailable;
-        }
-        Task<int> RegisterDiscoveredLiveness(HealthChecksDb db, string name, Uri uri)
-        {
-            db.Configurations.Add(new HealthCheckConfiguration
-            {
-                Name = name,
-                Uri = uri.ToString(),
-                DiscoveryService = "docker"
-            });
-
-            return db.SaveChangesAsync();
         }
     }
 }

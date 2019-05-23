@@ -18,6 +18,6 @@
         internal const string HEALTH_CHECK_HTTP_CLIENT_NAME = "health-checks";
         internal const string K8S_DISCOVERY_HTTP_CLIENT_NAME = "k8s-discovery";
         internal const string K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME = "k8s-cluster-service";
-        internal const string DOCKER_CLUSTER_SERVICE_HTTP_CLIENT_NAME = "docker-cluster-service";
+        internal const string DISCOVERY_SERVICE_HTTP_CLIENT_NAME = "discovery-http-client";
     }
 }

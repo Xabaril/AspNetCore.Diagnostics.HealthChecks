@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     configuration.GetSection(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY)
                         .Bind(settings, c => c.BindNonPublicProperties = true);
-                    
+
                     setupSettings?.Invoke(settings);
                 })
                 .Configure<KubernetesDiscoverySettings>(settings =>
@@ -87,6 +87,15 @@ namespace Microsoft.Extensions.DependencyInjection
             if (dockerDiscoverySettings.Enabled)
             {
                 services.AddHostedService<DockerDiscoveryHostedService>()
+                    .AddSingleton<IDockerDiscoveryService>(x =>
+                    {
+                        var config = x.GetRequiredService<IOptions<DockerDiscoverySettings>>().Value;
+
+                        var uri = new Uri(config.Endpoint);
+                        var labelPrefix = $"{config.ServicesLabelPrefix}.";
+
+                        return ActivatorUtilities.CreateInstance<DockerDiscoveryService>(x, uri, labelPrefix);
+                    })
                     .AddHttpClient(Keys.DOCKER_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
             }
 

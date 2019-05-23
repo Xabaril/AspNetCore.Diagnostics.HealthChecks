@@ -5,10 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Docker.DotNet;
-using Docker.DotNet.Models;
 using HealthChecks.UI.Core.Data;
-using HealthChecks.UI.Core.Discovery.Docker.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -21,8 +18,8 @@ namespace HealthChecks.UI.Core.Discovery.Docker
         private readonly DockerDiscoverySettings _discoveryOptions;
         private readonly ILogger<DockerDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IDockerDiscoveryService _discoveryService;
         private readonly HttpClient _clusterServiceClient;
-        private readonly DockerClient _client;
 
         private Task _executingTask;
 
@@ -30,25 +27,22 @@ namespace HealthChecks.UI.Core.Discovery.Docker
             IServiceProvider serviceProvider,
             IOptions<DockerDiscoverySettings> discoveryOptions,
             IHttpClientFactory httpClientFactory,
+            IDockerDiscoveryService discoveryService,
             ILogger<DockerDiscoveryHostedService> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _discoveryService = discoveryService ?? throw new ArgumentNullException(nameof(discoveryService));
             _discoveryOptions = discoveryOptions?.Value ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _clusterServiceClient = httpClientFactory.CreateClient(Keys.DOCKER_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
-
-            _client = new DockerClientConfiguration(new Uri(_discoveryOptions.Endpoint))
-                .CreateClient();
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteAsync(cancellationToken);
 
             if (_executingTask.IsCompleted)
-            {
                 return _executingTask;
-            }
 
             return Task.CompletedTask;
         }
@@ -59,12 +53,13 @@ namespace HealthChecks.UI.Core.Discovery.Docker
         private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             var refreshTime = TimeSpan.FromSeconds(_discoveryOptions.RefreshTimeOnSeconds);
-            var labelPrefix = $"{_discoveryOptions.ServicesLabelPrefix}.";
-            var listParameters = new ContainersListParameters();
+            var defaultPath = $"/{_discoveryOptions.HealthPath}";
+            const int defaultPort = 80;
+            const string defaultScheme = "http";
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation($"Starting docker service discovery on endpoint {_client.Configuration.EndpointBaseUri}");
+                _logger.LogInformation($"Starting docker service discovery on endpoint {_discoveryOptions.Endpoint}");
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
@@ -72,58 +67,21 @@ namespace HealthChecks.UI.Core.Discovery.Docker
 
                     try
                     {
-                        var containers = await _client.Containers.ListContainersAsync(listParameters);
+                        var containers = await _discoveryService.Discover(cancellationToken);
 
                         _logger.LogDebug("Identified {Count} containers", containers.Count);
 
-                        foreach (ContainerListResponse container in containers)
+                        foreach (var container in containers)
                         {
-                            if (!container.TryGetLabel($"{labelPrefix}Enabled", out bool isEnabled) || !isEnabled)
-                                continue;
-
                             using (_logger.BeginScope(new Dictionary<string, object>
                             {
-                                {"ContainerId", container.ID},
-                                {"ContainerNames", container.Names}
+                                {"ContainerId", container.Id},
+                                {"ContainerName", container.Name}
                             }))
                             {
-                                // Identify name
-                                string name;
-                                if (container.TryGetLabel($"{labelPrefix}Name", out string labelName))
-                                    name = labelName;
-                                else if (container.Names.Any())
-                                    name = container.Names.First();
-                                else
-                                    name = container.ID;
+                                Uri serviceAddress = new Uri($"{container.Scheme ?? defaultScheme}://{container.IP}:{container.Port ?? defaultPort}{container.Path ?? defaultPath}");
 
-                                // Create URI
-                                string ip;
-                                if (container.TryGetLabel($"{labelPrefix}Network", out string networkName) &&
-                                    container.NetworkSettings.Networks.TryGetValue(networkName,
-                                        out var networkSettings))
-                                    ip = networkSettings.IPAddress;
-                                else if (container.NetworkSettings.Networks.Any())
-                                    ip = container.NetworkSettings.Networks.First().Value.IPAddress;
-                                else
-                                {
-                                    _logger.LogWarning("Container {ContainerId} had no networks", container.ID);
-                                    continue;
-                                }
-
-                                string scheme = container.GetLabel($"{labelPrefix}Scheme", "http");
-                                string path = container.GetLabel($"{labelPrefix}Path", $"/{_discoveryOptions.HealthPath}");
-
-                                int port;
-                                if (container.TryGetLabel($"{labelPrefix}Port", out int portValue))
-                                    port = portValue;
-                                else if (container.Ports.Any())
-                                    port = container.Ports.First().PrivatePort;
-                                else
-                                    port = 80;
-
-                                Uri serviceAddress = new Uri($"{scheme}://{ip}:{port}{path}");
-
-                                _logger.LogDebug("Container {ContainerId} has service address {Uri}", container.ID, serviceAddress);
+                                _logger.LogDebug("Container {ContainerId} has service address {Uri}", container.Id, serviceAddress);
 
                                 if (IsLivenessRegistered(db, serviceAddress))
                                 {
@@ -136,14 +94,14 @@ namespace HealthChecks.UI.Core.Discovery.Docker
                                 {
                                     if (await IsValidHealthChecksStatusCode(serviceAddress))
                                     {
-                                        await RegisterDiscoveredLiveness(db, name, serviceAddress);
+                                        await RegisterDiscoveredLiveness(db, container.Name, serviceAddress);
 
-                                        _logger.LogInformation("Registered discovered liveness on {Address} with name {name}", serviceAddress, name);
+                                        _logger.LogInformation("Registered discovered liveness on {Address} with name {name}", serviceAddress, container.Name);
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    _logger.LogError(e, "Error discovering service {Name}", name);
+                                    _logger.LogError(e, "Error discovering service {Name}", container.Name);
                                 }
                             }
                         }

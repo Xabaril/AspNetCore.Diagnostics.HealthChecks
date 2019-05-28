@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace HealthChecks.UI.Client
 {
     /*
-     * Models for UI Client. This models represent a indirection between HealthChecks API and 
-     * UI Client in order to implement some features not present on HealthChecks of substitute 
+     * Models for UI Client. This models represent a indirection between HealthChecks API and
+     * UI Client in order to implement some features not present on HealthChecks of substitute
      * some properties etc.
      */
     public class UIHealthReport
@@ -34,7 +34,8 @@ namespace HealthChecks.UI.Client
                     Data = item.Value.Data,
                     Description = item.Value.Description,
                     Duration = item.Value.Duration,
-                    Status = (UIHealthStatus)item.Value.Status
+                    Status = (UIHealthStatus)item.Value.Status,
+                    Tags = item.Value.Tags
                 };
 
                 if (item.Value.Exception != null)
@@ -83,5 +84,6 @@ namespace HealthChecks.UI.Client
         public TimeSpan Duration { get; set; }
         public string Exception { get; set; }
         public UIHealthStatus Status { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }

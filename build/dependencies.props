@@ -81,7 +81,7 @@
     <HealthCheckEventStore>2.2.2</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.2</HealthCheckElasticsearch>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
-    <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
+    <HealthCheckNpgSql>2.2.1</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.2</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
     <HealthCheckKafka>2.2.2</HealthCheckKafka>

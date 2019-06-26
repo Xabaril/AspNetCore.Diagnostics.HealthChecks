@@ -95,7 +95,7 @@
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckConsul>2.2.2</HealthCheckConsul>
     <HealthCheckUI>2.2.30</HealthCheckUI>
-    <HealthCheckUIClient>2.2.3</HealthCheckUIClient>
+    <HealthCheckUIClient>2.2.4</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.4</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>

@@ -13,6 +13,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HealthChecks.UI.Core.Discovery;
+using HealthChecks.UI.Core.Discovery.Docker;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -29,12 +31,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     configuration.GetSection(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY)
                         .Bind(settings, c => c.BindNonPublicProperties = true);
-                    
+
                     setupSettings?.Invoke(settings);
                 })
-                .Configure<KubernetesDiscoverySettings>(settings=>
+                .Configure<KubernetesDiscoverySettings>(settings =>
                 {
                     configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
+                })
+                .Configure<DockerDiscoverySettings>(settings =>
+                {
+                    configuration.Bind(Keys.HEALTHCHECKSUI_DOCKER_DISCOVERY_SETTING_KEY, settings);
                 })
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
@@ -48,6 +54,10 @@ namespace Microsoft.Extensions.DependencyInjection
             var kubernetesDiscoverySettings = services.BuildServiceProvider()
                 .GetService<IOptions<KubernetesDiscoverySettings>>()
                 .Value ?? new KubernetesDiscoverySettings();
+
+            var dockerDiscoverySettings = services.BuildServiceProvider()
+                .GetService<IOptions<DockerDiscoverySettings>>()
+                .Value ?? new DockerDiscoverySettings();
 
             services.AddDbContext<HealthChecksDb>(db =>
             {
@@ -70,9 +80,25 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.AddSingleton(kubernetesDiscoverySettings)
                     .AddHostedService<KubernetesDiscoveryHostedService>()
                     .AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) => client.ConfigureKubernetesClient(provider))
-                        .ConfigureKubernetesMessageHandler()
+                    .ConfigureKubernetesMessageHandler()
                     .Services
                     .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+            }
+
+            if (dockerDiscoverySettings.Enabled)
+            {
+                services.AddHostedService<DockerDiscoveryHostedService>()
+                    .AddScoped<IDiscoveryRegistryService, DiscoveryRegistryService>()
+                    .AddSingleton<IDockerDiscoveryService>(x =>
+                    {
+                        var config = x.GetRequiredService<IOptions<DockerDiscoverySettings>>().Value;
+
+                        var uri = new Uri(config.Endpoint);
+                        var labelPrefix = $"{config.ServicesLabelPrefix}.";
+
+                        return ActivatorUtilities.CreateInstance<DockerDiscoveryService>(x, uri, labelPrefix);
+                    })
+                    .AddHttpClient(Keys.DISCOVERY_SERVICE_HTTP_CLIENT_NAME);
             }
 
             var serviceProvider = services.BuildServiceProvider();

@@ -38,18 +38,18 @@ export class App extends React.Component<AppProps, AppState> {
                     isOpen={this.state.menuOpen}
                     pageWrapId={'wrapper'}
                     outerContainerId={"outer-container"} >
-                    <Link to={'/healthchecks'} className="menu-item" onClick={this.toggleMenu}>
+                    <Link to='/healthchecks' className="menu-item" onClick={this.toggleMenu}>
                         <img className="menu-icon" src={WhiteHeartIcon} />
                         <div>Health Checks</div>
                     </Link>
-                    <Link to={'/webhooks'} className="menu-item" onClick={this.toggleMenu}>
+                    <Link to='/webhooks' className="menu-item" onClick={this.toggleMenu}>
                         <img className="menu-icon" src={WhiteGearIcon} />
                         <div>Webhooks</div>
                     </Link>
                 </Menu>
                 <Route exact path="/" render={() => <Redirect to="/healthchecks" />} />
-                <Route path={'/healthchecks'} render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />                
-                <Route path={'/webhooks'} render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
+                <Route path='/healthchecks' render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />                
+                <Route path='/webhooks' render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
             </div>            
         </React.Fragment>
     }

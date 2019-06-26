@@ -73,7 +73,7 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>2.2.2</HealthCheckIdSvr>
-    <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
+    <HealthCheckSqlServer>2.2.1</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.3</HealthCheckUri>
     <HealthCheckRedis>2.2.3</HealthCheckRedis>

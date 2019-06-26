@@ -1,5 +1,7 @@
 ﻿using HealthChecks.Publisher.ApplicationInsights;
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,12 +19,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="saveDetailedReport">Specifies if save an Application Insights event for each HealthCheck or just save one event with the global status for all the HealthChecks. Optional: If <c>true</c> saves an Application Insights event for each HealthCheck</c></param>
         /// <param name="excludeHealthyReports">Specifies if save an Application Insights event only for reports indicating an unhealthy status</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddApplicationInsightsPublisher(this IHealthChecksBuilder builder, string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false)
+        public static IHealthChecksBuilder AddApplicationInsightsPublisher(this IHealthChecksBuilder builder, bool saveDetailedReport = false, bool excludeHealthyReports = false)
         {
             builder.Services
                .AddSingleton<IHealthCheckPublisher>(sp =>
                {
-                   return new ApplicationInsightsPublisher(instrumentationKey, saveDetailedReport, excludeHealthyReports);
+                   var telemetryClient = sp.GetService<TelemetryClient>()  ?? throw new Exception($"Application insights telemetry client has not been registered in the application"); 
+
+                   return new ApplicationInsightsPublisher(telemetryClient, saveDetailedReport, excludeHealthyReports);
                });
 
             return builder;

@@ -118,6 +118,21 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
+Note:
+
+Following Microsoft good practices, Application Insights Publisher relays on dependency injection so it will try to get the TelemetryClient from the service provider.
+To register your own TelemetryClient you can use the package **Microsoft.AspNetCore.ApplicationInsights.HostingStartup**
+and use the extension method UseApplicationInsights().
+
+
+```csharp
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseApplicationInsights("your-telemetry-key")
+                .UseStartup<Startup>();
+```
+
+
 ## HealthCheckUI and failure notifications
 
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.

@@ -44,7 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     .ConfigurePrimaryHttpMessageHandler(sp =>
                    {
                        var settings = sp.GetService<IOptions<Settings>>();
-                       return settings?.Value.HttpHandler ?? new HttpClientHandler();
+                       return settings.Value.HttpHandler ?? new HttpClientHandler();
                    });
 
 

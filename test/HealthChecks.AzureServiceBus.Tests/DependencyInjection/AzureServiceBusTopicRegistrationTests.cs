@@ -57,5 +57,34 @@ namespace HealthChecks.AzureServiceBus.Tests
 
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
         }
+
+        [Fact]
+        public void add_health_check_using_factories_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            bool connectionStringFactoryCalled = false, topicNameFactoryCalled = false;
+            services.AddHealthChecks()
+                .AddAzureServiceBusTopic(_ =>
+                    {
+                        connectionStringFactoryCalled = true;
+                        return "cnn";
+                    },
+                    _ =>
+                    {
+                        topicNameFactoryCalled = true;
+                        return "topicName";
+                    });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azuretopic");
+            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            connectionStringFactoryCalled.Should().BeTrue();
+            topicNameFactoryCalled.Should().BeTrue();
+        }
     }
 }

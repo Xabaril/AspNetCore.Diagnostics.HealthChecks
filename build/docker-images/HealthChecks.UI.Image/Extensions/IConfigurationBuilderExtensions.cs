@@ -11,18 +11,18 @@ namespace HealthChecks.UI.Image.Extensions
         {
             if (AzureAppConfiguration.UseConnectionString)
             {
-                builder.AddAzureAppConfiguration(AzureConfigurationSetup.WithConnectionString);
+                builder.AddAzureAppConfiguration(AzureAppConfigurationSetup.WithConnectionString);
             }
             else
             {
-                builder.AddAzureAppConfiguration(AzureConfigurationSetup.WithManagedIdentity);
+                builder.AddAzureAppConfiguration(AzureAppConfigurationSetup.WithManagedIdentity);
             }
 
             return builder;
         }
     }
 
-    internal class AzureConfigurationSetup
+    internal class AzureAppConfigurationSetup
     {
         public static void WithConnectionString(AzureAppConfigurationOptions options)
         {
@@ -37,6 +37,7 @@ namespace HealthChecks.UI.Image.Extensions
         public static void WithManagedIdentity(AzureAppConfigurationOptions options)
         {
             options.ConnectWithManagedIdentity(AzureAppConfiguration.ManagedIdentityEndpoint);
+            
             if (AzureAppConfiguration.UseLabel)
             {
                 options.Use(KeyFilter.Any, AzureAppConfiguration.Label);

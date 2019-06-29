@@ -22,9 +22,7 @@ namespace HealthChecks.UI.Image
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-
             return WebHost.CreateDefaultBuilder(args)
-                
                 .ConfigureAppConfiguration(config =>
                 {
                     if (AzureAppConfiguration.Enabled)

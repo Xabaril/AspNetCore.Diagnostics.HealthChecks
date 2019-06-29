@@ -29,5 +29,4 @@ namespace HealthChecks.UI.Image.Configuration
         private static bool HasValue(string variable) => 
             !string.IsNullOrEmpty(Environment.GetEnvironmentVariable(variable));
     }
-   
 }

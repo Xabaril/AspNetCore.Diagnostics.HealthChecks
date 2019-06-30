@@ -118,7 +118,7 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<Mail> messa
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",
@@ -157,7 +157,7 @@ And the HealthChecksUI configuration:
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",

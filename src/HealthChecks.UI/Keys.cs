@@ -1,8 +1,11 @@
-﻿namespace HealthChecks.UI
+﻿using System;
+
+namespace HealthChecks.UI
 {
     class Keys
     {
-        internal const string HEALTHCHECKSUI_SECTION_SETTING_KEY = "HealthChecks-UI";
+        internal const string HEALTHCHECKSUI_OLD_SECTION_SETTING_KEY = "HealthChecks-UI";        
+        internal const string HEALTHCHECKSUI_SECTION_SETTING_KEY = "HealthChecksUI";
         internal const string HEALTHCHECKS_DEFAULT_PATH = "hc";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_LABEL = "HealthChecks";
         internal const string HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY = "HealthChecks-UI:KubernetesDiscoveryService";        

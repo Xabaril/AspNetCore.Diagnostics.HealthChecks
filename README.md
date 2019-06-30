@@ -172,7 +172,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",
@@ -202,7 +202,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",

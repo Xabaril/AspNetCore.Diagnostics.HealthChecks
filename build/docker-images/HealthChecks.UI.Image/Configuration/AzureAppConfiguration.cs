@@ -1,32 +1,43 @@
 using System;
 using System.Security.Policy;
+using HealthChecks.UI.Image.Configuration.Helpers;
 
 namespace HealthChecks.UI.Image.Configuration
 {
     public class AzureAppConfiguration
     {
-        public static bool Enabled => 
-            HasValue(AzureAppConfigurationKeys.Enabled) ? true : false;
+        public static bool Enabled
+        {
+            get
+            {
+                if (EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Enabled))
+                {
+                    if (Boolean.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled)
+                        , out bool enabled))
+                    {
+                        return enabled;
+                    }
+
+                    return false;
+                }
+
+                return false;
+            }
+        }
 
         public static bool UseConnectionString => 
-            HasValue(AzureAppConfigurationKeys.ConnectionString) ? true : false;
+            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.ConnectionString) ? true : false;
 
         public static bool UseLabel => 
-            HasValue(AzureAppConfigurationKeys.Label) ? true : false;
+            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Label) ? true : false;
 
         public static string ConnectionString => 
-            GetValue(AzureAppConfigurationKeys.ConnectionString);
+            EnvironmentVariable.GetValue(AzureAppConfigurationKeys.ConnectionString);
 
         public static string ManagedIdentityEndpoint => 
-            GetValue(AzureAppConfigurationKeys.ManagedIdentityEndpoint);
+            EnvironmentVariable.GetValue(AzureAppConfigurationKeys.ManagedIdentityEndpoint);
 
         public static string Label => 
-            GetValue(AzureAppConfigurationKeys.Label);
-
-        private static string GetValue(string variable) => 
-            Environment.GetEnvironmentVariable(variable);
-        
-        private static bool HasValue(string variable) => 
-            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable(variable));
+            EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Label);
     }
 }

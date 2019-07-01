@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 
 namespace HealthChecks.UI.Configuration
 {
@@ -9,6 +10,7 @@ namespace HealthChecks.UI.Configuration
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
         internal string HealthCheckDatabaseConnectionString { get; set; }
+        internal HttpMessageHandler HttpHandler { get; set; }
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
         {
@@ -48,6 +50,12 @@ namespace HealthChecks.UI.Configuration
         public Settings SetHealthCheckDatabaseConnectionString(string connectionString)
         {
             HealthCheckDatabaseConnectionString = connectionString;
+            return this;
+        }
+
+        public Settings UseHttpMessageHandler(HttpMessageHandler handler)
+        {
+            HttpHandler = handler;
             return this;
         }
     }

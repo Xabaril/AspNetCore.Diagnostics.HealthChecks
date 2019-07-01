@@ -37,6 +37,7 @@ HealthChecks packages include health checks for:
 - Consul
 - Hangfire
 - SignalR
+- Kubernetes
 
 
 ``` PowerShell
@@ -65,6 +66,7 @@ Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.SignalR
+Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 ```
 

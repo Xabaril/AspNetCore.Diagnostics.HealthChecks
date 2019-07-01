@@ -174,7 +174,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",
@@ -195,6 +195,9 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 }
 ```
 
+**Note**: The previous configuration section was HealthChecks-UI, but due to incompatibilies with Azure Web App environment variables the section has been moved to HealthChecksUI. The UI is retro compatible and it will check the new section first, and fallback to the old section if the new section has not been declared.
+
+
     1.- HealthChecks: The collection of health checks uris to evaluate.
     2.- EvaluationTimeOnSeconds: Number of elapsed seconds between health checks.
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
@@ -204,7 +207,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "HTTP-Api-Basic",

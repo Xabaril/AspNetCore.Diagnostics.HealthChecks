@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -29,17 +30,23 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     configuration.GetSection(Keys.HEALTHCHECKSUI_SECTION_SETTING_KEY)
                         .Bind(settings, c => c.BindNonPublicProperties = true);
-                    
+
                     setupSettings?.Invoke(settings);
                 })
-                .Configure<KubernetesDiscoverySettings>(settings=>
+                .Configure<KubernetesDiscoverySettings>(settings =>
                 {
                     configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
                 })
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
-                .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+                .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME)
+                    .ConfigurePrimaryHttpMessageHandler(sp =>
+                   {
+                       var settings = sp.GetService<IOptions<Settings>>();
+                       return settings.Value.HttpHandler ?? new HttpClientHandler();
+                   });
+
 
             var healthCheckSettings = services.BuildServiceProvider()
                 .GetService<IOptions<Settings>>()

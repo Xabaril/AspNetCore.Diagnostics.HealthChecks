@@ -29,7 +29,7 @@ The existing environment variables are explained below:
 |---|---|---|
 | AAC_Enabled   | Enables AAC config provider   | Not set by default |
 | AAC_ConnectionString   | Connection string to configuration service  | If set, Managed Service Identity won't be used   |
-| AAC_ManagedIdentityEndpoint | Your AAC endpoint to connect using Managed Identity | Don't provide a Sample: https://your-endpoint.azconfig.io
+| AAC_ManagedIdentityEndpoint | Your AAC endpoint to connect using Managed Identity | Sample: https://your-endpoint.azconfig.io
 | AAC_Label   | Filter configuration keys containing this label   | Sample: HealthChecksConfig  |
 
 

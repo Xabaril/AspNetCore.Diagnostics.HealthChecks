@@ -10,7 +10,7 @@ The default mechanism to register the target endpoints to be queried for health 
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "HealthChecks": [
       {
         "Name": "Http and UI on single project",
@@ -29,7 +29,7 @@ To enable Kubernetes discovery you just need to configure some settings inside t
 
 ```json
 {
-  "HealthChecks-UI": {
+  "HealthChecksUI": {
     "KubernetesDiscoveryService": {
           "Enabled": true,
           "ClusterHost": "https://myaks-962d02ba.hcp.westeurope.azmk8s.io:443",

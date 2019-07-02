@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HealthChecks.UI.Core.Data.Configuration
@@ -13,7 +14,8 @@ namespace HealthChecks.UI.Core.Data.Configuration
                 .IsRequired();
 
             builder.Property(lf => lf.LastNotified)
-                .IsRequired();
+                .IsRequired()
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
             builder.Property(lf => lf.IsUpAndRunning)
                 .IsRequired();

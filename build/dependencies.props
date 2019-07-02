@@ -73,16 +73,16 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>2.2.2</HealthCheckIdSvr>
-    <HealthCheckSqlServer>2.2.0</HealthCheckSqlServer>
+    <HealthCheckSqlServer>2.2.1</HealthCheckSqlServer>
     <HealthCheckSqlite>2.2.0</HealthCheckSqlite>
     <HealthCheckUri>2.2.3</HealthCheckUri>
     <HealthCheckRedis>2.2.3</HealthCheckRedis>
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
-    <HealthCheckEventStore>2.2.1</HealthCheckEventStore>
+    <HealthCheckEventStore>2.2.2</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.2</HealthCheckElasticsearch>
     <HealthCheckOracle>2.2.0</HealthCheckOracle>
-    <HealthCheckNpgSql>2.2.0</HealthCheckNpgSql>
-    <HealthCheckMongoDB>2.2.2</HealthCheckMongoDB>
+    <HealthCheckNpgSql>2.2.1</HealthCheckNpgSql>
+    <HealthCheckMongoDB>2.2.3</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
     <HealthCheckKafka>2.2.2</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
@@ -94,8 +94,8 @@
     <HealthCheckHangfire>2.2.2</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>2.2.4</HealthCheckAzureServiceBus>
     <HealthCheckConsul>2.2.2</HealthCheckConsul>
-    <HealthCheckUI>2.2.28</HealthCheckUI>
-    <HealthCheckUIClient>2.2.3</HealthCheckUIClient>
+    <HealthCheckUI>2.2.32</HealthCheckUI>
+    <HealthCheckUIClient>2.2.4</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.4</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>

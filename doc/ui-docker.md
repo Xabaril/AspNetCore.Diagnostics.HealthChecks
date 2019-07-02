@@ -10,7 +10,7 @@ docker run --name ui -p 5000:80 -d xabarilcoding/healthchecksui:latest
 You can use environment variables to configure all properties on *HealthChecksUI*. 
 
 ```bash
-docker run --name ui -p 5000:80 -e 'HealthChecks-UI:HealthChecks:0:Name=httpBasic' -e 'HealthChecks-UI:HealthChecks:0:Uri=http://the-healthchecks-server-path' -d xabarilcoding/healthchecksui:latest
+docker run --name ui -p 5000:80 -e 'HealthChecksUI:HealthChecks:0:Name=httpBasic' -e 'HealthChecksUI:HealthChecks:0:Uri=http://the-healthchecks-server-path' -d xabarilcoding/healthchecksui:latest
 ```
 
 Read the [DockerHub full description](https://hub.docker.com/r/xabarilcoding/healthchecksui/) to get more information about HealthChecksUI docker configuration.

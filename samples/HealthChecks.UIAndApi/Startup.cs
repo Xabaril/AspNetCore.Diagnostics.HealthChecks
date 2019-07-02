@@ -37,7 +37,7 @@ namespace HealthChecks.UIAndApi
                 .AddHealthChecksUI()
                 .AddHealthChecks()
                 .AddCheck<RandomHealthCheck>("random")
-                .AddUrlGroup(new Uri("http://httpbin.org/status/200"))
+                .AddUrlGroup(new Uri("http://httpbin.org/status/200"));
                 //.AddKubernetes(setup =>
                 //{
                 //    setup.WithConfiguration(k8s.KubernetesClientConfiguration.BuildConfigFromConfigFile())
@@ -46,9 +46,7 @@ namespace HealthChecks.UIAndApi
                 //        .CheckService("wordpress-one-wordpress", s => s.Spec.Type == "LoadBalancer")
                 //        .CheckPod("myapp-pod", p =>  p.Metadata.Labels["app"] == "myapp" );
                 //})
-                .Services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+               
 
             //
             //   below show howto use default policy handlers ( polly )
@@ -76,13 +74,18 @@ namespace HealthChecks.UIAndApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseHealthChecks("/healthz", new HealthCheckOptions
+            app.UseRouting();
+            app.UseEndpoints(config =>
             {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            })
-            .UseHealthChecksUI()
-            .UseMvc();
+                config.MapHealthChecks("/healthz", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                config.MapHealthChecksUI();
+            });
+
         }
     }
 

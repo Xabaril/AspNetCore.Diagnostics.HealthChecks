@@ -1,7 +1,13 @@
-﻿namespace HealthChecks.UI.Configuration
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+
+namespace HealthChecks.UI.Configuration
 {
     public class Options
     {
+        internal ICollection<string> CustomStyleSheets { get;  }= new List<string>();
         public string UIPath { get; set; } = "/healthchecks-ui";
         public string ApiPath { get; set; } = "/healthchecks-api";
         public bool UseRelativeApiPath = true;
@@ -9,5 +15,19 @@
         public bool UseRelativeWebhookPath = true;
         public string ResourcesPath { get; set; } = "/ui/resources";
         public bool UseRelativeResourcesPath = true;
+
+        public Options AddCustomStyleSheet(string path)
+        {
+            var stylesheetPath = Path.Combine(Environment.CurrentDirectory, path);
+            
+            if (!File.Exists(stylesheetPath))
+            {
+                throw new Exception($"Could not find style sheet at path {path}");
+            }
+            
+            CustomStyleSheets.Add(stylesheetPath);
+            
+            return this;
+        }
     }
 }

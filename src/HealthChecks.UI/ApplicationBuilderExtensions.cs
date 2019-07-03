@@ -30,6 +30,7 @@ namespace Microsoft.AspNetCore.Builder
             new UIResourcesMapper(
                 new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
                 .Map(app, options);
+          
 
             return app;
         }

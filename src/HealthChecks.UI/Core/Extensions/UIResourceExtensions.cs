@@ -1,6 +1,7 @@
 ﻿using HealthChecks.UI.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace HealthChecks.UI.Core
@@ -31,5 +32,33 @@ namespace HealthChecks.UI.Core
 
             return resource;
         }
-    }
+
+        public static ICollection<UIStylesheet> GetCustomStylesheets(this UIResource resource, Options options)
+        {
+            List<UIStylesheet> styleSheets = new List<UIStylesheet>();
+            
+            if (!options.CustomStyleSheets.Any())
+            {
+                resource.Content = resource.Content.Replace("#customstylesheets#", string.Empty);
+                return styleSheets;
+            }
+
+            foreach (var stylesheet in options.CustomStyleSheets)
+            {
+                styleSheets.Add(UIStylesheet.Create(options, stylesheet));
+            }
+            
+            var htmlStyles = styleSheets.Select
+                (s =>
+            {
+                var linkHref = options.UseRelativeResourcesPath ? s.ResourcePath.AsRelativeResource() : s.ResourcePath;
+                return $"<link rel='stylesheet' href='{linkHref}'/>";
+            });
+            
+            resource.Content = resource.Content.Replace("#customstylesheets#",
+                string.Join("\n", htmlStyles));
+
+            return styleSheets;
+        }
+    }    
 }

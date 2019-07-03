@@ -37,13 +37,13 @@ namespace HealthChecks.UI.Core
         {
             List<UIStylesheet> styleSheets = new List<UIStylesheet>();
             
-            if (!options.CustomStyleSheets.Any())
+            if (!options.CustomStylesheets.Any())
             {
                 resource.Content = resource.Content.Replace("#customstylesheets#", string.Empty);
                 return styleSheets;
             }
 
-            foreach (var stylesheet in options.CustomStyleSheets)
+            foreach (var stylesheet in options.CustomStylesheets)
             {
                 styleSheets.Add(UIStylesheet.Create(options, stylesheet));
             }

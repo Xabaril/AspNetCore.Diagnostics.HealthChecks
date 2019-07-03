@@ -56,20 +56,19 @@ namespace HealthChecks.UI.Core
                 });
             });
 
-            if (styleSheets.Any())
+
+            foreach (var item in styleSheets)
             {
-                foreach (var item in styleSheets)
+                app.Map(item.ResourcePath, appBuilder =>
                 {
-                    app.Map(item.ResourcePath, appBuilder =>
+                    appBuilder.Run(async context =>
                     {
-                        appBuilder.Run(async context =>
-                        {
-                            context.Response.ContentType = "text/css";
-                            await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length);
-                        });
+                        context.Response.ContentType = "text/css";
+                        await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length);
                     });
-                }
+                });
             }
+            
         }
     }
 }

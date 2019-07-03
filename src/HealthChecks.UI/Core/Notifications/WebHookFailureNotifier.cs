@@ -47,6 +47,8 @@ namespace HealthChecks.UI.Core.Notifications
                 foreach (var webHook in _settings.Webhooks)
                 {
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
+                    if (description != null)
+                        description = StringEscape(description);
                     payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
                         .Replace(Keys.FAILURE_BOOKMARK, failure)
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
@@ -58,6 +60,16 @@ namespace HealthChecks.UI.Core.Notifications
             {
                 _logger.LogInformation("Notification is sent on same window time.");
             }
+        }
+        private string StringEscape(string str)
+        {
+            StringBuilder s = new StringBuilder(str);
+
+            s.Replace("\\", "\\\\");
+            s.Replace("\"", "\\\"");
+            s.Replace("'", "\'");
+
+            return s.ToString();
         }
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
         {

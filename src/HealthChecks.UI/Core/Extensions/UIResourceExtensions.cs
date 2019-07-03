@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HealthChecks.UI.Core
 {
@@ -39,7 +40,7 @@ namespace HealthChecks.UI.Core
             
             if (!options.CustomStylesheets.Any())
             {
-                resource.Content = resource.Content.Replace("#customstylesheets#", string.Empty);
+                resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_STYLESHEETS_TARGET, string.Empty);
                 return styleSheets;
             }
 
@@ -55,7 +56,7 @@ namespace HealthChecks.UI.Core
                 return $"<link rel='stylesheet' href='{linkHref}'/>";
             });
             
-            resource.Content = resource.Content.Replace("#customstylesheets#",
+            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_STYLESHEETS_TARGET,
                 string.Join("\n", htmlStyles));
 
             return styleSheets;

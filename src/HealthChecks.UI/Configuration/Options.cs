@@ -22,7 +22,7 @@ namespace HealthChecks.UI.Configuration
             
             if (!File.Exists(stylesheetPath))
             {
-                throw new Exception($"Could not find style sheet at path {path}");
+                throw new Exception($"Could not find style sheet at path {stylesheetPath}");
             }
             
             CustomStylesheets.Add(stylesheetPath);

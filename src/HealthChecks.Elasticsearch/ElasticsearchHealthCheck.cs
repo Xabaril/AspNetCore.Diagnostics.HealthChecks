@@ -35,6 +35,11 @@ namespace HealthChecks.Elasticsearch
                         settings = settings.ClientCertificate(_options.Certificate);
                     }
 
+                    if (_options.CertificateValidationCallback != null)
+                    {
+                        settings = settings.ServerCertificateValidationCallback(_options.CertificateValidationCallback);
+                    }
+
                     lowLevelClient = new ElasticClient(settings);
 
                     if (!_connections.TryAdd(_options.Uri, lowLevelClient))

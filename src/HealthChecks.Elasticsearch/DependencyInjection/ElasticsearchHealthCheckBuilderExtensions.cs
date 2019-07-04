@@ -24,10 +24,14 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var options = new ElasticsearchOptions();
             options.UseServer(elasticsearchUri);
-            
+
+            IHealthCheck healthCheck = options.CheckClusterHealth ?
+              (IHealthCheck)new ElasticsearchClusterHealthCheck(options) :
+              new ElasticsearchHealthCheck(options);
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new ElasticsearchHealthCheck(options),
+                sp => healthCheck,
                 failureStatus,
                 tags));
         }
@@ -47,10 +51,14 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var options = new ElasticsearchOptions();
             setup?.Invoke(options);
-            
+
+            IHealthCheck healthCheck = options.CheckClusterHealth ?
+                (IHealthCheck)new ElasticsearchClusterHealthCheck(options) :
+                new ElasticsearchHealthCheck(options);
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new ElasticsearchHealthCheck(options),
+                sp => healthCheck,
                 failureStatus,
                 tags));
         }

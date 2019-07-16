@@ -44,14 +44,18 @@ To enable Kubernetes discovery you just need to configure some settings inside t
 
 Here are all the available parameters detailed:
 
-| Parameter            | Description                                                        | Default Value |
-| -------------------- | ------------------------------------------------------------------ | ------------- |
-| Enabled              | Establishes if the k8s discovery service is enabled of disabled    | false         |
-| ClusterHost          | The uri of the kubernetes cluster                                  |               |
-| Token                | The token that will be sent to the cluster for authentication      |               |
-| HealthPath           | The url path where the UI will call once the service is discovered | hc            |
-| ServicesLabel        | The labeled services the UI will look for in k8s                   | HealthChecks  |
-| RefreshTimeOnSeconds | Healthchecks refresh time in seconds                               | 300           |
+| Parameter            | Description                                                                                                                                       | Default Value    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| Enabled              | Establishes if the k8s discovery service is enabled of disabled                                                                                   | false            |
+| InCluster            | The service discovery will try to load the cluster config as an in-cluster pod. ClusterHost and Token does not need to be defined if this is true | false            |
+| ClusterHost          | The uri of the kubernetes cluster                                                                                                                 |                  |
+| Token                | The token that will be sent to the cluster for authentication                                                                                     |                  |
+| HealthPath           | The url path where the UI will call once the service is discovered                                                                                | hc               |
+| ServicesLabel        | The labeled services the UI will look for in k8s                                                                                                  | HealthChecks     |
+| HealthPathLabel      | The label on a service that can override the configured url path                                                                                  | HealthChecksPath |
+| HealthPortLabel      | The label on a service to define which port to call. If it does not exist on the service the first defined port will be used                      | HealthChecksPort |
+| RefreshTimeOnSeconds | Healthchecks refresh time in seconds                                                                                                              | 300              |
+| Namespaces           | The namespace(s) to query services in                                                                                                             | []               |
 
 ## Labeling Services for discovery in Kubernetes
 
@@ -63,10 +67,18 @@ If you want to tag a service just execute the k8s command line tool (kubectl) us
 
 Change `HealthChecks=true` by your configured ServiceLabel if you gave another value for it.
 
+The `HealthPathLabel` option (by default HealthChecksPath) provides a method for services to override the default health path configured.
+
+The `HealthPortLabel` option (by default HealthChecksPort) provides a method for services to specify which port to use for health checks. By default the first port defined on the service will be used. The label can refer to either the name of the port or the port number.
+
 ## How it works
 
 The kubernetes service discovery will retrieve from the k8s api all the labelled services and from the metadata it will try to build the target url to query for health.
 
-If you have exposed a deployment using for example a LoadBalancer on port 50000 and your configured  HealthPath is "healthz" the target url to be queried would be : (ip/host):50000/healthz
+If you have exposed a deployment using for example a LoadBalancer on port 50000 and your configured HealthPath is "healthz" the target url to be queried would be : (ip/host):50000/healthz
+
+If the InCluster option is set to true then the kubernetes service discovery will try to load the Cluster Host and the Token from the environment variables and service account token mounting that occurs by default in Kubernetes pods. If the InCluster option is set to false then the ClusterHost and Token options will need to be manually set.
+
+If Namespaces is set only the labelled services within the specified namespace(s) will be queried. By default it will query all services in the cluster.
 
 **NOTE**: Remember if you are using `kubectl proxy` you can configure your cluster address as http://localhost:8001.

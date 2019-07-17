@@ -33,7 +33,7 @@ namespace UnitTests.UI.Kubernetes
             serviceAddresses[1].Should().Be("http://localhost:9000/healthz");
             serviceAddresses[2].Should().Be("http://localhost:30000/healthz");
             serviceAddresses[3].Should().Be("http://10.97.1.153:80/healthz");
-            serviceAddresses[4].Should().Be("http://10.152.183.35:7070/custom/health/path");
+            serviceAddresses[4].Should().Be("http://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:7070/custom/health/path");
 
         }
 

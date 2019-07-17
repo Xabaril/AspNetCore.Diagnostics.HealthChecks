@@ -41,7 +41,15 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             }
             healthPath = healthPath.TrimStart('/');
 
-            return $"http://{address}{port}/{healthPath}";
+            // Support IPv6 address hosts
+            if(address.Contains(":"))
+            {
+                return $"http://[{address}]{port}/{healthPath}";
+            }
+            else
+            {
+                return $"http://{address}{port}/{healthPath}";
+            }
         }
         private string GetLoadBalancerAddress(Service service)
         {

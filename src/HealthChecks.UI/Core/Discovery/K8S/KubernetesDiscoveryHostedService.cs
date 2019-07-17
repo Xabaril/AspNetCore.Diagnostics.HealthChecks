@@ -57,7 +57,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation($"Starting kubernetes service discovery on cluster {_discoveryOptions.ClusterHost}");
+                var clusterName = _discoveryOptions.InCluster ? "host" : _discoveryOptions.ClusterHost;
+                _logger.LogInformation($"Starting kubernetes service discovery on cluster {clusterName}");
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
@@ -65,7 +66,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                     try
                     {
-                        var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
+                        var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces);
                         foreach (var item in services.Items)
                         {
                             try
@@ -82,9 +83,9 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                                     }
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-                                _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
+                                _logger.LogError(ex, $"Error discovering service {item.Metadata.Name}. It might not be visible");
                             }
                         }
                     }

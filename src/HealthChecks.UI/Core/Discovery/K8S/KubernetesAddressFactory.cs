@@ -4,14 +4,16 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesAddressFactory
     {
-        private readonly string _healthPath;
+        private readonly string _defaultHealthPath;
         private readonly string _healthPathLabel;
         private readonly string _healthPortLabel;
-        public KubernetesAddressFactory(string healthPath, string healthPathLabel, string healthPortLabel)
+        private readonly string _healthSchemeLabel;
+        public KubernetesAddressFactory(string defaultHealthPath, string healthPathLabel, string healthPortLabel, string healthSchemeLabel)
         {
-            _healthPath = healthPath;
+            _defaultHealthPath = defaultHealthPath;
             _healthPathLabel = healthPathLabel;
             _healthPortLabel = healthPortLabel;
+            _healthSchemeLabel = healthSchemeLabel;
         }
         public string CreateAddress(Service service)
         {
@@ -37,18 +39,28 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             }
             else
             {
-                healthPath = _healthPath;
+                healthPath = _defaultHealthPath;
             }
             healthPath = healthPath.TrimStart('/');
+
+            string healthScheme;
+            if(!string.IsNullOrEmpty(_healthSchemeLabel) && (service.Metadata.Labels?.ContainsKey(_healthSchemeLabel) ?? false))
+            {
+                healthScheme = service.Metadata.Labels[_healthSchemeLabel].ToLower();
+            }
+            else
+            {
+                healthScheme = "http";
+            }
 
             // Support IPv6 address hosts
             if(address.Contains(":"))
             {
-                return $"http://[{address}]{port}/{healthPath}";
+                return $"{healthScheme}://[{address}]{port}/{healthPath}";
             }
             else
             {
-                return $"http://{address}{port}/{healthPath}";
+                return $"{healthScheme}://{address}{port}/{healthPath}";
             }
         }
         private string GetLoadBalancerAddress(Service service)

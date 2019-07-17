@@ -170,6 +170,7 @@
           "HealthChecks": "true",
           "HealthChecksPath": "/custom/health/path",
           "HealthChecksPort": "healthcheck",
+          "HealthChecksScheme": "https",
           "app": "seq"
         }
       },

@@ -10,6 +10,7 @@ namespace HealthChecks.UI
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_LABEL = "HealthChecks";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL = "HealthChecksPath";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL = "HealthChecksPort";
+        internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL = "HealthChecksScheme";
         internal const string HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY = "HealthChecksUI:KubernetesDiscoveryService";        
         internal const string HEALTHCHECKSUI_MAIN_UI_RESOURCE = "index.html";
         internal const string HEALTHCHECKSUI_MAIN_UI_API_TARGET = "#apiPath#";

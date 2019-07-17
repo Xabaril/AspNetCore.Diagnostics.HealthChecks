@@ -19,7 +19,7 @@ function Exec
 #Select the UI version from dependencies.props and use it as image version
 
 
-$version = select-xml -Path .\build\dependencies.props -XPath "/Project/PropertyGroup[contains(@Label,'Health Checks Package Versions')]/HealthCheckUI"
+$version = select-xml -Path ${PSScriptRoot}/build/dependencies.props -XPath "/Project/PropertyGroup[contains(@Label,'Health Checks Package Versions')]/HealthCheckUI"
 
 $tag = $version.node.InnerXML
 
@@ -27,7 +27,7 @@ $tag = $version.node.InnerXML
 
 echo "building docker image with tag: $tag"
 
-exec { & docker build . -f .\build\docker-images\HealthChecks.UI.Image\Dockerfile -t xabarilcoding/healthchecksui:$tag }
+exec { & docker build . -f ${PSScriptRoot}/build/docker-images/HealthChecks.UI.Image/Dockerfile -t xabarilcoding/healthchecksui:$tag }
 exec { & docker tag xabarilcoding/healthchecksui:$tag xabarilcoding/healthchecksui:latest }
 
 echo "Created docker image healthchecksui:$tag. You can execute this image using docker run"

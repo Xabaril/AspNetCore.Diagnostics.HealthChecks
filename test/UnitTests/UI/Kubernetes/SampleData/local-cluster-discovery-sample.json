@@ -126,16 +126,30 @@
         "creationTimestamp": "2019-07-12T02:42:38Z",
         "labels": {
           "HealthChecks": "true",
+          "HealthChecksPath": "custom/health/path",
+          "HealthChecksPort": "7070",
           "app": "seq"
         }
       },
       "spec": {
         "ports": [
           {
-            "name": "http",
+            "name": "ingestion",
             "protocol": "TCP",
             "port": 5341,
             "targetPort": "ui"
+          },
+          {
+            "name": "http",
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": "ui"
+          },
+          {
+            "name": "healthcheck",
+            "protocol": "TCP",
+            "port": 7070,
+            "targetPort": "healthcheck"
           }
         ],
         "selector": {

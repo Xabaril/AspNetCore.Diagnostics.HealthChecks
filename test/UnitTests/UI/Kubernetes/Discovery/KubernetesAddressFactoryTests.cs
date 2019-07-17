@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using HealthChecks.UI;
 using HealthChecks.UI.Core.Discovery.K8S;
 using Newtonsoft.Json;
 using System;
@@ -19,7 +20,7 @@ namespace UnitTests.UI.Kubernetes
 
             var services = JsonConvert.DeserializeObject<ServiceList>(apiResponse);
 
-            var addressFactory = new KubernetesAddressFactory(healthPath);
+            var addressFactory = new KubernetesAddressFactory(healthPath, Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL, Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL);
 
             List<string> serviceAddresses = new List<string>();
             
@@ -32,7 +33,7 @@ namespace UnitTests.UI.Kubernetes
             serviceAddresses[1].Should().Be("http://localhost:9000/healthz");
             serviceAddresses[2].Should().Be("http://localhost:30000/healthz");
             serviceAddresses[3].Should().Be("http://10.97.1.153:80/healthz");
-            serviceAddresses[4].Should().Be("http://10.152.183.35:5341/healthz");
+            serviceAddresses[4].Should().Be("http://10.152.183.35:7070/custom/health/path");
 
         }
 
@@ -44,7 +45,7 @@ namespace UnitTests.UI.Kubernetes
 
             var services = JsonConvert.DeserializeObject<ServiceList>(apiResponse);
 
-            var addressFactory = new KubernetesAddressFactory(healthPath);
+            var addressFactory = new KubernetesAddressFactory(healthPath, Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL, Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL);
 
             List<string> serviceAddresses = new List<string>();
 
@@ -57,7 +58,7 @@ namespace UnitTests.UI.Kubernetes
             serviceAddresses[1].Should().Be("http://13.80.181.10:51000/healthz");
             serviceAddresses[2].Should().Be("http://12.0.0.190:5672/healthz");
             serviceAddresses[3].Should().Be("http://12.0.0.168:30478/healthz");
-            serviceAddresses[4].Should().Be("http://10.152.183.35:5341/healthz");
+            serviceAddresses[4].Should().Be("http://10.152.183.35:8080/custom/health/path");
 
         }
 

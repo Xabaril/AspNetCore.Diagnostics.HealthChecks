@@ -5,15 +5,19 @@ namespace HealthChecks.UI.Core.Discovery.K8S
     internal class KubernetesAddressFactory
     {
         private readonly string _healthPath;
-        public KubernetesAddressFactory(string healthPath)
+        private readonly string _healthPathLabel;
+        private readonly string _healthPortLabel;
+        public KubernetesAddressFactory(string healthPath, string healthPathLabel, string healthPortLabel)
         {
             _healthPath = healthPath;
+            _healthPathLabel = healthPathLabel;
+            _healthPortLabel = healthPortLabel;
         }
         public string CreateAddress(Service service)
         {
             string address = string.Empty;
 
-            var port = GetServicePort(service);
+            var port = GetServicePortValue(service);
 
             switch (service.Spec.PortType)
             {
@@ -26,7 +30,18 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                     break;
             }
 
-            return $"http://{address}{port}/{_healthPath}";
+            string healthPath;
+            if(!string.IsNullOrEmpty(_healthPathLabel) && (service.Metadata.Labels?.ContainsKey(_healthPathLabel) ?? false))
+            {
+                healthPath = service.Metadata.Labels[_healthPathLabel];
+            }
+            else
+            {
+                healthPath = _healthPath;
+            }
+            healthPath = healthPath.TrimStart('/');
+
+            return $"http://{address}{port}/{healthPath}";
         }
         private string GetLoadBalancerAddress(Service service)
         {
@@ -38,7 +53,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return service.Spec.ClusterIP;
         }
-        private string GetServicePort(Service service)
+        private string GetServicePortValue(Service service)
         {
             string port = string.Empty;
 
@@ -46,10 +61,10 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             {
                 case PortType.LoadBalancer:
                 case PortType.ClusterIP:
-                    port = service.Spec?.Ports?.FirstOrDefault()?.PortNumber.ToString() ?? "";
+                    port = GetServicePort(service)?.PortNumber.ToString() ?? "";
                     break;
                 case (PortType.NodePort):
-                    port = service.Spec?.Ports?.FirstOrDefault()?.NodePort.ToString() ?? "";
+                    port = GetServicePort(service)?.NodePort.ToString() ?? "";
                     break;
             }
 
@@ -58,6 +73,22 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 port = $":{port}";
             }
             return port;
+        }
+        private Port GetServicePort(Service service)
+        {
+            if(!string.IsNullOrEmpty(_healthPortLabel) && (service.Metadata.Labels?.ContainsKey(_healthPortLabel) ?? false))
+            {
+                var labelValue = service.Metadata.Labels[_healthPortLabel];
+                if(int.TryParse(labelValue, out var labelIntValue)) {
+                    return service.Spec?.Ports?.Where(p => p.PortNumber == labelIntValue)?.FirstOrDefault();
+                } else {
+                    return service.Spec?.Ports?.Where(p => p.Name == labelValue)?.FirstOrDefault();
+                }
+            }
+            else
+            {
+                return service.Spec?.Ports?.FirstOrDefault();
+            }
         }
     }
 }

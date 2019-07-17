@@ -19,6 +19,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string Uid { get; set; }
+        public IDictionary<string, string> Labels { get; set; }
     }
     internal class LoadBalancer
     {     
@@ -42,6 +43,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
     }
     internal class Port
     {
+        public string Name { get; set; }
         public string Protocol { get; set; }
         [JsonProperty("Port")]
         public int PortNumber { get; set; }

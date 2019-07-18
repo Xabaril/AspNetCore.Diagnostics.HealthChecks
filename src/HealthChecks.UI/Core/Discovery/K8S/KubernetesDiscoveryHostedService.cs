@@ -35,7 +35,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             _discoveryClient = httpClientFactory.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME);
             _clusterServiceClient = httpClientFactory.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
-            _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath, discoveryOptions.HealthPathLabel, discoveryOptions.HealthPortLabel, discoveryOptions.HealthSchemeLabel);
+            _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath, discoveryOptions.ServicesPathLabel, discoveryOptions.ServicesPortLabel, discoveryOptions.ServicesSchemeLabel);
 
         }
         public Task StartAsync(CancellationToken cancellationToken)
@@ -66,7 +66,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                     try
                     {
-                        var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces);
+                        var services = await _discoveryClient.GetServices(_logger, _discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces);
                         foreach (var item in services.Items)
                         {
                             try

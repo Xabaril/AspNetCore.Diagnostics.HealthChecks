@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
 {
@@ -14,7 +15,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
         internal static void ConfigureKubernetesClient(this HttpClient client, IServiceProvider serviceProvider)
         {
             var options = serviceProvider.GetRequiredService<KubernetesDiscoverySettings>();
-            
+
             string token;
             string hostString;
 
@@ -33,7 +34,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
                     hostString = $"https://{clusterHost}:{clusterPort}";
                 }
 
-                token = File.ReadAllText("/var/run/secrets/kubernetes.io/serviceaccount/token").Trim();
+                var tokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token";
+                if(!File.Exists(tokenPath)) {
+                    throw new Exception($"A Kubernetes Service Account token was not mounted");
+                }
+                token = File.ReadAllText(tokenPath).Trim();
             }
             else
             {
@@ -51,20 +56,20 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
 
             client.BaseAddress = host;
                     
-             if (!string.IsNullOrEmpty(options.Token))
+            if (!string.IsNullOrEmpty(token))
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         }
-        internal static async Task<ServiceList> GetServices(this HttpClient client, string label = "", string[] k8sNamespaces = null)
+        internal static async Task<ServiceList> GetServices(this HttpClient client, ILogger logger, string label = "", string[] k8sNamespaces = null)
         {
             if(k8sNamespaces == null || k8sNamespaces.Length <= 1)
             {
-                return await client.GetServices(label, k8sNamespaces?.FirstOrDefault() ?? "");
+                return await client.GetServices(logger, label, k8sNamespaces?.FirstOrDefault() ?? "");
             }
             else
             {
-                var responses = await Task.WhenAll(k8sNamespaces.Select(k8sNamespace => client.GetServices(label, k8sNamespace)));
+                var responses = await Task.WhenAll(k8sNamespaces.Select(k8sNamespace => client.GetServices(logger, label, k8sNamespace)));
 
                 return new ServiceList {
                     Items = responses.SelectMany(r => r.Items).ToArray()
@@ -72,7 +77,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
             }
         }
 
-        private static async Task<ServiceList> GetServices(this HttpClient client, string label, string k8sNamespace)
+        private static async Task<ServiceList> GetServices(this HttpClient client, ILogger logger, string label, string k8sNamespace)
         {
             string apiPath;
             if(string.IsNullOrEmpty(k8sNamespace))
@@ -84,6 +89,10 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
                 apiPath = string.Format(KubernetesApiEndpoints.NamespacedServicesV1, Uri.EscapeDataString(k8sNamespace));
             }
             var response = await client.GetAsync($"{client.BaseAddress.AbsoluteUri}{apiPath}?labelSelector={label}");
+            if(!response.IsSuccessStatusCode)
+            {
+                logger.LogWarning($"Received HTTP {response.StatusCode} {response.ReasonPhrase} when making Kubernetes Service Discovery request to {apiPath}");
+            }
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ServiceList>(content);
         }

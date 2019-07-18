@@ -34,7 +34,29 @@ To enable Kubernetes discovery you just need to configure some settings inside t
           "Enabled": true,
           "ClusterHost": "https://myaks-962d02ba.hcp.westeurope.azmk8s.io:443",
           "Token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3M...",
-          "HealthPath": "healthz"
+          "HealthPath": "healthz",
+          "ServicesLabel": "HealthChecks",
+          "ServicesPathLabel": "HealthChecksPath",
+          "ServicesPortLabel": "HealthChecksPort",
+          "ServicesSchemeLabel": "HealthChecksScheme"
+    }
+  }
+}
+```
+
+If you are hosting HealthChecks UI within Kubernetes, you can use the following configuration instead:
+
+```json
+{
+  "HealthChecksUI": {
+    "KubernetesDiscoveryService": {
+          "Enabled": true,
+          "InCluster": true,
+          "HealthPath": "healthz",
+          "ServicesLabel": "HealthChecks",
+          "ServicesPathLabel": "HealthChecksPath",
+          "ServicesPortLabel": "HealthChecksPort",
+          "ServicesSchemeLabel": "HealthChecksScheme"
     }
   }
 }
@@ -52,9 +74,9 @@ Here are all the available parameters detailed:
 | Token                | The token that will be sent to the cluster for authentication                                                                                     |                    |
 | HealthPath           | The default url path where the UI will call once the service is discovered                                                                        | hc                 |
 | ServicesLabel        | The labeled services the UI will look for in k8s                                                                                                  | HealthChecks       |
-| HealthPathLabel      | The label on a service that can override the configured url path                                                                                  | HealthChecksPath   |
-| HealthPortLabel      | The label on a service to define which port to call. If the label does not exist on the service the first defined port will be used               | HealthChecksPort   |
-| HealthSchemeLabel    | The label on a service to define which URI scheme to use for healthchecks. If the label does not exist on the service http will be used           | HealthChecksScheme |
+| ServicesPathLabel    | The label on a service that can override the configured url path                                                                                  | HealthChecksPath   |
+| ServicesPortLabel    | The label on a service to define which port to call. If the label does not exist on the service the first defined port will be used               | HealthChecksPort   |
+| ServicesSchemeLabel  | The label on a service to define which URI scheme to use for healthchecks. If the label does not exist on the service http will be used           | HealthChecksScheme |
 | RefreshTimeOnSeconds | Healthchecks refresh time in seconds                                                                                                              | 300                |
 | Namespaces           | The namespace(s) to query services in                                                                                                             | []                 |
 

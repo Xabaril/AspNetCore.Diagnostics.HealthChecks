@@ -46,7 +46,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
 
             if (!validHttpEndpoint)
             {
-                throw new Exception($"{nameof(host)} is not a valid Http Uri");
+                throw new Exception($"{hostString} is not a valid Http Uri");
             }
 
             client.BaseAddress = host;

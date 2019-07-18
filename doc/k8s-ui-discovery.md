@@ -33,8 +33,8 @@ To enable Kubernetes discovery you just need to configure some settings inside t
     "KubernetesDiscoveryService": {
           "Enabled": true,
           "ClusterHost": "https://myaks-962d02ba.hcp.westeurope.azmk8s.io:443",
-          "Token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3M...",      
-          "HealthPath": "healthz"      
+          "Token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3M...",
+          "HealthPath": "healthz"
     }
   }
 }
@@ -50,7 +50,7 @@ Here are all the available parameters detailed:
 | InCluster            | The service discovery will try to load the cluster config as an in-cluster pod. ClusterHost and Token does not need to be defined if this is true | false              |
 | ClusterHost          | The uri of the kubernetes cluster                                                                                                                 |                    |
 | Token                | The token that will be sent to the cluster for authentication                                                                                     |                    |
-| HealthPath           | The url path where the UI will call once the service is discovered                                                                                | hc                 |
+| HealthPath           | The default url path where the UI will call once the service is discovered                                                                        | hc                 |
 | ServicesLabel        | The labeled services the UI will look for in k8s                                                                                                  | HealthChecks       |
 | HealthPathLabel      | The label on a service that can override the configured url path                                                                                  | HealthChecksPath   |
 | HealthPortLabel      | The label on a service to define which port to call. If the label does not exist on the service the first defined port will be used               | HealthChecksPort   |
@@ -85,3 +85,20 @@ If the InCluster option is set to true then the kubernetes service discovery wil
 If Namespaces is set only the labelled services within the specified namespace(s) will be queried. By default it will query all services in the cluster.
 
 **NOTE**: Remember if you are using `kubectl proxy` you can configure your cluster address as http://localhost:8001.
+
+## Kubernetes Role-Based Access
+
+The service account being used for the Kubernetes Service Discovery needs the following role on its service account for the service discovery to work:
+
+``` yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: healthchecksui
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["list"]
+```
+
+The role needs to be added in every namespace configured, and a corresponding `RoleBinding` to bind it to the service account. If you wish to query all namespaces, replace `Role` with `ClusterRole` and `RoleBinding` to `ClusterRoleBinding`.

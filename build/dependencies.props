@@ -36,7 +36,7 @@
     <MySqlConnector>0.40.4</MySqlConnector>
     <ConfluentKafka>1.0.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
-    <NEST>6.1.0</NEST>
+    <NEST>7.1.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
     <MicrosoftAzureCosmosDB>3.0.0.9-preview</MicrosoftAzureCosmosDB>

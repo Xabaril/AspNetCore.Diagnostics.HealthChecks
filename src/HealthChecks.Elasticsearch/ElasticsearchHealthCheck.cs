@@ -48,7 +48,7 @@ namespace HealthChecks.Elasticsearch
                     }
                 }
 
-                var pingResult = await lowLevelClient.PingAsync(cancellationToken: cancellationToken);
+                var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken);
                 var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
                 return isSuccess

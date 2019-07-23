@@ -97,6 +97,7 @@
     <HealthCheckUI>2.2.32</HealthCheckUI>
     <HealthCheckUIClient>2.2.4</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>2.2.4</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherDatadog>2.2.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>2.2.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>2.2.0</HealthCheckAWSS3>
     <HealthCheckKeyVault>2.2.2</HealthCheckKeyVault>

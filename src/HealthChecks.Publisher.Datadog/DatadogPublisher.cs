@@ -18,7 +18,7 @@ namespace HealthChecks.Publisher.Datadog
         {
             _dogStatsd = dogStatsd ?? throw new ArgumentNullException(nameof(dogStatsd));
             _serviceCheckName = serviceCheckName ?? throw new ArgumentNullException(nameof(serviceCheckName));
-            _defaultTags = defaultTags ?? throw new ArgumentNullException(nameof(defaultTags));
+            _defaultTags = defaultTags ?? new string[0];
         }
 
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -48,7 +48,7 @@ namespace HealthChecks.Publisher.Datadog
                         break;
                 }
 
-                var tags = (_defaultTags ?? new string[0]).Concat(new[]
+                var tags = _defaultTags.Concat(new[]
                 {
                     $"check:{key}"
                 }).ToArray();

@@ -64,6 +64,7 @@
     <KubernetesClient>1.2.0</KubernetesClient>
     <MicrosoftAspNetCoreSignalRClient>1.1.0</MicrosoftAspNetCoreSignalRClient>
     <MicrosoftAspNetCoreSignalR>1.1.0</MicrosoftAspNetCoreSignalR>
+    <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">

@@ -16,6 +16,7 @@ namespace HealthChecks.AzureKeyVault
         }
 
         internal string KeyVaultUrlBase { get; private set; }
+        internal string TokenProviderConnectionString { get; private set; }
         internal string ClientId { get; private set; }
         internal string ClientSecret { get; private set; }
         internal bool UseManagedServiceIdentity { get; private set; } = true;
@@ -33,6 +34,17 @@ namespace HealthChecks.AzureKeyVault
             }
 
             KeyVaultUrlBase = keyVaultUrlBase;
+            return this;
+        }
+
+        /// <summary>
+        /// Configures the connection string for the Azure Service Token Provider
+        /// </summary>
+        /// <param name="connectionString">The token provider connection string like "RunAs=App;AppId=...".</param>
+        /// <returns><see cref="AzureKeyVaultOptions"/></returns>
+        public AzureKeyVaultOptions UseTokenProviderConnectionString(string connectionString)
+        {
+            TokenProviderConnectionString = connectionString;
             return this;
         }
 

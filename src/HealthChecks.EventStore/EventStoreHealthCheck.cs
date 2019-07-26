@@ -42,12 +42,13 @@ namespace HealthChecks.EventStore
                         .Build();
                 }
 
-                var connection = EventStoreConnection.Create(
+                using (var connection = EventStoreConnection.Create(
                     connectionSettings,
                     eventStoreUri,
-                    CONNECTION_NAME);
-
-                await connection.ConnectAsync();
+                    CONNECTION_NAME))
+                {
+                    await connection.ConnectAsync();
+                }
 
                 return HealthCheckResult.Healthy();
             }

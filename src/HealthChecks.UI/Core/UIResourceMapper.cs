@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core
@@ -19,6 +20,7 @@ namespace HealthChecks.UI.Core
         {
             var resources = _reader.UIResources;
             var ui = resources.GetMainUI(options);
+            var styleSheets = ui.GetCustomStylesheets(options);
 
             foreach (var resource in resources)
             {
@@ -53,6 +55,20 @@ namespace HealthChecks.UI.Core
                     await context.Response.WriteAsync(ui.Content);
                 });
             });
+
+
+            foreach (var item in styleSheets)
+            {
+                app.Map(item.ResourcePath, appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
+                        context.Response.ContentType = "text/css";
+                        await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length);
+                    });
+                });
+            }
+            
         }
     }
 }

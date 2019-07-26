@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Polly;
+using Polly.Extensions.Http;
+using Polly.Timeout;
 using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,19 +62,27 @@ namespace HealthChecks.UIAndApi
             //    .RetryAsync(5);
 
             //services.AddHttpClient("uri-group") //default healthcheck registration name for uri ( you can change it on AddUrlGroup )
-            //    .AddPolicyHandler(retryPolicy);
+            //    .AddPolicyHandler(retryPolicy)
+            //    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
+            //    {
+            //        ClientCertificateOptions = ClientCertificateOption.Manual,
+            //        ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+            //        {
+            //            return true;
+            //        }
+            //    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           app.UseHealthChecks("/healthz",new HealthCheckOptions
-           {
-               Predicate = _=> true,
-               ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-           })
-           .UseHealthChecksUI()
-           .UseMvc();
+            app.UseHealthChecks("/healthz", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            })
+            .UseHealthChecksUI()
+            .UseMvc();
         }
     }
 

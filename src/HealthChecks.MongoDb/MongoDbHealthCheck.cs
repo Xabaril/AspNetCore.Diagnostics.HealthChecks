@@ -26,15 +26,7 @@ namespace HealthChecks.MongoDb
         {
             try
             {
-                if (!_mongoClient.TryGetValue(_mongoClientSettings, out var mongoClient))
-                {
-                    mongoClient = new MongoClient(_mongoClientSettings);
-
-                    if (!_mongoClient.TryAdd(_mongoClientSettings, mongoClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New MongoClient can't be added into dictionary.");
-                    }
-                }
+                var mongoClient = _mongoClient.GetOrAdd(_mongoClientSettings, settings => new MongoClient(settings));
 
                 if (!string.IsNullOrEmpty(_specifiedDatabase))
                 {

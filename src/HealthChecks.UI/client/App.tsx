@@ -1,11 +1,10 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Redirect } from "react-router-dom";
 import { LivenessPage } from "./components/LivenessPage";
 import { WebhooksPage } from "./components/WebhooksPage";
 import { scaleRotate as Menu } from "react-burger-menu";
 
-interface AppProps {
-    mountPath: string;
+interface AppProps {    
     apiEndpoint: string;
     webhookEndpoint: string;
 }
@@ -39,17 +38,18 @@ export class App extends React.Component<AppProps, AppState> {
                     isOpen={this.state.menuOpen}
                     pageWrapId={'wrapper'}
                     outerContainerId={"outer-container"} >
-                    <Link to={this.props.mountPath} className="menu-item" onClick={this.toggleMenu}>
+                    <Link to='/healthchecks' className="menu-item" onClick={this.toggleMenu}>
                         <img className="menu-icon" src={WhiteHeartIcon} />
                         <div>Health Checks</div>
                     </Link>
-                    <Link to={`${this.props.mountPath}/webhooks`} className="menu-item" onClick={this.toggleMenu}>
+                    <Link to='/webhooks' className="menu-item" onClick={this.toggleMenu}>
                         <img className="menu-icon" src={WhiteGearIcon} />
                         <div>Webhooks</div>
                     </Link>
                 </Menu>
-                <Route exact path={this.props.mountPath} render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />
-                <Route path={`${this.props.mountPath}/webhooks`} render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
+                <Route exact path="/" render={() => <Redirect to="/healthchecks" />} />
+                <Route path='/healthchecks' render={() => <LivenessPage endpoint={this.props.apiEndpoint} />} />                
+                <Route path='/webhooks' render={() => <WebhooksPage endpoint={this.props.webhookEndpoint} />} />
             </div>            
         </React.Fragment>
     }

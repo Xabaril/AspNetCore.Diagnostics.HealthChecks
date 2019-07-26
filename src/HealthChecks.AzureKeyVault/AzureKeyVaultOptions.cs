@@ -20,6 +20,8 @@ namespace HealthChecks.AzureKeyVault
         internal string ClientId { get; private set; }
         internal string ClientSecret { get; private set; }
         internal bool UseManagedServiceIdentity { get; private set; } = true;
+        internal AzureServiceTokenProviderOptions TokenProviderOptions = new AzureServiceTokenProviderOptions();
+
 
         /// <summary>
         /// Configures remote Azure Key Vault Url service
@@ -38,20 +40,8 @@ namespace HealthChecks.AzureKeyVault
         }
 
         /// <summary>
-        /// Configures the connection string for the Azure Service Token Provider
-        /// </summary>
-        /// <param name="connectionString">The token provider connection string like "RunAs=App;AppId=...".</param>
-        /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions UseTokenProviderConnectionString(string connectionString)
-        {
-            TokenProviderConnectionString = connectionString;
-            return this;
-        }
-
-        /// <summary>
         /// Azure key vault connection is performed using provided Client Id and Client Secret.
         /// </summary>
-        /// <param name="keyVaultUrlBase">Azure Key Vault base url - https://[vaultname].vault.azure.net/ </param>
         /// <param name="clientId">Registered application Id</param>
         /// <param name="clientSecret">Registered application secret</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
@@ -71,12 +61,14 @@ namespace HealthChecks.AzureKeyVault
         /// <summary>
         /// Azure key vault connection is performed using Azure Managed Service Identity.
         /// </summary>
+        /// <param name="setup">Optional action to configure the Azure Service Token Provider.</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions UseAzureManagedServiceIdentity()
+        public AzureKeyVaultOptions UseAzureManagedServiceIdentity(Action<AzureServiceTokenProviderOptions> setup = null)
         {
             ClientId = string.Empty;
             ClientSecret = string.Empty;
-            UseManagedServiceIdentity = true;
+            UseManagedServiceIdentity = true;            
+            setup?.Invoke(TokenProviderOptions);
             return this;
         }
 

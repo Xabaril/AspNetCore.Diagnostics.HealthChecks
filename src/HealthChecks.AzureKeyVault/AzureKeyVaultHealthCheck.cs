@@ -28,6 +28,7 @@ namespace HealthChecks.AzureKeyVault
                         await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
                     }
                 }
+
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
@@ -40,7 +41,7 @@ namespace HealthChecks.AzureKeyVault
         {
             if (_options.UseManagedServiceIdentity)
             {
-                var azureServiceTokenProvider = new AzureServiceTokenProvider(connectionString: _options.TokenProviderConnectionString);
+                var azureServiceTokenProvider = new AzureServiceTokenProvider(_options.TokenProviderOptions.ConnectionString, _options.TokenProviderOptions.AzureAdInstance);
                 return new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
             }
             else
@@ -59,6 +60,7 @@ namespace HealthChecks.AzureKeyVault
             {
                 throw new InvalidOperationException($"[{nameof(AzureKeyVaultHealthCheck)}] - Failed to obtain the JWT token");
             }
+            
             return result.AccessToken;
         }
     }

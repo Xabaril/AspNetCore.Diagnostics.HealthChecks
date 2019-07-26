@@ -19,10 +19,56 @@ namespace HealthChecks.AzureKeyVault
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureServiceTokenProviderOptions UseConnectionString(string connectionString)
         {            
-            if (string.IsNullOrEmpty(connectionString))
+            // Validate connection string format
+            if (!string.IsNullOrWhiteSpace(connectionString))
+            {
+                HashSet<string> connectionSettingsKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                // Split by ;
+                string[] splitted = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string splitSetting in splitted)
+                {
+                    // Remove spaces before and after key=value
+                    string setting = splitSetting.Trim();
+
+                    // If setting is empty, continue. This is an empty space at the end e.g. "key=value; "
+                    if (setting.Length == 0)
+                        continue;
+
+                    if (setting.Contains("="))
+                    {
+                        // Key is the first part before =
+                        string[] keyValuePair = setting.Split('=');
+                        string key = keyValuePair[0].Trim();
+
+                        // Value is everything else as is
+                        var value = setting.Substring(keyValuePair[0].Length + 1).Trim();
+
+                        if (!string.IsNullOrWhiteSpace(key))
+                        {
+                            if (!connectionSettingsKeys.Contains(key))
+                            {
+                                connectionSettingsKeys.Add(key);
+                            }
+                            else
+                            {
+                                throw new ArgumentException(
+                                    $"Connection string {connectionString} is not in a proper format. Key '{key}' is repeated.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentException(
+                            $"Connection string {connectionString} is not in a proper format. Expected format is Key1=Value1;Key2=Value=2;");
+                    }
+                }
+            }
+            else
             {
                 throw new ArgumentNullException(nameof(connectionString));
-            }      
+            }    
 
             ConnectionString = connectionString;
             return this;

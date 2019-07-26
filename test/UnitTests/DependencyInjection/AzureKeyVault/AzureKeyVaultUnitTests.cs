@@ -58,19 +58,49 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         }
 
         [Fact]
-        public void fail_when_invalidad_uri_provided_in_configuration()
+        public void fail_when_invalid_uri_provided_in_configuration()
         {
             var services = new ServiceCollection();
 
             Assert.Throws<ArgumentException>(() =>
             {
                 services.AddHealthChecks()
-                .AddAzureKeyVault(setup =>
-                {
-                    setup
-                    .UseKeyVaultUrl("invalid URI")
-                    .AddSecret("mysecret");
-                });
+                    .AddAzureKeyVault(setup =>
+                    {
+                        setup
+                        .UseKeyVaultUrl("invalid URI")
+                        .AddSecret("mysecret");
+                    });
+            });
+        }
+
+        [Fact]
+        public void fail_when_invalid_AD_instance_uri_provided_for_token_provider() 
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                services.AddHealthChecks()
+                    .AddAzureKeyVault(setup =>
+                    {
+                        setup.UseAzureManagedServiceIdentity(tp => tp.UseAzureAdInstance("invalid URI"));
+                    });
+            });
+        }
+
+        [Fact]
+        public void fail_when_invalid_connection_string_provided_for_token_provider() 
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                services.AddHealthChecks()
+                    .AddAzureKeyVault(setup =>
+                    {
+                        setup.UseAzureManagedServiceIdentity(tp => tp.UseConnectionString("RunAs"));
+                    });
             });
         }
     }

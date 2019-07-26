@@ -16,7 +16,6 @@ namespace HealthChecks.AzureKeyVault
         }
 
         internal string KeyVaultUrlBase { get; private set; }
-        internal string TokenProviderConnectionString { get; private set; }
         internal string ClientId { get; private set; }
         internal string ClientSecret { get; private set; }
         internal bool UseManagedServiceIdentity { get; private set; } = true;

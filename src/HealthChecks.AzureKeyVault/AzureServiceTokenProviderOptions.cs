@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace HealthChecks.AzureKeyVault
 {
@@ -12,16 +13,26 @@ namespace HealthChecks.AzureKeyVault
         internal string AzureAdInstance { get; private set; } = "https://login.microsoftonline.com/";
 
         /// <summary>
-        /// Configures remote Azure Key Vault Url service
+        /// Configures connection string for the Azure Service Token Provider
         /// </summary>
-        /// <param name="keyVaultUrlBase">The azure KeyVault url base like  https://[vaultname].vault.azure.net/ .</param>
+        /// <param name="connectionString">The connection string for the Azure Service Token Provider</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureServiceTokenProviderOptions UseConnectionString(string connectionString)
-        {
+        {            
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }      
+
             ConnectionString = connectionString;
             return this;
         }
 
+        /// <summary>
+        /// Configures the Azure AD instance for the Azure Service Token Provider
+        /// </summary>
+        /// <param name="azureAdInstance">The Azure AD instance for the Azure Service Token Provider</param>
+        /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureServiceTokenProviderOptions UseAzureAdInstance(string azureAdInstance) 
         {
             if (string.IsNullOrEmpty(azureAdInstance))

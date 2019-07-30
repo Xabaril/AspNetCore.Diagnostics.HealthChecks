@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace HealthChecks.Uris
 {
@@ -12,6 +13,8 @@ namespace HealthChecks.Uris
         IUriOptions UseTimeout(TimeSpan timeout);
         IUriOptions ExpectHttpCode(int codeToExpect);
         IUriOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect);
+        IUriOptions ExpectContent(string contentToExpect);
+        IUriOptions ExpectContent(Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> contentCheckerFunc);
         IUriOptions AddCustomHeader(string name, string value);
     }
     public class UriOptions : IUriOptions
@@ -21,6 +24,8 @@ namespace HealthChecks.Uris
         public TimeSpan Timeout { get; private set; }
 
         public (int Min, int Max)? ExpectedHttpCodes { get; private set; }
+        public string ExpectedContent { get; private set; }
+        public Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> ExpectedContentFunc { get; private set; }
 
         public Uri Uri { get; }
 
@@ -57,6 +62,16 @@ namespace HealthChecks.Uris
             ExpectedHttpCodes = (minCodeToExpect, maxCodeToExpect);
             return this;
         }
+        IUriOptions IUriOptions.ExpectContent(string contentToExpect)
+        {
+            ExpectedContent = contentToExpect;
+            return this;
+        }
+        IUriOptions IUriOptions.ExpectContent(Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> contentCheckerFunc)
+        {
+            ExpectedContentFunc = contentCheckerFunc;
+            return this;
+        }
         IUriOptions IUriOptions.UseHttpMethod(HttpMethod methodToUse)
         {
             HttpMethod = methodToUse;
@@ -76,6 +91,9 @@ namespace HealthChecks.Uris
         internal HttpMethod HttpMethod { get; private set; }
         internal TimeSpan Timeout { get; private set; }
         internal (int Min, int Max) ExpectedHttpCodes { get; private set; }
+        internal string ExpectedContent { get; private set; }
+        internal Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> ExpectedContentFunc { get; private set; }
+
 
         public UriHealthCheckOptions()
         {
@@ -121,6 +139,16 @@ namespace HealthChecks.Uris
         public UriHealthCheckOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect)
         {
             ExpectedHttpCodes = (minCodeToExpect, maxCodeToExpect);
+            return this;
+        }
+        public UriHealthCheckOptions ExpectContent(string contentToExpect)
+        {
+            ExpectedContent = contentToExpect;
+            return this;
+        }
+        public UriHealthCheckOptions ExpectContent(Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> expectedContentFunc)
+        {
+            ExpectedContentFunc = expectedContentFunc;
             return this;
         }
         internal static UriHealthCheckOptions CreateFromUris(IEnumerable<Uri> uris)

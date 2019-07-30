@@ -20,6 +20,8 @@ namespace HealthChecks.Uris
         {
             var defaultHttpMethod = _options.HttpMethod;
             var defaultExpectedStatusCodes = _options.ExpectedHttpCodes;
+            var defaultExpectedContent = _options.ExpectedContent;
+            var defaultExpectedContentFunc = _options.ExpectedContentFunc;
             var defaultTimeout = _options.Timeout;
             var idx = 0;
 
@@ -34,6 +36,8 @@ namespace HealthChecks.Uris
 
                     var method = item.HttpMethod ?? defaultHttpMethod;
                     var expectedStatusCodes = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
+                    var expectedContent = item.ExpectedContent ?? defaultExpectedContent;
+                    var expectedContentFunc = item.ExpectedContentFunc ?? defaultExpectedContentFunc;
                     var timeout = item.Timeout != TimeSpan.Zero ? item.Timeout : defaultTimeout;
 
                     var httpClient = _httpClientFactory();
@@ -53,6 +57,25 @@ namespace HealthChecks.Uris
                         if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
+                        }
+
+                        if (expectedContent != null)
+                        {
+                            var actualContent = await response.Content.ReadAsStringAsync();
+                            if (actualContent != expectedContent)
+                            {
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with content {expectedContent}, the current content is {actualContent}.");
+                            }
+                        }
+
+                        if (expectedContentFunc != null)
+                        {
+                            var (isOk, notOkReason) = await expectedContentFunc(response.Content);
+                            if (!isOk)
+                            {
+                                var actualContent = await response.Content.ReadAsStringAsync();
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with expected content, reason: '{notOkReason}'. The current content is {actualContent}.");
+                            }
                         }
 
                         ++idx;

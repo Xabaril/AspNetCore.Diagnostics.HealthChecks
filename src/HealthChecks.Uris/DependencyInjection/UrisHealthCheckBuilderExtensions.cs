@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -64,6 +65,74 @@ namespace Microsoft.Extensions.DependencyInjection
                     var options = new UriHealthCheckOptions()
                         .AddUri(uri)
                         .UseHttpMethod(httpMethod);
+
+                    return CreateHealthCheck(sp, registrationName, options);
+                },
+                failureStatus,
+                tags));
+        }
+        /// <summary>
+        /// Add a health check for single uri.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="uri">The uri to check.</param>
+        /// <param name="httpMethod">The http method to use on check.</param>
+        /// <param name="expectedContent">The content expected in the response body.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string expectedContent, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        {
+            builder.Services.AddHttpClient();
+
+            var registrationName = name ?? NAME;
+            return builder.Add(new HealthCheckRegistration(
+                registrationName,
+                sp =>
+                {
+                    var options = new UriHealthCheckOptions()
+                        .AddUri(uri)
+                        .UseHttpMethod(httpMethod)
+                        .ExpectContent(expectedContent);
+
+                    return CreateHealthCheck(sp, registrationName, options);
+                },
+                failureStatus,
+                tags));
+        }
+        /// <summary>
+        /// Add a health check for single uri.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="uri">The uri to check.</param>
+        /// <param name="httpMethod">The http method to use on check.</param>
+        /// <param name="expectedContentFunc">A function that checks the HttpContent of the response.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, 
+            Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> expectedContentFunc, 
+            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        {
+            builder.Services.AddHttpClient();
+
+            var registrationName = name ?? NAME;
+            return builder.Add(new HealthCheckRegistration(
+                registrationName,
+                sp =>
+                {
+                    var options = new UriHealthCheckOptions()
+                        .AddUri(uri)
+                        .UseHttpMethod(httpMethod)
+                        .ExpectContent(expectedContentFunc);
 
                     return CreateHealthCheck(sp, registrationName, options);
                 },

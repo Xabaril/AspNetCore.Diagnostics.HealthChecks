@@ -15,8 +15,9 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _connectionString;
         private readonly string _topicName;
         private static readonly ConcurrentDictionary<string, TopicClient> _topicClient = new ConcurrentDictionary<string, TopicClient>();
+        private readonly Func<AzureServiceBusTopicHealthCheck, string> _partitionKeySelector;
 
-        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
+        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName, Func<AzureServiceBusTopicHealthCheck, string> partitionKeySelector = null)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -29,6 +30,7 @@ namespace HealthChecks.AzureServiceBus
 
             _connectionString = connectionString;
             _topicName = topicName;
+            _partitionKeySelector = partitionKeySelector;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -44,9 +46,13 @@ namespace HealthChecks.AzureServiceBus
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "New TopicClient can't be added into dictionary.");
                     }
                 }
+                
+                var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
 
-                var scheduledMessageId = await topicClient.ScheduleMessageAsync(
-                    new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE)),
+                if (_partitionKeySelector != null)
+                    message.PartitionKey = _partitionKeySelector(this);
+
+                var scheduledMessageId = await topicClient.ScheduleMessageAsync(message,
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await topicClient.CancelScheduledMessageAsync(scheduledMessageId);

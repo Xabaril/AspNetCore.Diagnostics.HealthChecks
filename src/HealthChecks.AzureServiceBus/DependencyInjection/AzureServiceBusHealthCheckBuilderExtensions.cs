@@ -1,4 +1,5 @@
-﻿using HealthChecks.AzureServiceBus;
+﻿using System;
+using HealthChecks.AzureServiceBus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Generic;
 
@@ -43,12 +44,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="partitionKeySelector">Partition key callback. Optional. If <c>null</c> no partition key will be used.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Func<AzureServiceBusQueueHealthCheck, string> partitionKeySelector = null)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUE_NAME,
-                sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName),
+                sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName, partitionKeySelector),
                 failureStatus,
                 tags));
         }
@@ -64,12 +66,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="partitionKeySelector">Partition key callback. Optional. If <c>null</c> no partition key will be used.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Func<AzureServiceBusTopicHealthCheck, string> partitionKeySelector = null)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURETOPIC_NAME,
-                sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName),
+                sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName, partitionKeySelector),
                 failureStatus,
                 tags));
         }

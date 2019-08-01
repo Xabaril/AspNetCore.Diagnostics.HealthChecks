@@ -1,4 +1,5 @@
-﻿using HealthChecks.AzureServiceBus;
+﻿using System;
+using HealthChecks.AzureServiceBus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Generic;
 
@@ -23,14 +24,46 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureEventHub(this IHealthChecksBuilder builder, string connectionString, string eventHubName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddAzureEventHub(this IHealthChecksBuilder builder, string connectionString,
+            string eventHubName, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default)
         {
+            return builder.AddAzureEventHub(_ => connectionString, _ => eventHubName, name, failureStatus, tags);
+        }
+
+        /// <summary>
+        /// Add a health check for specified Azure Event Hub.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionStringFactory">A factory to build the azure event hub connection string.</param>
+        /// <param name="eventHubNameFactory">A factory to build the azure event hub name.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureeventhub' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureEventHub(this IHealthChecksBuilder builder,
+            Func<IServiceProvider, string> connectionStringFactory, Func<IServiceProvider, string> eventHubNameFactory,
+            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        {
+            if (connectionStringFactory == null)
+            {
+                throw new ArgumentNullException(nameof(connectionStringFactory));
+            }
+            if (eventHubNameFactory == null)
+            {
+                throw new ArgumentNullException(nameof(eventHubNameFactory));
+            }
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREEVENTHUB_NAME,
-                sp => new AzureEventHubHealthCheck(connectionString, eventHubName),
-                failureStatus,
-                tags));
+                provider => new AzureEventHubHealthCheck(connectionStringFactory(provider),
+                    eventHubNameFactory(provider)),
+                failureStatus, tags));
         }
+
         /// <summary>
         /// Add a health check for specified Azure Service Bus Queue.
         /// </summary>
@@ -44,14 +77,47 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder,
+            string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default)
         {
+            return builder.AddAzureServiceBusQueue(_ => connectionString, _ => queueName, name, failureStatus, tags);
+        }
+
+        /// <summary>
+        /// Add a health check for specified Azure Service Bus Queue.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionStringFactory">A factory to build the azure service bus connection string to be used.</param>
+        /// <param name="queueNameFactory">A factory to build the name of the queue to check.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder,
+            Func<IServiceProvider, string> connectionStringFactory, Func<IServiceProvider, string> queueNameFactory,
+            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        {
+            if (connectionStringFactory == null)
+            {
+                throw new ArgumentNullException(nameof(connectionStringFactory));
+            }
+            if (queueNameFactory == null)
+            {
+                throw new ArgumentNullException(nameof(queueNameFactory));
+            }
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUE_NAME,
-                sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName),
+                provider => new AzureServiceBusQueueHealthCheck(connectionStringFactory(provider),
+                    queueNameFactory(provider)),
                 failureStatus,
                 tags));
         }
+
         /// <summary>
         /// Add a health check for Azure Service Bus Topic.
         /// </summary>
@@ -65,11 +131,34 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder,
+            string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default)
+        {
+            return builder.AddAzureServiceBusTopic(_ => connectionString, _ => topicName, name, failureStatus, tags);
+        }
+
+        /// <summary>
+        /// Add a health check for Azure Service Bus Topic.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionStringFactory">A factory to build the Azure ServiceBus connection string to be used.</param>
+        /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder,
+            Func<IServiceProvider, string> connectionStringFactory, Func<IServiceProvider, string> topicNameFactory,
+            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURETOPIC_NAME,
-                sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName),
+                provider => new AzureServiceBusTopicHealthCheck(connectionStringFactory(provider),
+                    topicNameFactory(provider)),
                 failureStatus,
                 tags));
         }

@@ -16,9 +16,9 @@ namespace HealthChecks.AzureServiceBus
 
         private readonly string _connectionString;
         private readonly string _queueName;
-        private readonly Func<AzureServiceBusQueueHealthCheck, string> _partitionKeySelector;
+        private readonly Action<Message> _configureMessage;
 
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Func<AzureServiceBusQueueHealthCheck, string> partitionKeySelector = null)
+        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Action<Message> configureMessage = null)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -30,7 +30,7 @@ namespace HealthChecks.AzureServiceBus
             }
             _connectionString = connectionString;
             _queueName = queueName;
-            _partitionKeySelector = partitionKeySelector;
+            _configureMessage = configureMessage;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -48,9 +48,7 @@ namespace HealthChecks.AzureServiceBus
                 }
 
                 var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
-
-                if (_partitionKeySelector != null)
-                    message.PartitionKey = _partitionKeySelector(this);
+                _configureMessage?.Invoke(message);
                 
                 var scheduledMessageId = await queueClient.ScheduleMessageAsync(message, 
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));

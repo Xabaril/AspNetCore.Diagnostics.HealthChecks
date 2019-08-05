@@ -12,16 +12,15 @@
   "author": "Xabaril Team",
   "license": "ISC",
   "dependencies": {
+    "classnames": "^2.2.6",
     "moment": "2.22.2",
     "react": "16.4.0",
-    "react-burger-menu": "2.5.0",
     "react-dom": "16.4.0",
     "react-json-view": "1.17.0",
     "react-router-dom": "4.3.1"
   },
   "devDependencies": {
     "@types/react": "16.3.16",
-    "@types/react-burger-menu": "2.2.0",
     "@types/react-dom": "16.0.6",
     "@types/react-router-dom": "4.2.7",
     "awesome-typescript-loader": "5.0.0",

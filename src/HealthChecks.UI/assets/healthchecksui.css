@@ -1,23 +1,8 @@
-html{
-    height:100%
-}
-body{
-    margin:0;
-    height:100%;
-    font-family:'Roboto',sans-serif;
-    font-weight:normal;
-    font-size:100%;
-    background-color:#f6f6f7
-}
-#app{
-    height:100%
-}
-.table td{
-    text-align:center
-}
-.table .thead-dark th{
-    text-align:center
-}
+
+
+
+
+
 .status-icon{
     width:20px;
     height:20px
@@ -110,13 +95,7 @@ body{
 .bottom-buffer-60 {
     margin-bottom: 60px
 }
-.table .thead-dark th{
-    background-color:#0ca34e
-}
-.table .thead-black th{
-    background-color:#686867;
-    color:white
-}
+/*
 .bm-burger-button{
     position:fixed;
     width:36px;
@@ -153,50 +132,12 @@ body{
 .bm-overlay{
     background:rgba(0,0,0,0.3)
 }
-@-webkit-keyframes fadeIn{
-    from{
-        opacity:0
-    }
-    to{
-        opacity:1
-    }
-}
-@keyframes fadeIn{
-    from{
-        opacity:0
-    }
-    to{
-        opacity:1
-    }
-}
-@-webkit-keyframes fadeOut{
-    from{
-        opacity:1
-    }
-    to{
-        opacity:0
-    }
-}
-@keyframes fadeOut{
-    from{
-        opacity:1
-    }
-    to{
-        opacity:0
-    }
-}
-.checks-table{
-    -webkit-animation:fadeIn 1s;
-    animation:fadeIn 1s
-}
-.hidden{
-    display:none;
-    -webkit-animation:fadeOut 1s;
-    animation:fadeOut 1s
-}
+
+
+
 .bm-item-list{
     text-align:center;
-    font-size:26px
+    font-size:26px;
 }
 .bm-item-list a{
     color:white;
@@ -210,13 +151,41 @@ body{
     -webkit-stroke-color:#fff;
     -webkit-fill-color:#fff;
     text-shadow:1px 0 20px white
+} */
+
+.checks-table {
+    animation:fadeIn 1s
 }
+
+.hidden{
+    display:none;
+    animation:fadeOut 1s
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+
+@keyframes fadeOut{
+    from{
+        opacity:1;
+    }
+    to{
+        opacity:0;
+    }
+}
+
 .polling-input{
     width:50px;
     text-align:center;
     margin-right:.5rem;
     margin-left:.5rem;
-    border:1px solid #ced4da;
+    border:1px solid var(--lightColor);
     border-radius:.25rem
 }
 .status-icon{
@@ -231,9 +200,7 @@ body{
     display:block;
     margin:0 auto
 }
-.table{
-    background-color:white
-}
+
 .header-logo img{
     width:40px;
     height:40px;
@@ -243,16 +210,14 @@ body{
 .header-logo h2{
     float:left
 }
-.table td,.table th{
-    padding:.45rem
-}
+
 .webhooks{
     margin:10px
 }
 .webhook{
     margin-top:20px;
     padding:20px;
-    border-color:#bdc3c7;
+    border-color:var(--midGrayColor);
     border-width:1px;
     border-style:solid;
     border-radius:25px
@@ -306,7 +271,7 @@ body{
 }
 .td-message{
     height:45px;
-    float:'left';
+    float:left;
     background-color:#d0e2e8
 }
 .expand-button{
@@ -328,4 +293,172 @@ body{
 }
 .break-word{
     word-break:break-all
+}
+
+
+/**** NEW STYLES ****/
+*{
+    box-sizing: border-box;
+}
+
+:root {
+    --primaryColor: #50739C;
+    --secondaryColor: #719AB3;
+    --darkColor:#17202A;
+    --grayColor: #2f313a;
+    --midGrayColor:#8999;
+    --lightColor: #f6f6f7;
+    --dangerColor:#fa5071;
+    --successColor:#0bba93;
+
+    --bgMainColor: var(--lightColor);
+    --fcNegative: #ffffff;
+    --fcBase:var(--darkColor);
+    --bgMenuColor: #2f313a;
+    --bgMenuActiveColor: #000000;
+    --bcMenuActiveColor: var(--primaryColor);
+    --logoImageUrl:url('./images/kubernetes-icon.png');
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+ol,
+ul {
+    list-style-type: none;
+}
+
+button {
+    outline: none;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+button:focus {
+    outline: none;
+}
+
+html {
+    height:100%;
+}
+
+body{
+    margin:0;
+    height:100%;
+    font-family:'Roboto',sans-serif;
+    font-weight:normal;
+    font-size:100%;
+    background-color:var(--bgMainColor);
+}
+
+#app{
+    height:100%;
+}
+
+main {
+    height: 100%;
+    display: flex;
+}
+
+.hc-section-router {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.hc-aside {
+    width: 3rem;
+    max-width: 3rem;
+    background-color: var(--bgMenuColor);
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.hc-aside.hc-aside--open {
+    width: auto;
+    max-width: 15rem;
+}
+
+.hc-aside__logo {
+    background-color: var(--primaryColor);
+    background-image: var(--logoImageUrl);
+    border-radius: 50%;
+    height: 2.5rem;
+    width: 2.5rem;
+    min-width: 2.5rem;
+}
+
+.hc-aside__open-btn {
+    border-width: 0;
+    cursor: pointer;
+    width: 2rem;
+    margin-top: 0.5rem;
+}
+
+
+.hc-aside-menu {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1rem;
+    align-self: flex-start;
+}
+
+.hc-aside-menu__item {
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    color: var(--fcNegative);
+    border-width: 0 0 0 4px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+.hc-aside-menu__item:hover,
+.hc-aside-menu__item.hc-aside-menu__item--active {
+    border-color: var(--bcMenuActiveColor);
+    background-color: var(--bgMenuActiveColor);
+    color: var(--fcNegative);
+    text-decoration: none;
+}
+
+.hc-aside-menu__item img {
+    width: 1.5rem;
+    margin-right: 1rem;
+}
+
+
+
+
+.table{
+    background-color:var(--bgMainColor);
+}
+
+.table td{
+    text-align:center;
+}
+.table .thead-dark th{
+    text-align:center
+}
+
+.table .thead-dark th{
+    background-color: var(--darkColor);
+    filter: grayscale(10%);
+}
+.table .thead-black th{
+    background-color:#686867;
+    color:white
+}
+
+.table td,.table th{
+    padding:.45rem
 }

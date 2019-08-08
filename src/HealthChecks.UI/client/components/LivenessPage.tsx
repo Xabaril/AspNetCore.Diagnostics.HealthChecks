@@ -102,7 +102,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
             .map((el: any) => el.nextSibling)
             .forEach((el: any) => el.classList.remove("hidden"));
 
-            Array.from(tableElement.getElementsByClassName("plus-icon"))            
+            Array.from(tableElement.getElementsByClassName("plus-icon"))
             .forEach((el: any) => el.src = MinusIcon);
     }
 
@@ -111,17 +111,17 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
         Array.from(tableElement.getElementsByClassName("tr-liveness"))
             .map((el: any) => el.nextSibling)
             .forEach((el: any) => el.classList.add("hidden"));
-        
-            Array.from(tableElement.getElementsByClassName("plus-icon"))            
+
+            Array.from(tableElement.getElementsByClassName("plus-icon"))
             .forEach((el: any) => el.src = PlusIcon);
     }
 
     render() {
-        return <div id="wrapper" style={{ height: '100%', overflow: 'auto' }}>
-            <div className="container liveness-container">
+        return <article className="hc-liveness">
+            <header className="container liveness-container">
                 <div className="row top-buffer-100">
                     <div className="header-logo">
-                        <img src={DarkHeartIcon} className="logo-icon" /><h2 className="title">Health Checks status</h2>
+                        <h2 className="title">Health Checks status</h2>
                     </div>
                     <div className="col text-right">
                         <label>Refresh every</label>
@@ -130,7 +130,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
                         <button onClick={this.initPolling} type="button" className="btn btn-light btn-sm">Change</button>
                     </div>
                 </div>
-            </div>
+            </header>
             <div className="container liveness-container">
                 <div className="row text-right bottom-buffer-10">
                     <div className="col-md-12">
@@ -146,7 +146,7 @@ export class LivenessPage extends React.Component<LivenessProps, LivenessState> 
                     }
                 </div>
             </div >
-        </div>
+        </article>
 
     }
 }

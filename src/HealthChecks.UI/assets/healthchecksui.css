@@ -222,10 +222,10 @@
     border-style:solid;
     border-radius:25px
 }
-.liveness-container{
+/* .liveness-container{
     margin-top:20px;
     margin-left:7%
-}
+} */
 .webhook-container{
     margin-left:7%;
     margin-top:5px
@@ -302,20 +302,22 @@
 }
 
 :root {
-    --primaryColor: #50739C;
-    --secondaryColor: #719AB3;
-    --darkColor:#17202A;
-    --grayColor: #2f313a;
-    --midGrayColor:#8999;
+    --primaryColor: #0bc9f6;
+    --secondaryColor: #3f6ca1;
+    --secondaryDarkColor:#225992;
+    --darkColor: #000000;
+    --midDarkColor:#2f313a;
+    --grayColor: #444444;
+    --midGrayColor:#EBEBEB;
     --lightColor: #f6f6f7;
     --dangerColor:#fa5071;
     --successColor:#0bba93;
 
     --bgMainColor: var(--lightColor);
     --fcNegative: #ffffff;
-    --fcBase:var(--darkColor);
-    --bgMenuColor: #2f313a;
-    --bgMenuActiveColor: #000000;
+    --fcBase:var(--grayColor);
+    --bgMenuColor: var(--midDarkColor);
+    --bgMenuActiveColor: var(--darkColor);
     --bcMenuActiveColor: var(--primaryColor);
     --logoImageUrl:url('./images/kubernetes-icon.png');
 }
@@ -451,7 +453,7 @@ main {
 }
 
 .table .thead-dark th{
-    background-color: var(--darkColor);
+    background-color: var(--midDarkColor);
     filter: grayscale(10%);
 }
 .table .thead-black th{
@@ -462,3 +464,6 @@ main {
 .table td,.table th{
     padding:.45rem
 }
+
+
+.hc-liveness{}

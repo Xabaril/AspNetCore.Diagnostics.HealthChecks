@@ -12,17 +12,19 @@ namespace HealthChecks.AzureServiceBus
         : IHealthCheck
     {
         private const string TEST_MESSAGE = "HealthCheckTestMessage";
+        private static readonly ConcurrentDictionary<string, TopicClient> _topicClient = new ConcurrentDictionary<string, TopicClient>();
+
         private readonly string _connectionString;
         private readonly string _topicName;
-        private static readonly ConcurrentDictionary<string, TopicClient> _topicClient = new ConcurrentDictionary<string, TopicClient>();
-        private readonly Action<Message> _configureMessage;
+        private readonly Action<Message> _configuringMessage;
 
-        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName, Action<Message> configureMessage = null)
+        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName, Action<Message> configuringMessage = null)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
+
             if (string.IsNullOrEmpty(topicName))
             {
                 throw new ArgumentNullException(nameof(topicName));
@@ -30,7 +32,7 @@ namespace HealthChecks.AzureServiceBus
 
             _connectionString = connectionString;
             _topicName = topicName;
-            _configureMessage = configureMessage;
+            _configuringMessage = configuringMessage;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -46,11 +48,12 @@ namespace HealthChecks.AzureServiceBus
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "New TopicClient can't be added into dictionary.");
                     }
                 }
-                
+
                 var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
-                _configureMessage?.Invoke(message);
                 
-                var scheduledMessageId = await topicClient.ScheduleMessageAsync(message,
+                _configuringMessage?.Invoke(message);
+
+                var scheduledMessageId = await topicClient.ScheduleMessageAsync(message, 
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await topicClient.CancelScheduledMessageAsync(scheduledMessageId);

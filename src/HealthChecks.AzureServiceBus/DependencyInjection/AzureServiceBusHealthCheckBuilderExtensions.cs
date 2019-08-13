@@ -1,8 +1,8 @@
-﻿using System;
-using HealthChecks.AzureServiceBus;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Collections.Generic;
+﻿using HealthChecks.AzureServiceBus;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -45,13 +45,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configureMessage">Message configuration Action. Optional.</param>
+        /// <param name="configuringMessage">Message configuration Action, usually used when queue is partitioned or with duplication detection feature enabled Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configureMessage = null)
+        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUE_NAME,
-                sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName, configureMessage),
+                sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName, configuringMessage),
                 failureStatus,
                 tags));
         }
@@ -67,13 +67,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configureMessage">Message configuration Action. Optional.</param>
+        /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configureMessage = null)
+        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURETOPIC_NAME,
-                sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName, configureMessage),
+                sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName, configuringMessage),
                 failureStatus,
                 tags));
         }

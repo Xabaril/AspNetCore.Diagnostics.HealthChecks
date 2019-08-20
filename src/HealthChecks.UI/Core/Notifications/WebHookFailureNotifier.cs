@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
@@ -48,7 +49,9 @@ namespace HealthChecks.UI.Core.Notifications
                 {
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
                     if (description != null)
-                        description = StringEscape(description);
+                    {
+                        description = JavaScriptEncoder.Default.Encode(description);
+                    }
                     payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
                         .Replace(Keys.FAILURE_BOOKMARK, failure)
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
@@ -61,16 +64,7 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogInformation("Notification is sent on same window time.");
             }
         }
-        private string StringEscape(string str)
-        {
-            StringBuilder s = new StringBuilder(str);
 
-            s.Replace("\\", "\\\\");
-            s.Replace("\"", "\\\"");
-            s.Replace("'", "\'");
-
-            return s.ToString();
-        }
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
         {
             var lastNotification = await _db.Failures

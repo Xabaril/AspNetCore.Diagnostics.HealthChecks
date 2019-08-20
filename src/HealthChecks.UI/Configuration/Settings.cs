@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace HealthChecks.UI.Configuration
@@ -10,7 +11,8 @@ namespace HealthChecks.UI.Configuration
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
         internal string HealthCheckDatabaseConnectionString { get; set; }
-        internal HttpMessageHandler HttpHandler { get; set; }
+        internal Func<IServiceProvider, HttpMessageHandler> ApiEndpointHttpHandler { get; private set; }
+        internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
         {
@@ -53,9 +55,15 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings UseHttpMessageHandler(HttpMessageHandler handler)
+        public Settings UseApiEndpointHttpMessageHandler(Func<IServiceProvider, HttpClientHandler> apiEndpointHttpHandler)
         {
-            HttpHandler = handler;
+            ApiEndpointHttpHandler = apiEndpointHttpHandler;
+            return this;
+        }
+        
+        public Settings UseWebhookEndpointHttpMessageHandler(Func<IServiceProvider, HttpClientHandler> webhookEndpointHttpHandler)
+        {
+            WebHooksEndpointHttpHandler = webhookEndpointHttpHandler;
             return this;
         }
     }

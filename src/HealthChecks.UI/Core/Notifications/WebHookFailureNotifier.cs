@@ -18,12 +18,19 @@ namespace HealthChecks.UI.Core.Notifications
         private readonly ILogger<WebHookFailureNotifier> _logger;
         private readonly Settings _settings;
         private readonly HealthChecksDb _db;
+        private readonly HttpClient _httpClient;
 
-        public WebHookFailureNotifier(HealthChecksDb db, IOptions<Settings> settings, ILogger<WebHookFailureNotifier> logger)
+        public WebHookFailureNotifier(
+            HealthChecksDb db,
+            IOptions<Settings> settings,
+            ILogger<WebHookFailureNotifier> logger, 
+            IHttpClientFactory httpClientFactory)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _settings = settings.Value ?? new Settings();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
+
         }
         public async Task NotifyDown(string name, UIHealthReport report)
         {
@@ -93,15 +100,14 @@ namespace HealthChecks.UI.Core.Notifications
             }
             try
             {
-                using (var httpClient = new HttpClient())
-                {
+                
                     var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
-                    var response = await httpClient.PostAsync(webHookUri, payload);
+                    var response = await _httpClient.PostAsync(webHookUri, payload);
                     if (!response.IsSuccessStatusCode)
                     {
                         _logger.LogError($"The webhook notification has not executed successfully for {name} webhook. The error code is {response.StatusCode}.");
                     }
-                }
+                
             }
             catch (Exception exception)
             {

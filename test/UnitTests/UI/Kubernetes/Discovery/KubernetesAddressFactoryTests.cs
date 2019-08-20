@@ -30,8 +30,9 @@ namespace UnitTests.UI.Kubernetes
 
             serviceAddresses[0].Should().Be("http://localhost:10000/healthz");
             serviceAddresses[1].Should().Be("http://localhost:9000/healthz");
-            serviceAddresses[2].Should().Be("http://localhost:30000/healthz");            
+            serviceAddresses[2].Should().Be("http://localhost:30000/healthz");
             serviceAddresses[3].Should().Be("http://10.97.1.153:80/healthz");
+            serviceAddresses[4].Should().Be("http://10.152.183.35:5341/healthz");
 
         }
 
@@ -56,6 +57,7 @@ namespace UnitTests.UI.Kubernetes
             serviceAddresses[1].Should().Be("http://13.80.181.10:51000/healthz");
             serviceAddresses[2].Should().Be("http://12.0.0.190:5672/healthz");
             serviceAddresses[3].Should().Be("http://12.0.0.168:30478/healthz");
+            serviceAddresses[4].Should().Be("http://10.152.183.35:5341/healthz");
 
         }
 

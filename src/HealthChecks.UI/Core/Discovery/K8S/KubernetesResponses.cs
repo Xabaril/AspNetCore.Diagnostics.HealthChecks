@@ -46,6 +46,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         [JsonProperty("Port")]
         public int PortNumber { get; set; }
         public int NodePort { get; set; }
-        public int TargetPort { get; set; }
+        public string TargetPort { get; set; }
     }
 }

@@ -18,14 +18,14 @@ const renderTable = (props: CheckTableProps) => {
             <td>
                 {item.name}
             </td>
-            <td className="centered">
+            <td>
                 <img className="status-icon" src={getStatusImage(item.status)} />
                 {item.status}
             </td>
             <td>
                 {item.description}
             </td>
-            <td>
+            <td className="align-center">
                 {item.duration.toString()}
             </td>
         </tr>
@@ -34,16 +34,16 @@ const renderTable = (props: CheckTableProps) => {
 
 
 const CheckTable: React.SFC<CheckTableProps> = (props) => {
-    return <table className="table-responsive" style={{ display: 'inline-table' }}>
-        <thead className="thead-black">
+    return <table className="hc-checks-table">
+        <thead className="hc-checks-table__header">
             <tr>
                 <th>Name</th>
                 <th>Health</th>
                 <th>Description</th>
-                <th>Duration</th>                
+                <th>Duration</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody className="hc-checks-table__body">
             {renderTable(props)}
         </tbody>
     </table>

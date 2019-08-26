@@ -153,14 +153,7 @@
     text-shadow:1px 0 20px white
 } */
 
-.checks-table {
-    animation:fadeIn 1s
-}
 
-.hidden{
-    display:none;
-    animation:fadeOut 1s
-}
 
 @keyframes fadeIn{
     from{
@@ -274,7 +267,7 @@
     float:left;
     background-color:#d0e2e8
 }
-.expand-button{
+/* .expand-button{
     width:30px;
     height:30px;
     margin-right:5px;
@@ -284,7 +277,7 @@
     width:30px;
     height:30px;
     cursor:pointer
-}
+} */
 .discovery-icon{
     width:20px;
     height:20px;
@@ -302,25 +295,37 @@
 }
 
 :root {
-    --primaryColor: #0bc9f6;
-    --secondaryColor: #3f6ca1;
-    --secondaryDarkColor:#225992;
+    --primaryColor: #5EC297;
+    --secondaryColor: #349B72;
     --darkColor: #000000;
     --midDarkColor:#2f313a;
     --grayColor: #444444;
     --midGrayColor:#EBEBEB;
     --lightColor: #f6f6f7;
-    --dangerColor:#fa5071;
-    --successColor:#0bba93;
+    --dangerColor:#D26B4E;
+    --successColor:#3AAA97;
+    --fontFamilyBase: 'Roboto', sans-serif;
 
     --bgMainColor: var(--lightColor);
+    --bgTableOddColor:#ffffff;
     --fcNegative: #ffffff;
     --fcBase:var(--grayColor);
     --bgMenuColor: var(--midDarkColor);
     --bgMenuActiveColor: var(--darkColor);
     --bcMenuActiveColor: var(--primaryColor);
     --logoImageUrl:url('./images/kubernetes-icon.png');
+    --inputBorderColor: var(--midGrayColor);
+    --tableBorderColor: var(--midGrayColor);
+    --bgTableButton: #ffffff;
 }
+
+input,
+input:focus,
+button,
+button:focus {
+  outline: none;
+}
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -338,41 +343,58 @@ button {
     border: 0;
     cursor: pointer;
 }
+
 button:focus {
     outline: none;
 }
 
 html {
     height:100%;
+    font-size:100%;
 }
 
-body{
+body {
     margin:0;
     height:100%;
-    font-family:'Roboto',sans-serif;
+    font-family: var(--fontFamilyBase);
     font-weight:normal;
-    font-size:100%;
+    font-size: 0.875rem;
+    color: var(--fcBase);
     background-color:var(--bgMainColor);
 }
 
-#app{
-    height:100%;
-}
 
 main {
     height: 100%;
     display: flex;
 }
 
+h1 {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+h2{
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+#app{
+    height:100%;
+}
+
+
 .hc-section-router {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    padding: 2rem;
 }
 
 .hc-aside {
     width: 3rem;
-    max-width: 3rem;
+    flex-grow: 0;
+    flex-shrink:0;
     background-color: var(--bgMenuColor);
     height: 100%;
     overflow-y: auto;
@@ -384,8 +406,7 @@ main {
 }
 
 .hc-aside.hc-aside--open {
-    width: auto;
-    max-width: 15rem;
+    width: 12rem;
 }
 
 .hc-aside__logo {
@@ -400,7 +421,7 @@ main {
 .hc-aside__open-btn {
     border-width: 0;
     cursor: pointer;
-    width: 2rem;
+    width: 1.5rem;
     margin-top: 0.5rem;
 }
 
@@ -411,6 +432,7 @@ main {
     flex-direction: column;
     font-size: 1rem;
     align-self: flex-start;
+    width: 100%;
 }
 
 .hc-aside-menu__item {
@@ -423,6 +445,11 @@ main {
     border-width: 0 0 0 4px;
     border-style: solid;
     border-color: transparent;
+    text-decoration: none;
+}
+
+.hc-aside-menu__item:visited {
+    text-decoration: none;
 }
 
 .hc-aside-menu__item:hover,
@@ -433,6 +460,8 @@ main {
     text-decoration: none;
 }
 
+
+
 .hc-aside-menu__item img {
     width: 1.5rem;
     margin-right: 1rem;
@@ -441,29 +470,147 @@ main {
 
 
 
-.table{
-    background-color:var(--bgMainColor);
+.hc-table{
+    width: 100%;
 }
 
-.table td{
+.hc-table__head {
     text-align:center;
+
+    font-weight: 600;
+    text-transform: uppercase;
 }
-.table .thead-dark th{
-    text-align:center
+.hc-table__head tr {
+    height: 3rem;
+}
+.hc-table__row:nth-child(odd){
+    background-color: var(--bgTableOddColor);
 }
 
-.table .thead-dark th{
-    background-color: var(--midDarkColor);
-    filter: grayscale(10%);
-}
-.table .thead-black th{
-    background-color:#686867;
-    color:white
+.hc-table__body td{
+    padding: 0.5rem;
+    border: 1px solid var(--tableBorderColor);
 }
 
-.table td,.table th{
-    padding:.45rem
+.hc-checks-table-container {
+    animation:fadeIn 1s;
 }
 
 
-.hc-liveness{}
+.hc-checks-table-container.is-hidden{
+    display:none;
+    animation:fadeOut 1s;
+}
+
+.hc-checks-table-container > td {
+    padding: 0.5rem;
+    border: 0;
+}
+.hc-checks-table {
+    width: 100%;
+}
+
+.hc-checks-table__header tr {
+    height: 2rem;
+}
+
+.hc-checks-table__body td,
+.hc-checks-table__header th {
+    padding: 0.5rem;
+    background: var(--bgTableOddColor);
+    border: 1px solid var(--tableBorderColor);
+}
+
+.hc-checks-table__header th{
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.hc-button {
+    text-align: center;
+    line-height: 1.2;
+    vertical-align: middle;
+    border-radius: 0;
+    background-color: var(--secondaryColor);
+    color: var(--fcNegative);
+    padding: 0.5rem;
+    height: 2rem;
+}
+
+.hc-button:hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.20));
+}
+
+
+.hc-liveness{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.hc-liveness__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hc-refesh-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+
+}
+
+
+.hc-refesh-group  input {
+    border: 1px solid var(--inputBorderColor);
+    border-radius: 0;
+    padding: 0.5rem;
+    margin:0 0.5rem;
+    max-width:5rem;
+    height: 2rem;
+}
+
+.hc-refesh-group input:hover,
+.hc-refesh-group input:focus {
+    border-color:transparent;
+    border-bottom: 2px solid var(--primaryColor);
+    background-color: var(--primaryColor);
+    color: var(--primaryColor);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7));
+}
+
+.hc-refesh-group .hc-button {
+    margin-left: 1rem;
+}
+
+.hc-liveness__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.hc-table-btn {
+    height: 2.5rem;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bgTableButton);
+}
+
+.hc-table-btn:hover{
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7));
+}
+
+
+/* Helpers */
+
+.align-center{
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}

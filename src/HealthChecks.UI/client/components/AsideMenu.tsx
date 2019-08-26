@@ -12,7 +12,7 @@ const AsideMenu = (props: AsideMenuProps) => {
       className={`hc-aside ${props.isOpen ? 'hc-aside--open' : ''}`}>
       <button
         className="hc-aside__open-btn"
-        onClick={(event) => {event.preventDefault(); return(props.onClick())}}>
+        onClick={() => {props.onClick()}}>
         <img src={MenuIcon} />
       </button>
       {/* <div className="hc-aside__logo" /> */}

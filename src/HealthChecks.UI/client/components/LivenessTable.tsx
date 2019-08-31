@@ -1,10 +1,12 @@
 ﻿import React from 'react';
 import { Liveness } from '../typings/models';
-import { getStatusImage, discoveryServices } from '../healthChecksResources';
+import { discoveryServices, getStatusConfig } from '../healthChecksResources';
 import { CheckTable } from './CheckTable';
 
 interface LivenessTableProps {
   livenessData: Array<Liveness>;
+  collapseAll: (event: any) => void;
+  expandAll: (event: any) => void;
 }
 
 const PlusIcon = require('../../assets/svg/plus.svg');
@@ -18,6 +20,7 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
     };
 
     this.mapTable = this.mapTable.bind(this);
+    this.toggleAll = this.toggleAll.bind(this);
   }
 
   mapTable(livenessData: Array<Liveness>): Array<Liveness> {
@@ -65,8 +68,23 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
       ? checksTable.classList.remove('is-hidden')
       : checksTable.classList.add('is-hidden');
 
-    let iconImage = currentTarget.getElementsByClassName('plus-icon')[0];
-    iconImage.src = isHidden ? MinusIcon : PlusIcon;
+    let iconImage = currentTarget.getElementsByClassName('js-toggle-event')[0];
+    iconImage.innerHTML = isHidden ? 'add' : 'remove';
+    iconImage.setAttribute('title', isHidden ? 'expand info' : 'hide info');
+  }
+
+  toggleAll(event: any) {
+    let { currentTarget } = event;
+    let iconToggle = currentTarget.getElementsByClassName('js-toggle-all')[0];
+    const innerValue = iconToggle.innerHTML;
+
+    if (innerValue == 'add_circle_outline') {
+      iconToggle.innerHTML = 'remove_circle_outline';
+      return this.props.expandAll(event);
+    } else {
+      iconToggle.innerHTML = 'add_circle_outline';
+      return this.props.collapseAll(event);
+    }
   }
 
   render() {
@@ -74,7 +92,15 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
       <table className="hc-table">
         <thead className="hc-table__head">
           <tr>
-            <th  />
+            <th>
+              <nav className="hc-button-group">
+                <button title="expand all" onClick={e => this.toggleAll(e)}>
+                  <i className="material-icons js-toggle-all">
+                    add_circle_outline
+                  </i>
+                </button>
+              </nav>
+            </th>
             <th>Name</th>
             <th>Health</th>
             <th>On state from</th>
@@ -83,31 +109,41 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
         </thead>
         <tbody className="hc-table__body">
           {this.mapTable(this.props.livenessData).map((item, index) => {
+            const statusConfig = getStatusConfig(item.status);
             return (
               <React.Fragment>
                 <tr
                   className="hc-table__row"
                   key={index}
-                  onClick={this.toggleVisibility}
-                  style={{ cursor: 'pointer' }}>
-                  <td >
-                    <img className="plus-icon" src={PlusIcon} />
+                  onClick={this.toggleVisibility}>
+                  <td className="align-center">
+                    <i
+                      className="material-icons js-toggle-event"
+                      title="expand info">
+                      add
+                    </i>
                   </td>
                   <td>
                     {this.getDiscoveryServiceImage(item.discoveryService)}
                     {item.name}
                   </td>
                   <td className="align-center">
-                    <img
-                      className="status-icon"
-                      src={getStatusImage(item.status)}
-                    />
+                    <i
+                      className="material-icons"
+                      style={{
+                        paddingRight: '0.5rem',
+                        color: `var(${statusConfig!.color})`
+                      }}>
+                      {statusConfig!.image}
+                    </i>
                   </td>
                   <td>{item.onStateFrom}</td>
-                  <td className="align-center">{this.formatDate(item.lastExecuted)}</td>
+                  <td className="align-center">
+                    {this.formatDate(item.lastExecuted)}
+                  </td>
                 </tr>
                 <tr className="hc-checks-table-container is-hidden">
-                  <td  colSpan={5}>
+                  <td colSpan={5}>
                     <CheckTable checks={item.entries} />
                   </td>
                 </tr>

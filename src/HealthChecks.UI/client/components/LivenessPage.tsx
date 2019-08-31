@@ -110,23 +110,23 @@ export class LivenessPage extends React.Component<
 
   expandAll(event: any) {
     var tableElement = this._lifenessTable;
-    Array.from(tableElement.getElementsByClassName('tr-liveness'))
-      .map((el: any) => el.nextSibling)
-      .forEach((el: any) => el.classList.remove('hidden'));
+    Array.from(
+      tableElement.getElementsByClassName('hc-checks-table-container')
+    ).forEach((el: any) => el.classList.remove('is-hidden'));
 
-    Array.from(tableElement.getElementsByClassName('plus-icon')).forEach(
-      (el: any) => (el.src = MinusIcon)
+    Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
+      (el: any) => (el.innerHTML = 'remove')
     );
   }
 
   collapseAll(event: any) {
     var tableElement = this._lifenessTable;
-    Array.from(tableElement.getElementsByClassName('tr-liveness'))
-      .map((el: any) => el.nextSibling)
-      .forEach((el: any) => el.classList.add('hidden'));
+    Array.from(
+      tableElement.getElementsByClassName('hc-checks-table-container')
+    ).forEach((el: any) => el.classList.add('is-hidden'));
 
-    Array.from(tableElement.getElementsByClassName('plus-icon')).forEach(
-      (el: any) => (el.src = PlusIcon)
+    Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
+      (el: any) => (el.innerHTML = 'add')
     );
   }
 
@@ -156,15 +156,11 @@ export class LivenessPage extends React.Component<
           <div
             className="hc-table-container"
             ref={lt => (this._lifenessTable = lt)}>
-            <nav className="hc-button-group">
-              <button title="expand all" onClick={this.expandAll}>
-                <i className="material-icons"  >unfold_more</i>
-              </button>
-              <button title="Collapse all" onClick={this.collapseAll}>
-              <i className="material-icons"  >unfold_less</i>
-              </button>
-            </nav>
-            <LivenessTable  livenessData={this.state.livenessData} />
+            <LivenessTable
+              expandAll={this.expandAll}
+              collapseAll={this.collapseAll}
+              livenessData={this.state.livenessData}
+            />
             {this.state.error ? (
               <div className="w-100 alert alert-danger" role="alert">
                 {this.state.error}

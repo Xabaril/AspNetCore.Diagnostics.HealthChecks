@@ -77,9 +77,11 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
 
     if (innerValue == 'add_circle_outline') {
       iconToggle.innerHTML = 'remove_circle_outline';
+      currentTarget.setAttribute('title', 'close all');
       return this.props.expandAll(event);
     } else {
       iconToggle.innerHTML = 'add_circle_outline';
+      currentTarget.setAttribute('title', 'expand all');
       return this.props.collapseAll(event);
     }
   }

@@ -10,6 +10,7 @@ const AsideMenu = (props: AsideMenuProps) => {
   return (
     <aside className={`hc-aside ${props.isOpen ? 'hc-aside--open' : ''}`}>
       <button
+        title={props.isOpen ? 'close menu' : 'open menu'}
         className="hc-aside__open-btn"
         onClick={() => {
           props.onClick();

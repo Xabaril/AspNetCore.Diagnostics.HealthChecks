@@ -1,171 +1,3 @@
-.status-icon {
-  width: 20px;
-  height: 20px;
-}
-.centered {
-  vertical-align: middle;
-  text-align: center;
-}
-.centered img {
-  display: block;
-  margin: 0 auto;
-}
-.loader,
-.loader:before,
-.loader:after {
-  background: #fff;
-  -webkit-animation: load1 1s infinite ease-in-out;
-  animation: load1 1s infinite ease-in-out;
-  width: 1em;
-  height: 4em;
-}
-.polling-input {
-  width: 50px;
-  text-align: center;
-  color: green;
-  font-weight: bold;
-}
-.loader {
-  color: green;
-  text-indent: -9999em;
-  margin: 88px auto;
-  position: relative;
-  font-size: 11px;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-}
-.loader:before,
-.loader:after {
-  position: absolute;
-  top: 0;
-  content: '';
-}
-.loader:before {
-  left: -1.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.loader:after {
-  left: 1.5em;
-}
-@-webkit-keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-@keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
-}
-.title {
-  color: #16212d;
-  font-weight: 500;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-.polling-input {
-  width: 50px;
-  text-align: center;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
-  border: 1px solid var(--lightColor);
-  border-radius: 0.25rem;
-}
-.status-icon {
-  width: 20px;
-  height: 20px;
-}
-.centered {
-  vertical-align: middle;
-  text-align: center;
-}
-.centered img {
-  display: block;
-  margin: 0 auto;
-}
-
-.header-logo img {
-  width: 40px;
-  height: 40px;
-  float: left;
-  margin-right: 10px;
-}
-.header-logo h2 {
-  float: left;
-}
-
-.webhooks {
-  margin: 10px;
-}
-.webhook {
-  margin-top: 20px;
-  padding: 20px;
-  border-color: var(--midGrayColor);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 25px;
-}
-/* .liveness-container{
-    margin-top:20px;
-    margin-left:7%
-} */
-.webhook-container {
-  margin-left: 7%;
-  margin-top: 5px;
-}
-.webhooks .block {
-  display: block;
-  margin: 5px;
-}
-.react-json-view {
-  margin-top: 8px;
-}
-
-.discovery-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 3px;
-  margin-bottom: 3px;
-}
-.break-word {
-  word-break: break-all;
-}
-
 /**** NEW STYLES ****/
 * {
   box-sizing: border-box;
@@ -259,6 +91,109 @@ h2 {
 
 #app {
   height: 100%;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  background: #fff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+
+.loader {
+  color: green;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.loader:after {
+  left: 1.5em;
+}
+
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+
+.polling-input {
+  width: 50px;
+  text-align: center;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  border: 1px solid var(--lightColor);
+  border-radius: 0.25rem;
+}
+
+.webhook {
+  margin-top: 20px;
+  padding: 20px;
+  border-color: var(--midGrayColor);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 25px;
+}
+
+.webhook .block {
+  margin: 5px;
+}
+
+.break-word {
+  word-break: break-all;
+}
+
+.react-json-view {
+  margin-top: 8px;
+}
+
+.discovery-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 3px;
+  margin-bottom: 3px;
 }
 
 .hc-section-router {
@@ -377,6 +312,24 @@ h2 {
 .hc-table__body td {
   padding: 0.5rem;
   border: 1px solid var(--bcTable);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 .hc-checks-table-container {
@@ -508,6 +461,9 @@ h2 {
 
 /* Helpers */
 
+.d-flex {
+  display: flex;
+}
 .align-center {
   text-align: center;
 }

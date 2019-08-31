@@ -8,14 +8,15 @@ interface AsideMenuProps {
 
 const AsideMenu = (props: AsideMenuProps) => {
   return (
-    <aside
-      className={`hc-aside ${props.isOpen ? 'hc-aside--open' : ''}`}>
+    <aside className={`hc-aside ${props.isOpen ? 'hc-aside--open' : ''}`}>
       <button
         className="hc-aside__open-btn"
-        onClick={() => {props.onClick()}}>
-        <img src={MenuIcon} />
+        onClick={() => {
+          props.onClick();
+        }}>
+        <i className="material-icons">{props.isOpen ? 'menu_open' : 'menu'}</i>
       </button>
-      {/* <div className="hc-aside__logo" /> */}
+      <div className="hc-aside__logo" />
       <nav className="hc-aside-menu">{props.children}</nav>
     </aside>
   );

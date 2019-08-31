@@ -9,9 +9,6 @@ interface LivenessTableProps {
   expandAll: (event: any) => void;
 }
 
-const PlusIcon = require('../../assets/svg/plus.svg');
-const MinusIcon = require('../../assets/svg/minus.svg');
-
 export class LivenessTable extends React.Component<LivenessTableProps> {
   constructor(props: LivenessTableProps) {
     super(props);
@@ -69,8 +66,8 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
       : checksTable.classList.add('is-hidden');
 
     let iconImage = currentTarget.getElementsByClassName('js-toggle-event')[0];
-    iconImage.innerHTML = isHidden ? 'add' : 'remove';
-    iconImage.setAttribute('title', isHidden ? 'expand info' : 'hide info');
+    iconImage.innerHTML = isHidden ? 'remove' : 'add';
+    iconImage.setAttribute('title', isHidden ? 'hide info' : 'expand info');
   }
 
   toggleAll(event: any) {

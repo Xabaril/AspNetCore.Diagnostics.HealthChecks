@@ -115,7 +115,10 @@ export class LivenessPage extends React.Component<
     ).forEach((el: any) => el.classList.remove('is-hidden'));
 
     Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
-      (el: any) => (el.innerHTML = 'remove')
+      (el: any) => {
+        el.innerHTML = 'remove';
+        el.setAttribute('title', 'hide info');
+      }
     );
   }
 
@@ -126,7 +129,10 @@ export class LivenessPage extends React.Component<
     ).forEach((el: any) => el.classList.add('is-hidden'));
 
     Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
-      (el: any) => (el.innerHTML = 'add')
+      (el: any) => {
+        el.innerHTML = 'add';
+        el.setAttribute('title', 'expand info');
+      }
     );
   }
 

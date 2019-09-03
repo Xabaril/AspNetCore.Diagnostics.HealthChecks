@@ -23,10 +23,19 @@
   --bgMenuActive: var(--darkColor);
   --bcMenuActive: var(--primaryColor);
   --bcInput: var(--midGrayColor);
+  --bcInputHover: var(--primaryColor);
+  --bgInputHover: var(--primaryColor);
+  --fcInputHover: var(--primaryColor);
   --bcTable: var(--midGrayColor);
   --bgTable: var(--bgSecondary);
   --bgTableSecondary: var(--midGrayColor);
   --bgTableButton: var(--bgSecondary);
+  --bgButton: var(--secondaryColor);
+  --bgImageDarken: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  --bgImageLigthen: linear-gradient(
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.8)
+  );
   --logoImageUrl: url('https://avatars3.githubusercontent.com/u/25212406?s=460&v=4');
 }
 
@@ -225,10 +234,7 @@ h2 {
 
 .hc-table__row:hover {
   background-color: var(--primaryColor);
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.8),
-    rgba(255, 255, 255, 0.8)
-  );
+  background-image: var(--bgImageLigthen);
 }
 
 @keyframes fadeIn {
@@ -306,14 +312,14 @@ h2 {
   line-height: 1.2;
   vertical-align: middle;
   border-radius: 0;
-  background-color: var(--secondaryColor);
+  background-color: var(--bgButton);
   color: var(--fcNegative);
   padding: 0.5rem;
   height: 2rem;
 }
 
 .hc-button:hover {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  background-image: var(--bgImageDarken);
 }
 
 .hc-liveness {
@@ -345,13 +351,10 @@ h2 {
 .hc-refesh-group input:hover,
 .hc-refesh-group input:focus {
   border-color: transparent;
-  border-bottom: 2px solid var(--primaryColor);
-  background-color: var(--primaryColor);
-  color: var(--primaryColor);
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.7)
-  );
+  border-bottom: 2px solid var(--bcInputHover);
+  background-color: var(--bgInputHover);
+  color: var(--fcInputHover);
+  background-image: var(--bgImageLigthen);
 }
 
 .hc-refesh-group .hc-button {
@@ -361,23 +364,6 @@ h2 {
 .hc-liveness__container {
   display: flex;
   flex-direction: column;
-}
-
-.hc-table-btn {
-  height: 2.5rem;
-  width: 2.5rem;
-  min-width: 2.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--bgTableButton);
-}
-
-.hc-table-btn:hover {
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.7)
-  );
 }
 
 .hc-webhooks-container {

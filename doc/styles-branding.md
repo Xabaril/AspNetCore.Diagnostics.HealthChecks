@@ -1,10 +1,10 @@
 ## Health Checks UI Interface styling and branding
 
-Since version 2.2.34 the UI interface has a new feature to add custom stylesheets that will be served by the UI middleware, allowing to customise most interface sections:
+Since version 2.2.34 the UI interface has a new feature to add custom stylesheets that will be served by the UI middleware, allowing to customize most interface sections:
 
 ![HealthChecksUIBranding](./images/ui-branding.png)
 
-To customize your branding just register your custom stylesheets in UseHealthChecksUI setup action:
+To customize your styles and branding just register your custom stylesheets in UseHealthChecksUI setup action:
 
 
 ```csharp

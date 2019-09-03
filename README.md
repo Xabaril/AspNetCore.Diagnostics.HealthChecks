@@ -256,6 +256,8 @@ To add your custom styles sheet, use the UI setup method:
   });
 
 ```
+You can visit the section [custom styles and branding](./doc/styles-branding.md) to find source samples and get further information about custom css properties.
+
 
 ## UI Kubernetes automatic services discovery
 

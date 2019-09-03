@@ -92,13 +92,11 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
         <thead className="hc-table__head">
           <tr>
             <th>
-              <nav className="hc-button-group">
-                <button title="expand all" onClick={e => this.toggleAll(e)}>
-                  <i className="material-icons js-toggle-all">
-                    add_circle_outline
-                  </i>
-                </button>
-              </nav>
+              <button title="expand all" onClick={e => this.toggleAll(e)}>
+                <i className="material-icons js-toggle-all">
+                  add_circle_outline
+                </i>
+              </button>
             </th>
             <th>Name</th>
             <th>Health</th>

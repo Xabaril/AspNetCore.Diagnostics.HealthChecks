@@ -40,26 +40,24 @@ export class WebhooksPage extends React.Component<
     let components: any[] = [];
     for (let chunkWebhooks of webHooksChunk) {
       var component = (
-        <div className="row">
+        <>
           {chunkWebhooks.map((webhook, index) => {
             return (
-              <div className="webhook">
-                <p className="block">
-                  <b>Name</b> : {webhook.name}
+              <div className="webhook-card">
+                <p>
+                  <b>Name</b>: {webhook.name}
                 </p>
-                <p className="block break-word">
-                  <b>Uri</b> : {webhook.uri}
+                <p className="break-word">
+                  <b>Uri</b>: {webhook.uri}
                 </p>
-                <div>
-                  <p className="block">
-                    <b>Payload</b> :
-                  </p>
-                  <ReactJson src={webhook.payload as Object} />
-                </div>
+                <p>
+                  <b>Payload</b> :
+                </p>
+                <ReactJson src={webhook.payload as Object} />
               </div>
             );
           })}
-        </div>
+        </>
       );
       components.push(component);
     }
@@ -72,7 +70,9 @@ export class WebhooksPage extends React.Component<
           <h1>{this.state.webhooks.length} Configured Webhooks</h1>
         </header>
         <div className="hc-liveness__container">
-          {this.renderWebhooks(this.state.webhooks)}
+          <div className="hc-webhooks-container">
+            {this.renderWebhooks(this.state.webhooks)}
+          </div>
         </div>
       </article>
     );

@@ -240,9 +240,26 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
+## UI Style and branding customization
+
+### Sample of dotnet styled UI
+
+![HealthChecksUIBranding](./doc/images/ui-branding.png)
+
+Since version 2.2.34, UI supports custom styles and branding by using a **custom style sheet** and **css variables**.
+To add your custom styles sheet, use the UI setup method:
+
+```csharp
+  .UseHealthChecksUI(setup =>
+  {
+    setup.AddCustomStylesheet("dotnet.css");
+  });
+
+```
+
 ## UI Kubernetes automatic services discovery
 
-![k8s-discovery](./doc/images/k8s-discovery-service.png)
+<!-- ![k8s-discovery](./doc/images/k8s-discovery-service.png) -->
 
 
 HealthChecks UI supports automatic discovery of k8s services exposing pods that have health checks endpoints. This means, you can benefit from it and avoid registering all the endpoints you want to check and let the UI discover them using the k8s api.

@@ -18,9 +18,8 @@
   <ItemGroup>
     <EmbeddedResource Include="assets\index.html" />
     <EmbeddedResource Include="assets\healthchecksui-min.css" />
-    <EmbeddedResource Include="assets\bootstrap-min.css" />
-    <EmbeddedResource Include="assets\vendors-dll.js" />    
-    <EmbeddedResource Include="assets\healthchecks-bundle.js" /> 
+    <EmbeddedResource Include="assets\vendors-dll.js" />
+    <EmbeddedResource Include="assets\healthchecks-bundle.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +39,7 @@
 
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">
     <Message Importance="high" Text="*** Installing npm packages ***" />
-    <Exec Command="npm install" ContinueOnError="false" />  
+    <Exec Command="npm install" ContinueOnError="false" />
   </Target>
 
   <Target Name="BuildClient" BeforeTargets="BeforeBuild" DependsOnTargets="InstallPackages">
@@ -52,5 +51,5 @@
     <Message Importance="high" Text="*** Uglifying css files *** " />
     <Exec Command="npm run buildcss:prod" ContinueOnError="false" />
   </Target>
-  
+
 </Project>

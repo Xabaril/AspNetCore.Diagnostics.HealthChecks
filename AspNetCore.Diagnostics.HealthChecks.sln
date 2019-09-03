@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB8-43CF-B3A2-B70E648259D4}"
 EndProject
@@ -56,6 +56,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{092533AB-7505-4EDC-8932-D40BF575D0D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Sample", "samples\HealthChecks.UI.Sample\HealthChecks.UI.Sample.csproj", "{7C8F7A48-2FF9-4CF4-AAAC-142053E34FC0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7C5C213-677D-4B03-ADA9-101299BCA047} = {B7C5C213-677D-4B03-ADA9-101299BCA047}
+		{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6} = {B1E1B671-EAA2-42A2-909E-0DE2C9900BF6}
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090} = {91DF8A73-8174-4EA2-ABFA-2557B71EE090}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.ApplicationInsights", "src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj", "{EEF1E206-DEE3-45F2-A753-73D2FFFF8EDA}"
 EndProject

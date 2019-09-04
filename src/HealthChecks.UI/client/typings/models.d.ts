@@ -12,17 +12,24 @@ export interface Liveness {
     livenessResult: string;
     discoveryService: string;
     entries : Array<Check>;
+    history: Array<ExecutionHistory>;
 }
 
 export interface LivenessResult {
-    checks : Array<Check> | string;    
+    checks : Array<Check> | string;
 }
 
 export interface Check {
     name: string;
     status: string;
     description: string;
-    duration: string;    
+    duration: string;
+}
+
+export interface ExecutionHistory {
+    id: number;
+    status: string;
+    on: string;
 }
 
 interface WebHook {

@@ -3,6 +3,7 @@ import { Liveness } from '../typings/models';
 import { discoveryServices, getStatusConfig } from '../healthChecksResources';
 import { CheckTable } from './CheckTable';
 
+
 interface LivenessTableProps {
   livenessData: Array<Liveness>;
   collapseAll: (event: any) => void;
@@ -141,7 +142,7 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
                 </tr>
                 <tr className="hc-checks-table-container is-hidden">
                   <td colSpan={5}>
-                    <CheckTable checks={item.entries} />
+                    <CheckTable checks={item.entries} history={item.history} />
                   </td>
                 </tr>
               </React.Fragment>

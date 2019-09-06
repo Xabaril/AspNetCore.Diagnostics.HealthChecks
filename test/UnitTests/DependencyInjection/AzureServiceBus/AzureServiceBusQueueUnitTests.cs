@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using AutoFixture;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
@@ -50,7 +52,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         }
 
         [Fact]
-        public void fail_when_no_health_check_configuration_provided()
+        public void register_succeeded_when_no_health_check_configuration_provided()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
@@ -60,8 +62,29 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
+            var healthCheck = registration.Factory(serviceProvider);
+            healthCheck.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
+        }
 
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        [Theory]
+        [InlineData("", "test", HealthStatus.Degraded)]
+        [InlineData("test", "", HealthStatus.Degraded)]
+        [InlineData("", "", HealthStatus.Unhealthy)]
+        [InlineData("", "", HealthStatus.Healthy)]
+        public async Task empty_string_check_returns_failure_status(string connectionString, string queueName, HealthStatus status)
+        {
+            // Arrange
+            var healthCheck = new AzureServiceBusQueueHealthCheck(connectionString, queueName);
+            var fixture = new Fixture();
+            fixture.Register<IHealthCheck>(() => healthCheck);
+            var context = fixture.Create<HealthCheckContext>();
+            context.Registration.FailureStatus = status;
+
+            // Act
+            var result = await healthCheck.CheckHealthAsync(context);
+
+            // Assert
+            result.Status.Should().Be(status);
         }
     }
 }

@@ -15,21 +15,27 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _eventHubConnectionString;
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
-            if (string.IsNullOrEmpty(connectionString))
+            if (connectionString == null)
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
-
-            if (string.IsNullOrEmpty(eventHubName))
+            if (eventHubName == null)
             {
                 throw new ArgumentNullException(nameof(eventHubName));
             }
 
-            var builder = new EventHubsConnectionStringBuilder(connectionString)
+            if (connectionString != "" && eventHubName != "")
             {
-                EntityPath = eventHubName
-            };
-            _eventHubConnectionString = builder.ToString();
+                var builder = new EventHubsConnectionStringBuilder(connectionString)
+                {
+                    EntityPath = eventHubName
+                };
+                _eventHubConnectionString = builder.ToString();
+            }
+            else
+            {
+                _eventHubConnectionString = "";
+            }
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

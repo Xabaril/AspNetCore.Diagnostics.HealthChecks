@@ -20,14 +20,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, ProducerConfig config, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, ProducerConfig config, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
                 sp => new KafkaHealthCheck(config),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for Kafka cluster.
@@ -40,8 +42,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Action<ProducerConfig> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Action<ProducerConfig> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var config = new ProducerConfig();
             setup?.Invoke(config);
@@ -50,7 +53,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 name ?? NAME,
                 sp => new KafkaHealthCheck(config),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
     }
 }

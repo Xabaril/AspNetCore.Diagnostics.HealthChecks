@@ -24,14 +24,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureEventHub(this IHealthChecksBuilder builder, string connectionString, string eventHubName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddAzureEventHub(this IHealthChecksBuilder builder, string connectionString, string eventHubName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default,TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREEVENTHUB_NAME,
                 sp => new AzureEventHubHealthCheck(connectionString, eventHubName),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for specified Azure Service Bus Queue.
@@ -46,14 +48,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="configuringMessage">Message configuration Action, usually used when queue is partitioned or with duplication detection feature enabled Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null)
+        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null,TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUE_NAME,
                 sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName, configuringMessage),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for Azure Service Bus Topic.
@@ -68,14 +72,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null)
+        public static IHealthChecksBuilder AddAzureServiceBusTopic(this IHealthChecksBuilder builder, string connectionString, string topicName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null,TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURETOPIC_NAME,
                 sp => new AzureServiceBusTopicHealthCheck(connectionString, topicName, configuringMessage),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
     }
 }

@@ -21,8 +21,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
@@ -37,7 +38,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     return CreateHealthCheck(sp, registrationName, options);
                 },
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for single uri.
@@ -51,8 +53,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
@@ -68,7 +71,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     return CreateHealthCheck(sp, registrationName, options);
                 },
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for multiple uri's.
@@ -81,7 +85,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
@@ -90,7 +96,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 registrationName,
                 sp => CreateHealthCheck(sp, registrationName, UriHealthCheckOptions.CreateFromUris(uris)),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for multiple uri's.
@@ -104,14 +111,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => 
+                sp =>
                 {
                     var options = UriHealthCheckOptions
                         .CreateFromUris(uris)
@@ -120,7 +129,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     return CreateHealthCheck(sp, registrationName, options);
                 },
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for multiple uri's.
@@ -133,22 +143,25 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Action<UriHealthCheckOptions> uriOptions, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Action<UriHealthCheckOptions> uriOptions, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => 
+                sp =>
                 {
                     var options = new UriHealthCheckOptions();
                     uriOptions?.Invoke(options);
-                    
+
                     return CreateHealthCheck(sp, registrationName, options);
                 },
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         private static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
         {

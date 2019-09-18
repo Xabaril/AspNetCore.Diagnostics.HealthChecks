@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <PackageTags>HealthCheck;UI;Client</PackageTags>

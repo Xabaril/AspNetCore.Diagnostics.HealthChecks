@@ -12,6 +12,7 @@
   "author": "Xabaril Team",
   "license": "ISC",
   "dependencies": {
+    "@types/classnames": "^2.2.9",
     "classnames": "^2.2.6",
     "moment": "2.22.2",
     "react": "16.4.0",

@@ -19,6 +19,7 @@
   --bgSecondary: #ffffff;
   --fcNegative: #ffffff;
   --fcBase: var(--grayColor);
+  --fcAction: var(--primaryColor);
   --bgAside: var(--midDarkColor);
   --bgMenuActive: var(--darkColor);
   --bcMenuActive: var(--primaryColor);
@@ -395,6 +396,34 @@ h2 {
   margin: 0.25rem;
 }
 
+.hc-action-btn {
+  border: 0;
+  background: transparent;
+  color: var(--fcAction);
+}
+
+.hc-liveness-panel {
+  position: fixed;
+  top: 0;
+  right: -22rem;
+  width: 22rem;
+  height: 100vh;
+  z-index: 900;
+  visibility: hidden;
+  padding: 1rem;
+  transition: right 0.3s ease-in-out 0.3s;
+}
+
+.hc-liveness-panel.hc-liveness-panel--open {
+  right: 0;
+  visibility: visible;
+}
+
+.hc-liveness-panel.hc-action-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
 .react-json-view {
   margin-top: 0.5rem;
 }

@@ -428,18 +428,18 @@ h4 {
 }
 
 .hc-liveness-panel {
-  position: fixed;
-  top: 0;
-  right: -30rem;
-  width: 30rem;
-  height: 100vh;
-  z-index: 900;
-  visibility: hidden;
-  padding: 1rem;
-  overflow: hidden;
-  background-color: var(--bgSecondary);
-  box-shadow: 0 0.375em 1em 0 rgba(0, 0, 0, 0.1);
-  transition: right 0.3s ease-in-out 0.3s;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30rem;
+    height: 100vh;
+    z-index: 900;
+    display: block;
+    padding: 1rem;
+    overflow: hidden;
+    background-color: var(--bgSecondary);
+    box-shadow: 0 0.375em 1em 0 rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out 0.3s;
 }
 
 .hc-liveness-detail {
@@ -447,7 +447,7 @@ h4 {
     flex-direction: column;
     height: 100%;
     transition: right 0.3s ease-in-out 0.3s;
-    display: none;
+    display: block;
 }
 
 .hc-liveness-detail--open {
@@ -528,7 +528,7 @@ h4 {
 
 .hc-liveness-panel.hc-liveness-panel--open {
   right: 0;
-  visibility: visible;
+  display: block;
 }
 
 .hc-liveness-panel .hc-action-btn {

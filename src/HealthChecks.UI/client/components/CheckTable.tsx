@@ -51,8 +51,10 @@ export class CheckTable extends Component<CheckTableProps, CheckTableState> {
                 onClosePanel={() => this.setOpenPanelState()}
                 isOpen={this.state.isOpenPanel}>
                 <LivenessDetail
-                  healthcheck={item}
-                  executionHistory={props.history}></LivenessDetail>
+                            healthcheck={item}
+                            isOpen={this.state.isOpenPanel}
+                            executionHistory={props.history}>
+                </LivenessDetail>
               </LivenessPanel>
             </td>
           </tr>

@@ -8,15 +8,19 @@ import { ExecutionHistory, Check } from '../typings/models';
 import { getStatusConfig } from '../healthChecksResources';
 import { Status } from './Status';
 import moment from 'moment';
+import classNames from "classnames";
 
 interface LivenessDetailsProps {
   healthcheck: Check;
-  executionHistory: Array<ExecutionHistory>;
+    executionHistory: Array<ExecutionHistory>;
+    isOpen: boolean;
 }
 
 const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
   return (
-    <section className="hc-liveness-detail">
+      <section className={classNames('hc-liveness-detail', {
+          'hc-liveness-detail--open': props.isOpen
+      })}>
       <header>
         <h2>{props.healthcheck.name}</h2>
         <Status status={props.healthcheck.status}></Status>

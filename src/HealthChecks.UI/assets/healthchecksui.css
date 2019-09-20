@@ -443,17 +443,24 @@ h4 {
 }
 
 .hc-liveness-detail {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: right 0.3s ease-in-out 0.3s;
+    display: none;
+}
+
+.hc-liveness-detail--open {
+    display: block;
 }
 
 .hc-liveness-detail__body {
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  display: flex;
-  justify-content: center;
+    flex-grow: 1;
+    overflow: hidden;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+
 }
 
 .hc-liveness-detail .hc-status {

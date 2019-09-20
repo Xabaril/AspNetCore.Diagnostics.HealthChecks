@@ -47,8 +47,7 @@ namespace HealthChecks.UIAndApi
                 //        .CheckPod("myapp-pod", p =>  p.Metadata.Labels["app"] == "myapp" );
                 //})
                 .Services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllers();
 
             //
             //   below show howto use default policy handlers ( polly )
@@ -74,7 +73,7 @@ namespace HealthChecks.UIAndApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHealthChecks("/healthz", new HealthCheckOptions
             {
@@ -82,7 +81,8 @@ namespace HealthChecks.UIAndApi
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             })
             .UseHealthChecksUI()
-            .UseMvc();
+            .UseRouting()
+            .UseEndpoints(config => config.MapDefaultControllerRoute());
         }
     }
 

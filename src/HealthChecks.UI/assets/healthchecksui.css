@@ -37,6 +37,9 @@
     rgba(255, 255, 255, 0.8),
     rgba(255, 255, 255, 0.8)
   );
+  --bgBulletTimeline: var(--primaryColor);
+  --bgLineTimeline: var(--midGrayColor);
+  --bcEventTimeline: var(--midGrayColor);
   --logoImageUrl: url('https://avatars3.githubusercontent.com/u/25212406?s=460&v=4');
 }
 
@@ -96,8 +99,21 @@ h1 {
 }
 
 h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 1em 0;
+}
+
+h3 {
   font-size: 0.875rem;
   font-weight: 500;
+  margin: 1em 0;
+}
+
+h4 {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 1em 0;
 }
 
 #app {
@@ -399,19 +415,74 @@ h2 {
 .hc-action-btn {
   border: 0;
   background: transparent;
+  color: var(--fcBase);
+}
+
+.hc-action-btn:hover {
   color: var(--fcAction);
+}
+
+.hc-status {
+  display: flex;
+  align-items: center;
 }
 
 .hc-liveness-panel {
   position: fixed;
   top: 0;
-  right: -22rem;
-  width: 22rem;
+  right: -26rem;
+  width: 26rem;
   height: 100vh;
   z-index: 900;
   visibility: hidden;
   padding: 1rem;
+  overflow: hidden;
+  background-color: var(--bgSecondary);
   transition: right 0.3s ease-in-out 0.3s;
+}
+
+.hc-liveness-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hc-liveness-detail__body {
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.hc-timeline.vertical-timeline {
+  width: 100%;
+  margin: 0;
+  padding: 0 1rem;
+}
+
+.hc-timeline.vertical-timeline::before {
+  background-color: var(--bgLineTimeline);
+  left: 22px;
+}
+
+.hc-timeline.vertical-timeline .hc-timeline__event {
+  margin-bottom: 1rem;
+}
+
+.hc-timeline.vertical-timeline .vertical-timeline-element-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  box-shadow: none;
+  background-color: var(--bgBulletTimeline);
+}
+
+.hc-timeline.vertical-timeline .vertical-timeline-element-content {
+  margin-left: 3rem;
+  box-shadow: none;
+  border-radius: 0;
+  border: 1px solid var(--bcEventTimeline);
 }
 
 .hc-liveness-panel.hc-liveness-panel--open {
@@ -419,11 +490,12 @@ h2 {
   visibility: visible;
 }
 
-.hc-liveness-panel.hc-action-btn {
+.hc-liveness-panel .hc-action-btn {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
 }
+
 .react-json-view {
   margin-top: 0.5rem;
 }

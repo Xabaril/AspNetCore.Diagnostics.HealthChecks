@@ -6,6 +6,7 @@ import {
 import 'react-vertical-timeline-component/style.min.css';
 import { ExecutionHistory, Check } from '../typings/models';
 import { getStatusConfig } from '../healthChecksResources';
+import { Status } from './Status';
 import moment from 'moment';
 
 interface LivenessDetailsProps {
@@ -15,40 +16,34 @@ interface LivenessDetailsProps {
 
 const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
   return (
-    <>
-      <p>{props.healthcheck.name}</p>
-      <p>Current status: {props.healthcheck.status}</p>
-
-      {props.executionHistory.length > 0 && (
-        <VerticalTimeline>
-          {' '}
-          {props.executionHistory.reverse().map(e => {
-            const statusConfig = getStatusConfig(e.status);
-            return (
-              <VerticalTimelineElement
-                className="vertical-timeline-element--work"
-                date={moment(e.on)
-                  .format('LLL')
-                  .toString()}
-                iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-                icon="">
-                <h3 className="vertical-timeline-element-title">{e.status}</h3>
-                <h4 className="vertical-timeline-element-subtitle">
-                  <i
-                    className="material-icons"
-                    style={{
-                      paddingRight: '0.5rem',
-                      color: `var(${statusConfig!.color})`
-                    }}>
-                    {statusConfig!.image}
-                  </i>
-                </h4>
-              </VerticalTimelineElement>
-            );
-          })}
-        </VerticalTimeline>
-      )}
-    </>
+    <section className="hc-liveness-detail">
+      <header>
+        <h2>{props.healthcheck.name}</h2>
+        <h3 className="">
+          <Status status={props.healthcheck.status}></Status>
+        </h3>
+      </header>
+      <div className="hc-liveness-detail__body">
+        {props.executionHistory.length > 0 && (
+          <VerticalTimeline className="hc-timeline">
+            {' '}
+            {props.executionHistory.reverse().map(e => {
+              return (
+                <VerticalTimelineElement
+                  className="hc-timeline__event"
+                  date={moment(e.on)
+                    .format('LLL')
+                    .toString()}>
+                  <h3>
+                    <Status status={e.status}></Status>
+                  </h3>
+                </VerticalTimelineElement>
+              );
+            })}
+          </VerticalTimeline>
+        )}
+      </div>
+    </section>
   );
 };
 

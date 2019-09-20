@@ -16,11 +16,11 @@ const LivenessPanel = ({
     className={classNames('hc-liveness-panel', {
       'hc-liveness-panel--open': isOpen
     })}>
-    <button className="hc-action-btn" onClick={onClosePanel()}>
+    <button className="hc-action-btn" onClick={() => onClosePanel()}>
       <i className="material-icons">close</i>
     </button>
     {children}
   </aside>
 );
 
-export default LivenessPanel;
+export { LivenessPanel };

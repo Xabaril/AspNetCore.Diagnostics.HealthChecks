@@ -19,9 +19,7 @@ const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
     <section className="hc-liveness-detail">
       <header>
         <h2>{props.healthcheck.name}</h2>
-        <h3 className="">
-          <Status status={props.healthcheck.status}></Status>
-        </h3>
+        <Status status={props.healthcheck.status}></Status>
       </header>
       <div className="hc-liveness-detail__body">
         {props.executionHistory.length > 0 && (
@@ -34,9 +32,9 @@ const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
                   date={moment(e.on)
                     .format('LLL')
                     .toString()}>
-                  <h3>
+                  <p>
                     <Status status={e.status}></Status>
-                  </h3>
+                  </p>
                 </VerticalTimelineElement>
               );
             })}

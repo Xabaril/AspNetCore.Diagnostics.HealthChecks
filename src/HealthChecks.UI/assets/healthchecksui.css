@@ -107,13 +107,13 @@ h2 {
 h3 {
   font-size: 0.875rem;
   font-weight: 500;
-  margin: 1em 0;
+  margin: 0.8em 0;
 }
 
 h4 {
   font-size: 0.75rem;
   font-weight: 500;
-  margin: 1em 0;
+  margin: 0.7em 0;
 }
 
 #app {
@@ -430,14 +430,15 @@ h4 {
 .hc-liveness-panel {
   position: fixed;
   top: 0;
-  right: -26rem;
-  width: 26rem;
+  right: -30rem;
+  width: 30rem;
   height: 100vh;
   z-index: 900;
   visibility: hidden;
   padding: 1rem;
   overflow: hidden;
   background-color: var(--bgSecondary);
+  box-shadow: 0 0.375em 1em 0 rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease-in-out 0.3s;
 }
 
@@ -451,12 +452,21 @@ h4 {
   flex-grow: 1;
   overflow: hidden;
   overflow-y: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.hc-liveness-detail .hc-status {
+  font-size: 0.75rem;
+}
+.hc-liveness-detail header {
+  padding-bottom: 1rem;
 }
 
 .hc-timeline.vertical-timeline {
-  width: 100%;
   margin: 0;
   padding: 0 1rem;
+  height: fit-content;
 }
 
 .hc-timeline.vertical-timeline::before {
@@ -465,24 +475,48 @@ h4 {
 }
 
 .hc-timeline.vertical-timeline .hc-timeline__event {
-  margin-bottom: 1rem;
+  margin: 0;
+  margin-bottom: 2rem;
 }
 
 .hc-timeline.vertical-timeline .vertical-timeline-element-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
   border: 0;
   box-shadow: none;
   background-color: var(--bgBulletTimeline);
 }
 
+@media only screen and (min-width: 1170px) {
+  .hc-timeline.vertical-timeline.vertical-timeline--two-columns
+    .vertical-timeline-element-icon {
+    margin-left: -8px;
+  }
+}
+
 .hc-timeline.vertical-timeline .vertical-timeline-element-content {
-  margin-left: 3rem;
   box-shadow: none;
-  border-radius: 0;
   border: 1px solid var(--bcEventTimeline);
+  border-radius: 0;
+  padding: 1rem;
+}
+
+.hc-timeline.vertical-timeline .vertical-timeline-element-content p {
+  margin: 0;
+}
+
+.hc-timeline.vertical-timeline .vertical-timeline-element-content::before {
+  display: none;
+}
+
+.hc-timeline.vertical-timeline .vertical-timeline-element-content h3 {
+  margin: 0;
+}
+
+.hc-timeline.vertical-timeline
+  .vertical-timeline-element-content
+  span.vertical-timeline-element-date {
+  font-size: 0.75rem;
 }
 
 .hc-liveness-panel.hc-liveness-panel--open {

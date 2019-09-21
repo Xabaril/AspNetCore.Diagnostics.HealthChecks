@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-//using Newtonsoft.Json;
-//using Newtonsoft.Json.Converters;
-//using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -26,18 +23,16 @@ namespace HealthChecks.UI.Client
                 {
                     AllowTrailingCommas = true,
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    IgnoreNullValues = true
+                    IgnoreNullValues = true,
                 };
-                //var settings = new JsonSerializerSettings()
-                //{
-                //    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                //    NullValueHandling = NullValueHandling.Ignore,
-                //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                //};
 
                 jsonConfigurator?.Invoke(settings);
                 
                 settings.Converters.Add(new JsonStringEnumConverter());
+
+                //for compatibility with older UI versions ( <3.0 ) we arrange
+                //timepan serialization as s
+                settings.Converters.Add(new TimeSpanConverter());
 
                 httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
 
@@ -48,6 +43,19 @@ namespace HealthChecks.UI.Client
             }
 
             return httpContext.Response.WriteAsync(response);
+        }
+    }
+
+    internal class TimeSpanConverter
+        : JsonConverter<TimeSpan>
+    {
+        public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return default;
+        }
+        public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString());
         }
     }
 }

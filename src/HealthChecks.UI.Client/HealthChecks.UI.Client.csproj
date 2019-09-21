@@ -16,7 +16,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
+    <!--<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />-->
   </ItemGroup>
 
 </Project>

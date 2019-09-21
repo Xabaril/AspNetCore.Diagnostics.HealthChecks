@@ -35,21 +35,6 @@ namespace Microsoft.AspNetCore.Builder
             
             builder.MapGet(options.ApiPath, apiDelegate);
             return builder.MapGet(options.WebhookPath, webhooksDelegate);
-            
-
-//           
-//
-//            var embeddedResourcesAssembly = typeof(UIResource).Assembly;
-//
-//            app.Map(options.ApiPath, appBuilder => appBuilder.UseMiddleware<UIApiEndpointMiddleware>());
-//            app.Map(options.WebhookPath, appBuilder => appBuilder.UseMiddleware<UIWebHooksApiMiddleware>());
-//
-//            new UIResourcesMapper(
-//                    new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
-//                .Map(app, options);
-//
-//            return app;
-
 
         }
         

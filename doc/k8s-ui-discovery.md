@@ -44,14 +44,14 @@ To enable Kubernetes discovery you just need to configure some settings inside t
 
 Here are all the available parameters detailed:
 
-| Parameter  | Description  |  Default Value |
-|---|---|---|
-|  Enabled | Establishes if the k8s discovery service is enabled of disabled  | false  |
-| ClusterHost | The uri of the kubernetes cluster |   |
-| Token | The token that will be sent to the cluster for authentication | |
-| HealthPath | The url path where the UI will call once the service is discovered |  hc | 
-| ServicesLabel | The labeled services the UI will look for in k8s | HealtChecks
-| RefreshTimeOnSeconds | Healthchecks refresh time in seconds | 300
+| Parameter            | Description                                                        | Default Value |
+| -------------------- | ------------------------------------------------------------------ | ------------- |
+| Enabled              | Establishes if the k8s discovery service is enabled of disabled    | false         |
+| ClusterHost          | The uri of the kubernetes cluster                                  |               |
+| Token                | The token that will be sent to the cluster for authentication      |               |
+| HealthPath           | The url path where the UI will call once the service is discovered | hc            |
+| ServicesLabel        | The labeled services the UI will look for in k8s                   | HealthChecks  |
+| RefreshTimeOnSeconds | Healthchecks refresh time in seconds                               | 300           |
 
 ## Labeling Services for discovery in Kubernetes
 

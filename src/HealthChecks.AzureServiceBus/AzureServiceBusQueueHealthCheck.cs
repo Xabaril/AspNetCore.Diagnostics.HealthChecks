@@ -16,7 +16,9 @@ namespace HealthChecks.AzureServiceBus
 
         private readonly string _connectionString;
         private readonly string _queueName;
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
+        private readonly Action<Message> _configuringMessage;
+
+        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Action<Message> configuringMessage = null)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -28,6 +30,7 @@ namespace HealthChecks.AzureServiceBus
             }
             _connectionString = connectionString;
             _queueName = queueName;
+            _configuringMessage = configuringMessage;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -44,8 +47,10 @@ namespace HealthChecks.AzureServiceBus
                     }
                 }
 
-                var scheduledMessageId = await queueClient.ScheduleMessageAsync(
-                    new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE)),
+                var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
+                _configuringMessage?.Invoke(message);
+                
+                var scheduledMessageId = await queueClient.ScheduleMessageAsync(message, 
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await queueClient.CancelScheduledMessageAsync(scheduledMessageId);

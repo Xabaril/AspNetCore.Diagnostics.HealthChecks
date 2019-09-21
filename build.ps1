@@ -93,6 +93,7 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
@@ -129,6 +130,7 @@ else {
     exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
@@ -137,4 +139,3 @@ else {
     exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }
-

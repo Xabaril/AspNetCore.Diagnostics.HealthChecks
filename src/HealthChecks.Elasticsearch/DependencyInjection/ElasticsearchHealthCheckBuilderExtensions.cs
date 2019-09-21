@@ -19,17 +19,19 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddElasticsearch(this IHealthChecksBuilder builder, string elasticsearchUri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddElasticsearch(this IHealthChecksBuilder builder, string elasticsearchUri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new ElasticsearchOptions();
             options.UseServer(elasticsearchUri);
-            
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
                 sp => new ElasticsearchHealthCheck(options),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
         /// <summary>
         /// Add a health check for Elasticsearch databases.
@@ -42,17 +44,19 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddElasticsearch(this IHealthChecksBuilder builder, Action<ElasticsearchOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddElasticsearch(this IHealthChecksBuilder builder, Action<ElasticsearchOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default,TimeSpan? timeout = default)
         {
             var options = new ElasticsearchOptions();
             setup?.Invoke(options);
-            
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
                 sp => new ElasticsearchHealthCheck(options),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace HealthChecks.UIAndApi
         {
             //
             //  This project configure health checks for asp.net core project and UI
-            //  in the same project. Typically health checks and UI are on different projects 
+            //  in the same project. Typically health checks and UI are on different projects
             //  UI exist also as container image
             //
 
@@ -37,7 +37,7 @@ namespace HealthChecks.UIAndApi
                 .AddHealthChecksUI()
                 .AddHealthChecks()
                 .AddCheck<RandomHealthCheck>("random")
-                .AddUrlGroup(new Uri("http://httpbin.org/status/200"));
+                .AddUrlGroup(new Uri("http://httpbin.org/status/200"))
                 //.AddKubernetes(setup =>
                 //{
                 //    setup.WithConfiguration(k8s.KubernetesClientConfiguration.BuildConfigFromConfigFile())
@@ -46,12 +46,13 @@ namespace HealthChecks.UIAndApi
                 //        .CheckService("wordpress-one-wordpress", s => s.Spec.Type == "LoadBalancer")
                 //        .CheckPod("myapp-pod", p =>  p.Metadata.Labels["app"] == "myapp" );
                 //})
-               
+                .Services
+                .AddControllers();
 
             //
             //   below show howto use default policy handlers ( polly )
             //   with httpclient on asp.net core also
-            //   on uri health checks 
+            //   on uri health checks
             //
 
             //var retryPolicy = HttpPolicyExtensions
@@ -72,20 +73,12 @@ namespace HealthChecks.UIAndApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
-            app.UseEndpoints(config =>
-            {
-                config.MapHealthChecks("/healthz", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-
-                config.MapHealthChecksUI();
-            });
-
+           app
+            .UseHealthChecksUI()
+            .UseRouting()
+            .UseEndpoints(config => config.MapDefaultControllerRoute());
         }
     }
 

@@ -100,12 +100,13 @@ public void ConfigureServices(IServiceCollection services)
 
 ## HealthCheck push results
 
-HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights**,**AspNetCore.HealthChecks.Publisher.Prometheus** or **AspNetCore.HealthChecks.Publisher.Seq** define a consumers to send report results to Application Insights,Prometheus or Seq.
+HealthChecks include a *push model* to send HealthCheckReport results into configured consumers. The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights**, **AspNetCore.HealthChecks.Publisher.Datadog**, **AspNetCore.HealthChecks.Publisher.Prometheus** or **AspNetCore.HealthChecks.Publisher.Seq** define a consumers to send report results to Application Insights, Datadog, Prometheus or Seq.
 
 Include the package in your project:
 
 ```powershell
 install-package AspNetcore.HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.Datadog
 install-package AspNetcore.HealthChecks.Publisher.Prometheus
 install-package AspNetcore.HealthChecks.Publisher.Seq
 ```
@@ -117,6 +118,7 @@ services.AddHealthChecks()
         .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
         .AddCheck<RandomHealthCheck>("random")
         .AddApplicationInsightsPublisher()
+        .AddDatadogPublisher("myservice.healthchecks")
         .AddPrometheusGatewayPublisher();
 ```
 
@@ -238,9 +240,28 @@ If the **WebHooks** section is configured, HealthCheck-UI automatically posts a 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
+## UI Style and branding customization
+
+### Sample of dotnet styled UI
+
+![HealthChecksUIBranding](./doc/images/ui-branding.png)
+
+Since version 2.2.34, UI supports custom styles and branding by using a **custom style sheet** and **css variables**.
+To add your custom styles sheet, use the UI setup method:
+
+```csharp
+  .UseHealthChecksUI(setup =>
+  {
+    setup.AddCustomStylesheet("dotnet.css");
+  });
+
+```
+You can visit the section [custom styles and branding](./doc/styles-branding.md) to find source samples and get further information about custom css properties.
+
+
 ## UI Kubernetes automatic services discovery
 
-![k8s-discovery](./doc/images/k8s-discovery-service.png)
+<!-- ![k8s-discovery](./doc/images/k8s-discovery-service.png) -->
 
 
 HealthChecks UI supports automatic discovery of k8s services exposing pods that have health checks endpoints. This means, you can benefit from it and avoid registering all the endpoints you want to check and let the UI discover them using the k8s api.
@@ -265,9 +286,9 @@ Check this [README](./extensions/README.md) on how to configure it.
 
 ## Contributing
 
-AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas) and Eduard Tomás [@eiximenis](https://github.com/eiximenis).
+AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas), Eduard Tomás [@eiximenis](https://github.com/eiximenis) and Eva Crespo [@evacrespob](https://github.com/evacrespob)
 
-*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup, Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r, David Bottiau @odonno.
+*Our valued committers are*: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup, Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r, David Bottiau @odonno,ZeWizard @zeWizard, Ruslan Popovych @rpopovych.
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

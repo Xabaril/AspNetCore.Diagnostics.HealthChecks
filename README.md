@@ -6,7 +6,7 @@
 
 # AspNetCore.Diagnostics.HealthChecks
 
-This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI *port* to new *Microsoft Health Checks* feature included on **ASP.NET Core 2.2**.
+This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI *port* to new *Microsoft Health Checks* feature included on **ASP.NET Core** from **2.2 version**.
 
 ## Health Checks
 
@@ -39,6 +39,7 @@ HealthChecks packages include health checks for:
 - SignalR
 - Kubernetes
 
+> Use 2.2.X package version for .NET Core 2.2 and 3.0.X for .NET Core 3.0
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System

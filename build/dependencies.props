@@ -1,9 +1,8 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetStandardTargetVersion21>netstandard2.1</NetStandardTargetVersion21>
     <NetCoreTargetVersion>netcoreapp3.0</NetCoreTargetVersion>
-    <MicrosoftNETTestSdk>16.2.0</MicrosoftNETTestSdk>
+    <MicrosoftNETTestSdk>16.3.0</MicrosoftNETTestSdk>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -19,27 +18,24 @@
 
   <PropertyGroup Label="Package Versions">
     <MicrosoftExtensionsDiagnosticsHealthChecks>3.0.0-rc1.19456.10</MicrosoftExtensionsDiagnosticsHealthChecks>
-    <MicrosoftAspNetCoreDiagnosticsHealthChecks>3.0.0-preview4-19123-01</MicrosoftAspNetCoreDiagnosticsHealthChecks>
     <MicrosoftExtensionsHttp>3.0.0-rc1.19456.10</MicrosoftExtensionsHttp>
     <MicrosoftExtensionsDependencyInjection>3.0.0-rc1.19456.10</MicrosoftExtensionsDependencyInjection>
     <MicrosoftAspNetCoreTestHost>3.0.0-rc1.19457.4</MicrosoftAspNetCoreTestHost>
     <SystemDataSqlClient>4.7.0-rc1.19456.4</SystemDataSqlClient>
     <MicrosoftDataSqlite>3.0.0-rc1.19456.14</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
-    <MicrosoftAzureCosmosDB>3.1.1</MicrosoftAzureCosmosDB>
+    <MicrosoftAzureCosmosDB>3.2.0</MicrosoftAzureCosmosDB>
     <MicrosoftAzureEventHubs>4.1.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>4.0.0</MicrosoftAzureServiceBus>
-    <MicrosoftAspNetCoreHostingAbstractions>2.2.0</MicrosoftAspNetCoreHostingAbstractions>
     <MicrosoftEntityFrameworkCore>3.0.0-rc1.19456.14</MicrosoftEntityFrameworkCore>
     <MicrosoftEntityFrameworkCoreDesign>3.0.0-rc1.19456.14</MicrosoftEntityFrameworkCoreDesign>
     <MicrosoftEntityFrameworkCoreSqlite>3.0.0-rc1.19456.14</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>2.0.0-preview1-final</MicrosoftEntityFrameworkCoreSqliteDesign>
-    <MicrosoftExtensionsConfigurationBinder>3.0.0-rc1.19456.10</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftExtensionsConfigurationJson>3.0.0-rc1.19456.10</MicrosoftExtensionsConfigurationJson>
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
     <MicrosoftIdentityModelClientsActiveDirectory>4.4.1</MicrosoftIdentityModelClientsActiveDirectory>
     <MicrosoftAzureServicesAppAuthentication>1.3.1</MicrosoftAzureServicesAppAuthentication>
-    <MicrosoftAspNetCoreSignalRClient>3.0.0-preview9.19424.4</MicrosoftAspNetCoreSignalRClient>
+    <MicrosoftAspNetCoreSignalRClient>3.0.0-rc1.19457.4</MicrosoftAspNetCoreSignalRClient>
     <MicrosoftAspNetCoreSignalR>3.0.0-preview4-19123-01</MicrosoftAspNetCoreSignalR>
     <MicrosoftSourceLinkGithub>1.0.0-beta2-19367-01</MicrosoftSourceLinkGithub>
     <FluentAssertions>5.9.0</FluentAssertions>
@@ -52,30 +48,23 @@
     <Npgsql>4.0.10</Npgsql>
     <MongoDBDriver>2.9.1</MongoDBDriver>
     <MySqlConnector>0.56.0</MySqlConnector>
-    <ConfluentKafka>1.1.0</ConfluentKafka>
+    <ConfluentKafka>1.2.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
     <NEST>7.3.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
-    <MicrosoftAzureDocumentDbCore>1.9.1</MicrosoftAzureDocumentDbCore>
+    <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
     <MicrosoftAzureCosmosDB>3.1.1</MicrosoftAzureCosmosDB>
     <GoogleCloudFirestore>1.0.0</GoogleCloudFirestore>
     <HangfireCore>1.7.6</HangfireCore>
     <WindowsAzureStorage>9.3.3</WindowsAzureStorage>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
-    <AWSSDKDynamoDBv2>3.3.101.64</AWSSDKDynamoDBv2>
+    <AWSSDKDynamoDBv2>3.3.101.69</AWSSDKDynamoDBv2>
     <NewtonsoftJson>12.0.2</NewtonsoftJson>
     <EventStoreClient>5.0.2</EventStoreClient>
-    <MicrosoftAspNetCoreHostingAbstractions>2.2.0</MicrosoftAspNetCoreHostingAbstractions>
-    <MicrosoftEntityFrameworkCore>2.2.0</MicrosoftEntityFrameworkCore>
-    <MicrosoftEntityFrameworkCoreDesign>2.2.0</MicrosoftEntityFrameworkCoreDesign>
-    <MicrosoftEntityFrameworkCoreSqlite>2.2.0</MicrosoftEntityFrameworkCoreSqlite>
-    <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.6</MicrosoftEntityFrameworkCoreSqliteDesign>
-    <MicrosoftExtensionsConfigurationBinder>2.2.0</MicrosoftExtensionsConfigurationBinder>
-    <MicrosoftExtensionsConfigurationJson>2.2.0</MicrosoftExtensionsConfigurationJson>
-    <MicrosoftApplicationInsights>2.7.2</MicrosoftApplicationInsights>
+    <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
-    <AWSSKDS3>3.3.29</AWSSKDS3>
+    <AWSSKDS3>3.3.29</AWSSKDS3> 
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
     <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>

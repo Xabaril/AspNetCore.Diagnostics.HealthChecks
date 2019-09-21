@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,15 +19,17 @@ namespace HealthChecks.UI.Image
             services
                 .AddHealthChecksUI()
                 .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            
-
-            app.UseHealthChecksUI()
-                .UseMvc();
+            app.UseRouting()
+                .UseEndpoints(config =>
+                {
+                    config.MapHealthChecksUI();
+                    config.MapDefaultControllerRoute();
+                });
         }
     }
 }

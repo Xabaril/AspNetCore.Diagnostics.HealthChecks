@@ -20,6 +20,7 @@ namespace HealthChecks.UI.Core
         {
             var resources = _reader.UIResources;
             var ui = resources.GetMainUI(options);
+            var styleSheets = ui.GetCustomStylesheets(options);
 
             foreach (var resource in resources)
             {
@@ -34,7 +35,6 @@ namespace HealthChecks.UI.Core
             {
                 context.Response.OnStarting(() =>
                 {
-
                     if (!context.Response.Headers.ContainsKey("Cache-Control"))
                     {
                         context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
@@ -45,8 +45,16 @@ namespace HealthChecks.UI.Core
 
                 context.Response.ContentType = ui.ContentType;
                 await context.Response.WriteAsync(ui.Content);
-
             });
+
+            foreach (var item in styleSheets)
+            {
+                builder.MapGet(item.ResourcePath, async context =>
+                {
+                    context.Response.ContentType = "text/css";
+                    await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length);
+                });
+            }
         }
     }
 }

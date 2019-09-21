@@ -75,10 +75,14 @@ namespace HealthChecks.UIAndApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-           app
-            .UseHealthChecksUI()
-            .UseRouting()
-            .UseEndpoints(config => config.MapDefaultControllerRoute());
+            app
+                .UseRouting()
+                .UseEndpoints(config =>
+                {
+                    config.MapHealthChecksUI();
+                    config.MapDefaultControllerRoute();
+                });
+
         }
     }
 

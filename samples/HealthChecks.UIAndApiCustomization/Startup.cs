@@ -33,20 +33,25 @@ namespace HealthChecks.UIAndApi
                 .Services
                 .AddControllers();
         }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHealthChecks("/healthz", new HealthCheckOptions
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            })
-            .UseHealthChecksUI(setup =>
-            {
-                setup.UIPath = "/show-health-ui"; // this is ui path in your browser
-                setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
-            })
-            .UseRouting()
-            .UseEndpoints(config => config.MapDefaultControllerRoute());
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                })
+                .UseRouting()
+                .UseEndpoints(config =>
+                {
+                    config.MapHealthChecksUI(setup =>
+                    {
+                        setup.UIPath = "/show-health-ui"; // this is ui path in your browser
+                        setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
+                    });
+
+                    config.MapDefaultControllerRoute();
+                });
         }
     }
 }

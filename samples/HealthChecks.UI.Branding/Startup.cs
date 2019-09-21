@@ -43,7 +43,6 @@ namespace HealthChecks.UI.Branding
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 })
-                .UseMvc()
                 .UseRouting()
                 .UseEndpoints(config =>
                 {

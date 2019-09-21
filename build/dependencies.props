@@ -109,7 +109,7 @@
     <HealthCheckHangfire>3.0.0-rc1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.0.0-rc1</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.0.0-rc1</HealthCheckConsul>
-    <HealthCheckUI>2.2.34</HealthCheckUI>
+    <HealthCheckUI>3.0.0-rc1</HealthCheckUI>
     <HealthCheckUIClient>3.0.0-rc1</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>3.0.0-rc1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.0.0-rc1</HealthCheckPublisherDatadog>

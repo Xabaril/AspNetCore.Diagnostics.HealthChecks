@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="$(MicrosoftAspNetCoreDiagnosticsHealthChecks)" />
   </ItemGroup>
 
   <ItemGroup>

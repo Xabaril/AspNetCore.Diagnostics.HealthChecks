@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.Prometheus
 {
-    internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher, IDisposable
+    internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly Func<HttpClient> _httpClientFactory;
         private readonly Uri _targetUrl;
 
-        public PrometheusGatewayPublisher(string endpoint, string job, string instance = null)
+        public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string instance = null)
         {
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+
             if (endpoint == null) throw new ArgumentNullException(nameof(endpoint));
 
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
@@ -30,15 +32,7 @@ namespace HealthChecks.Publisher.Prometheus
                 throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
             }
         }
-        public PrometheusGatewayPublisher(HttpClient httpClient, string endpoint, string job, string instance) 
-            : this(endpoint, job, instance)
-        {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        }
-        public void Dispose()
-        {
-            _httpClient?.Dispose();
-        }
+       
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             WriteMetricsFromHealthReport(report);
@@ -51,7 +45,7 @@ namespace HealthChecks.Publisher.Prometheus
             {
                 using (var outStream = CollectionToStreamWriter(Registry))
                 {
-                    var response = await _httpClient
+                    var response = await _httpClientFactory()
                         .PostAsync(_targetUrl, new StreamContent(outStream));
 
                     response.EnsureSuccessStatusCode();

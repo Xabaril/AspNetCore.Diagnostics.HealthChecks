@@ -87,7 +87,7 @@
     <HealthCheckMySql>2.2.0</HealthCheckMySql>
     <HealthCheckKafka>2.2.2</HealthCheckKafka>
     <HealthCheckSystem>2.2.1</HealthCheckSystem>
-    <HealthCheckNetwork>2.2.2</HealthCheckNetwork>
+    <HealthCheckNetwork>2.2.3</HealthCheckNetwork>
     <HealthCheckDynamoDb>2.2.0</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>2.2.0</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>2.2.1</HealthCheckDocumentDb>

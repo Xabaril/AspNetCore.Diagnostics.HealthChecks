@@ -12,6 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string MEMORY_NAME = "privatememory";
         const string WORKINGSET_NAME = "workingset";
         const string VIRTUALMEMORYSIZE_NAME = "virtualmemory";
+        const string PROCESS_NAME = "process";
         /// <summary>
         /// Add a health check for disk storage.
         /// </summary>
@@ -99,6 +100,21 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                 name ?? VIRTUALMEMORYSIZE_NAME,
                 sp => new MaximumValueHealthCheck<long>(maximumMemoryBytes, () => Process.GetCurrentProcess().VirtualMemorySize64),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        public static IHealthChecksBuilder AddProcessHealthCheck(
+            this IHealthChecksBuilder builder, string serviceName, Func<Process[], bool> predicate, string name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            if (string.IsNullOrEmpty(serviceName)) throw new ArgumentNullException(nameof(serviceName));
+            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? PROCESS_NAME,
+                sp => new ProcessHealthCheck(serviceName, predicate),
                 failureStatus,
                 tags,
                 timeout));

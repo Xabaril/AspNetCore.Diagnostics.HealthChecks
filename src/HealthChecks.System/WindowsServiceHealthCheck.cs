@@ -22,11 +22,18 @@ namespace HealthChecks.System
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            using(var sc = new ServiceController(_serviceName))
+            using (var sc = new ServiceController(_serviceName))
             {
-                if(_predicate(sc))
+                try
                 {
-                    return  Task.FromResult(HealthCheckResult.Healthy());
+                    if (_predicate(sc))
+                    {
+                        return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, exception: null));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
                 }
 
                 return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));

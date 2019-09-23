@@ -22,11 +22,18 @@ namespace HealthChecks.System
         {
             var processes = Process.GetProcessesByName(_processName);
 
-            if(_predicate(processes))
+            try
             {
-                return Task.FromResult(HealthCheckResult.Healthy());
+                if (_predicate(processes))
+                {
+                    return Task.FromResult(HealthCheckResult.Healthy());
+                }
             }
-
+            catch (Exception ex)
+            {
+                return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
+            }
+        
             return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
         }
     }

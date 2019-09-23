@@ -20,17 +20,25 @@ namespace HealthChecks.System
             _predicate = predicate;
         }
 
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
-            using(var sc = new ServiceController(_serviceName))
+            try
             {
-                if(_predicate(sc))
+                using (var sc = new ServiceController(_serviceName))
                 {
-                    return  Task.FromResult(HealthCheckResult.Healthy());
+                    if (_predicate(sc))
+                    {
+                        return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, exception: null));
+                    }
                 }
-
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
             }
+            catch (Exception ex)
+            {
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+            }
+
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
         }
     }
 }

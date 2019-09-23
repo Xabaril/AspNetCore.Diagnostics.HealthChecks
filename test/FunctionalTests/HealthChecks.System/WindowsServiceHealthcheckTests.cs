@@ -75,7 +75,7 @@ namespace FunctionalTests.HealthChecks.System
         }
 
         [SkipOnPlatform(Platform.WINDOWS)]
-        public async Task throw_exception_when_registering_it_in_a_no_windows_system()
+        public void throw_exception_when_registering_it_in_a_no_windows_system()
         {
             var webhostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()
@@ -91,10 +91,13 @@ namespace FunctionalTests.HealthChecks.System
                        Predicate = r => true
                    });
                });
-            Assert.Throws<Exception>(() =>
+            
+            var exception = Assert.Throws<Exception>(() =>
             {
                 var server = new TestServer(webhostBuilder);
             });
+
+            exception.Message.Should().Be("WindowsServiceHealthCheck can only be registered in Windows Systems");
         }
     }
 }

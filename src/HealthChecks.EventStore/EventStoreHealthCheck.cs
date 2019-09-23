@@ -62,10 +62,18 @@ namespace HealthChecks.EventStore
                         status: context.Registration.FailureStatus,
                         exception: e.Exception));
 
-                    //completes after tcp connection init, but before successful connection and login
-                    await connection.ConnectAsync();
+                    using (cancellationToken.Register(() => connection.Close()))
+                    {
+                        //completes after tcp connection init, but before successful connection and login
+                        await connection.ConnectAsync();
+                    }                        
 
-                    return await tcs.Task;
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
+                    {
+                        return await tcs.Task;
+                    }                        
                 }
             }
             catch (Exception ex)

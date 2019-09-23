@@ -75,7 +75,7 @@ namespace FunctionalTests.HealthChecks.System
         }
 
         [SkipOnPlatform(Platform.WINDOWS)]
-        public async Task throw_exception_when_registering_it_in_a_no_windows_system()
+        public Task throw_exception_when_registering_it_in_a_no_windows_system()
         {
             var webhostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()

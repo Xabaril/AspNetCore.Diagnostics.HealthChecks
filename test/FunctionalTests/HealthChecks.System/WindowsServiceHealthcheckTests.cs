@@ -13,11 +13,24 @@ using Xunit;
 
 namespace FunctionalTests.HealthChecks.System
 {
+    [Collection("execution")]
     public class windows_service__healthcheck_should
     {
+        private readonly ExecutionFixture _fixture;
+
+        public windows_service__healthcheck_should(ExecutionFixture fixture)
+        {
+            _fixture = fixture;
+        }
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_healthy_when_the_service_is_running()
         {
+            //AppVeyor does not run standard windows services
+            if (_fixture.IsAppVeyorExecution)
+            {
+                return;
+            }
+            
             var webhostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
@@ -69,7 +82,7 @@ namespace FunctionalTests.HealthChecks.System
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                       .AddWindowsServiceHealthCheck("sv", s => s.Status == ServiceControllerStatus.Running);
+                       .AddWindowsServiceHealthCheck("dotnet", s => s.Status == ServiceControllerStatus.Running);
                })
                .Configure(app =>
                {

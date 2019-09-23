@@ -31,13 +31,15 @@ namespace HealthChecks.EventStore
                 if (string.IsNullOrEmpty(_login) || string.IsNullOrEmpty(_password))
                 {
                     connectionSettings = ConnectionSettings.Create()
-                        .KeepRetrying()
+                        .LimitReconnectionsTo(1)
+                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(500))
                         .Build();
                 }
                 else
                 {
                     connectionSettings = ConnectionSettings.Create()
-                        .KeepRetrying()
+                        .LimitReconnectionsTo(1)
+                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(500))
                         .SetDefaultUserCredentials(new UserCredentials(_login, _password))
                         .Build();
                 }
@@ -47,10 +49,24 @@ namespace HealthChecks.EventStore
                     eventStoreUri,
                     CONNECTION_NAME))
                 {
-                    await connection.ConnectAsync();
-                }
+                    var tcs = new TaskCompletionSource<HealthCheckResult>();
 
-                return HealthCheckResult.Healthy();
+                    //connected
+                    connection.Connected += (s, e) => tcs.TrySetResult(HealthCheckResult.Healthy());
+                    //connection closed after configured amount of failed reconnections
+                    connection.Closed += (s, e) => tcs.TrySetResult(new HealthCheckResult(
+                        status: context.Registration.FailureStatus,
+                        description: e.Reason));
+                    //connection error
+                    connection.ErrorOccurred += (s, e) => tcs.TrySetResult(new HealthCheckResult(
+                        status: context.Registration.FailureStatus,
+                        exception: e.Exception));
+
+                    //completes after tcp connection init, but before successful connection and login
+                    await connection.ConnectAsync();
+
+                    return await tcs.Task;
+                }
             }
             catch (Exception ex)
             {

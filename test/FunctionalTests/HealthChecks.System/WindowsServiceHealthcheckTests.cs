@@ -15,7 +15,7 @@ namespace FunctionalTests.HealthChecks.System
 {
     public class windows_service__healthcheck_should
     {
-        [SkipOnAppVeyor]
+        [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_healthy_when_the_service_is_running()
         {
             var webhostBuilder = new WebHostBuilder()
@@ -38,7 +38,7 @@ namespace FunctionalTests.HealthChecks.System
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         
-        [SkipOnAppVeyor]
+        [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_unhealthy_when_the_service_does_not_exist()
         {
             var webhostBuilder = new WebHostBuilder()

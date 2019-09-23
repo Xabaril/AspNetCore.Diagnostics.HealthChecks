@@ -19,11 +19,11 @@ namespace HealthChecks.System
             _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            var processes = Process.GetProcessesByName(_processName);
-
+        {            
             try
             {
+                var processes = Process.GetProcessesByName(_processName);
+                
                 if (_predicate(processes))
                 {
                     return Task.FromResult(HealthCheckResult.Healthy());

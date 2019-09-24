@@ -39,7 +39,7 @@ HealthChecks packages include health checks for:
 - SignalR
 - Kubernetes
 
-> Use 2.2.X package version for .NET Core 2.2 and 3.0.X for .NET Core 3.0
+> We support netcoreapp 2.2 and the new netcoreapp 3.0. Please use 2.2.X package version for .NET Core 2.2 and 3.0.X for .NET Core 3.0
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -139,7 +139,8 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
-        app.UseRouting()
+        app
+          .UseRouting()
           .UseEndpoints(config =>
            {                   
              config.MapHealthChecksUI();
@@ -150,25 +151,33 @@ public class Startup
 
 This automatically registers a new interface on **/healthchecks-ui** where the spa will be served.
 
-> Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
+> Optionally, *MapHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the MapHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
 **Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend spa to receive the result of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by default is the url that the spa queries.
 
 Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
 
-When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring UseHealthChecks method.
+When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
 
 ![HealthChecksUI](./doc/images/ui-home.png)
 
+### Health status history timeline
+
+By clicking details button in the healthcheck row you can preview the health status history timeline:
+
+![Timeline](./doc/images/timeline.png)
+
 **HealthChecksUI** is also available as a *docker image*  You can read more about [HealthChecks UI Docker image](./doc/ui-docker.md).
+
 
 ### Configuration
 
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
- app.UseRouting()
+ app
+    .UseRouting()
     .UseEndpoints(config =>
     {
       config.MapHealthChecks("/healthz", new HealthCheckOptions
@@ -258,10 +267,15 @@ Since version 2.2.34, UI supports custom styles and branding by using a **custom
 To add your custom styles sheet, use the UI setup method:
 
 ```csharp
-  .UseHealthChecksUI(setup =>
-  {
-    setup.AddCustomStylesheet("dotnet.css");
-  });
+  app
+   .UseRouting()
+   .UseEndpoints(config =>
+    {    
+      config.MapHealthChecksUI(setup =>
+      {
+        setup.AddCustomStylesheet("dotnet.css");
+      });
+   });
 
 ```
 You can visit the section [custom styles and branding](./doc/styles-branding.md) to find source samples and get further information about custom css properties.

@@ -1,6 +1,12 @@
 ﻿<Project>
   <Import Project="build/dependencies.props" />
 
+  <!-- Temporal - Waiting for a netcoreapp 3.0 version of Github Source Link -->
+  <PropertyGroup>
+    <EnableSourceLink>false</EnableSourceLink>
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+  </PropertyGroup>
+  
   <!-- Disable Sourcelink on non Windows machines due to a bug -->
   <!-- https://github.com/dotnet/sourcelink/issues/119 -->
   <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">

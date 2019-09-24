@@ -27,7 +27,7 @@ namespace HealthChecks.Network
                     {
                         if (!item.Resolutions.Contains(ipAddress.ToString()))
                         {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: "Ip Address {ipAddress} was not resolved from host {item.Host}");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ip Address {ipAddress} was not resolved from host {item.Host}");
                         }
                     }
                 }

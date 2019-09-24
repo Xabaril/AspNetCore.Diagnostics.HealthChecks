@@ -26,8 +26,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddPingHealthCheck(this IHealthChecksBuilder builder, Action<PingHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddPingHealthCheck(this IHealthChecksBuilder builder, Action<PingHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new PingHealthCheckOptions();
             setup?.Invoke(options);
@@ -36,7 +37,8 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? PING_NAME,
                sp => new PingHealthCheck(options),
                failureStatus,
-               tags));
+               tags,
+               timeout));
         }
 
         /// <summary>
@@ -50,8 +52,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddSftpHealthCheck(this IHealthChecksBuilder builder, Action<SftpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddSftpHealthCheck(this IHealthChecksBuilder builder, Action<SftpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new SftpHealthCheckOptions();
             setup?.Invoke(options);
@@ -60,7 +63,8 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? SFTP_NAME,
                sp => new SftpHealthCheck(options),
                failureStatus,
-               tags));
+               tags,
+               timeout));
         }
 
         /// <summary>
@@ -74,8 +78,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddFtpHealthCheck(this IHealthChecksBuilder builder, Action<FtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddFtpHealthCheck(this IHealthChecksBuilder builder, Action<FtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new FtpHealthCheckOptions();
             setup?.Invoke(options);
@@ -84,7 +89,8 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? FTP_NAME,
                sp => new FtpHealthCheck(options),
                failureStatus,
-               tags));
+               tags,
+               timeout));
         }
 
         /// <summary>
@@ -122,8 +128,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddImapHealthCheck(this IHealthChecksBuilder builder, Action<ImapHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddImapHealthCheck(this IHealthChecksBuilder builder, Action<ImapHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = null)
         {
             var options = new ImapHealthCheckOptions();
             setup?.Invoke(options);
@@ -132,7 +139,8 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? IMAP_NAME,
                sp => new ImapHealthCheck(options),
                failureStatus,
-               tags));
+               tags,
+               timeout));
         }
 
         /// <summary>
@@ -146,8 +154,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddSmtpHealthCheck(this IHealthChecksBuilder builder, Action<SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddSmtpHealthCheck(this IHealthChecksBuilder builder, Action<SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new SmtpHealthCheckOptions();
             setup?.Invoke(options);
@@ -156,7 +165,8 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? SMTP_NAME,
                sp => new SmtpHealthCheck(options),
                failureStatus,
-               tags));
+               tags,
+               timeout));
         }
 
         /// <summary>
@@ -170,8 +180,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddTcpHealthCheck(this IHealthChecksBuilder builder, Action<TcpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddTcpHealthCheck(this IHealthChecksBuilder builder, Action<TcpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new TcpHealthCheckOptions();
             setup?.Invoke(options);
@@ -180,7 +191,8 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? TCP_NAME,
                sp => new TcpHealthCheck(options),
                failureStatus,
-               tags));
+               tags,
+               timeout));
         }
     }
 }

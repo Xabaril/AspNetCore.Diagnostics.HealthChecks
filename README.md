@@ -6,7 +6,7 @@
 
 # AspNetCore.Diagnostics.HealthChecks
 
-This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI *port* to new *Microsoft Health Checks* feature included on **ASP.NET Core 2.2**.
+This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI *port* to new *Microsoft Health Checks* feature included on **ASP.NET Core** from **2.2 version**.
 
 ## Health Checks
 
@@ -22,7 +22,7 @@ HealthChecks packages include health checks for:
 - RabbitMQ
 - Elasticsearch
 - Redis
-- System: Disk Storage, Private Memory, Virtual Memory
+- System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
 - Azure Key Vault
@@ -39,6 +39,7 @@ HealthChecks packages include health checks for:
 - SignalR
 - Kubernetes
 
+> We support netcoreapp 2.2 and the new netcoreapp 3.0. Please use 2.2.X package version for .NET Core 2.2 and 3.0.X for .NET Core 3.0
 
 ``` PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -138,36 +139,52 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
-        app.UseHealthChecksUI();
+        app
+          .UseRouting()
+          .UseEndpoints(config =>
+           {                   
+             config.MapHealthChecksUI();
+          });
     }
 }
 ```
 
 This automatically registers a new interface on **/healthchecks-ui** where the spa will be served.
 
-> Optionally, *UseHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the UseHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
+> Optionally, *MapHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the MapHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
 **Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend spa to receive the result of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by default is the url that the spa queries.
 
 Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
 
-When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring UseHealthChecks method.
+When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
 
 ![HealthChecksUI](./doc/images/ui-home.png)
 
+### Health status history timeline
+
+By clicking details button in the healthcheck row you can preview the health status history timeline:
+
+![Timeline](./doc/images/timeline.png)
+
 **HealthChecksUI** is also available as a *docker image*  You can read more about [HealthChecks UI Docker image](./doc/ui-docker.md).
+
 
 ### Configuration
 
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
- app.UseHealthChecks("/healthz", new HealthCheckOptions()
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+ app
+    .UseRouting()
+    .UseEndpoints(config =>
+    {
+      config.MapHealthChecks("/healthz", new HealthCheckOptions
+      {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+      });
 ```
 
 > *WriteHealthCheckUIResponse* is defined on HealthChecks.UI.Client nuget package.
@@ -191,7 +208,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
         "RestoredPayload":""
       }
     ],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications":60
   }
 }
@@ -201,7 +218,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 
 
     1.- HealthChecks: The collection of health checks uris to evaluate.
-    2.- EvaluationTimeOnSeconds: Number of elapsed seconds between health checks.
+    2.- EvaluationTimeInSeconds: Number of elapsed seconds between health checks.
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
@@ -224,7 +241,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
         "RestoredPayload":""
       }
     ],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications":60,
     "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
   }
@@ -250,10 +267,15 @@ Since version 2.2.34, UI supports custom styles and branding by using a **custom
 To add your custom styles sheet, use the UI setup method:
 
 ```csharp
-  .UseHealthChecksUI(setup =>
-  {
-    setup.AddCustomStylesheet("dotnet.css");
-  });
+  app
+   .UseRouting()
+   .UseEndpoints(config =>
+    {    
+      config.MapHealthChecksUI(setup =>
+      {
+        setup.AddCustomStylesheet("dotnet.css");
+      });
+   });
 
 ```
 You can visit the section [custom styles and branding](./doc/styles-branding.md) to find source samples and get further information about custom css properties.

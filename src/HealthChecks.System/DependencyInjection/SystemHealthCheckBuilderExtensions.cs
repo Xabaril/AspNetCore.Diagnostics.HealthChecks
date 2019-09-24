@@ -160,7 +160,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                throw new Exception($"{nameof(WindowsServiceHealthCheck)} can only be registered in Windows Systems");
+                throw new PlatformNotSupportedException($"{nameof(WindowsServiceHealthCheck)} can only be registered in Windows Systems");
             }
 
             if (string.IsNullOrEmpty(serviceName)) throw new ArgumentNullException(nameof(serviceName));

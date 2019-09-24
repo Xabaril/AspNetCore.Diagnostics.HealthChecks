@@ -92,7 +92,7 @@ namespace FunctionalTests.HealthChecks.System
                    });
                });
             
-            var exception = Assert.Throws<Exception>(() =>
+            var exception = Assert.Throws<PlatformNotSupportedException>(() =>
             {
                 var server = new TestServer(webhostBuilder);
             });

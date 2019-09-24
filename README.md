@@ -22,7 +22,7 @@ HealthChecks packages include health checks for:
 - RabbitMQ
 - Elasticsearch
 - Redis
-- System: Disk Storage, Private Memory, Virtual Memory
+- System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
 - Azure Key Vault
@@ -139,7 +139,11 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
-        app.UseHealthChecksUI();
+        app.UseRouting()
+          .UseEndpoints(config =>
+           {                   
+             config.MapHealthChecksUI();
+          });
     }
 }
 ```
@@ -164,11 +168,14 @@ When we target applications to be tested and shown on the UI interface, those en
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
 ```csharp
- app.UseHealthChecks("/healthz", new HealthCheckOptions()
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+ app.UseRouting()
+    .UseEndpoints(config =>
+    {
+      config.MapHealthChecks("/healthz", new HealthCheckOptions
+      {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+      });
 ```
 
 > *WriteHealthCheckUIResponse* is defined on HealthChecks.UI.Client nuget package.
@@ -192,7 +199,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
         "RestoredPayload":""
       }
     ],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications":60
   }
 }
@@ -202,7 +209,7 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
 
 
     1.- HealthChecks: The collection of health checks uris to evaluate.
-    2.- EvaluationTimeOnSeconds: Number of elapsed seconds between health checks.
+    2.- EvaluationTimeInSeconds: Number of elapsed seconds between health checks.
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
 
@@ -225,7 +232,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
         "RestoredPayload":""
       }
     ],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications":60,
     "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
   }

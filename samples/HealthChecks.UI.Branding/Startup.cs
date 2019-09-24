@@ -53,19 +53,21 @@ namespace HealthChecks.UI.Branding
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHealthChecks("/healthz", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                })
-                .UseRouting()
+            app .UseRouting()
                 .UseEndpoints(config =>
                 {
-                    config.MapDefaultControllerRoute();
+                    config.MapHealthChecks("/healthz", new HealthCheckOptions
+                    {
+                        Predicate = _ => true,
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+                    
                     config.MapHealthChecksUI(setup =>
                     {
                         setup.AddCustomStylesheet("dotnet.css");
                     });
+
+                    config.MapDefaultControllerRoute();
                 });
         }
     }

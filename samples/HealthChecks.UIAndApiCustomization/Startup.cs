@@ -36,14 +36,15 @@ namespace HealthChecks.UIAndApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHealthChecks("/healthz", new HealthCheckOptions
+            app.UseRouting()
+               .UseEndpoints(config =>
                 {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                })
-                .UseRouting()
-                .UseEndpoints(config =>
-                {
+                    config.MapHealthChecks("/healthz", new HealthCheckOptions
+                    {
+                        Predicate = _ => true,
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+
                     config.MapHealthChecksUI(setup =>
                     {
                         setup.UIPath = "/show-health-ui"; // this is ui path in your browser

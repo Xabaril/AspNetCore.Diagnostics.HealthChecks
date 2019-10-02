@@ -11,25 +11,20 @@ namespace HealthChecks.DynamoDb
         : IHealthCheck
     {
         private readonly DynamoDBOptions _options;
+
         public DynamoDbHealthCheck(DynamoDBOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            if (string.IsNullOrEmpty(options.AccessKey)) throw new ArgumentNullException(nameof(DynamoDBOptions.AccessKey));
-            if (string.IsNullOrEmpty(options.SecretKey)) throw new ArgumentNullException(nameof(DynamoDBOptions.SecretKey));
-            if (string.IsNullOrWhiteSpace(options.ServiceUrl) && options.RegionEndpoint == null) throw new ArgumentException("No RegionEndpoint or ServiceUrl are provided");
+            if (string.IsNullOrWhiteSpace(options.ServiceUrl) && options.RegionEndpoint == null)
+                throw new ArgumentException("No RegionEndpoint or ServiceUrl are provided");
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                var config = new AmazonDynamoDBConfig
-                {
-                    RegionEndpoint = _options.RegionEndpoint,
-                    ServiceURL =  _options.ServiceUrl
-                };
-                var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
-                var client = new AmazonDynamoDBClient(credentials, config);
-
+                var client = GetDynamoDbClient();
                 await client.ListTablesAsync(cancellationToken);
                 return HealthCheckResult.Healthy();
             }
@@ -37,6 +32,23 @@ namespace HealthChecks.DynamoDb
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
+        }
+
+        private AmazonDynamoDBClient GetDynamoDbClient()
+        {
+            // ServiceUrl will always take precedence when setting both ServiceUrl and RegionEndpoint
+            var config = string.IsNullOrWhiteSpace(_options.ServiceUrl)
+                ? new AmazonDynamoDBConfig {RegionEndpoint = _options.RegionEndpoint}
+                : new AmazonDynamoDBConfig {ServiceURL = _options.ServiceUrl};
+
+            // if either AccessKey or SecretKey is not provided, don't use basic credentials
+            // and let AWS SDK looks up credentials from its credentials provider chain
+            // Reference: https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html#creds-assign
+            if (string.IsNullOrWhiteSpace(_options.AccessKey) || string.IsNullOrWhiteSpace(_options.SecretKey))
+                return new AmazonDynamoDBClient(config);
+
+            var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
+            return new AmazonDynamoDBClient(credentials, config);
         }
     }
 }

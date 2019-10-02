@@ -86,5 +86,42 @@ namespace FunctionalTests.HealthChecks.DynamoDb
             response.StatusCode
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
+        
+        [Fact]
+        public async Task look_for_credentials_from_credentials_provider_chain_when_not_explicitly_provided()
+        {
+            var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddDynamoDb(options =>
+                        {
+                            options.ServiceUrl = "http://localhost:8000";
+                        }, tags: new string[] {"dynamodb"});
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("dynamodb")
+                    });
+                });
+
+            // Access key and secret key are not provided to DynamoDb health check, so it should look up credentials for provider chain
+            // Environment variable is one of the credentials provider that AWS SDK uses
+            // Note: for this test to be reliable, the host machine should not have ~/.aws/credentials file since that file will take
+            // precedence over environment variable
+            Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "access-key-id");
+            Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "secret-access-key");
+            
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest("/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+        }
     }
 }

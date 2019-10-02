@@ -33,6 +33,9 @@
 	{
 		"path": "AspNetCoreHealthCheckReleaseGate"
 	},
+    {
+		"path": "Asp.NetCoreHealthCheckVerification"
+	},
 	{
 		"path": "images/aspnethealth-task.png",
 		"addressable": true
@@ -63,5 +66,16 @@
 		"properties": {
 			"name": "AspNetCoreHealthCheckReleaseGate"
 		}
-	}]
+	},
+    {
+		"id": "Asp.NetCoreHealthCheckVerification",
+		"targets": [
+		  "ms.vss-distributed-task.tasks"
+		],
+		"type": "ms.vss-distributed-task.task",
+		"properties": {
+		  "name": "Asp.NetCoreHealthCheckVerification"
+		}
+	  }
+  	]
 }

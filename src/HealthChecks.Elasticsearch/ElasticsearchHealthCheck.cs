@@ -48,12 +48,26 @@ namespace HealthChecks.Elasticsearch
                     }
                 }
 
-                var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken);
-                var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
+                var healthResult = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken);
 
-                return isSuccess
-                    ? HealthCheckResult.Healthy()
-                    : new HealthCheckResult(context.Registration.FailureStatus);
+                if (healthResult.ApiCall.HttpStatusCode != 200)
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus);
+                }
+
+                switch (healthResult.Status.ToString())
+                {
+                    case "green":
+                        return HealthCheckResult.Healthy();
+
+                    case "yellow":
+                        return HealthCheckResult.Degraded();
+
+                    case "red":
+                        return HealthCheckResult.Unhealthy();
+                }
+
+                return HealthCheckResult.Unhealthy();
             }
             catch (Exception ex)
             {

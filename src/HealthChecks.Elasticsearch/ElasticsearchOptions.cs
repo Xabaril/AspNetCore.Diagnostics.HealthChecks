@@ -12,6 +12,7 @@ namespace HealthChecks.Elasticsearch
         public X509Certificate Certificate { get; private set; }
         public bool AuthenticateWithBasicCredentials { get; private set; } = false;
         public bool AuthenticateWithCertificate { get; private set; } = false;
+        public bool CheckClusterHealth { get; private set; } = false;
         public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> CertificateValidationCallback { get; private set; }
         public ElasticsearchOptions UseBasicAuthentication(string name, string password)
         {
@@ -42,6 +43,11 @@ namespace HealthChecks.Elasticsearch
         public ElasticsearchOptions UseCertificateValidationCallback(Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> callback)
         {
             CertificateValidationCallback = callback;
+            return this;
+        }
+        public ElasticsearchOptions UseClusterHealth()
+        {
+            CheckClusterHealth = true;
             return this;
         }
     }

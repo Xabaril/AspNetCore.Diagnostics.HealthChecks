@@ -48,26 +48,39 @@ namespace HealthChecks.Elasticsearch
                     }
                 }
 
-                var healthResult = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken);
-
-                if (healthResult.ApiCall.HttpStatusCode != 200)
+                if (_options.CheckClusterHealth)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus);
-                }
 
-                switch (healthResult.Status.ToString())
+                    var healthResult = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken);
+
+                    if (healthResult.ApiCall.HttpStatusCode != 200)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus);
+                    }
+
+                    switch (healthResult.Status.ToString())
+                    {
+                        case "green":
+                            return HealthCheckResult.Healthy();
+
+                        case "yellow":
+                            return HealthCheckResult.Degraded();
+
+                        case "red":
+                            return HealthCheckResult.Unhealthy();
+                    }
+
+                    return HealthCheckResult.Unhealthy();
+                }
+                else
                 {
-                    case "green":
-                        return HealthCheckResult.Healthy();
+                    var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken);
+                    var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
-                    case "yellow":
-                        return HealthCheckResult.Degraded();
-
-                    case "red":
-                        return HealthCheckResult.Unhealthy();
+                    return isSuccess
+                        ? HealthCheckResult.Healthy()
+                        : new HealthCheckResult(context.Registration.FailureStatus);
                 }
-
-                return HealthCheckResult.Unhealthy();
             }
             catch (Exception ex)
             {

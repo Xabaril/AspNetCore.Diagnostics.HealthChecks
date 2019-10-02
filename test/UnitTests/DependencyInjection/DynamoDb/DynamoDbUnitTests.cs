@@ -1,4 +1,5 @@
-﻿using Amazon;
+﻿using System;
+using Amazon;
 using FluentAssertions;
 using HealthChecks.DynamoDb;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,14 @@ namespace UnitTests.HealthChecks.DependencyInjection.DynamoDb
 {
     public class dynamoDb_registration_should
     {
+        [Fact]
+        public void require_either_region_endpoint_or_service_url()
+        {
+            var options = new DynamoDBOptions {AccessKey = "key", SecretKey = "key"};
+            Action constructorInvocation = () => new DynamoDbHealthCheck(options);
+            constructorInvocation.Should().Throw<ArgumentException>("No RegionEndpoint or ServiceUrl are provided");
+        }
+        
         [Fact]
         public void add_health_check_when_properly_configured()
         {
@@ -27,6 +36,28 @@ namespace UnitTests.HealthChecks.DependencyInjection.DynamoDb
             registration.Name.Should().Be("dynamodb");
             check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
         }
+        
+        [Fact]
+        public void add_health_check_when_configured_with_service_url()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddDynamoDb(_ => { 
+                    _.AccessKey = "key";
+                    _.SecretKey = "key";
+                    _.ServiceUrl = "http://localhost:8000";
+                });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("dynamodb");
+            check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
+        }
+        
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
@@ -43,5 +74,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.DynamoDb
             registration.Name.Should().Be("my-dynamodb-group");
             check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
         }
+
     }
 }

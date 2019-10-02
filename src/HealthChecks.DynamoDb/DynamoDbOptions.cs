@@ -7,5 +7,6 @@ namespace HealthChecks.DynamoDb
         public string AccessKey { get; set; }
         public string SecretKey { get; set; }
         public RegionEndpoint RegionEndpoint { get; set; }
+        public string ServiceUrl { get; set; }
     }
 }

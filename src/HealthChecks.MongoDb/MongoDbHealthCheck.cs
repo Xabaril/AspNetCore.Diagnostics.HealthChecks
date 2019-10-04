@@ -16,6 +16,10 @@ namespace HealthChecks.MongoDb
         public MongoDbHealthCheck(string connectionString, string databaseName = default)
             : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {
+            if (databaseName == default)
+            {
+                _specifiedDatabase = MongoUrl.Create(connectionString)?.DatabaseName; 
+            }
         }
         public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)
         {

@@ -66,11 +66,9 @@ namespace HealthChecks.Elasticsearch
                         case "yellow":
                             return HealthCheckResult.Degraded();
 
-                        case "red":
+                        default:
                             return HealthCheckResult.Unhealthy();
                     }
-
-                    return HealthCheckResult.Unhealthy();
                 }
                 else
                 {

@@ -60,10 +60,10 @@ namespace HealthChecks.Elasticsearch
 
                     switch (healthResult.Status.ToString())
                     {
-                        case "green":
+                        case "Green":
                             return HealthCheckResult.Healthy();
 
-                        case "yellow":
+                        case "Yellow":
                             return HealthCheckResult.Degraded();
 
                         default:

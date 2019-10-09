@@ -185,7 +185,6 @@ namespace FunctionalTests.HealthChecks.Elasticsearch
 
                 using (var server = new TestServer(webHostBuilder))
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(3));
                     await action(server);
                 }
 

@@ -43,7 +43,7 @@ echo "Running unit tests"
 try {
 
 Push-Location -Path .\test\UnitTests
-        exec { & dotnet test}
+        exec { & dotnet test --configuration x64}
 } finally {
         Pop-Location
 }
@@ -60,7 +60,7 @@ echo "Running functional tests"
 try {
 
 Push-Location -Path .\test\FunctionalTests
-        exec { & dotnet test}
+        exec { & dotnet test --configuration x64}
 } finally {
         Pop-Location
 }

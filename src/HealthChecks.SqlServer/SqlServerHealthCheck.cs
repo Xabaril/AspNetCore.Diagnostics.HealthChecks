@@ -18,24 +18,17 @@ namespace HealthChecks.SqlServer
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            using (var connection = new SqlConnection(_connectionString))
             {
-                using (var connection = new SqlConnection(_connectionString))
+                await connection.OpenAsync(cancellationToken);
+
+                using (var command = connection.CreateCommand())
                 {
-                    await connection.OpenAsync(cancellationToken);
-
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    command.CommandText = _sql;
+                    await command.ExecuteScalarAsync(cancellationToken);
                 }
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+
+                return HealthCheckResult.Healthy();
             }
         }
     }

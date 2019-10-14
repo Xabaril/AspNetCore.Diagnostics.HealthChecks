@@ -88,7 +88,7 @@
     <HealthCheckElasticsearch>3.0.0</HealthCheckElasticsearch>
     <HealthCheckOracle>3.0.0</HealthCheckOracle>
     <HealthCheckNpgSql>3.0.0</HealthCheckNpgSql>
-    <HealthCheckMongoDB>3.0.0</HealthCheckMongoDB>
+    <HealthCheckMongoDB>3.0.1</HealthCheckMongoDB>
     <HealthCheckMySql>3.0.0</HealthCheckMySql>
     <HealthCheckKafka>3.0.0</HealthCheckKafka>
     <HealthCheckSystem>3.0.0</HealthCheckSystem>

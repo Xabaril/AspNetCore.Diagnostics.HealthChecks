@@ -1,0 +1,11 @@
+:root {
+    
+    --primaryColor: #68217a;
+    --secondaryColor: #f4f4f4;  
+    --bgMenuActive: #8e47a0;
+    --bgButton: #68217a;
+    --logoImageUrl: url('https://dotnetfoundation.org/img/logo_footer.png');
+    --bgAside: var(--primaryColor);   
+
+}
+

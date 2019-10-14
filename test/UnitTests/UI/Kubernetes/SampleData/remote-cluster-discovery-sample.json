@@ -157,6 +157,39 @@
       "status": {
         "loadBalancer": {}
       }
+    },
+    {
+      "metadata": {
+        "name": "seq",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/seq",
+        "uid": "7e1071b4-29c7-422e-80e3-326129590a30",
+        "resourceVersion": "134427",
+        "creationTimestamp": "2019-07-12T02:42:38Z",
+        "labels": {
+          "HealthChecks": "true",
+          "app": "seq"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "http",
+            "protocol": "TCP",
+            "port": 5341,
+            "targetPort": "ui"
+          }
+        ],
+        "selector": {
+          "app": "seq"
+        },
+        "clusterIP": "10.152.183.35",
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
     }
   ]
 }

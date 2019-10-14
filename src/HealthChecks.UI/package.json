@@ -12,19 +12,23 @@
   "author": "Xabaril Team",
   "license": "ISC",
   "dependencies": {
+    "@types/classnames": "^2.2.9",
+    "classnames": "^2.2.6",
     "moment": "2.22.2",
     "react": "16.4.0",
-    "react-burger-menu": "2.5.0",
     "react-dom": "16.4.0",
     "react-json-view": "1.17.0",
-    "react-router-dom": "4.3.1"
+    "react-router-dom": "4.3.1",
+    "react-vertical-timeline-component": "^2.4.0"
   },
   "devDependencies": {
     "@types/react": "16.3.16",
-    "@types/react-burger-menu": "2.2.0",
     "@types/react-dom": "16.0.6",
     "@types/react-router-dom": "4.2.7",
+    "@types/react-vertical-timeline-component": "^2.3.1",
     "awesome-typescript-loader": "5.0.0",
+    "css-loader": "^3.2.0",
+    "style-loader": "^1.0.0",
     "typescript": "2.9.1",
     "uglifycss": "0.0.29",
     "url-loader": "1.0.1",

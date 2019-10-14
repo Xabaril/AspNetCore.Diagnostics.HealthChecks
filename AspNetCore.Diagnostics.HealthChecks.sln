@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB8-43CF-B3A2-B70E648259D4}"
 EndProject
@@ -56,6 +56,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{092533AB-7505-4EDC-8932-D40BF575D0D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Sample", "samples\HealthChecks.UI.Sample\HealthChecks.UI.Sample.csproj", "{7C8F7A48-2FF9-4CF4-AAAC-142053E34FC0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7C5C213-677D-4B03-ADA9-101299BCA047} = {B7C5C213-677D-4B03-ADA9-101299BCA047}
+		{B1E1B671-EAA2-42A2-909E-0DE2C9900BF6} = {B1E1B671-EAA2-42A2-909E-0DE2C9900BF6}
+		{91DF8A73-8174-4EA2-ABFA-2557B71EE090} = {91DF8A73-8174-4EA2-ABFA-2557B71EE090}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.ApplicationInsights", "src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj", "{EEF1E206-DEE3-45F2-A753-73D2FFFF8EDA}"
 EndProject
@@ -91,11 +96,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RavenDB", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Kubernetes", "src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj", "{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.SignalR", "src\HealthChecks.SignalR\HealthChecks.SignalR.csproj", "{6A4616DA-6471-478C-9797-D19029AD757C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SignalR", "src\HealthChecks.SignalR\HealthChecks.SignalR.csproj", "{6A4616DA-6471-478C-9797-D19029AD757C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.CosmosDb", "src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj", "{08FE3B71-2C9C-459B-9943-0C141191453C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.CosmosDb", "src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj", "{08FE3B71-2C9C-459B-9943-0C141191453C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Gcp.CloudFirestore", "src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj", "{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gcp.CloudFirestore", "src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj", "{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Datadog", "src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj", "{18F9E412-646D-4751-9751-30AA7A0233DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.Branding", "samples\HealthChecks.UI.Branding\HealthChecks.UI.Branding.csproj", "{B526834E-9392-4749-BAB2-7DF579F8F418}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,18 +256,26 @@ Global
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08FE3B71-2C9C-459B-9943-0C141191453C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08FE3B71-2C9C-459B-9943-0C141191453C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08FE3B71-2C9C-459B-9943-0C141191453C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08FE3B71-2C9C-459B-9943-0C141191453C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A4616DA-6471-478C-9797-D19029AD757C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A4616DA-6471-478C-9797-D19029AD757C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A4616DA-6471-478C-9797-D19029AD757C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A4616DA-6471-478C-9797-D19029AD757C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08FE3B71-2C9C-459B-9943-0C141191453C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18F9E412-646D-4751-9751-30AA7A0233DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18F9E412-646D-4751-9751-30AA7A0233DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18F9E412-646D-4751-9751-30AA7A0233DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18F9E412-646D-4751-9751-30AA7A0233DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B526834E-9392-4749-BAB2-7DF579F8F418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B526834E-9392-4749-BAB2-7DF579F8F418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B526834E-9392-4749-BAB2-7DF579F8F418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B526834E-9392-4749-BAB2-7DF579F8F418}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -300,9 +317,11 @@ Global
 		{439DF9B7-5D0F-4531-BA19-F1BD01B244DB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E91924B0-BE65-4CF8-A43A-2F22EEFE53F2} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{AFEB2B9F-6750-4DDA-AACC-B05D899D04E1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
-		{08FE3B71-2C9C-459B-9943-0C141191453C} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{6A4616DA-6471-478C-9797-D19029AD757C} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{08FE3B71-2C9C-459B-9943-0C141191453C} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{F561CEBE-C1D4-45CC-978C-A7CAA8A1F0C4} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{18F9E412-646D-4751-9751-30AA7A0233DF} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{B526834E-9392-4749-BAB2-7DF579F8F418} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

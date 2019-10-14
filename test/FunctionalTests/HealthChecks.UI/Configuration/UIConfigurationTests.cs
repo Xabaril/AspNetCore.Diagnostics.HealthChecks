@@ -1,6 +1,9 @@
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +43,7 @@ namespace FunctionalTests.UI.Configuration
                             .SetHealthCheckDatabaseConnectionString(databaseConnection);
                     });
                 });
-            
+
             var serviceProvider = webhost.Build().Services;
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
 
@@ -60,7 +63,6 @@ namespace FunctionalTests.UI.Configuration
             webhook.Uri.Should().Be(webhookUri);
             webhook.Payload.Should().Be(webhookPayload);
             webhook.RestoredPayload.Should().Be(webhookRestorePayload);
-
         }
 
         [Fact]
@@ -72,7 +74,6 @@ namespace FunctionalTests.UI.Configuration
                 {
                     conf.Sources.Clear();
                     conf.AddJsonFile("HealthChecks.UI/Configuration/appsettings.json", false);
-                    
                 }).ConfigureServices(services => { services.AddHealthChecksUI(); });
 
 
@@ -86,12 +87,12 @@ namespace FunctionalTests.UI.Configuration
 
             UISettings.HealthChecks.Count.Should().Be(1);
             UISettings.Webhooks.Count.Should().Be(1);
-            
+
             var healthcheck = UISettings.HealthChecks[0];
             healthcheck.Name.Should().Be("api1");
             healthcheck.Uri.Should().Be("http://api1/healthz");
-            
-            
+
+
             var webhook = UISettings.Webhooks[0];
             webhook.Name.Should().Be("webhook1");
             webhook.Uri.Should().Be("http://webhook1");
@@ -107,14 +108,13 @@ namespace FunctionalTests.UI.Configuration
             var webhookName = "webhook2";
             var webhookUri = "http://webhook2";
             var webhookPayload = "payload1";
-            
+
             var webhost = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
                     conf.AddJsonFile("HealthChecks.UI/Configuration/appsettings.json", false);
-                    
                 }).ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI(setupSettings: setup =>
@@ -149,7 +149,53 @@ namespace FunctionalTests.UI.Configuration
             webHook1.Uri.Should().Be("http://webhook1");
             webHook2.Name.Should().Be(webhookName);
             webHook2.Uri.Should().Be(webhookUri);
+        }
 
+        [Fact]
+        public void should_register_configured_http_message_handler_into_client()
+        {
+            var apiHandlerConfigured = false;
+            var webhookHandlerConfigured = false;
+
+            var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureAppConfiguration(conf =>
+                {
+                    conf.Sources.Clear();
+                    conf.AddJsonFile("HealthChecks.UI/Configuration/appsettings.json", false);
+                })
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecksUI(setupSettings: setup =>
+                    {
+                        setup.UseApiEndpointHttpMessageHandler(sp =>
+                            {
+                                apiHandlerConfigured = true;
+                                return new HttpClientHandler
+                                {
+                                    Proxy = new WebProxy("http://proxy:8080")
+                                };
+                            })
+                            .UseWebhookEndpointHttpMessageHandler(sp =>
+                            {
+                                webhookHandlerConfigured = true;
+                                return new HttpClientHandler()
+                                {
+                                    Properties =
+                                    {
+                                        ["prop"] = "value"
+                                    }
+                                };
+                            });
+                    });
+                }).Build();
+
+            var clientFactory = webhost.Services.GetService<IHttpClientFactory>();
+            var apiClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+            var webhookClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
+            
+            apiHandlerConfigured.Should().BeTrue();
+            webhookHandlerConfigured.Should().BeTrue();
         }
     }
 }

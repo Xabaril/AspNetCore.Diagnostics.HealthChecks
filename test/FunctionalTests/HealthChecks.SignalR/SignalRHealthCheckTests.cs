@@ -44,12 +44,17 @@ namespace FunctionalTests.HealthChecks.SignalR
              })
              .Configure(app =>
              {
+
                  app
                      .UseHealthChecks("/health", new HealthCheckOptions()
                      {
                          Predicate = r => r.Tags.Contains("signalr")
                      })
-                     .UseSignalR(configure => configure.MapHub<TestHub>("/test"));
+                     .UseRouting()
+                     .UseEndpoints(config =>
+                     {
+                         config.MapHub<TestHub>("/test");
+                     });                     
              });
 
             server = new TestServer(webHostBuilder);
@@ -86,7 +91,11 @@ namespace FunctionalTests.HealthChecks.SignalR
                      {
                          Predicate = r => r.Tags.Contains("signalr")
                      })
-                     .UseSignalR(configure => configure.MapHub<TestHub>("/test"));
+                     .UseRouting()
+                     .UseEndpoints(config =>
+                     {
+                         config.MapHub<TestHub>("/test");
+                     });
              });
 
             server = new TestServer(webHostBuilder);

@@ -33,7 +33,7 @@ namespace HealthChecks.CosmosDb
                         cosmosDbClient = _connections[_connectionString];
                     }
                 }
-                await cosmosDbClient.GetAccountSettingsAsync();
+                await cosmosDbClient.ReadAccountAsync();
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

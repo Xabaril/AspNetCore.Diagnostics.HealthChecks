@@ -76,12 +76,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
         /// <summary>
-        /// Add a health check for single uri.
+        /// Add a health check for single uri, validating the content matches <paramref name="expectedContent"/> when read as a plain string.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="uri">The uri to check.</param>
         /// <param name="httpMethod">The http method to use on check.</param>
-        /// <param name="expectedContent">The content expected in the response body.</param>
+        /// <param name="expectedContent">The content expected in the response body. Compared with response content as plain string.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

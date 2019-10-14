@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.Uris;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -86,8 +87,7 @@ namespace FunctionalTests.HealthChecks.Uris
         [Fact]
         public async Task be_healthy_if_content_matches()
         {
-            // TODO: Know of a service we can use that has a fixed response body we can control?
-            var uri = new Uri("https://httpbin.org/get");
+            var uri = new Uri("https://httpstat.us/200");
 
             var webHostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()
@@ -96,8 +96,9 @@ namespace FunctionalTests.HealthChecks.Uris
                    services.AddHealthChecks()
                     .AddUrlGroup(
                        uri,
+                       uriOptionsSetup: opts => opts.AddCustomHeader("Accept", "*/*"),
                        httpMethod: HttpMethod.Get,
-                       expectedContent: "expected value",
+                       expectedContent: "200 OK",
                        tags: new string[] { "uris" });
                })
                .Configure(app =>
@@ -129,16 +130,16 @@ namespace FunctionalTests.HealthChecks.Uris
                    services.AddHealthChecks()
                     .AddUrlGroup(
                        uri, 
-                       httpMethod: HttpMethod.Get, 
-                       expectedContentFunc: async httpContent =>
+                       httpMethod: HttpMethod.Get,
+                       contentCheckFunc: async httpContent =>
                        {
                            var json = await httpContent.ReadAsStringAsync();
                            var jToken = JToken.Parse(json);
                            if (jToken["url"].Value<string>() == "https://httpbin.org/get")
                            {
-                               return (true, null);
+                               return new ExpectedContentResult();
                            }
-                           return (false, "Url property didn't match.");
+                           return new UnexpectedContentResult("Url property didn't match.");
                        }, 
                        tags: new string[] { "uris" });
                })
@@ -330,7 +331,7 @@ namespace FunctionalTests.HealthChecks.Uris
                     .AddUrlGroup(
                        uri,
                        httpMethod: HttpMethod.Get,
-                       expectedContentFunc: async httpContent => await Task.FromResult((false, "Just cuz")),
+                       contentCheckFunc: async httpContent => await Task.FromResult(new UnexpectedContentResult("Just cuz")),
                        tags: new string[] { "uris" });
                })
                .Configure(app =>

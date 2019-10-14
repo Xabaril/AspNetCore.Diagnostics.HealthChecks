@@ -70,11 +70,11 @@ namespace HealthChecks.Uris
 
                         if (expectedContentFunc != null)
                         {
-                            var (isOk, notOkReason) = await expectedContentFunc(response.Content);
-                            if (!isOk)
+                            var contentCheckResult = await expectedContentFunc(response.Content);
+                            if (contentCheckResult is UnexpectedContentResult unexpectedContentResult)
                             {
                                 var actualContent = await response.Content.ReadAsStringAsync();
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with expected content, reason: '{notOkReason}'. The current content is {actualContent}.");
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with expected content, reason: '{unexpectedContentResult.Reason}'. The current content is {actualContent}.");
                             }
                         }
 

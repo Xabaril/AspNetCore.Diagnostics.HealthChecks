@@ -42,6 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for single uri.
         /// </summary>
@@ -75,21 +76,27 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
-        /// Add a health check for single uri, validating the content matches <paramref name="expectedContent"/> when read as a plain string.
+        /// Add a health check for single uri, validating the response content matches <paramref name="expectedContent"/> when read as a plain string.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="uri">The uri to check.</param>
         /// <param name="httpMethod">The http method to use on check.</param>
         /// <param name="expectedContent">The content expected in the response body. Compared with response content as plain string.</param>
+        /// <param name="uriOptionsSetup">A way to configure the options that will be used for the Uri. Optional.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string expectedContent, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, 
+            string expectedContent, 
+            Action<IUriOptions> uriOptionsSetup = null,
+            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
@@ -99,32 +106,41 @@ namespace Microsoft.Extensions.DependencyInjection
                 sp =>
                 {
                     var options = new UriHealthCheckOptions()
-                        .AddUri(uri)
+                        .AddUri(uri, uriOptionsSetup)
                         .UseHttpMethod(httpMethod)
                         .ExpectContent(expectedContent);
 
                     return CreateHealthCheck(sp, registrationName, options);
                 },
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
+
         /// <summary>
-        /// Add a health check for single uri.
+        /// Add a health check for single uri, validate the response content is expected using <paramref name="contentCheckFunc"/>.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="uri">The uri to check.</param>
         /// <param name="httpMethod">The http method to use on check.</param>
-        /// <param name="expectedContentFunc">A function that checks the HttpContent of the response.</param>
+        /// <param name="contentCheckFunc">
+        /// A function that checks the HttpContent of the response. 
+        /// Should return a <see cref="ExpectedContentResult" /> if valid,
+        /// or a <see cref="UnexpectedContentResult" /> if invalid.
+        /// </param>
+        /// <param name="uriOptionsSetup">A way to configure the options that will be used for the Uri. Optional.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, 
-            Func<HttpContent, Task<(bool IsOk, string NotOkReason)>> expectedContentFunc, 
-            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod,
+            Func<HttpContent, Task<ContentCheckResult>> contentCheckFunc,
+            Action<IUriOptions> uriOptionsSetup = null,
+            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
@@ -134,15 +150,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 sp =>
                 {
                     var options = new UriHealthCheckOptions()
-                        .AddUri(uri)
+                        .AddUri(uri, uriOptionsSetup)
                         .UseHttpMethod(httpMethod)
-                        .ExpectContent(expectedContentFunc);
+                        .ExpectContent(contentCheckFunc);
 
                     return CreateHealthCheck(sp, registrationName, options);
                 },
                 failureStatus,
                 tags));
         }
+        
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -168,6 +185,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+        
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -201,6 +219,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+        
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -232,6 +251,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+        
         private static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
         {
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();

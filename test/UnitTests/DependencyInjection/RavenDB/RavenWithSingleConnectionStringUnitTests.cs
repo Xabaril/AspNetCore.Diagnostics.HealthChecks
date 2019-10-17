@@ -10,12 +10,12 @@ namespace UnitTests.DependencyInjection.RavenDB
         [Fact]
         public void add_health_check_when_properly_configured()
         {
-            ShouldPass("ravendb", typeof(RavenDBHealthCheck), builder => builder.AddRavenDB("http://localhost:8080"));
+            ShouldPass("ravendb", typeof(RavenDBHealthCheck), builder => builder.AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080" }));
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
-            ShouldPass("my-ravendb", typeof(RavenDBHealthCheck), builder => builder.AddRavenDB("http://localhost:8080", name: "my-ravendb"));
+            ShouldPass("my-ravendb", typeof(RavenDBHealthCheck), builder => builder.AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080" }, name: "my-ravendb"));
         }
     }
 }

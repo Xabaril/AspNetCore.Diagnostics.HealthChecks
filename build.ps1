@@ -67,74 +67,75 @@ Push-Location -Path .\test\FunctionalTests
 
 
 if ($suffix -eq "") {
-    exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Redis\HealthChecks.Redis.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.MySql\HealthChecks.MySql.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Uris\HealthChecks.Uris.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.System\HealthChecks.System.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Network\HealthChecks.Network.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
-	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Redis\HealthChecks.Redis.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.MySql\HealthChecks.MySql.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Uris\HealthChecks.Uris.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.System\HealthChecks.System.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Network\HealthChecks.Network.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build }
 }
 
 else {
-    exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Redis\HealthChecks.Redis.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.MySql\HealthChecks.MySql.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Uris\HealthChecks.Uris.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.System\HealthChecks.System.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Network\HealthChecks.Network.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
-	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Redis\HealthChecks.Redis.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.MySql\HealthChecks.MySql.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Uris\HealthChecks.Uris.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.System\HealthChecks.System.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Network\HealthChecks.Network.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Consul\HealthChecks.Consul.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }
-

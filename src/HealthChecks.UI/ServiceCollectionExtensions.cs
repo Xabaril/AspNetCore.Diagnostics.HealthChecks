@@ -39,12 +39,17 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
                 .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME)
-                    .ConfigurePrimaryHttpMessageHandler(sp =>
-                   {
-                       var settings = sp.GetService<IOptions<Settings>>();
-                       return settings.Value.HttpHandler ?? new HttpClientHandler();
-                   });
-
+                .ConfigurePrimaryHttpMessageHandler(sp =>
+                {
+                    var settings = sp.GetService<IOptions<Settings>>();
+                    return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
+                }).Services
+                .AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME)
+                .ConfigurePrimaryHttpMessageHandler(sp =>
+                {
+                    var settings = sp.GetService<IOptions<Settings>>();
+                    return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
+                });
 
             var healthCheckSettings = services.BuildServiceProvider()
                 .GetService<IOptions<Settings>>()

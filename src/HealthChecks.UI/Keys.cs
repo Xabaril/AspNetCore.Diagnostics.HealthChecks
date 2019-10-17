@@ -2,7 +2,7 @@
 
 namespace HealthChecks.UI
 {
-    class Keys
+    internal class Keys
     {
         internal const string HEALTHCHECKSUI_OLD_SECTION_SETTING_KEY = "HealthChecks-UI";        
         internal const string HEALTHCHECKSUI_SECTION_SETTING_KEY = "HealthChecksUI";
@@ -19,6 +19,7 @@ namespace HealthChecks.UI
         internal const string FAILURE_BOOKMARK = "[[FAILURE]]";
         internal const string DESCRIPTIONS_BOOKMARK = "[[DESCRIPTIONS]]";
         internal const string HEALTH_CHECK_HTTP_CLIENT_NAME = "health-checks";
+        internal const string HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME = "health-checks-webhooks";
         internal const string K8S_DISCOVERY_HTTP_CLIENT_NAME = "k8s-discovery";
         internal const string K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME = "k8s-cluster-service";
     }

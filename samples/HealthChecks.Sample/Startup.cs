@@ -38,39 +38,39 @@ namespace HealthChecks.Sample
                 //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
                 .AddApplicationInsightsPublisher();
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHealthChecks("/health", new HealthCheckOptions
-            {
-                Predicate = _ => true
-            });
-
-            app.UseHealthChecks("/healthz", new HealthCheckOptions
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-
-            app.UseMvc();
+            app
+                .UseHealthChecks("/health", new HealthCheckOptions
+                {
+                    Predicate = _ => true
+                })
+                .UseHealthChecks("/healthz", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                })
+                .UseRouting()
+                .UseEndpoints(config => config.MapDefaultControllerRoute());
         }
-    }
 
-    public class RandomHealthCheck
-        : IHealthCheck
-    {
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public class RandomHealthCheck
+            : IHealthCheck
         {
-            if (DateTime.UtcNow.Minute % 2 == 0)
+            public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
             {
-                return Task.FromResult(HealthCheckResult.Healthy());
+                if (DateTime.UtcNow.Minute % 2 == 0)
+                {
+                    return Task.FromResult(HealthCheckResult.Healthy());
+                }
+
+                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed"));
             }
 
-            return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed"));
         }
     }
 }

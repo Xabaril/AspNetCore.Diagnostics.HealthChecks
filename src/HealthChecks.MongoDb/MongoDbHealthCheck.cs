@@ -16,6 +16,10 @@ namespace HealthChecks.MongoDb
         public MongoDbHealthCheck(string connectionString, string databaseName = default)
             : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {
+            if (databaseName == default)
+            {
+                _specifiedDatabase = MongoUrl.Create(connectionString)?.DatabaseName;
+            }
         }
         public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)
         {
@@ -34,9 +38,9 @@ namespace HealthChecks.MongoDb
                     // this you can list only collection on specified database.
                     // Related with issue #43
 
-                    await mongoClient
-                        .GetDatabase(_specifiedDatabase)
-                        .ListCollectionsAsync(cancellationToken: cancellationToken);
+                    await (await mongoClient
+                         .GetDatabase(_specifiedDatabase)
+                         .ListCollectionsAsync(cancellationToken: cancellationToken)).FirstAsync(cancellationToken);
                 }
                 else
                 {

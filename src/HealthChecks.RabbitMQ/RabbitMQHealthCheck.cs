@@ -10,26 +10,45 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck
         : IHealthCheck
     {
-        private readonly string _rabbitMqConnectionString;
+        private readonly Lazy<IConnectionFactory> _lazyConnectionFactory;
+        private readonly IConnection _rmqConnection;
         private readonly SslOption _sslOption;
+
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
-            _rabbitMqConnectionString = rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString));
+            if (rabbitMqConnectionString == null) throw new ArgumentNullException(nameof(rabbitMqConnectionString));
+
+            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => new ConnectionFactory()
+            {
+                Uri = new Uri(rabbitMqConnectionString)
+            });
+
             _sslOption = sslOption ?? new SslOption(serverName: "localhost", enabled: false);
         }
+
+        public RabbitMQHealthCheck(IConnection connection)
+        {
+            _rmqConnection = connection ?? throw new ArgumentNullException(nameof(connection));
+        }
+
+        public RabbitMQHealthCheck(IConnectionFactory connectionFactory)
+        {
+            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => 
+                connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory)));
+        }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var factory = new ConnectionFactory()
+                if (_rmqConnection != null)
                 {
-                    Uri = new Uri(_rabbitMqConnectionString)
-                };
-                using (var connection = CreateConnection(factory, _sslOption))
-                using (var channel = connection.CreateModel())
+                    return TestConnection(_rmqConnection);
+                }
+
+                using (var connection = CreateConnection(_lazyConnectionFactory.Value, _sslOption))
                 {
-                    return Task.FromResult(
-                        HealthCheckResult.Healthy());
+                    return TestConnection(connection);
                 }
             }
             catch (Exception ex)
@@ -38,6 +57,16 @@ namespace HealthChecks.RabbitMQ
                     new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
+
+        private static Task<HealthCheckResult> TestConnection(IConnection connection)
+        {
+            using (var channel = connection.CreateModel())
+            {
+                return Task.FromResult(
+                    HealthCheckResult.Healthy());
+            }
+        }
+
         private static IConnection CreateConnection(IConnectionFactory connectionFactory, SslOption sslOption)
         {
             return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint> { new AmqpTcpEndpoint(connectionFactory.Uri, sslOption) });

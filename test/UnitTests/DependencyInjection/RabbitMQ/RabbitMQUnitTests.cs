@@ -15,7 +15,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRabbitMQ("connectionstring");
+                .AddRabbitMQ(rabbitMQConnectionString: "connectionstring");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

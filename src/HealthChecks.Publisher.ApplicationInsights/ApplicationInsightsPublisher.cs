@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.ApplicationInsights
 {
-    class ApplicationInsightsPublisher
+    public class ApplicationInsightsPublisher
         : IHealthCheckPublisher
     {
         const string EVENT_NAME = "AspNetCoreHealthCheck";

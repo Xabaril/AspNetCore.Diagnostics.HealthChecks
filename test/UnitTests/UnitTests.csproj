@@ -13,6 +13,7 @@
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsDependencyInjection)" />
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
   </ItemGroup>
 
   <ItemGroup>    
@@ -42,6 +43,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj" />
   </ItemGroup>
  
   <ItemGroup>

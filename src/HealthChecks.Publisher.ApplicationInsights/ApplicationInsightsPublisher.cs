@@ -30,6 +30,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
+            _trackExceptions = trackExceptions;
         }
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {

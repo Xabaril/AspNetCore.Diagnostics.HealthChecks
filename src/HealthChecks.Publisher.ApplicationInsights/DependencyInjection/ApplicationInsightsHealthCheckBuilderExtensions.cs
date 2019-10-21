@@ -17,12 +17,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="saveDetailedReport">Specifies if save an Application Insights event for each HealthCheck or just save one event with the global status for all the HealthChecks. Optional: If <c>true</c> saves an Application Insights event for each HealthCheck</c></param>
         /// <param name="excludeHealthyReports">Specifies if save an Application Insights event only for reports indicating an unhealthy status</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddApplicationInsightsPublisher(this IHealthChecksBuilder builder, string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false)
+        public static IHealthChecksBuilder AddApplicationInsightsPublisher(this IHealthChecksBuilder builder, string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false, bool trackExceptions = true)
         {
             builder.Services
                .AddSingleton<IHealthCheckPublisher>(sp =>
                {
-                   return new ApplicationInsightsPublisher(instrumentationKey, saveDetailedReport, excludeHealthyReports);
+                   return new ApplicationInsightsPublisher(instrumentationKey, saveDetailedReport, excludeHealthyReports, trackExceptions);
                });
 
             return builder;

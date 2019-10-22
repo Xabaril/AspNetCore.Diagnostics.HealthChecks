@@ -73,7 +73,7 @@ namespace HealthChecks.Network
     {
         internal string Host { get; }
         internal string UserName { get; set; }
-        internal int Port { get; }
+        internal int Port { get; } = 22;
         internal List<AuthenticationMethod> AuthenticationMethods { get; }
         internal (bool createFile, string remoteFilePath) FileCreationOptions = (false, string.Empty);
 

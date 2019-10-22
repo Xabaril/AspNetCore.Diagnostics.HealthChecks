@@ -23,7 +23,7 @@ namespace HealthChecks.Network
             {
                 foreach (var item in _options.ConfiguredHosts.Values)
                 {
-                    var connectionInfo = new ConnectionInfo(item.Host, item.UserName, item.AuthenticationMethods.ToArray());
+                    var connectionInfo = new ConnectionInfo(item.Host, item.Port, item.UserName, item.AuthenticationMethods.ToArray());
 
                     using (var sftpClient = new SftpClient(connectionInfo))
                     {

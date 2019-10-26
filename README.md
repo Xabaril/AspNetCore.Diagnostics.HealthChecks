@@ -249,11 +249,13 @@ All health checks results are stored into a SqLite database persisted to disk wi
 ```
 ### Failure Notifications
 
-If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:
+If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks and environment variables:
 
-[[LIVENESS]] The name of the liveness that returns *Down*.
+`[[LIVENESS]]` The name of the liveness that returns *Down*.
 
-[[FAILURE]] A detail message with the failure.
+`[[FAILURE]]` A detail message with the failure.
+
+`$MY_ENV_1` Environment defined variables for your application.
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 

@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
@@ -57,6 +58,13 @@ namespace HealthChecks.UI.Core.Notifications
                     payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
                         .Replace(Keys.FAILURE_BOOKMARK, failure)
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
+
+                    var envMatches = Regex.Matches(payload, Keys.ENVIRONMENT_VARIABLES_REGEX);
+                    foreach (var match in envMatches.Select(x => x.Value))
+                    {
+                        var envKey = match.Replace("$", string.Empty);
+                        payload = payload.Replace(match, Environment.GetEnvironmentVariable(envKey));
+                    }
 
                     await SendRequest(webHook.Uri, webHook.Name, payload);
                 }

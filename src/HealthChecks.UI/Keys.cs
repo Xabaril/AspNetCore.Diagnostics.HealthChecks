@@ -18,6 +18,7 @@ namespace HealthChecks.UI
         internal const string LIVENESS_BOOKMARK = "[[LIVENESS]]";
         internal const string FAILURE_BOOKMARK = "[[FAILURE]]";
         internal const string DESCRIPTIONS_BOOKMARK = "[[DESCRIPTIONS]]";
+        internal const string ENVIRONMENT_VARIABLES_REGEX = @"([$])\w+";
         internal const string HEALTH_CHECK_HTTP_CLIENT_NAME = "health-checks";
         internal const string HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME = "health-checks-webhooks";
         internal const string K8S_DISCOVERY_HTTP_CLIENT_NAME = "k8s-discovery";

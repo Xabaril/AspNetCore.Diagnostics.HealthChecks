@@ -46,7 +46,7 @@ namespace HealthChecks.RabbitMQ
                     return TestConnection(_rmqConnection);
                 }
 
-                using (var connection = CreateConnection(_lazyConnectionFactory.Value, _sslOption))
+                using (var connection = CreateConnection(_lazyConnectionFactory.Value))
                 {
                     return TestConnection(connection);
                 }
@@ -67,9 +67,9 @@ namespace HealthChecks.RabbitMQ
             }
         }
 
-        private static IConnection CreateConnection(IConnectionFactory connectionFactory, SslOption sslOption)
+        private static IConnection CreateConnection(IConnectionFactory connectionFactory)
         {
-            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint> { new AmqpTcpEndpoint(connectionFactory.Uri, sslOption) });
+            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint> { new AmqpTcpEndpoint(connectionFactory.Uri) });
         }
     }
 }

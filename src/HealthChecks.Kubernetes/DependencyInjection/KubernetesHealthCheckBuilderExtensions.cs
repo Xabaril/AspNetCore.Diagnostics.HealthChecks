@@ -20,8 +20,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddKubernetes(this IHealthChecksBuilder builder, Action<KubernetesHealthCheckBuilder> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default)
+        public static IHealthChecksBuilder AddKubernetes(this IHealthChecksBuilder builder, Action<KubernetesHealthCheckBuilder> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var kubernetesHealthCheckBuilder = new KubernetesHealthCheckBuilder();
             setup?.Invoke(kubernetesHealthCheckBuilder);
@@ -33,12 +34,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var client = new Kubernetes(kubernetesHealthCheckBuilder.Configuration);
             var kubernetesChecksExecutor = new KubernetesChecksExecutor(client);
-            
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new KubernetesHealthCheck(kubernetesHealthCheckBuilder, kubernetesChecksExecutor), 
+                sp => new KubernetesHealthCheck(kubernetesHealthCheckBuilder, kubernetesChecksExecutor),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
     }
 }

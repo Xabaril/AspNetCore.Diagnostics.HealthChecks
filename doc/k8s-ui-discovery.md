@@ -18,7 +18,7 @@ The default mechanism to register the target endpoints to be queried for health 
       }
     ],
     "Webhooks": [],
-    "EvaluationTimeOnSeconds": 10,
+    "EvaluationTimeInSeconds": 10,
     "MinimumSecondsBetweenFailureNotifications": 60
   }
 }

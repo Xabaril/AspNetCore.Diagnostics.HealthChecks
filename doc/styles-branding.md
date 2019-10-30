@@ -8,9 +8,14 @@ To customize your styles and branding just register your custom stylesheets in U
 
 
 ```csharp
-  .UseHealthChecksUI(setup =>
-  {
-    setup.AddCustomStylesheet("dotnet.css");
+ app
+  .UseRouting()
+  .UseEndpoints(config =>
+  {                 
+     config.MapHealthChecksUI(setup =>
+     {
+        setup.AddCustomStylesheet("dotnet.css");
+     });
   });
 
 ```

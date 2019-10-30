@@ -53,7 +53,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 {
                     services
                     .AddHealthChecks()
-                    .AddRavenDB(ConnectionString, tags: new string[] { "ravendb" });
+                    .AddRavenDB(setup => setup.Urls = new[] { ConnectionString }, tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {
@@ -81,7 +81,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 {
                     services
                     .AddHealthChecks()
-                    .AddRavenDB(ConnectionString, "Demo", tags: new string[] { "ravendb" });
+                    .AddRavenDB(setup => setup.Urls = new[] { ConnectionString }, "Demo", tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {
@@ -111,7 +111,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 {
                     services
                     .AddHealthChecks()
-                    .AddRavenDB(connectionString, tags: new string[] { "ravendb" });
+                    .AddRavenDB(setup => setup.Urls = new[] { connectionString }, tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {
@@ -139,7 +139,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 {
                     services
                     .AddHealthChecks()
-                    .AddRavenDB(ConnectionString, "ThisDatabaseReallyDoesnExist", tags: new string[] { "ravendb" });
+                    .AddRavenDB(setup => setup.Urls = new[] { ConnectionString }, "ThisDatabaseReallyDoesnExist", tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {

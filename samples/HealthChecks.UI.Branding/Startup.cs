@@ -47,23 +47,28 @@ namespace HealthChecks.UI.Branding
                     setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200", payload: "{}");
                     setup.AddWebhookNotification("webhook2", uri: "http://httpbin.org/status/200", payload: "{}");
                 })
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHealthChecks("/healthz", new HealthCheckOptions
+            app .UseRouting()
+                .UseEndpoints(config =>
                 {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                })
-                .UseHealthChecksUI(setup =>
-                {
-                  setup.AddCustomStylesheet("dotnet.css");
-                })
-                .UseMvc();
+                    config.MapHealthChecks("/healthz", new HealthCheckOptions
+                    {
+                        Predicate = _ => true,
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+                    
+                    config.MapHealthChecksUI(setup =>
+                    {
+                        setup.AddCustomStylesheet("dotnet.css");
+                    });
+
+                    config.MapDefaultControllerRoute();
+                });
         }
     }
 }

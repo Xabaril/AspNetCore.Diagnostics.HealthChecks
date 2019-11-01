@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>    
+    <ProjectReference Include="..\..\src\HealthChecks.AzureIoTHub\HealthChecks.AzureIoTHub.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />    

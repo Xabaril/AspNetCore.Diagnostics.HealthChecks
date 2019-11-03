@@ -69,7 +69,7 @@ namespace HealthChecks.UI.Core.Notifications
         private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
         {
             var lastNotification = await _db.Failures
-                .Where(lf => lf.HealthCheckName.Equals(livenessName, StringComparison.InvariantCultureIgnoreCase))
+                .Where(lf => lf.HealthCheckName.ToLower() == livenessName.ToLower())
                 .OrderByDescending(lf => lf.LastNotified)
                 .Take(1)
                 .SingleOrDefaultAsync();

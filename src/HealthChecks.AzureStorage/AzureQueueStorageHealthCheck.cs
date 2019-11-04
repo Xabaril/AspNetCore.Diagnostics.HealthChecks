@@ -26,16 +26,21 @@ namespace HealthChecks.AzureStorage
             try
             {
                 var storageAccount = CloudStorageAccount.Parse(_connectionString);
-                var blobClient = storageAccount.CreateCloudQueueClient();
-                if (!string.IsNullOrEmpty(_nameQueue))
-                {
-                    var queue = blobClient.GetQueueReference(_nameQueue); 
-                }
+                var blobClient = storageAccount.CreateCloudQueueClient();                
 
                 var serviceProperties = await blobClient.GetServicePropertiesAsync(
                     new QueueRequestOptions(),
                     operationContext: null,
                     cancellationToken: cancellationToken);
+
+                if (!string.IsNullOrEmpty(_nameQueue))
+                {
+                    var queue = blobClient.GetQueueReference(_nameQueue);
+                    if (!await queue.ExistsAsync())
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Queue '{_nameQueue}' not exists");
+                    }
+                }
 
                 return HealthCheckResult.Healthy();
             }

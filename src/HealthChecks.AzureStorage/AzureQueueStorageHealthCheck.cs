@@ -40,6 +40,7 @@ namespace HealthChecks.AzureStorage
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Queue '{_nameQueue}' not exists");
                     }
+                    await queue.FetchAttributesAsync();
                 }
 
                 return HealthCheckResult.Healthy();

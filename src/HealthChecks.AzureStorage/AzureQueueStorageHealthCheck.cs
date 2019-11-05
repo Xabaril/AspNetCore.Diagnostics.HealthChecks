@@ -26,7 +26,7 @@ namespace HealthChecks.AzureStorage
             try
             {
                 var storageAccount = CloudStorageAccount.Parse(_connectionString);
-                var blobClient = storageAccount.CreateCloudQueueClient();                
+                var blobClient = storageAccount.CreateCloudQueueClient();
 
                 var serviceProperties = await blobClient.GetServicePropertiesAsync(
                     new QueueRequestOptions(),

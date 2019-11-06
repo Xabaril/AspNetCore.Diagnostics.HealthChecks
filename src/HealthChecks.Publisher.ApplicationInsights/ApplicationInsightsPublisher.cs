@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.ApplicationInsights
 {
-    public class ApplicationInsightsPublisher
+    internal class ApplicationInsightsPublisher
         : IHealthCheckPublisher
     {
         const string EVENT_NAME = "AspNetCoreHealthCheck";
@@ -18,19 +18,18 @@ namespace HealthChecks.Publisher.ApplicationInsights
         const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
         const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
 
-        private readonly string _instrumentationKey;
         private static TelemetryClient _client;
         private static readonly object sync_root = new object();
+
+        private readonly string _instrumentationKey;
         private readonly bool _saveDetailedReport;
         private readonly bool _excludeHealthyReports;
-        private readonly bool _trackExceptions;
 
-        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false, bool trackExceptions = true)
+        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false)
         {
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
-            _trackExceptions = trackExceptions;
         }
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
@@ -50,18 +49,15 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 SaveGeneralizedReport(report, client);
             }
 
-            if (_trackExceptions)
-            {
-                TrackExceptions(report, client);
-            }
 
             return Task.CompletedTask;
         }
-        private void TrackExceptions(HealthReport report, TelemetryClient client)
+
+        private void SaveDetailedReport(HealthReport report, TelemetryClient client)
         {
-            foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
+            foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
             {
-                client.TrackException(reportEntry.Value.Exception,
+                client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
                     properties: new Dictionary<string, string>()
                     {
                         { nameof(Environment.MachineName), Environment.MachineName },
@@ -74,12 +70,10 @@ namespace HealthChecks.Publisher.ApplicationInsights
                         { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
                     });
             }
-        }
-        private void SaveDetailedReport(HealthReport report, TelemetryClient client)
-        {
-            foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
+
+            foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
             {
-                client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
+                client.TrackException(reportEntry.Value.Exception,
                     properties: new Dictionary<string, string>()
                     {
                         { nameof(Environment.MachineName), Environment.MachineName },

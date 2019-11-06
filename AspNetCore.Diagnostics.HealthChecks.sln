@@ -104,7 +104,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gcp.CloudFires
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Datadog", "src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj", "{18F9E412-646D-4751-9751-30AA7A0233DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.Branding", "samples\HealthChecks.UI.Branding\HealthChecks.UI.Branding.csproj", "{B526834E-9392-4749-BAB2-7DF579F8F418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Branding", "samples\HealthChecks.UI.Branding\HealthChecks.UI.Branding.csproj", "{B526834E-9392-4749-BAB2-7DF579F8F418}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

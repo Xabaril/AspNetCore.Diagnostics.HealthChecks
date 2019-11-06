@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.ApplicationInsights
 {
-    class ApplicationInsightsPublisher
+    public class ApplicationInsightsPublisher
         : IHealthCheckPublisher
     {
         const string EVENT_NAME = "AspNetCoreHealthCheck";
@@ -23,12 +23,14 @@ namespace HealthChecks.Publisher.ApplicationInsights
         private static readonly object sync_root = new object();
         private readonly bool _saveDetailedReport;
         private readonly bool _excludeHealthyReports;
+        private readonly bool _trackExceptions;
 
-        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false)
+        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false, bool trackExceptions = true)
         {
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
+            _trackExceptions = trackExceptions;
         }
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
@@ -48,7 +50,30 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 SaveGeneralizedReport(report, client);
             }
 
+            if (_trackExceptions)
+            {
+                TrackExceptions(report, client);
+            }
+
             return Task.CompletedTask;
+        }
+        private void TrackExceptions(HealthReport report, TelemetryClient client)
+        {
+            foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
+            {
+                client.TrackException(reportEntry.Value.Exception,
+                    properties: new Dictionary<string, string>()
+                    {
+                        { nameof(Environment.MachineName), Environment.MachineName },
+                        { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                        { HEALTHCHECK_NAME, reportEntry.Key }
+                    },
+                    metrics: new Dictionary<string, double>()
+                    {
+                        { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0 },
+                        { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
+                    });
+            }
         }
         private void SaveDetailedReport(HealthReport report, TelemetryClient client)
         {

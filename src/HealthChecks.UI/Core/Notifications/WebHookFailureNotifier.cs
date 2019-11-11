@@ -100,7 +100,6 @@ namespace HealthChecks.UI.Core.Notifications
             }
             try
             {
-                
                     var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
                     var response = await _httpClient.PostAsync(webHookUri, payload);
                     if (!response.IsSuccessStatusCode)

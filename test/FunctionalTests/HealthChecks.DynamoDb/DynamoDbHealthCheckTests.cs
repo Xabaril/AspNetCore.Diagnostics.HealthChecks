@@ -23,7 +23,7 @@ namespace FunctionalTests.HealthChecks.DynamoDb
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_healthy_listing_all_tables_if_dynamodb_is_available()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -55,7 +55,7 @@ namespace FunctionalTests.HealthChecks.DynamoDb
                 .Should().Be(HttpStatusCode.OK);
         }
         
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_unhealthy_listing_all_tables_if_dynamodb_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -87,7 +87,7 @@ namespace FunctionalTests.HealthChecks.DynamoDb
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
         
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task look_for_credentials_from_credentials_provider_chain_when_not_explicitly_provided()
         {
             var webHostBuilder = new WebHostBuilder()

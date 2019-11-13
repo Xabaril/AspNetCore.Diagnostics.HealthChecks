@@ -27,10 +27,12 @@ namespace HealthChecks.UI.Configuration
         
         public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "")
         {
+            if (!Uri.TryCreate(uri, UriKind.Absolute, out Uri absoluteUri)) throw new ArgumentException($"Invalid uri: {uri}");
+
             Webhooks.Add(new WebHookNotification
             {
                 Name = name,
-                Uri = uri,
+                Uri = absoluteUri,
                 Payload = payload,
                 RestoredPayload = restorePayload
             });
@@ -77,7 +79,7 @@ namespace HealthChecks.UI.Configuration
     public class WebHookNotification
     {
         public string Name { get; set; }
-        public string Uri { get; set; }
+        public Uri Uri { get; set; }
         public string Payload { get; set; }
         public string RestoredPayload { get; set; }
     }

@@ -14,19 +14,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Branding
 {
-    public class RandomHealthCheck
-        : IHealthCheck
-    {
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            if (DateTime.UtcNow.Minute % 2 == 0)
-            {
-                return Task.FromResult(HealthCheckResult.Healthy());
-            }
-            
-            return Task.FromResult(HealthCheckResult.Unhealthy(description: $"The healthcheck {context.Registration.Name} failed at minute {DateTime.UtcNow.Minute}"));
-        }
-    }
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -43,7 +30,7 @@ namespace HealthChecks.UI.Branding
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
-                    setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200", payload: "{}");
+                    setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?sample=2&withcode=200&code=344623784738378123==", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}");
                 })
                 .AddControllers();
         }
@@ -67,6 +54,20 @@ namespace HealthChecks.UI.Branding
 
                     config.MapDefaultControllerRoute();
                 });
+        }
+    }
+
+    public class RandomHealthCheck
+    : IHealthCheck
+    {
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        {
+            if (DateTime.UtcNow.Minute % 2 == 0)
+            {
+                return Task.FromResult(HealthCheckResult.Healthy());
+            }
+
+            return Task.FromResult(HealthCheckResult.Unhealthy(description: $"The healthcheck {context.Registration.Name} failed at minute {DateTime.UtcNow.Minute}"));
         }
     }
 }

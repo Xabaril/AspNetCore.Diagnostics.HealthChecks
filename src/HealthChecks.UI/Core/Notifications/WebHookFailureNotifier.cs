@@ -23,7 +23,7 @@ namespace HealthChecks.UI.Core.Notifications
         public WebHookFailureNotifier(
             HealthChecksDb db,
             IOptions<Settings> settings,
-            ILogger<WebHookFailureNotifier> logger, 
+            ILogger<WebHookFailureNotifier> logger,
             IHttpClientFactory httpClientFactory)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -90,23 +90,17 @@ namespace HealthChecks.UI.Core.Notifications
                 await _db.SaveChangesAsync();
             }
         }
-        private async Task SendRequest(string uri, string name, string payloadContent)
+        private async Task SendRequest(Uri uri, string name, string payloadContent)
         {
-            if (uri == null || !Uri.TryCreate(uri, UriKind.Absolute, out Uri webHookUri))
-            {
-                _logger.LogWarning($"The web hook notification uri is not established or is not an absolute Uri ({name}). Set the webhook uri value on BeatPulse settings.");
-
-                return;
-            }
             try
             {
-                    var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
-                    var response = await _httpClient.PostAsync(webHookUri, payload);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        _logger.LogError($"The webhook notification has not executed successfully for {name} webhook. The error code is {response.StatusCode}.");
-                    }
-                
+                var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
+                var response = await _httpClient.PostAsync(uri, payload);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"The webhook notification has not executed successfully for {name} webhook. The error code is {response.StatusCode}.");
+                }
+
             }
             catch (Exception exception)
             {

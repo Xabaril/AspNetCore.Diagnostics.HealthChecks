@@ -91,7 +91,7 @@
     <HealthCheckMongoDB>3.0.1</HealthCheckMongoDB>
     <HealthCheckMySql>3.0.0</HealthCheckMySql>
     <HealthCheckKafka>3.0.0</HealthCheckKafka>
-    <HealthCheckSystem>3.0.1</HealthCheckSystem>
+    <HealthCheckSystem>3.0.2</HealthCheckSystem>
     <HealthCheckNetwork>3.0.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.0.0</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>3.0.0</HealthCheckCosmosDb>

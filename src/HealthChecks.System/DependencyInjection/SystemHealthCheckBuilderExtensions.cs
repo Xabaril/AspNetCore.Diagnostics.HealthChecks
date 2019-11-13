@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string WORKINGSET_NAME = "workingset";
         const string VIRTUALMEMORYSIZE_NAME = "virtualmemory";
         const string PROCESS_NAME = "process";
+        const string PROCESS_ALLOCATED_MEMORY = "process_allocated_memory";
         const string WINDOWS_SERVICE_NAME = "windowsservice";
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (maximumBytesAllocated <= 0) throw new ArgumentException($"{nameof(maximumBytesAllocated)} should be greater than zero");
 
             return builder.Add(new HealthCheckRegistration(
-                name ?? PROCESS_NAME,
+                name ?? PROCESS_ALLOCATED_MEMORY,
                 sp => new ProcessAllocatedMemoryHealthCheck(maximumBytesAllocated),
                 failureStatus,
                 tags,

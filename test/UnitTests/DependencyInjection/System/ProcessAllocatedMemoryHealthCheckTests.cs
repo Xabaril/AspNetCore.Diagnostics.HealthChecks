@@ -27,7 +27,7 @@ namespace UnitTests.DependencyInjection.System
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("process");
+            registration.Name.Should().Be("process_allocated_memory");
             check.GetType().Should().Be(typeof(ProcessAllocatedMemoryHealthCheck));
         }
 

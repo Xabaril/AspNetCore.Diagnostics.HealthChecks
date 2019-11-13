@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Branding
                 return Task.FromResult(HealthCheckResult.Healthy());
             }
             
-            return Task.FromResult(HealthCheckResult.Unhealthy(description: $"The healthcheck {context.Registration.Name} failed at minutes {DateTime.UtcNow.Minute}"));
+            return Task.FromResult(HealthCheckResult.Unhealthy(description: $"The healthcheck {context.Registration.Name} failed at minute {DateTime.UtcNow.Minute}"));
         }
     }
     public class Startup

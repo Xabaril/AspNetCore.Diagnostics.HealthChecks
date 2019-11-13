@@ -28,7 +28,7 @@ namespace HealthChecks.UI.Image
             app.UseRouting()
                 .UseEndpoints(config =>
                 {
-                    config.MapDockerHealthchecksUI(Configuration);
+                    config.MapHealthChecksUI(Configuration);
                     config.MapDefaultControllerRoute();
                 });
         }

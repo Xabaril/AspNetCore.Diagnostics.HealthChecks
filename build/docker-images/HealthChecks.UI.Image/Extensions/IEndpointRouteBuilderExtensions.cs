@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class IEndpointRouteBuilderExtensions
     {
-        public static IEndpointConventionBuilder MapDockerHealthchecksUI(this IEndpointRouteBuilder builder, IConfiguration configuration)
+        public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder, IConfiguration configuration)
        {
             return builder.MapHealthChecksUI(setup =>
             {

@@ -22,15 +22,14 @@ namespace HealthChecks.UI.Branding
         {
             services
                 .AddHealthChecks()
+                .AddProcessAllocatedMemoryHealthCheck(maximumBytesAllocated: 100)
                 .AddCheck<RandomHealthCheck>("random1")
                 .AddCheck<RandomHealthCheck>("random2")
-                .AddCheck<RandomHealthCheck>("random3")
-                .AddCheck<RandomHealthCheck>("random4")
                 .Services
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
-                    setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?sample=2&withcode=200&code=344623784738378123==", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}");
+                    setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}");
                 })
                 .AddControllers();
         }

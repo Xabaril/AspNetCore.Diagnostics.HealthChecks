@@ -138,6 +138,33 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
 
+        /// <summary>
+        /// Adds a healthcheck that allows to check the allocated bytes in memory and configure a threshold
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="maximumBytesAllocated">The maximum megabytes allowed to be allocated by the process</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'process' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddProcessAllocatedMemoryHealthCheck(
+            this IHealthChecksBuilder builder, int maximumBytesAllocated, string name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            if (maximumBytesAllocated <= 0) throw new ArgumentException($"{nameof(maximumBytesAllocated)} should be greater than zero");
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? PROCESS_NAME,
+                sp => new ProcessAllocatedMemoryHealthCheck(maximumBytesAllocated),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
 
         /// <summary>
         /// Add a healthcheck that allows to check a predicate against the configured windows service.

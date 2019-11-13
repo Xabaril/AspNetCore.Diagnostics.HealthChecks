@@ -1,10 +1,10 @@
 
-using System;
+using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using System;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -15,7 +15,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             var options = new Options();
             setupOptions?.Invoke(options);
-            
+
             EnsureValidApiOptions(options);
 
             var apiDelegate =
@@ -27,17 +27,23 @@ namespace Microsoft.AspNetCore.Builder
                 builder.CreateApplicationBuilder()
                     .UseMiddleware<UIWebHooksApiMiddleware>()
                     .Build();
- 
-            
+
+
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
             new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
                 .Map(builder, options);
-            
-            builder.MapGet(options.ApiPath, apiDelegate);
-            return builder.MapGet(options.WebhookPath, webhooksDelegate);
+
+
+            var apiEndpoint = builder.Map(options.ApiPath, apiDelegate)
+                                .WithDisplayName("HealthChecks UI Api");
+
+            var webhooksEndpoint = builder.Map(options.WebhookPath, webhooksDelegate)
+                                .WithDisplayName("HealthChecks UI Webhooks");
+
+            return new HealthCheckUIConventionBuilder(apiEndpoint, webhooksEndpoint);
 
         }
-        
+
         private static void EnsureValidApiOptions(Options options)
         {
             Action<string, string> ensureValidPath = (string path, string argument) =>

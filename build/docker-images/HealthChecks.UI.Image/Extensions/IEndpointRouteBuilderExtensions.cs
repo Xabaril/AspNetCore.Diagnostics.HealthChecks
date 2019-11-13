@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public static  class IEndpointRouteBuilderExtensions
+    public static class IEndpointRouteBuilderExtensions
     {
         public static IEndpointConventionBuilder MapDockerHealthchecksUI(this IEndpointRouteBuilder builder, IConfiguration configuration)
        {

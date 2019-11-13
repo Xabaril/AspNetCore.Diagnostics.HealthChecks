@@ -20,7 +20,7 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _queueName;
 
         /// <summary>
-        /// Null value for this variable specifies not being able to connect to queue yet to know session requirement.
+        /// Null value for this field specifies not being able to connect to queue yet to know session requirement.
         /// This could happen if queue is not yet created or gets deleted, after health check starts.
         /// </summary>
         private bool? _requiresSession;

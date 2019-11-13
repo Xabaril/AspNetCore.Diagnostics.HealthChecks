@@ -28,7 +28,8 @@ The environment variables are:
 
 - **ui_path** to configure the frontend spa segment
 - **ui_api_path** to configure the path where the api middleware will be served
-- **ui_resources_path** to configure the path where static files will be server
+- **ui_webhooks_path** to configure the path where the webhooks middleware will be served
+- **ui_resources_path** to configure the path where static files will be served
 
 
 ```bash

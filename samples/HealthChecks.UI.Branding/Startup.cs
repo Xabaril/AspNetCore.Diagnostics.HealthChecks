@@ -22,7 +22,7 @@ namespace HealthChecks.UI.Branding
         {
             services
                 .AddHealthChecks()
-                .AddProcessAllocatedMemoryHealthCheck(maximumBytesAllocated: 100)
+                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100)
                 .AddCheck<RandomHealthCheck>("random1")
                 .AddCheck<RandomHealthCheck>("random2")
                 .Services
@@ -37,22 +37,22 @@ namespace HealthChecks.UI.Branding
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app .UseRouting()
-                .UseEndpoints(config =>
-                {
-                    config.MapHealthChecks("/healthz", new HealthCheckOptions
-                    {
-                        Predicate = _ => true,
-                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                    });
-                    
-                    config.MapHealthChecksUI(setup =>
-                    {
-                        setup.AddCustomStylesheet("dotnet.css");
-                    });
+            app.UseRouting()
+               .UseEndpoints(config =>
+               {
+                   config.MapHealthChecks("/healthz", new HealthCheckOptions
+                   {
+                       Predicate = _ => true,
+                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                   });
 
-                    config.MapDefaultControllerRoute();
-                });
+                   config.MapHealthChecksUI(setup =>
+                   {
+                       setup.AddCustomStylesheet("dotnet.css");
+                   });
+
+                   config.MapDefaultControllerRoute();
+               });
         }
     }
 

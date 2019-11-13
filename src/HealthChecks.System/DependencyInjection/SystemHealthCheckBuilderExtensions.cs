@@ -143,7 +143,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Adds a healthcheck that allows to check the allocated bytes in memory and configure a threshold
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="maximumBytesAllocated">The maximum megabytes allowed to be allocated by the process</param>
+        /// <param name="maximumMegabytesAllocated">The maximum megabytes allowed to be allocated by the process</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'process' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -153,14 +153,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddProcessAllocatedMemoryHealthCheck(
-            this IHealthChecksBuilder builder, int maximumBytesAllocated, string name = default,
+            this IHealthChecksBuilder builder, int maximumMegabytesAllocated, string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            if (maximumBytesAllocated <= 0) throw new ArgumentException($"{nameof(maximumBytesAllocated)} should be greater than zero");
+            if (maximumMegabytesAllocated <= 0) throw new ArgumentException($"{nameof(maximumMegabytesAllocated)} should be greater than zero");
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? PROCESS_ALLOCATED_MEMORY,
-                sp => new ProcessAllocatedMemoryHealthCheck(maximumBytesAllocated),
+                sp => new ProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated),
                 failureStatus,
                 tags,
                 timeout));

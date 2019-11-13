@@ -118,6 +118,17 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
+                if (execution.Status == healthReport.Status)
+                {
+                    _logger.LogDebug("HealthReport history already exists and is in the same state, updating the values.");
+
+                    execution.LastExecuted = lastExecutionTime;
+                }
+                else
+                {
+                    SaveExecutionHistoryEntries(healthReport, execution, lastExecutionTime);
+                }
+
                 //update existing entries from new health report
 
                 foreach (var item in healthReport.ToExecutionEntries())
@@ -156,26 +167,6 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                 }
 
-                if (execution.Status == healthReport.Status)
-                {
-                    _logger.LogDebug("HealthReport history already exists and is in the same state, updating the values.");
-
-                    execution.LastExecuted = lastExecutionTime;
-                }
-                else
-                {
-                    _logger.LogDebug("HealthCheckReportCollector already exists but on different state, updating the values.");
-
-                    execution.History.Add(new HealthCheckExecutionHistory()
-                    {
-                        On = lastExecutionTime,
-                        Status = execution.Status
-                    });
-
-                    execution.OnStateFrom = lastExecutionTime;
-                    execution.LastExecuted = lastExecutionTime;
-                    execution.Status = healthReport.Status;
-                }
             }
             else
             {
@@ -197,6 +188,32 @@ namespace HealthChecks.UI.Core.HostedService
             }
 
             await _db.SaveChangesAsync();
+        }
+
+        private void SaveExecutionHistoryEntries(UIHealthReport healthReport, HealthCheckExecution execution, DateTime lastExecutionTime)
+        {
+
+            _logger.LogDebug("HealthCheckReportCollector already exists but on different state, updating the values.");
+
+            foreach (var item in execution.Entries)
+            {
+                var reportEntry = healthReport.Entries[item.Name];
+
+                if (item.Status != reportEntry.Status)
+                {
+                    execution.History.Add(new HealthCheckExecutionHistory()
+                    {
+                        On = lastExecutionTime,
+                        Status = reportEntry.Status,
+                        Name = item.Name,
+                        Description = reportEntry.Description
+                    });
+                }
+            }
+
+            execution.OnStateFrom = lastExecutionTime;
+            execution.LastExecuted = lastExecutionTime;
+            execution.Status = healthReport.Status;
         }
     }
 }

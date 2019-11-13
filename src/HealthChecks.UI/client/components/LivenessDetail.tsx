@@ -15,6 +15,7 @@ interface LivenessDetailsProps {
 }
 
 const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
+
   return (
       <section className="hc-liveness-detail">
       <header>
@@ -33,7 +34,11 @@ const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
                     .format('LLL')
                     .toString()}>
                   <p>
-                    <Status status={e.status}></Status>
+                          <Status status={e.status}></Status>
+                          <span title={e.description}>
+                              {e.description &&
+                               e.description.length > 100 ?
+                              `${e.description.substring(0, 100)}...` : e.description}</span>
                   </p>
                 </VerticalTimelineElement>
               );

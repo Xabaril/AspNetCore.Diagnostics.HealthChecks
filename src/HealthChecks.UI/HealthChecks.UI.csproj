@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>    
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsHttp)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCore)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCoreDesign)" />
@@ -33,6 +33,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Data\Migrations\" />
   </ItemGroup>
 
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">

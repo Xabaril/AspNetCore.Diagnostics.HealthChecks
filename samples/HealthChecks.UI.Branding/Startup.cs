@@ -23,8 +23,8 @@ namespace HealthChecks.UI.Branding
             {
                 return Task.FromResult(HealthCheckResult.Healthy());
             }
-
-            return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed"));
+            
+            return Task.FromResult(HealthCheckResult.Unhealthy(description: $"The healthcheck {context.Registration.Name} failed at minutes {DateTime.UtcNow.Minute}"));
         }
     }
     public class Startup
@@ -43,9 +43,7 @@ namespace HealthChecks.UI.Branding
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
-                    setup.AddHealthCheckEndpoint("endpoint2", "http://localhost:8001/healthz");
                     setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200", payload: "{}");
-                    setup.AddWebhookNotification("webhook2", uri: "http://httpbin.org/status/200", payload: "{}");
                 })
                 .AddControllers();
         }

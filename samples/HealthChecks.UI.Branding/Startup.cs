@@ -30,7 +30,7 @@ namespace HealthChecks.UI.Branding
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
-                    setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}");
+                    setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?sample=2&withcode=200&code=344623784738378123==", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}");
                 })
                 .AddControllers();
         }

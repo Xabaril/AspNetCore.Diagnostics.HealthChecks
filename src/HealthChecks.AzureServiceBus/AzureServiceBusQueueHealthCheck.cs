@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.ServiceBus;
+using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
@@ -12,7 +13,9 @@ namespace HealthChecks.AzureServiceBus
         : IHealthCheck
     {
         private const string TEST_MESSAGE = "HealthCheckTest";
+        private const string TEST_SESSIONID = "TestSessionId";
         private static readonly ConcurrentDictionary<string, QueueClient> _queueClientConnections = new ConcurrentDictionary<string, QueueClient>();
+        private static bool _requiresSession;
 
         private readonly string _connectionString;
         private readonly string _queueName;
@@ -45,9 +48,17 @@ namespace HealthChecks.AzureServiceBus
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "New QueueClient connection can't be added into dictionary.");
                     }
+
+                    var managementClient = new ManagementClient(_connectionString);
+                    var queueDescription = await managementClient.GetQueueAsync(_queueName);
+                    _requiresSession = queueDescription.RequiresSession;
                 }
 
                 var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
+                if (_requiresSession)
+                {
+                    message.SessionId = TEST_SESSIONID;
+                }
                 _configuringMessage?.Invoke(message);
                 
                 var scheduledMessageId = await queueClient.ScheduleMessageAsync(message, 

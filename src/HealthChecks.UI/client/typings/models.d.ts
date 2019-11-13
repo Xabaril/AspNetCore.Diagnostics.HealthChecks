@@ -27,6 +27,8 @@ export interface Check {
 }
 
 export interface ExecutionHistory {
+    name: string;
+    description: string;
     id: number;
     status: string;
     on: string;

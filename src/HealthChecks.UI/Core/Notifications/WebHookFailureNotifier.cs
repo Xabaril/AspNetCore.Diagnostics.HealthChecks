@@ -58,7 +58,7 @@ namespace HealthChecks.UI.Core.Notifications
                         .Replace(Keys.FAILURE_BOOKMARK, failure)
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
 
-                    await SendRequest(webHook.Uri, webHook.Name, payload);
+                    await SendRequest(webHook.Uri.AbsoluteUri, webHook.Name, payload);
                 }
             }
             else

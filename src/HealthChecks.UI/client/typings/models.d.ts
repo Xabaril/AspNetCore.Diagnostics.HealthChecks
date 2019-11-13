@@ -36,6 +36,6 @@ export interface ExecutionHistory {
 
 interface WebHook {
     name: string;
-    uri: string;
+    host: string;
     payload: string;
 }

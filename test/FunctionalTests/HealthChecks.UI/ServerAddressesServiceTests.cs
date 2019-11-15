@@ -50,13 +50,11 @@ namespace FunctionalTests.HealthChecks.UI
         private List<string> _addresses = new List<string>();
         public CustomServerAddressFeature(params string[] addresses)
         {
-
             foreach (var address in addresses)
             {
                 _addresses.Add(address);
             }
         }
-
         public ICollection<string> Addresses => _addresses;
 
         public bool PreferHostingUrls { get => true; set => throw new NotImplementedException(); }

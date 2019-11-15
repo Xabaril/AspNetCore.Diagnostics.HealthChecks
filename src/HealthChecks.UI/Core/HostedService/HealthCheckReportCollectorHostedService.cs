@@ -13,15 +13,21 @@ namespace HealthChecks.UI.Core.HostedService
         : IHostedService
     {
         private readonly ILogger<HealthCheckCollectorHostedService> _logger;
+        private readonly ServerAddressesService _serverAddressesService;
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
 
         private Task _executingTask;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public HealthCheckCollectorHostedService(IServiceProvider provider, IOptions<Settings> settings, ILogger<HealthCheckCollectorHostedService> logger)
+        public HealthCheckCollectorHostedService
+            (IServiceProvider provider,
+            IOptions<Settings> settings,
+            ServerAddressesService serverAddressesService,
+            ILogger<HealthCheckCollectorHostedService> logger)
         {
             _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
             _logger = logger ?? throw new ArgumentNullException(nameof(provider));
             _settings = settings.Value ?? new Settings();
             _cancellationTokenSource = new CancellationTokenSource();
@@ -49,20 +55,24 @@ namespace HealthChecks.UI.Core.HostedService
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogDebug("Executing HealthCheck collector HostedService.");
-
-                using (var scope = scopeFactory.CreateScope())
+                // Collect should not be triggered until IServerAddressFeature reports the listening endpoints
+                if (_serverAddressesService.HasAddresses)
                 {
-                    try
-                    {
-                        var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>();
-                        await runner.Collect(cancellationToken);
+                    _logger.LogDebug("Executing HealthCheck collector HostedService.");
 
-                        _logger.LogDebug("HealthCheck collector HostedService executed successfully.");
-                    }
-                    catch (Exception ex)
+                    using (var scope = scopeFactory.CreateScope())
                     {
-                        _logger.LogError(ex, $"HealthCheck collector HostedService throw a error: {ex.Message}");
+                        try
+                        {
+                            var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>();
+                            await runner.Collect(cancellationToken);
+
+                            _logger.LogDebug("HealthCheck collector HostedService executed successfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, $"HealthCheck collector HostedService throw a error: {ex.Message}");
+                        }
                     }
                 }
 

@@ -1,5 +1,6 @@
 ﻿using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
 using HealthChecks.UI.Core.Discovery.K8S.Extensions;
@@ -23,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var configuration = services.BuildServiceProvider()
                 .GetService<IConfiguration>();
-
+            
             services
                 .AddOptions()
                 .Configure<Settings>(settings =>
@@ -35,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
                 })
+                .AddSingleton<ServerAddressesService>()
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()

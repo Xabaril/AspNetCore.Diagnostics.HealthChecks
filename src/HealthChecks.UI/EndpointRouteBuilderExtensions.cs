@@ -3,7 +3,9 @@ using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Microsoft.AspNetCore.Builder
@@ -13,6 +15,12 @@ namespace Microsoft.AspNetCore.Builder
         public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
             Action<Options> setupOptions = null)
         {
+            var serverAddressesFeature = builder.CreateApplicationBuilder()
+                    .ServerFeatures.Get<IServerAddressesFeature>();
+
+            var serverAddressesService = builder.ServiceProvider.GetRequiredService<ServerAddressesService>();
+            serverAddressesService.SetFeature(serverAddressesFeature);
+
             var options = new Options();
             setupOptions?.Invoke(options);
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting.Server.Features;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +10,23 @@ namespace HealthChecks.UI.Core
 {
     internal class ServerAddressesService
     {
-        internal IServerAddressesFeature _serverAddressesFeature;
+        private readonly IServer _server;
 
-        internal void SetFeature(IServerAddressesFeature feature) => _serverAddressesFeature = feature;
+        public ServerAddressesService(IServer server)
+        {
+            _server = server;
+        }
 
-        internal ICollection<string> Addresses => _serverAddressesFeature.Addresses;
+        internal ICollection<string> Addresses => AddressesFeature.Addresses;
 
-        internal bool HasAddresses => Addresses.Any();
+        internal bool HasAddresses => AddressesFeature.Addresses.Any();
+
+        private IServerAddressesFeature AddressesFeature =>
+            _server.Features.Get<IServerAddressesFeature>();
 
         internal string AbsoluteUriFromRelative(string relativeUrl)
         {
-            var targetAddress = Addresses.First();
+            var targetAddress = AddressesFeature.Addresses.First();
 
             if (targetAddress.EndsWith("/"))
             {

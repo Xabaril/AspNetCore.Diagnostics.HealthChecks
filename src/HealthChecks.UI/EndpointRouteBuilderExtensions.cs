@@ -15,12 +15,6 @@ namespace Microsoft.AspNetCore.Builder
         public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
             Action<Options> setupOptions = null)
         {
-            var serverAddressesFeature = builder.CreateApplicationBuilder()
-                    .ServerFeatures.Get<IServerAddressesFeature>();
-
-            var serverAddressesService = builder.ServiceProvider.GetRequiredService<ServerAddressesService>();
-            serverAddressesService.SetFeature(serverAddressesFeature);
-
             var options = new Options();
             setupOptions?.Invoke(options);
 

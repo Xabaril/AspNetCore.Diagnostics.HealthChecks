@@ -19,15 +19,15 @@ namespace HealthChecks.AzureIoTHub
             {
                 if (_options.RegistryWriteCheck)
                 {
-                    await ExecuteRegistryWriteCheck(cancellationToken);
+                    await ExecuteRegistryWriteCheckAsync(cancellationToken);
                 }
                 else if (_options.RegistryReadCheck)
                 {
-                    await ExecuteRegistryReadCheck();
+                    await ExecuteRegistryReadCheckAsync();
                 }
                 if (_options.ServiceConnectionCheck)
                 {
-                    await ExecuteServiceConnectionCheck(cancellationToken);
+                    await ExecuteServiceConnectionCheckAsync(cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();
@@ -38,7 +38,7 @@ namespace HealthChecks.AzureIoTHub
             }
         }
 
-        private async Task ExecuteServiceConnectionCheck(CancellationToken cancellationToken)
+        private async Task ExecuteServiceConnectionCheckAsync(CancellationToken cancellationToken)
         {
             var transportType = MapToTransportType(_options.ServiceConnectionTransport);
             using (var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, transportType))
@@ -48,7 +48,7 @@ namespace HealthChecks.AzureIoTHub
             }
         }
 
-        private async Task ExecuteRegistryReadCheck()
+        private async Task ExecuteRegistryReadCheckAsync()
         {
             using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
             {
@@ -65,7 +65,7 @@ namespace HealthChecks.AzureIoTHub
         /// If in previous health check device were not removed, try remove it.
         /// If in previous health check device were added and removed, try create and remove it.
         /// </remarks>
-        private async Task ExecuteRegistryWriteCheck(CancellationToken cancellationToken)
+        private async Task ExecuteRegistryWriteCheckAsync(CancellationToken cancellationToken)
         {
             using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
             {

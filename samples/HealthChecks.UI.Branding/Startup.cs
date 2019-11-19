@@ -22,15 +22,23 @@ namespace HealthChecks.UI.Branding
         {
             services
                 .AddHealthChecks()
-                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100)
-                .AddCheck<RandomHealthCheck>("random1")
-                .AddCheck<RandomHealthCheck>("random2")
+                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process" })
+                .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
+                .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
                 .Services
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
-                    setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
-                    setup.AddHealthCheckEndpoint("endpoint2", "healthz");
-                    setup.AddWebhookNotification("webhook1", uri: "status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}");
+                    setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
+                    setup.AddHealthCheckEndpoint("endpoint2", "health-process");
+
+                    setup.AddWebhookNotification("webhook1", uri: "status/200?code=ax3rt56s"
+                                                , payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}",
+                                                 restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
+
+                    setup.AddWebhookNotification("webhook1", uri: "https://healthchecks.requestcatcher.com/",
+                                                 payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}",
+                                                 restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
+
                 })
                 .AddControllers();
         }
@@ -41,9 +49,15 @@ namespace HealthChecks.UI.Branding
             app.UseRouting()
                .UseEndpoints(config =>
                {
-                   config.MapHealthChecks("/healthz", new HealthCheckOptions
+                   config.MapHealthChecks("/health-random", new HealthCheckOptions
                    {
-                       Predicate = _ => true,
+                       Predicate = r => r.Tags.Contains("random"),
+                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                   });
+
+                   config.MapHealthChecks("/health-process", new HealthCheckOptions
+                   {
+                       Predicate = r => r.Tags.Contains("process"),
                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                    });
 

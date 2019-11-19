@@ -19,8 +19,6 @@ namespace HealthChecks.UI.Core
 
         internal ICollection<string> Addresses => AddressesFeature.Addresses;
 
-        internal bool HasAddresses => AddressesFeature.Addresses.Any();
-
         private IServerAddressesFeature AddressesFeature =>
             _server.Features.Get<IServerAddressesFeature>();
 

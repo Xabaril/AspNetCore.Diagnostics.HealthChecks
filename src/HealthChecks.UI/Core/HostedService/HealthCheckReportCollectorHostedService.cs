@@ -79,7 +79,7 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"HealthCheck collector HostedService throw a error: {ex.Message}");
+                        _logger.LogError(ex, "HealthCheck collector HostedService threw an error: {Error}", ex.Message);
                     }
                 }
 

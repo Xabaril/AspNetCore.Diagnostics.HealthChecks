@@ -10,53 +10,46 @@ using Microsoft.AspNetCore.TestHost;
 using HealthChecks.UI.Core;
 using FluentAssertions;
 using FunctionalTests.Base;
+using System.Threading.Tasks;
 
 namespace FunctionalTests.HealthChecks.UI
 {
     public class server_addresses_service_should
     {
-        [SkipOnAppVeyor]
+        // Based in AspNetCore TestServer test - https://github.com/aspnet/Hosting/pull/969
+        [Fact]
         public void parse_correctly_relative_endpoint_uris()
         {
-            var serverAddress = "https://localhost:9845";
+            var serverAddress = "http://localhost:5000";
 
             var host = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
-                .UseKestrel()
-                .ConfigureServices(services => services.AddHealthChecksUI(setupSettings: setup => setup.SetHealthCheckDatabaseConnectionString("Data Source=hcdb")));
+                .UseUrls(serverAddress)
+                .ConfigureServices(services => services.AddSingleton<ServerAddressesService>())
+                .Configure(app =>
+                {
+                    app.ServerFeatures.Get<IServerAddressesFeature>().Should().NotBeNull();
+
+                    var serverAddressService = app.ApplicationServices.GetRequiredService<ServerAddressesService>();
+
+                    serverAddressService.AbsoluteUriFromRelative("/health2")
+                        .Should().Be($"{serverAddress}/health2");
+
+                    serverAddressService.AbsoluteUriFromRelative("healthz")
+                        .Should().Be($"{serverAddress}/healthz");
+
+                    serverAddressService.AbsoluteUriFromRelative("/my/relative/url")
+                       .Should().Be($"{serverAddress}/my/relative/url");
+
+                    serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
+                     .Should().Be($"{serverAddress}/segment1/segment2/segment3");
+
+                });
 
             var featureCollection = new FeatureCollection();
-            featureCollection.Set<IServerAddressesFeature>(new CustomServerAddressFeature(serverAddress));
+            featureCollection.Set<IServerAddressesFeature>(new ServerAddressesFeature());
 
             var testServer = new TestServer(host, featureCollection);
-            var serverAddressService = testServer.Services.GetRequiredService<ServerAddressesService>();
-
-            serverAddressService.AbsoluteUriFromRelative("/health2")
-                .Should().Be($"{serverAddress}/health2");
-        
-            serverAddressService.AbsoluteUriFromRelative("healthz")
-                .Should().Be($"{serverAddress}/healthz");
-
-            serverAddressService.AbsoluteUriFromRelative("/my/relative/url")
-               .Should().Be($"{serverAddress}/my/relative/url");
-
-            serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
-             .Should().Be($"{serverAddress}/segment1/segment2/segment3");
         }
     }
 
-    internal class CustomServerAddressFeature : IServerAddressesFeature
-    {
-        private List<string> _addresses = new List<string>();
-        public CustomServerAddressFeature(params string[] addresses)
-        {
-            foreach (var address in addresses)
-            {
-                _addresses.Add(address);
-            }
-        }
-        public ICollection<string> Addresses => _addresses;
-
-        public bool PreferHostingUrls { get => true; set => throw new NotImplementedException(); }
-    }
 }

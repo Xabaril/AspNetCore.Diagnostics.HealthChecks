@@ -15,7 +15,7 @@ namespace FunctionalTests.HealthChecks.UI
 {
     public class server_addresses_service_should
     {
-        [Fact]
+        [SkipOnAppVeyor]
         public void parse_correctly_relative_endpoint_uris()
         {
             var serverAddress = "https://localhost:9845";

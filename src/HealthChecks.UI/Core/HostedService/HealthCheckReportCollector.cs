@@ -198,9 +198,8 @@ namespace HealthChecks.UI.Core.HostedService
             foreach (var item in execution.Entries)
             {
                 // If the health service is down, no entry in dictionary
-                if(healthReport.Entries.ContainsKey(item.Name)) { 
-                    var reportEntry = healthReport.Entries[item.Name];
-
+                if (healthReport.Entries.TryGetValue(item.Name, out var reportEntry))
+                {
                     if (item.Status != reportEntry.Status)
                     {
                         execution.History.Add(new HealthCheckExecutionHistory()

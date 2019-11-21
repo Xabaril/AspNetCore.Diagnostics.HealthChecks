@@ -43,8 +43,7 @@ namespace HealthChecks.AzureIoTHub
             var transportType = MapToTransportType(_options.ServiceConnectionTransport);
             using (var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, transportType))
             {
-                var result = await client.GetServiceStatisticsAsync(cancellationToken);
-                var _ = result.ConnectedDeviceCount;
+                await client.GetServiceStatisticsAsync(cancellationToken);
             }
         }
 
@@ -53,18 +52,10 @@ namespace HealthChecks.AzureIoTHub
             using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
             {
                 var query = client.CreateQuery(_options.RegistryReadQuery, 1);
-                var _ = await query.GetNextAsJsonAsync();
+                await query.GetNextAsJsonAsync();
             }
         }
 
-        /// <summary>
-        /// This method try create and remove device for registry write check.
-        /// </summary>
-        /// <remarks>
-        /// In default implementation of configuration <code>deviceId</code> equals <code>"health-check-registry-write-device-id"</code>.
-        /// If in previous health check device were not removed, try remove it.
-        /// If in previous health check device were added and removed, try create and remove it.
-        /// </remarks>
         private async Task ExecuteRegistryWriteCheckAsync(CancellationToken cancellationToken)
         {
             using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))

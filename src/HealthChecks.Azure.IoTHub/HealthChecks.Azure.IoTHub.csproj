@@ -3,14 +3,14 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>HealthCheck;Azure IoT Hub</PackageTags>
-    <Description>HealthChecks.AzureIoTHub is the health check package for Azure IoT Hub</Description>
+    <PackageTags>HealthCheck;Azure;IoT Hub</PackageTags>
+    <Description>HealthChecks.Azure.IoTHub is the health check package for Azure IoT Hub</Description>
     <Version>$(HealthCheckIoTHub)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <LangVersion>latest</LangVersion>
-    <PackageId>AspNetCore.HealthChecks.AzureIoTHub</PackageId>
+    <PackageId>AspNetCore.HealthChecks.Azure.IoTHub</PackageId>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>

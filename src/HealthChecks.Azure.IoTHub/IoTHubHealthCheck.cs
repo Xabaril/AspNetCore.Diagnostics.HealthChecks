@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureIoTHub
+namespace HealthChecks.Azure.IoTHub
 {
-    public class AzureIoTHubHealthCheck : IHealthCheck
+    public class IoTHubHealthCheck : IHealthCheck
     {
-        private readonly AzureIoTHubOptions _options;
-        public AzureIoTHubHealthCheck(AzureIoTHubOptions options)
+        private readonly IoTHubOptions _options;
+        public IoTHubHealthCheck(IoTHubOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }

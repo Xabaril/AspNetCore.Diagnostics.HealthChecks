@@ -1,13 +1,13 @@
-﻿using FluentAssertions;
-using HealthChecks.AzureIoTHub;
+﻿using System;
+using System.Linq;
+using FluentAssertions;
+using HealthChecks.Azure.IoTHub;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureIoTHub
+namespace UnitTests.DependencyInjection.Azure.IoTHub
 {
     public class azure_iothub_registration_should
     {
@@ -16,7 +16,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureIoTHub
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureIoTHub(setup => new AzureIoTHubOptions("https://iothub"));
+                .AddAzureIoTHub(setup => new IoTHubOptions("https://iothub"));
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -24,8 +24,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureIoTHub
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureiothub");
-            check.GetType().Should().Be(typeof(AzureIoTHubHealthCheck));
+            registration.Name.Should().Be("iothub");
+            check.GetType().Should().Be(typeof(IoTHubHealthCheck));
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureIoTHub
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureIoTHub(setup => new AzureIoTHubOptions("https://iothub"), name: "iothubcheck");
+                .AddAzureIoTHub(setup => new IoTHubOptions("https://iothub"), name: "iothubcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -42,7 +42,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureIoTHub
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("iothubcheck");
-            check.GetType().Should().Be(typeof(AzureIoTHubHealthCheck));
+            check.GetType().Should().Be(typeof(IoTHubHealthCheck));
         }
 
         [Fact]

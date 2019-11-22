@@ -1,20 +1,20 @@
-﻿using HealthChecks.AzureIoTHub;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using HealthChecks.Azure.IoTHub;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class AzureIoTHubHealthChecksBuilderExtensions
+    public static class IoTHubHealthChecksBuilderExtensions
     {
-        const string NAME = "azureiothub";
+        const string NAME = "iothub";
 
         /// <summary>
         /// Add a health check for Azure IoT Hub.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="optionsFactory">A factory to build the Azure IoT Hub connection and health check options to use.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureiothub' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'iothub' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddAzureIoTHub(this IHealthChecksBuilder builder,
-            Func<IServiceProvider, AzureIoTHubOptions> optionsFactory,
+            Func<IServiceProvider, IoTHubOptions> optionsFactory,
             string name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default,
@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
                sp =>
                {
                    var options = optionsFactory(sp);
-                   return new AzureIoTHubHealthCheck(options);
+                   return new IoTHubHealthCheck(options);
                },
                failureStatus,
                tags,

@@ -1,8 +1,8 @@
 using System;
 
-namespace HealthChecks.AzureIoTHub
+namespace HealthChecks.Azure.IoTHub
 {
-    public class AzureIoTHubOptions
+    public class IoTHubOptions
     {
         internal string ConnectionString { get; }
         internal bool RegistryReadCheck { get; private set; }
@@ -12,7 +12,7 @@ namespace HealthChecks.AzureIoTHub
         internal Func<string> RegistryWriteDeviceIdFactory { get; private set; }
         internal ServiceConnectionTransport ServiceConnectionTransport { get; set; }
 
-        public AzureIoTHubOptions(string connectionString)
+        public IoTHubOptions(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -21,19 +21,19 @@ namespace HealthChecks.AzureIoTHub
 
             ConnectionString = connectionString;
         }
-        public AzureIoTHubOptions AddRegistryReadCheck(string query = "SELECT deviceId FROM devices")
+        public IoTHubOptions AddRegistryReadCheck(string query = "SELECT deviceId FROM devices")
         {
             RegistryReadCheck = true;
             RegistryReadQuery = query;
             return this;
         }
-        public AzureIoTHubOptions AddRegistryWriteCheck(Func<string> deviceIdFactory = null)
+        public IoTHubOptions AddRegistryWriteCheck(Func<string> deviceIdFactory = null)
         {
             RegistryWriteCheck = true;
             RegistryWriteDeviceIdFactory = deviceIdFactory ?? (() => "health-check-registry-write-device-id");
             return this;
         }
-        public AzureIoTHubOptions AddServiceConnectionCheck(ServiceConnectionTransport transport = ServiceConnectionTransport.Amqp)
+        public IoTHubOptions AddServiceConnectionCheck(ServiceConnectionTransport transport = ServiceConnectionTransport.Amqp)
         {
             ServiceConnectionCheck = true;
             ServiceConnectionTransport = transport;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +11,6 @@ namespace HealthChecks.RabbitMQ
     {
         private readonly Lazy<IConnectionFactory> _lazyConnectionFactory;
         private readonly IConnection _rmqConnection;
-        private readonly SslOption _sslOption;
 
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
@@ -20,10 +18,9 @@ namespace HealthChecks.RabbitMQ
 
             _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => new ConnectionFactory()
             {
-                Uri = new Uri(rabbitMqConnectionString)
+                Uri = new Uri(rabbitMqConnectionString),
+                Ssl = sslOption
             });
-
-            _sslOption = sslOption ?? new SslOption(serverName: "localhost", enabled: false);
         }
 
         public RabbitMQHealthCheck(IConnection connection)
@@ -69,7 +66,7 @@ namespace HealthChecks.RabbitMQ
 
         private static IConnection CreateConnection(IConnectionFactory connectionFactory)
         {
-            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint> { new AmqpTcpEndpoint(connectionFactory.Uri) });
+            return connectionFactory.CreateConnection("Health Check Connection");
         }
     }
 }

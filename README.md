@@ -27,6 +27,7 @@ HealthChecks packages include health checks for:
 - Azure Storage: Blob, Queue and Table
 - Azure Key Vault
 - Azure DocumentDb
+- Azure IoT Hub
 - Amazon DynamoDb
 - Amazon S3
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
@@ -53,6 +54,7 @@ Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
+Install-Package AspNetCore.HealthChecks.AzureIoTHub
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite

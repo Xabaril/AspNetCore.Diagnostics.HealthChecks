@@ -70,6 +70,7 @@
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
     <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
+    <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -112,5 +113,6 @@
     <HealthCheckKubernetes>3.0.0</HealthCheckKubernetes>
     <HealthCheckSignalR>3.0.0</HealthCheckSignalR>
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
+    <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
   </PropertyGroup>
 </Project>

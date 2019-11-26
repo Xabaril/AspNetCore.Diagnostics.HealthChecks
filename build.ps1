@@ -89,6 +89,7 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.System\HealthChecks.System.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Network\HealthChecks.Network.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o .\artifacts --include-symbols --no-build }
@@ -126,6 +127,7 @@ else {
     exec { & dotnet pack .\src\HealthChecks.System\HealthChecks.System.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Network\HealthChecks.Network.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }

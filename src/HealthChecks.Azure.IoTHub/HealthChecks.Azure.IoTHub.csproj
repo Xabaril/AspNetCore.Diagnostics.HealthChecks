@@ -4,7 +4,7 @@
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <PackageTags>HealthCheck;Azure;IoT Hub</PackageTags>
-    <Description>HealthChecks.Azure.IoTHub is the health check package for Azure IoT Hub</Description>
+    <Description>HealthChecks.Azure.IoTHub is the health check package for Azure IoT Hub.</Description>
     <Version>$(HealthCheckIoTHub)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>

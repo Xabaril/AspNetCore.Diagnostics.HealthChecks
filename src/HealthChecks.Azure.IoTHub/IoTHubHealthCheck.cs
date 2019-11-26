@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Microsoft.Azure.Devices;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.Devices;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Azure.IoTHub
 {
     public class IoTHubHealthCheck : IHealthCheck
     {
         private readonly IoTHubOptions _options;
+
         public IoTHubHealthCheck(IoTHubOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -40,8 +41,7 @@ namespace HealthChecks.Azure.IoTHub
 
         private async Task ExecuteServiceConnectionCheckAsync(CancellationToken cancellationToken)
         {
-            var transportType = MapToTransportType(_options.ServiceConnectionTransport);
-            using (var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, transportType))
+            using (var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, _options.ServiceConnectionTransport))
             {
                 await client.GetServiceStatisticsAsync(cancellationToken);
             }
@@ -75,19 +75,6 @@ namespace HealthChecks.Azure.IoTHub
                     await client.AddDeviceAsync(new Device(deviceId), cancellationToken);
                     await client.RemoveDeviceAsync(deviceId, cancellationToken);
                 }
-            }
-        }
-
-        private TransportType MapToTransportType(ServiceConnectionTransport transport)
-        {
-            switch (transport)
-            {
-                case ServiceConnectionTransport.Amqp:
-                    return TransportType.Amqp;
-                case ServiceConnectionTransport.AmqpWebSocketOnly:
-                    return TransportType.Amqp_WebSocket_Only;
-                default:
-                    throw new Exception($"Undefined {nameof(TransportType)}.");
             }
         }
     }

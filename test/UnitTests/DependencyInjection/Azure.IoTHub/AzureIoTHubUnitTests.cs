@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HealthChecks.Azure.IoTHub;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using System.Linq;
 using Xunit;
 
 namespace UnitTests.DependencyInjection.Azure.IoTHub
@@ -16,7 +15,10 @@ namespace UnitTests.DependencyInjection.Azure.IoTHub
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureIoTHub(setup => new IoTHubOptions("https://iothub"));
+                .AddAzureIoTHub(options =>
+                {
+                    options.AddConnectionString("the-iot-connection-string");
+                });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -33,7 +35,10 @@ namespace UnitTests.DependencyInjection.Azure.IoTHub
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureIoTHub(setup => new IoTHubOptions("https://iothub"), name: "iothubcheck");
+                 .AddAzureIoTHub(options =>
+                 {
+                     options.AddConnectionString("the-iot-connection-string");
+                 },name:"iothubcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -43,18 +48,6 @@ namespace UnitTests.DependencyInjection.Azure.IoTHub
 
             registration.Name.Should().Be("iothubcheck");
             check.GetType().Should().Be(typeof(IoTHubHealthCheck));
-        }
-
-        [Fact]
-        public void fail_when_invalid_connection_string_provided_in_configuration()
-        {
-            var services = new ServiceCollection();
-
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                services.AddHealthChecks()
-                    .AddAzureIoTHub(null);
-            });
         }
     }
 }

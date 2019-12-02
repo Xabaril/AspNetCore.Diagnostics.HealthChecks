@@ -177,6 +177,7 @@ By clicking details button in the healthcheck row you can preview the health sta
 
 By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
 
+
 ```csharp
  app
     .UseRouting()
@@ -192,6 +193,10 @@ By default HealthChecks returns a simple Status Code (200 or 503) without the He
 > *WriteHealthCheckUIResponse* is defined on HealthChecks.UI.Client nuget package.
 
 To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings.
+
+You can configure these Healthchecks and webhooks by using *IConfiguration* providers (appsettings, user secrets, env variables) or the *AddHealthChecksUI(setupSettings: setup =>)* method can be used too.
+
+#### Sample 2:  Configuration using appsettings.json
 
 ```json
 {
@@ -214,6 +219,18 @@ To show these HealthChecks in HealthCheck-UI they have to be configured through 
     "MinimumSecondsBetweenFailureNotifications":60
   }
 }
+```
+
+#### Sample 2: Configuration using setupSettings method:
+
+```csharp
+  services
+    .AddHealthChecksUI(setupSettings: setup =>
+    {
+       setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
+       setup.AddHealthCheckEndpoint("endpoint2", "http://remoteendpoint:9000/healthz");
+       setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?code=ax3rt56s", payload: "{...}");
+    });
 ```
 
 **Note**: The previous configuration section was HealthChecks-UI, but due to incompatibilies with Azure Web App environment variables the section has been moved to HealthChecksUI. The UI is retro compatible and it will check the new section first, and fallback to the old section if the new section has not been declared.
@@ -249,6 +266,34 @@ All health checks results are stored into a SqLite database persisted to disk wi
   }
 }
 ```
+
+
+
+### Using relative urls in Health Checks and Webhooks configurations (UI 3.0.5 onwards)
+
+If you are configuring the UI in the same process where the HealthChecks and Webhooks are listening, from version 3.0.5 onwards the UI can use relative urls
+and it will automatically discover the listening endpoints by using server IServerAddressesFeature
+
+Sample:
+
+```csharp
+
+  //Configuration sample with relative url health checks and webhooks
+  
+  services
+    .AddHealthChecksUI(setupSettings: setup =>
+    {
+       setup.AddHealthCheckEndpoint("endpoint1", "/health-databases");
+       setup.AddHealthCheckEndpoint("endpoint2", "health-messagebrokers");
+       setup.AddWebhookNotification("webhook1", uri: "/notify", payload: "{...}");
+    });
+```
+
+You can also use relative urls when using IConfiguration providers like appsettings.json
+
+
+
+
 ### Failure Notifications
 
 If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:

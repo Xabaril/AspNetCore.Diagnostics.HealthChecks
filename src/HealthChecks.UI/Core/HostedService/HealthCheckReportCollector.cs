@@ -23,18 +23,23 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly Settings _settings;
         private readonly HttpClient _httpClient;
         private readonly ILogger<HealthCheckReportCollector> _logger;
+        private readonly ServerAddressesService _serverAddressService;
+
+        private static readonly Dictionary<int, Uri> endpointAddresses = new Dictionary<int, Uri>();
 
         public HealthCheckReportCollector(
             HealthChecksDb db,
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
             IOptions<Settings> settings,
             IHttpClientFactory httpClientFactory,
-            ILogger<HealthCheckReportCollector> logger)
+            ILogger<HealthCheckReportCollector> logger,
+            ServerAddressesService serverAddressService)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
             _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _serverAddressService = serverAddressService ?? throw new ArgumentNullException(nameof(serverAddressService));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
         }
         public async Task Collect(CancellationToken cancellationToken)
@@ -78,7 +83,9 @@ namespace HealthChecks.UI.Core.HostedService
 
             try
             {
-                var response = await _httpClient.GetAsync(uri);
+                var absoluteUri = GetEndpointUri(configuration);
+
+                var response = await _httpClient.GetAsync(absoluteUri);
 
                 return await response.As<UIHealthReport>();
             }
@@ -89,6 +96,26 @@ namespace HealthChecks.UI.Core.HostedService
                 return UIHealthReport.CreateFrom(exception);
             }
         }
+
+        private Uri GetEndpointUri(HealthCheckConfiguration configuration)
+        {
+             if (endpointAddresses.ContainsKey(configuration.Id))
+            {
+                return endpointAddresses[configuration.Id];
+            }
+
+            var parsedUri = Uri.TryCreate(configuration.Uri, UriKind.Absolute, out var absoluteUri);
+
+            if (!parsedUri)
+            {
+                Uri.TryCreate(_serverAddressService.AbsoluteUriFromRelative(configuration.Uri), UriKind.Absolute, out absoluteUri);
+            }
+
+            endpointAddresses[configuration.Id] = absoluteUri;
+
+            return absoluteUri;
+        }
+
         private async Task<bool> HasLivenessRecoveredFromFailure(HealthCheckConfiguration configuration)
         {
             var previous = await GetHealthCheckExecution(configuration);

@@ -97,7 +97,7 @@
     <HealthCheckDynamoDb>3.0.0</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>3.0.0</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.0.0</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>3.0.0</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>3.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.0.0</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.0.0</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.0.0</HealthCheckConsul>

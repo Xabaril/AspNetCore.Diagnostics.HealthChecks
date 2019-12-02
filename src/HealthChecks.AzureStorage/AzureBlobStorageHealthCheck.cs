@@ -11,15 +11,11 @@ namespace HealthChecks.AzureStorage
         : IHealthCheck
     {
         private readonly string _connectionString;
-        private readonly string _nameContainer;
-        public AzureBlobStorageHealthCheck(string connectionString, string nameContainer = default)
+        private readonly string _containerName;
+        public AzureBlobStorageHealthCheck(string connectionString, string containerName = default)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-            _connectionString = connectionString;
-            _nameContainer = nameContainer;
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _containerName = containerName;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -33,13 +29,16 @@ namespace HealthChecks.AzureStorage
                     operationContext: null,
                     cancellationToken: cancellationToken);
 
-                if (!string.IsNullOrEmpty(_nameContainer))
+                if (!string.IsNullOrEmpty(_containerName))
                 {
-                    var container = blobClient.GetContainerReference(_nameContainer);
+                    var container = blobClient
+                        .GetContainerReference(_containerName);
+
                     if (!await container.ExistsAsync())
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Container '{_nameContainer}' not exists");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Container '{_containerName}' not exists");
                     }
+
                     await container.FetchAttributesAsync();
                 }
 

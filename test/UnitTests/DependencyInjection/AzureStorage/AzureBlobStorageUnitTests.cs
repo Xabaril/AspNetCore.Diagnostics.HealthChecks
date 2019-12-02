@@ -47,7 +47,7 @@ namespace UnitTests.DependencyInjection.AzureStorage
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string", nameContainer: "container");
+                .AddAzureBlobStorage("the-connection-string", containerName: "container");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

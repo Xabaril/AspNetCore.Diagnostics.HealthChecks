@@ -11,13 +11,15 @@ namespace HealthChecks.AzureStorage
         : IHealthCheck
     {
         private readonly string _connectionString;
-        public AzureTableStorageHealthCheck(string connectionString)
+        private readonly string _nameTable;
+        public AzureTableStorageHealthCheck(string connectionString, string nameTable = default)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
             _connectionString = connectionString;
+            _nameTable = nameTable;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -30,6 +32,15 @@ namespace HealthChecks.AzureStorage
                     new TableRequestOptions(),
                     operationContext: null,
                     cancellationToken: cancellationToken);
+
+                if (!string.IsNullOrEmpty(_nameTable))
+                {
+                    var table = blobClient.GetTableReference(_nameTable);
+                    if (!await table.ExistsAsync())
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Table '{_nameTable}' not exists");
+                    }
+                }
 
                 return HealthCheckResult.Healthy();
             }

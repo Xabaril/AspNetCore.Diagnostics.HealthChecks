@@ -79,5 +79,22 @@ namespace UnitTests.DependencyInjection.AzureStorage
             registration.FailureStatus.Should().Be(HealthStatus.Degraded);
             check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
         }
+
+        [Fact]
+        public void add_named_queue_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureQueueStorage("the-connection-string", nameQueue: "queue");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azurequeue");
+            check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
+        }
     }
 }

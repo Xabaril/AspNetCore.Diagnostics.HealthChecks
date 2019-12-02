@@ -42,5 +42,21 @@ namespace UnitTests.DependencyInjection.AzureStorage
             registration.Name.Should().Be("my-azureblob-group");
             check.GetType().Should().Be(typeof(AzureBlobStorageHealthCheck));
         }
+        [Fact]
+        public void add_named_container_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureBlobStorage("the-connection-string", nameContainer: "container");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azureblob");
+            check.GetType().Should().Be(typeof(AzureBlobStorageHealthCheck));
+        }
     }
 }

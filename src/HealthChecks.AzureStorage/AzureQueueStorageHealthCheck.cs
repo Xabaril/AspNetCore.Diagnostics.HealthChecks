@@ -11,13 +11,15 @@ namespace HealthChecks.AzureStorage
         : IHealthCheck
     {
         private readonly string _connectionString;
-        public AzureQueueStorageHealthCheck(string connectionString)
+        private readonly string _nameQueue;
+        public AzureQueueStorageHealthCheck(string connectionString, string nameQueue = default)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
             _connectionString = connectionString;
+            _nameQueue = nameQueue;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -30,6 +32,16 @@ namespace HealthChecks.AzureStorage
                     new QueueRequestOptions(),
                     operationContext: null,
                     cancellationToken: cancellationToken);
+
+                if (!string.IsNullOrEmpty(_nameQueue))
+                {
+                    var queue = blobClient.GetQueueReference(_nameQueue);
+                    if (!await queue.ExistsAsync())
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Queue '{_nameQueue}' not exists");
+                    }
+                    await queue.FetchAttributesAsync();
+                }
 
                 return HealthCheckResult.Healthy();
             }

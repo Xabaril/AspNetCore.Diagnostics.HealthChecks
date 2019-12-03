@@ -16,10 +16,21 @@ namespace HealthChecks.RabbitMQ
         {
             if (rabbitMqConnectionString == null) throw new ArgumentNullException(nameof(rabbitMqConnectionString));
 
-            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => new ConnectionFactory()
+            
+            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() =>
             {
-                Uri = new Uri(rabbitMqConnectionString),
-                Ssl = sslOption
+                var connectionFactory = new ConnectionFactory
+                {
+                    Uri = new Uri(rabbitMqConnectionString),
+                    AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
+                };
+
+                if (sslOption != null)
+                {
+                    connectionFactory.Ssl = sslOption;
+                }
+
+                return connectionFactory;
             });
         }
 

@@ -9,29 +9,26 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck
         : IHealthCheck
     {
-        private readonly Lazy<IConnectionFactory> _lazyConnectionFactory;
-        private readonly IConnection _rmqConnection;
+        private readonly IConnectionFactory _connectionFactory;
+        private IConnection _rmqConnection;
 
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
             if (rabbitMqConnectionString == null) throw new ArgumentNullException(nameof(rabbitMqConnectionString));
 
-            
-            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() =>
+
+            var connectionFactory = new ConnectionFactory
             {
-                var connectionFactory = new ConnectionFactory
-                {
-                    Uri = new Uri(rabbitMqConnectionString),
-                    AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
-                };
+                Uri = new Uri(rabbitMqConnectionString),
+                AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
+            };
 
-                if (sslOption != null)
-                {
-                    connectionFactory.Ssl = sslOption;
-                }
+            if (sslOption != null)
+            {
+                connectionFactory.Ssl = sslOption;
+            }
 
-                return connectionFactory;
-            });
+            _connectionFactory = connectionFactory;
         }
 
         public RabbitMQHealthCheck(IConnection connection)
@@ -41,23 +38,24 @@ namespace HealthChecks.RabbitMQ
 
         public RabbitMQHealthCheck(IConnectionFactory connectionFactory)
         {
-            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => 
-                connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory)));
+            _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (_rmqConnection != null)
+                if (_rmqConnection != null && _rmqConnection.IsOpen == false)
                 {
-                    return TestConnection(_rmqConnection);
+                    _rmqConnection.Close(0);
+                    _rmqConnection = null;
+                }
+                if (_rmqConnection == null)
+                {
+                    _rmqConnection = CreateConnection(_connectionFactory);
                 }
 
-                using (var connection = CreateConnection(_lazyConnectionFactory.Value))
-                {
-                    return TestConnection(connection);
-                }
+                return TestConnection(_rmqConnection);
             }
             catch (Exception ex)
             {
@@ -68,7 +66,7 @@ namespace HealthChecks.RabbitMQ
 
         private static Task<HealthCheckResult> TestConnection(IConnection connection)
         {
-            using (var channel = connection.CreateModel())
+            using (connection.CreateModel())
             {
                 return Task.FromResult(
                     HealthCheckResult.Healthy());

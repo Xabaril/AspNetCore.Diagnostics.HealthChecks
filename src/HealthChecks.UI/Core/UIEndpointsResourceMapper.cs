@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -16,22 +17,24 @@ namespace HealthChecks.UI.Core
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
         }
 
-        public void Map(IEndpointRouteBuilder builder, Options options)
+        public IEnumerable<IEndpointConventionBuilder> Map(IEndpointRouteBuilder builder, Options options)
         {
+            var endpoints = new List<IEndpointConventionBuilder>();
+
             var resources = _reader.UIResources;
             var ui = resources.GetMainUI(options);
             var styleSheets = ui.GetCustomStylesheets(options);
 
             foreach (var resource in resources)
             {
-                builder.MapGet($"{options.ResourcesPath}/{resource.FileName}", async context =>
+                endpoints.Add(builder.MapGet($"{options.ResourcesPath}/{resource.FileName}", async context =>
                 {
                     context.Response.ContentType = resource.ContentType;
                     await context.Response.WriteAsync(resource.Content);
-                });
+                }));
             }
 
-            builder.MapGet($"{options.UIPath}", async context =>
+            endpoints.Add(builder.MapGet($"{options.UIPath}", async context =>
             {
                 context.Response.OnStarting(() =>
                 {
@@ -45,16 +48,18 @@ namespace HealthChecks.UI.Core
 
                 context.Response.ContentType = ui.ContentType;
                 await context.Response.WriteAsync(ui.Content);
-            });
+            }));
 
             foreach (var item in styleSheets)
             {
-                builder.MapGet(item.ResourcePath, async context =>
+                endpoints.Add(builder.MapGet(item.ResourcePath, async context =>
                 {
                     context.Response.ContentType = "text/css";
                     await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length);
-                });
+                }));
             }
+
+            return endpoints;
         }
     }
 }

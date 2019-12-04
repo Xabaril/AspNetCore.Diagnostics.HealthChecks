@@ -20,6 +20,7 @@
 
   <PropertyGroup Label="Package Versions">
     <MicrosoftExtensionsDiagnosticsHealthChecks>3.0.0</MicrosoftExtensionsDiagnosticsHealthChecks>
+    <MicrosoftAspNetCoreJwtBearer>3.0.0</MicrosoftAspNetCoreJwtBearer>
     <MicrosoftExtensionsHttp>3.0.0</MicrosoftExtensionsHttp>
     <MicrosoftExtensionsDependencyInjection>3.0.0</MicrosoftExtensionsDependencyInjection>
     <MicrosoftAspNetCoreTestHost>3.0.0</MicrosoftAspNetCoreTestHost>

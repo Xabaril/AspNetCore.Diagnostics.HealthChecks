@@ -5,6 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCoreJwtBearer)" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
         <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
         <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />

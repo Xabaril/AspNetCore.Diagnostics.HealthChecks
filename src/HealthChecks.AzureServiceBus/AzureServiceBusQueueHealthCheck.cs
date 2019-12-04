@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
@@ -18,15 +17,10 @@ namespace HealthChecks.AzureServiceBus
 
         private readonly string _connectionString;
         private readonly string _queueName;
-
-        /// <summary>
-        /// Null value for this field specifies not being able to connect to queue yet to know session requirement.
-        /// This could happen if queue is not yet created or gets deleted, after health check starts.
-        /// </summary>
-        private bool? _requiresSession;
+        private readonly bool _requiresSession;
         private readonly Action<Message> _configuringMessage;
 
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Action<Message> configuringMessage = null)
+        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Action<Message> configuringMessage = null, bool requiresSession = false)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -39,7 +33,9 @@ namespace HealthChecks.AzureServiceBus
             _connectionString = connectionString;
             _queueName = queueName;
             _configuringMessage = configuringMessage;
+            _requiresSession = requiresSession;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -55,16 +51,8 @@ namespace HealthChecks.AzureServiceBus
                     }
                 }
 
-                // If the queue is not yet available, GetQueueAsync will throw and _requiresSession will not have any value
-                if (!_requiresSession.HasValue)
-                {
-                    var managementClient = new ManagementClient(_connectionString);
-                    var queueDescription = await managementClient.GetQueueAsync(_queueName);
-                    _requiresSession = queueDescription.RequiresSession;
-                }
-
                 var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
-                if (_requiresSession.Value)
+                if (_requiresSession)
                 {
                     message.SessionId = TEST_SESSIONID;
                 }
@@ -78,9 +66,6 @@ namespace HealthChecks.AzureServiceBus
             }
             catch (Exception ex)
             {
-                // Reset _requiresSession to handle cases of queue not available once the health check probe is up
-                // If queue becomes available at a later time, we should again figure out whether sessions are needed.
-                _requiresSession = null;
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }

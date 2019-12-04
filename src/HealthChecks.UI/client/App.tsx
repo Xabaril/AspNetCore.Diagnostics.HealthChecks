@@ -21,7 +21,7 @@ export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.state = {
-      menuOpen: true
+      menuOpen: false
     };
 
     this.toggleMenu = this.toggleMenu.bind(this);

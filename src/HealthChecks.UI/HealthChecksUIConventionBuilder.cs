@@ -7,19 +7,19 @@ namespace HealthChecks.UI
 {
     class HealthCheckUIConventionBuilder : IEndpointConventionBuilder
     {
-        private readonly IEndpointConventionBuilder ApiEndpoint;
-        private readonly IEndpointConventionBuilder WebhooksEndpoint;
+        private readonly IEnumerable<IEndpointConventionBuilder> _endpoints;
 
-        public HealthCheckUIConventionBuilder(IEndpointConventionBuilder apiEndpoint, IEndpointConventionBuilder webhooksEndpoint)
+        public HealthCheckUIConventionBuilder(IEnumerable<IEndpointConventionBuilder> endpoints)
         {
-            ApiEndpoint = apiEndpoint ?? throw new ArgumentNullException(nameof(apiEndpoint));
-            WebhooksEndpoint = webhooksEndpoint ?? throw new ArgumentNullException(nameof(webhooksEndpoint));
+            _endpoints = endpoints ?? throw new ArgumentNullException(nameof(endpoints));
         }
 
         public void Add(Action<EndpointBuilder> convention)
         {
-            ApiEndpoint.Add(convention);
-            WebhooksEndpoint.Add(convention);
+            foreach(var endpoint in _endpoints)
+            {
+                endpoint.Add(convention);
+            }
         }
     }
 }

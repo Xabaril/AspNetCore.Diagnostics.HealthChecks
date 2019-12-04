@@ -20,7 +20,11 @@ namespace HealthChecks.UI.Branding
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //To add authentication and authorization using demo identityserver uncomment AddDemoAuthentication and RequireAuthorization lines
+
             services
+                //.AddDemoAuthentication()
                 .AddHealthChecks()
                 .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process" })
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
@@ -47,6 +51,8 @@ namespace HealthChecks.UI.Branding
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting()
+               .UseAuthentication()
+               .UseAuthorization()
                .UseEndpoints(config =>
                {
                    config.MapHealthChecks("/health-random", new HealthCheckOptions
@@ -64,7 +70,10 @@ namespace HealthChecks.UI.Branding
                    config.MapHealthChecksUI(setup =>
                    {
                        setup.AddCustomStylesheet("dotnet.css");
-                   });
+
+                   })
+                   //.RequireAuthorization("AuthUserPolicy")
+                   ;
 
                    config.MapDefaultControllerRoute();
                });

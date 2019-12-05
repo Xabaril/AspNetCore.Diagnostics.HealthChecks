@@ -3,8 +3,12 @@ using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -30,7 +34,8 @@ namespace Microsoft.AspNetCore.Builder
 
 
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
-            new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
+
+            var resourcesEndpoints = new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
                 .Map(builder, options);
 
 
@@ -40,8 +45,9 @@ namespace Microsoft.AspNetCore.Builder
             var webhooksEndpoint = builder.Map(options.WebhookPath, webhooksDelegate)
                                 .WithDisplayName("HealthChecks UI Webhooks");
 
-            return new HealthCheckUIConventionBuilder(apiEndpoint, webhooksEndpoint);
+            var endpointConventionBuilders = new List<IEndpointConventionBuilder>(new[] { apiEndpoint, webhooksEndpoint }.Union(resourcesEndpoints));
 
+            return new HealthCheckUIConventionBuilder(endpointConventionBuilders);
         }
 
         private static void EnsureValidApiOptions(Options options)

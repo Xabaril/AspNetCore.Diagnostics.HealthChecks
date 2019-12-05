@@ -19,7 +19,7 @@ namespace HealthChecks.RabbitMQ
             _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => new ConnectionFactory()
             {
                 Uri = new Uri(rabbitMqConnectionString),
-                Ssl = sslOption
+                Ssl = sslOption ?? new SslOption()
             });
         }
 

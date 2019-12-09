@@ -45,6 +45,14 @@ namespace HealthChecks.RabbitMQ
         {
             try
             {
+                // If no factory was provided then we're stuck using the passed in connection
+                // regardless of the state it may be in. We don't have a way to attempt to
+                // create a new connection :(
+                if (_connectionFactory == null)
+                {
+                    return TestConnection(_rmqConnection);
+                }
+
                 if (_rmqConnection != null && _rmqConnection.IsOpen == false)
                 {
                     _rmqConnection.Close(0);

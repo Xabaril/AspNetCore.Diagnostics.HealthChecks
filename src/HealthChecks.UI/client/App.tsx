@@ -7,6 +7,7 @@ import { AsideMenu } from './components/AsideMenu';
 interface AppProps {
   apiEndpoint: string;
   webhookEndpoint: string;
+  asideMenuOpened: boolean;
 }
 
 interface AppState {
@@ -21,7 +22,7 @@ export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.state = {
-      menuOpen: true
+      menuOpen: props.asideMenuOpened
     };
 
     this.toggleMenu = this.toggleMenu.bind(this);

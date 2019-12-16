@@ -15,6 +15,7 @@ namespace HealthChecks.UI.Configuration
         public bool UseRelativeWebhookPath = true;
         public string ResourcesPath { get; set; } = "/ui/resources";
         public bool UseRelativeResourcesPath = true;
+        public bool AsideMenuOpened { get; set; } = true;
 
         public Options AddCustomStylesheet(string path)
         {

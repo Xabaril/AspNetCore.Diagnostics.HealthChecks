@@ -17,7 +17,6 @@ namespace HealthChecks.AzureKeyVault
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            var currentSecret = string.Empty;
             try
             {
                 using (var client = CreateClient())

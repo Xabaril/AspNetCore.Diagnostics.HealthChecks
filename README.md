@@ -54,7 +54,7 @@ Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
-Install-Package AspNetCore.HealthChecks.AzureIoTHub
+Install-Package AspNetCore.HealthChecks.Azure.IoTHub
 Install-Package AspNetCore.HealthChecks.MySql
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite

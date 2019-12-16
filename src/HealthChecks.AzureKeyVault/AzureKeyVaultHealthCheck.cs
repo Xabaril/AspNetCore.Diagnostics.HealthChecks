@@ -22,9 +22,14 @@ namespace HealthChecks.AzureKeyVault
             {
                 using (var client = CreateClient())
                 {
-                    foreach (var item in _options.Secrets)
+                    foreach (var secret in _options.Secrets)
                     {
-                        await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
+                        await client.GetSecretAsync(_options.KeyVaultUrlBase, secret, cancellationToken);
+                    }
+
+                    foreach (var key in _options.Keys)
+                    {
+                        await client.GetKeyAsync(_options.KeyVaultUrlBase, key, cancellationToken);
                     }
                 }
                 return HealthCheckResult.Healthy();

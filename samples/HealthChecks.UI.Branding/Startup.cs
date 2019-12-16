@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HealthChecks.UI.Client;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace HealthChecks.UI.Branding
                 .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process" })
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
                 .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
+                .AddApplicationInsightsPublisher("e88332d4-624d-4c8a-883a-a5121e7faa7b", saveDetailedReport: true)
                 .Services
                 .AddHealthChecksUI(setupSettings: setup =>
                 {

@@ -32,7 +32,7 @@ namespace HealthChecks.UI.Core
                 .Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET, resourcePath);
 
             resource.Content = resource.Content
-                .Replace(Keys.HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET, options.AsideMenuOpened.ToString());
+                .Replace(Keys.HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET, options.AsideMenuOpened.ToString().ToLower());
 
             return resource;
         }

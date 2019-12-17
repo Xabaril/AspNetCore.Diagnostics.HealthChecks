@@ -30,6 +30,21 @@ namespace HealthChecks.AzureKeyVault
                     {
                         await client.GetKeyAsync(_options.KeyVaultUrlBase, key, cancellationToken);
                     }
+
+                    foreach (var (key, checkExpired) in _options.Certificates)
+                    {
+                        var certificate = await client.GetCertificateAsync(_options.KeyVaultUrlBase, key, cancellationToken);
+
+                        if (checkExpired && certificate.Attributes.Expires.HasValue)
+                        {
+                            var expirationDate = certificate.Attributes.Expires.Value;
+
+                            if (expirationDate < DateTime.UtcNow)
+                            {
+                                throw new Exception($"The certificate with key {key} has expired with date {expirationDate}");
+                            }
+                        }
+                    }
                 }
                 return HealthCheckResult.Healthy();
             }

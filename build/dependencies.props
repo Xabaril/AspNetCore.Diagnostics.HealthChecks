@@ -108,7 +108,7 @@
     <HealthCheckPublisherDatadog>3.0.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.0.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>3.0.0</HealthCheckAWSS3>
-    <HealthCheckKeyVault>3.0.0</HealthCheckKeyVault>
+    <HealthCheckKeyVault>3.0.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>3.0.0</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>3.0.0</HealthCheckRavenDB>
     <HealthCheckKubernetes>3.0.0</HealthCheckKubernetes>

@@ -68,7 +68,7 @@
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3> 
-    <MicrosoftAzureKeyVault>3.0.5</MicrosoftAzureKeyVault>
+    <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
     <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
@@ -108,7 +108,7 @@
     <HealthCheckPublisherDatadog>3.0.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.0.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>3.0.0</HealthCheckAWSS3>
-    <HealthCheckKeyVault>3.0.0</HealthCheckKeyVault>
+    <HealthCheckKeyVault>3.0.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>3.0.0</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>3.0.0</HealthCheckRavenDB>
     <HealthCheckKubernetes>3.0.0</HealthCheckKubernetes>

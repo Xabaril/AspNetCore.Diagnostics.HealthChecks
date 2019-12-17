@@ -29,7 +29,7 @@ namespace HealthChecks.UI.Image.Extensions
 
             bool disableRelativePaths = false;
 
-            if(!string.IsNullOrEmpty(relativePaths))
+            if (!string.IsNullOrEmpty(relativePaths))
             {
                 bool.TryParse(relativePaths, out disableRelativePaths);
             }
@@ -39,7 +39,7 @@ namespace HealthChecks.UI.Image.Extensions
             if (!string.IsNullOrEmpty(resourcesPath)) options.ResourcesPath = resourcesPath;
             if (!string.IsNullOrEmpty(webhooksPath)) options.WebhookPath = webhooksPath;
 
-            if(disableRelativePaths)
+            if (disableRelativePaths)
             {
                 options.UseRelativeApiPath = false;
                 options.UseRelativeResourcesPath = false;

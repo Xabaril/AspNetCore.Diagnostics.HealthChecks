@@ -37,11 +37,11 @@ namespace HealthChecks.AzureKeyVault
 
                         if (checkExpired && certificate.Attributes.Expires.HasValue)
                         {
-                            var expiralDate = certificate.Attributes.Expires.Value;
+                            var expirationDate = certificate.Attributes.Expires.Value;
 
-                            if (expiralDate < DateTime.UtcNow)
+                            if (expirationDate < DateTime.UtcNow)
                             {
-                                throw new Exception($"The certificate with key {key} has expired with date {expiralDate}");
+                                throw new Exception($"The certificate with key {key} has expired with date {expirationDate}");
                             }
                         }
                     }

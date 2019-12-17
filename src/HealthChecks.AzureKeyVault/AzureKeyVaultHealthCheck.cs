@@ -31,7 +31,7 @@ namespace HealthChecks.AzureKeyVault
                         await client.GetKeyAsync(_options.KeyVaultUrlBase, key, cancellationToken);
                     }
 
-                    foreach (var (key, checkExpired) in _options._certificates)
+                    foreach (var (key, checkExpired) in _options.Certificates)
                     {
                         var certificate = await client.GetCertificateAsync(_options.KeyVaultUrlBase, key, cancellationToken);
 

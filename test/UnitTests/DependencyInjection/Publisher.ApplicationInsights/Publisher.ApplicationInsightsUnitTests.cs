@@ -10,18 +10,17 @@ namespace UnitTests.DependencyInjection.Publisher.ApplicationInsights
     public class application_insights_publisher_registration_should
     {
         [Fact]
-        public void fail_when_no_telemetry_configuration_is_configured_using_parameters_or_IOptions()
+        public void add_healthcheck_when_no_telemetry_configuration_is_configured_using_parameters_or_IOptions()
         {
             var services = new ServiceCollection();
-            services.AddHealthChecks()
+            services
+                .AddHealthChecks()
                 .AddApplicationInsightsPublisher();
 
             var serviceProvider = services.BuildServiceProvider();
+            var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                serviceProvider.GetService<IHealthCheckPublisher>();
-            });
+            Assert.NotNull(publisher);
         }
 
         [Fact]

@@ -32,15 +32,10 @@ namespace HealthChecks.Publisher.ApplicationInsights
             bool saveDetailedReport = false,
             bool excludeHealthyReports = false)
         {
-            _telemetryConfiguration = telemetryConfiguration?.Value;
+            _telemetryConfiguration = telemetryConfiguration?.Value ?? TelemetryConfiguration.CreateDefault();
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
-
-            if (string.IsNullOrEmpty(instrumentationKey) && string.IsNullOrEmpty(_telemetryConfiguration?.InstrumentationKey))
-            {
-                throw new ArgumentNullException("No instrumentation key was provided in options or constructor");
-            }
         }
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
@@ -124,7 +119,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                         //key active on the project.
 
                         var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
-                            ? new TelemetryConfiguration(_telemetryConfiguration?.InstrumentationKey)
+                            ? _telemetryConfiguration
                             : new TelemetryConfiguration(_instrumentationKey);
 
                         _client = new TelemetryClient(configuration);

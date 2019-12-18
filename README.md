@@ -327,6 +327,42 @@ To add your custom styles sheet, use the UI setup method:
 ```
 You can visit the section [custom styles and branding](./doc/styles-branding.md) to find source samples and get further information about custom css properties.
 
+## UI Configure HttpClient and HttpMessageHandler for Api and Webhooks endpoints
+
+If you need to configure a proxy, or set an authentication header, the UI allows you to configure the HttpMessageHandler and the HttpClient for the webhooks and healtheck api endpoints.
+
+```csharp
+
+services.AddHealthChecksUI(setupSettings: setup =>
+{
+    setup.ConfigureApiEndpointHttpclient((sp, client) =>
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "supertoken");
+    })
+    .UseApiEndpointHttpMessageHandler(sp =>
+        {
+            return new HttpClientHandler
+            {
+                Proxy = new WebProxy("http://proxy:8080")
+            };
+        })
+    .ConfigureWebhooksEndpointHttpclient((sp, client) =>
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "sampletoken");
+    })
+    .UseWebhookEndpointHttpMessageHandler(sp =>
+    {
+        return new HttpClientHandler()
+        {
+            Properties =
+            {
+                ["prop"] = "value"
+            }
+        };
+    });
+});
+
+```
 
 ## UI Kubernetes automatic services discovery
 

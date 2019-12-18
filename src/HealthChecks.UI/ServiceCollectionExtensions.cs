@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var configuration = services.BuildServiceProvider()
                 .GetService<IConfiguration>();
-            
+
             services
                 .AddOptions()
                 .Configure<Settings>(settings =>
@@ -40,18 +40,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
-                .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME)
-                .ConfigurePrimaryHttpMessageHandler(sp =>
-                {
-                    var settings = sp.GetService<IOptions<Settings>>();
-                    return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
-                }).Services
-                .AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME)
-                .ConfigurePrimaryHttpMessageHandler(sp =>
-                {
-                    var settings = sp.GetService<IOptions<Settings>>();
-                    return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
-                });
+                .AddApiEndpointHttpClient()
+                .AddWebhooksEndpointHttpClient();
 
             var healthCheckSettings = services.BuildServiceProvider()
                 .GetService<IOptions<Settings>>()
@@ -92,6 +82,36 @@ namespace Microsoft.Extensions.DependencyInjection
             CreateDatabase(serviceProvider).Wait();
 
             return services;
+        }
+
+        public static IServiceCollection AddApiEndpointHttpClient(this IServiceCollection services)
+        {
+            return services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME, (sp, client) =>
+            {
+                var settings = sp.GetService<IOptions<Settings>>();
+                settings.Value.ApiEndpointHttpClientConfig?.Invoke(sp, client);
+            })
+              .ConfigurePrimaryHttpMessageHandler(sp =>
+              {
+                  var settings = sp.GetService<IOptions<Settings>>();
+                  return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
+              })
+             .Services;
+        }
+
+        public static IServiceCollection AddWebhooksEndpointHttpClient(this IServiceCollection services)
+        {
+            return services.AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME, (sp, client) =>
+            {
+                var settings = sp.GetService<IOptions<Settings>>();
+                settings.Value.WebHooksEndpointHttpClientConfig?.Invoke(sp, client);
+            })
+            .ConfigurePrimaryHttpMessageHandler(sp =>
+             {
+                 var settings = sp.GetService<IOptions<Settings>>();
+                 return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
+             })
+            .Services;
         }
 
         static async Task CreateDatabase(IServiceProvider serviceProvider)

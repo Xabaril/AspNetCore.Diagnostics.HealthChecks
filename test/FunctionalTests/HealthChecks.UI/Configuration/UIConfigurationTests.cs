@@ -155,10 +155,12 @@ namespace FunctionalTests.UI.Configuration
         }
 
         [Fact]
-        public void should_register_configured_http_message_handler_into_client()
+        public void should_register_configured_http_client_and_http_message_handler_into_client()
         {
             var apiHandlerConfigured = false;
+            var apiClientConfigured = false;
             var webhookHandlerConfigured = false;
+            var webhookClientConfigured = false;
 
             var webhost = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
@@ -171,7 +173,11 @@ namespace FunctionalTests.UI.Configuration
                 {
                     services.AddHealthChecksUI(setupSettings: setup =>
                     {
-                        setup.UseApiEndpointHttpMessageHandler(sp =>
+                        setup.ConfigureApiEndpointHttpclient((sp, client) =>
+                        {
+                            apiClientConfigured = true;
+                        })
+                        .UseApiEndpointHttpMessageHandler(sp =>
                             {
                                 apiHandlerConfigured = true;
                                 return new HttpClientHandler
@@ -179,17 +185,21 @@ namespace FunctionalTests.UI.Configuration
                                     Proxy = new WebProxy("http://proxy:8080")
                                 };
                             })
-                            .UseWebhookEndpointHttpMessageHandler(sp =>
+                        .ConfigureWebhooksEndpointHttpclient((sp, client) =>
+                        {
+                            webhookClientConfigured = true;
+                        })
+                        .UseWebhookEndpointHttpMessageHandler(sp =>
+                        {
+                            webhookHandlerConfigured = true;
+                            return new HttpClientHandler()
                             {
-                                webhookHandlerConfigured = true;
-                                return new HttpClientHandler()
+                                Properties =
                                 {
-                                    Properties =
-                                    {
-                                        ["prop"] = "value"
-                                    }
-                                };
-                            });
+                                    ["prop"] = "value"
+                                }
+                            };
+                        });
                     });
                 }).Build();
 
@@ -198,7 +208,9 @@ namespace FunctionalTests.UI.Configuration
             var webhookClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
 
             apiHandlerConfigured.Should().BeTrue();
+            apiClientConfigured.Should().BeTrue();
             webhookHandlerConfigured.Should().BeTrue();
+            webhookClientConfigured.Should().BeTrue();
         }
 
         [Fact]

@@ -12,7 +12,9 @@ namespace HealthChecks.UI.Configuration
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
         internal string HealthCheckDatabaseConnectionString { get; set; }
         internal Func<IServiceProvider, HttpMessageHandler> ApiEndpointHttpHandler { get; private set; }
+        internal Action<IServiceProvider, HttpClient> ApiEndpointHttpClientConfig { get; private set; }
         internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
+        internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
         {
@@ -24,7 +26,7 @@ namespace HealthChecks.UI.Configuration
 
             return this;
         }
-        
+
         public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "")
         {
             Webhooks.Add(new WebHookNotification
@@ -42,7 +44,7 @@ namespace HealthChecks.UI.Configuration
             EvaluationTimeInSeconds = seconds;
             return this;
         }
-        
+
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;
@@ -60,10 +62,22 @@ namespace HealthChecks.UI.Configuration
             ApiEndpointHttpHandler = apiEndpointHttpHandler;
             return this;
         }
-        
+
         public Settings UseWebhookEndpointHttpMessageHandler(Func<IServiceProvider, HttpClientHandler> webhookEndpointHttpHandler)
         {
             WebHooksEndpointHttpHandler = webhookEndpointHttpHandler;
+            return this;
+        }
+
+        public Settings ConfigureApiEndpointHttpclient(Action<IServiceProvider, HttpClient> apiEndpointHttpClientconfig)
+        {
+            ApiEndpointHttpClientConfig = apiEndpointHttpClientconfig;
+            return this;
+        }
+
+        public Settings ConfigureWebhooksEndpointHttpclient(Action<IServiceProvider, HttpClient> webhooksEndpointHttpClientconfig)
+        {
+            WebHooksEndpointHttpClientConfig = webhooksEndpointHttpClientconfig;
             return this;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -62,13 +63,13 @@ namespace HealthChecks.UI.Core.Notifications
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
 
 
-                    var parsedUri = Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);
+                    Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);
 
-                    if (!parsedUri)
+                    if (absoluteUri == null || !absoluteUri.IsValidHealthCheckEndpoint())
                     {
                         Uri.TryCreate(_serverAddressesService.AbsoluteUriFromRelative(webHook.Uri), UriKind.Absolute, out absoluteUri);
                     }
-                    
+
                     await SendRequest(absoluteUri, webHook.Name, payload);
                 }
             }

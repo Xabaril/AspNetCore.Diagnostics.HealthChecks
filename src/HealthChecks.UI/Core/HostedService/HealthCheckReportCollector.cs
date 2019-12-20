@@ -1,6 +1,7 @@
 ﻿using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -99,14 +100,14 @@ namespace HealthChecks.UI.Core.HostedService
 
         private Uri GetEndpointUri(HealthCheckConfiguration configuration)
         {
-             if (endpointAddresses.ContainsKey(configuration.Id))
+            if (endpointAddresses.ContainsKey(configuration.Id))
             {
                 return endpointAddresses[configuration.Id];
             }
 
-            var parsedUri = Uri.TryCreate(configuration.Uri, UriKind.Absolute, out var absoluteUri);
+            Uri.TryCreate(configuration.Uri, UriKind.Absolute, out var absoluteUri);
 
-            if (!parsedUri)
+            if (absoluteUri == null || !absoluteUri.IsValidHealthCheckEndpoint())
             {
                 Uri.TryCreate(_serverAddressService.AbsoluteUriFromRelative(configuration.Uri), UriKind.Absolute, out absoluteUri);
             }

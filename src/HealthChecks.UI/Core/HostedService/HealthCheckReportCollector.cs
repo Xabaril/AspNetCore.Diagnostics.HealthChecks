@@ -99,14 +99,14 @@ namespace HealthChecks.UI.Core.HostedService
 
         private Uri GetEndpointUri(HealthCheckConfiguration configuration)
         {
-             if (endpointAddresses.ContainsKey(configuration.Id))
+            if (endpointAddresses.ContainsKey(configuration.Id))
             {
                 return endpointAddresses[configuration.Id];
             }
 
             var parsedUri = Uri.TryCreate(configuration.Uri, UriKind.Absolute, out var absoluteUri);
 
-            if (!parsedUri)
+            if (!parsedUri || absoluteUri.IsFile)
             {
                 Uri.TryCreate(_serverAddressService.AbsoluteUriFromRelative(configuration.Uri), UriKind.Absolute, out absoluteUri);
             }

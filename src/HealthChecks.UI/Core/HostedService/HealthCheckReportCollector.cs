@@ -84,7 +84,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             try
             {
-              var absoluteUri = GetEndpointUri(configuration);
+                var absoluteUri = GetEndpointUri(configuration);
 
                 var response = await _httpClient.GetAsync(absoluteUri);
 
@@ -100,7 +100,7 @@ namespace HealthChecks.UI.Core.HostedService
 
         private Uri GetEndpointUri(HealthCheckConfiguration configuration)
         {
-             if (endpointAddresses.ContainsKey(configuration.Id))
+            if (endpointAddresses.ContainsKey(configuration.Id))
             {
                 return endpointAddresses[configuration.Id];
             }

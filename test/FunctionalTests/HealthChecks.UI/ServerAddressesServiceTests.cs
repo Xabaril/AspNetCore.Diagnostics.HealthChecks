@@ -50,6 +50,7 @@ namespace FunctionalTests.HealthChecks.UI
 
             var testServer = new TestServer(host, featureCollection);
         }
+        
     }
 
 }

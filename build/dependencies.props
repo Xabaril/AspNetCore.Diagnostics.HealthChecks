@@ -40,7 +40,7 @@
     <MicrosoftAzureServicesAppAuthentication>1.3.1</MicrosoftAzureServicesAppAuthentication>
     <MicrosoftAspNetCoreSignalRClient>3.0.0</MicrosoftAspNetCoreSignalRClient>
     <MicrosoftAspNetCoreSignalR>1.0.0</MicrosoftAspNetCoreSignalR>
-    <MicrosoftSourceLinkGithub>1.0.0-beta2-19367-01</MicrosoftSourceLinkGithub>
+    <MicrosoftSourceLinkGithub>1.0.0</MicrosoftSourceLinkGithub>
     <FluentAssertions>5.9.0</FluentAssertions>
     <xunit>2.4.1</xunit>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>

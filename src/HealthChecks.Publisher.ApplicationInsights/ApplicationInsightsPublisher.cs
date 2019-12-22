@@ -36,11 +36,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
-
-            if (string.IsNullOrEmpty(instrumentationKey) && string.IsNullOrEmpty(_telemetryConfiguration?.InstrumentationKey))
-            {
-                throw new ArgumentNullException("No instrumentation key was provided in options or constructor");
-            }
         }
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {

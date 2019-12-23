@@ -8,24 +8,27 @@ namespace HealthChecks.Kafka
 {
     public class KafkaHealthCheck : IHealthCheck
     {
-        private readonly ProducerConfig _configuration;
+        private readonly IProducer<string, string> _producer;
+
         public KafkaHealthCheck(ProducerConfig configuration)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            if(configuration == null) 
+                throw new ArgumentNullException(nameof(configuration));
+            
+            _producer = new ProducerBuilder<string, string>(configuration).Build();
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var producer = new ProducerBuilder<string, string>(_configuration).Build())
-                {
-                    var message = new Message<string, string>()
+                var message = new Message<string, string>()
                     {
-                        Key = "healtcheck-key",
+                        Key = "healthcheck-key",
                         Value = $"Check Kafka healthy on {DateTime.UtcNow}"
                     };
 
-                    var result = await producer.ProduceAsync("healthchecks-topic", message);
+                    var result = await _producer.ProduceAsync("healthchecks-topic", message);
 
                     if (result.Status == PersistenceStatus.NotPersisted)
                     {
@@ -33,7 +36,6 @@ namespace HealthChecks.Kafka
                     }
 
                     return HealthCheckResult.Healthy();
-                }
             }
             catch (Exception ex)
             {

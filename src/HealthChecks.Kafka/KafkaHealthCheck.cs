@@ -12,7 +12,7 @@ namespace HealthChecks.Kafka
 
         public KafkaHealthCheck(ProducerConfig configuration)
         {
-            if(configuration == null) 
+            if (configuration == null) 
                 throw new ArgumentNullException(nameof(configuration));
             
             _producer = new ProducerBuilder<string, string>(configuration).Build();

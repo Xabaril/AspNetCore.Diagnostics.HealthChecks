@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
-using System.Threading.Tasks;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.IO;
+using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
         private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
-        private static JsonSerializerOptions defaultOptions = CreateOptions(null);
+        private static Lazy<JsonSerializerOptions> options = new Lazy<JsonSerializerOptions>(() => CreateOptions());
         const string DEFAULT_CONTENT_TYPE = "application/json";
 
-        private static JsonSerializerOptions CreateOptions(Action<JsonSerializerOptions> jsonConfigurator)
+        private static JsonSerializerOptions CreateOptions()
         {
             var options = new JsonSerializerOptions()
             {
@@ -22,8 +22,6 @@ namespace HealthChecks.UI.Client
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 IgnoreNullValues = true,
             };
-
-            jsonConfigurator?.Invoke(options);
 
             options.Converters.Add(new JsonStringEnumConverter());
 
@@ -34,16 +32,10 @@ namespace HealthChecks.UI.Client
             return options;
         }
 
-        private static JsonSerializerOptions TryCreateOptions(Action<JsonSerializerOptions> jsonConfigurator) => jsonConfigurator == null ? defaultOptions : CreateOptions(jsonConfigurator);
-
-        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) => await WriteHealthCheckUIResponse(httpContext, report, null);
-
-        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report, Action<JsonSerializerOptions> jsonConfigurator)
+        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
         {
             if (report != null)
             {
-                var options = TryCreateOptions(jsonConfigurator);
-
                 httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
 
                 var uiReport = UIHealthReport
@@ -51,7 +43,7 @@ namespace HealthChecks.UI.Client
 
                 using var responseStream = new MemoryStream();
 
-                await JsonSerializer.SerializeAsync(responseStream, uiReport, options);
+                await JsonSerializer.SerializeAsync(responseStream, uiReport, options.Value);
                 await httpContext.Response.BodyWriter.WriteAsync(responseStream.ToArray());
             }
             else

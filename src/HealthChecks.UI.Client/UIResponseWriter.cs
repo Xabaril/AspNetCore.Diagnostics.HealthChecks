@@ -1,39 +1,41 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
-using System.Threading.Tasks;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.IO;
+using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
         private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
+        private static Lazy<JsonSerializerOptions> options = new Lazy<JsonSerializerOptions>(() => CreateOptions());
         const string DEFAULT_CONTENT_TYPE = "application/json";
 
-        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) => await WriteHealthCheckUIResponse(httpContext, report, null);
+        private static JsonSerializerOptions CreateOptions()
+        {
+            var options = new JsonSerializerOptions()
+            {
+                AllowTrailingCommas = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreNullValues = true,
+            };
 
-        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report, Action<JsonSerializerOptions> jsonConfigurator)
+            options.Converters.Add(new JsonStringEnumConverter());
+
+            //for compatibility with older UI versions ( <3.0 ) we arrange
+            //timespan serialization as s
+            options.Converters.Add(new TimeSpanConverter());
+
+            return options;
+        }
+
+        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
         {
             if (report != null)
             {
-                var settings = new JsonSerializerOptions()
-                {
-                    AllowTrailingCommas = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    IgnoreNullValues = true,
-                };
-
-                jsonConfigurator?.Invoke(settings);
-
-                settings.Converters.Add(new JsonStringEnumConverter());
-
-                //for compatibility with older UI versions ( <3.0 ) we arrange
-                //timepan serialization as s
-                settings.Converters.Add(new TimeSpanConverter());
-
                 httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
 
                 var uiReport = UIHealthReport
@@ -41,14 +43,13 @@ namespace HealthChecks.UI.Client
 
                 using var responseStream = new MemoryStream();
 
-                await JsonSerializer.SerializeAsync(responseStream, uiReport, settings);
+                await JsonSerializer.SerializeAsync(responseStream, uiReport, options.Value);
                 await httpContext.Response.BodyWriter.WriteAsync(responseStream.ToArray());
             }
             else
             {
                 await httpContext.Response.BodyWriter.WriteAsync(emptyResponse);
             }
-
         }
     }
 

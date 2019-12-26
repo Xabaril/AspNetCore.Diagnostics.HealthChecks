@@ -4,19 +4,19 @@ using System;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.IO;
 
 namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
+        private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
         const string DEFAULT_CONTENT_TYPE = "application/json";
 
-        public static Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) => WriteHealthCheckUIResponse(httpContext, report, null);
+        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) => await WriteHealthCheckUIResponse(httpContext, report, null);
 
-        public static Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report, Action<JsonSerializerOptions> jsonConfigurator)
+        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report, Action<JsonSerializerOptions> jsonConfigurator)
         {
-            var response = "{}";
-
             if (report != null)
             {
                 var settings = new JsonSerializerOptions()
@@ -27,7 +27,7 @@ namespace HealthChecks.UI.Client
                 };
 
                 jsonConfigurator?.Invoke(settings);
-                
+
                 settings.Converters.Add(new JsonStringEnumConverter());
 
                 //for compatibility with older UI versions ( <3.0 ) we arrange
@@ -39,10 +39,16 @@ namespace HealthChecks.UI.Client
                 var uiReport = UIHealthReport
                     .CreateFrom(report);
 
-                response = JsonSerializer.Serialize(uiReport, settings);
+                using var responseStream = new MemoryStream();
+
+                await JsonSerializer.SerializeAsync(responseStream, uiReport, settings);
+                await httpContext.Response.BodyWriter.WriteAsync(responseStream.ToArray());
+            }
+            else
+            {
+                await httpContext.Response.BodyWriter.WriteAsync(emptyResponse);
             }
 
-            return httpContext.Response.WriteAsync(response);
         }
     }
 

@@ -10,14 +10,13 @@ namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
+        private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
         const string DEFAULT_CONTENT_TYPE = "application/json";
 
         public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) => await WriteHealthCheckUIResponse(httpContext, report, null);
 
         public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report, Action<JsonSerializerOptions> jsonConfigurator)
         {
-            var emptyResponse = new byte[] { (byte)'{', (byte)'}' };
-
             if (report != null)
             {
                 var settings = new JsonSerializerOptions()

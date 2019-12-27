@@ -10,27 +10,10 @@ namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
-        private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
-        private static Lazy<JsonSerializerOptions> options = new Lazy<JsonSerializerOptions>(() => CreateOptions());
         const string DEFAULT_CONTENT_TYPE = "application/json";
 
-        private static JsonSerializerOptions CreateOptions()
-        {
-            var options = new JsonSerializerOptions()
-            {
-                AllowTrailingCommas = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreNullValues = true,
-            };
-
-            options.Converters.Add(new JsonStringEnumConverter());
-
-            //for compatibility with older UI versions ( <3.0 ) we arrange
-            //timespan serialization as s
-            options.Converters.Add(new TimeSpanConverter());
-
-            return options;
-        }
+        private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
+        private static Lazy<JsonSerializerOptions> options = new Lazy<JsonSerializerOptions>(() => CreateJsonOptions());
 
         public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
         {
@@ -50,6 +33,24 @@ namespace HealthChecks.UI.Client
             {
                 await httpContext.Response.BodyWriter.WriteAsync(emptyResponse);
             }
+        }
+
+        private static JsonSerializerOptions CreateJsonOptions()
+        {
+            var options = new JsonSerializerOptions()
+            {
+                AllowTrailingCommas = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreNullValues = true,
+            };
+
+            options.Converters.Add(new JsonStringEnumConverter());
+
+            //for compatibility with older UI versions ( <3.0 ) we arrange
+            //timespan serialization as s
+            options.Converters.Add(new TimeSpanConverter());
+
+            return options;
         }
     }
 

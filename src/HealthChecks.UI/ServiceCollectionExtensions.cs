@@ -22,20 +22,21 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddHealthChecksUI(this IServiceCollection services, string databaseName = "healthchecksdb", Action<Settings> setupSettings = null)
         {
-            var configuration = services.BuildServiceProvider()
-                .GetService<IConfiguration>();
-
             services
-                .AddOptions()
-                .Configure<Settings>(settings =>
+                .AddOptions<Settings>()
+                .Configure<IConfiguration>((settings, configuration) =>
                 {
                     configuration.BindUISettings(settings);
                     setupSettings?.Invoke(settings);
-                })
-                .Configure<KubernetesDiscoverySettings>(settings =>
+                });
+
+            services.AddOptions<KubernetesDiscoverySettings>()
+                .Configure<IConfiguration>((settings, configuration) =>
                 {
                     configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
-                })
+                });
+                
+            services
                 .AddSingleton<ServerAddressesService>()
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
@@ -51,11 +52,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 .GetService<IOptions<KubernetesDiscoverySettings>>()
                 .Value ?? new KubernetesDiscoverySettings();
 
-            services.AddDbContext<HealthChecksDb>(db =>
+            services.AddDbContext<HealthChecksDb>((provider, db) =>
             {
                 var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString;
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
+                    var configuration = provider.GetRequiredService<IConfiguration>();
                     var contentRoot = configuration[HostDefaults.ContentRootKey];
                     var path = Path.Combine(contentRoot, databaseName);
                     connectionString = $"Data Source={path}";

@@ -44,16 +44,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddApiEndpointHttpClient()
                 .AddWebhooksEndpointHttpClient();
 
-            var healthCheckSettings = services.BuildServiceProvider()
-                .GetService<IOptions<Settings>>()
-                .Value ?? new Settings();
-
             var kubernetesDiscoverySettings = services.BuildServiceProvider()
                 .GetService<IOptions<KubernetesDiscoverySettings>>()
                 .Value ?? new KubernetesDiscoverySettings();
 
             services.AddDbContext<HealthChecksDb>((provider, db) =>
             {
+                var healthCheckSettings = provider
+                      .GetService<IOptions<Settings>>()
+                      .Value ?? new Settings();
+
                 var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString;
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {

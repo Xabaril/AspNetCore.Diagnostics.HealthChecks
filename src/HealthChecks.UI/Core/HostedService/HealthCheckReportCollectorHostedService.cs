@@ -64,7 +64,6 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     // We are halting, task cancellation is expected.
                 }
-
             });
 
             return Task.CompletedTask;

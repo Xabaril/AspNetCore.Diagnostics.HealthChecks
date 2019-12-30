@@ -54,7 +54,19 @@ namespace HealthChecks.UI.Core.HostedService
         }
         private Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _lifetime.ApplicationStarted.Register(async () => await Collect(cancellationToken));
+            _lifetime.ApplicationStarted.Register(async () =>
+            {
+                try
+                {
+                    await Collect(cancellationToken);
+                }
+                catch(TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    // We are halting, task cancellation is expected.
+                }
+
+            });
+
             return Task.CompletedTask;
         }
 

@@ -1,5 +1,9 @@
-﻿using HealthChecks.UI.Core.Data.Configuration;
+﻿using System.Linq;
+using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core.Data.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.Data
 {
@@ -33,6 +37,24 @@ namespace HealthChecks.UI.Core.Data
             modelBuilder.ApplyConfiguration(new HealthCheckExecutionEntryMap());
             modelBuilder.ApplyConfiguration(new HealthCheckExecutionHistoryMap());
             modelBuilder.ApplyConfiguration(new HealthCheckFailureNotificationsMap());
+
+            var settings = Database.GetService<IOptions<Settings>>();
+            var healthCheckConfigurations = settings
+                .Value
+                .HealthChecks?
+                .Select(s => new HealthCheckConfiguration
+                {
+                    Name = s.Name,
+                    Uri = s.Uri
+                })
+                .ToArray();
+
+            if (healthCheckConfigurations != null && healthCheckConfigurations.Any())
+            {
+                modelBuilder
+                    .Entity<HealthCheckConfiguration>()
+                    .HasData(healthCheckConfigurations);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesDiscoveryHostedService : IHostedService
     {
-        private readonly KubernetesDiscoverySettings _discoveryOptions;
+        private readonly KubernetesDiscoverySettings? _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly HttpClient _discoveryClient;
@@ -25,7 +25,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
-            KubernetesDiscoverySettings discoveryOptions,
+            KubernetesDiscoverySettings? discoveryOptions,
             IHttpClientFactory httpClientFactory,
             ILogger<KubernetesDiscoveryHostedService> logger)
         {
@@ -38,16 +38,18 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath);
 
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _executingTask = ExecuteAsync(cancellationToken);
+            var isKubernetesDisabled = _discoveryOptions == null || !_discoveryOptions.Enabled;
 
-            if (_executingTask.IsCompleted)
-            {
-                return _executingTask;
-            }
+            _executingTask = isKubernetesDisabled ? 
+                Task.CompletedTask :
+                ExecuteAsync(cancellationToken);
 
-            return Task.CompletedTask;
+            return _executingTask.IsCompleted ? 
+                _executingTask : 
+                Task.CompletedTask;
         }
         public async Task StopAsync(CancellationToken cancellationToken)
         {

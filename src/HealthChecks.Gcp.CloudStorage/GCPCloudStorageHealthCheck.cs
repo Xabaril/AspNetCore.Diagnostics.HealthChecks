@@ -48,7 +48,7 @@ namespace AspNetCore.HealthChecks.GCP.CloudStorage
                 }
 
 
-                return HealthCheckResult.Healthy((string)null, (IReadOnlyDictionary<string, object>)null);
+                return HealthCheckResult.Healthy();
 
             }
             catch (Exception ex)
@@ -63,4 +63,3 @@ namespace AspNetCore.HealthChecks.GCP.CloudStorage
         }
     }
 }
-

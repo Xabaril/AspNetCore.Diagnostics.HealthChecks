@@ -16,13 +16,14 @@ namespace UnitTests.DependencyInjection.CloudStorage
         [Fact]
         public void add_health_check_when_properly_configured()
         {
+
             var services = new ServiceCollection();
             services.AddHealthChecks()
                 .AddGcpCloudStorage(setup =>
                 {
                     setup.ProjectId = Guid.NewGuid().ToString();
                     setup.Bucket = "mybucket";
-                    setup.GoogleCredential = GoogleCredential.GetApplicationDefault();
+                    setup.GoogleCredential = GoogleCredential.FromAccessToken("xxxxxxxxx");
                 });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -44,7 +45,7 @@ namespace UnitTests.DependencyInjection.CloudStorage
                 {
                     setup.ProjectId = Guid.NewGuid().ToString();
                     setup.Bucket = "mybucket";
-                    setup.GoogleCredential = GoogleCredential.GetApplicationDefault();
+                    setup.GoogleCredential = GoogleCredential.FromAccessToken("xxxxxxxxx");
                 }, name: "my-cloud-storage-group");
 
             var serviceProvider = services.BuildServiceProvider();

@@ -8,8 +8,6 @@
     <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <PackageIconUrl />
     <RepositoryType></RepositoryType>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>Licence.txt</PackageLicenseFile>
     <PackageId>AspNetCore.HealthChecks.Gcp.CloudStorage</PackageId>
     <Version>3.0.0</Version>
     <Authors>Xabaril Contributors</Authors>
@@ -22,6 +20,8 @@
     <AssemblyName>HealthChecks.Gcp.CloudStorage</AssemblyName>
     <RootNamespace>HealthChecks.Gcp.CloudStorage</RootNamespace>
     <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl />
   </PropertyGroup>
 
   <ItemGroup>

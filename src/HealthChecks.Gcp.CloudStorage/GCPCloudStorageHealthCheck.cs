@@ -9,7 +9,7 @@ using Google.Cloud.Storage.V1;
 using HealthChecks.Gcp.CloudStorage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace AspNetCore.HealthChecks.GCP.CloudStorage
+namespace HealthChecks.GCP.CloudStorage
 {
     public class GcpCloudStorageHealthCheck : IHealthCheck
     {
@@ -44,16 +44,16 @@ namespace AspNetCore.HealthChecks.GCP.CloudStorage
                 {
 
                     if (ex.HttpStatusCode == HttpStatusCode.NotFound || ex.HttpStatusCode == HttpStatusCode.BadRequest)
-                        return new HealthCheckResult(context.Registration.FailureStatus, (string)null, ex, (IReadOnlyDictionary<string, object>)null);
+                        return await Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, null, ex, null));
                 }
 
 
-                return HealthCheckResult.Healthy();
+                return await Task.FromResult(HealthCheckResult.Healthy());
 
             }
             catch (Exception ex)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, (string)null, ex, (IReadOnlyDictionary<string, object>)null);
+                return await Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, (string)null, ex, null));
             }
         }
 

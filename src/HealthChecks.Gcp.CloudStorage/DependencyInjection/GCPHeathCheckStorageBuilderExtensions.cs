@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AspNetCore.HealthChecks.GCP.CloudStorage;
+using HealthChecks.GCP.CloudStorage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using AspNetCore.HealthChecks.GCP.CloudStorage;
 using FluentAssertions;
 using Google.Apis.Auth.OAuth2;
-using HealthChecks.Gcp.CloudStorage;
-using HealthChecks.Gcp.CloudStorage.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using HealthChecks.GCP.CloudStorage;
+using HealthChecks.Gcp.CloudStorage.DependencyInjection;
 using Xunit;
 
 namespace UnitTests.DependencyInjection.CloudStorage

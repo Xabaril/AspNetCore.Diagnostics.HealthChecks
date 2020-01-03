@@ -45,7 +45,7 @@ namespace HealthChecks.SmbCifs.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for Smb/Cifs (SharCifs used for Samba /Cifs Connections).
+        /// Add a health check for Smb/Cifs (SharCifs used for Samba/Cifs Connections).
         /// Project uses the excellent port found at http://sharpcifsstd.dobes.jp/
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>

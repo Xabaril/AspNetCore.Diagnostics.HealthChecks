@@ -7,7 +7,6 @@ namespace HealthChecks.SmbCifs.DependencyInjection
 {
     public static class SmbCifsHealthCheckStorageBuilderExtensions
     {
-
         private const string NAME = "smbcifs";
 
         /// <summary>

@@ -1,11 +1,7 @@
 ﻿namespace HealthChecks.SmbCifs
 {
-    public class SmbCifsExtendedOptions
+    public class SmbCifsExtendedOptions : SmbCifsOptions
     {
-        /// <summary>
-        /// The HostName to reach
-        /// </summary>
-        public string Hostname { get; set; }
         /// <summary>
         /// The Domain to reach
         /// </summary>

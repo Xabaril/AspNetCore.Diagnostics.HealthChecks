@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using FluentAssertions;
 using HealthChecks.SmbCifs;
 using HealthChecks.SmbCifs.DependencyInjection;
@@ -32,10 +33,17 @@ namespace UnitTests.DependencyInjection.SmbCifs
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
+
             var check = registration.Factory(serviceProvider);
 
+
+
             registration.Name.Should().Be("smbcifs");
+
             check.GetType().Should().Be(typeof(SmbCifsStorageHealthCheck));
+
+            FieldInfo fi = registration.Factory.Target.GetType().GetField("options");
+            Assert.True(fi?.FieldType == typeof(SmbCifsBasicOptions));
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_with_basic_auth()
@@ -59,6 +67,9 @@ namespace UnitTests.DependencyInjection.SmbCifs
 
             registration.Name.Should().Be("my-smbcifs-group");
             check.GetType().Should().Be(typeof(SmbCifsStorageHealthCheck));
+
+            FieldInfo fi = registration.Factory.Target.GetType().GetField("options");
+            Assert.True(fi?.FieldType == typeof(SmbCifsBasicOptions));
         }
 
         [Fact]
@@ -87,6 +98,9 @@ namespace UnitTests.DependencyInjection.SmbCifs
 
             registration.Name.Should().Be("smbcifs");
             check.GetType().Should().Be(typeof(SmbCifsStorageHealthCheck));
+
+            FieldInfo fi = registration.Factory.Target.GetType().GetField("options");
+            Assert.True(fi?.FieldType == typeof(SmbCifsExtendedOptions));
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_with_extended_auth()
@@ -112,6 +126,9 @@ namespace UnitTests.DependencyInjection.SmbCifs
 
             registration.Name.Should().Be("my-smbcifs-group");
             check.GetType().Should().Be(typeof(SmbCifsStorageHealthCheck));
+
+            FieldInfo fi = registration.Factory.Target.GetType().GetField("options");
+            Assert.True(fi?.FieldType == typeof(SmbCifsExtendedOptions));
         }
     }
 }

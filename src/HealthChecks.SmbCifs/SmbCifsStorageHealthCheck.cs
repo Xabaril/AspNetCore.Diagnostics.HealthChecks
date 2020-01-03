@@ -8,33 +8,21 @@ namespace HealthChecks.SmbCifs
 {
     public class SmbCifsStorageHealthCheck : IHealthCheck
     {
-        private readonly object _cifsOptions;
+        private readonly SmbCifsOptions _cifsOptions;
 
         private NtlmPasswordAuthentication _auth;
 
-        public SmbCifsStorageHealthCheck(SmbCifsBasicOptions cifsOptions)
+        public SmbCifsStorageHealthCheck(SmbCifsOptions cifsOptions)
         {
             _cifsOptions = cifsOptions ?? throw new ArgumentNullException(nameof(cifsOptions));
-
-            if (_cifsOptions.GetType() != typeof(SmbCifsBasicOptions))
-                throw new InvalidCastException($"Invalid cast for object {nameof(cifsOptions)} to SmbCifsBasicOptions");
         }
 
-        public SmbCifsStorageHealthCheck(SmbCifsExtendedOptions cifsOptions)
-        {
-            _cifsOptions = cifsOptions ?? throw new ArgumentNullException(nameof(cifsOptions));
-
-            if (_cifsOptions.GetType() != typeof(SmbCifsExtendedOptions))
-                throw new InvalidCastException($"Invalid cast for object {nameof(cifsOptions)} to SmbCifsExtendedOptions");
-        }
 
         public async Task<HealthCheckResult> CheckHealthAsync(
           HealthCheckContext context,
           CancellationToken cancellationToken = default)
         {
-            var hostName = _cifsOptions.GetType() == typeof(SmbCifsBasicOptions)
-                ? ((SmbCifsBasicOptions)_cifsOptions).Hostname
-                : ((SmbCifsExtendedOptions)_cifsOptions).Hostname;
+            var hostName = _cifsOptions.Hostname;
 
             try
             {
@@ -55,39 +43,36 @@ namespace HealthChecks.SmbCifs
         private void CreateConnection()
         {
 
-            if (_cifsOptions.GetType() == typeof(SmbCifsBasicOptions))
+            if (_cifsOptions is SmbCifsBasicOptions optionsBasic)
             {
-                var options = (SmbCifsBasicOptions)_cifsOptions;
-                if (options.Hostname == null)
-                    throw new ArgumentNullException(nameof(options.Hostname));
-                if (options.Domain == null)
-                    throw new ArgumentNullException(nameof(options.Domain));
-                if (options.Username == null)
-                    throw new ArgumentNullException(nameof(options.Username));
-                if (options.UserPassword == null)
-                    throw new ArgumentNullException(nameof(options.UserPassword));
+                if (optionsBasic.Hostname == null)
+                    throw new ArgumentNullException(nameof(optionsBasic.Hostname));
+                if (optionsBasic.Domain == null)
+                    throw new ArgumentNullException(nameof(optionsBasic.Domain));
+                if (optionsBasic.Username == null)
+                    throw new ArgumentNullException(nameof(optionsBasic.Username));
+                if (optionsBasic.UserPassword == null)
+                    throw new ArgumentNullException(nameof(optionsBasic.UserPassword));
 
 
-                _auth = new NtlmPasswordAuthentication(options.Domain, options.Username, options.UserPassword);
+                _auth = new NtlmPasswordAuthentication(optionsBasic.Domain, optionsBasic.Username, optionsBasic.UserPassword);
             }
-            else if (_cifsOptions.GetType() == typeof(SmbCifsExtendedOptions))
+            else if (_cifsOptions is SmbCifsExtendedOptions optionsExtended)
             {
-                var options = (SmbCifsExtendedOptions)_cifsOptions;
-                if (options.Hostname == null)
-                    throw new ArgumentNullException(nameof(options.Hostname));
-                if (options.Domain == null)
-                    throw new ArgumentNullException(nameof(options.Domain));
-                if (options.Username == null)
-                    throw new ArgumentNullException(nameof(options.Username));
-                //Not Sure this are really all mandatory on this case
-                if (options.Challenge == null)
-                    throw new ArgumentNullException(nameof(options.Challenge));
-                if (options.AnsiHash == null)
-                    throw new ArgumentNullException(nameof(options.AnsiHash));
-                if (options.UnicodeHash == null)
-                    throw new ArgumentNullException(nameof(options.UnicodeHash));
+                if (optionsExtended.Hostname == null)
+                    throw new ArgumentNullException(nameof(optionsExtended.Hostname));
+                if (optionsExtended.Domain == null)
+                    throw new ArgumentNullException(nameof(optionsExtended.Domain));
+                if (optionsExtended.Username == null)
+                    throw new ArgumentNullException(nameof(optionsExtended.Username));
+                if (optionsExtended.Challenge == null)
+                    throw new ArgumentNullException(nameof(optionsExtended.Challenge));
+                if (optionsExtended.AnsiHash == null)
+                    throw new ArgumentNullException(nameof(optionsExtended.AnsiHash));
+                if (optionsExtended.UnicodeHash == null)
+                    throw new ArgumentNullException(nameof(optionsExtended.UnicodeHash));
 
-                _auth = new NtlmPasswordAuthentication(options.Domain, options.Username, options.Challenge, options.AnsiHash, options.UnicodeHash);
+                _auth = new NtlmPasswordAuthentication(optionsExtended.Domain, optionsExtended.Username, optionsExtended.Challenge, optionsExtended.AnsiHash, optionsExtended.UnicodeHash);
             }
 
 

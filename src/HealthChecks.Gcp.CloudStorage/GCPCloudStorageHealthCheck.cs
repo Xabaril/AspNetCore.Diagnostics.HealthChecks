@@ -22,7 +22,6 @@ namespace HealthChecks.GCP.CloudStorage
             _cloudStorageOptions = cloudStorageOptions ?? throw new ArgumentNullException(nameof(cloudStorageOptions));
         }
 
-
         public async Task<HealthCheckResult> CheckHealthAsync(
           HealthCheckContext context,
           CancellationToken cancellationToken = default(CancellationToken))

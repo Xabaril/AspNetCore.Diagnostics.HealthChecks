@@ -41,7 +41,6 @@ namespace HealthChecks.SmbCifs
 
         private void CreateConnection()
         {
-
             if (_cifsOptions is SmbCifsBasicOptions optionsBasic)
             {
                 if (optionsBasic.Hostname == null)

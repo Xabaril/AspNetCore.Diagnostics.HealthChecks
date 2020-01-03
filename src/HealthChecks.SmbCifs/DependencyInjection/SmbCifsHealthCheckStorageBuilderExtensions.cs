@@ -31,7 +31,6 @@ namespace HealthChecks.SmbCifs.DependencyInjection
             IEnumerable<string> tags = null,
             TimeSpan? timeout = default)
         {
-
             var options = new SmbCifsBasicOptions();
             setup?.Invoke(options);
 

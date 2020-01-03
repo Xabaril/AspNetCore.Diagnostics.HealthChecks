@@ -8,7 +8,6 @@ namespace HealthChecks.Gcp.CloudStorage.DependencyInjection
 {
     public static class GcpHeathCheckStorageBuilderExtensions
     {
-
         private const string NAME = "gcpcloudstorage";
 
         /// <summary>

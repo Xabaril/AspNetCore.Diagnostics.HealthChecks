@@ -28,6 +28,5 @@
     <PackageReference Include="Google.Cloud.Storage.V1" Version="2.4.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.0.0" />
   </ItemGroup>
-  
 
 </Project>

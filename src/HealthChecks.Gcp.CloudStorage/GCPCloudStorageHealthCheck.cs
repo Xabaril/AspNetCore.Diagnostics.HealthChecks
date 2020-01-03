@@ -46,7 +46,6 @@ namespace HealthChecks.GCP.CloudStorage
                         return await Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, null, ex, null));
                 }
 
-
                 return await Task.FromResult(HealthCheckResult.Healthy());
 
             }

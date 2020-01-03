@@ -2,7 +2,6 @@
 {
     public class SmbCifsBasicOptions : SmbCifsOptions
     {
-
         /// <summary>
         /// The Domain to reach
         /// </summary>

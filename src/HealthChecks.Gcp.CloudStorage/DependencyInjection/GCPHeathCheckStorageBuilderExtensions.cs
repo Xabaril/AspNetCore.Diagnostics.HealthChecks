@@ -41,6 +41,5 @@ namespace HealthChecks.Gcp.CloudStorage.DependencyInjection
                    timeout));
         }
 
-
     }
 }

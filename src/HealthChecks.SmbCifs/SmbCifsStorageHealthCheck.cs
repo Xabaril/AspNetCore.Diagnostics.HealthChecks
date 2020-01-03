@@ -17,7 +17,6 @@ namespace HealthChecks.SmbCifs
             _cifsOptions = cifsOptions ?? throw new ArgumentNullException(nameof(cifsOptions));
         }
 
-
         public async Task<HealthCheckResult> CheckHealthAsync(
           HealthCheckContext context,
           CancellationToken cancellationToken = default)
@@ -82,4 +81,3 @@ namespace HealthChecks.SmbCifs
         }
     }
 }
-

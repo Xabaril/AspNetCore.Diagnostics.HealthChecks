@@ -52,7 +52,6 @@ namespace HealthChecks.SmbCifs
                 if (optionsBasic.UserPassword == null)
                     throw new ArgumentNullException(nameof(optionsBasic.UserPassword));
 
-
                 _auth = new NtlmPasswordAuthentication(optionsBasic.Domain, optionsBasic.Username, optionsBasic.UserPassword);
             }
             else if (_cifsOptions is SmbCifsExtendedOptions optionsExtended)

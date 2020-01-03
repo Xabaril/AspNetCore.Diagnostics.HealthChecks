@@ -20,6 +20,5 @@ namespace HealthChecks.Gcp.CloudStorage
         /// Please initialize GoogleCredential (new GoogleCredential();) to obtain the passing constructors possible
         /// </summary>
         public GoogleCredential GoogleCredential { get; set; }
-
     }
 }

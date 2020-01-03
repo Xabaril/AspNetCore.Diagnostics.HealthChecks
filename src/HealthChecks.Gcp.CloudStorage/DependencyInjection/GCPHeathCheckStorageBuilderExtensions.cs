@@ -31,7 +31,6 @@ namespace HealthChecks.Gcp.CloudStorage.DependencyInjection
             IEnumerable<string> tags = default,
             TimeSpan? timeout = default)
         {
-
             var options = new CloudStorageOptions();
             setup?.Invoke(options);
 

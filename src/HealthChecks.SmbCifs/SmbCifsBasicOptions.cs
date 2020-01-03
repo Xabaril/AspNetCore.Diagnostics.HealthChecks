@@ -14,6 +14,5 @@
         /// The User Password for domain authentication/permission
         /// </summary>
         public string UserPassword { get; set; }
-
     }
 }

@@ -1,31 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<PackageTags>HealthCheck;SmbCifs</PackageTags>
+		<Description>HealthChecks.SmbCifs is the health check package using SharpCifs (Samba/Cifs) for .net Standard protocol. Project uses the excellent port found at http://sharpcifsstd.dobes.jp/</Description>
+		<Version>$(HealthCheckCloudSmbCifs)</Version>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
+		<LangVersion>latest</LangVersion>
+		<PackageId>AspNetCore.HealthChecks.SmbCifs</PackageId>
+		<PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Copyright></Copyright>
-    <Description>HealthChecks.SmbCifs is the health check package using SharpCifs (Samba/Cifs) for .net Standard protocol. Project uses the excellent port found at http://sharpcifsstd.dobes.jp/</Description>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <RepositoryUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
-    <PackageIconUrl />
-    <RepositoryType></RepositoryType>    
-    <PackageId>AspNetCore.HealthChecks.SmbCifs</PackageId>
-    <Version>3.0.0</Version>
-    <Authors>Xabaril Contributors</Authors>
-    <Company>Xabaril</Company>
-    <Product>HealthChecks.SmbCifs</Product>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
-    <ApplicationIcon />
-    <AssemblyName>HealthChecks.SmbCifs</AssemblyName>
-    <RootNamespace>HealthChecks.SmbCifs</RootNamespace>
-    <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
-	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>   
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SharpCifs.Std" Version="0.2.13" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.0.0" /> 
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="SharpCifs.Std" Version="$(SharpCifsStd)" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" /> 
+	</ItemGroup>
 
 </Project>

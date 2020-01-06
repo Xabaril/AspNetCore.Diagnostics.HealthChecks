@@ -72,6 +72,8 @@
     <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
+    <SharpCifsStd>0.2.13</SharpCifsStd>
+    <GoogleCloudStorage>2.4.0</GoogleCloudStorage>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -115,5 +117,7 @@
     <HealthCheckSignalR>3.0.0</HealthCheckSignalR>
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
+    <HealthCheckCloudCloudStorage>3.0.0</HealthCheckCloudCloudStorage>
+    <HealthCheckCloudSmbCifs>3.0.0</HealthCheckCloudSmbCifs>
   </PropertyGroup>
 </Project>

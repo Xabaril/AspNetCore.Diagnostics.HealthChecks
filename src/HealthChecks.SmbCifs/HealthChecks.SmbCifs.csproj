@@ -1,18 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 		<PackageTags>HealthCheck;SmbCifs</PackageTags>
 		<Description>HealthChecks.SmbCifs is the health check package using SharpCifs (Samba/Cifs) for .net Standard protocol. Project uses the excellent port found at http://sharpcifsstd.dobes.jp/</Description>
-		<Version>$(HealthCheckCloudSmbCifs)</Version>
-		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-		<Company>$(Company)</Company>
-		<Authors>$(Authors)</Authors>
-		<LangVersion>latest</LangVersion>
 		<PackageId>AspNetCore.HealthChecks.SmbCifs</PackageId>
-		<PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 
 	<ItemGroup>

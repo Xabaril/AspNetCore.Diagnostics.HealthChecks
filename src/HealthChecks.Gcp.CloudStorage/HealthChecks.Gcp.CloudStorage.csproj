@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <PackageTags>HealthCheck;CloudStorage</PackageTags>
+    <Description>HealthChecks.Gcp.CloudStorage is the health check package for the CloudStorage Buckets inside ProjectIds.</Description>
+    <PackageId>AspNetCore.HealthChecks.Gcp.CloudStorage</PackageId>
+    <Version>$(HealthCheckCloudStorage)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="$(GoogleCloudStorage)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+
+</Project>

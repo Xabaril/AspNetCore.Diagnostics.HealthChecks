@@ -73,6 +73,7 @@
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
     <SharpCifsStd>0.2.13</SharpCifsStd>
+    <GoogleCloudStorage>2.4.0</GoogleCloudStorage>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -117,5 +118,6 @@
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
     <HealthCheckSmbCifs>3.0.0</HealthCheckSmbCifs>
+    <HealthCheckCloudStorage>3.0.0</HealthCheckCloudStorage>
   </PropertyGroup>
 </Project>

@@ -25,11 +25,26 @@ namespace HealthChecks.UI.Image.Extensions
             var apiPath = configuration[UIKeys.UI_API_PATH];
             var resourcesPath = configuration[UIKeys.UI_RESOURCES_PATH];
             var webhooksPath = configuration[UIKeys.UI_WEBHOOKS_PATH];
+            var relativePaths = configuration[UIKeys.UI_NO_RELATIVE_PATHS];
+
+            bool disableRelativePaths = false;
+
+            if (!string.IsNullOrEmpty(relativePaths))
+            {
+                bool.TryParse(relativePaths, out disableRelativePaths);
+            }
 
             if (!string.IsNullOrEmpty(uiPath)) options.UIPath = uiPath;
             if (!string.IsNullOrEmpty(apiPath)) options.ApiPath = apiPath;
             if (!string.IsNullOrEmpty(resourcesPath)) options.ResourcesPath = resourcesPath;
             if (!string.IsNullOrEmpty(webhooksPath)) options.WebhookPath = webhooksPath;
+
+            if (disableRelativePaths)
+            {
+                options.UseRelativeApiPath = false;
+                options.UseRelativeResourcesPath = false;
+                options.UseRelativeWebhookPath = false;
+            }
         }
     }
 }

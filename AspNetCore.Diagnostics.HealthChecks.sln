@@ -108,6 +108,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Branding", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.IoTHub", "src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj", "{252BB504-B7CB-4581-8CD8-D7398CAA16F5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.K8s.Controller", "src\HealthChecks.UI.K8s.Controller\HealthChecks.UI.K8s.Controller.csproj", "{692313D3-E947-494A-83B7-754E2FFAF348}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -282,6 +284,10 @@ Global
 		{252BB504-B7CB-4581-8CD8-D7398CAA16F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{252BB504-B7CB-4581-8CD8-D7398CAA16F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{252BB504-B7CB-4581-8CD8-D7398CAA16F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{692313D3-E947-494A-83B7-754E2FFAF348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{692313D3-E947-494A-83B7-754E2FFAF348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{692313D3-E947-494A-83B7-754E2FFAF348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{692313D3-E947-494A-83B7-754E2FFAF348}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -329,6 +335,7 @@ Global
 		{18F9E412-646D-4751-9751-30AA7A0233DF} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{B526834E-9392-4749-BAB2-7DF579F8F418} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 		{252BB504-B7CB-4581-8CD8-D7398CAA16F5} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{692313D3-E947-494A-83B7-754E2FFAF348} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

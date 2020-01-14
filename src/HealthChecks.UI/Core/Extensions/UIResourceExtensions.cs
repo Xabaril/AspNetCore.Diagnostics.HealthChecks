@@ -1,4 +1,6 @@
 ﻿using HealthChecks.UI.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +19,19 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_API_TARGET, apiPath);
 
+            var clientOptions = JsonConvert.SerializeObject(options.ClientOptions,
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+
+            resource.Content = resource.Content
+                .Replace(Keys.HEALTHCHECKSUI_CLIENT_OPTIONS_TARGET, clientOptions);
 
             var webhooksPath = options.UseRelativeWebhookPath ? options.WebhookPath.AsRelativeResource() : options.WebhookPath;
 
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, webhooksPath);
-
             
             var resourcePath = options.UseRelativeResourcesPath ? options.ResourcesPath.AsRelativeResource() : options.ResourcesPath;
             

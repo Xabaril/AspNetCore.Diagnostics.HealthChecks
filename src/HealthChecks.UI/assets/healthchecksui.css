@@ -120,6 +120,15 @@ h4 {
   height: 100%;
 }
 
+.polling-save {
+    margin-left: 0.5em;
+}
+
+.polling-save:not(:disabled) {
+    background-color: #0ca34e;
+    color: white;
+}
+
 .discovery-icon {
   width: 1.25rem;
   min-width: 1.25rem;

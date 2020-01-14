@@ -16,9 +16,9 @@ export class HealthChecksClient {
         });
     }
 
-    startPolling(interval: string | number, onTimeElapsedCallback: () => void) {
+    startPolling(interval: number, onTimeElapsedCallback: () => void) {
         this.stopPolling();
-        this._pollingInterval = setInterval(onTimeElapsedCallback, interval);
+        this._pollingInterval = window.setInterval(onTimeElapsedCallback, interval);
     }
 
     stopPolling() {

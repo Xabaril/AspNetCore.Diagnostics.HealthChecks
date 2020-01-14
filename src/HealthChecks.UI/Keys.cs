@@ -14,6 +14,7 @@
         internal const string HEALTHCHECKSUI_MAIN_UI_API_TARGET = "#apiPath#";
         internal const string HEALTHCHECKSUI_WEBHOOKS_API_TARGET = "#webhookPath#";
         internal const string HEALTHCHECKSUI_RESOURCES_TARGET = "#uiResourcePath#";
+        internal const string HEALTHCHECKSUI_CLIENT_OPTIONS_TARGET = "#clientOptions#";
         internal const string HEALTHCHECKSUI_STYLESHEETS_TARGET = "#customstylesheets#";
         internal const string HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET = "#asideMenuOpened#";
         internal const string DEFAULT_RESPONSE_CONTENT_TYPE = "application/json";

@@ -74,6 +74,12 @@ namespace HealthChecks.UIAndApi
         {
             app
                 .UseRouting()
+                .UseHealthChecksUI(o =>
+                {
+                    o.ClientOptions.DefaultPollingIntervalSeconds = 5;
+                    o.ClientOptions.MinimumPollingIntervalSeconds = 2;
+                    //o.ClientOptions.HidePollingIntervalControl = true;
+                })
                 .UseEndpoints(config =>
                 {
                     config.MapHealthChecks("healthz", new HealthCheckOptions()

@@ -14,12 +14,9 @@ namespace HealthChecks.RabbitMQ
 
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
-            if (rabbitMqConnectionString == null) throw new ArgumentNullException(nameof(rabbitMqConnectionString));
-
-
             var connectionFactory = new ConnectionFactory
             {
-                Uri = new Uri(rabbitMqConnectionString),
+                Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
                 AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
             };
 

@@ -19,12 +19,10 @@ namespace HealthChecks.RabbitMQ
                 Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
                 AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
             };
-
             if (sslOption != null)
             {
                 connectionFactory.Ssl = sslOption;
             }
-
             _connectionFactory = connectionFactory;
         }
 

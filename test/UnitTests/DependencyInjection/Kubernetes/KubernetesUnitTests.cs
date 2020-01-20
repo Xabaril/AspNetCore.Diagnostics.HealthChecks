@@ -8,7 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.Kubernetes
+namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
 {
     public class kubernetes_registration_should
     {

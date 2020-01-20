@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.Consul
+namespace UnitTests.HealthChecks.DependencyInjection.Consul
 {
     public class ConsulUnitTests
     {

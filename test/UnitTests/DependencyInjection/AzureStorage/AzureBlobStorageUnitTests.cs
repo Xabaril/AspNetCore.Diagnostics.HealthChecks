@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.AzureStorage
+namespace UnitTests.HealthChecks.DependencyInjection.AzureStorage
 {
     public class azureblobstorage_registration_should
     {

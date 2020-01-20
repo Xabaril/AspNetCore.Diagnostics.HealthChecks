@@ -24,11 +24,6 @@ namespace HealthChecks.AzureStorage
                 var storageAccount = CloudStorageAccount.Parse(_connectionString);
                 var blobClient = storageAccount.CreateCloudTableClient();
 
-                var serviceProperties = await blobClient.GetServicePropertiesAsync(
-                    new TableRequestOptions(),
-                    operationContext: null,
-                    cancellationToken: cancellationToken);
-
                 if (!string.IsNullOrEmpty(_tableName))
                 {
                     var table = blobClient.GetTableReference(_tableName);

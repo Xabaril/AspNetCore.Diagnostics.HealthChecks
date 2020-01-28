@@ -168,10 +168,12 @@
         "creationTimestamp": "2019-07-12T02:42:38Z",
         "labels": {
           "HealthChecks": "true",
+          "app": "seq"
+        },
+        "annotations": {
           "HealthChecksPath": "/custom/health/path",
           "HealthChecksPort": "healthcheck",
-          "HealthChecksScheme": "https",
-          "app": "seq"
+          "HealthChecksScheme": "https"
         }
       },
       "spec": {

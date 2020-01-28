@@ -35,7 +35,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             _discoveryClient = httpClientFactory.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME);
             _clusterServiceClient = httpClientFactory.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
-            _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath, discoveryOptions.ServicesPathLabel, discoveryOptions.ServicesPortLabel, discoveryOptions.ServicesSchemeLabel);
+            _addressFactory = new KubernetesAddressFactory(discoveryOptions);
 
         }
         public Task StartAsync(CancellationToken cancellationToken)

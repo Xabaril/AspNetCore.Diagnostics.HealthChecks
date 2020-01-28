@@ -4,16 +4,10 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesAddressFactory
     {
-        private readonly string _defaultHealthPath;
-        private readonly string _healthPathLabel;
-        private readonly string _healthPortLabel;
-        private readonly string _healthSchemeLabel;
-        public KubernetesAddressFactory(string defaultHealthPath, string healthPathLabel, string healthPortLabel, string healthSchemeLabel)
+        private readonly KubernetesDiscoverySettings _settings;
+        public KubernetesAddressFactory(KubernetesDiscoverySettings discoveryOptions)
         {
-            _defaultHealthPath = defaultHealthPath;
-            _healthPathLabel = healthPathLabel;
-            _healthPortLabel = healthPortLabel;
-            _healthSchemeLabel = healthSchemeLabel;
+            _settings = discoveryOptions;
         }
         public string CreateAddress(Service service)
         {
@@ -33,20 +27,28 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             }
 
             string healthPath;
-            if(!string.IsNullOrEmpty(_healthPathLabel) && (service.Metadata.Labels?.ContainsKey(_healthPathLabel) ?? false))
+            if(!string.IsNullOrEmpty(_settings.ServicesPathLabel) && (service.Metadata.Labels?.ContainsKey(_settings.ServicesPathLabel) ?? false))
             {
-                healthPath = service.Metadata.Labels[_healthPathLabel];
+                healthPath = service.Metadata.Labels[_settings.ServicesPathLabel];
+            }
+            else if(!string.IsNullOrEmpty(_settings.ServicesPathAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesPathAnnotation) ?? false))
+            {
+                healthPath = service.Metadata.Annotations[_settings.ServicesPathAnnotation];
             }
             else
             {
-                healthPath = _defaultHealthPath;
+                healthPath = _settings.HealthPath;
             }
             healthPath = healthPath.TrimStart('/');
 
             string healthScheme;
-            if(!string.IsNullOrEmpty(_healthSchemeLabel) && (service.Metadata.Labels?.ContainsKey(_healthSchemeLabel) ?? false))
+            if(!string.IsNullOrEmpty(_settings.ServicesSchemeLabel) && (service.Metadata.Labels?.ContainsKey(_settings.ServicesSchemeLabel) ?? false))
             {
-                healthScheme = service.Metadata.Labels[_healthSchemeLabel].ToLower();
+                healthScheme = service.Metadata.Labels[_settings.ServicesSchemeLabel].ToLower();
+            }
+            else if(!string.IsNullOrEmpty(_settings.ServicesSchemeAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesSchemeAnnotation) ?? false))
+            {
+                healthScheme = service.Metadata.Annotations[_settings.ServicesSchemeAnnotation].ToLower();
             }
             else
             {
@@ -96,13 +98,22 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         }
         private Port GetServicePort(Service service)
         {
-            if(!string.IsNullOrEmpty(_healthPortLabel) && (service.Metadata.Labels?.ContainsKey(_healthPortLabel) ?? false))
+            if(!string.IsNullOrEmpty(_settings.ServicesPortLabel) && (service.Metadata.Labels?.ContainsKey(_settings.ServicesPortLabel) ?? false))
             {
-                var labelValue = service.Metadata.Labels[_healthPortLabel];
+                var labelValue = service.Metadata.Labels[_settings.ServicesPortLabel];
                 if(int.TryParse(labelValue, out var labelIntValue)) {
                     return service.Spec?.Ports?.Where(p => p.PortNumber == labelIntValue)?.FirstOrDefault();
                 } else {
                     return service.Spec?.Ports?.Where(p => p.Name == labelValue)?.FirstOrDefault();
+                }
+            }
+            else if(!string.IsNullOrEmpty(_settings.ServicesPortAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesPortAnnotation) ?? false))
+            {
+                var annotationValue = service.Metadata.Annotations[_settings.ServicesPortAnnotation];
+                if(int.TryParse(annotationValue, out var annotationIntValue)) {
+                    return service.Spec?.Ports?.Where(p => p.PortNumber == annotationIntValue)?.FirstOrDefault();
+                } else {
+                    return service.Spec?.Ports?.Where(p => p.Name == annotationValue)?.FirstOrDefault();
                 }
             }
             else

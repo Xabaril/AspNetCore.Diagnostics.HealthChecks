@@ -20,12 +20,14 @@ namespace UnitTests.UI.Kubernetes
 
             var services = JsonConvert.DeserializeObject<ServiceList>(apiResponse);
 
-            var addressFactory = new KubernetesAddressFactory(
-                healthPath,
-                Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL,
-                Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL,
-                Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL
-            );
+
+            var addressFactory = new KubernetesAddressFactory(new KubernetesDiscoverySettings
+            {
+                HealthPath = healthPath,
+                ServicesPathLabel = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL,
+                ServicesPortLabel = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL,
+                ServicesSchemeLabel = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL
+            });
 
             List<string> serviceAddresses = new List<string>();
             
@@ -50,12 +52,13 @@ namespace UnitTests.UI.Kubernetes
 
             var services = JsonConvert.DeserializeObject<ServiceList>(apiResponse);
 
-            var addressFactory = new KubernetesAddressFactory(
-                healthPath,
-                Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL,
-                Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL,
-                Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL
-            );
+            var addressFactory = new KubernetesAddressFactory(new KubernetesDiscoverySettings
+            {
+                HealthPath = healthPath,
+                ServicesPathAnnotation = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL,
+                ServicesPortAnnotation = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL,
+                ServicesSchemeAnnotation = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL
+            });
 
             List<string> serviceAddresses = new List<string>();
 

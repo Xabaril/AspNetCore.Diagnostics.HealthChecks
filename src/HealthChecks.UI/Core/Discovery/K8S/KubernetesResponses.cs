@@ -20,6 +20,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         public string Namespace { get; set; }
         public string Uid { get; set; }
         public IDictionary<string, string> Labels { get; set; }
+        public IDictionary<string, string> Annotations { get; set; }
     }
     internal class LoadBalancer
     {     

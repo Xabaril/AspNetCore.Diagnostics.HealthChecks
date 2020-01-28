@@ -10,6 +10,9 @@
         public string ServicesPathLabel { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL;
         public string ServicesPortLabel { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL;
         public string ServicesSchemeLabel { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL;
+        public string ServicesPathAnnotation { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_LABEL;
+        public string ServicesPortAnnotation { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_LABEL;
+        public string ServicesSchemeAnnotation { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_LABEL;
         public string Token { get; set; }
         public int RefreshTimeOnSeconds { get; set; } = 300;
         public string[] Namespaces { get; set; } = new string[] {};

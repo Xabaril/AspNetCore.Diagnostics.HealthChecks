@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Controller;
+using HealthChecks.UI.K8s.Operator.Handlers;
 
 
 namespace HealthChecks.UI.K8s.Operator
@@ -33,6 +34,9 @@ namespace HealthChecks.UI.K8s.Operator
             services.AddSingleton(sp => GetKubernetesClient());
             services.AddTransient<IKubernetesOperator, HealthChecksOperator>();
             services.AddTransient<IHealthChecksController, HealthChecksController>();
+            services.AddSingleton<DeploymentHandler>();
+            services.AddSingleton<ServiceHandler>();
+            services.AddSingleton<HealthCheckServiceWatcher>();
            
             return services.BuildServiceProvider();
         }

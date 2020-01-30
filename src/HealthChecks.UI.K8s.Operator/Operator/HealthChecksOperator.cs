@@ -13,14 +13,17 @@ namespace HealthChecks.UI.K8s.Operator
         private Watcher<HealthCheckResource> _watcher;
         private readonly IKubernetes _client;
         private readonly IHealthChecksController _controller;
+        private readonly HealthCheckServiceWatcher _serviceWatcher;
         private readonly string _namespace;
 
         public HealthChecksOperator(
             IKubernetes client,
-            IHealthChecksController controller)
+            IHealthChecksController controller,
+            HealthCheckServiceWatcher serviceWatcher)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
+            _serviceWatcher = serviceWatcher;
         }
 
         private async Task StartWatcher()
@@ -44,6 +47,7 @@ namespace HealthChecks.UI.K8s.Operator
                 onError: e => Console.WriteLine(e.Message)
                 );
         }
+        
 
         public async Task RunAsync(CancellationToken token)
         {
@@ -56,11 +60,13 @@ namespace HealthChecks.UI.K8s.Operator
             if (type == WatchEventType.Added)
             {
                 await _controller.DeployAsync(item);
+                await _serviceWatcher.WatchAsync(item);
             }
 
             if (type == WatchEventType.Deleted)
             {
                 await _controller.DeleteDeploymentAsync(item);
+                _serviceWatcher.Stopwatch(item);
             }
         }
 

@@ -7,7 +7,7 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 {
     internal interface IHealthChecksController
     {
-        Task DeployAsync(HealthCheckResource resource);
+        Task<DeploymentResult> DeployAsync(HealthCheckResource resource);
         Task DeleteDeploymentAsync(HealthCheckResource resource);
     }
 }

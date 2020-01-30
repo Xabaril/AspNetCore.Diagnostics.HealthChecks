@@ -34,7 +34,7 @@ namespace HealthChecks.UI.K8s.Operator
                 );
 
             _watcher = response.Watch<HealthCheckResource, object>(
-                onEvent: async(type, item) => await OnEventHandlerAsync(type, item)
+                onEvent: async (type, item) => await OnEventHandlerAsync(type, item)
                 ,
                 onClosed: () =>
                 {
@@ -56,6 +56,11 @@ namespace HealthChecks.UI.K8s.Operator
             if (type == WatchEventType.Added)
             {
                 await _controller.DeployAsync(item);
+            }
+
+            if (type == WatchEventType.Deleted)
+            {
+                await _controller.DeleteDeploymentAsync(item);
             }
         }
 

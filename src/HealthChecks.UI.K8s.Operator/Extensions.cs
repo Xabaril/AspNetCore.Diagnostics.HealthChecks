@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HealthChecks.UI.K8s.Controller
+namespace HealthChecks.UI.K8s.Operator
 {
     public static class Extensions
     {

@@ -108,7 +108,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Branding", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.IoTHub", "src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj", "{252BB504-B7CB-4581-8CD8-D7398CAA16F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.K8s.Controller", "src\HealthChecks.UI.K8s.Controller\HealthChecks.UI.K8s.Controller.csproj", "{692313D3-E947-494A-83B7-754E2FFAF348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.K8s.Operator", "src\HealthChecks.UI.K8s.Operator\HealthChecks.UI.K8s.Operator.csproj", "{692313D3-E947-494A-83B7-754E2FFAF348}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

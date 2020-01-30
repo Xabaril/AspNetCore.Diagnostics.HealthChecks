@@ -1,36 +1,33 @@
-﻿using HealthChecks.UI.K8s.Controller.Controller;
-using k8s;
+﻿using k8s;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Controller;
 
-namespace HealthChecks.UI.K8s.Controller
+namespace HealthChecks.UI.K8s.Operator
 {
     internal class HealthChecksOperator : IKubernetesOperator
     {
         private Watcher<HealthCheckResource> _watcher;
-        private readonly Kubernetes _client;
+        private readonly IKubernetes _client;
         private readonly IHealthChecksController _controller;
         private readonly string _namespace;
 
         public HealthChecksOperator(
-            Kubernetes client,
-            IHealthChecksController controller,
-            string @namespace)
+            IKubernetes client,
+            IHealthChecksController controller)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
-            _namespace = @namespace ?? throw new ArgumentNullException(nameof(client));
         }
 
         private async Task StartWatcher()
         {
-            var response = await _client.ListNamespacedCustomObjectWithHttpMessagesAsync(
+            var response = await _client.ListClusterCustomObjectWithHttpMessagesAsync(
                 group: Constants.Group,
                 version: Constants.Version,
-                namespaceParameter: _namespace,
                 plural: Constants.Plural,
                 watch: true,
                 timeoutSeconds: ((int)TimeSpan.FromMinutes(60).TotalSeconds)
@@ -56,7 +53,10 @@ namespace HealthChecks.UI.K8s.Controller
 
         private async Task OnEventHandlerAsync(WatchEventType type, HealthCheckResource item)
         {
-
+            if (type == WatchEventType.Added)
+            {
+                await _controller.DeployAsync(item);
+            }
         }
 
         public void Dispose()

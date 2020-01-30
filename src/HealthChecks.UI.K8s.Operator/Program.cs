@@ -1,15 +1,12 @@
-﻿using HealthChecks.UI.K8s.Controller.Controller;
-using k8s;
+﻿using k8s;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Rest;
 using System;
-using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Controller;
 
 
-namespace HealthChecks.UI.K8s.Controller
+namespace HealthChecks.UI.K8s.Operator
 {
 
     class Program
@@ -33,8 +30,9 @@ namespace HealthChecks.UI.K8s.Controller
         private static IServiceProvider InitializeProvider()
         {
             var services = new ServiceCollection();
-            services.AddTransient(sp => GetKubernetesClient());
-            services.AddTransient(sp => new HealthChecksController());
+            services.AddSingleton(sp => GetKubernetesClient());
+            services.AddTransient<IKubernetesOperator, HealthChecksOperator>();
+            services.AddTransient<IHealthChecksController, HealthChecksController>();
            
             return services.BuildServiceProvider();
         }

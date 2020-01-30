@@ -2,7 +2,7 @@
 using k8s.Models;
 
 
-namespace HealthChecks.UI.K8s.Controller.Crd
+namespace HealthChecks.UI.K8s.Operator.Crd
 {
     public abstract class CustomResource<TSpec, TStatus> : CustomResource
     {

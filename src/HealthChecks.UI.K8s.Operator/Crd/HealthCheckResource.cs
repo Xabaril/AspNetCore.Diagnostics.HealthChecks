@@ -1,8 +1,8 @@
-﻿using HealthChecks.UI.K8s.Controller.Crd;
-using System;
+﻿using System;
+using HealthChecks.UI.K8s.Operator.Crd;
 
 
-namespace HealthChecks.UI.K8s.Controller
+namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthCheckResource : CustomResource<HealthCheckResourceSpec, Object> { }
     

@@ -1,8 +1,8 @@
-﻿namespace HealthChecks.UI.K8s.Controller
+﻿namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthCheckResourceSpec
     {
-        public string Image { get; set; }
+        public string Name { get; set; }
         public string ListeningPort { get; set; }
         public string UiPath { get; set; }
     }    

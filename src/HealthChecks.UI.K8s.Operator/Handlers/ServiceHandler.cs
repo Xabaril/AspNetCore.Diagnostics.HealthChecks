@@ -22,6 +22,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             var serviceList = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
             return serviceList.Items.FirstOrDefault();
         }
+
+        public async Task<V1Service> Get(string namespaceProperty, string labelSelector)
+        {
+            var serviceList = await _client.ListNamespacedServiceAsync(namespaceProperty, labelSelector: labelSelector);
+            return serviceList.Items.FirstOrDefault();
+        }
         public async Task<V1Service> GetOrCreateAsync(HealthCheckResource resource)
         {
             var service = await Get(resource);

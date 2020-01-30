@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    internal class HealthCheckServiceWatcher
+    internal class HealthCheckServiceWatcher: IDisposable
     {
         private readonly IKubernetes _client;
         private Watcher<V1Service> _watcher;
@@ -20,21 +21,17 @@ namespace HealthChecks.UI.K8s.Operator
 
         internal async Task<Watcher<V1Service>> WatchAsync(HealthCheckResource resource)
         {
-            if (!_watchers.ContainsKey(resource))
+            Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
+            
+            if (!_watchers.Keys.Any(filter))
             {
-                
                 var response =  _client.ListNamespacedServiceWithHttpMessagesAsync(
                     namespaceParameter: resource.Metadata.NamespaceProperty, 
-                    labelSelector: $"{resource.Spec.HealthchecksLabel}=true",
+                    labelSelector: $"{resource.Spec.HealthchecksLabel}",
                     watch: true);
     
                 _watcher = response.Watch<V1Service, V1ServiceList>(
                     onEvent: async (type, item) => await OnServiceDiscoveredAsync(type, item, resource),
-                    onClosed: () =>
-                    {
-                        Stopwatch(resource);
-                        WatchAsync(resource);
-                    },
                     onError: e => Console.WriteLine(e.Message)
                 );
             
@@ -48,16 +45,27 @@ namespace HealthChecks.UI.K8s.Operator
 
         internal void Stopwatch(HealthCheckResource resource)
         {
-            if (_watchers.ContainsKey(resource))
+            Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
+            if (_watchers.Keys.Any(filter))
             {
-                _watchers[resource].Dispose();
-                _watchers.Remove(resource);
+                var svcResource = _watchers.Keys.FirstOrDefault(filter);
+                if (svcResource != null)
+                {
+                    Console.WriteLine($"Stopping services watcher for namespace {resource.Metadata.NamespaceProperty}");
+                    _watchers[svcResource].Dispose();
+                    _watchers.Remove(svcResource);
+                }
             }
         }
 
-         internal Task OnServiceDiscoveredAsync(WatchEventType type, V1Service item, HealthCheckResource resource) {
-             return Task.CompletedTask;
-         }
-    }
+        internal async Task OnServiceDiscoveredAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
+        {
+            await HealthChecksPushService.PushNotification(type, resource, service);
+        }
 
+        public void Dispose()
+        {
+            _watchers.Values.ToList().ForEach(w => w?.Dispose());
+        }
+    }
 }

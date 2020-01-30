@@ -23,7 +23,6 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 
         public async Task<DeploymentResult> DeployAsync(HealthCheckResource resource)
         {
-          
             Console.WriteLine($"Creating deployment for hc resource: {resource.Metadata.NamespaceProperty}");
 
             var deployment = await _deploymentHandler.GetOrCreateAsync(resource);
@@ -37,6 +36,7 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 
         public async Task DeleteDeploymentAsync(HealthCheckResource resource)
         {
+            Console.WriteLine($"Deleting healthchecks deployment {resource.Spec.Name}");
             await _deploymentHandler.Delete(resource);
             await _serviceHandler.Delete(resource);
         }

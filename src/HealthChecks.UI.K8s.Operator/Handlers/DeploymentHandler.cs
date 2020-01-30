@@ -107,7 +107,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                                 },
                                 Env = new List<V1EnvVar>
                                 {
-                                    new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.UIDefaultPath)
+                                    new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.UIDefaultPath),
+                                    new V1EnvVar("enable_push_endpoint", "true")
                                 }
                             }
                         }

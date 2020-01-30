@@ -26,6 +26,7 @@ namespace HealthChecks.UI.K8s.Operator
             Console.CancelKeyPress += (s, a) => reset.Set();
 
             reset.Wait();
+            @operator.Dispose();
         }
 
         private static IServiceProvider InitializeProvider()
@@ -37,7 +38,7 @@ namespace HealthChecks.UI.K8s.Operator
             services.AddSingleton<DeploymentHandler>();
             services.AddSingleton<ServiceHandler>();
             services.AddSingleton<HealthCheckServiceWatcher>();
-           
+
             return services.BuildServiceProvider();
         }
 

@@ -12,5 +12,6 @@ namespace HealthChecks.UI.K8s.Operator
         public const string PodName = "healthchecks-ui";
         public const string DockerImage = "xabarilcoding/healthchecksui";
         public const string UIDefaultPath = "/healthchecks";
+        public const string PushServicePath = "/healthchecks/push";
     }
 }

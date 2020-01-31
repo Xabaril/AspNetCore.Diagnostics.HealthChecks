@@ -29,7 +29,7 @@ namespace HealthChecks.UI.Image.PushService
 
                 await _db.SaveChangesAsync();
 
-                Console.WriteLine($"[Push] New service added: {name} - {uri}");
+                Console.WriteLine($"[Push] New service added: {name} with uri: {uri}");
             }
 
         }
@@ -45,6 +45,15 @@ namespace HealthChecks.UI.Image.PushService
 
                 Console.WriteLine($"[Push] Service removed: {name}");
             }
+        }
+
+        public async Task UpdateAsync(string name, string uri)
+        {
+            var endpoint = await Get(name);
+            endpoint.Uri = uri;
+            _db.Configurations.Update(endpoint);
+            await _db.SaveChangesAsync();
+            Console.WriteLine($"[Push] Service updated: {name} with uri {uri}");
         }
 
         private Task<HealthCheckConfiguration> Get(string name)

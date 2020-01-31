@@ -31,6 +31,7 @@ namespace HealthChecks.UI.K8s.Operator
             using var client = new HttpClient();
             try
             {
+                uiAddress = "http://localhost:5000";
                 var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}",
               new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
               {

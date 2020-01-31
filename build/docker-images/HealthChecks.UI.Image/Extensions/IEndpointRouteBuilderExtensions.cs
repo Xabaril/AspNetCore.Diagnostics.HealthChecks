@@ -61,6 +61,10 @@ namespace Microsoft.AspNetCore.Builder
                         {
                             await pushService.RemoveAsync(name);
                         }
+                        else if (type == PushServiceKeys.ServiceUpdated)
+                        {
+                            await pushService.UpdateAsync(name, uri);
+                        }
                     }
                 });
             }

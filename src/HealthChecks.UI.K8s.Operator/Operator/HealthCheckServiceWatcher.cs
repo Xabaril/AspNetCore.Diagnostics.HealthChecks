@@ -62,6 +62,11 @@ namespace HealthChecks.UI.K8s.Operator
         {
             var uiService = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
 
+            if(!service.Metadata.Labels.ContainsKey(resource.Spec.ServicesLabel))
+            {
+                type = WatchEventType.Deleted;
+            }
+
             await HealthChecksPushService.PushNotification(type, resource, uiService.Items.First(), service);
         }
 

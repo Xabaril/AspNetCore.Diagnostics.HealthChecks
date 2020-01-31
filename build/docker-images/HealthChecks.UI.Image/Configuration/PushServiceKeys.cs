@@ -9,6 +9,7 @@ namespace HealthChecks.UI.Image.Configuration
     {
         public const string Enabled = "enable_push_endpoint";
         public const int ServiceAdded = 0;
-        public const int ServiceRemoved = 2;
+        public const int ServiceUpdated = 1;
+        public const int ServiceRemoved = 2;        
     }
 }

@@ -1,8 +1,5 @@
 ﻿using k8s.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace HealthChecks.UI.K8s.Operator.Operator
 {
@@ -19,13 +16,14 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 PortType.NodePort => GetServicePort(service)?.NodePort ?? DefaultPort
             };
 
-            var address = service.Spec.Type switch
-            {
-                PortType.LoadBalancer => GetLoadBalancerAddress(service),
-                PortType.NodePort => GetLoadBalancerAddress(service),
-                PortType.ClusterIP => service.Spec.ClusterIP
-            };
+            //var address = service.Spec.Type switch
+            //{
+            //    PortType.LoadBalancer => GetLoadBalancerAddress(service),
+            //    PortType.NodePort => GetLoadBalancerAddress(service),
+            //    PortType.ClusterIP => service.Spec.ClusterIP
+            //};
 
+            var address = service.Spec.ClusterIP;
           
             var healthScheme = service.Metadata.Labels.ContainsKey(Constants.ServicesSchemeLabel) ?
                     service.Metadata.Labels[Constants.ServicesSchemeLabel] :

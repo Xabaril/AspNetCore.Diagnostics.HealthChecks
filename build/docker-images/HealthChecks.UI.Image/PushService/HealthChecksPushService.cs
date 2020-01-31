@@ -16,7 +16,7 @@ namespace HealthChecks.UI.Image.PushService
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
         public async Task AddAsync(string name, string uri)
-        {            
+        {
 
             if ((await Get(name)) == null)
             {
@@ -31,7 +31,6 @@ namespace HealthChecks.UI.Image.PushService
 
                 Console.WriteLine($"[Push] New service added: {name} with uri: {uri}");
             }
-
         }
 
         public async Task RemoveAsync(string name)
@@ -50,10 +49,15 @@ namespace HealthChecks.UI.Image.PushService
         public async Task UpdateAsync(string name, string uri)
         {
             var endpoint = await Get(name);
-            endpoint.Uri = uri;
-            _db.Configurations.Update(endpoint);
-            await _db.SaveChangesAsync();
-            Console.WriteLine($"[Push] Service updated: {name} with uri {uri}");
+
+            if (endpoint != null)
+            {
+                endpoint.Uri = uri;
+                _db.Configurations.Update(endpoint);
+                await _db.SaveChangesAsync();
+                Console.WriteLine($"[Push] Service updated: {name} with uri {uri}");
+            }
+
         }
 
         private Task<HealthCheckConfiguration> Get(string name)

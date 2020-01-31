@@ -1,11 +1,9 @@
+using k8s;
+using k8s.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using HealthChecks.UI.K8s.Operator;
-using k8s;
-using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
@@ -101,6 +99,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         {
                             new V1Container
                             {
+                                ImagePullPolicy = "Never",
                                 Name = Constants.PodName,
                                 Image = Constants.DockerImage,
                                 Ports = new List<V1ContainerPort>
@@ -110,7 +109,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                                 Env = new List<V1EnvVar>
                                 {
                                     new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.UIDefaultPath),
-                                    new V1EnvVar("enable_push_endpoint", "true")
+                                    new V1EnvVar("enable_push_endpoint", "true"),
+                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret")))
                                 }
                             }
                         }

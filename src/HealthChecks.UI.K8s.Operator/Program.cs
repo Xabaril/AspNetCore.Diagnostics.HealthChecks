@@ -34,6 +34,14 @@ namespace HealthChecks.UI.K8s.Operator
 
             reset.Wait();
         }
+        private static IKubernetes GetKubernetesClient()
+        {
+            var config = KubernetesClientConfiguration.IsInCluster() ?
+                KubernetesClientConfiguration.InClusterConfig() :
+                KubernetesClientConfiguration.BuildConfigFromConfigFile();
+
+            return new Kubernetes(config);
+        }
 
         private static IServiceProvider InitializeProvider()
         {
@@ -43,15 +51,10 @@ namespace HealthChecks.UI.K8s.Operator
             services.AddTransient<IHealthChecksController, HealthChecksController>();
             services.AddSingleton<DeploymentHandler>();
             services.AddSingleton<ServiceHandler>();
+            services.AddSingleton<SecretHandler>();
             services.AddSingleton<HealthCheckServiceWatcher>();
 
             return services.BuildServiceProvider();
-        }
-
-        private static IKubernetes GetKubernetesClient()
-        {
-            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
-            return new Kubernetes(config);
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using k8s;
+﻿using  HealthChecks.UI.K8s.Operator.Controller;
+using k8s;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using HealthChecks.UI.K8s.Operator.Controller;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -60,7 +58,7 @@ namespace HealthChecks.UI.K8s.Operator
             if (type == WatchEventType.Added)
             {
                 await _controller.DeployAsync(item);
-                await _serviceWatcher.WatchAsync(item, token);
+                await _serviceWatcher.WatchAsync(item, token);                
             }
 
             if (type == WatchEventType.Deleted)

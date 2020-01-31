@@ -1,11 +1,10 @@
+using k8s;
+using k8s.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using k8s;
-using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -63,13 +62,14 @@ namespace HealthChecks.UI.K8s.Operator
         internal async Task OnServiceDiscoveredAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
         {
             var uiService = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
+            var secret = await _client.ListNamespacedSecretAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
 
             if(!service.Metadata.Labels.ContainsKey(resource.Spec.ServicesLabel))
             {
                 type = WatchEventType.Deleted;
             }
 
-            await HealthChecksPushService.PushNotification(type, resource, uiService.Items.First(), service);
+            await HealthChecksPushService.PushNotification(type, resource, uiService.Items.First(), service, secret.Items.First());
         }
 
         public void Dispose()

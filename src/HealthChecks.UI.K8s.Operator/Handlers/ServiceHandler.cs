@@ -50,7 +50,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         public async Task Delete(HealthCheckResource resource)
         {
             try {
-                await _client.DeleteNamespacedServiceAsync($"{resource.Metadata.Name}-svc", resource.Metadata.NamespaceProperty);
+                await _client.DeleteNamespacedServiceAsync($"{resource.Spec.Name}-svc", resource.Metadata.NamespaceProperty);
             }
             catch(Exception ex) {
                 Console.WriteLine($"Error deleting service for hc resource {resource.Spec.Name}: {ex.Message}");
@@ -60,7 +60,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         {
             var meta = new V1ObjectMeta
             {
-                Name = $"{resource.Metadata.Name}-svc",
+                Name = $"{resource.Spec.Name}-svc",
                 Labels = new Dictionary<string, string>
                 {
                     ["resourceId"] = resource.Metadata.Uid,
@@ -74,11 +74,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 {
                     ["app"] = resource.Spec.Name
                 },
-                Type = "LoadBalancer",
+                Type = resource.Spec.PortType,
                 Ports = new List<V1ServicePort> {
                     new V1ServicePort {
                         Name = "httport",
-                        Port = int.Parse(resource.Spec.ListeningPort),
+                        Port = int.Parse(resource.Spec.PortNumber),
                         TargetPort = 80,
                         
                     }
@@ -86,11 +86,6 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             };
 
             return new V1Service(metadata: meta, spec: spec);
-        }
-        public async Task<bool> Exists(IKubernetes client, HealthCheckResource resource)
-        {
-            var service = await client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
-            return service.Items.Any();
-        }
+        }       
     }
 }

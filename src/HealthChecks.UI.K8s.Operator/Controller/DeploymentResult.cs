@@ -7,14 +7,17 @@ namespace HealthChecks.UI.K8s.Operator.Controller
     {
         public V1Deployment Deployment { get; private set; }
         public V1Service Service { get; private set; }
-        private DeploymentResult(V1Deployment deployment, V1Service service)
+        public V1Secret Secret { get; set; }
+
+        private DeploymentResult(V1Deployment deployment, V1Service service, V1Secret secret)
         {
             Deployment = deployment ?? throw new ArgumentNullException(nameof(deployment));
             Service = service ?? throw new ArgumentNullException(nameof(service));
+            Secret = secret ?? throw new ArgumentNullException(nameof(secret));
         }
-        public static DeploymentResult Create(V1Deployment deployment, V1Service service)
+        public static DeploymentResult Create(V1Deployment deployment, V1Service service, V1Secret secret)
         {
-            return new DeploymentResult(deployment, service);
+            return new DeploymentResult(deployment, service, secret);
         }
     }
 }

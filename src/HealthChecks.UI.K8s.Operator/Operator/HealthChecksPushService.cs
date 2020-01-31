@@ -16,7 +16,8 @@ namespace HealthChecks.UI.K8s.Operator
             WatchEventType eventType,
             HealthCheckResource resource,
             V1Service uiService,
-            V1Service notificationService)
+            V1Service notificationService,
+            V1Secret endpointSecret)
         {
             var address = KubernetesAddressFactory.CreateHealthAddress(notificationService);
             var uiAddress = KubernetesAddressFactory.CreateAddress(uiService);
@@ -24,21 +25,27 @@ namespace HealthChecks.UI.K8s.Operator
             dynamic healthCheck = new
             {
                 Type = eventType,
-                Name = resource.Spec.Name,
+                notificationService.Metadata.Name,
                 Uri = address
             };
 
             using var client = new HttpClient();
             try
             {
-                uiAddress = "http://localhost:5000";
-                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}",
-              new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
-              {
-                  PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-              }), Encoding.UTF8, "application/json"));
+                Console.WriteLine($"[PushService] Sending Type: {healthCheck.Type} - Service {notificationService.Metadata.Name} with uri : {healthCheck.Uri} to ui endpoint: {uiAddress}");
 
-                Console.WriteLine($"[PushService] Type: {healthCheck.Type} - Service {notificationService.Metadata.Name} with uri : {healthCheck.Uri} -  notification result: {response.StatusCode}");
+                var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
+
+                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}",
+
+                  new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
+                  {
+                      PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                  }), Encoding.UTF8, "application/json"));
+
+
+                Console.WriteLine($"[PushService] Notification result for {notificationService.Metadata.Name} - status code: {response.StatusCode}");
+
             }
             catch (Exception ex)
             {
@@ -51,7 +58,7 @@ namespace HealthChecks.UI.K8s.Operator
 
             string IpAddress = default;
 
-            if (service.Spec.Type == "LoadBalancer")
+            if (service.Spec.Type == PortType.LoadBalancer)
             {
                 var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
                 if (ingress != null)

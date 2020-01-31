@@ -16,5 +16,6 @@ namespace HealthChecks.UI.K8s.Operator
         public const string ServicesLabel = "servicesLabel";
         public const string ServicesHealthPathLabel = "servicesHealthPathLabel";
         public const string ServicesSchemeLabel = "servicesSchemeLabel";
+        public const string PushServiceAuthKey = "key";        
     }
 }

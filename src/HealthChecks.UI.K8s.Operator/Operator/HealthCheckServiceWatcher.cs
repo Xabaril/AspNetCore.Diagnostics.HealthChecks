@@ -1,5 +1,6 @@
 using k8s;
 using k8s.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,14 @@ namespace HealthChecks.UI.K8s.Operator
     internal class HealthCheckServiceWatcher: IDisposable
     {
         private readonly IKubernetes _client;
+        private readonly ILogger<K8sOperator> _logger;
         private Watcher<V1Service> _watcher;
         private Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
 
-        public HealthCheckServiceWatcher(IKubernetes client)
+        public HealthCheckServiceWatcher(IKubernetes client, ILogger<K8sOperator> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         internal async Task<Watcher<V1Service>> WatchAsync(HealthCheckResource resource, CancellationToken token)
@@ -33,7 +36,7 @@ namespace HealthChecks.UI.K8s.Operator
     
                 _watcher = response.Watch<V1Service, V1ServiceList>(
                     onEvent: async (type, item) => await OnServiceDiscoveredAsync(type, item, resource),
-                    onError: e => Console.WriteLine(e.Message)
+                    onError: e => _logger.LogError(e, "Error in service watcher: {message}", e.Message)
                 );
             
                 _watchers.Add(resource, _watcher);
@@ -52,7 +55,7 @@ namespace HealthChecks.UI.K8s.Operator
                 var svcResource = _watchers.Keys.FirstOrDefault(filter);
                 if (svcResource != null)
                 {
-                    Console.WriteLine($"Stopping services watcher for namespace {resource.Metadata.NamespaceProperty}");
+                    _logger.LogInformation("Stopping services watcher for namespace {namespace}", resource.Metadata.NamespaceProperty);
                     _watchers[svcResource].Dispose();
                     _watchers.Remove(svcResource);
                 }
@@ -69,7 +72,13 @@ namespace HealthChecks.UI.K8s.Operator
                 type = WatchEventType.Deleted;
             }
 
-            await HealthChecksPushService.PushNotification(type, resource, uiService.Items.First(), service, secret.Items.First());
+            await HealthChecksPushService.PushNotification(
+                type,
+                resource,
+                uiService.Items.First(),
+                service,
+                secret.Items.First(),
+                _logger);
         }
 
         public void Dispose()

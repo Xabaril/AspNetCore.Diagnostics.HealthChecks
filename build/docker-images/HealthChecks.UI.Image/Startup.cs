@@ -19,7 +19,7 @@ namespace HealthChecks.UI.Image
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services
+            services                
                 .AddHealthChecksUI()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);

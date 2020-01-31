@@ -1,5 +1,6 @@
 ﻿using k8s;
 using k8s.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
     public class SecretHandler
     {
         private readonly IKubernetes _client;
+        private readonly ILogger<K8sOperator> _logger;
 
-        public SecretHandler(IKubernetes client)
+        public SecretHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client)); ;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<V1Secret> GetOrCreate(HealthCheckResource resource)
@@ -28,11 +31,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 secret = await _client.CreateNamespacedSecretAsync(secretResource,
                               resource.Metadata.NamespaceProperty);
 
-                Console.WriteLine($"Secret {secret.Metadata.Name} has been created");
+                _logger.LogInformation("Secret {name} has been created", secret.Metadata.Name);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating Secret: {ex.Message}");
+                _logger.LogError("Error creating Secret: {message}", ex.Message);
             }
 
             return secret;
@@ -54,7 +57,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting secret for hc resource {resource.Spec.Name}: {ex.Message}");
+                _logger.LogError("Error deleting secret for hc resource {name} : {message}", resource.Spec.Name,ex.Message);
             }
         }
 

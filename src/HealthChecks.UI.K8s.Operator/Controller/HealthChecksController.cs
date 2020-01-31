@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Controller
 {
@@ -11,31 +12,34 @@ namespace HealthChecks.UI.K8s.Operator.Controller
         private readonly DeploymentHandler _deploymentHandler;
         private readonly ServiceHandler _serviceHandler;
         private readonly SecretHandler _secretHandler;
+        private readonly ILogger<K8sOperator> _logger;
 
         public HealthChecksController(
             IKubernetes client,
             DeploymentHandler deploymentHandler,
             ServiceHandler serviceHandler,
-            SecretHandler secretHandler)
+            SecretHandler secretHandler,
+            ILogger<K8sOperator> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _deploymentHandler = deploymentHandler ?? throw new ArgumentNullException(nameof(deploymentHandler));
             _serviceHandler = serviceHandler ?? throw new ArgumentNullException(nameof(serviceHandler));
             _secretHandler = secretHandler ?? throw new ArgumentNullException(nameof(secretHandler));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<DeploymentResult> DeployAsync(HealthCheckResource resource)
         {
-            Console.WriteLine($"Creating secret for hc resource - namespace {resource.Metadata.NamespaceProperty}");
+            _logger.LogInformation("Creating secret for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
 
             var secret = await _secretHandler.GetOrCreate(resource);
 
-            Console.WriteLine($"Creating deployment for hc resource - namespace {resource.Metadata.NamespaceProperty}");
+            _logger.LogInformation("Creating deployment for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
 
             var deployment = await _deploymentHandler.GetOrCreateAsync(resource);
-            
-            Console.WriteLine($"Creating service  for hc resource - namespace {resource.Metadata.NamespaceProperty}");
-            
+
+            _logger.LogInformation("Creating service for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
+
             var service = await _serviceHandler.GetOrCreateAsync(resource);
             
             return DeploymentResult.Create(deployment, service, secret);
@@ -43,7 +47,8 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 
         public async Task DeleteDeploymentAsync(HealthCheckResource resource)
         {
-            Console.WriteLine($"Deleting healthchecks deployment {resource.Spec.Name}");
+            _logger.LogInformation("Deleting healthchecks deployment {name}", resource.Spec.Name);
+
             await _secretHandler.Delete(resource);
             await _deploymentHandler.Delete(resource);
             await _serviceHandler.Delete(resource);

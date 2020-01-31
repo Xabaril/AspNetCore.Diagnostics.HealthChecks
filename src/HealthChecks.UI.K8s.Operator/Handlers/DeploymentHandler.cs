@@ -1,5 +1,6 @@
 using k8s;
 using k8s.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
     public class DeploymentHandler
     {
         private readonly IKubernetes _client;
+        private readonly ILogger<K8sOperator> _logger;
 
-        public DeploymentHandler(IKubernetes client)
+        public DeploymentHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<V1Deployment> Get(HealthCheckResource resource)
@@ -36,11 +39,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
 
-                Console.WriteLine($"Deployment {deployment.Metadata.Name} has been created");
+                _logger.LogInformation("Deployment {deployment} has been created", deployment.Metadata.Name);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating deployment: {ex.Message}");
+                _logger.LogError("Error creating deployment: {error}", ex.Message);
             }
 
             return deployment;
@@ -56,7 +59,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting deployment for hc resource {resource.Spec.Name}: {ex.Message}");
+                _logger.LogError("Error deleting deployment for hc resource: {name}", resource.Spec.Name);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using  HealthChecks.UI.K8s.Operator.Controller;
 using k8s;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,16 +13,19 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly IKubernetes _client;
         private readonly IHealthChecksController _controller;
         private readonly HealthCheckServiceWatcher _serviceWatcher;
+        private readonly ILogger<K8sOperator> _logger;
         private readonly string _namespace;
 
         public HealthChecksOperator(
             IKubernetes client,
             IHealthChecksController controller,
-            HealthCheckServiceWatcher serviceWatcher)
+            HealthCheckServiceWatcher serviceWatcher,
+            ILogger<K8sOperator> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
             _serviceWatcher = serviceWatcher;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private async Task StartWatcher(CancellationToken token)
@@ -43,7 +47,7 @@ namespace HealthChecks.UI.K8s.Operator
                     _watcher.Dispose();
                     StartWatcher(token);
                 },
-                onError: e => Console.WriteLine(e.Message)
+                onError: e => _logger.LogError(e.Message)
                 );
         }
         

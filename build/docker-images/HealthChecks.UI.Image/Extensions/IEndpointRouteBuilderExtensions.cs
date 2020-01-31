@@ -1,18 +1,14 @@
-﻿using HealthChecks.UI.Image.Configuration;
+﻿using HealthChecks.UI.Image;
+using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Image.Extensions;
-using Microsoft.AspNetCore.Builder;
+using HealthChecks.UI.Image.PushService;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using HealthChecks.UI.Configuration;
-using HealthChecks.UI.Core.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using HealthChecks.UI.Image.PushService;
-using System.Linq;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -37,7 +33,8 @@ namespace Microsoft.AspNetCore.Builder
             IConfiguration configuration)
         {
 
-            Console.WriteLine("HealthChecks Push Endpoint Enabled");
+            var logger = builder.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("HealthChecks Push Endpoint Enabled");
 
             builder.MapPost("/healthchecks/push", async context =>
             {

@@ -5,18 +5,21 @@ using System.Net;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
     public class ServiceHandler
     {
         private readonly IKubernetes _client;
+        private readonly ILogger<K8sOperator> _logger;
 
-        public ServiceHandler(IKubernetes client)
+        public ServiceHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-    
+
         public async Task<V1Service> Get(HealthCheckResource resource)
         {
             var serviceList = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
@@ -32,16 +35,16 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         {
             var service = await Get(resource);
             if (service != null) return service;
-            
+
             try
             {
                 var serviceResource = Build(resource);
                 service = await _client.CreateNamespacedServiceAsync(serviceResource, resource.Metadata.NamespaceProperty);
-                Console.WriteLine($"Service {service.Metadata.Name} has been created");
+                _logger.LogInformation("Service {name} has been created", service.Metadata.Name);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating service for hc resource {resource.Spec.Name}: {ex.Message}");
+                _logger.LogError("Error creating service for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
             }
 
             return service;
@@ -49,12 +52,14 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public async Task Delete(HealthCheckResource resource)
         {
-            try {
+            try
+            {
                 await _client.DeleteNamespacedServiceAsync($"{resource.Spec.Name}-svc", resource.Metadata.NamespaceProperty);
             }
-            catch(Exception ex) {
-                Console.WriteLine($"Error deleting service for hc resource {resource.Spec.Name}: {ex.Message}");
-            }       
+            catch (Exception ex)
+            {
+                _logger.LogError("Error deleting service for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
+            }
         }
         public V1Service Build(HealthCheckResource resource)
         {
@@ -80,12 +85,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         Name = "httport",
                         Port = int.Parse(resource.Spec.PortNumber),
                         TargetPort = 80,
-                        
+
                     }
                 }
             };
 
             return new V1Service(metadata: meta, spec: spec);
-        }       
+        }
     }
 }

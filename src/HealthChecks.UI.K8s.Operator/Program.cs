@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Controller;
 using HealthChecks.UI.K8s.Operator.Handlers;
-
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -16,9 +16,13 @@ namespace HealthChecks.UI.K8s.Operator
         {
             var provider = InitializeProvider();
 
+            var logger = provider.GetService<ILogger<K8sOperator>>();
+
             var @operator = provider.GetRequiredService<IKubernetesOperator>();
             
             var cancelTokenSource = new CancellationTokenSource();
+
+            logger.LogInformation("Healthchecks Operator is starting...");
 
             await @operator.RunAsync(cancelTokenSource.Token);
 
@@ -28,7 +32,7 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 cancelTokenSource.Cancel();              
                 @operator.Dispose();
-                Console.WriteLine("Healthchecks Operator is shutting down...");
+                logger.LogInformation("Healthchecks Operator is shutting down...");
                 reset.Set();
             };
 
@@ -46,6 +50,11 @@ namespace HealthChecks.UI.K8s.Operator
         private static IServiceProvider InitializeProvider()
         {
             var services = new ServiceCollection();
+            services.AddLogging(config => {
+                config.AddConsole();
+                config.AddFilter(typeof(Program).Namespace, LogLevel.Information);
+                config.AddFilter("Microsoft", LogLevel.None);                
+            });
             services.AddSingleton(sp => GetKubernetesClient());
             services.AddTransient<IKubernetesOperator, HealthChecksOperator>();
             services.AddTransient<IHealthChecksController, HealthChecksController>();
@@ -58,4 +67,6 @@ namespace HealthChecks.UI.K8s.Operator
         }
     }
 }
+
+public class K8sOperator { } //Dummy class for logging
 

@@ -1,5 +1,6 @@
 ﻿using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,15 @@ namespace HealthChecks.UI.Image.PushService
     internal class HealthChecksPushService
     {
         private readonly HealthChecksDb _db;
+        private readonly ILogger<HealthChecksPushService> _logger;
 
-        public HealthChecksPushService(HealthChecksDb db)
+        public HealthChecksPushService(HealthChecksDb db, ILogger<HealthChecksPushService> logger)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
+            _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
         public async Task AddAsync(string name, string uri)
         {
-
             if ((await Get(name)) == null)
             {
                 await _db.Configurations.AddAsync(new HealthCheckConfiguration
@@ -29,7 +31,7 @@ namespace HealthChecks.UI.Image.PushService
 
                 await _db.SaveChangesAsync();
 
-                Console.WriteLine($"[Push] New service added: {name} with uri: {uri}");
+                _logger.LogInformation("[Push] New service added: {name} with uri: {uri}", name, uri);
             }
         }
 
@@ -42,7 +44,7 @@ namespace HealthChecks.UI.Image.PushService
                 _db.Configurations.Remove(endpoint);
                 await _db.SaveChangesAsync();
 
-                Console.WriteLine($"[Push] Service removed: {name}");
+                _logger.LogInformation("[Push] Service removed: {name}", name);
             }
         }
 
@@ -55,9 +57,9 @@ namespace HealthChecks.UI.Image.PushService
                 endpoint.Uri = uri;
                 _db.Configurations.Update(endpoint);
                 await _db.SaveChangesAsync();
-                Console.WriteLine($"[Push] Service updated: {name} with uri {uri}");
-            }
 
+                _logger.LogInformation("[Push] Service updated: {name} with uri {uri}", name, uri);
+            }
         }
 
         private Task<HealthCheckConfiguration> Get(string name)

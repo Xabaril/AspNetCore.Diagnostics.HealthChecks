@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
@@ -19,7 +20,7 @@ namespace HealthChecks.UI.K8s.Operator
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        internal async Task<Watcher<V1Service>> WatchAsync(HealthCheckResource resource)
+        internal async Task<Watcher<V1Service>> WatchAsync(HealthCheckResource resource, CancellationToken token)
         {            
             Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
             
@@ -28,7 +29,8 @@ namespace HealthChecks.UI.K8s.Operator
                 var response =  _client.ListNamespacedServiceWithHttpMessagesAsync(
                     namespaceParameter: resource.Metadata.NamespaceProperty, 
                     labelSelector: $"{resource.Spec.ServicesLabel}",
-                    watch: true);
+                    watch: true, 
+                    cancellationToken: token);
     
                 _watcher = response.Watch<V1Service, V1ServiceList>(
                     onEvent: async (type, item) => await OnServiceDiscoveredAsync(type, item, resource),

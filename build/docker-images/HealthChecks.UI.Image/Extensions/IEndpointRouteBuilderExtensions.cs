@@ -20,7 +20,10 @@ namespace Microsoft.AspNetCore.Builder
         public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
             IConfiguration configuration)
         {
-            builder.MapHealthCheckPushEndpoint(configuration);
+            if (bool.TryParse(configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
+            {
+                builder.MapHealthCheckPushEndpoint(configuration);
+            }
 
             return builder.MapHealthChecksUI(setup =>
             {
@@ -32,42 +35,38 @@ namespace Microsoft.AspNetCore.Builder
         private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder,
             IConfiguration configuration)
         {
-            if (bool.TryParse(configuration[PushServiceKeys.Enabled], out bool enabled))
+
+            Console.WriteLine("HealthChecks Push Endpoint Enabled");
+
+            builder.MapPost("/healthchecks/push", async context =>
             {
-                if (!enabled) return;
+                using var streamReader = new StreamReader(context.Request.Body);
+                var content = await streamReader.ReadToEndAsync();
 
-                Console.WriteLine("HealthChecks Push Endpoint Enabled");
+                var endpoint = JsonDocument.Parse(content);
+                var root = endpoint.RootElement;
+                var name = root.GetProperty("name").GetString();
+                var uri = root.GetProperty("uri").GetString();
+                var type = root.GetProperty("type").GetInt16();
 
-                builder.MapPost("/healthchecks/push", async context =>
+                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(uri))
                 {
-                    using var streamReader = new StreamReader(context.Request.Body);
-                    var content = await streamReader.ReadToEndAsync();
+                    var pushService = context.RequestServices.GetService<HealthChecksPushService>();
 
-                    var endpoint = JsonDocument.Parse(content);
-                    var root = endpoint.RootElement;
-                    var name = root.GetProperty("name").GetString();
-                    var uri = root.GetProperty("uri").GetString();
-                    var type = root.GetProperty("type").GetInt16();
-
-                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(uri))
+                    if (type == PushServiceKeys.ServiceAdded)
                     {
-                        var pushService = context.RequestServices.GetService<HealthChecksPushService>();
-
-                        if (type == PushServiceKeys.ServiceAdded)
-                        {
-                            await pushService.AddAsync(name, uri);
-                        }
-                        else if (type == PushServiceKeys.ServiceRemoved)
-                        {
-                            await pushService.RemoveAsync(name);
-                        }
-                        else if (type == PushServiceKeys.ServiceUpdated)
-                        {
-                            await pushService.UpdateAsync(name, uri);
-                        }
+                        await pushService.AddAsync(name, uri);
                     }
-                });
-            }
+                    else if (type == PushServiceKeys.ServiceRemoved)
+                    {
+                        await pushService.RemoveAsync(name);
+                    }
+                    else if (type == PushServiceKeys.ServiceUpdated)
+                    {
+                        await pushService.UpdateAsync(name, uri);
+                    }
+                }
+            });
         }
     }
 }

@@ -26,23 +26,24 @@ namespace HealthChecks.UI.K8s.Operator
             _serviceWatcher = serviceWatcher;
         }
 
-        private async Task StartWatcher()
+        private async Task StartWatcher(CancellationToken token)
         {
             var response = await _client.ListClusterCustomObjectWithHttpMessagesAsync(
                 group: Constants.Group,
                 version: Constants.Version,
                 plural: Constants.Plural,
                 watch: true,
-                timeoutSeconds: ((int)TimeSpan.FromMinutes(60).TotalSeconds)
+                timeoutSeconds: ((int)TimeSpan.FromMinutes(60).TotalSeconds),
+                cancellationToken: token
                 );
 
             _watcher = response.Watch<HealthCheckResource, object>(
-                onEvent: async (type, item) => await OnEventHandlerAsync(type, item)
+                onEvent: async (type, item) => await OnEventHandlerAsync(type, item, token)
                 ,
                 onClosed: () =>
                 {
                     _watcher.Dispose();
-                    StartWatcher();
+                    StartWatcher(token);
                 },
                 onError: e => Console.WriteLine(e.Message)
                 );
@@ -51,16 +52,15 @@ namespace HealthChecks.UI.K8s.Operator
 
         public async Task RunAsync(CancellationToken token)
         {
-            await StartWatcher();
-            await token.WaitAsync();
+            await StartWatcher(token);           
         }
 
-        private async Task OnEventHandlerAsync(WatchEventType type, HealthCheckResource item)
+        private async Task OnEventHandlerAsync(WatchEventType type, HealthCheckResource item, CancellationToken token)
         {
             if (type == WatchEventType.Added)
             {
                 await _controller.DeployAsync(item);
-                await _serviceWatcher.WatchAsync(item);
+                await _serviceWatcher.WatchAsync(item, token);
             }
 
             if (type == WatchEventType.Deleted)

@@ -22,11 +22,17 @@ namespace HealthChecks.UI.K8s.Operator
 
             await @operator.RunAsync(cancelTokenSource.Token);
 
-            var reset = new ManualResetEventSlim();
-            Console.CancelKeyPress += (s, a) => reset.Set();
+            var reset = new ManualResetEventSlim(false);
+
+            Console.CancelKeyPress += (s, a) =>
+            {
+                cancelTokenSource.Cancel();              
+                @operator.Dispose();
+                Console.WriteLine("Healthchecks Operator is shutting down...");
+                reset.Set();
+            };
 
             reset.Wait();
-            @operator.Dispose();
         }
 
         private static IServiceProvider InitializeProvider()

@@ -29,7 +29,6 @@ namespace Microsoft.AspNetCore.Builder
 
             });
         }
-
         private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder,
             IConfiguration configuration)
         {

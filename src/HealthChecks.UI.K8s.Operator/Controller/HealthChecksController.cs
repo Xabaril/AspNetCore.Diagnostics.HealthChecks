@@ -23,11 +23,11 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 
         public async Task<DeploymentResult> DeployAsync(HealthCheckResource resource)
         {
-            Console.WriteLine($"Creating deployment for hc resource: {resource.Metadata.NamespaceProperty}");
+            Console.WriteLine($"Creating deployment for hc resource - namespace {resource.Metadata.NamespaceProperty}");
 
             var deployment = await _deploymentHandler.GetOrCreateAsync(resource);
             
-            Console.WriteLine($"Creating service  for hc resource: {resource.Metadata.NamespaceProperty}");
+            Console.WriteLine($"Creating service  for hc resource - namespace {resource.Metadata.NamespaceProperty}");
             
             var service = await _serviceHandler.GetOrCreateAsync(resource);
             

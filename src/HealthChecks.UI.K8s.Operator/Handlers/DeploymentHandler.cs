@@ -37,6 +37,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                     await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource,
                         resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
+
+                Console.WriteLine($"Deployment {deployment.Metadata.Name} has been created");
             }
             catch (Exception ex)
             {

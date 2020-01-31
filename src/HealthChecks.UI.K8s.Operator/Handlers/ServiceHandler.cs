@@ -37,7 +37,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             {
                 var serviceResource = Build(resource);
                 service = await _client.CreateNamespacedServiceAsync(serviceResource, resource.Metadata.NamespaceProperty);
-                
+                Console.WriteLine($"Service {service.Metadata.Name} has been created");
             }
             catch (Exception ex)
             {

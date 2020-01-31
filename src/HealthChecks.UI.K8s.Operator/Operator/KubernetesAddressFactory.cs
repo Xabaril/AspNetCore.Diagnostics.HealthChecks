@@ -26,22 +26,31 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 PortType.ClusterIP => service.Spec.ClusterIP
             };
 
-            var healthPath = service.Metadata.Labels.ContainsKey(Constants.ServicesHealthPathLabel) ?
-                    service.Metadata.Labels[Constants.ServicesHealthPathLabel] :
-                    "health";
-
+          
             var healthScheme = service.Metadata.Labels.ContainsKey(Constants.ServicesSchemeLabel) ?
                     service.Metadata.Labels[Constants.ServicesSchemeLabel] :
                     "http";
 
             if (address.Contains(":"))
             {
-                return $"{healthScheme}://[{address}]{port}/{healthPath}";
+                return $"{healthScheme}://[{address}]:{port}";
             }
             else
             {
-                return $"{healthScheme}://{address}{port}/{healthPath}";
+                return $"{healthScheme}://{address}:{port}";
             }
+        }
+
+        public static string CreateHealthAddress(V1Service service)
+        {
+            var address = CreateAddress(service);
+
+            var healthPath = service.Metadata.Labels.ContainsKey(Constants.ServicesHealthPathLabel) ?
+                  service.Metadata.Labels[Constants.ServicesHealthPathLabel] :
+                  "health";
+
+            return $"{address}/{ healthPath}";
+
         }
         private static string GetLoadBalancerAddress(V1Service service)
         {

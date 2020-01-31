@@ -12,9 +12,14 @@ namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthChecksPushService
     {
-        public static async Task PushNotification(WatchEventType eventType, HealthCheckResource resource, V1Service service)
+        public static async Task PushNotification(
+            WatchEventType eventType,
+            HealthCheckResource resource,
+            V1Service uiService,
+            V1Service notificationService)
         {
-            var address = KubernetesAddressFactory.CreateAddress(service);
+            var address = KubernetesAddressFactory.CreateHealthAddress(notificationService);
+            var uiAddress = KubernetesAddressFactory.CreateAddress(uiService);
 
             dynamic healthCheck = new
             {
@@ -26,13 +31,13 @@ namespace HealthChecks.UI.K8s.Operator
             using var client = new HttpClient();
             try
             {
-                var response = await client.PostAsync($"http://localhost:5000{Constants.PushServicePath}",
+                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}",
               new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
               {
                   PropertyNamingPolicy = JsonNamingPolicy.CamelCase
               }), Encoding.UTF8, "application/json"));
 
-                Console.WriteLine($"[PushService] Type: {healthCheck.Type} - Service {service.Metadata.Name} with uri : {healthCheck.Uri} -  notification result: {response.StatusCode}");
+                Console.WriteLine($"[PushService] Type: {healthCheck.Type} - Service {notificationService.Metadata.Name} with uri : {healthCheck.Uri} -  notification result: {response.StatusCode}");
             }
             catch (Exception ex)
             {

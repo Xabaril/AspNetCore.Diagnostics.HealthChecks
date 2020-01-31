@@ -20,7 +20,7 @@ namespace HealthChecks.UI.K8s.Operator
         }
 
         internal async Task<Watcher<V1Service>> WatchAsync(HealthCheckResource resource)
-        {
+        {            
             Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
             
             if (!_watchers.Keys.Any(filter))
@@ -59,8 +59,10 @@ namespace HealthChecks.UI.K8s.Operator
         }
 
         internal async Task OnServiceDiscoveredAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
-        {            
-            await HealthChecksPushService.PushNotification(type, resource, service);
+        {
+            var uiService = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
+
+            await HealthChecksPushService.PushNotification(type, resource, uiService.Items.First(), service);
         }
 
         public void Dispose()

@@ -1,9 +1,9 @@
 namespace HealthChecks.UI.K8s.Operator
 {
-    internal enum PortType
+    public class PortType
     {
-        LoadBalancer,
-        NodePort,
-        ClusterIP
+        public const string LoadBalancer = "LoadBalancer";
+        public const string ClusterIP = "ClusterIP";
+        public const string NodePort = "NodePort";
     }
 }

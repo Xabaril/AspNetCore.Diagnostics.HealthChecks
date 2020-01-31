@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Operator;
 using k8s;
 using k8s.Models;
 
@@ -13,27 +14,37 @@ namespace HealthChecks.UI.K8s.Operator
     {
         public static async Task PushNotification(WatchEventType eventType, HealthCheckResource resource, V1Service service)
         {
-            var (addr, port) = GetServiceAddress(service);
-            if (!string.IsNullOrEmpty(addr) && port != null)
+            var address = KubernetesAddressFactory.CreateAddress(service);
+
+            dynamic healthCheck = new
             {
-                dynamic healthCheck = new
-                {
-                    Type = eventType,
-                    Name = resource.Spec.Name,
-                    Uri = $"http://{addr}:{port.Port}"
-                };
-                
-                using var client = new HttpClient();
-                await client.PostAsync($"http://localhost:5000/{Constants.PushServicePath}",
-                    new StringContent(healthCheck, Encoding.UTF8, "application/json"));
+                Type = eventType,
+                Name = resource.Spec.Name,
+                Uri = address
+            };
+
+            using var client = new HttpClient();
+            try
+            {
+                var response = await client.PostAsync($"http://localhost:5000{Constants.PushServicePath}",
+              new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
+              {
+                  PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+              }), Encoding.UTF8, "application/json"));
+
+                Console.WriteLine($"[PushService] Type: {healthCheck.Type} - Service {service.Metadata.Name} with uri : {healthCheck.Uri} -  notification result: {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error notifying healthcheck service: {ex.Message}");
             }
         }
 
         private static (string address, V1ServicePort port) GetServiceAddress(V1Service service)
         {
-            
+
             string IpAddress = default;
-            
+
             if (service.Spec.Type == "LoadBalancer")
             {
                 var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();

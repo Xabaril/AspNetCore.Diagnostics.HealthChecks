@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Image.Configuration;
+using HealthChecks.UI.Image.PushService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +22,12 @@ namespace HealthChecks.UI.Image
                 .AddHealthChecksUI()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-        }
 
+            if (bool.TryParse(Configuration[PushServiceKeys.Enabled], out bool enabled))
+            {
+                services.AddTransient<HealthChecksPushService>();
+            }
+        }
         public void Configure(IApplicationBuilder app)
         {
             app.UseRouting()

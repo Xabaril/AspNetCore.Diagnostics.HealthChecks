@@ -27,7 +27,7 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 var response =  _client.ListNamespacedServiceWithHttpMessagesAsync(
                     namespaceParameter: resource.Metadata.NamespaceProperty, 
-                    labelSelector: $"{resource.Spec.HealthchecksLabel}",
+                    labelSelector: $"{resource.Spec.ServicesLabel}",
                     watch: true);
     
                 _watcher = response.Watch<V1Service, V1ServiceList>(
@@ -59,7 +59,7 @@ namespace HealthChecks.UI.K8s.Operator
         }
 
         internal async Task OnServiceDiscoveredAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
-        {
+        {            
             await HealthChecksPushService.PushNotification(type, resource, service);
         }
 

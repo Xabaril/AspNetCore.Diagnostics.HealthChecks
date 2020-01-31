@@ -11,6 +11,7 @@ using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using HealthChecks.UI.Image.PushService;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -20,29 +21,29 @@ namespace Microsoft.AspNetCore.Builder
             IConfiguration configuration)
         {
             builder.MapHealthCheckPushEndpoint(configuration);
-            
+
             return builder.MapHealthChecksUI(setup =>
             {
                 setup.ConfigureStylesheet(configuration);
                 setup.ConfigurePaths(configuration);
-                
+
             });
         }
 
         private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder,
             IConfiguration configuration)
         {
-            if (Boolean.TryParse(configuration["enable_push_endpoint"], out bool enabled))
+            if (bool.TryParse(configuration[PushServiceKeys.Enabled], out bool enabled))
             {
                 if (!enabled) return;
-                
+
                 Console.WriteLine("HealthChecks Push Endpoint Enabled");
-                
+
                 builder.MapPost("/healthchecks/push", async context =>
                 {
                     using var streamReader = new StreamReader(context.Request.Body);
                     var content = await streamReader.ReadToEndAsync();
-                    
+
                     var endpoint = JsonDocument.Parse(content);
                     var root = endpoint.RootElement;
                     var name = root.GetProperty("name").GetString();
@@ -51,19 +52,16 @@ namespace Microsoft.AspNetCore.Builder
 
                     if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(uri))
                     {
-                        using var scope = context.RequestServices.GetService<IServiceScopeFactory>().CreateScope();
-                        var db = scope.ServiceProvider.GetService<HealthChecksDb>();
-                        
-                        await db.Configurations.AddAsync(new HealthCheckConfiguration
+                        var pushService = context.RequestServices.GetService<HealthChecksPushService>();
+
+                        if (type == PushServiceKeys.ServiceAdded)
                         {
-                            Name = name,
-                            Uri = uri,
-                            DiscoveryService = "kubernetes"
-                        });
-                        
-                        await db.SaveChangesAsync();
-                        
-                        Console.WriteLine($"[Push] New service added: {name} - {uri}");
+                            await pushService.AddAsync(name, uri);
+                        }
+                        else if (type == PushServiceKeys.ServiceRemoved)
+                        {
+                            await pushService.RemoveAsync(name);
+                        }
                     }
                 });
             }

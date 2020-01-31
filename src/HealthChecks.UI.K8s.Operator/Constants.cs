@@ -13,5 +13,8 @@ namespace HealthChecks.UI.K8s.Operator
         public const string DockerImage = "xabarilcoding/healthchecksui";
         public const string UIDefaultPath = "/healthchecks";
         public const string PushServicePath = "/healthchecks/push";
+        public const string ServicesLabel = "servicesLabel";
+        public const string ServicesHealthPathLabel = "servicesHealthPathLabel";
+        public const string ServicesSchemeLabel = "servicesSchemeLabel";
     }
 }

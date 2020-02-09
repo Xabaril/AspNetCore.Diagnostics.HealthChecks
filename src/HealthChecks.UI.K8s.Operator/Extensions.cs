@@ -20,6 +20,5 @@ namespace HealthChecks.UI.K8s.Operator
         {
             ((TaskCompletionSource<bool>)taskCompletionSource).SetResult(true);
         }
-
     }
 }

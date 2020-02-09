@@ -41,6 +41,7 @@
     <MicrosoftAspNetCoreSignalRClient>3.0.0</MicrosoftAspNetCoreSignalRClient>
     <MicrosoftAspNetCoreSignalR>1.0.0</MicrosoftAspNetCoreSignalR>
     <MicrosoftSourceLinkGithub>1.0.0</MicrosoftSourceLinkGithub>
+    <MicrosoftExtensionsLoggingConsole>3.0.0</MicrosoftExtensionsLoggingConsole>
     <FluentAssertions>5.9.0</FluentAssertions>
     <xunit>2.4.1</xunit>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
@@ -72,6 +73,7 @@
     <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
+    <KubernetesClient>1.6.10</KubernetesClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -115,5 +117,6 @@
     <HealthCheckSignalR>3.0.0</HealthCheckSignalR>
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
+    <HealthChecksK8sOperator>3.0.0</HealthChecksK8sOperator>
   </PropertyGroup>
 </Project>

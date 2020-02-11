@@ -42,7 +42,7 @@ namespace FunctionalTests.HealthChecks.Uris
                        Predicate = r => r.Tags.Contains("uris")
                    });
                });
-
+               
             var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")

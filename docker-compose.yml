@@ -17,6 +17,13 @@ services:
         ports:
           - "9300:9300"
           - ${ELASTICSEARCH_PORT}:9200
+    solr:
+        image: solr:8.4.1
+        ports:
+            - ${SOLR_PORT}:8983
+        volumes:
+            - ./build/docker-services/solrcore:/var/solr/data/solrcore
+    
     postgres:
         image: postgres
         environment:

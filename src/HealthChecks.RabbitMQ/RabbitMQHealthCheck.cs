@@ -19,10 +19,12 @@ namespace HealthChecks.RabbitMQ
                 Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
                 AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
             };
+
             if (sslOption != null)
             {
                 connectionFactory.Ssl = sslOption;
             }
+
             _connectionFactory = connectionFactory;
         }
 
@@ -48,17 +50,10 @@ namespace HealthChecks.RabbitMQ
                     return TestConnection(_rmqConnection);
                 }
 
-                if (_rmqConnection != null && _rmqConnection.IsOpen == false)
+                using (var connection = _connectionFactory.CreateConnection())
                 {
-                    _rmqConnection.Close(0);
-                    _rmqConnection = null;
+                    return TestConnection(connection);
                 }
-                if (_rmqConnection == null)
-                {
-                    _rmqConnection = CreateConnection(_connectionFactory);
-                }
-
-                return TestConnection(_rmqConnection);
             }
             catch (Exception ex)
             {

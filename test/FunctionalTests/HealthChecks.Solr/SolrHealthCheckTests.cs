@@ -26,7 +26,6 @@ namespace FunctionalTests.HealthChecks.Solr
         [Fact]
         public async Task be_healthy_if_solr_is_available()
         {
-
                 
             var webHostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()

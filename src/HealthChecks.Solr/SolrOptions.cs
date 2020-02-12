@@ -10,7 +10,8 @@ namespace HealthChecks.Solr
         public string Core { get; private set; }
         public int Timeout { get; private set; }
 
-        public SolrOptions UseServer(string uri, string core,int timeout = 1000)
+        public SolrOptions UseServer(string uri, string core, int timeout = 1000)
+
         {
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));
             Core = core ?? throw new ArgumentNullException(nameof(core));

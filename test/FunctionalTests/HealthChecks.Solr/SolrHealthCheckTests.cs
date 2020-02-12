@@ -79,7 +79,6 @@ namespace FunctionalTests.HealthChecks.Solr
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
         
-
         [Fact]
         public async Task be_unhealthy_if_solr_is_not_available()
         {

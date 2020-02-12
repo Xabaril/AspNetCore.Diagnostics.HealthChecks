@@ -13,7 +13,7 @@ namespace HealthChecks.Solr
     public class SolrHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ISolrConnection> _connections = new ConcurrentDictionary<string, ISolrConnection>();
+        private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new ConcurrentDictionary<string, SolrConnection>();
 
         private readonly SolrOptions _options;
 
@@ -25,11 +25,14 @@ namespace HealthChecks.Solr
         {
             try
             {
-                if (!_connections.TryGetValue(_options.Uri, out ISolrConnection solrConnection))
-                {
-                    solrConnection = new SolrConnection($"{_options.Uri}/{_options.Core}");
+                var url = $"{_options.Uri}/{_options.Core}";
 
-                    if (!_connections.TryAdd(_options.Uri, solrConnection))
+                if (!_connections.TryGetValue(url, out SolrConnection solrConnection))
+                {
+                    solrConnection = new SolrConnection(url);
+                    solrConnection.Timeout = _options.Timeout;
+
+                    if (!_connections.TryAdd(url, solrConnection))
                     {
                         solrConnection = _connections[_options.Uri];
                     }

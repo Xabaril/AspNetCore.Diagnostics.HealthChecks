@@ -52,6 +52,32 @@ namespace FunctionalTests.HealthChecks.Solr
                 .Should().Be(HttpStatusCode.OK);
         }
 
+        [Fact]
+        public async Task be_unhealthy_if_solr_ping_is_disabled()
+        {
+            var webHostBuilder = new WebHostBuilder()
+               .UseStartup<DefaultStartup>()
+               .ConfigureServices(services =>
+               {
+                   services.AddHealthChecks()
+                    .AddSolr("http://localhost:8893/solr", "solrcoredown", tags: new string[] { "solr" });
+               })
+               .Configure(app =>
+               {
+                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   {
+                       Predicate = r => r.Tags.Contains("solr")
+                   });
+               });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
         
 
         [Fact]

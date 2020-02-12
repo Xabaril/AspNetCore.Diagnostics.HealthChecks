@@ -34,7 +34,7 @@ namespace HealthChecks.Solr
 
                     if (!_connections.TryAdd(url, solrConnection))
                     {
-                        solrConnection = _connections[_options.Uri];
+                        solrConnection = _connections[url];
                     }
                 }
 

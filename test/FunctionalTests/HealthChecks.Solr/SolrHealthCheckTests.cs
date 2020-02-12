@@ -23,7 +23,7 @@ namespace FunctionalTests.HealthChecks.Solr
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_healthy_if_solr_is_available()
         {
                 
@@ -32,7 +32,7 @@ namespace FunctionalTests.HealthChecks.Solr
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSolr("http://localhost:8893/solr", "solrcore", tags: new string[] { "solr" });
+                    .AddSolr("http://localhost:8983/solr", "solrcore", tags: new string[] { "solr" });
                })
                .Configure(app =>
                {
@@ -51,7 +51,7 @@ namespace FunctionalTests.HealthChecks.Solr
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_unhealthy_if_solr_ping_is_disabled()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -78,7 +78,7 @@ namespace FunctionalTests.HealthChecks.Solr
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
         
-        [Fact]
+        [SkipOnAppVeyor]
         public async Task be_unhealthy_if_solr_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()

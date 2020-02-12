@@ -23,7 +23,7 @@ services:
             - ${SOLR_PORT}:8983
         volumes:
             - ./build/docker-services/solrcore:/var/solr/data/solrcore
-    
+            - ./build/docker-services/solrcoredown:/var/solr/data/solrcoredown            
     postgres:
         image: postgres
         environment:

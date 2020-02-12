@@ -27,12 +27,13 @@ namespace FunctionalTests.HealthChecks.Solr
         public async Task be_healthy_if_solr_is_available()
         {
 
+                
             var webHostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSolr("http://localhost:8893", "core", tags: new string[] { "solr" });
+                    .AddSolr("http://localhost:8893/solr", "solrcore", tags: new string[] { "solr" });
                })
                .Configure(app =>
                {

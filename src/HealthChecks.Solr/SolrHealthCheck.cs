@@ -35,9 +35,10 @@ namespace HealthChecks.Solr
                     }
                 }
 
-                var result = await new PingCommand().ExecuteAsync(solrConnection);
-               
-                var isSuccess = result =="OK";
+                var server = new SolrBasicServer<string>(solrConnection, null, null, null, null, null, null, null);
+                var result = await server.PingAsync();
+
+                var isSuccess = result.Status == 0;
 
                 return isSuccess
                     ? HealthCheckResult.Healthy()

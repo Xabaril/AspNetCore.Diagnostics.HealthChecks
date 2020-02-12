@@ -5,7 +5,7 @@
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <Description>HealthChecks.solr is the health check package for solr.</Description>
     <PackageTags>HealthCheck;Health;solr</PackageTags>
-    <Version>$(HealthChecksolr)</Version>
+    <Version>$(HealthCheckSolr)</Version>
     <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
@@ -20,6 +20,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SolrNet.Core" Version="1.0.19"/>
+    <PackageReference Include="SolrNet.Core" Version="$(SolrNetCore)"/>
   </ItemGroup>
 </Project>

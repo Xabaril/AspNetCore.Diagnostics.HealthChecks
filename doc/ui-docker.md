@@ -13,6 +13,12 @@ You can use environment variables to configure all properties on *HealthChecksUI
 docker run --name ui -p 5000:80 -e 'HealthChecksUI:HealthChecks:0:Name=httpBasic' -e 'HealthChecksUI:HealthChecks:0:Uri=http://the-healthchecks-server-path' -d xabarilcoding/healthchecksui:latest
 ```
 
+The default port binding can be changed via *ASPNETCORE_URLS* environment variable.
+
+```bash
+docker run --name ui -p 5000:80 -e 'ASPNETCORE_URLS=http://0.0.0.0:80'
+```
+
 ## Use a custom css stylesheet for branding
 
 Since version 3.0.3 you can use an environment variable and a volume to configure your own css stylesheet and display your own branding within the UI:

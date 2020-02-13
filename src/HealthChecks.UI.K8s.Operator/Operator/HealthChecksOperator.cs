@@ -1,4 +1,4 @@
-﻿using  HealthChecks.UI.K8s.Operator.Controller;
+﻿using HealthChecks.UI.K8s.Operator.Controller;
 using k8s;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,7 +14,6 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly IHealthChecksController _controller;
         private readonly HealthCheckServiceWatcher _serviceWatcher;
         private readonly ILogger<K8sOperator> _logger;
-        private readonly string _namespace;
 
         public HealthChecksOperator(
             IKubernetes client,
@@ -50,11 +49,11 @@ namespace HealthChecks.UI.K8s.Operator
                 onError: e => _logger.LogError(e.Message)
                 );
         }
-        
+
 
         public async Task RunAsync(CancellationToken token)
         {
-            await StartWatcher(token);           
+            await StartWatcher(token);
         }
 
         private async Task OnEventHandlerAsync(WatchEventType type, HealthCheckResource item, CancellationToken token)
@@ -62,7 +61,7 @@ namespace HealthChecks.UI.K8s.Operator
             if (type == WatchEventType.Added)
             {
                 await _controller.DeployAsync(item);
-                await _serviceWatcher.WatchAsync(item, token);                
+                await _serviceWatcher.WatchAsync(item, token);
             }
 
             if (type == WatchEventType.Deleted)
@@ -74,7 +73,7 @@ namespace HealthChecks.UI.K8s.Operator
 
         public void Dispose()
         {
-            _serviceWatcher?.Dispose();
+             _serviceWatcher?.Dispose();
             _watcher?.Dispose();
         }
     }

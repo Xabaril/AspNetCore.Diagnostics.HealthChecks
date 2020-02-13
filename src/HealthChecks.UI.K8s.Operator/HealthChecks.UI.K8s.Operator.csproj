@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <Version>$(HealthChecksK8sOperator)</Version>
+    <Version>$(HealthChecksUIK8sOperator)</Version>
   </PropertyGroup>
 
   <ItemGroup>

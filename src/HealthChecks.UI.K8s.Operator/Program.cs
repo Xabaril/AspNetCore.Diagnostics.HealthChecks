@@ -12,27 +12,28 @@ namespace HealthChecks.UI.K8s.Operator
 
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             var provider = InitializeProvider();
 
             var logger = provider.GetService<ILogger<K8sOperator>>();
 
             var @operator = provider.GetRequiredService<IKubernetesOperator>();
-            
+
             var cancelTokenSource = new CancellationTokenSource();
 
             logger.LogInformation("Healthchecks Operator is starting...");
 
-            await @operator.RunAsync(cancelTokenSource.Token);
+            _ = @operator.RunAsync(cancelTokenSource.Token);
 
             var reset = new ManualResetEventSlim(false);
 
             Console.CancelKeyPress += (s, a) =>
             {
-                cancelTokenSource.Cancel();              
-                @operator.Dispose();
                 logger.LogInformation("Healthchecks Operator is shutting down...");
+                @operator.Dispose();
+                cancelTokenSource.Cancel();
+
                 reset.Set();
             };
 
@@ -50,10 +51,11 @@ namespace HealthChecks.UI.K8s.Operator
         private static IServiceProvider InitializeProvider()
         {
             var services = new ServiceCollection();
-            services.AddLogging(config => {
+            services.AddLogging(config =>
+            {
                 config.AddConsole();
                 config.AddFilter(typeof(Program).Namespace, LogLevel.Information);
-                config.AddFilter("Microsoft", LogLevel.None);                
+                config.AddFilter("Microsoft", LogLevel.None);
             });
             services.AddSingleton(sp => GetKubernetesClient());
             services.AddTransient<IKubernetesOperator, HealthChecksOperator>();

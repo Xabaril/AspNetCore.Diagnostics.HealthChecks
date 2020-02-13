@@ -59,7 +59,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error deleting deployment for hc resource: {name}", resource.Spec.Name);
+                _logger.LogError("Error deleting deployment for hc resource: {name} - err: {error}", resource.Spec.Name, ex.Message);
             }
         }
 

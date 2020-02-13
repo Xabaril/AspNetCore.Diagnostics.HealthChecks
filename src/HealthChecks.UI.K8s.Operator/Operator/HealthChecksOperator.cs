@@ -44,7 +44,7 @@ namespace HealthChecks.UI.K8s.Operator
                 onClosed: () =>
                 {
                     _watcher.Dispose();
-                    StartWatcher(token);
+                    _ = StartWatcher(token);
                 },
                 onError: e => _logger.LogError(e.Message)
                 );
@@ -61,7 +61,7 @@ namespace HealthChecks.UI.K8s.Operator
             if (type == WatchEventType.Added)
             {
                 await _controller.DeployAsync(item);
-                await _serviceWatcher.WatchAsync(item, token);
+                _serviceWatcher.Watch(item, token);
             }
 
             if (type == WatchEventType.Deleted)

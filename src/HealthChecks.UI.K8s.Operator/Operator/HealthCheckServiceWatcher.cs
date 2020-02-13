@@ -22,7 +22,7 @@ namespace HealthChecks.UI.K8s.Operator
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        internal async Task<Watcher<V1Service>> WatchAsync(HealthCheckResource resource, CancellationToken token)
+        internal Watcher<V1Service> Watch(HealthCheckResource resource, CancellationToken token)
         {            
             Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
             

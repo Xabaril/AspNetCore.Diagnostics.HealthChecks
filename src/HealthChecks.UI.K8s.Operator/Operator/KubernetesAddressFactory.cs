@@ -1,4 +1,5 @@
 ﻿using k8s.Models;
+using System;
 using System.Linq;
 
 namespace HealthChecks.UI.K8s.Operator.Operator
@@ -13,15 +14,9 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             {
                 PortType.LoadBalancer => GetServicePort(service)?.Port ?? DefaultPort,
                 PortType.ClusterIP => GetServicePort(service)?.Port ?? DefaultPort,
-                PortType.NodePort => GetServicePort(service)?.NodePort ?? DefaultPort
+                PortType.NodePort => GetServicePort(service)?.NodePort ?? DefaultPort,
+                _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
             };
-
-            //var address = service.Spec.Type switch
-            //{
-            //    PortType.LoadBalancer => GetLoadBalancerAddress(service),
-            //    PortType.NodePort => GetLoadBalancerAddress(service),
-            //    PortType.ClusterIP => service.Spec.ClusterIP
-            //};
 
             var address = service.Spec.ClusterIP;
           

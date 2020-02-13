@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: healthchecks-ui-k8s-operator-deploy
-  namespace: lande
 spec:
   replicas: 1
   template:
@@ -13,4 +12,4 @@ spec:
       containers:
         - name: healthchecks-ui-k8s-operator
           image: healthchecksui-k8s-operator
-          imagePullPolicy: Never
+          imagePullPolicy: Always

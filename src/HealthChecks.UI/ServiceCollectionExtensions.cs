@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
                     var contentRoot = configuration[HostDefaults.ContentRootKey];
-                    var path = Path.Combine(contentRoot, databaseName);
+                    var path = Path.Combine(contentRoot??".", databaseName);
                     connectionString = $"Data Source={path}";
                 }
                 else
@@ -131,8 +131,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 var settings = scope.ServiceProvider
                     .GetService<IOptions<Settings>>();
+              
                 if (db.Database.GetMigrations().Count()>0)
                 {
+                    if (db.Database.GetPendingMigrations() .Count()> 0)
+                    {
+                        db.Database.Migrate();
+                    }
                     var healthCheckConfigurations = settings.Value?
                         .HealthChecks?
                         .Select(s => new HealthCheckConfiguration

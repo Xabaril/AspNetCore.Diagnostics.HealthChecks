@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -30,6 +31,8 @@ namespace FunctionalTests.UI.Configuration
             var databaseConnection = "Data Source=healthchecksdb";
             var evaluationTimeInSeconds = 180;
             var minimumSeconds = 30;
+            var maxDegreeOfParallelism = 5;
+            var timeOutInSeconds =30;
 
             var webhost = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
@@ -43,6 +46,8 @@ namespace FunctionalTests.UI.Configuration
                                 restorePayload: webhookRestorePayload)
                             .SetEvaluationTimeInSeconds(evaluationTimeInSeconds)
                             .SetMinimumSecondsBetweenFailureNotifications(minimumSeconds)
+                            .SetMaxDegreeOfParallelism(maxDegreeOfParallelism)
+                            .SetTimeOut(TimeSpan.FromSeconds(timeOutInSeconds))
                             .SetHealthCheckDatabaseConnectionString(databaseConnection);
                     });
                 });
@@ -53,7 +58,8 @@ namespace FunctionalTests.UI.Configuration
             UISettings.EvaluationTimeInSeconds.Should().Be(evaluationTimeInSeconds);
             UISettings.HealthCheckDatabaseConnectionString.Should().Be(databaseConnection);
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(minimumSeconds);
-
+            UISettings.MaxDegreeOfParallelism.Should().Be(maxDegreeOfParallelism);
+            UISettings.TimeOutInSeconds.Should().Be(timeOutInSeconds);
             UISettings.Webhooks.Count.Should().Be(1);
             UISettings.HealthChecks.Count.Should().Be(1);
 

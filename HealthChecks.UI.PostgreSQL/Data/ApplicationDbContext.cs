@@ -9,7 +9,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.PostgreSQL.Data
 {
-    public class ApplicationDbContext : IdentityDbContext, HealthChecks.UI.Core.Data.IHealthChecksDb
+    public class ApplicationDbContext : IdentityDbContext, IHealthChecksDb
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

@@ -4,10 +4,12 @@ using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -16,27 +18,26 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    internal class HealthCheckReportCollector
-        : IHealthCheckReportCollector
+    internal class HealthCheckReportCollector<T>
+        : IHealthCheckReportCollector where T : DbContext, IHealthChecksDb
     {
-        private readonly HealthChecksDb _db;
-        private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IHealthCheckFailureNotifier<T> _healthCheckFailureNotifier;
         private readonly Settings _settings;
         private readonly HttpClient _httpClient;
-        private readonly ILogger<HealthCheckReportCollector> _logger;
+        private readonly ILogger  _logger;
         private readonly ServerAddressesService _serverAddressService;
-
         private static readonly Dictionary<int, Uri> endpointAddresses = new Dictionary<int, Uri>();
 
         public HealthCheckReportCollector(
-            HealthChecksDb db,
-            IHealthCheckFailureNotifier healthCheckFailureNotifier,
+          IServiceScopeFactory serviceScopeFactory,
+            IHealthCheckFailureNotifier<T> healthCheckFailureNotifier,
             IOptions<Settings> settings,
             IHttpClientFactory httpClientFactory,
-            ILogger<HealthCheckReportCollector> logger,
+            ILogger<HealthCheckReportCollector<T>> logger,
             ServerAddressesService serverAddressService)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
+            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
             _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
             _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -47,34 +48,62 @@ namespace HealthChecks.UI.Core.HostedService
         {
             using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
             {
-                var healthChecks = await _db.Configurations
-                   .ToListAsync();
-
-                foreach (var item in healthChecks.OrderBy(h => h.Id))
+                List<HealthCheckConfiguration> healthChecks;
+                using (var scope = _serviceScopeFactory.CreateScope())
+                using (var _db = scope.ServiceProvider.GetService<T>())
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        _logger.LogDebug("HealthReportCollector has been cancelled.");
-                        break;
-                    }
-
-                    var healthReport = await GetHealthReport(item);
-
-                    if (healthReport.Status != UIHealthStatus.Healthy)
-                    {
-                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
-                    }
-                    else
-                    {
-                        if (await HasLivenessRecoveredFromFailure(item))
-                        {
-                            await _healthCheckFailureNotifier.NotifyWakeUp(item.Name);
-                        }
-                    }
-
-                    await SaveExecutionHistory(item, healthReport);
+                      healthChecks = await _db.Configurations
+                          .AsNoTracking().ToListAsync();
                 }
+                int _maxDegreeOfParallelism = _settings?.MaxDegreeOfParallelism??10;
+                TimeSpan timeout= TimeSpan.FromSeconds( _settings?.TimeOutInSeconds ?? 60);
+                if (healthChecks.Any())
+                {
+                    var po = new ParallelOptions() { MaxDegreeOfParallelism = _maxDegreeOfParallelism };
+                    var part = Partitioner.Create(0, healthChecks.Count(), (healthChecks.Count() + _maxDegreeOfParallelism - 1) / _maxDegreeOfParallelism);
+                    Parallel.ForEach(part, po, (range, loopState) =>
+                   {
+                       using (var scope = _serviceScopeFactory.CreateScope())
+                       using (var _db = scope.ServiceProvider.GetService<T>())
+                       {
+                           for (int i = range.Item1; i < range.Item2; i++)
+                           {
+                               Task.Run(async () =>
+                               {
+                                   if (cancellationToken.IsCancellationRequested)
+                                   {
+                                       _logger.LogDebug("HealthReportCollector has been cancelled.");
+                                   }
+                                   else
+                                   {
+                                       try
+                                       {
+                                           var item = _db.Configurations.Find(healthChecks[i].Id);
+                                           var healthReport = await GetHealthReport(item);
+                                           if (healthReport.Status != UIHealthStatus.Healthy)
+                                           {
+                                               await _healthCheckFailureNotifier.NotifyDown(_db, item.Name, healthReport);
+                                           }
+                                           else
+                                           {
 
+                                               if (await HasLivenessRecoveredFromFailure(_db, item))
+                                               {
+                                                   await _healthCheckFailureNotifier.NotifyWakeUp(_db, item.Name);
+                                               }
+                                           }
+                                           await SaveExecutionHistory(_db, item, healthReport);
+                                       }
+                                       catch (Exception ex)
+                                       {
+                                           _logger.LogError(ex, $"HealthReportCollector has exception {ex.Message}.");
+                                       }
+                                   }
+                               }).Wait(timeout);
+                           }
+                       }
+                   });
+                }
                 _logger.LogDebug("HealthReportCollector has completed.");
             }
         }
@@ -117,9 +146,9 @@ namespace HealthChecks.UI.Core.HostedService
             return absoluteUri;
         }
 
-        private async Task<bool> HasLivenessRecoveredFromFailure(HealthCheckConfiguration configuration)
+        private async Task<bool> HasLivenessRecoveredFromFailure(T _db, HealthCheckConfiguration configuration)
         {
-            var previous = await GetHealthCheckExecution(configuration);
+            var previous = await GetHealthCheckExecution(_db,configuration);
 
             if (previous != null)
             {
@@ -128,7 +157,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             return false;
         }
-        private async Task<HealthCheckExecution> GetHealthCheckExecution(HealthCheckConfiguration configuration)
+        private async Task<HealthCheckExecution> GetHealthCheckExecution(T _db, HealthCheckConfiguration configuration)
         {
             return await _db.Executions
                 .Include(le => le.History)
@@ -136,11 +165,11 @@ namespace HealthChecks.UI.Core.HostedService
                 .Where(le => le.Name == configuration.Name)
                 .SingleOrDefaultAsync();
         }
-        private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, UIHealthReport healthReport)
+        private async Task SaveExecutionHistory(T _db, HealthCheckConfiguration configuration, UIHealthReport healthReport)
         {
             _logger.LogDebug("HealthReportCollector - health report execution history saved.");
 
-            var execution = await GetHealthCheckExecution(configuration);
+            var execution = await GetHealthCheckExecution(_db,configuration);
 
             var lastExecutionTime = DateTime.UtcNow;
 

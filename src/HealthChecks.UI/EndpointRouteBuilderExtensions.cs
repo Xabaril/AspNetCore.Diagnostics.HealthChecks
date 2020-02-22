@@ -2,9 +2,11 @@
 using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
+using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Middleware;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,12 @@ namespace Microsoft.AspNetCore.Builder
     public static class EndpointRouteBuilderExtensions
     {
         public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
-            Action<Options> setupOptions = null)
+         Action<Options> setupOptions = null) 
+        {
+            return builder.MapHealthChecksUI<HealthChecksDb>(setupOptions);
+        }
+            public static IEndpointConventionBuilder MapHealthChecksUI<T>(this IEndpointRouteBuilder builder,
+            Action<Options> setupOptions = null)    where T : DbContext, IHealthChecksDb
         {
             var options = new Options();
             setupOptions?.Invoke(options);
@@ -24,7 +31,7 @@ namespace Microsoft.AspNetCore.Builder
 
             var apiDelegate =
                 builder.CreateApplicationBuilder()
-                    .UseMiddleware<UIApiEndpointMiddleware>()
+                    .UseMiddleware<UIApiEndpointMiddleware<T>>()
                     .Build();
 
             var webhooksDelegate =

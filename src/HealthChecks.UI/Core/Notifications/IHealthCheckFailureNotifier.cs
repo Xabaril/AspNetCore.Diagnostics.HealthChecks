@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
 {
-    interface IHealthCheckFailureNotifier
+    interface IHealthCheckFailureNotifier<T>
     {
-        Task NotifyDown(string name, UIHealthReport report);
-        Task NotifyWakeUp(string name);
+        Task NotifyDown(T _db, string name, UIHealthReport report);
+        Task NotifyWakeUp(T _db,string name);
     }
 }

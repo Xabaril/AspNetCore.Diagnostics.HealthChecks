@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HealthChecks.UI.Core.Data
 {
-    internal class HealthCheckExecution
+    public class HealthCheckExecution
     {
         public int Id { get; set; }
 

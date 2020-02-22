@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Middleware
 {
-    internal class UIApiEndpointMiddleware
+    internal class UIApiEndpointMiddleware<T> where T:DbContext,IHealthChecksDb
     {
         private readonly RequestDelegate _next;
         private readonly JsonSerializerSettings _jsonSerializationSettings;
@@ -31,14 +31,14 @@ namespace HealthChecks.UI.Middleware
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
-            using (var db = scope.ServiceProvider.GetService<HealthChecksDb>())
+            using (var db = scope.ServiceProvider.GetService<T>())
             {
                 var healthChecks = await db.Configurations
                       .ToListAsync();
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 
-                foreach (var item in healthChecks.OrderBy(h => h.Id))
+                foreach (var item in healthChecks.OrderBy(h => h.Name))
                 {
                     var execution = await db.Executions
                         .Include(le => le.History)

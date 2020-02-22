@@ -15,6 +15,8 @@ namespace HealthChecks.UI.Configuration
         internal Action<IServiceProvider, HttpClient> ApiEndpointHttpClientConfig { get; private set; }
         internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
+        public int  MaxDegreeOfParallelism { get; set; } = 10;
+        public int TimeOutInSeconds { get; set; } = 60;
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
         {
@@ -44,7 +46,21 @@ namespace HealthChecks.UI.Configuration
             EvaluationTimeInSeconds = seconds;
             return this;
         }
-
+        public Settings SetTimeOutInSeconds(int seconds)
+        {
+            TimeOutInSeconds = seconds;
+            return this;
+        }
+        public Settings SetTimeOut(TimeSpan span)
+        {
+            TimeOutInSeconds =(int) span.TotalSeconds;
+            return this;
+        }
+        public Settings SetMaxDegreeOfParallelism(int maxDegreeOfParallelism)
+        {
+            MaxDegreeOfParallelism = maxDegreeOfParallelism;
+            return this;
+        }
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;

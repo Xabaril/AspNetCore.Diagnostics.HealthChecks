@@ -1,30 +1,43 @@
 ﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
+using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Middleware;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
+        public static IApplicationBuilder UseHealthChecksUI<T>(this IApplicationBuilder app, Action<Options> setup) where T : DbContext, IHealthChecksDb
+        {
+            var options = new Options();
+            setup?.Invoke(options);
+            return ConfigurePipeline<T>(app, options);
+        }
         public static IApplicationBuilder UseHealthChecksUI(this IApplicationBuilder app, Action<Options> setup)
         {
             var options = new Options();
             setup?.Invoke(options);
 
-            return ConfigurePipeline(app, options);
+            return ConfigurePipeline<HealthChecksDb>(app, options);
+        }
+        public static IApplicationBuilder UseHealthChecksUI<T>(this IApplicationBuilder app) where T : DbContext, IHealthChecksDb
+        {
+            return ConfigurePipeline<T>(app, new Options());
         }
         public static IApplicationBuilder UseHealthChecksUI(this IApplicationBuilder app)
         {
-            return ConfigurePipeline(app, new Options());
+            return ConfigurePipeline<HealthChecksDb>(app, new Options());
         }
-        private static IApplicationBuilder ConfigurePipeline(IApplicationBuilder app, Options options)
+        
+            private static IApplicationBuilder ConfigurePipeline<T>(IApplicationBuilder app, Options options) where T : DbContext, IHealthChecksDb
         {
             EnsureValidApiOptions(options);
 
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 
-            app.Map(options.ApiPath, appBuilder => appBuilder.UseMiddleware<UIApiEndpointMiddleware>());
+            app.Map(options.ApiPath, appBuilder => appBuilder.UseMiddleware<UIApiEndpointMiddleware<T>>());
             app.Map(options.WebhookPath, appBuilder => appBuilder.UseMiddleware<UIWebHooksApiMiddleware>());
 
             new UIResourcesMapper(

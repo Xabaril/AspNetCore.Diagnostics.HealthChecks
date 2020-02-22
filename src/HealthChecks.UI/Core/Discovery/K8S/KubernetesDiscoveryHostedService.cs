@@ -1,5 +1,6 @@
 ﻿using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -12,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
-    internal class KubernetesDiscoveryHostedService : IHostedService
+    internal class KubernetesDiscoveryHostedService <T>: IHostedService where T : DbContext, IHealthChecksDb
     {
         private readonly KubernetesDiscoverySettings _discoveryOptions;
-        private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
+        private readonly ILogger  _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly HttpClient _discoveryClient;
         private readonly HttpClient _clusterServiceClient;
@@ -27,7 +28,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             IServiceProvider serviceProvider,
             KubernetesDiscoverySettings discoveryOptions,
             IHttpClientFactory httpClientFactory,
-            ILogger<KubernetesDiscoveryHostedService> logger)
+            ILogger<KubernetesDiscoveryHostedService<T>> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
@@ -61,7 +62,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var livenessDbContext = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
+                    var livenessDbContext = scope.ServiceProvider.GetRequiredService<T>();
 
                     try
                     {
@@ -97,7 +98,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 await Task.Delay(_discoveryOptions.RefreshTimeOnSeconds * 1000);
             }
         }
-        bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
+        bool IsLivenessRegistered(T livenessDb, string host)
         {
             return livenessDb.Configurations
                 .Any(lc => lc.Uri == host);
@@ -111,7 +112,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             var response = await _clusterServiceClient.GetAsync(host);
             return response.StatusCode;
         }
-        Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
+        Task<int> RegisterDiscoveredLiveness(T livenessDb, string host, string name)  
         {
             livenessDb.Configurations.Add(new HealthCheckConfiguration()
             {

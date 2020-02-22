@@ -1,10 +1,11 @@
 ﻿using HealthChecks.UI.Core.Data.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Core.Data
 {
     class HealthChecksDb
-        : DbContext
+        : DbContext, IHealthChecksDb
     {
         public DbSet<HealthCheckConfiguration> Configurations { get; set; }
 
@@ -28,11 +29,7 @@ namespace HealthChecks.UI.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new HealthCheckConfigurationMap());
-            modelBuilder.ApplyConfiguration(new HealthCheckExecutionMap());
-            modelBuilder.ApplyConfiguration(new HealthCheckExecutionEntryMap());
-            modelBuilder.ApplyConfiguration(new HealthCheckExecutionHistoryMap());
-            modelBuilder.ApplyConfiguration(new HealthCheckFailureNotificationsMap());
+            modelBuilder.ApplyHealthChecksDBConfiguration();
         }
     }
 }

@@ -13,42 +13,39 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
 {
-    internal class WebHookFailureNotifier
-        : IHealthCheckFailureNotifier
+    internal class WebHookFailureNotifier<T> 
+        : IHealthCheckFailureNotifier<T> where T : DbContext, IHealthChecksDb
     {
-        private readonly ILogger<WebHookFailureNotifier> _logger;
+        private readonly ILogger  _logger;
         private readonly Settings _settings;
-        private readonly HealthChecksDb _db;
         private readonly ServerAddressesService _serverAddressesService;
         private readonly HttpClient _httpClient;
 
         public WebHookFailureNotifier(
-            HealthChecksDb db,
             IOptions<Settings> settings,
             ServerAddressesService serverAddressesService,
-            ILogger<WebHookFailureNotifier> logger,
+            ILogger<WebHookFailureNotifier<T>> logger,
             IHttpClientFactory httpClientFactory)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
             _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
             _settings = settings.Value ?? new Settings();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
 
         }
-        public async Task NotifyDown(string name, UIHealthReport report)
+        public async Task NotifyDown(T _db, string name, UIHealthReport report)
         {
-            await Notify(name, failure: GetFailedMessageFromContent(report), isHealthy: false, description: GetFailedDescriptionsFromContent(report));
+            await Notify(_db,name, failure: GetFailedMessageFromContent(report), isHealthy: false, description: GetFailedDescriptionsFromContent(report));
         }
-        public async Task NotifyWakeUp(string name)
+        public async Task NotifyWakeUp(T _db, string name)
         {
-            await Notify(name, isHealthy: true);
+            await Notify(_db,name, isHealthy: true);
         }
-        private async Task Notify(string name, string failure = "", bool isHealthy = false, string description = null)
+        private async Task Notify(T _db, string name, string failure = "", bool isHealthy = false, string description = null)
         {
-            if (!await IsNotifiedOnWindowTime(name, isHealthy))
+            if (!await IsNotifiedOnWindowTime(_db,name, isHealthy))
             {
-                await SaveNotification(new HealthCheckFailureNotification()
+                await SaveNotification(_db,new HealthCheckFailureNotification()
                 {
                     LastNotified = DateTime.UtcNow,
                     HealthCheckName = name,
@@ -78,7 +75,7 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogInformation("Notification is sent on same window time.");
             }
         }
-        private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
+        private async Task<bool> IsNotifiedOnWindowTime(T _db, string livenessName, bool restore)
         {
             var lastNotification = await _db.Failures
                 .Where(lf => lf.HealthCheckName.ToLower() == livenessName.ToLower())
@@ -92,7 +89,7 @@ namespace HealthChecks.UI.Core.Notifications
                 &&
                 (DateTime.UtcNow - lastNotification.LastNotified).TotalSeconds < _settings.MinimumSecondsBetweenFailureNotifications;
         }
-        private async Task SaveNotification(HealthCheckFailureNotification notification)
+        private async Task SaveNotification(T _db, HealthCheckFailureNotification notification)
         {
             if (notification != null)
             {
@@ -136,13 +133,6 @@ namespace HealthChecks.UI.Core.Notifications
                 .Aggregate((first, after) => $"{first} {JOIN_SYMBOL} {after}");
 
             return failedChecksDescription;
-        }
-        public void Dispose()
-        {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
         }
     }
 }

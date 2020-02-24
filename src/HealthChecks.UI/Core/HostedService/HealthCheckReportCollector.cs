@@ -43,6 +43,7 @@ namespace HealthChecks.UI.Core.HostedService
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _serverAddressService = serverAddressService ?? throw new ArgumentNullException(nameof(serverAddressService));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+            _httpClient.Timeout = TimeSpan.FromSeconds(_settings.TimeOutInSeconds);
         }
         public async Task Collect(CancellationToken cancellationToken)
         {

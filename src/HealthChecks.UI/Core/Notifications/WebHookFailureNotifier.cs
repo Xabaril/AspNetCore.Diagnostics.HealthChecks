@@ -90,7 +90,7 @@ namespace HealthChecks.UI.Core.Notifications
                 &&
                 lastNotification.IsUpAndRunning == restore
                 &&
-                (DateTime.UtcNow - lastNotification.LastNotified).TotalSeconds < _settings.MinimumSecondsBetweenFailureNotifications;
+                (DateTime.UtcNow - lastNotification.LastNotified).TotalSeconds > _settings.MinimumSecondsBetweenFailureNotifications;
         }
         private async Task SaveNotification(HealthCheckFailureNotification notification)
         {

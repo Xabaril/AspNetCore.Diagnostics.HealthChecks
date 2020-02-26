@@ -115,8 +115,6 @@ namespace Microsoft.Extensions.DependencyInjection
             .Services;
         }
 
-        private static volatile bool isDatabaseDeleted = false;
-        private static Mutex deletionMutex = new Mutex();
         static async Task CreateDatabase(IServiceProvider serviceProvider)
         {
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
@@ -132,14 +130,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 var settings = scope.ServiceProvider
                     .GetService<IOptions<Settings>>();
 
-                deletionMutex.WaitOne();
-                if (!isDatabaseDeleted)
-                {
-                    await db.Database.EnsureDeletedAsync();
-                    isDatabaseDeleted = true;
-                }
-                await db.Database.MigrateAsync();
-                deletionMutex.ReleaseMutex();
+                await db.EnsureMigratedAsync();
 
                 var healthCheckConfigurations = settings.Value?
                     .HealthChecks?
@@ -159,6 +150,20 @@ namespace Microsoft.Extensions.DependencyInjection
                     await db.SaveChangesAsync();
                 }
             }
+        }
+
+        private static volatile bool isDatabaseDeleted;
+        private static SemaphoreSlim deletionSemaphore = new SemaphoreSlim(1);
+        private static async Task EnsureMigratedAsync(this HealthChecksDb db)
+        {
+            await deletionSemaphore.WaitAsync();
+            if (!isDatabaseDeleted)
+            {
+                await db.Database.EnsureDeletedAsync();
+                isDatabaseDeleted = true;
+            }
+            await db.Database.MigrateAsync();
+            deletionSemaphore.Release();
         }
     }
 }

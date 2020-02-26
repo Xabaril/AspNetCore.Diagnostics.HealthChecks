@@ -14,7 +14,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -116,7 +115,7 @@ namespace Microsoft.Extensions.DependencyInjection
             .Services;
         }
 
-        private static bool databaseDeleted = false;
+        private static volatile bool isDatabaseDeleted = false;
         private static Mutex deletionMutex = new Mutex();
         static async Task CreateDatabase(IServiceProvider serviceProvider)
         {
@@ -134,10 +133,10 @@ namespace Microsoft.Extensions.DependencyInjection
                     .GetService<IOptions<Settings>>();
 
                 deletionMutex.WaitOne();
-                if (!databaseDeleted)
+                if (!isDatabaseDeleted)
                 {
                     await db.Database.EnsureDeletedAsync();
-                    databaseDeleted = true;
+                    isDatabaseDeleted = true;
                 }
                 await db.Database.MigrateAsync();
                 deletionMutex.ReleaseMutex();

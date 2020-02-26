@@ -153,17 +153,17 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         private static volatile bool isDatabaseMigrated;
-        private static SemaphoreSlim deletionSemaphore = new SemaphoreSlim(1);
+        private static SemaphoreSlim migrationSemaphore = new SemaphoreSlim(1);
         private static async Task EnsureMigratedAsync(this HealthChecksDb db)
         {
-            await deletionSemaphore.WaitAsync();
+            await migrationSemaphore.WaitAsync();
             if (!isDatabaseMigrated)
             {
                 await db.Database.EnsureDeletedAsync();
                 await db.Database.MigrateAsync();
                 isDatabaseMigrated = true;
             }
-            deletionSemaphore.Release();
+            migrationSemaphore.Release();
         }
     }
 }

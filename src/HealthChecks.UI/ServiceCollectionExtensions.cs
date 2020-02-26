@@ -152,6 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
+
         private static volatile bool isDatabaseMigrated;
         private static SemaphoreSlim migrationSemaphore = new SemaphoreSlim(1);
         private static async Task EnsureMigratedAsync(this HealthChecksDb db)

@@ -152,6 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
+
         private static volatile bool isDatabaseMigrated;
         private static Mutex migrationMutex = new Mutex();
         private static async Task EnsureMigratedAsync(this HealthChecksDb db)

@@ -157,13 +157,18 @@ namespace Microsoft.Extensions.DependencyInjection
         private static async Task EnsureMigratedAsync(this HealthChecksDb db)
         {
             await migrationSemaphore.WaitAsync();
-            if (!isDatabaseMigrated)
+            try
             {
-                await db.Database.EnsureDeletedAsync();
-                await db.Database.MigrateAsync();
-                isDatabaseMigrated = true;
+                if (!isDatabaseMigrated)
+                {
+                    await db.Database.EnsureDeletedAsync();
+                    await db.Database.MigrateAsync();
+                    isDatabaseMigrated = true;
+                }
             }
-            migrationSemaphore.Release();
+            finally {
+                migrationSemaphore.Release();
+            }
         }
     }
 }

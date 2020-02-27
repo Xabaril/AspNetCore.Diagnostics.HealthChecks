@@ -154,10 +154,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
         private static volatile bool isDatabaseMigrated;
-        private static Mutex migrationMutex = new Mutex();
+        private static SemaphoreSlim migrationSemaphore = new SemaphoreSlim(1, 1);
         private static async Task EnsureMigratedAsync(this HealthChecksDb db)
         {
-            migrationMutex.WaitOne();
+            await migrationSemaphore.WaitAsync();
             try
             {
                 if (!isDatabaseMigrated)
@@ -169,7 +169,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             finally
             {
-                migrationMutex.ReleaseMutex();
+                migrationSemaphore.Release();
             }
         }
     }

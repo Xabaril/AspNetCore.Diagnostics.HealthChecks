@@ -166,7 +166,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     isDatabaseMigrated = true;
                 }
             }
-            finally {
+            finally
+            {
                 migrationSemaphore.Release();
             }
         }

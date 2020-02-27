@@ -25,7 +25,8 @@ namespace FunctionalTests.HealthChecks.UI
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks();
-                  Action<Settings> setupSettings = settings => {
+                  Action<Settings> setupSettings = settings =>
+                  {
                       settings.AddHealthCheckEndpoint("Base", "/health");
                   };
                   services.AddHealthChecksUI(setupSettings: setupSettings);

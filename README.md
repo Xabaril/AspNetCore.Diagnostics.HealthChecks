@@ -21,6 +21,7 @@ HealthChecks packages include health checks for:
 - EventStore
 - RabbitMQ
 - Elasticsearch
+- Solr
 - Redis
 - System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
@@ -49,6 +50,7 @@ Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.Elasticsearch
+Install-Package AspNetCore.HealthChecks.Solr
 Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore
 Install-Package AspNetCore.HealthChecks.AzureStorage

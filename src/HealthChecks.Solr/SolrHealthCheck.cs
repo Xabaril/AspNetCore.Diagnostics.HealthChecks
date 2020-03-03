@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SolrNet.Impl;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using SolrNet;
-using SolrNet.Impl;
-using SolrNet.Impl.ResponseParsers;
-using SolrNet.Commands;
 
 namespace HealthChecks.Solr
 {
@@ -30,7 +27,7 @@ namespace HealthChecks.Solr
                 if (!_connections.TryGetValue(url, out SolrConnection solrConnection))
                 {
                     solrConnection = new SolrConnection(url);
-                    solrConnection.Timeout = _options.Timeout;
+                    solrConnection.Timeout = (int)_options.Timeout.TotalMilliseconds;
 
                     if (!_connections.TryAdd(url, solrConnection))
                     {
@@ -38,7 +35,16 @@ namespace HealthChecks.Solr
                     }
                 }
 
-                var server = new SolrBasicServer<string>(solrConnection, null, null, null, null, null, null, null);
+                var server = new SolrBasicServer<string>(
+                    solrConnection,
+                    queryExecuter: null,
+                    documentSerializer: null,
+                    schemaParser: null,
+                    headerParser: null,
+                    querySerializer: null,
+                    dihStatusParser: null,
+                    extractResponseParser: null);
+
                 var result = await server.PingAsync();
 
                 var isSuccess = result.Status == 0;

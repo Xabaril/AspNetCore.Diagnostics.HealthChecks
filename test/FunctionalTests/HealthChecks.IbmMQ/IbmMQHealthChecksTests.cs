@@ -114,7 +114,6 @@ namespace FunctionalTests.HealthChecks.IbmMQ
     [SkipOnAppVeyor]
     public async Task be_unhealthy_if_ibmmq_managed_is_unavailable()
     {
-
       var webHostBuilder = new WebHostBuilder()
           .UseStartup<DefaultStartup>()
           .ConfigureServices(services =>

@@ -29,7 +29,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Using Managed Client Connection
 
-For `MQC.TRANSPORT_MQSERIES_MANAGED` connection you can use the following conveniece extension method where you need to specified the channel and the host(port) information. User and password are optional parameters.
+For `MQC.TRANSPORT_MQSERIES_MANAGED` connection you can use the following conveniece extension method where you need to specify the channel and the host(port) information. User and password are optional parameters.
 
 ```cs
 public void ConfigureServices(IServiceCollection services)

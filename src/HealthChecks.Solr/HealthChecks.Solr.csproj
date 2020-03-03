@@ -10,7 +10,7 @@
     <Company>$(Company)</Company>
     <Authors>$(Authors)</Authors>
     <LangVersion>latest</LangVersion>
-    <PackageId>AspNetCore.HealthChecks.solr</PackageId>
+    <PackageId>AspNetCore.HealthChecks.Solr</PackageId>
     <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>

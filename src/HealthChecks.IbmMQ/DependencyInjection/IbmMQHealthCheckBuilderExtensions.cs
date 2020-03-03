@@ -62,6 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
           tags,
           timeout));
     }
+
     private static Hashtable BuildProperties(string channel, string connectionInfo, string userName = null, string password = null)
     {
       Hashtable properties = new Hashtable {

@@ -14,28 +14,16 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
         {
             if(k8sNamespaces is null || !k8sNamespaces.Any())
             {
-                return await client.GetServices(label, k8sNamespaces?.FirstOrDefault(), cancellationToken);
+                return await client.ListServiceForAllNamespacesAsync(labelSelector: label, cancellationToken: cancellationToken);
             }
             else
             {
-                var responses = await Task.WhenAll(k8sNamespaces.Select(k8sNamespace => client.GetServices(label, k8sNamespace, cancellationToken)));
+                var responses = await Task.WhenAll(k8sNamespaces.Select(k8sNamespace => client.ListNamespacedServiceAsync(k8sNamespace, labelSelector: label, cancellationToken: cancellationToken)));
                 
                 return new V1ServiceList()
                 {
                     Items = responses.SelectMany(r => r.Items).ToList()
                 };
-            }
-        }
-
-        private static async Task<V1ServiceList> GetServices(this IKubernetes client, string label, string? k8sNamespace, CancellationToken cancellationToken)
-        {
-            if(string.IsNullOrEmpty(k8sNamespace))
-            {
-                return await client.ListServiceForAllNamespacesAsync(labelSelector: label, cancellationToken: cancellationToken);
-            }
-            else
-            {
-                return await client.ListNamespacedServiceAsync(k8sNamespace, labelSelector: label, cancellationToken: cancellationToken);
             }
         }
     }

@@ -3,9 +3,9 @@ using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
-using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
+using k8s;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -69,12 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (kubernetesDiscoverySettings.Enabled)
             {
-                services.AddSingleton(kubernetesDiscoverySettings)
-                    .AddHostedService<KubernetesDiscoveryHostedService>()
-                    .AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) => client.ConfigureKubernetesClient(provider))
-                        .ConfigureKubernetesMessageHandler()
-                    .Services
-                    .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+                services.AddKubernetesDiscoveryService(kubernetesDiscoverySettings);
             }
 
             var serviceProvider = services.BuildServiceProvider();
@@ -150,6 +145,36 @@ namespace Microsoft.Extensions.DependencyInjection
                     await db.SaveChangesAsync();
                 }
             }
+        }
+
+        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
+        {
+            KubernetesClientConfiguration kubernetesConfig;
+            if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))
+            {
+                kubernetesConfig = new KubernetesClientConfiguration {
+                    Host = kubernetesDiscoverySettings.ClusterHost,
+                    AccessToken = kubernetesDiscoverySettings.Token,
+                    // Some cloud services like Azure AKS use self-signed certificates not valid for httpclient.
+                    // With this method we allow invalid certificates
+                    SkipTlsVerify = true
+                };
+            }
+            else if (KubernetesClientConfiguration.IsInCluster())
+            {
+                kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
+            }
+            else
+            {
+                kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            }
+
+            services.AddSingleton(kubernetesDiscoverySettings)
+                .AddHostedService<KubernetesDiscoveryHostedService>()
+                .AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig))
+                .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+
+            return services;
         }
     }
 }

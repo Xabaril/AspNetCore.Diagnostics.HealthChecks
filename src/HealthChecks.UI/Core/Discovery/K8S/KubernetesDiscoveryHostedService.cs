@@ -1,5 +1,6 @@
 ﻿using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S.Extensions;
+using k8s;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly KubernetesDiscoverySettings _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly HttpClient _discoveryClient;
+        private readonly IKubernetes _discoveryClient;
         private readonly HttpClient _clusterServiceClient;
         private readonly KubernetesAddressFactory _addressFactory;
 
@@ -27,15 +28,16 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             IServiceProvider serviceProvider,
             KubernetesDiscoverySettings discoveryOptions,
             IHttpClientFactory httpClientFactory,
+            IKubernetes discoveryClient,
             ILogger<KubernetesDiscoveryHostedService> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _discoveryClient = httpClientFactory.CreateClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME);
+            _discoveryClient = discoveryClient;
             _clusterServiceClient = httpClientFactory.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
-            _addressFactory = new KubernetesAddressFactory(discoveryOptions.HealthPath);
+            _addressFactory = new KubernetesAddressFactory(discoveryOptions);
 
         }
         public Task StartAsync(CancellationToken cancellationToken)
@@ -57,41 +59,40 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.LogInformation($"Starting kubernetes service discovery on cluster {_discoveryOptions.ClusterHost}");
+                _logger.LogInformation("Starting kubernetes service discovery");
 
-                using (var scope = _serviceProvider.CreateScope())
+                using var scope = _serviceProvider.CreateScope();
+
+                var livenessDbContext = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
+
+                try
                 {
-                    var livenessDbContext = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
-
-                    try
+                    var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
+                    foreach (var item in services.Items)
                     {
-                        var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel);
-                        foreach (var item in services.Items)
+                        try
                         {
-                            try
-                            {
-                                var serviceAddress = _addressFactory.CreateAddress(item);
+                            var serviceAddress = _addressFactory.CreateAddress(item);
 
-                                if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
+                            if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
+                            {
+                                var statusCode = await CallClusterService(serviceAddress);
+                                if (IsValidHealthChecksStatusCode(statusCode))
                                 {
-                                    var statusCode = await CallClusterService(serviceAddress);
-                                    if (IsValidHealthChecksStatusCode(statusCode))
-                                    {
-                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
-                                        _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
-                                    }
+                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                    _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
                                 }
                             }
-                            catch (Exception)
-                            {
-                                _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
-                            }
+                        }
+                        catch (Exception)
+                        {
+                            _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "An error occurred on kubernetes service discovery");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred on kubernetes service discovery");
                 }
 
                 await Task.Delay(_discoveryOptions.RefreshTimeOnSeconds * 1000);

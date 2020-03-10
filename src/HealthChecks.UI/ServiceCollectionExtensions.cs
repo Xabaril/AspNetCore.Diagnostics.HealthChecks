@@ -150,6 +150,7 @@ namespace Microsoft.Extensions.DependencyInjection
         static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
         {
             KubernetesClientConfiguration kubernetesConfig;
+
             if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))
             {
                 kubernetesConfig = new KubernetesClientConfiguration {

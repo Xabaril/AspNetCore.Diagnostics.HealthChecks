@@ -34,9 +34,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            _discoveryClient = discoveryClient;
-            _clusterServiceClient = httpClientFactory.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+            _discoveryClient = discoveryClient ?? throw new ArgumentNullException(nameof(discoveryClient));
+            _clusterServiceClient = httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME) ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _addressFactory = new KubernetesAddressFactory(discoveryOptions);
 
         }
@@ -68,25 +67,29 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 try
                 {
                     var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
-                    foreach (var item in services.Items)
-                    {
-                        try
-                        {
-                            var serviceAddress = _addressFactory.CreateAddress(item);
 
-                            if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
+                    if (services != null)
+                    {
+                        foreach (var item in services.Items)
+                        {
+                            try
                             {
-                                var statusCode = await CallClusterService(serviceAddress);
-                                if (IsValidHealthChecksStatusCode(statusCode))
+                                var serviceAddress = _addressFactory.CreateAddress(item);
+
+                                if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                                 {
-                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
-                                    _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
+                                    var statusCode = await CallClusterService(serviceAddress);
+                                    if (IsValidHealthChecksStatusCode(statusCode))
+                                    {
+                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                        _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
+                                    }
                                 }
                             }
-                        }
-                        catch (Exception)
-                        {
-                            _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
+                            catch (Exception)
+                            {
+                                _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
+                            }
                         }
                     }
                 }

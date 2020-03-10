@@ -69,7 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (kubernetesDiscoverySettings.Enabled)
             {
-                services.AddKubernetesServiceDiscovery(kubernetesDiscoverySettings);
+                services.AddKubernetesDiscoveryService(kubernetesDiscoverySettings);
             }
 
             var serviceProvider = services.BuildServiceProvider();
@@ -147,7 +147,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
-        static IServiceCollection AddKubernetesServiceDiscovery(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
+        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
         {
             KubernetesClientConfiguration kubernetesConfig;
             if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))

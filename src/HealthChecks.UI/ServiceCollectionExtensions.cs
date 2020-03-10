@@ -69,30 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (kubernetesDiscoverySettings.Enabled)
             {
-                KubernetesClientConfiguration kubernetesConfig;
-                if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))
-                {
-                    kubernetesConfig = new KubernetesClientConfiguration {
-                        Host = kubernetesDiscoverySettings.ClusterHost,
-                        AccessToken = kubernetesDiscoverySettings.Token,
-                        // Some cloud services like Azure AKS use self-signed certificates not valid for httpclient.
-                        // With this method we allow invalid certificates
-                        SkipTlsVerify = true
-                    };
-                }
-                else if (KubernetesClientConfiguration.IsInCluster())
-                {
-                    kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
-                }
-                else
-                {
-                    kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
-                }
-
-                services.AddSingleton(kubernetesDiscoverySettings)
-                    .AddHostedService<KubernetesDiscoveryHostedService>()
-                    .AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig))
-                    .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+                services.AddKubernetesServiceDiscovery(kubernetesDiscoverySettings);
             }
 
             var serviceProvider = services.BuildServiceProvider();
@@ -168,6 +145,36 @@ namespace Microsoft.Extensions.DependencyInjection
                     await db.SaveChangesAsync();
                 }
             }
+        }
+
+        static IServiceCollection AddKubernetesServiceDiscovery(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
+        {
+            KubernetesClientConfiguration kubernetesConfig;
+            if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))
+            {
+                kubernetesConfig = new KubernetesClientConfiguration {
+                    Host = kubernetesDiscoverySettings.ClusterHost,
+                    AccessToken = kubernetesDiscoverySettings.Token,
+                    // Some cloud services like Azure AKS use self-signed certificates not valid for httpclient.
+                    // With this method we allow invalid certificates
+                    SkipTlsVerify = true
+                };
+            }
+            else if (KubernetesClientConfiguration.IsInCluster())
+            {
+                kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
+            }
+            else
+            {
+                kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            }
+
+            services.AddSingleton(kubernetesDiscoverySettings)
+                .AddHostedService<KubernetesDiscoveryHostedService>()
+                .AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig))
+                .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+
+            return services;
         }
     }
 }

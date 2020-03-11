@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace HealthChecks.UI.Core
@@ -26,6 +27,8 @@ namespace HealthChecks.UI.Core
         {
             var targetAddress = AddressesFeature.Addresses.First();
 
+            Uri.TryCreate(targetAddress, UriKind.Absolute, out var original);
+
             if (targetAddress.EndsWith("/"))
             {
                 targetAddress = targetAddress[0..^1];
@@ -34,6 +37,13 @@ namespace HealthChecks.UI.Core
             if (!relativeUrl.StartsWith("/"))
             {
                 relativeUrl = $"/{relativeUrl}";
+            }
+
+            var hostCheck = Uri.CheckHostName(original.DnsSafeHost);
+
+            if(hostCheck != UriHostNameType.Dns)
+            {
+                targetAddress = $"{original.Scheme}://{Dns.GetHostName()}:{original.Port}";
             }
 
             return $"{targetAddress}{relativeUrl}";

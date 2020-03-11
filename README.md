@@ -155,7 +155,7 @@ public class Startup
 
 This automatically registers a new interface on **/healthchecks-ui** where the spa will be served.
 
-> Optionally, *MapHealthChecksUI* can be configured to serve it's health api, webhooks api and the front-end resources in different endpoints using the MapHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
+> Optionally, *MapHealthChecksUI* can be configured to serve its health api, webhooks api and the front-end resources in different endpoints using the MapHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
 **Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend spa to receive the result of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by default is the url that the spa queries.
 

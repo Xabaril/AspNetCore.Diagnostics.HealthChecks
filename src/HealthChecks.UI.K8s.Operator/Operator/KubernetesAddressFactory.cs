@@ -18,7 +18,13 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
             };
 
-            var address = service.Spec.ClusterIP;
+            var address = service.Spec.Type switch
+            {
+                ServiceType.LoadBalancer => GetLoadBalancerAddress(service),
+                ServiceType.NodePort => GetLoadBalancerAddress(service),
+                ServiceType.ClusterIP => service.Spec.ClusterIP,
+                _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
+            };
 
             var healthScheme = service.Metadata.Annotations?.ContainsKey(Constants.HealthCheckSchemeAnnotation) ?? false ?
                     service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation] :
@@ -52,6 +58,17 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
             return $"{address}/{ healthPath.TrimStart('/')}";
 
+        }
+
+        private static string GetLoadBalancerAddress(V1Service service)
+        {
+            var ingress = service.Status.LoadBalancer?.Ingress?.FirstOrDefault();
+            if (ingress != null)
+            {
+                return ingress.Hostname ?? ingress.Ip;
+            }
+
+            return service.Spec.ClusterIP;
         }
 
         private static V1ServicePort GetServicePort(V1Service service)

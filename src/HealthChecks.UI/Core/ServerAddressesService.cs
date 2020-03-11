@@ -41,7 +41,7 @@ namespace HealthChecks.UI.Core
 
             var hostCheck = Uri.CheckHostName(original.DnsSafeHost);
 
-            if(hostCheck != UriHostNameType.Dns)
+            if (hostCheck != UriHostNameType.Dns)
             {
                 targetAddress = $"{original.Scheme}://{Dns.GetHostName()}:{original.Port}";
             }

@@ -26,9 +26,17 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
             };
 
-            var healthScheme = service.Metadata.Annotations?.ContainsKey(Constants.HealthCheckSchemeAnnotation) ?? false ?
-                    service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation] :
-                    Constants.DefaultScheme;
+            string healthScheme = resource.Spec.HealthChecksScheme;
+
+            if (service.Metadata.Annotations?.ContainsKey(Constants.HealthCheckSchemeAnnotation) ?? false)
+            {
+                healthScheme = service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation];
+            }
+
+            if (string.IsNullOrEmpty(healthScheme))
+            {
+                healthScheme = Constants.DefaultScheme;
+            }
 
             if (address.Contains(":"))
             {

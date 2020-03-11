@@ -11,5 +11,5 @@ spec:
     spec:
       containers:
         - name: healthchecks-ui-k8s-operator
-          image: healthchecksui-k8s-operator
+          image: xabarilcoding/healthchecksui-k8s-operator
           imagePullPolicy: Always

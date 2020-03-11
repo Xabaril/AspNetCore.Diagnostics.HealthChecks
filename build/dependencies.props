@@ -41,6 +41,7 @@
     <MicrosoftAspNetCoreSignalRClient>3.0.0</MicrosoftAspNetCoreSignalRClient>
     <MicrosoftAspNetCoreSignalR>1.0.0</MicrosoftAspNetCoreSignalR>
     <MicrosoftSourceLinkGithub>1.0.0</MicrosoftSourceLinkGithub>
+    <MicrosoftExtensionsLoggingConsole>3.0.0</MicrosoftExtensionsLoggingConsole>
     <FluentAssertions>5.9.0</FluentAssertions>
     <xunit>2.4.1</xunit>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
@@ -69,9 +70,9 @@
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3> 
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
-    <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
+    <KubernetesClient>1.6.10</KubernetesClient>
     <SolrNetCore>1.0.19</SolrNetCore>
   </PropertyGroup>
 
@@ -104,7 +105,7 @@
     <HealthCheckHangfire>3.0.0</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.0.0</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.0.0</HealthCheckConsul>
-    <HealthCheckUI>3.0.9</HealthCheckUI>
+    <HealthCheckUI>3.0.10</HealthCheckUI>
     <HealthCheckUIClient>3.0.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>3.0.3</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.0.0</HealthCheckPublisherDatadog>
@@ -117,6 +118,7 @@
     <HealthCheckSignalR>3.0.0</HealthCheckSignalR>
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
-	<HealthCheckIbmMQ>3.0.0</HealthCheckIbmMQ>
+	  <HealthCheckIbmMQ>3.0.0</HealthCheckIbmMQ>
+    <HealthChecksUIK8sOperator>3.0.0-beta.1</HealthChecksUIK8sOperator>
   </PropertyGroup>
 </Project>

@@ -127,6 +127,8 @@ services.AddHealthChecks()
 
 ## HealthCheckUI and failure notifications
 
+[UI Changelog](./doc/ui-changelog.md)
+
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
 
 To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**

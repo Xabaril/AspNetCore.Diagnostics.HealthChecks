@@ -108,6 +108,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Branding", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.IoTHub", "src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj", "{252BB504-B7CB-4581-8CD8-D7398CAA16F5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.IbmMQ", "src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj", "{AC711D43-DD3D-4C7C-BF31-1EAADEF50E10}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.K8s.Operator", "src\HealthChecks.UI.K8s.Operator\HealthChecks.UI.K8s.Operator.csproj", "{692313D3-E947-494A-83B7-754E2FFAF348}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Image", "build\docker-images\HealthChecks.UI.Image\HealthChecks.UI.Image.csproj", "{737E4FD6-EA77-4608-A20F-767557FE3190}"
@@ -302,6 +304,10 @@ Global
 		{6054F41F-6FAA-4E7F-AAE3-5B22228C1468}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6054F41F-6FAA-4E7F-AAE3-5B22228C1468}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6054F41F-6FAA-4E7F-AAE3-5B22228C1468}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC711D43-DD3D-4C7C-BF31-1EAADEF50E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC711D43-DD3D-4C7C-BF31-1EAADEF50E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC711D43-DD3D-4C7C-BF31-1EAADEF50E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC711D43-DD3D-4C7C-BF31-1EAADEF50E10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -352,6 +358,7 @@ Global
 		{692313D3-E947-494A-83B7-754E2FFAF348} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{737E4FD6-EA77-4608-A20F-767557FE3190} = {95119F6F-87C8-45B8-8D95-61736FBEBEDE}
 		{6054F41F-6FAA-4E7F-AAE3-5B22228C1468} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{AC711D43-DD3D-4C7C-BF31-1EAADEF50E10} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

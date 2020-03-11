@@ -142,4 +142,5 @@ else {
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }	
 }

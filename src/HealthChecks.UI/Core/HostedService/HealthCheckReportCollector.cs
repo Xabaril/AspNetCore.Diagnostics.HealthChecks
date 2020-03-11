@@ -146,6 +146,12 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
+                
+                if (execution.Uri != configuration.Uri)
+                {
+                    UpdateUris(execution, configuration);
+                }
+
                 if (execution.Status == healthReport.Status)
                 {
                     _logger.LogDebug("HealthReport history already exists and is in the same state, updating the values.");
@@ -216,6 +222,12 @@ namespace HealthChecks.UI.Core.HostedService
             }
 
             await _db.SaveChangesAsync();
+        }
+
+        private void UpdateUris(HealthCheckExecution execution, HealthCheckConfiguration configuration)
+        {
+            execution.Uri = configuration.Uri;
+            endpointAddresses.Remove(configuration.Id);
         }
 
         private void SaveExecutionHistoryEntries(UIHealthReport healthReport, HealthCheckExecution execution, DateTime lastExecutionTime)

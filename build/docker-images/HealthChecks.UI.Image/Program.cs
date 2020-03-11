@@ -22,7 +22,11 @@ namespace HealthChecks.UI.Image
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
+            return WebHost.CreateDefaultBuilder(args)                
+                .ConfigureLogging(config =>
+                {
+                    config.AddFilter(typeof(Program).Namespace, LogLevel.Information);
+                })
                 .ConfigureAppConfiguration(config =>
                 {
                     if (AzureAppConfiguration.Enabled)

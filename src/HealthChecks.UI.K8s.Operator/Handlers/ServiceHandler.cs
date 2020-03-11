@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
@@ -20,17 +21,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<V1Service> Get(HealthCheckResource resource)
+        public Task<V1Service> Get(HealthCheckResource resource)
         {
-            var serviceList = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
-            return serviceList.Items.FirstOrDefault();
+            return _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
-        public async Task<V1Service> Get(string namespaceProperty, string labelSelector)
-        {
-            var serviceList = await _client.ListNamespacedServiceAsync(namespaceProperty, labelSelector: labelSelector);
-            return serviceList.Items.FirstOrDefault();
-        }
         public async Task<V1Service> GetOrCreateAsync(HealthCheckResource resource)
         {
             var service = await Get(resource);
@@ -66,9 +61,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             var meta = new V1ObjectMeta
             {
                 Name = $"{resource.Spec.Name}-svc",
+                OwnerReferences = new List<V1OwnerReference> {
+                    resource.CreateOwnerReference()
+                },
                 Labels = new Dictionary<string, string>
                 {
-                    ["resourceId"] = resource.Metadata.Uid,
                     ["app"] = resource.Spec.Name
                 },
             };
@@ -79,13 +76,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 {
                     ["app"] = resource.Spec.Name
                 },
-                Type = resource.Spec.PortType,
+                Type = resource.Spec.ServiceType ?? Constants.DefaultServiceType,
                 Ports = new List<V1ServicePort> {
                     new V1ServicePort {
                         Name = "httport",
-                        Port = int.Parse(resource.Spec.PortNumber),
-                        TargetPort = 80,
-
+                        Port = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort),
+                        TargetPort = 80
                     }
                 }
             };

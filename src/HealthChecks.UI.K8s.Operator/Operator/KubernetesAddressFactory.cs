@@ -6,23 +6,23 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 {
     class KubernetesAddressFactory
     {
-        private static int DefaultPort = 80;
-        public static string CreateAddress(V1Service service)
+        public static string CreateAddress(V1Service service, HealthCheckResource resource)
         {
+            var defaultPort = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort);
 
             var port = service.Spec.Type switch
             {
-                PortType.LoadBalancer => GetServicePort(service)?.Port ?? DefaultPort,
-                PortType.ClusterIP => GetServicePort(service)?.Port ?? DefaultPort,
-                PortType.NodePort => GetServicePort(service)?.NodePort ?? DefaultPort,
+                ServiceType.LoadBalancer => GetServicePort(service)?.Port ?? defaultPort,
+                ServiceType.ClusterIP => GetServicePort(service)?.Port ?? defaultPort,
+                ServiceType.NodePort => GetServicePort(service)?.NodePort ?? defaultPort,
                 _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
             };
 
             var address = service.Spec.ClusterIP;
-          
-            var healthScheme = service.Metadata.Labels.ContainsKey(Constants.ServicesSchemeLabel) ?
-                    service.Metadata.Labels[Constants.ServicesSchemeLabel] :
-                    "http";
+
+            var healthScheme = service.Metadata.Annotations?.ContainsKey(Constants.HealthCheckSchemeAnnotation) ?? false ?
+                    service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation] :
+                    Constants.DefaultScheme;
 
             if (address.Contains(":"))
             {
@@ -34,26 +34,24 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             }
         }
 
-        public static string CreateHealthAddress(V1Service service)
+        public static string CreateHealthAddress(V1Service service, HealthCheckResource resource)
         {
-            var address = CreateAddress(service);
+            var address = CreateAddress(service, resource);
 
-            var healthPath = service.Metadata.Labels.ContainsKey(Constants.ServicesHealthPathLabel) ?
-                  service.Metadata.Labels[Constants.ServicesHealthPathLabel] :
-                  "health";
+            string healthPath = resource.Spec.HealthChecksPath;
 
-            return $"{address}/{ healthPath}";
-
-        }
-        private static string GetLoadBalancerAddress(V1Service service)
-        {
-            var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
-            if (ingress != null)
+            if (service.Metadata.Annotations?.ContainsKey(Constants.HealthCheckPathAnnotation) ?? false)
             {
-                return ingress.Ip ?? ingress.Hostname;
+                healthPath = service.Metadata.Annotations[Constants.HealthCheckPathAnnotation];
             }
 
-            return service.Spec.ClusterIP;
+            if (string.IsNullOrEmpty(healthPath))
+            {
+                healthPath = Constants.DefaultHealthPath;
+            }
+
+            return $"{address}/{ healthPath.TrimStart('/')}";
+
         }
 
         private static V1ServicePort GetServicePort(V1Service service)

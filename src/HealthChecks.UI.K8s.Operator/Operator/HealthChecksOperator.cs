@@ -73,7 +73,7 @@ namespace HealthChecks.UI.K8s.Operator
 
         public void Dispose()
         {
-             _serviceWatcher?.Dispose();
+            _serviceWatcher?.Dispose();
             _watcher?.Dispose();
         }
     }

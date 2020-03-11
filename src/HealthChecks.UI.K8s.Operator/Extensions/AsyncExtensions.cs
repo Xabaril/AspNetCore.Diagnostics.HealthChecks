@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    public static class Extensions
+    public static class AsyncExtensions
     {
         public static Task WaitAsync(this CancellationToken token)
         {

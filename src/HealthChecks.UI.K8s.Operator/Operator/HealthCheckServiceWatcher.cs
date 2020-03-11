@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    internal class HealthCheckServiceWatcher: IDisposable
+    internal class HealthCheckServiceWatcher : IDisposable
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
@@ -23,24 +23,24 @@ namespace HealthChecks.UI.K8s.Operator
         }
 
         internal Watcher<V1Service> Watch(HealthCheckResource resource, CancellationToken token)
-        {            
+        {
             Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
-            
+
             if (!_watchers.Keys.Any(filter))
             {
-                var response =  _client.ListNamespacedServiceWithHttpMessagesAsync(
-                    namespaceParameter: resource.Metadata.NamespaceProperty, 
+                var response = _client.ListNamespacedServiceWithHttpMessagesAsync(
+                    namespaceParameter: resource.Metadata.NamespaceProperty,
                     labelSelector: $"{resource.Spec.ServicesLabel}",
-                    watch: true, 
+                    watch: true,
                     cancellationToken: token);
-    
+
                 _watcher = response.Watch<V1Service, V1ServiceList>(
                     onEvent: async (type, item) => await OnServiceDiscoveredAsync(type, item, resource),
                     onError: e => _logger.LogError(e, "Error in service watcher: {message}", e.Message)
                 );
-            
+
                 _watchers.Add(resource, _watcher);
-            
+
                 return _watcher;
             }
 
@@ -64,10 +64,10 @@ namespace HealthChecks.UI.K8s.Operator
 
         internal async Task OnServiceDiscoveredAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
         {
-            var uiService = await _client.ListNamespacedServiceAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
-            var secret = await _client.ListNamespacedSecretAsync(resource.Metadata.NamespaceProperty, labelSelector: $"resourceId={resource.Metadata.Uid}");
+            var uiService = await _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
+            var secret = await _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
 
-            if(!service.Metadata.Labels.ContainsKey(resource.Spec.ServicesLabel))
+            if (!service.Metadata.Labels.ContainsKey(resource.Spec.ServicesLabel))
             {
                 type = WatchEventType.Deleted;
             }
@@ -75,9 +75,9 @@ namespace HealthChecks.UI.K8s.Operator
             await HealthChecksPushService.PushNotification(
                 type,
                 resource,
-                uiService.Items.First(),
+                uiService,
                 service,
-                secret.Items.First(),
+                secret,
                 _logger);
         }
 

@@ -21,8 +21,8 @@ namespace HealthChecks.UI.K8s.Operator
             V1Secret endpointSecret,
             ILogger<K8sOperator> logger)
         {
-            var address = KubernetesAddressFactory.CreateHealthAddress(notificationService);
-            var uiAddress = KubernetesAddressFactory.CreateAddress(uiService);
+            var address = KubernetesAddressFactory.CreateHealthAddress(notificationService, resource);
+            var uiAddress = KubernetesAddressFactory.CreateAddress(uiService, resource);
 
             dynamic healthCheck = new
             {
@@ -38,7 +38,7 @@ namespace HealthChecks.UI.K8s.Operator
                 string name = healthCheck.Name;
                 string uri = healthCheck.Uri;
 
-                logger.LogInformation("[PushService] Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", type, name , uri, uiAddress);
+                logger.LogInformation("[PushService] Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", type, name, uri, uiAddress);
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
@@ -64,7 +64,7 @@ namespace HealthChecks.UI.K8s.Operator
 
             string IpAddress = default;
 
-            if (service.Spec.Type == PortType.LoadBalancer)
+            if (service.Spec.Type == ServiceType.LoadBalancer)
             {
                 var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
                 if (ingress != null)

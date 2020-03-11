@@ -1,6 +1,6 @@
 namespace HealthChecks.UI.K8s.Operator
 {
-    public class PortType
+    public class ServiceType
     {
         public const string LoadBalancer = "LoadBalancer";
         public const string ClusterIP = "ClusterIP";

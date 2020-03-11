@@ -1,4 +1,5 @@
-﻿using k8s;
+﻿using HealthChecks.UI.K8s.Operator.Extensions;
+using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -41,12 +42,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             return secret;
         }
 
-        public async Task<V1Secret> Get(HealthCheckResource resource)
+        public Task<V1Secret> Get(HealthCheckResource resource)
         {
-            var secrets = await _client.ListNamespacedSecretAsync(resource.Metadata.NamespaceProperty,
-                labelSelector: $"resourceId={resource.Metadata.Uid}");
-
-            return secrets.Items.FirstOrDefault();
+            return _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
         public async Task Delete(HealthCheckResource resource)
@@ -57,7 +55,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error deleting secret for hc resource {name} : {message}", resource.Spec.Name,ex.Message);
+                _logger.LogError("Error deleting secret for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
             }
         }
 
@@ -69,9 +67,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 {
                     Name = $"{resource.Spec.Name}-secret",
                     NamespaceProperty = resource.Metadata.NamespaceProperty,
+                    OwnerReferences = new List<V1OwnerReference> {
+                        resource.CreateOwnerReference()
+                    },
                     Labels = new Dictionary<string, string>
                     {
-                        ["resourceId"] = resource.Metadata.Uid,
                         ["app"] = resource.Spec.Name
                     }
                 },

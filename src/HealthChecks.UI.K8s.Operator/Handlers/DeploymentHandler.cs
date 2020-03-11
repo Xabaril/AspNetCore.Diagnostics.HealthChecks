@@ -1,9 +1,9 @@
+using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
@@ -19,11 +19,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<V1Deployment> Get(HealthCheckResource resource)
+        public Task<V1Deployment> Get(HealthCheckResource resource)
         {
-            var deploymentList = await _client.ListNamespacedDeploymentAsync(resource.Metadata.NamespaceProperty,
-                labelSelector: $"resourceId={resource.Metadata.Uid}");
-            return deploymentList.Items.FirstOrDefault();
+            return _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
         public async Task<V1Deployment> GetOrCreateAsync(HealthCheckResource resource)
@@ -68,9 +66,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
             var metadata = new V1ObjectMeta
             {
+                OwnerReferences = new List<V1OwnerReference> {
+                    resource.CreateOwnerReference()
+                },
                 Labels = new Dictionary<string, string>
                 {
-                    ["resourceId"] = resource.Metadata.Uid,
                     ["app"] = resource.Spec.Name
                 },
                 Name = $"{resource.Spec.Name}-deploy",
@@ -102,16 +102,16 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         {
                             new V1Container
                             {
-                                ImagePullPolicy = "Never",
+                                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DefaultPullPolicy,
                                 Name = Constants.PodName,
-                                Image = Constants.DockerImage,
+                                Image = resource.Spec.Image ?? Constants.ImageName,
                                 Ports = new List<V1ContainerPort>
                                 {
                                     new V1ContainerPort(80)
                                 },
                                 Env = new List<V1EnvVar>
                                 {
-                                    new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.UIDefaultPath),
+                                    new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.DefaultUIPath),
                                     new V1EnvVar("enable_push_endpoint", "true"),
                                     new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret")))
                                 }

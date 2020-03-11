@@ -74,6 +74,7 @@
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
     <KubernetesClient>1.6.10</KubernetesClient>
     <SolrNetCore>1.0.19</SolrNetCore>
+    <IBMMQDotnetClient>9.1.4</IBMMQDotnetClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">

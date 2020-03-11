@@ -1,63 +1,120 @@
-﻿using System.Linq;
+﻿using k8s.Models;
+using System.Linq;
 
+#nullable enable
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesAddressFactory
     {
-        private readonly string _healthPath;
-        public KubernetesAddressFactory(string healthPath)
+        private readonly KubernetesDiscoverySettings _settings;
+        public KubernetesAddressFactory(KubernetesDiscoverySettings discoveryOptions)
         {
-            _healthPath = healthPath;
+            _settings = discoveryOptions;
         }
-        public string CreateAddress(Service service)
+        public string CreateAddress(V1Service service)
         {
             string address = string.Empty;
 
-            var port = GetServicePort(service);
+            var port = GetServicePortValue(service);
 
-            switch (service.Spec.PortType)
+            switch (service.Spec.Type)
             {
-                case PortType.LoadBalancer:
-                case PortType.NodePort:
+                case ServiceType.LoadBalancer:
+                case ServiceType.NodePort:
                     address = GetLoadBalancerAddress(service);
                     break;
-                case PortType.ClusterIP:
+                case ServiceType.ClusterIP:
                     address = service.Spec.ClusterIP;
+                    break;
+                case ServiceType.ExternalName:
+                    address = service.Spec.ExternalName;
                     break;
             }
 
-            return $"http://{address}{port}/{_healthPath}";
-        }
-        private string GetLoadBalancerAddress(Service service)
-        {
-            var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
-            if (ingress != null)
+            string healthPath = _settings.HealthPath;
+            if(!string.IsNullOrEmpty(_settings.ServicesPathAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesPathAnnotation) ?? false))
             {
-                return ingress.Ip ?? ingress.HostName;
+                healthPath = service.Metadata.Annotations![_settings.ServicesPathAnnotation]!;
+            }
+            healthPath = healthPath.TrimStart('/');
+
+            string healthScheme = "http";
+            if(!string.IsNullOrEmpty(_settings.ServicesSchemeAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesSchemeAnnotation) ?? false))
+            {
+                healthScheme = service.Metadata.Annotations![_settings.ServicesSchemeAnnotation]!.ToLower();
+            }
+
+            // Support IPv6 address hosts
+            if(address.Contains(":"))
+            {
+                return $"{healthScheme}://[{address}]{port}/{healthPath}";
+            }
+            else
+            {
+                return $"{healthScheme}://{address}{port}/{healthPath}";
+            }
+        }
+        private string GetLoadBalancerAddress(V1Service service)
+        {
+            var firstIngress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
+            if (firstIngress is V1LoadBalancerIngress ingress)
+            {
+                return string.IsNullOrEmpty(ingress.Ip) ? ingress.Hostname : ingress.Ip;
             }
 
             return service.Spec.ClusterIP;
         }
-        private string GetServicePort(Service service)
+        private string GetServicePortValue(V1Service service)
         {
-            string port = string.Empty;
-
-            switch (service.Spec.PortType)
+            int? port;
+            switch (service.Spec.Type)
             {
-                case PortType.LoadBalancer:
-                case PortType.ClusterIP:
-                    port = service.Spec?.Ports?.FirstOrDefault()?.PortNumber.ToString() ?? "";
+                case ServiceType.LoadBalancer:
+                case ServiceType.ClusterIP:
+                    port = GetServicePort(service)?.Port;
                     break;
-                case (PortType.NodePort):
-                    port = service.Spec?.Ports?.FirstOrDefault()?.NodePort.ToString() ?? "";
+                case ServiceType.NodePort:
+                    port = GetServicePort(service)?.NodePort;
+                    break;
+                case ServiceType.ExternalName:
+                    if(GetServicePortAnnotation(service) is string servicePortAnnotation && int.TryParse(servicePortAnnotation, out var servicePort))
+                    {
+                        port = servicePort;
+                    }
+                    else
+                    {
+                        port = null;
+                    }
+                    break;
+                default:
+                    port = null;
                     break;
             }
 
-            if (!string.IsNullOrEmpty(port))
+            return port is null ? string.Empty : $":{port.Value}";
+        }
+        private V1ServicePort? GetServicePort(V1Service service)
+        {
+            if(GetServicePortAnnotation(service) is string portAnnotationValue)
             {
-                port = $":{port}";
+                if(int.TryParse(portAnnotationValue, out var portAnnotationIntValue)) {
+                    return service.Spec?.Ports?.Where(p => p.Port == portAnnotationIntValue)?.FirstOrDefault();
+                } else {
+                    return service.Spec?.Ports?.Where(p => p.Name == portAnnotationValue)?.FirstOrDefault();
+                }
             }
-            return port;
+            else
+            {
+                return service.Spec?.Ports?.FirstOrDefault();
+            }
+        }
+        private string? GetServicePortAnnotation(V1Service service)
+        {
+            if(!string.IsNullOrEmpty(_settings.ServicesPortAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesPortAnnotation) ?? false))
+            {
+                return service.Metadata.Annotations![_settings.ServicesPortAnnotation]!;
+            }
+            return null;
         }
     }
 }

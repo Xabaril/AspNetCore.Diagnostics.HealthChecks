@@ -5,7 +5,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.Publisher.ApplicationInsights
+namespace UnitTests.HealthChecks.DependencyInjection.Publisher.ApplicationInsights
 {
     public class application_insights_publisher_registration_should
     {

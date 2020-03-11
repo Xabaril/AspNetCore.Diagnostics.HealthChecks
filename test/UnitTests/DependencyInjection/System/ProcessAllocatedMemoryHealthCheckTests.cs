@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.System
+namespace UnitTests.HealthChecks.DependencyInjection.System
 {
     public class process_allocated_memory_healthcheck_should
     {

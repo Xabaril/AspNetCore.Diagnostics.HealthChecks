@@ -73,6 +73,7 @@
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
     <KubernetesClient>1.6.10</KubernetesClient>
+    <SolrNetCore>1.0.19</SolrNetCore>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -86,9 +87,10 @@
     <HealthCheckSqlite>3.0.0</HealthCheckSqlite>
     <HealthCheckUri>3.0.0</HealthCheckUri>
     <HealthCheckRedis>3.0.0</HealthCheckRedis>
-    <HealthCheckRabbitMQ>3.0.3</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>3.0.5</HealthCheckRabbitMQ>
     <HealthCheckEventStore>3.0.0</HealthCheckEventStore>
     <HealthCheckElasticsearch>3.0.0</HealthCheckElasticsearch>
+    <HealthCheckSolr>3.0.0</HealthCheckSolr>
     <HealthCheckOracle>3.0.0</HealthCheckOracle>
     <HealthCheckNpgSql>3.0.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>3.0.1</HealthCheckMongoDB>

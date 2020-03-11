@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.SignalR
+namespace UnitTests.HealthChecks.DependencyInjection.SignalR
 {
     public class signalr_registration_should
     {

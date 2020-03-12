@@ -4,7 +4,34 @@
 
 # AspNetCore.Diagnostics.HealthChecks
 
-This project is a [BeatPulse](http://github.com/xabaril/beatpulse) liveness and UI _port_ to new _Microsoft Health Checks_ feature included on **ASP.NET Core** from **2.2 version**.
+This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
+
+**ASP.NET** versions supported: 2.2, 3.0
+
+
+# Sections
+
+## HealthChecks
+  - [Health Checks](#Health-Checks)
+  - [Health Checks Push Results](#HealthCheck-push-results)
+
+## HealthChecks UI
+ - [UI](#HealthCheckUI)
+ - [History Timeline](#Health-status-history-timeline)
+ - [Configuration](#Configuration)
+ - [Failure Notifications](#Failure-Notifications)
+ - [HttpClient and HttpMessageHandler Configuration](#UI-Configure-HttpClient-and-HttpMessageHandler-for-Api-and-Webhooks-endpoints)
+
+## HealthChecks UI and Kubernetes
+ - Kubernetes Operator (Documentation in progress)
+ - [Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
+
+## HealthChecks and Devops
+ - [Releases Gates for Azure DevOps Pipelines](#HealthChecks-as-Release-Gates-for-Azure-DevOps-Pipelines)
+
+## HealthChecks Tutorials
+ - [Tutorials, Demos and walkthroughs](#Tutorials,-demos-and-walkthroughs-on-ASP.NET-Core-HealthChecks)
+
 
 ## Health Checks
 
@@ -127,7 +154,7 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
-## HealthCheckUI and failure notifications
+## HealthCheckUI 
 
 [UI Changelog](./doc/ui-changelog.md)
 

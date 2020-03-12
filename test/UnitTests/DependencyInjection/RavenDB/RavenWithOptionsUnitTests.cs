@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.RavenDB
+namespace UnitTests.HealthChecks.DependencyInjection.RavenDB
 {
     public class ravendb_with_options_registration_should
     {

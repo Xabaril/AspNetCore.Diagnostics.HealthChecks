@@ -9,6 +9,7 @@
 .EXAMPLE
   exec { svn info $repository_trunk } "Error executing SVN. Please verify SVN command-line client is installed"
 #>
+
 function Exec
 {
 	[CmdletBinding()]
@@ -28,7 +29,7 @@ exec { & dotnet restore }
 
 $tag = $(git tag -l --points-at HEAD)
 $revision = @{ $true = "{0:00000}" -f [convert]::ToInt32("0" + $env:APPVEYOR_BUILD_NUMBER, 10); $false = "local" }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
-$suffix = @{ $true = ""; $false = "ci-$revision"}[$tag -ne $NULL -and $revision -ne "local"]
+$suffix = @{ $true = ""; $false = "ci-$revision" }[$tag -ne $NULL -and $revision -ne "local"]
 $commitHash = $(git rev-parse --short HEAD)
 $buildSuffix = @{ $true = "$($suffix)-$($commitHash)"; $false = "$($branch)-$($commitHash)" }[$suffix -ne ""]
 
@@ -41,16 +42,14 @@ exec { & dotnet build AspNetCore.Diagnostics.HealthChecks.sln -c Release --versi
 echo "Running unit tests"
 
 try {
-
 Push-Location -Path .\test\UnitTests
 		exec { & dotnet test}
 } finally {
 		Pop-Location
 }
 
-
 if (-Not (Test-Path 'env:APPVEYOR')) {
-	exec { & docker-compose up -d }
+    exec { & docker-compose up -d }
 }
 
 echo "compose up done"
@@ -58,13 +57,11 @@ echo "compose up done"
 echo "Running functional tests"
 
 try {
-
 Push-Location -Path .\test\FunctionalTests
 		exec { & dotnet test}
 } finally {
 		Pop-Location
 }
-
 
 if ($suffix -eq "") {
 	exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o .\artifacts --include-symbols --no-build }
@@ -78,6 +75,7 @@ if ($suffix -eq "") {
 	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.Solr\HealthChecks.Solr.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o .\artifacts --include-symbols --no-build }
@@ -102,6 +100,7 @@ if ($suffix -eq "") {
 	exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build }
 	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build }
+	exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }	
 	exec { & dotnet pack .\src\HealthChecks.SmbCifs\HealthChecks.SmbCifs.csproj -c Release -o .\artifacts --include-symbols --no-build }
 }
 
@@ -116,6 +115,7 @@ else {
 	exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.Solr\HealthChecks.Solr.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }    
 	exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
@@ -141,5 +141,6 @@ else {
 	exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 	exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+	exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }	
 	exec { & dotnet pack .\src\HealthChecks.SmbCifs\HealthChecks.SmbCifs.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }

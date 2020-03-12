@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RabbitMQHealthCheck(rabbitMQConnectionString, sslOption),
+                new RabbitMQHealthCheck(rabbitMQConnectionString, sslOption),
                 failureStatus,
                 tags,
                 timeout));

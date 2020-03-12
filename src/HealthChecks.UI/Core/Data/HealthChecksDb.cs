@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Core.Data
 {
-    class HealthChecksDb
+    internal class HealthChecksDb
         : DbContext
     {
         public DbSet<HealthCheckConfiguration> Configurations { get; set; }

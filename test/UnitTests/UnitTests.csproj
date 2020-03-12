@@ -35,8 +35,9 @@
     <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />    
-    <ProjectReference Include="..\..\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj" />    
-    <ProjectReference Include="..\..\src\HealthChecks.SmbCifs\HealthChecks.SmbCifs.csproj" />    
+    <ProjectReference Include="..\..\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj" /> 
+    <ProjectReference Include="..\..\src\HealthChecks.SmbCifs\HealthChecks.SmbCifs.csproj" /> 
+    <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />

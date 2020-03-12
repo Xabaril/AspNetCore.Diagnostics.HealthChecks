@@ -17,6 +17,13 @@ services:
         ports:
           - "9300:9300"
           - ${ELASTICSEARCH_PORT}:9200
+    solr:
+        image: solr:8.4.1
+        ports:
+            - ${SOLR_PORT}:8983
+        volumes:
+            - ./build/docker-services/solrcore:/var/solr/data/solrcore
+            - ./build/docker-services/solrcoredown:/var/solr/data/solrcoredown            
     postgres:
         image: postgres
         environment:
@@ -128,4 +135,15 @@ services:
         image: consul:latest
         ports:
           - "8500:8500"
-          - "8600:8600"   
+          - "8600:8600"
+    ibmmq:
+        image: ibmcom/mq
+        ports:
+        - "1414:1414"
+        - "9157:9157"
+        environment:
+        - LICENSE=accept
+        - MQ_QMGR_NAME=QM.TEST.01
+        - MQ_APP_PASSWORD=12345678
+        - MQ_ENABLE_METRICS=true
+        

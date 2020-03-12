@@ -6,7 +6,7 @@
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET** versions supported: 2.2, 3.0
+**ASP.NET Core** versions supported: 2.2, 3.0
 
 
 # Sections

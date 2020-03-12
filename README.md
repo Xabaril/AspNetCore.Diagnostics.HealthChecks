@@ -18,6 +18,7 @@ HealthChecks packages include health checks for:
 - Postgres
 - EventStore
 - RabbitMQ
+- IbmMQ
 - Elasticsearch
 - Solr
 - Redis
@@ -61,6 +62,7 @@ Install-Package AspNetCore.HealthChecks.SqLite
 Install-Package AspNetCore.HealthChecks.RavenDB
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.RabbitMQ
+Install-Package AspNetCore.HealthChecks.IbmMQ
 Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
 Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle

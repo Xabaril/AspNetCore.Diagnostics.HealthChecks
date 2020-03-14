@@ -1,10 +1,14 @@
 
-using System;
+using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -15,7 +19,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             var options = new Options();
             setupOptions?.Invoke(options);
-            
+
             EnsureValidApiOptions(options);
 
             var apiDelegate =
@@ -27,17 +31,25 @@ namespace Microsoft.AspNetCore.Builder
                 builder.CreateApplicationBuilder()
                     .UseMiddleware<UIWebHooksApiMiddleware>()
                     .Build();
- 
-            
-            var embeddedResourcesAssembly = typeof(UIResource).Assembly;
-            new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
-                .Map(builder, options);
-            
-            builder.MapGet(options.ApiPath, apiDelegate);
-            return builder.MapGet(options.WebhookPath, webhooksDelegate);
 
+
+            var embeddedResourcesAssembly = typeof(UIResource).Assembly;
+
+            var resourcesEndpoints = new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
+                .Map(builder, options);
+
+
+            var apiEndpoint = builder.Map(options.ApiPath, apiDelegate)
+                                .WithDisplayName("HealthChecks UI Api");
+
+            var webhooksEndpoint = builder.Map(options.WebhookPath, webhooksDelegate)
+                                .WithDisplayName("HealthChecks UI Webhooks");
+
+            var endpointConventionBuilders = new List<IEndpointConventionBuilder>(new[] { apiEndpoint, webhooksEndpoint }.Union(resourcesEndpoints));
+
+            return new HealthCheckUIConventionBuilder(endpointConventionBuilders);
         }
-        
+
         private static void EnsureValidApiOptions(Options options)
         {
             Action<string, string> ensureValidPath = (string path, string argument) =>

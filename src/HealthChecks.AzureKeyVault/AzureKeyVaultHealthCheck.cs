@@ -17,14 +17,33 @@ namespace HealthChecks.AzureKeyVault
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            var currentSecret = string.Empty;
             try
             {
                 using (var client = CreateClient())
                 {
-                    foreach (var item in _options.Secrets)
+                    foreach (var secret in _options.Secrets)
                     {
-                        await client.GetSecretAsync(_options.KeyVaultUrlBase, item, cancellationToken);
+                        await client.GetSecretAsync(_options.KeyVaultUrlBase, secret, cancellationToken);
+                    }
+
+                    foreach (var key in _options.Keys)
+                    {
+                        await client.GetKeyAsync(_options.KeyVaultUrlBase, key, cancellationToken);
+                    }
+
+                    foreach (var (key, checkExpired) in _options.Certificates)
+                    {
+                        var certificate = await client.GetCertificateAsync(_options.KeyVaultUrlBase, key, cancellationToken);
+
+                        if (checkExpired && certificate.Attributes.Expires.HasValue)
+                        {
+                            var expirationDate = certificate.Attributes.Expires.Value;
+
+                            if (expirationDate < DateTime.UtcNow)
+                            {
+                                throw new Exception($"The certificate with key {key} has expired with date {expirationDate}");
+                            }
+                        }
                     }
                 }
                 return HealthCheckResult.Healthy();

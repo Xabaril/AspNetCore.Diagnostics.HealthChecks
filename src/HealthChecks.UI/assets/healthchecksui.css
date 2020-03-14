@@ -437,6 +437,7 @@ h4 {
     display: block;
     padding: 1rem;
     overflow: hidden;
+    overflow-y: auto;
     background-color: var(--bgSecondary);
     box-shadow: 0 0.375em 1em 0 rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease-in-out 0.3s;

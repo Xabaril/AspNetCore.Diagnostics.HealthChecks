@@ -1,10 +1,11 @@
 ﻿using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
-using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
+using k8s;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -35,21 +36,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
                 })
+                .AddSingleton<ServerAddressesService>()
                 .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
-                .AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME)
-                .ConfigurePrimaryHttpMessageHandler(sp =>
-                {
-                    var settings = sp.GetService<IOptions<Settings>>();
-                    return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
-                }).Services
-                .AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME)
-                .ConfigurePrimaryHttpMessageHandler(sp =>
-                {
-                    var settings = sp.GetService<IOptions<Settings>>();
-                    return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
-                });
+                .AddApiEndpointHttpClient()
+                .AddWebhooksEndpointHttpClient();
 
             var healthCheckSettings = services.BuildServiceProvider()
                 .GetService<IOptions<Settings>>()
@@ -77,12 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (kubernetesDiscoverySettings.Enabled)
             {
-                services.AddSingleton(kubernetesDiscoverySettings)
-                    .AddHostedService<KubernetesDiscoveryHostedService>()
-                    .AddHttpClient(Keys.K8S_DISCOVERY_HTTP_CLIENT_NAME, (provider, client) => client.ConfigureKubernetesClient(provider))
-                        .ConfigureKubernetesMessageHandler()
-                    .Services
-                    .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+                services.AddKubernetesDiscoveryService(kubernetesDiscoverySettings);
             }
 
             var serviceProvider = services.BuildServiceProvider();
@@ -90,6 +77,36 @@ namespace Microsoft.Extensions.DependencyInjection
             CreateDatabase(serviceProvider).Wait();
 
             return services;
+        }
+
+        public static IServiceCollection AddApiEndpointHttpClient(this IServiceCollection services)
+        {
+            return services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME, (sp, client) =>
+            {
+                var settings = sp.GetService<IOptions<Settings>>();
+                settings.Value.ApiEndpointHttpClientConfig?.Invoke(sp, client);
+            })
+              .ConfigurePrimaryHttpMessageHandler(sp =>
+              {
+                  var settings = sp.GetService<IOptions<Settings>>();
+                  return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
+              })
+             .Services;
+        }
+
+        public static IServiceCollection AddWebhooksEndpointHttpClient(this IServiceCollection services)
+        {
+            return services.AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME, (sp, client) =>
+            {
+                var settings = sp.GetService<IOptions<Settings>>();
+                settings.Value.WebHooksEndpointHttpClientConfig?.Invoke(sp, client);
+            })
+            .ConfigurePrimaryHttpMessageHandler(sp =>
+             {
+                 var settings = sp.GetService<IOptions<Settings>>();
+                 return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
+             })
+            .Services;
         }
 
         static async Task CreateDatabase(IServiceProvider serviceProvider)
@@ -128,6 +145,37 @@ namespace Microsoft.Extensions.DependencyInjection
                     await db.SaveChangesAsync();
                 }
             }
+        }
+
+        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
+        {
+            KubernetesClientConfiguration kubernetesConfig;
+
+            if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))
+            {
+                kubernetesConfig = new KubernetesClientConfiguration {
+                    Host = kubernetesDiscoverySettings.ClusterHost,
+                    AccessToken = kubernetesDiscoverySettings.Token,
+                    // Some cloud services like Azure AKS use self-signed certificates not valid for httpclient.
+                    // With this method we allow invalid certificates
+                    SkipTlsVerify = true
+                };
+            }
+            else if (KubernetesClientConfiguration.IsInCluster())
+            {
+                kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
+            }
+            else
+            {
+                kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            }
+
+            services.AddSingleton(kubernetesDiscoverySettings)
+                .AddHostedService<KubernetesDiscoveryHostedService>()
+                .AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig))
+                .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
+
+            return services;
         }
     }
 }

@@ -65,7 +65,7 @@ export class CheckTable extends Component<CheckTableProps, CheckTableState> {
                             <td>
                                 <button
                                     className="hc-action-btn"
-                                    onClick={() => this.openPanel(item, props.history)}>
+                                    onClick={() => this.openPanel(item, props.history.filter(h => h.name == item.name))}>
                                     <i className="material-icons">history</i>
                                 </button>
                             </td>

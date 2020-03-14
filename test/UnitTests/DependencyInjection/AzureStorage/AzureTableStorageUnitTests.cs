@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.DependencyInjection.AzureStorage
+namespace UnitTests.HealthChecks.DependencyInjection.AzureStorage
 {
     public class azuretabletorage_registration_should
     {
@@ -40,6 +40,22 @@ namespace UnitTests.DependencyInjection.AzureStorage
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("my-azuretable-group");
+            check.GetType().Should().Be(typeof(AzureTableStorageHealthCheck));
+        }
+        [Fact]
+        public void add_named_table_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureTableStorage("the-connection-string", tableName: "table");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azuretable");
             check.GetType().Should().Be(typeof(AzureTableStorageHealthCheck));
         }
     }

@@ -7,7 +7,7 @@ using System.Linq;
 using Xunit;
 #pragma warning disable 618
 
-namespace UnitTests.DependencyInjection.RavenDB
+namespace UnitTests.HealthChecks.DependencyInjection.RavenDB
 {
     public class ravendb_with_single_conection_string_registration_should
     {

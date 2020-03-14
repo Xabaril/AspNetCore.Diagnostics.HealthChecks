@@ -32,7 +32,6 @@ namespace HealthChecks.UI.Core
                 var sanitizedWebhooksResponse = settings.Value.Webhooks.Select(item => new
                 {
                     item.Name,
-                    item.Uri,
                     Payload = string.IsNullOrEmpty(item.Payload) ? new JObject() : JObject.Parse(Regex.Unescape(item.Payload))
                 });
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;

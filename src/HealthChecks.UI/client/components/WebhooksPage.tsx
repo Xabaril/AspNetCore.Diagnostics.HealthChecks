@@ -47,9 +47,6 @@ export class WebhooksPage extends React.Component<
                 <p>
                   <b>Name</b>: {webhook.name}
                 </p>
-                <p className="break-word">
-                  <b>Uri</b>: {webhook.uri}
-                </p>
                 <p>
                   <b>Payload</b> :
                 </p>

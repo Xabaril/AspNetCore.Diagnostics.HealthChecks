@@ -1,0 +1,48 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: healthchecks.aspnetcore.ui
+spec:
+  group: aspnetcore.ui
+  names:
+    plural: healthchecks
+    singular: healthcheck
+    kind: HealthCheck
+    listKind: HealthChecks
+    shortNames:
+      - hc
+  versions:
+    - name: v1
+      served: true
+      storage: true
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          properties:
+            name:
+              type: string
+            serviceType:
+              type: string
+              enum:
+                - ClusterIP
+                - LoadBalancer
+                - NodePort
+            portNumber:
+              type: number
+            uiPath:
+              type: string
+            servicesLabel:
+              type: string
+            healthChecksPath:
+              type: string
+            healthChecksScheme:
+              type: string
+            image:
+              type: string
+            imagePullPolicy:
+              type: string
+          required:
+            - name
+            - servicesLabel

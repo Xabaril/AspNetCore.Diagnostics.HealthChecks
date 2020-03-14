@@ -25,12 +25,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureEventHub(this IHealthChecksBuilder builder, string connectionString, string eventHubName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default,TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureServiceBusQueue(this IHealthChecksBuilder builder, string connectionString, string queueName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, Action<Message> configuringMessage = null, TimeSpan? timeout = default, bool requiresSession = false)
         {
             return builder.Add(new HealthCheckRegistration(
-                name ?? AZUREEVENTHUB_NAME,
-                sp => new AzureEventHubHealthCheck(connectionString, eventHubName),
+                name ?? AZUREQUEUE_NAME,
+                sp => new AzureServiceBusQueueHealthCheck(connectionString, queueName, configuringMessage, requiresSession),
                 failureStatus,
                 tags,
                 timeout));

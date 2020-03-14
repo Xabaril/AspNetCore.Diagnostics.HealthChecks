@@ -13,16 +13,25 @@ namespace HealthChecks.UI.Core.HostedService
         : IHostedService
     {
         private readonly ILogger<HealthCheckCollectorHostedService> _logger;
+        private readonly IHostApplicationLifetime _lifetime;
+        private readonly ServerAddressesService _serverAddressesService;
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
 
         private Task _executingTask;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public HealthCheckCollectorHostedService(IServiceProvider provider, IOptions<Settings> settings, ILogger<HealthCheckCollectorHostedService> logger)
+        public HealthCheckCollectorHostedService
+            (IServiceProvider provider,
+            IOptions<Settings> settings,
+            ServerAddressesService serverAddressesService,
+            ILogger<HealthCheckCollectorHostedService> logger,
+            IHostApplicationLifetime lifetime)
         {
             _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
             _logger = logger ?? throw new ArgumentNullException(nameof(provider));
+            _lifetime = lifetime ?? throw new ArgumentNullException(nameof(lifetime));
             _settings = settings.Value ?? new Settings();
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -43,12 +52,31 @@ namespace HealthChecks.UI.Core.HostedService
 
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
-        private async Task ExecuteAsync(CancellationToken cancellationToken)
+        private Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            _lifetime.ApplicationStarted.Register(async () =>
+            {
+                try
+                {
+                    await Collect(cancellationToken);
+                }
+                catch(TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    // We are halting, task cancellation is expected.
+                }
+            });
+
+            return Task.CompletedTask;
+        }
+
+        private async Task Collect(CancellationToken cancellationToken)
         {
             var scopeFactory = _serviceProvider.GetRequiredService<IServiceScopeFactory>();
 
             while (!cancellationToken.IsCancellationRequested)
             {
+                // Collect should not be triggered until IServerAddressFeature reports the listening endpoints
+
                 _logger.LogDebug("Executing HealthCheck collector HostedService.");
 
                 using (var scope = scopeFactory.CreateScope())
@@ -62,7 +90,7 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"HealthCheck collector HostedService throw a error: {ex.Message}");
+                        _logger.LogError(ex, "HealthCheck collector HostedService threw an error: {Error}", ex.Message);
                     }
                 }
 

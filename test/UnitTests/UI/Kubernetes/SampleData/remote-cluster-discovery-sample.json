@@ -169,15 +169,32 @@
         "labels": {
           "HealthChecks": "true",
           "app": "seq"
+        },
+        "annotations": {
+          "HealthChecksPath": "/custom/health/path",
+          "HealthChecksPort": "healthcheck",
+          "HealthChecksScheme": "https"
         }
       },
       "spec": {
         "ports": [
           {
-            "name": "http",
+            "name": "ingestion",
             "protocol": "TCP",
             "port": 5341,
+            "targetPort": "ingestion"
+          },
+          {
+            "name": "http",
+            "protocol": "TCP",
+            "port": 80,
             "targetPort": "ui"
+          },
+          {
+            "name": "healthcheck",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": "healthcheck"
           }
         ],
         "selector": {

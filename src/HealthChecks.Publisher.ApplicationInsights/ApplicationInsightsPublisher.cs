@@ -1,6 +1,7 @@
 ﻿using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,18 @@ namespace HealthChecks.Publisher.ApplicationInsights
 
         private static TelemetryClient _client;
         private static readonly object sync_root = new object();
-
+        private readonly TelemetryConfiguration _telemetryConfiguration;
         private readonly string _instrumentationKey;
         private readonly bool _saveDetailedReport;
         private readonly bool _excludeHealthyReports;
 
-        public ApplicationInsightsPublisher(string instrumentationKey = default, bool saveDetailedReport = false, bool excludeHealthyReports = false)
+        public ApplicationInsightsPublisher(
+            IOptions<TelemetryConfiguration> telemetryConfiguration,
+            string instrumentationKey = default,
+            bool saveDetailedReport = false,
+            bool excludeHealthyReports = false)
         {
+            _telemetryConfiguration = telemetryConfiguration?.Value;
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
@@ -113,7 +119,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                         //key active on the project.
 
                         var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
-                            ? TelemetryConfiguration.Active
+                            ? new TelemetryConfiguration(_telemetryConfiguration?.InstrumentationKey)
                             : new TelemetryConfiguration(_instrumentationKey);
 
                         _client = new TelemetryClient(configuration);

@@ -1,6 +1,7 @@
 ﻿using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,15 +19,18 @@ namespace HealthChecks.UI.Core.Notifications
         private readonly ILogger<WebHookFailureNotifier> _logger;
         private readonly Settings _settings;
         private readonly HealthChecksDb _db;
+        private readonly ServerAddressesService _serverAddressesService;
         private readonly HttpClient _httpClient;
 
         public WebHookFailureNotifier(
             HealthChecksDb db,
             IOptions<Settings> settings,
-            ILogger<WebHookFailureNotifier> logger, 
+            ServerAddressesService serverAddressesService,
+            ILogger<WebHookFailureNotifier> logger,
             IHttpClientFactory httpClientFactory)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
+            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
             _settings = settings.Value ?? new Settings();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
@@ -58,7 +62,15 @@ namespace HealthChecks.UI.Core.Notifications
                         .Replace(Keys.FAILURE_BOOKMARK, failure)
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
 
-                    await SendRequest(webHook.Uri, webHook.Name, payload);
+
+                    Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);
+
+                    if (absoluteUri == null || !absoluteUri.IsValidHealthCheckEndpoint())
+                    {
+                        Uri.TryCreate(_serverAddressesService.AbsoluteUriFromRelative(webHook.Uri), UriKind.Absolute, out absoluteUri);
+                    }
+
+                    await SendRequest(absoluteUri, webHook.Name, payload);
                 }
             }
             else
@@ -90,23 +102,17 @@ namespace HealthChecks.UI.Core.Notifications
                 await _db.SaveChangesAsync();
             }
         }
-        private async Task SendRequest(string uri, string name, string payloadContent)
+        private async Task SendRequest(Uri uri, string name, string payloadContent)
         {
-            if (uri == null || !Uri.TryCreate(uri, UriKind.Absolute, out Uri webHookUri))
-            {
-                _logger.LogWarning($"The web hook notification uri is not established or is not an absolute Uri ({name}). Set the webhook uri value on BeatPulse settings.");
-
-                return;
-            }
             try
             {
-                    var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
-                    var response = await _httpClient.PostAsync(webHookUri, payload);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        _logger.LogError($"The webhook notification has not executed successfully for {name} webhook. The error code is {response.StatusCode}.");
-                    }
-                
+                var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
+                var response = await _httpClient.PostAsync(uri, payload);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("The webhook notification has not executed successfully for {name} webhook. The error code is {statuscode}.", name, response.StatusCode);
+                }
+
             }
             catch (Exception exception)
             {

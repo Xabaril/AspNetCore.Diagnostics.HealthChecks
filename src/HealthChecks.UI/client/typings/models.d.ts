@@ -27,6 +27,8 @@ export interface Check {
 }
 
 export interface ExecutionHistory {
+    name: string;
+    description: string;
     id: number;
     status: string;
     on: string;
@@ -34,6 +36,6 @@ export interface ExecutionHistory {
 
 interface WebHook {
     name: string;
-    uri: string;
+    host: string;
     payload: string;
 }

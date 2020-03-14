@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,20 +9,23 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck
         : IHealthCheck
     {
-        private readonly Lazy<IConnectionFactory> _lazyConnectionFactory;
-        private readonly IConnection _rmqConnection;
-        private readonly SslOption _sslOption;
+        private readonly IConnectionFactory _connectionFactory;
+        private IConnection _rmqConnection;
 
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
-            if (rabbitMqConnectionString == null) throw new ArgumentNullException(nameof(rabbitMqConnectionString));
-
-            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => new ConnectionFactory()
+            var connectionFactory = new ConnectionFactory
             {
-                Uri = new Uri(rabbitMqConnectionString)
-            });
+                Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
+                AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
+            };
 
-            _sslOption = sslOption ?? new SslOption(serverName: "localhost", enabled: false);
+            if (sslOption != null)
+            {
+                connectionFactory.Ssl = sslOption;
+            }
+
+            _connectionFactory = connectionFactory;
         }
 
         public RabbitMQHealthCheck(IConnection connection)
@@ -33,20 +35,22 @@ namespace HealthChecks.RabbitMQ
 
         public RabbitMQHealthCheck(IConnectionFactory connectionFactory)
         {
-            _lazyConnectionFactory = new Lazy<IConnectionFactory>(() => 
-                connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory)));
+            _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (_rmqConnection != null)
+                // If no factory was provided then we're stuck using the passed in connection
+                // regardless of the state it may be in. We don't have a way to attempt to
+                // create a new connection :(
+                if (_connectionFactory == null)
                 {
                     return TestConnection(_rmqConnection);
                 }
 
-                using (var connection = CreateConnection(_lazyConnectionFactory.Value))
+                using (var connection = _connectionFactory.CreateConnection())
                 {
                     return TestConnection(connection);
                 }
@@ -60,7 +64,7 @@ namespace HealthChecks.RabbitMQ
 
         private static Task<HealthCheckResult> TestConnection(IConnection connection)
         {
-            using (var channel = connection.CreateModel())
+            using (connection.CreateModel())
             {
                 return Task.FromResult(
                     HealthCheckResult.Healthy());
@@ -69,7 +73,7 @@ namespace HealthChecks.RabbitMQ
 
         private static IConnection CreateConnection(IConnectionFactory connectionFactory)
         {
-            return connectionFactory.CreateConnection(new List<AmqpTcpEndpoint> { new AmqpTcpEndpoint(connectionFactory.Uri) });
+            return connectionFactory.CreateConnection("Health Check Connection");
         }
     }
 }

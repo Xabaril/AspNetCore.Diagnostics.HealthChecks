@@ -19,8 +19,9 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 .AddAzureKeyVault(setup =>
                {
                    setup
-                   .UseKeyVaultUrl("https://keyvault")
-                   .AddSecret("supercret");
+                   .UseKeyVaultUrl("https://keyvault/")
+                   .AddSecret("supersecret")
+                   .AddKey("mycryptokey");
                });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -42,7 +43,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 .AddAzureKeyVault(setup =>
                 {
                     setup
-                    .UseKeyVaultUrl("https://keyvault")
+                    .UseKeyVaultUrl("https://keyvault/")
                     .UseClientSecrets("client", "secret");
 
                 }, name: "keyvaultcheck");
@@ -69,7 +70,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 {
                     setup
                     .UseKeyVaultUrl("invalid URI")
-                    .AddSecret("mysecret");
+                    .AddSecret("mysecret")
+                    .AddKey("mycryptokey");
                 });
             });
         }

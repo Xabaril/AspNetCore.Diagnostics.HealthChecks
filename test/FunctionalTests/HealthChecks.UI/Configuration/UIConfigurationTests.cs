@@ -5,9 +5,12 @@ using FluentAssertions;
 using FunctionalTests.Base;
 using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Xunit;
 
@@ -152,10 +155,12 @@ namespace FunctionalTests.UI.Configuration
         }
 
         [Fact]
-        public void should_register_configured_http_message_handler_into_client()
+        public void should_register_configured_http_client_and_http_message_handler_into_client()
         {
             var apiHandlerConfigured = false;
+            var apiClientConfigured = false;
             var webhookHandlerConfigured = false;
+            var webhookClientConfigured = false;
 
             var webhost = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
@@ -168,7 +173,11 @@ namespace FunctionalTests.UI.Configuration
                 {
                     services.AddHealthChecksUI(setupSettings: setup =>
                     {
-                        setup.UseApiEndpointHttpMessageHandler(sp =>
+                        setup.ConfigureApiEndpointHttpclient((sp, client) =>
+                        {
+                            apiClientConfigured = true;
+                        })
+                        .UseApiEndpointHttpMessageHandler(sp =>
                             {
                                 apiHandlerConfigured = true;
                                 return new HttpClientHandler
@@ -176,26 +185,81 @@ namespace FunctionalTests.UI.Configuration
                                     Proxy = new WebProxy("http://proxy:8080")
                                 };
                             })
-                            .UseWebhookEndpointHttpMessageHandler(sp =>
+                        .ConfigureWebhooksEndpointHttpclient((sp, client) =>
+                        {
+                            webhookClientConfigured = true;
+                        })
+                        .UseWebhookEndpointHttpMessageHandler(sp =>
+                        {
+                            webhookHandlerConfigured = true;
+                            return new HttpClientHandler()
                             {
-                                webhookHandlerConfigured = true;
-                                return new HttpClientHandler()
+                                Properties =
                                 {
-                                    Properties =
-                                    {
-                                        ["prop"] = "value"
-                                    }
-                                };
-                            });
+                                    ["prop"] = "value"
+                                }
+                            };
+                        });
                     });
                 }).Build();
 
             var clientFactory = webhost.Services.GetService<IHttpClientFactory>();
             var apiClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
             var webhookClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
-            
+
             apiHandlerConfigured.Should().BeTrue();
+            apiClientConfigured.Should().BeTrue();
             webhookHandlerConfigured.Should().BeTrue();
+            webhookClientConfigured.Should().BeTrue();
+        }
+
+        [Fact]
+        public void register_server_addresses_service_to_resolve_relative_uris_using_endpoints()
+        {
+            var webHostBuilder = new WebHostBuilder()
+                .UseKestrel()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddHealthChecksUI(setupSettings: setup => setup.SetHealthCheckDatabaseConnectionString("Data Source=hcdb"))
+                    .AddRouting();
+
+                }).Configure(app =>
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(config =>
+                    {
+                        config.MapHealthChecksUI();
+                    });
+
+                });
+
+            var serviceProvider = webHostBuilder.Build().Services;
+            var serverAddressesService = serviceProvider.GetRequiredService<ServerAddressesService>();
+
+            serverAddressesService.Should().NotBeNull();
+            serverAddressesService.Addresses.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void register_server_addresses_service_to_resolve_relative_uris_using_application_builder()
+        {
+            var webHostBuilder = new WebHostBuilder()
+                .UseKestrel()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.
+                    AddHealthChecksUI(setupSettings: setup => setup.SetHealthCheckDatabaseConnectionString("Data Source=hcdb"));
+
+                }).Configure(app => app.UseHealthChecksUI());
+
+            var serviceProvider = webHostBuilder.Build().Services;
+            var serverAddressesService = serviceProvider.GetRequiredService<ServerAddressesService>();
+
+            serverAddressesService.Should().NotBeNull();
+            serverAddressesService.Addresses.Should().NotBeNull();
         }
     }
 }

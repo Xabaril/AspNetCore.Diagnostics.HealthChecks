@@ -51,9 +51,31 @@ You must escape the json before setting the **Payload** property in the configur
 }
 ```
 
+## Configuring Webhooks by code
+
+You can also configure webhooks by using code. This scenario allows greater customization as you can use your own user functions to configure if a payload should be notified and customize [[FAILURE]] and [[DESCRIPTIONS]] placeholders.
+
+```csharp
+setup
+.AddWebhookNotification("webhook1",
+    uri: "status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}",
+    restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}",
+    shouldNotifyFunc: report => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23
+    customMessageFunc: (report) =>
+    {
+        var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+        return $"{failing.Count()} healthchecks are failing";
+    },
+    customDescriptionFunc: report =>
+    {
+        var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+        return $"HealthChecks with names {string.Join("/", failing.Select(f => f.Key))} are failing";
+    });
+```
+
 ## Azure Functions
 
-You can use [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) to receive *HealthCheckUI* notifications and perform any action. 
+You can use [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) to receive _HealthCheckUI_ notifications and perform any action.
 
 Next samples show AF integration with Twilio to send SMS / SendGrid for HealthCheckUI failure notifications.
 
@@ -81,7 +103,7 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<SMSMessage>
 
 ```
 
-```c# 
+```c#
 #r "SendGrid"
 using System;
 using SendGrid.Helpers.Mail;

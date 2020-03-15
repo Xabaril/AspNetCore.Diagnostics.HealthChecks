@@ -289,13 +289,15 @@ Sample:
 
 You can also use relative urls when using IConfiguration providers like appsettings.json
 
-### Failure Notifications
+### Webhooks Failure Notifications
 
 If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:
 
 [[LIVENESS]] The name of the liveness that returns _Down_.
 
 [[FAILURE]] A detail message with the failure.
+
+[[DESCRIPTIONS]] Failure descriptions
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 

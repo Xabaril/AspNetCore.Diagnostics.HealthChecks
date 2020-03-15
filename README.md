@@ -8,30 +8,33 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 **ASP.NET Core** versions supported: 2.2, 3.0
 
-
 # Sections
 
 ## HealthChecks
-  - [Health Checks](#Health-Checks)
-  - [Health Checks Push Results](#HealthCheck-push-results)
+
+- [Health Checks](#Health-Checks)
+- [Health Checks Push Results](#HealthCheck-push-results)
 
 ## HealthChecks UI
- - [UI](#HealthCheckUI)
- - [History Timeline](#Health-status-history-timeline)
- - [Configuration](#Configuration)
- - [Failure Notifications](#Failure-Notifications)
- - [HttpClient and HttpMessageHandler Configuration](#UI-Configure-HttpClient-and-HttpMessageHandler-for-Api-and-Webhooks-endpoints)
+
+- [UI](#HealthCheckUI)
+- [History Timeline](#Health-status-history-timeline)
+- [Configuration](#Configuration)
+- [Webhooks and Failure Notifications](#Webhooks-and-Failure-Notifications)
+- [HttpClient and HttpMessageHandler Configuration](#UI-Configure-HttpClient-and-HttpMessageHandler-for-Api-and-Webhooks-endpoints)
 
 ## HealthChecks UI and Kubernetes
- - Kubernetes Operator (Documentation in progress)
- - [Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
+
+- Kubernetes Operator (Documentation in progress)
+- [Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
 
 ## HealthChecks and Devops
- - [Releases Gates for Azure DevOps Pipelines](#HealthChecks-as-Release-Gates-for-Azure-DevOps-Pipelines)
+
+- [Releases Gates for Azure DevOps Pipelines](#HealthChecks-as-Release-Gates-for-Azure-DevOps-Pipelines)
 
 ## HealthChecks Tutorials
- - [Tutorials, Demos and walkthroughs](#Tutorials,-demos-and-walkthroughs-on-ASP.NET-Core-HealthChecks)
 
+- [Tutorials, Demos and walkthroughs](#Tutorials,-demos-and-walkthroughs-on-ASP.NET-Core-HealthChecks)
 
 ## Health Checks
 
@@ -154,7 +157,7 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
-## HealthCheckUI 
+## HealthCheckUI
 
 [UI Changelog](./doc/ui-changelog.md)
 
@@ -316,13 +319,17 @@ Sample:
 
 You can also use relative urls when using IConfiguration providers like appsettings.json
 
-### Failure Notifications
+### Webhooks and Failure Notifications
 
 If the **WebHooks** section is configured, HealthCheck-UI automatically posts a new notification into the webhook collection. HealthCheckUI uses a simple replace method for values in the webhook's **Payload** and **RestorePayload** properties. At this moment we support two bookmarks:
 
 [[LIVENESS]] The name of the liveness that returns _Down_.
 
 [[FAILURE]] A detail message with the failure.
+
+[[DESCRIPTIONS]] Failure descriptions
+
+Webhooks can be configured with configuration providers and also by code. Using code allows greater customization as you can setup you own user functions to customize output messages or configuring if a payload should be sent to a given webhook endpoint.
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 

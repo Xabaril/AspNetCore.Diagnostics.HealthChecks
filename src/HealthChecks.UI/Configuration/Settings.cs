@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthChecks.UI.Client;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
@@ -27,14 +28,17 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "")
+        public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "", Func<UIHealthReport, bool> shouldNotifyFunc = null, Func<UIHealthReport,string> customMessageFunc = null, Func<UIHealthReport, string> customDescriptionFunc = null)
         {
             Webhooks.Add(new WebHookNotification
             {
                 Name = name,
                 Uri = uri,
                 Payload = payload,
-                RestoredPayload = restorePayload
+                RestoredPayload = restorePayload,
+                ShouldNotifyFunc = shouldNotifyFunc,
+                CustomMessageFunc = customMessageFunc,
+                CustomDescriptionFunc = customDescriptionFunc
             });
             return this;
         }
@@ -94,5 +98,8 @@ namespace HealthChecks.UI.Configuration
         public string Uri { get; set; }
         public string Payload { get; set; }
         public string RestoredPayload { get; set; }
+        internal Func<UIHealthReport, bool> ShouldNotifyFunc { get; set; } 
+        internal Func<UIHealthReport, string> CustomMessageFunc { get; set; }
+        internal Func<UIHealthReport, string> CustomDescriptionFunc { get; set; }
     }
 }

@@ -47,7 +47,7 @@ setup.AddWebhookNotification("webhook1", uri: "https://healthchecks.requestcatch
 ```csharp
 setup
 .AddWebhookNotification("webhook1",
-    uri: "status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}",
+    uri: "status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
     restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}",
     shouldNotifyFunc: report => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23
     customMessageFunc: (report) =>

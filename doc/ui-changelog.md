@@ -1,6 +1,8 @@
 **3.0.10**
 
-- Improved k8s discovery service: New health, scheme and port annotations and better compatibility with ipv4 / ipv6 addresses. Thanks @ggmaresca
+- Improved k8s discovery service Thanks @ggmaresca: 
+    - New health, scheme and port annotations and better compatibility with ipv4 / ipv6 addresses. 
+    - Customizable namespaces
 
 - Added docker image push capabilities for Kubernetes Operator with a new protected endpoint
 

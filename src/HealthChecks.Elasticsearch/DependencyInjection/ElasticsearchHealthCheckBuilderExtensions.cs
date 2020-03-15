@@ -51,6 +51,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new ElasticsearchOptions();
             setup?.Invoke(options);
 
+            options.RequestTimeout ??= timeout;
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
                 sp => new ElasticsearchHealthCheck(options),

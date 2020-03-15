@@ -35,12 +35,25 @@ namespace HealthChecks.UI.Branding
                     setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
                     setup.AddHealthCheckEndpoint("endpoint2", "health-process");
 
-                    setup.AddWebhookNotification("webhook1", uri: "status/200?code=ax3rt56s"
-                                                , payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}",
-                                                 restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
+                    //Webhook endpoint with custom notification hours, and custom failure and description messages
+
+                    setup.AddWebhookNotification("webhook1", uri: "https://healthchecks2.requestcatcher.com/"
+                                                , payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
+                                                 restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}", 
+                                                 shouldNotifyFunc: report => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23,
+                                                 customMessageFunc : (report) =>
+                                                 {
+                                                     var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+                                                     return $"{failing.Count()} healthchecks are failing";
+                                                 }, customDescriptionFunc: report => {
+                                                     var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+                                                     return $"{string.Join(" - ", failing.Select(f => f.Key))} healthchecks are failing";
+                                                 });
+
+                    //Webhook endpoint with default failure and description messages
 
                     setup.AddWebhookNotification("webhook1", uri: "https://healthchecks.requestcatcher.com/",
-                                                 payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]]\"}",
+                                                 payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                                                  restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
 
                 })

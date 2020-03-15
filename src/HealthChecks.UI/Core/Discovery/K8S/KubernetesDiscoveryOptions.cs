@@ -14,6 +14,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         public string ServicesSchemeAnnotation { get; set; } = Keys.HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_ANNOTATION;
         public string Token { get; set; }
         public int RefreshTimeOnSeconds { get; set; } = 300;
-        public IEnumerable<string> Namespaces { get; set; } = Enumerable.Empty<string>();
+        public List<string> Namespaces { get; set; } = new List<string>();
     }
 }

@@ -11,12 +11,18 @@ namespace HealthChecks.RabbitMQ
     {
         private readonly IConnectionFactory _connectionFactory;
         private IConnection _rmqConnection;
+        protected bool AttemptConnectionReuse = false;
 
         public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
         {
             var connectionFactory = new ConnectionFactory
             {
                 Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
+                // Using background threads to ensure that process shutdown isn't waiting for these IO threads to complete.
+                // This addresses issue #412 which reports that the process hangs on shutdown if the connection used
+                // for health checks is using foreground threads and isn't explicitly disposed.
+                UseBackgroundThreadsForIO = true, 
+
                 AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
             };
 
@@ -50,9 +56,41 @@ namespace HealthChecks.RabbitMQ
                     return TestConnection(_rmqConnection);
                 }
 
-                using (var connection = _connectionFactory.CreateConnection())
+                // If we're in a situation where we don't know that it's safe to
+                // reuse connections then we will create a new connection for each
+                // health check evaluation.
+                //
+                // It is not safe if we don't know that this RabbitMQHealthCheck instance 
+                // may be transient, where a new one created for each new health check evaluation,
+                // since we would then never reuse this instance to reuse the internally stored connection.
+                //
+                // It is also not safe if the IConnectionFactory.UseBackgroundThreadsForIO is
+                // set to false as the foreground threads of an internally stored connection would
+                // prevent the process from terminating since there isn't a hook to dispose
+                // the connection on shutdown.
+                if (!AttemptConnectionReuse)
                 {
-                    return TestConnection(connection);
+                    using (var connection = CreateConnection(_connectionFactory))
+                    {
+                        return TestConnection(connection);
+                    }
+                }
+                // We're safe holding on to the connection and not disposing it here because
+                // the factory is configured to use background threads and won't cause the
+                // process shutdown to hang (as would happen with foreground thread that are still running)
+                // and we've been told (through AttemptConnectionReuse) to assume that this is a long
+                // lived RabbitMQHealthCheck instance (so we'll reuse this instance and be able to
+                // benefit from reusing the internally stored connection).
+                else
+                {
+                    
+                    if (_rmqConnection == null || !_rmqConnection.IsOpen)
+                    {
+                        _rmqConnection?.Abort(0);
+                    }
+
+                    _rmqConnection = _rmqConnection ?? CreateConnection(_connectionFactory);
+                    return TestConnection(_rmqConnection);
                 }
             }
             catch (Exception ex)

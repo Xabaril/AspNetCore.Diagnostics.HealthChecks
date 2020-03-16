@@ -2,12 +2,16 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Security.Principal;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class RabbitMQHealthCheckBuilderExtensions
     {
+        private static ConcurrentDictionary<Guid, Lazy<RabbitMQHealthCheck>> _healthChecks = new ConcurrentDictionary<Guid, Lazy<RabbitMQHealthCheck>>();
+
         const string NAME = "rabbitmq";
 
         /// <summary>
@@ -24,11 +28,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <remarks>A single connection to the RabbitMQ broker will be reused for health checks.</remarks>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitMQConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new RabbitMQHealthCheck(rabbitMQConnectionString, sslOption),
+                new InternalRabbitMQHealthCheck(rabbitMQConnectionString, sslOption),
                 failureStatus,
                 tags,
                 timeout));
@@ -47,26 +52,39 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <remarks>A single connection to the RabbitMQ broker will be reused for health checks.</remarks>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default, 
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            var guid = Guid.NewGuid();
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => {
-                    var connection = sp.GetService<IConnection>();
-                    var connectionFactory = sp.GetService<IConnectionFactory>();
-                    if (connection != null)
+                sp =>
+                {
+                    if (!_healthChecks.ContainsKey(guid))
                     {
-                        return new RabbitMQHealthCheck(connection);
+                        _healthChecks.TryAdd(guid, new Lazy<RabbitMQHealthCheck>(() =>
+                        {
+                            var connection = sp.GetService<IConnection>();
+                            var connectionFactory = sp.GetService<IConnectionFactory>();
+                            if (connection != null)
+                            {
+                                return new InternalRabbitMQHealthCheck(connection);
+                            }
+                            else if (connectionFactory != null)
+                            {
+                                return new InternalRabbitMQHealthCheck(connectionFactory);
+                            }
+                            else
+                            {
+                                throw new ArgumentException(
+                                    $"Either an IConnection or IConnectionFactory must be registered with the service provider");
+                            }
+                        }));
                     }
-                    else if(connectionFactory != null)
-                    {
-                        return new RabbitMQHealthCheck(connectionFactory);
-                    }
-                    else
-                    {
-                        throw new ArgumentException($"Either an IConnection or IConnectionFactory must be registered with the service provider");
-                    }
+
+                    return _healthChecks[guid].Value;
                 },
                 failureStatus,
                 tags,
@@ -86,12 +104,27 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <remarks>A single connection to the RabbitMQ broker will be reused for health checks.</remarks>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory, 
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            var guid = Guid.NewGuid();
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RabbitMQHealthCheck(connectionFactory(sp)),
+                sp =>
+                {
+                    if (!_healthChecks.ContainsKey(guid))
+                    {
+                        _healthChecks.TryAdd(guid,
+                            new Lazy<RabbitMQHealthCheck>(() =>
+                            {
+                                return new InternalRabbitMQHealthCheck(connectionFactory(sp));
+                            }));
+                    }
+
+                    return _healthChecks[guid].Value;
+                },
                 failureStatus,
                 tags,
                 timeout));
@@ -110,12 +143,27 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <remarks>ONLY if IConnectionFactory.UseBackgroundThreadsForIO is true, then a single connection to the RabbitMQ broker will be reused for health checks.</remarks>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory, 
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            var guid = Guid.NewGuid();
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)),
+                sp =>
+                {
+                    if (!_healthChecks.ContainsKey(guid))
+                    {
+                        _healthChecks.TryAdd(guid,
+                            new Lazy<RabbitMQHealthCheck>(() =>
+                            {
+                                return new InternalRabbitMQHealthCheck(connectionFactoryFactory(sp));
+                            }));
+                    }
+
+                    return _healthChecks[guid].Value;
+                },
                 failureStatus,
                 tags,
                 timeout));

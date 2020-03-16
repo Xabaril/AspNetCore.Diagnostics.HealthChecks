@@ -4,7 +4,6 @@ using RabbitMQ.Client;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Security.Principal;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

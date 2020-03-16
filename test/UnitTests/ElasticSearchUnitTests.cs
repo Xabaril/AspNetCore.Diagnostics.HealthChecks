@@ -51,7 +51,6 @@ namespace UnitTests
             });
 
             settings.RequestTimeout.Should().NotHaveValue();
-
         }
     }
 }

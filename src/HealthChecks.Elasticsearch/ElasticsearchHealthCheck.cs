@@ -28,7 +28,7 @@ namespace HealthChecks.Elasticsearch
 
                     if (_options.RequestTimeout.HasValue)
                     {
-                        settings.RequestTimeout(_options.RequestTimeout.Value);
+                        settings = settings.RequestTimeout(_options.RequestTimeout.Value);
                     }
 
                     if (_options.AuthenticateWithBasicCredentials)

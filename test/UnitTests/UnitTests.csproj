@@ -26,11 +26,11 @@
     <ProjectReference Include="..\..\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj" />    
+    <ProjectReference Include="..\..\src\HealthChecks.IdentityServer\HealthChecks.IdentityServer.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />    
-    <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />    

@@ -93,7 +93,7 @@ Install-Package AspNetCore.HealthChecks.RavenDB
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.RabbitMQ
 Install-Package AspNetCore.HealthChecks.IbmMQ
-Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
+Install-Package AspNetCore.HealthChecks.IdentityServer
 Install-Package AspNetCore.HealthChecks.DynamoDB
 Install-Package AspNetCore.HealthChecks.Oracle
 Install-Package AspNetCore.HealthChecks.Uris

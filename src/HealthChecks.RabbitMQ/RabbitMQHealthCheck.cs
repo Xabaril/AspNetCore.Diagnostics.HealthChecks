@@ -83,7 +83,6 @@ namespace HealthChecks.RabbitMQ
                 // benefit from reusing the internally stored connection).
                 else
                 {
-                    
                     if (_rmqConnection == null || !_rmqConnection.IsOpen)
                     {
                         _rmqConnection?.Abort(0);

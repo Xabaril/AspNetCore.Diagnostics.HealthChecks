@@ -88,7 +88,22 @@ namespace HealthChecks.UI.Core.HostedService
 
                 var response = await _httpClient.GetAsync(absoluteUri);
 
-                return await response.As<UIHealthReport>();
+                var healthReport = await response.As<UIHealthReport>();
+
+                if(healthReport.Entries == null && healthReport.TotalDuration.Equals(TimeSpan.Zero))
+                {
+                    var rebuiltHealthReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), TimeSpan.Zero);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        rebuiltHealthReport.Status = UIHealthStatus.Healthy;
+                    }
+                    return rebuiltHealthReport;
+                }
+                else
+                {
+                    return healthReport;
+                }
             }
             catch (Exception exception)
             {

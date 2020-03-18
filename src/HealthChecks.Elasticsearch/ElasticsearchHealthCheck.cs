@@ -26,6 +26,11 @@ namespace HealthChecks.Elasticsearch
                 {
                     var settings = new ConnectionSettings(new Uri(_options.Uri));
 
+                    if (_options.RequestTimeout.HasValue)
+                    {
+                        settings = settings.RequestTimeout(_options.RequestTimeout.Value);
+                    }
+
                     if (_options.AuthenticateWithBasicCredentials)
                     {
                         settings = settings.BasicAuthentication(_options.UserName, _options.Password);

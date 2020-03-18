@@ -13,6 +13,7 @@ namespace HealthChecks.Elasticsearch
         public bool AuthenticateWithBasicCredentials { get; private set; } = false;
         public bool AuthenticateWithCertificate { get; private set; } = false;
         public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> CertificateValidationCallback { get; private set; }
+        public TimeSpan? RequestTimeout { get; set; }
         public ElasticsearchOptions UseBasicAuthentication(string name, string password)
         {
             UserName = name ?? throw new ArgumentNullException(nameof(name));

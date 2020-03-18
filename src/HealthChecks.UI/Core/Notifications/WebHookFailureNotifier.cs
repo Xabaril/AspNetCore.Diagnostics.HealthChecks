@@ -35,15 +35,18 @@ namespace HealthChecks.UI.Core.Notifications
         }
         public async Task NotifyDown(T _db, string name, UIHealthReport report)
         {
-            await Notify(_db,name, failure: GetFailedMessageFromContent(report), isHealthy: false, description: GetFailedDescriptionsFromContent(report));
+            await Notify(name, report, isHealthy: false);
         }
         public async Task NotifyWakeUp(T _db, string name)
         {
-            await Notify(_db,name, isHealthy: true);
+            await Notify(name, null, isHealthy: true);
         }
-        private async Task Notify(T _db, string name, string failure = "", bool isHealthy = false, string description = null)
+        internal async Task Notify(string name, UIHealthReport report, bool isHealthy = false)
         {
-            if (!await IsNotifiedOnWindowTime(_db,name, isHealthy))
+            string failure = default;
+            string description = default;
+
+            if (!await IsNotifiedOnWindowTime(name, isHealthy))
             {
                 await SaveNotification(_db,new HealthCheckFailureNotification()
                 {
@@ -54,6 +57,19 @@ namespace HealthChecks.UI.Core.Notifications
 
                 foreach (var webHook in _settings.Webhooks)
                 {
+                    bool shouldNotify = webHook.ShouldNotifyFunc?.Invoke(report) ?? true;
+
+                    if (!shouldNotify) {
+                        _logger.LogInformation("Webhook notification will not be sent because of user configuration");
+                        continue;
+                    };
+
+                    if(!isHealthy)
+                    {
+                        failure = webHook.CustomMessageFunc?.Invoke(report) ?? GetFailedMessageFromContent(report);
+                        description = webHook.CustomDescriptionFunc?.Invoke(report) ?? GetFailedDescriptionsFromContent(report);
+                    }
+
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
                     payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
                         .Replace(Keys.FAILURE_BOOKMARK, failure)

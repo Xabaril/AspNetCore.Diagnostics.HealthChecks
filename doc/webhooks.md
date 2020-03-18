@@ -2,32 +2,11 @@
 
 ![HealthChecksUI](./images/ui-webhooks.png)
 
-## Microsoft Teams
+> HealthCheckUI replace automatically [[LIVENESS]], [[FAILURE]] and [[DESCRIPTIONS]] bookmarks.
 
-If you want to send failure notifications to Microsoft Teams the payload to be used is:
+Webhooks can be configured using configuration providers or by code.
 
-```json
-{
-  "@context": "http://schema.org/extensions",
-  "@type": "MessageCard",
-  "themeColor": "0072C6",
-  "title": "[[LIVENESS]] has failed!",
-  "text": "[[FAILURE]]. Click **Learn More** to go to BeatPulseUI!",
-  "potentialAction": [
-    {
-      "@type": "OpenUri",
-      "name": "Learn More",
-      "targets": [
-        { "os": "default", "uri": "http://localhost:52665/beatpulse-ui" }
-      ]
-    }
-  ]
-}
-```
-
-> HealthCheckUI replace automatically [[LIVENESS]] and [[FAILURE]] bookmarks.
-
-You must escape the json before setting the **Payload** property in the configuration file:
+If you are using json file configuration. you must escape the json before setting the **Payload** property in the configuration file:
 
 ```json
 {
@@ -51,9 +30,64 @@ You must escape the json before setting the **Payload** property in the configur
 }
 ```
 
+## Configuring Webhooks by code
+
+You can also configure webhooks by using code. This scenario allows greater customization as you can use your own user functions to configure if a payload should be notified and customize [[FAILURE]] and [[DESCRIPTIONS]] bookmarks.
+
+**Sample with default failure message and descriptions**:
+
+```csharp
+setup.AddWebhookNotification("webhook1", uri: "https://healthchecks.requestcatcher.com/",
+            payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
+            restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
+```
+
+**Sample with custom user functions**:
+
+```csharp
+setup
+.AddWebhookNotification("webhook1",
+    uri: "status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
+    restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}",
+    shouldNotifyFunc: report => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23
+    customMessageFunc: (report) =>
+    {
+        var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+        return $"{failing.Count()} healthchecks are failing";
+    },
+    customDescriptionFunc: report =>
+    {
+        var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+        return $"HealthChecks with names {string.Join("/", failing.Select(f => f.Key))} are failing";
+    });
+```
+
+## Microsoft Teams
+
+If you want to send failure notifications to Microsoft Teams the payload to be used is:
+
+```json
+{
+  "@context": "http://schema.org/extensions",
+  "@type": "MessageCard",
+  "themeColor": "0072C6",
+  "title": "[[LIVENESS]] has failed!",
+  "text": "[[FAILURE]]. Click **Learn More** to go to BeatPulseUI!",
+  "potentialAction": [
+    {
+      "@type": "OpenUri",
+      "name": "Learn More",
+      "targets": [
+        { "os": "default", "uri": "http://localhost:52665/beatpulse-ui" }
+      ]
+    }
+  ]
+}
+```
+
 ## Azure Functions
 
-You can use [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) to receive *HealthCheckUI* notifications and perform any action. 
+You can use [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/) to receive _HealthCheckUI_ notifications and perform any action.
 
 Next samples show AF integration with Twilio to send SMS / SendGrid for HealthCheckUI failure notifications.
 
@@ -81,7 +115,7 @@ public static async Task Run(HttpRequestMessage req, IAsyncCollector<SMSMessage>
 
 ```
 
-```c# 
+```c#
 #r "SendGrid"
 using System;
 using SendGrid.Helpers.Mail;

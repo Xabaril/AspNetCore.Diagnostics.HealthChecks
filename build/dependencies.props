@@ -41,6 +41,7 @@
     <MicrosoftAspNetCoreSignalRClient>3.0.0</MicrosoftAspNetCoreSignalRClient>
     <MicrosoftAspNetCoreSignalR>1.0.0</MicrosoftAspNetCoreSignalR>
     <MicrosoftSourceLinkGithub>1.0.0</MicrosoftSourceLinkGithub>
+    <MicrosoftExtensionsLoggingConsole>3.0.0</MicrosoftExtensionsLoggingConsole>
     <FluentAssertions>5.9.0</FluentAssertions>
     <xunit>2.4.1</xunit>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
@@ -51,7 +52,7 @@
     <Npgsql>4.0.10</Npgsql>
     <MongoDBDriver>2.9.1</MongoDBDriver>
     <MySqlConnector>0.56.0</MySqlConnector>
-    <ConfluentKafka>1.2.0</ConfluentKafka>
+    <ConfluentKafka>1.3.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
     <NEST>7.3.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
@@ -69,10 +70,11 @@
     <PrometheusNet>2.1.3</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3> 
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
-    <KubernetesClient>1.5.25</KubernetesClient>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
+    <KubernetesClient>1.6.10</KubernetesClient>
     <SolrNetCore>1.0.19</SolrNetCore>
+    <IBMMQDotnetClient>9.1.4</IBMMQDotnetClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -88,13 +90,13 @@
     <HealthCheckRedis>3.0.0</HealthCheckRedis>
     <HealthCheckRabbitMQ>3.0.5</HealthCheckRabbitMQ>
     <HealthCheckEventStore>3.0.0</HealthCheckEventStore>
-    <HealthCheckElasticsearch>3.0.0</HealthCheckElasticsearch>
+    <HealthCheckElasticsearch>3.0.1</HealthCheckElasticsearch>
     <HealthCheckSolr>3.0.0</HealthCheckSolr>
     <HealthCheckOracle>3.0.0</HealthCheckOracle>
     <HealthCheckNpgSql>3.0.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>3.0.1</HealthCheckMongoDB>
     <HealthCheckMySql>3.0.0</HealthCheckMySql>
-    <HealthCheckKafka>3.0.0</HealthCheckKafka>
+    <HealthCheckKafka>3.0.1</HealthCheckKafka>
     <HealthCheckSystem>3.0.3</HealthCheckSystem>
     <HealthCheckNetwork>3.0.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.0.0</HealthCheckDynamoDb>
@@ -102,9 +104,9 @@
     <HealthCheckDocumentDb>3.0.0</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>3.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.0.0</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>3.0.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>3.0.1</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.0.0</HealthCheckConsul>
-    <HealthCheckUI>3.0.9</HealthCheckUI>
+    <HealthCheckUI>3.0.11</HealthCheckUI>
     <HealthCheckUIClient>3.0.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>3.0.3</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.0.0</HealthCheckPublisherDatadog>
@@ -117,5 +119,7 @@
     <HealthCheckSignalR>3.0.0</HealthCheckSignalR>
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
+	  <HealthCheckIbmMQ>3.0.0</HealthCheckIbmMQ>
+    <HealthChecksUIK8sOperator>3.0.0-beta.1</HealthChecksUIK8sOperator>
   </PropertyGroup>
 </Project>

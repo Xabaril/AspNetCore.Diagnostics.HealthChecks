@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Core.Data
 {
-    class HealthChecksDb
+    internal class HealthChecksDb
         : DbContext, IHealthChecksDb
     {
         public DbSet<HealthCheckConfiguration> Configurations { get; set; }

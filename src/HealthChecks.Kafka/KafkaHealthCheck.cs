@@ -9,9 +9,11 @@ namespace HealthChecks.Kafka
     public class KafkaHealthCheck : IHealthCheck
     {
         private readonly ProducerConfig _configuration;
-        public KafkaHealthCheck(ProducerConfig configuration)
+        private readonly string _topic;
+        public KafkaHealthCheck(ProducerConfig configuration, string topic = "healthchecks-topic")
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _topic = topic;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -21,11 +23,11 @@ namespace HealthChecks.Kafka
                 {
                     var message = new Message<string, string>()
                     {
-                        Key = "healtcheck-key",
+                        Key = "healthcheck-key",
                         Value = $"Check Kafka healthy on {DateTime.UtcNow}"
                     };
 
-                    var result = await producer.ProduceAsync("healthchecks-topic", message);
+                    var result = await producer.ProduceAsync(_topic, message);
 
                     if (result.Status == PersistenceStatus.NotPersisted)
                     {

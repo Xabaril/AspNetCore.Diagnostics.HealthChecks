@@ -127,23 +127,65 @@
         "labels": {
           "HealthChecks": "true",
           "app": "seq"
+        },
+        "annotations": {
+          "HealthChecksPath": "custom/health/path",
+          "HealthChecksPort": "7070"
         }
       },
       "spec": {
         "ports": [
           {
-            "name": "http",
+            "name": "ingestion",
             "protocol": "TCP",
             "port": 5341,
             "targetPort": "ui"
+          },
+          {
+            "name": "http",
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": "ui"
+          },
+          {
+            "name": "healthcheck",
+            "protocol": "TCP",
+            "port": 7070,
+            "targetPort": "healthcheck"
           }
         ],
         "selector": {
           "app": "seq"
         },
-        "clusterIP": "10.152.183.35",
+        "clusterIP": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
         "type": "ClusterIP",
         "sessionAffinity": "None"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "metadata": {
+        "name": "external-site",
+        "namespace": "default",
+        "selfLink": "/api/v1/namespaces/default/services/external-site",
+        "uid": "c704e4b7-cd91-4f4b-88e7-c5284aa373a7",
+        "resourceVersion": "134427",
+        "creationTimestamp": "2019-07-12T02:42:38Z",
+        "labels": {
+          "HealthChecks": "true",
+          "app": "seq"
+        },
+        "annotations": {
+          "HealthChecksPath": "custom/health/path",
+          "HealthChecksPort": "443",
+          "HealthChecksScheme": "HTTPS"
+        }
+      },
+      "spec": {
+        "type": "ExternalName",
+        "externalName": "some.external-site.com"
       },
       "status": {
         "loadBalancer": {}

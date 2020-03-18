@@ -83,12 +83,12 @@ namespace UnitTests.UI.Kubernetes
 
             IReadOnlyList<string> serviceAddresses = services.Items.Select(service => addressFactory.CreateAddress(service)).ToList();
 
-            serviceAddresses[0].Should().Be("http://webapp.default:10000/healthz");
-            serviceAddresses[1].Should().Be("http://webapp2.default:9000/healthz");
-            serviceAddresses[2].Should().Be("http://webapp3.default:30000/healthz");
+            serviceAddresses[0].Should().Be("http://localhost:10000/healthz");
+            serviceAddresses[1].Should().Be("http://localhost:9000/healthz");
+            serviceAddresses[2].Should().Be("http://localhost:30000/healthz");
             serviceAddresses[3].Should().Be("http://webapp4.default/healthz");
             serviceAddresses[4].Should().Be("http://seq.default:7070/custom/health/path");
-            serviceAddresses[5].Should().Be("https://external-site.default/custom/health/path");
+            serviceAddresses[5].Should().Be("https://some.external-site.com/custom/health/path");
         }
 
     }

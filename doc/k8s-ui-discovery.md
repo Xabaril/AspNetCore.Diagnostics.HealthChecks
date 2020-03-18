@@ -65,19 +65,19 @@ By default, it'll use the in-cluster pod config if running inside of a pod and t
 
 Here are all the available parameters detailed:
 
-| Parameter                | Description                                                                                                                                       | Default Value      |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Enabled                  | Establishes if the k8s discovery service is enabled of disabled                                                                                   | false              |
-| ClusterHost              | The uri of the kubernetes cluster                                                                                                                 |                    |
-| Token                    | The token that will be sent to the cluster for authentication                                                                                     |                    |
-| HealthPath               | The default url path where the UI will call once the service is discovered                                                                        | hc                 |
-| ServicesLabel            | The labeled services the UI will look for in k8s                                                                                                  | HealthChecks       |
-| ServicesPathAnnotation   | The annotation on a service that can override the configured url path                                                                             | HealthChecksPath   |
-| ServicesPortAnnotation   | The annotation on a service to define which port to call. If the annotation does not exist on the service the first defined port will be used     | HealthChecksPort   |
-| ServicesSchemeAnnotation | The annotation on a service to define which URI scheme to use for healthchecks. If the annotation does not exist on the service http will be used | HealthChecksScheme |
-| RefreshTimeOnSeconds     | Healthchecks refresh time in seconds                                                                                                              | 300                |
-| Namespaces               | The namespace(s) to query services in                                                                                                             | []                 |
-| UseDNSNames              | Use Kubernetes DNS names to call services (`http(s)://service.namespace/hc`). Recommended to only set true when running in-cluster             | false              |
+| Parameter                | Description                                                                                                                                                    | Default Value      |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Enabled                  | Establishes if the k8s discovery service is enabled of disabled                                                                                                | false              |
+| ClusterHost              | The uri of the kubernetes cluster                                                                                                                              |                    |
+| Token                    | The token that will be sent to the cluster for authentication                                                                                                  |                    |
+| HealthPath               | The default url path where the UI will call once the service is discovered                                                                                     | hc                 |
+| ServicesLabel            | The labeled services the UI will look for in k8s                                                                                                               | HealthChecks       |
+| ServicesPathAnnotation   | The annotation on a service that can override the configured url path                                                                                          | HealthChecksPath   |
+| ServicesPortAnnotation   | The annotation on a service to define which port to call. If the annotation does not exist on the service the first defined port will be used                  | HealthChecksPort   |
+| ServicesSchemeAnnotation | The annotation on a service to define which URI scheme to use for healthchecks. If the annotation does not exist on the service http will be used              | HealthChecksScheme |
+| RefreshTimeOnSeconds     | Healthchecks refresh time in seconds                                                                                                                           | 300                |
+| Namespaces               | The namespace(s) to query services in                                                                                                                          | []                 |
+| UseDNSNames              | Use Kubernetes DNS names instead of cluster IPs to call services (ex: `http(s)://service.namespace/hc`) . Recommended to only set true when running in-cluster | false              |
 
 ## Labeling Services for discovery in Kubernetes
 

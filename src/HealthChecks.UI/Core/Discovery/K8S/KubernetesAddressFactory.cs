@@ -16,11 +16,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             var port = GetServicePortValue(service);
 
             var address = (_settings.UseDNSNames, service.Spec.Type) switch {
-                (true, _) => service.Metadata.Name + "." + service.Metadata.NamespaceProperty,
                 (_, ServiceType.LoadBalancer) => GetLoadBalancerAddress(service),
                 (_, ServiceType.NodePort) => GetLoadBalancerAddress(service),
-                (_, ServiceType.ClusterIP) => service.Spec.ClusterIP,
                 (_, ServiceType.ExternalName) => service.Spec.ExternalName,
+                (true, _) => GetKubeDNSName(service),
+                (_, ServiceType.ClusterIP) => service.Spec.ClusterIP,
                 (_, _) => service.Spec.ClusterIP,
             };
 
@@ -54,6 +54,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 return $"{healthScheme}://{address}{portStr}/{healthPath}";
             }
         }
+        private string GetKubeDNSName(V1Service service) => service.Metadata.Name + "." + service.Metadata.NamespaceProperty;
         private string GetLoadBalancerAddress(V1Service service)
         {
             var firstIngress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
@@ -62,7 +63,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 return string.IsNullOrEmpty(ingress.Ip) ? ingress.Hostname : ingress.Ip;
             }
 
-            return service.Spec.ClusterIP;
+            return _settings.UseDNSNames ? GetKubeDNSName(service) : service.Spec.ClusterIP;
         }
         private int? GetServicePortValue(V1Service service)
         {

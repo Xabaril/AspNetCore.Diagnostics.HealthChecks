@@ -68,7 +68,6 @@ Here are all the available parameters detailed:
 | Parameter                | Description                                                                                                                                       | Default Value      |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | Enabled                  | Establishes if the k8s discovery service is enabled of disabled                                                                                   | false              |
-| InCluster                | The service discovery will try to load the cluster config as an in-cluster pod. ClusterHost and Token does not need to be defined if this is true | false              |
 | ClusterHost              | The uri of the kubernetes cluster                                                                                                                 |                    |
 | Token                    | The token that will be sent to the cluster for authentication                                                                                     |                    |
 | HealthPath               | The default url path where the UI will call once the service is discovered                                                                        | hc                 |
@@ -78,6 +77,7 @@ Here are all the available parameters detailed:
 | ServicesSchemeAnnotation | The annotation on a service to define which URI scheme to use for healthchecks. If the annotation does not exist on the service http will be used | HealthChecksScheme |
 | RefreshTimeOnSeconds     | Healthchecks refresh time in seconds                                                                                                              | 300                |
 | Namespaces               | The namespace(s) to query services in                                                                                                             | []                 |
+| UseDNSNames              | Use Kubernetes DNS names to call services (`http(s)://service.namespace/hc`). Recommended to only set true when running in-cluster             | false              |
 
 ## Labeling Services for discovery in Kubernetes
 

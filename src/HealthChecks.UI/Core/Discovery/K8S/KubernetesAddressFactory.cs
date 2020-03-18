@@ -13,23 +13,16 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         }
         public string CreateAddress(V1Service service)
         {
-            string address = string.Empty;
-
             var port = GetServicePortValue(service);
 
-            switch (service.Spec.Type)
-            {
-                case ServiceType.LoadBalancer:
-                case ServiceType.NodePort:
-                    address = GetLoadBalancerAddress(service);
-                    break;
-                case ServiceType.ClusterIP:
-                    address = service.Spec.ClusterIP;
-                    break;
-                case ServiceType.ExternalName:
-                    address = service.Spec.ExternalName;
-                    break;
-            }
+            var address = (_settings.UseDNSNames, service.Spec.Type) switch {
+                (true, _) => service.Metadata.Name + "." + service.Metadata.NamespaceProperty,
+                (_, ServiceType.LoadBalancer) => GetLoadBalancerAddress(service),
+                (_, ServiceType.NodePort) => GetLoadBalancerAddress(service),
+                (_, ServiceType.ClusterIP) => service.Spec.ClusterIP,
+                (_, ServiceType.ExternalName) => service.Spec.ExternalName,
+                (_, _) => service.Spec.ClusterIP,
+            };
 
             string healthPath = _settings.HealthPath;
             if(!string.IsNullOrEmpty(_settings.ServicesPathAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesPathAnnotation) ?? false))
@@ -44,14 +37,21 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 healthScheme = service.Metadata.Annotations![_settings.ServicesSchemeAnnotation]!.ToLower();
             }
 
+            var portStr = (port, healthScheme) switch {
+                var _ when port is null => string.Empty,
+                (80, "http") => string.Empty,
+                (443, "https") => string.Empty,
+                (_, _) => ":" + port.Value
+            };
+
             // Support IPv6 address hosts
             if(address.Contains(":"))
             {
-                return $"{healthScheme}://[{address}]{port}/{healthPath}";
+                return $"{healthScheme}://[{address}]{portStr}/{healthPath}";
             }
             else
             {
-                return $"{healthScheme}://{address}{port}/{healthPath}";
+                return $"{healthScheme}://{address}{portStr}/{healthPath}";
             }
         }
         private string GetLoadBalancerAddress(V1Service service)
@@ -64,7 +64,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return service.Spec.ClusterIP;
         }
-        private string GetServicePortValue(V1Service service)
+        private int? GetServicePortValue(V1Service service)
         {
             int? port;
             switch (service.Spec.Type)
@@ -91,7 +91,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                     break;
             }
 
-            return port is null ? string.Empty : $":{port.Value}";
+            return port;
         }
         private V1ServicePort? GetServicePort(V1Service service)
         {

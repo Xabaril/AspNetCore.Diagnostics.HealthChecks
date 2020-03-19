@@ -35,18 +35,18 @@ namespace HealthChecks.UI.Core.Notifications
         }
         public async Task NotifyDown(T _db, string name, UIHealthReport report)
         {
-            await Notify(name, report, isHealthy: false);
+            await Notify(_db,name, report, isHealthy: false);
         }
         public async Task NotifyWakeUp(T _db, string name)
         {
-            await Notify(name, null, isHealthy: true);
+            await Notify(_db,name, null, isHealthy: true);
         }
-        internal async Task Notify(string name, UIHealthReport report, bool isHealthy = false)
+        internal async Task Notify(T _db, string name, UIHealthReport report, bool isHealthy = false)
         {
             string failure = default;
             string description = default;
 
-            if (!await IsNotifiedOnWindowTime(name, isHealthy))
+            if (!await IsNotifiedOnWindowTime(_db,name, isHealthy))
             {
                 await SaveNotification(_db,new HealthCheckFailureNotification()
                 {

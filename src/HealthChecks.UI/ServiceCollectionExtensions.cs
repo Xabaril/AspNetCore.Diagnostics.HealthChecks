@@ -76,31 +76,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var kubernetesDiscoverySettings = services.BuildServiceProvider()
                 .GetService<IOptions<KubernetesDiscoverySettings>>()
                 .Value ?? new KubernetesDiscoverySettings();
-
-            services.AddDbContext<HealthChecksDb>((provider, db) =>
-            {
-                var healthCheckSettings = provider
-                      .GetService<IOptions<Settings>>()
-                      .Value ?? new Settings();
-
-                var connectionString = healthCheckSettings.HealthCheckDatabaseConnectionString;
-                if (string.IsNullOrWhiteSpace(connectionString))
-                {
-                    var configuration = provider.GetRequiredService<IConfiguration>();
-                    var contentRoot = configuration[HostDefaults.ContentRootKey];
-                    var path = Path.Combine(contentRoot, databaseName);
-                    connectionString = $"Data Source={path}";
-                }
-                else
-                {
-                    connectionString = Environment.ExpandEnvironmentVariables(connectionString);
-                }
-                db.UseSqlite(connectionString);
-            });
-
             if (kubernetesDiscoverySettings.Enabled)
             {
-                services.AddKubernetesDiscoveryService(kubernetesDiscoverySettings);
+                services.AddKubernetesDiscoveryService<T>(kubernetesDiscoverySettings);
             }
             var serviceProvider = services.BuildServiceProvider();
             CreateDatabase<T>(serviceProvider).Wait();
@@ -151,10 +129,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 var settings = scope.ServiceProvider
                     .GetService<IOptions<Settings>>();
-              
-                if (db.Database.GetMigrations().Count()>0)
+
+                if (db.Database.GetMigrations().Count() > 0)
                 {
-                    if (db.Database.GetPendingMigrations() .Count()> 0)
+                    if (db.Database.GetPendingMigrations().Count() > 0)
                     {
                         db.Database.Migrate();
                     }
@@ -195,8 +173,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 }
             }
+        }
 
-        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
+        static IServiceCollection AddKubernetesDiscoveryService<T>(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings) where T : DbContext, IHealthChecksDb
         {
             KubernetesClientConfiguration kubernetesConfig;
 
@@ -220,7 +199,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddSingleton(kubernetesDiscoverySettings)
-                .AddHostedService<KubernetesDiscoveryHostedService>()
+                .AddHostedService<KubernetesDiscoveryHostedService<T>>()
                 .AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig))
                 .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
 

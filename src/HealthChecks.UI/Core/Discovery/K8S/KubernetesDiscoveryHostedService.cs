@@ -30,7 +30,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             KubernetesDiscoverySettings discoveryOptions,
             IHttpClientFactory httpClientFactory,
             IKubernetes discoveryClient,
-            ILogger<KubernetesDiscoveryHostedService> logger)
+            ILogger<KubernetesDiscoveryHostedService<T>> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));

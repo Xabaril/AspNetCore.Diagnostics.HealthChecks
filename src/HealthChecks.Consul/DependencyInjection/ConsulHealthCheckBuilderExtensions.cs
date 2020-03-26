@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var registrationName = name ?? NAME;
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => CreateHealthCheck(sp, options, registrationName),
+                sp => CreateHealthCheck(sp, setup, registrationName),
                 failureStatus,
                 tags,
                 timeout));

@@ -25,9 +25,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddConsul(this IHealthChecksBuilder builder, Action<ConsulOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default,TimeSpan? timeout = default)
         {
-            var options = new ConsulOptions();
-            setup?.Invoke(options);
-
             builder.Services.AddHttpClient();
 
             var registrationName = name ?? NAME;
@@ -38,8 +35,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
-        private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, ConsulOptions options, string name)
+        private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, Action<ConsulOptions> setup, string name)
         {
+            var options = new ConsulOptions();
+            setup?.Invoke(options);
+
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             return new ConsulHealthCheck(options, () => httpClientFactory.CreateClient(name));
         }

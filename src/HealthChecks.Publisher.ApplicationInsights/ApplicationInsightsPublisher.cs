@@ -115,11 +115,11 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 {
                     if (_client == null)
                     {
-                        //override instrumentation key or use default instrumentation 
-                        //key active on the project.
+                        //override instrumentation key or use default telemetry
+                        //configuration active on the project.
 
                         var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
-                            ? new TelemetryConfiguration(_telemetryConfiguration?.InstrumentationKey)
+                            ? _telemetryConfiguration
                             : new TelemetryConfiguration(_instrumentationKey);
 
                         _client = new TelemetryClient(configuration);

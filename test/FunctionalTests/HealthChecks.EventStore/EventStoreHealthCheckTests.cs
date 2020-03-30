@@ -23,10 +23,10 @@ namespace FunctionalTests.HealthChecks.EventStore
         }
 
         [SkipOnAppVeyor]
-        public async Task be_healthy_if_eventstore_is_available()
+        [InlineData("tcp://localhost:1113")]
+        [InlineData("ConnectTo=tcp://admin:changeit@localhost:1113; HeartBeatTimeout=500")]
+        public async Task be_healthy_if_eventstore_is_available(string connectionString)
         {
-            var connectionString = "tcp://localhost:1113";
-
             var webHostBuilder = new WebHostBuilder()
             .UseStartup<DefaultStartup>()
             .ConfigureServices(services =>

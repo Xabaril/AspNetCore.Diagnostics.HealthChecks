@@ -29,7 +29,7 @@ namespace FunctionalTests.HealthChecks.SqlServer
             //https://www.appveyor.com/docs/services-databases/#sql-server-2017 
 
             var connectionString = _fixture.IsAppVeyorExecution
-                ? @"Server=(local)\SQL2016;Initial Catalog=master;User Id=sa;Password=Password12!"
+                ? @"Server=(local)\SQL2017;Initial Catalog=master;User Id=sa;Password=Password12!"
                 : "Server=tcp:127.0.0.1,1833;Initial Catalog=master;User Id=sa;Password=Password12!";
 
             var webHostBuilder = new WebHostBuilder()

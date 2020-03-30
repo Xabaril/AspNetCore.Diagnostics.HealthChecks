@@ -108,7 +108,7 @@
     <HealthCheckConsul>3.0.0</HealthCheckConsul>
     <HealthCheckUI>3.0.11</HealthCheckUI>
     <HealthCheckUIClient>3.0.2</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>3.0.3</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherAppplicationInsights>3.0.4</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.0.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.0.0</HealthCheckPublisherPrometheus>
     <HealthCheckAWSS3>3.0.0</HealthCheckAWSS3>

@@ -1,4 +1,4 @@
-using EventStore.ClientAPI;
+﻿using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
@@ -27,30 +27,25 @@ namespace HealthChecks.EventStore
         {
             try
             {
-
-                var eventStoreUri = new Uri(_eventStoreConnection);
-
-                ConnectionSettings connectionSettings;
+                ConnectionSettingsBuilder connectionSettings;
 
                 if (string.IsNullOrEmpty(_login) || string.IsNullOrEmpty(_password))
                 {
                     connectionSettings = ConnectionSettings.Create()
                         .LimitReconnectionsTo(RECONNECTION_LIMIT)
-                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS))
-                        .Build();
+                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS));
                 }
                 else
                 {
                     connectionSettings = ConnectionSettings.Create()
                         .LimitReconnectionsTo(RECONNECTION_LIMIT)
                         .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS))
-                        .SetDefaultUserCredentials(new UserCredentials(_login, _password))
-                        .Build();
+                        .SetDefaultUserCredentials(new UserCredentials(_login, _password));
                 }
 
                 using (var connection = EventStoreConnection.Create(
+                    _eventStoreConnection,
                     connectionSettings,
-                    eventStoreUri,
                     CONNECTION_NAME))
                 {
                     var tcs = new TaskCompletionSource<HealthCheckResult>();

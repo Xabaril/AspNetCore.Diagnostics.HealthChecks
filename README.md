@@ -6,7 +6,7 @@
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET Core** versions supported: 2.2, 3.0
+**ASP.NET Core** versions supported: 2.2, 3.0 and 3.1
 
 # Sections
 
@@ -70,7 +70,7 @@ HealthChecks packages include health checks for:
 - SignalR
 - Kubernetes
 
-> We support netcoreapp 2.2 and the new netcoreapp 3.0. Please use 2.2.X package version for .NET Core 2.2 and 3.0.X for .NET Core 3.0
+> We support netcoreapp 2.2, 3.0 and 3.1, Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
 ```PowerShell
 Install-Package AspNetCore.HealthChecks.System

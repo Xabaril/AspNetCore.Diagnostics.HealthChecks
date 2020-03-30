@@ -10,7 +10,7 @@ pull_requests:
   do_not_increment_build_number: true
 image: Visual Studio 2019
 services:
-  - mssql2019
+  - mssql2017
   - postgresql101
   - mongodb
   - mysql

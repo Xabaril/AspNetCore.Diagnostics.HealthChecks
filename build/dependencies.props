@@ -89,7 +89,7 @@
     <HealthCheckUri>3.0.0</HealthCheckUri>
     <HealthCheckRedis>3.0.0</HealthCheckRedis>
     <HealthCheckRabbitMQ>3.0.5</HealthCheckRabbitMQ>
-    <HealthCheckEventStore>3.0.0</HealthCheckEventStore>
+    <HealthCheckEventStore>3.0.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>3.0.1</HealthCheckElasticsearch>
     <HealthCheckSolr>3.0.0</HealthCheckSolr>
     <HealthCheckOracle>3.0.0</HealthCheckOracle>

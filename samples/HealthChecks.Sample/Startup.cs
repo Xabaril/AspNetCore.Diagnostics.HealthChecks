@@ -45,12 +45,8 @@ namespace HealthChecks.Sample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            lifetime.ApplicationStopped.Register(() =>
-            {
-
-            });
             app
                 .UseHealthChecks("/health", new HealthCheckOptions
                 {

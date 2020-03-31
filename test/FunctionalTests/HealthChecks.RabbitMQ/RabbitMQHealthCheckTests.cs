@@ -33,7 +33,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddRabbitMQ(rabbitMQConnectionString: connectionString, tags: new string[] { "rabbitmq" });
+                 .AddRabbitMQ(rabbitConnectionString: connectionString, tags: new string[] { "rabbitmq" });
                 //services.AddHealthChecks()
                 // .AddRabbitMQ(connectionString, sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
             })
@@ -59,19 +59,19 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
         public async Task be_unhealthy_if_rabbitmq_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-           .UseStartup<DefaultStartup>()
-           .ConfigureServices(services =>
-           {
-               services.AddHealthChecks()
-                .AddRabbitMQ("amqp://nonexistingdomain:5672", sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
-           })
-           .Configure(app =>
-           {
-               app.UseHealthChecks("/health", new HealthCheckOptions()
-               {
-                   Predicate = r => r.Tags.Contains("rabbitmq")
-               });
-           });
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddRabbitMQ("amqp://localhost:6672", sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("rabbitmq")
+                    });
+                });
 
             var server = new TestServer(webHostBuilder);
 

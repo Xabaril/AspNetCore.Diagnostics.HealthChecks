@@ -88,7 +88,7 @@
     <HealthCheckSqlite>3.0.0</HealthCheckSqlite>
     <HealthCheckUri>3.0.0</HealthCheckUri>
     <HealthCheckRedis>3.0.0</HealthCheckRedis>
-    <HealthCheckRabbitMQ>3.0.5</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>3.0.6</HealthCheckRabbitMQ>
     <HealthCheckEventStore>3.0.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>3.0.1</HealthCheckElasticsearch>
     <HealthCheckSolr>3.0.0</HealthCheckSolr>

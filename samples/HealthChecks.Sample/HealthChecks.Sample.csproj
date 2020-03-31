@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />

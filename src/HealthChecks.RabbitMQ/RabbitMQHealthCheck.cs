@@ -9,50 +9,21 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck
         : IHealthCheck
     {
-        private readonly IConnectionFactory _connectionFactory;
-        private IConnection _rmqConnection;
-
-        public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
-                AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
-            };
-
-            if (sslOption != null)
-            {
-                connectionFactory.Ssl = sslOption;
-            }
-
-            _connectionFactory = connectionFactory;
-        }
+        private IConnection _connection;
 
         public RabbitMQHealthCheck(IConnection connection)
         {
-            _rmqConnection = connection ?? throw new ArgumentNullException(nameof(connection));
-        }
-
-        public RabbitMQHealthCheck(IConnectionFactory connectionFactory)
-        {
-            _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
+            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                // If no factory was provided then we're stuck using the passed in connection
-                // regardless of the state it may be in. We don't have a way to attempt to
-                // create a new connection :(
-                if (_connectionFactory == null)
+                using (_connection.CreateModel())
                 {
-                    return TestConnection(_rmqConnection);
-                }
-
-                using (var connection = _connectionFactory.CreateConnection())
-                {
-                    return TestConnection(connection);
+                    return Task.FromResult(
+                        HealthCheckResult.Healthy());
                 }
             }
             catch (Exception ex)
@@ -60,20 +31,6 @@ namespace HealthChecks.RabbitMQ
                 return Task.FromResult(
                     new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
-        }
-
-        private static Task<HealthCheckResult> TestConnection(IConnection connection)
-        {
-            using (connection.CreateModel())
-            {
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
-            }
-        }
-
-        private static IConnection CreateConnection(IConnectionFactory connectionFactory)
-        {
-            return connectionFactory.CreateConnection("Health Check Connection");
         }
     }
 }

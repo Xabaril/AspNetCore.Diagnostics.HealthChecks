@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ namespace HealthChecks.Sample
              */
 
             services.AddHealthChecks()
+                //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:5672", name: "rabbit1")
+                //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:6672", name: "rabbit2")
                 //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random")
                 //.AddIdentityServer(new Uri("http://localhost:6060"))
@@ -42,8 +45,12 @@ namespace HealthChecks.Sample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IApplicationLifetime lifetime)
         {
+            lifetime.ApplicationStopped.Register(() =>
+            {
+
+            });
             app
                 .UseHealthChecks("/health", new HealthCheckOptions
                 {

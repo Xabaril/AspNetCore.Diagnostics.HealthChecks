@@ -14,6 +14,30 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for RabbitMQ services using connection string (amqp uri).
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="rabbitConnectionString">The RabbitMQ connection string to be used.</param>
+        /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            return builder.Add(new HealthCheckRegistration(
+                name ?? NAME,
+                new RabbitMQHealthCheck(CreateConnection(rabbitConnectionString, sslOption)),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        /// <summary>
+        /// Add a health check for RabbitMQ services using connection string (amqp uri).
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="rabbitMQConnectionString">The RabbitMQ connection string to be used.</param>
         /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
@@ -24,11 +48,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitMQConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Uri rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new RabbitMQHealthCheck(rabbitMQConnectionString, sslOption),
+                new RabbitMQHealthCheck(CreateConnection(rabbitConnectionString,sslOption)),
                 failureStatus,
                 tags,
                 timeout));
@@ -55,13 +79,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 sp => {
                     var connection = sp.GetService<IConnection>();
                     var connectionFactory = sp.GetService<IConnectionFactory>();
+
                     if (connection != null)
                     {
                         return new RabbitMQHealthCheck(connection);
                     }
                     else if(connectionFactory != null)
                     {
-                        return new RabbitMQHealthCheck(connectionFactory);
+                        connection = connectionFactory.CreateConnection();
+
+                        return new RabbitMQHealthCheck(connection);
                     }
                     else
                     {
@@ -115,10 +142,44 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)),
+                sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp).CreateConnection()),
                 failureStatus,
                 tags,
                 timeout));
+        }
+
+        private static IConnection CreateConnection(string rabbitConnectionString, SslOption ssl)
+        {
+            var connectionFactory = new ConnectionFactory()
+            {
+                Uri = new Uri(rabbitConnectionString),
+                AutomaticRecoveryEnabled = true,
+                UseBackgroundThreadsForIO = true
+            };
+
+            if ( ssl != null )
+            {
+                connectionFactory.Ssl = ssl;
+            }
+
+            return connectionFactory.CreateConnection();
+        }
+
+        private static IConnection CreateConnection(Uri uri, SslOption ssl)
+        {
+            var connectionFactory = new ConnectionFactory()
+            {
+                Uri = uri,
+                AutomaticRecoveryEnabled = true,
+                UseBackgroundThreadsForIO = true
+            };
+
+            if (ssl != null)
+            {
+                connectionFactory.Ssl = ssl;
+            }
+
+            return connectionFactory.CreateConnection();
         }
     }
 }

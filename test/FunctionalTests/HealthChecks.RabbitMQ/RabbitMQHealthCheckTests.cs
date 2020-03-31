@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -186,6 +187,121 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
 
             response.StatusCode
                 .Should().Be(HttpStatusCode.OK);
+        }
+
+        [SkipOnAppVeyor]
+        public async Task reuse_connection_resolving_iconnectionfactory()
+        {
+            var connectionString = @"amqp://localhost:5672";
+
+            var factory = new WrappedConnectionFactory()
+            {
+                Uri = new Uri(connectionString),
+                AutomaticRecoveryEnabled = true,
+                Ssl = new SslOption(serverName: "localhost", enabled: false)
+            };
+
+            var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton<IConnectionFactory>(factory);
+                    services
+                        .AddHealthChecks()
+                        .AddRabbitMQ(tags: new string[] { "rabbitmq" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("rabbitmq")
+                    });
+                });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+
+            var afterOneConnectionCount = factory.CreatedConnections;
+
+            response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+
+            var afterTwoConnectionCount = factory.CreatedConnections;
+
+            afterOneConnectionCount.Should().Be(1, because:"only one connection should be used for health checks");
+            afterTwoConnectionCount.Should().Be(1, because: "only one connection should be used for health checks");
+        }
+
+        [SkipOnAppVeyor]
+        public async Task reuse_connection_using_iconnectionfactory()
+        {
+            var connectionString = @"amqp://localhost:5672";
+
+            var factory = new WrappedConnectionFactory()
+            {
+                Uri = new Uri(connectionString),
+                AutomaticRecoveryEnabled = true,
+                Ssl = new SslOption(serverName: "localhost", enabled: false)
+            };
+
+            var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddHealthChecks()
+                        .AddRabbitMQ(sp => factory, tags: new string[] { "rabbitmq" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("rabbitmq")
+                    });
+                });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+
+            var afterOneConnectionCount = factory.CreatedConnections;
+
+            response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+
+            var afterTwoConnectionCount = factory.CreatedConnections;
+
+            afterOneConnectionCount.Should().Be(1, because:"only one connection should be used for health checks");
+            afterTwoConnectionCount.Should().Be(1, because: "only one connection should be used for health checks");
+        }
+    }
+
+    internal class WrappedConnectionFactory : ConnectionFactory
+    {
+        private int _createdConnections;
+        public int CreatedConnections => _createdConnections;
+
+
+
+        public override IConnection CreateConnection()
+        {
+            Interlocked.Increment(ref _createdConnections);
+            return base.CreateConnection();
         }
     }
 }

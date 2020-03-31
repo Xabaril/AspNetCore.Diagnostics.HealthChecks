@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new RabbitMQHealthCheck(CreateConnection(rabbitConnectionString, sslOption)),
+                new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption),
                 failureStatus,
                 tags,
                 timeout));
@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new RabbitMQHealthCheck(CreateConnection(rabbitConnectionString,sslOption)),
+                new RabbitMQHealthCheck(rabbitConnectionString, sslOption),
                 failureStatus,
                 tags,
                 timeout));
@@ -71,12 +71,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default, 
+        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => {
+                sp =>
+                {
                     var connection = sp.GetService<IConnection>();
                     var connectionFactory = sp.GetService<IConnectionFactory>();
 
@@ -84,7 +85,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         return new RabbitMQHealthCheck(connection);
                     }
-                    else if(connectionFactory != null)
+                    else if (connectionFactory != null)
                     {
                         connection = connectionFactory.CreateConnection();
 
@@ -113,7 +114,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory, 
+        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -137,7 +138,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory, 
+        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -153,23 +154,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var connectionFactory = new ConnectionFactory()
             {
                 Uri = new Uri(rabbitConnectionString),
-                AutomaticRecoveryEnabled = true,
-                UseBackgroundThreadsForIO = true
-            };
-
-            if ( ssl != null )
-            {
-                connectionFactory.Ssl = ssl;
-            }
-
-            return connectionFactory.CreateConnection();
-        }
-
-        private static IConnection CreateConnection(Uri uri, SslOption ssl)
-        {
-            var connectionFactory = new ConnectionFactory()
-            {
-                Uri = uri,
                 AutomaticRecoveryEnabled = true,
                 UseBackgroundThreadsForIO = true
             };

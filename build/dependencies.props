@@ -96,7 +96,7 @@
     <HealthCheckNpgSql>3.0.0</HealthCheckNpgSql>
     <HealthCheckMongoDB>3.0.1</HealthCheckMongoDB>
     <HealthCheckMySql>3.0.0</HealthCheckMySql>
-    <HealthCheckKafka>3.0.1</HealthCheckKafka>
+    <HealthCheckKafka>3.0.2</HealthCheckKafka>
     <HealthCheckSystem>3.0.3</HealthCheckSystem>
     <HealthCheckNetwork>3.0.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.0.0</HealthCheckDynamoDb>

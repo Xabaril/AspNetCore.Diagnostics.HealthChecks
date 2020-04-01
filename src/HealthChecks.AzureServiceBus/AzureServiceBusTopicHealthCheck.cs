@@ -9,39 +9,30 @@ using System.Threading.Tasks;
 namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusTopicHealthCheck
-        : IHealthCheck
+        : AzureServiceBusHealthCheck, IHealthCheck
     {
         private const string TEST_MESSAGE = "HealthCheckTestMessage";
+        private const string TEST_SESSIONID = "TestSessionId";
         private static readonly ConcurrentDictionary<string, TopicClient> _topicClient = new ConcurrentDictionary<string, TopicClient>();
 
-        private readonly string _connectionString;
-        private readonly string _topicName;
-        private readonly Action<Message> _configuringMessage;
-
-        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName, Action<Message> configuringMessage = null)
+        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName, Action<Message> configuringMessage = null, bool requiresSession = false)
+        : base(connectionString, topicName, configuringMessage, requiresSession)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
-
-            _connectionString = connectionString;
-            _topicName = topicName;
-            _configuringMessage = configuringMessage;
         }
+
+        public AzureServiceBusTopicHealthCheck(string connectionString, Action<Message> configuringMessage = null, bool requiresSession = false)
+            : base(connectionString, configuringMessage, requiresSession)
+        {
+        }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var connectionKey = $"{_connectionString}_{_topicName}";
+                var connectionKey = $"{Endpoint}_{EntityPath}";
                 if (!_topicClient.TryGetValue(connectionKey, out var topicClient))
                 {
-                    topicClient = new TopicClient(_connectionString, _topicName, RetryPolicy.NoRetry);
+                    topicClient = new TopicClient(ConnectionStringBuilder, RetryPolicy.NoRetry);
 
                     if (!_topicClient.TryAdd(connectionKey, topicClient))
                     {
@@ -50,10 +41,14 @@ namespace HealthChecks.AzureServiceBus
                 }
 
                 var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
-                
-                _configuringMessage?.Invoke(message);
+                if (RequiresSession)
+                {
+                    message.SessionId = TEST_SESSIONID;
+                }
 
-                var scheduledMessageId = await topicClient.ScheduleMessageAsync(message, 
+                ConfiguringMessage?.Invoke(message);
+
+                var scheduledMessageId = await topicClient.ScheduleMessageAsync(message,
                     new DateTimeOffset(DateTime.UtcNow).AddHours(2));
 
                 await topicClient.CancelScheduledMessageAsync(scheduledMessageId);

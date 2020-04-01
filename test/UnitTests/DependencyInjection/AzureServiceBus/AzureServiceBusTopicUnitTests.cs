@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnitTests.DependencyInjection.AzureServiceBus;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
@@ -16,9 +17,12 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         [Fact]
         public void add_health_check_when_properly_configured()
         {
+            const string namespaceName = "dummynamespace";
+            const string topicName = "topicName";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName);
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusTopic("cnn", "topicName");
+                .AddAzureServiceBusTopic(connectionString, topicName);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -28,15 +32,68 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azuretopic");
             check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            var serviceBusTopicHealthCheck = check as AzureServiceBusTopicHealthCheck;
+            serviceBusTopicHealthCheck.Should().NotBeNull();
+            serviceBusTopicHealthCheck.Endpoint.Contains(namespaceName);
+            serviceBusTopicHealthCheck.EntityPath.Should().Be(topicName);
+        }
+
+        [Fact]
+        public void add_health_check_without_topic_name_when_properly_configured()
+        {
+            const string namespaceName = "dummynamespace";
+            const string topicName = "topicName";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName, topicName);
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureServiceBusTopic(connectionString);
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azuretopic");
+            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            var serviceBusTopicHealthCheck = check as AzureServiceBusTopicHealthCheck;
+            serviceBusTopicHealthCheck.Should().NotBeNull();
+            serviceBusTopicHealthCheck.Endpoint.Contains(namespaceName);
+            serviceBusTopicHealthCheck.EntityPath.Should().Be(topicName);
+        }
+        [Fact]
+        public void add_health_check_with_sessions_when_properly_configured()
+        {
+            const string namespaceName = "dummynamespace";
+            const string topicName = "topicName";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName);
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureServiceBusTopic(connectionString, topicName, requiresSession: true);
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azuretopic");
+            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            var serviceBusTopicHealthCheck = check as AzureServiceBusTopicHealthCheck;
+            serviceBusTopicHealthCheck.Should().NotBeNull();
+            serviceBusTopicHealthCheck.RequiresSession.Should().BeTrue();
         }
 
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
+            const string namespaceName = "dummynamespace";
+            const string topicName = "topicName";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName);
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusTopic("cnn", "topic",
-                name: "azuretopiccheck");
+                .AddAzureServiceBusTopic(connectionString, topicName,
+                    name: "azuretopiccheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -46,6 +103,9 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azuretopiccheck");
             check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            var serviceBusTopicHealthCheck = check as AzureServiceBusTopicHealthCheck;
+            serviceBusTopicHealthCheck.Should().NotBeNull();
+            serviceBusTopicHealthCheck.EntityPath.Should().Be(topicName);
         }
 
         [Fact]

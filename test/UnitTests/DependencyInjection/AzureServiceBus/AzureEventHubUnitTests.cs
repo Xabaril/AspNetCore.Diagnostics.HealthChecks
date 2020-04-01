@@ -4,9 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using UnitTests.DependencyInjection.AzureServiceBus;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
@@ -16,10 +15,31 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         [Fact]
         public void add_health_check_when_properly_configured()
         {
+            const string namespaceName = "dummynamespace";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName);
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureEventHub("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", 
-                    "hubName");
+                .AddAzureEventHub(connectionString, "hubName");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azureeventhub");
+            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+        }
+
+        [Fact]
+        public void add_health_check_without_event_hub_name_when_properly_configured()
+        {
+            const string namespaceName = "dummynamespace";
+            const string eventHubName = "samplehub";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName, eventHubName);
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddAzureEventHub(connectionString);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -34,10 +54,11 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
+            const string namespaceName = "dummynamespace";
+            var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName);
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureEventHub("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", 
-                    "hubName", name: "azureeventhubcheck");
+                .AddAzureEventHub(connectionString, "hubName", name: "azureeventhubcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

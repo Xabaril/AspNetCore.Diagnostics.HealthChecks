@@ -13,6 +13,7 @@ namespace HealthChecks.AzureServiceBus
         private static readonly ConcurrentDictionary<string, EventHubClient> _eventHubConnections = new ConcurrentDictionary<string, EventHubClient>();
 
         private readonly string _eventHubConnectionString;
+
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
             if (string.IsNullOrEmpty(connectionString))
@@ -29,8 +30,22 @@ namespace HealthChecks.AzureServiceBus
             {
                 EntityPath = eventHubName
             };
+
             _eventHubConnectionString = builder.ToString();
         }
+
+        public AzureEventHubHealthCheck(string connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+
+            var builder = new EventHubsConnectionStringBuilder(connectionString);
+
+            _eventHubConnectionString = builder.ToString();
+        }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

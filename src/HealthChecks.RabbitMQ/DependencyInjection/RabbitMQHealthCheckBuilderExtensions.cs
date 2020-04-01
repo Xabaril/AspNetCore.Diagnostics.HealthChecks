@@ -71,6 +71,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        [Obsolete(@"If the service provider only contains a registration for IConnetionFactory this overload create healthcheck without reusing the connection and this can produce port exhaustion.
+             On future versions we only support this overload when service provider have IConnection registered.")]
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -138,6 +140,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        [Obsolete("Using IConnetionFactory create healthcheck without reusing the connection and this can produce port exhaustion.")]
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {

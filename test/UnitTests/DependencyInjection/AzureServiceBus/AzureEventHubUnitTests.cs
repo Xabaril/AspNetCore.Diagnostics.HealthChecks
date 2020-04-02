@@ -16,10 +16,11 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         public void add_health_check_when_properly_configured()
         {
             const string namespaceName = "dummynamespace";
+            const string eventHubName = "samplehub";
             var connectionString = AzureServiceBusConnectionStringGenerator.Generate(namespaceName);
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureEventHub(connectionString, "hubName");
+                .AddAzureEventHub(connectionString, eventHubName);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -29,6 +30,12 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azureeventhub");
             check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            var azureEventHubHealthCheck = check as AzureEventHubHealthCheck;
+            azureEventHubHealthCheck.Should().NotBeNull();
+            azureEventHubHealthCheck.Endpoint.Should().NotBeNull();
+            azureEventHubHealthCheck.Endpoint.Host.Should().NotBeNull();
+            azureEventHubHealthCheck.Endpoint.Host.Contains(namespaceName);
+            azureEventHubHealthCheck.EntityPath.Should().Be(eventHubName);
         }
 
         [Fact]
@@ -49,6 +56,12 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azureeventhub");
             check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            var azureEventHubHealthCheck = check as AzureEventHubHealthCheck;
+            azureEventHubHealthCheck.Should().NotBeNull();
+            azureEventHubHealthCheck.Endpoint.Should().NotBeNull();
+            azureEventHubHealthCheck.Endpoint.Host.Should().NotBeNull();
+            azureEventHubHealthCheck.Endpoint.Host.Contains(namespaceName);
+            azureEventHubHealthCheck.EntityPath.Should().Be(eventHubName);
         }
 
         [Fact]

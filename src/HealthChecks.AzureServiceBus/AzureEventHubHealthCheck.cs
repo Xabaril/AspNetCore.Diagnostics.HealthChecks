@@ -12,7 +12,9 @@ namespace HealthChecks.AzureServiceBus
     {
         private static readonly ConcurrentDictionary<string, EventHubClient> _eventHubConnections = new ConcurrentDictionary<string, EventHubClient>();
 
-        private readonly string _eventHubConnectionString;
+        public string EntityPath => ConnectionStringBuilder.EntityPath;
+        public Uri Endpoint => ConnectionStringBuilder.Endpoint;
+        protected EventHubsConnectionStringBuilder ConnectionStringBuilder { get; }
 
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
@@ -26,12 +28,10 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(eventHubName));
             }
 
-            var builder = new EventHubsConnectionStringBuilder(connectionString)
+            ConnectionStringBuilder = new EventHubsConnectionStringBuilder(connectionString)
             {
                 EntityPath = eventHubName
             };
-
-            _eventHubConnectionString = builder.ToString();
         }
 
         public AzureEventHubHealthCheck(string connectionString)
@@ -41,20 +41,19 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(connectionString));
             }
 
-            var builder = new EventHubsConnectionStringBuilder(connectionString);
-
-            _eventHubConnectionString = builder.ToString();
+            ConnectionStringBuilder = new EventHubsConnectionStringBuilder(connectionString);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (!_eventHubConnections.TryGetValue(_eventHubConnectionString, out var eventHubClient))
+                var eventHubConnectionString = ConnectionStringBuilder.ToString();
+                if (!_eventHubConnections.TryGetValue(eventHubConnectionString, out var eventHubClient))
                 {
-                    eventHubClient = EventHubClient.CreateFromConnectionString(_eventHubConnectionString);
+                    eventHubClient = EventHubClient.CreateFromConnectionString(eventHubConnectionString);
 
-                    if (!_eventHubConnections.TryAdd(_eventHubConnectionString, eventHubClient))
+                    if (!_eventHubConnections.TryAdd(eventHubConnectionString, eventHubClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "EventHubClient can't be added into dictionary.");
                     }

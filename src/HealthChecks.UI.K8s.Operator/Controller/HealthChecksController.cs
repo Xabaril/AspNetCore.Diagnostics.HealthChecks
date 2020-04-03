@@ -45,13 +45,10 @@ namespace HealthChecks.UI.K8s.Operator.Controller
             return DeploymentResult.Create(deployment, service, secret);
         }
 
-        public async Task DeleteDeploymentAsync(HealthCheckResource resource)
+        public ValueTask DeleteDeploymentAsync(HealthCheckResource resource)
         {
-            _logger.LogInformation("Deleting healthchecks deployment {name}", resource.Spec.Name);
-
-            await _secretHandler.Delete(resource);
-            await _deploymentHandler.Delete(resource);
-            await _serviceHandler.Delete(resource);
+            _logger.LogInformation("Deleting healthchecks deployment {name} and all references resources", resource.Spec.Name);
+            return new ValueTask();
         }
     }
 }

@@ -120,6 +120,6 @@
     <HealthCheckCloudFirestore>3.0.0</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.0.0</HealthCheckIoTHub>
 	  <HealthCheckIbmMQ>3.0.0</HealthCheckIbmMQ>
-    <HealthChecksUIK8sOperator>3.0.0-beta.1</HealthChecksUIK8sOperator>
+    <HealthChecksUIK8sOperator>3.0.0-beta.2</HealthChecksUIK8sOperator>
   </PropertyGroup>
 </Project>

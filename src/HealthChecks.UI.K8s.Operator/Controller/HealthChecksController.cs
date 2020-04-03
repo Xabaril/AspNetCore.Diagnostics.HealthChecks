@@ -47,7 +47,7 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 
         public ValueTask DeleteDeploymentAsync(HealthCheckResource resource)
         {
-            _logger.LogInformation("Deleting healthchecks deployment {name} and all references resources", resource.Spec.Name);
+            _logger.LogInformation("Deleting healthchecks deployment {name} and all referenced resources", resource.Spec.Name);
             return new ValueTask();
         }
     }

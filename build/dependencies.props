@@ -105,7 +105,7 @@
     <HealthCheckAzureStorage>3.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.0.0</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.0.1</HealthCheckAzureServiceBus>
-    <HealthCheckConsul>3.0.0</HealthCheckConsul>
+    <HealthCheckConsul>3.0.1</HealthCheckConsul>
     <HealthCheckUI>3.0.11</HealthCheckUI>
     <HealthCheckUIClient>3.0.2</HealthCheckUIClient>
     <HealthCheckPublisherAppplicationInsights>3.0.4</HealthCheckPublisherAppplicationInsights>

@@ -25,6 +25,7 @@
     <MicrosoftExtensionsDependencyInjection>3.0.0</MicrosoftExtensionsDependencyInjection>
     <MicrosoftAspNetCoreTestHost>3.0.0</MicrosoftAspNetCoreTestHost>
     <SystemDataSqlClient>4.7.0</SystemDataSqlClient>
+    <MicrosoftDataSqlClient>1.1.1</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>3.0.0</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
     <MicrosoftAzureCosmosDB>3.2.0</MicrosoftAzureCosmosDB>
@@ -84,7 +85,7 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>3.0.0</HealthCheckIdSvr>
-    <HealthCheckSqlServer>3.0.0</HealthCheckSqlServer>
+    <HealthCheckSqlServer>3.0.1</HealthCheckSqlServer>
     <HealthCheckSqlite>3.0.0</HealthCheckSqlite>
     <HealthCheckUri>3.0.0</HealthCheckUri>
     <HealthCheckRedis>3.0.0</HealthCheckRedis>

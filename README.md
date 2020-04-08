@@ -70,7 +70,7 @@ HealthChecks packages include health checks for:
 - SignalR
 - Kubernetes
 
-> We support netcoreapp 2.2, 3.0 and 3.1, Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
+> We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
 ```PowerShell
 Install-Package AspNetCore.HealthChecks.System

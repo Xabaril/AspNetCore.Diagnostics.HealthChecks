@@ -23,7 +23,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRabbitMQ(rabbitMQConnectionString: _fakeConnectionString);
+                .AddRabbitMQ(rabbitConnectionString: _fakeConnectionString);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

@@ -9,50 +9,32 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck
         : IHealthCheck
     {
-        private readonly IConnectionFactory _connectionFactory;
-        private IConnection _rmqConnection;
+        private IConnection _connection;
 
-        public RabbitMQHealthCheck(string rabbitMqConnectionString, SslOption sslOption = null)
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                Uri = new Uri(rabbitMqConnectionString ?? throw new ArgumentNullException(nameof(rabbitMqConnectionString))),
-                AutomaticRecoveryEnabled = true // Explicitly setting to ensure this is true (in case the default changes)
-            };
-
-            if (sslOption != null)
-            {
-                connectionFactory.Ssl = sslOption;
-            }
-
-            _connectionFactory = connectionFactory;
-        }
+        private Uri _rabbitConnectionString;
+        private SslOption _sslOption;
 
         public RabbitMQHealthCheck(IConnection connection)
         {
-            _rmqConnection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
         }
 
-        public RabbitMQHealthCheck(IConnectionFactory connectionFactory)
+        public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption ssl)
         {
-            _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
+            _rabbitConnectionString = rabbitConnectionString;
+            _sslOption = ssl;
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                // If no factory was provided then we're stuck using the passed in connection
-                // regardless of the state it may be in. We don't have a way to attempt to
-                // create a new connection :(
-                if (_connectionFactory == null)
-                {
-                    return TestConnection(_rmqConnection);
-                }
+                EnsureConnection();
 
-                using (var connection = _connectionFactory.CreateConnection())
+                using (_connection.CreateModel())
                 {
-                    return TestConnection(connection);
+                    return Task.FromResult(
+                        HealthCheckResult.Healthy());
                 }
             }
             catch (Exception ex)
@@ -62,18 +44,24 @@ namespace HealthChecks.RabbitMQ
             }
         }
 
-        private static Task<HealthCheckResult> TestConnection(IConnection connection)
+        private void EnsureConnection()
         {
-            using (connection.CreateModel())
+            if(_connection == null )
             {
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
-            }
-        }
+                var connectionFactory = new ConnectionFactory()
+                {
+                    Uri = _rabbitConnectionString,
+                    AutomaticRecoveryEnabled = true,
+                    UseBackgroundThreadsForIO = true
+                };
 
-        private static IConnection CreateConnection(IConnectionFactory connectionFactory)
-        {
-            return connectionFactory.CreateConnection("Health Check Connection");
+                if (_sslOption != null)
+                {
+                    connectionFactory.Ssl = _sslOption;
+                }
+
+                _connection = connectionFactory.CreateConnection();
+            }
         }
     }
 }

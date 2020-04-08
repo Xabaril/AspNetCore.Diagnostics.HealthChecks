@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => topic == default ? new KafkaHealthCheck(config) : new KafkaHealthCheck(config, topic),
+                new KafkaHealthCheck(config, topic),
                 failureStatus,
                 tags,
                 timeout));
@@ -56,7 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => topic == default ? new KafkaHealthCheck(config) : new KafkaHealthCheck(config, topic),
+                new KafkaHealthCheck(config, topic),
                 failureStatus,
                 tags,
                 timeout));

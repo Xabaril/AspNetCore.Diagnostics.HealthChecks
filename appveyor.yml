@@ -1,39 +1,39 @@
-version: '{build}'
+version: "{build}"
 environment:
-  matrix:    
-    - node_version: '10'    
+  matrix:
+    - node_version: "10"
 install:
   - ps: Install-Product node $env:node_version x64
   - ps: ./install-sdk.ps1
-  
+
 pull_requests:
   do_not_increment_build_number: true
-image: Visual Studio 2017
+image: Visual Studio 2019
 services:
-  - mssql2016
+  - mssql2017
   - postgresql101
   - mongodb
   - mysql
 nuget:
   disable_publish_on_pr: true
 build_script:
-- ps: .\Build.ps1
+  - ps: .\Build.ps1
 test: off
 artifacts:
-- path: .\artifacts\*.nupkg
-  name: NuGet
+  - path: .\artifacts\*.nupkg
+    name: NuGet
 deploy:
-- provider: NuGet
-  server: https://www.myget.org/F/xabaril/api/v2/package
-  api_key:
-    secure: uESSL/tmtvlykkG7fgS0dFd4UpR+12vOSqFN3AiuHhxJpDiUl6EWZbgNoxcrRrch
-  skip_symbols: true
-  on:
-    branch: master
-- provider: NuGet
-  name: production
-  api_key:
-    secure: dRGsXgd/P/zV2x0og9REDXX+MamPcpx3COpzaUhlBF3QV+JzBH6gMI32vx79cN1s
-  skip_symbols: true
-  on:
-    appveyor_repo_tag: true
+  - provider: NuGet
+    server: https://www.myget.org/F/xabaril/api/v2/package
+    api_key:
+      secure: uESSL/tmtvlykkG7fgS0dFd4UpR+12vOSqFN3AiuHhxJpDiUl6EWZbgNoxcrRrch
+    skip_symbols: true
+    on:
+      branch: master
+  - provider: NuGet
+    name: production
+    api_key:
+      secure: dRGsXgd/P/zV2x0og9REDXX+MamPcpx3COpzaUhlBF3QV+JzBH6gMI32vx79cN1s
+    skip_symbols: true
+    on:
+      appveyor_repo_tag: true

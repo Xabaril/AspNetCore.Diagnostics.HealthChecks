@@ -9,6 +9,7 @@ namespace HealthChecks.UI.Configuration
     {
         internal List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
         internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
+        internal int MaximumExecutionHistoriesPerEndpoint { get; private set; } = 100;
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
         internal string HealthCheckDatabaseConnectionString { get; set; }
@@ -82,6 +83,12 @@ namespace HealthChecks.UI.Configuration
         public Settings ConfigureWebhooksEndpointHttpclient(Action<IServiceProvider, HttpClient> webhooksEndpointHttpClientconfig)
         {
             WebHooksEndpointHttpClientConfig = webhooksEndpointHttpClientconfig;
+            return this;
+        }
+
+        public Settings MaximumHistoryEntriesPerEndpoint(int maxValue)
+        {
+            MaximumExecutionHistoriesPerEndpoint = maxValue;
             return this;
         }
     }

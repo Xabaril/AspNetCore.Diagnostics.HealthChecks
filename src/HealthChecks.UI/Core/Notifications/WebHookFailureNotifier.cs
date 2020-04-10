@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.Client;
-using HealthChecks.UI.Configuration;
+﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using Microsoft.EntityFrameworkCore;

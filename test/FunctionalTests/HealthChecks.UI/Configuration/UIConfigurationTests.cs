@@ -223,6 +223,7 @@ namespace FunctionalTests.UI.Configuration
                 {
                     services
                     .AddHealthChecksUI(setupSettings: setup => setup.SetHealthCheckDatabaseConnectionString("Data Source=hcdb"))
+                    .Services
                     .AddRouting();
 
                 }).Configure(app =>

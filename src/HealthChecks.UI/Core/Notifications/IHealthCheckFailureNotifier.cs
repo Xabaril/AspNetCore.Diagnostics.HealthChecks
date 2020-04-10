@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.Client;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.Notifications
 {

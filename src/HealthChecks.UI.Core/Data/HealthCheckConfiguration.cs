@@ -1,6 +1,6 @@
 ﻿namespace HealthChecks.UI.Core.Data
 {
-    internal class HealthCheckConfiguration
+    public class HealthCheckConfiguration
     {
         public int Id { get; set; }
 

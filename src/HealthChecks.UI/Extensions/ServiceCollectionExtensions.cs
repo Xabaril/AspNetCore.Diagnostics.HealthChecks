@@ -33,29 +33,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOptions<KubernetesDiscoverySettings>()
                 .Configure<IConfiguration>((settings, configuration) =>
                 {
-                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
+                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);                    
                 });
                 
             services
                 .AddSingleton<ServerAddressesService>()
-                .AddSingleton<IHostedService, HealthCheckCollectorHostedService>()
+                .AddHostedService<UIInitializationHostedService>()
+                .AddHostedService<HealthCheckCollectorHostedService>()
+                .AddKubernetesDiscoveryService()
                 .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
                 .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
                 .AddApiEndpointHttpClient()
                 .AddWebhooksEndpointHttpClient();
-
-            var kubernetesDiscoverySettings = services.BuildServiceProvider()
-                .GetService<IOptions<KubernetesDiscoverySettings>>()
-                .Value ?? new KubernetesDiscoverySettings();
-
-            if (kubernetesDiscoverySettings.Enabled)
-            {
-                services.AddKubernetesDiscoveryService(kubernetesDiscoverySettings);
-            }
-
-           // var serviceProvider = services.BuildServiceProvider();
-
-            //CreateDatabase(serviceProvider).Wait();
 
             return new HealthChecksUIBuilder(services);
         }
@@ -90,70 +79,10 @@ namespace Microsoft.Extensions.DependencyInjection
             .Services;
         }
 
-        static async Task CreateDatabase(IServiceProvider serviceProvider)
+        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services)
         {
-            var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
-
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var db = scope.ServiceProvider
-                    .GetService<HealthChecksDb>();
-
-                var configuration = scope.ServiceProvider
-                    .GetService<IConfiguration>();
-
-                var settings = scope.ServiceProvider
-                    .GetService<IOptions<Settings>>();
-
-                await db.Database.EnsureDeletedAsync();
-                await db.Database.MigrateAsync();
-
-                var healthCheckConfigurations = settings.Value?
-                    .HealthChecks?
-                    .Select(s => new HealthCheckConfiguration
-                    {
-                        Name = s.Name,
-                        Uri = s.Uri
-                    });
-
-                if (healthCheckConfigurations != null
-                    &&
-                    healthCheckConfigurations.Any())
-                {
-                    await db.Configurations
-                        .AddRangeAsync(healthCheckConfigurations);
-
-                    await db.SaveChangesAsync();
-                }
-            }
-        }
-
-        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services, KubernetesDiscoverySettings kubernetesDiscoverySettings)
-        {
-            KubernetesClientConfiguration kubernetesConfig;
-
-            if (!string.IsNullOrEmpty(kubernetesDiscoverySettings.ClusterHost) && !string.IsNullOrEmpty(kubernetesDiscoverySettings.Token))
-            {
-                kubernetesConfig = new KubernetesClientConfiguration {
-                    Host = kubernetesDiscoverySettings.ClusterHost,
-                    AccessToken = kubernetesDiscoverySettings.Token,
-                    // Some cloud services like Azure AKS use self-signed certificates not valid for httpclient.
-                    // With this method we allow invalid certificates
-                    SkipTlsVerify = true
-                };
-            }
-            else if (KubernetesClientConfiguration.IsInCluster())
-            {
-                kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
-            }
-            else
-            {
-                kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
-            }
-
-            services.AddSingleton(kubernetesDiscoverySettings)
-                .AddHostedService<KubernetesDiscoveryHostedService>()
-                .AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig))
+            services
+                .AddHostedService<KubernetesDiscoveryHostedService>()                
                 .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
 
             return services;

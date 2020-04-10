@@ -56,8 +56,8 @@ namespace HealthChecks.UI.Branding
                                                  payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                                                  restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
 
-                }).AddUISqlServerStorage("server=localhost,1433;user=sa;password=Passw0rd12!;initial catalog=UI")
-                .Services
+                }).AddSQLiteUIStorage("DataSource = mydatabase.db")
+                   .Services
                 .AddControllers();
         }
 

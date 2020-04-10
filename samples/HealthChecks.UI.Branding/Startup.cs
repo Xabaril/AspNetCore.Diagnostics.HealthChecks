@@ -1,6 +1,6 @@
 ﻿using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
-using HealthChecks.UI.Client;
+using HealthChecks.UI.InMemory.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -56,7 +56,7 @@ namespace HealthChecks.UI.Branding
                                                  payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                                                  restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
 
-                }).AddPostgreSqlStorage("Server=localhost;Port=5432;User ID=postgres;Password=Password12!;database=UI")
+                }).AddInMemoryStorage()
                   .Services
                 .AddControllers();
         }

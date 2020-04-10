@@ -121,6 +121,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.Core", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Client", "src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj", "{77CF612D-76FC-4F8A-8A30-2B61DC80DA5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.SQLite.Storage", "src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj", "{8AFFE091-4FEF-421B-BF10-ED20129FF99F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -319,6 +321,10 @@ Global
 		{77CF612D-76FC-4F8A-8A30-2B61DC80DA5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77CF612D-76FC-4F8A-8A30-2B61DC80DA5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77CF612D-76FC-4F8A-8A30-2B61DC80DA5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AFFE091-4FEF-421B-BF10-ED20129FF99F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AFFE091-4FEF-421B-BF10-ED20129FF99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AFFE091-4FEF-421B-BF10-ED20129FF99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AFFE091-4FEF-421B-BF10-ED20129FF99F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -372,6 +378,7 @@ Global
 		{0CCC5412-3856-4DAF-BE7E-4AEF13DCCB16} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{146C2E30-B28B-45CA-A10C-6F3F1CF505F5} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{77CF612D-76FC-4F8A-8A30-2B61DC80DA5D} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{8AFFE091-4FEF-421B-BF10-ED20129FF99F} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

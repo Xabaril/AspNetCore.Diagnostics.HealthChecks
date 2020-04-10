@@ -112,6 +112,7 @@
     <HealthCheckUIClient>3.1.0</HealthCheckUIClient>
     <HealthCheckUISqlServerStorage>3.1.0</HealthCheckUISqlServerStorage>
     <HealthCheckUISQLiteStorage>3.1.0</HealthCheckUISQLiteStorage>
+    <HealthCheckUIInMemoryStorage>3.1.0</HealthCheckUIInMemoryStorage>
     <HealthCheckPublisherAppplicationInsights>3.1.0</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.1.0</HealthCheckPublisherPrometheus>

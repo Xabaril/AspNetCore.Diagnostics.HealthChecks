@@ -10,7 +10,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using HealthChecks.UI.InMemory.Storage;
 
 namespace HealthChecks.UI.Branding
 {
@@ -57,8 +56,8 @@ namespace HealthChecks.UI.Branding
                                                  payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                                                  restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
 
-                }).AddInMemoryUIStorage()
-                   .Services
+                }).AddPostgreSqlStorage("Server=localhost;Port=5432;User ID=postgres;Password=Password12!;database=UI")
+                  .Services
                 .AddControllers();
         }
 

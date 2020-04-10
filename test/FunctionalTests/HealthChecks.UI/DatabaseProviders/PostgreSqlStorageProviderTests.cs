@@ -17,11 +17,11 @@ using Xunit;
 namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 {
     [Collection("execution")]
-    public class sqlserver_storage_should
+    public class postgre_storage_should
     {
         private readonly ExecutionFixture _fixture;
 
-        public sqlserver_storage_should(ExecutionFixture fixture)
+        public postgre_storage_should(ExecutionFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
@@ -34,14 +34,13 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
                 .UseKestrel()
                 .ConfigureServices(services =>
                 {
-                    services.AddHealthChecksUI(setup =>
-                    {
+                    services.AddHealthChecksUI(setup => {
                         foreach (var item in ProviderTestHelper.Endpoints)
                         {
                             setup.AddHealthCheckEndpoint(item.Name, item.Uri);
                         }
                     })
-                    .AddSqlServerStorage(ProviderTestHelper.SqlServerConnectionString(_fixture))
+                    .AddPostgreSqlStorage(ProviderTestHelper.PostgresConnectionString(_fixture))
                     .Services
                     .AddRouting();
 
@@ -49,8 +48,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
                 {
                     app
                     .UseRouting()
-                    .UseEndpoints(endpoints =>
-                    {
+                    .UseEndpoints(endpoints => {
                         endpoints.MapHealthChecksUI();
                     });
 
@@ -68,6 +66,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
             var configurations = await context.Configurations.ToListAsync();
+
             var host1 = ProviderTestHelper.Endpoints[0];
             var host2 = ProviderTestHelper.Endpoints[1];
 

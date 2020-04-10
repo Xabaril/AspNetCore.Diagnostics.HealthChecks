@@ -15,43 +15,39 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="assets\index.html"/>
-    <EmbeddedResource Include="assets\healthchecksui-min.css"/>
-    <EmbeddedResource Include="assets\vendors-dll.js"/>
-    <EmbeddedResource Include="assets\healthchecks-bundle.js"/>
+    <EmbeddedResource Include="assets\index.html" />
+    <EmbeddedResource Include="assets\healthchecksui-min.css" />
+    <EmbeddedResource Include="assets\vendors-dll.js" />
+    <EmbeddedResource Include="assets\healthchecks-bundle.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsHttp)"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCore)"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCoreDesign)"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCoreSqlite)"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="$(MicrosoftEntityFrameworkCoreSqliteDesign)"/>
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)"/>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsHttp)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCore)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCoreDesign)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCoreSqlite)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="$(MicrosoftEntityFrameworkCoreSqliteDesign)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
     <PackageReference Include="KubernetesClient" Version="$(KubernetesClient)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Core\Data\Migrations\"/>
+    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
   </ItemGroup>
 
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">
-    <Message Importance="high" Text="*** Installing npm packages ***"/>
-    <Exec Command="npm install" ContinueOnError="false"/>
+    <Message Importance="high" Text="*** Installing npm packages ***" />
+    <Exec Command="npm install" ContinueOnError="false" />
   </Target>
 
   <Target Name="BuildClient" BeforeTargets="BeforeBuild" DependsOnTargets="InstallPackages">
-    <Message Importance="high" Text="*** Bundling client files ***"/>
-    <Exec Command="npm run build" ContinueOnError="false"/>
+    <Message Importance="high" Text="*** Bundling client files ***" />
+    <Exec Command="npm run build" ContinueOnError="false" />
   </Target>
 
   <Target Name="UglifyCss" BeforeTargets="BeforeBuild" DependsOnTargets="BuildClient">
-    <Message Importance="high" Text="*** Uglifying css files *** "/>
-    <Exec Command="npm run buildcss:prod" ContinueOnError="false"/>
+    <Message Importance="high" Text="*** Uglifying css files *** " />
+    <Exec Command="npm run buildcss:prod" ContinueOnError="false" />
   </Target>
 </Project>

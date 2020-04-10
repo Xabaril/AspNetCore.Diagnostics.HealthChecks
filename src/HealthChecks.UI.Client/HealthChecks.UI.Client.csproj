@@ -18,5 +18,8 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <!--<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />-->
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+  </ItemGroup>
 
 </Project>

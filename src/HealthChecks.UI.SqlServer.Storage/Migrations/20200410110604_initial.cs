@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace HealthChecks.UI.Core.Data.Migrations
+namespace HealthChecks.UI.SqlServer.Storage.Migrations
 {
     public partial class initial : Migration
     {
@@ -12,7 +12,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Uri = table.Column<string>(maxLength: 500, nullable: false),
                     Name = table.Column<string>(maxLength: 500, nullable: false),
                     DiscoveryService = table.Column<string>(maxLength: 100, nullable: true)
@@ -27,7 +27,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Status = table.Column<int>(nullable: false),
                     OnStateFrom = table.Column<DateTime>(nullable: false),
                     LastExecuted = table.Column<DateTime>(nullable: false),
@@ -45,7 +45,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     HealthCheckName = table.Column<string>(maxLength: 500, nullable: false),
                     LastNotified = table.Column<DateTime>(nullable: false),
                     IsUpAndRunning = table.Column<bool>(nullable: false)
@@ -60,7 +60,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 500, nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
@@ -83,7 +83,7 @@ namespace HealthChecks.UI.Core.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Status = table.Column<int>(maxLength: 50, nullable: false),

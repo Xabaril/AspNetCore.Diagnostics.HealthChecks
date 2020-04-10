@@ -21,6 +21,7 @@ namespace HealthChecks.UI.Image
         {
             services                
                 .AddHealthChecksUI()
+                .Services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 

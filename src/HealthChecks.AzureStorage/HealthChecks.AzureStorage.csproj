@@ -15,7 +15,9 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="$(WindowsAzureStorage)" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="$(MicrosoftAzureCosmosTable)" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="$(AzureStorageBlobs)" />
+    <PackageReference Include="Azure.Storage.Queues" Version="$(AzureStorageQueues)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
       <PrivateAssets>all</PrivateAssets>

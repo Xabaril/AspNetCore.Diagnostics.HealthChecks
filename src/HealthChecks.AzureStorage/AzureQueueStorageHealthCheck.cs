@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
+﻿using Azure.Storage.Queues;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,22 +20,17 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                var storageAccount = CloudStorageAccount.Parse(_connectionString);
-                var blobClient = storageAccount.CreateCloudQueueClient();
-
-                var serviceProperties = await blobClient.GetServicePropertiesAsync(
-                    new QueueRequestOptions(),
-                    operationContext: null,
-                    cancellationToken: cancellationToken);
+                var queueServiceClient = new QueueServiceClient(_connectionString);
+                var serviceProperties = await queueServiceClient.GetPropertiesAsync(cancellationToken);
 
                 if (!string.IsNullOrEmpty(_queueName))
                 {
-                    var queue = blobClient.GetQueueReference(_queueName);
-                    if (!await queue.ExistsAsync())
+                    var queueClient = queueServiceClient.GetQueueClient(_queueName);
+                    if (!await queueClient.ExistsAsync(cancellationToken))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Queue '{_queueName}' not exists");
                     }
-                    await queue.FetchAttributesAsync();
+                    await queueClient.GetPropertiesAsync(cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();

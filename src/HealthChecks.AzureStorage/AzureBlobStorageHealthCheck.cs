@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Azure.Storage.Blobs;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,25 +20,19 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                var storageAccount = CloudStorageAccount.Parse(_connectionString);
-                var blobClient = storageAccount.CreateCloudBlobClient();
-
-                var serviceProperties = await blobClient.GetServicePropertiesAsync(
-                    new BlobRequestOptions(),
-                    operationContext: null,
-                    cancellationToken: cancellationToken);
-
+                var blobServiceClient = new BlobServiceClient(_connectionString);
+                var serviceProperties = await blobServiceClient.GetPropertiesAsync(cancellationToken);
+                
                 if (!string.IsNullOrEmpty(_containerName))
                 {
-                    var container = blobClient
-                        .GetContainerReference(_containerName);
+                    var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
 
-                    if (!await container.ExistsAsync())
+                    if (!await containerClient.ExistsAsync(cancellationToken))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Container '{_containerName}' not exists");
                     }
 
-                    await container.FetchAttributesAsync();
+                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();

@@ -16,15 +16,8 @@ using Xunit;
 
 namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 {
-    [Collection("execution")]
-    public class sqlserver_storage_should
+    public class sqlite_storage_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public sqlserver_storage_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
         [Fact]
         public async Task create_the_database_and_seed_configuration()
         {
@@ -41,7 +34,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
                             setup.AddHealthCheckEndpoint(item.Name, item.Uri);
                         }
                     })
-                    .AddSqlServerStorage(ProviderTestHelper.SqlServerConnectionString(_fixture))
+                    .AddSqliteStorage(ProviderTestHelper.SqliteConnectionString())
                     .Services
                     .AddRouting();
 
@@ -68,6 +61,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
             var configurations = await context.Configurations.ToListAsync();
+
             var host1 = ProviderTestHelper.Endpoints[0];
             var host2 = ProviderTestHelper.Endpoints[1];
 

@@ -1,5 +1,4 @@
-**healthchecksdb**
-
+**/**/healthchecksdb
 src/HealthChecks.UI/assets/healthchecks-bundle.js
 src/HealthChecks.UI/assets/vendors-dll.js
 src/HealthChecks.UI/assets/vendors-manifest.json

@@ -58,9 +58,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="HealthChecks.UI\DatabaseProviders\" />
-  </ItemGroup>
 
 </Project>

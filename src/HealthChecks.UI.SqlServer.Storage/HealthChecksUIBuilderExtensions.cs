@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class HealthChecksUISqlServerExtensions
+    public static class HealthChecksUIBuilderExtensions
     {
         public static HealthChecksUIBuilder AddSqlServerUIStorage(this HealthChecksUIBuilder builder, string connectionString, Action<DbContextOptionsBuilder> configureOptions = null)
         {            

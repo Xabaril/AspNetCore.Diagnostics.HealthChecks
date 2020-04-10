@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.InMemory.Storage;
 
 namespace HealthChecks.UI.Branding
 {
@@ -56,7 +57,7 @@ namespace HealthChecks.UI.Branding
                                                  payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                                                  restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
 
-                }).AddSQLiteUIStorage("DataSource = mydatabase.db")
+                }).AddInMemoryUIStorage()
                    .Services
                 .AddControllers();
         }

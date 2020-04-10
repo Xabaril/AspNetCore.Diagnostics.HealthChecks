@@ -2,6 +2,7 @@
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,7 +49,11 @@ namespace HealthChecks.UI.Core.HostedService
             var settings = sp.GetRequiredService<IOptions<Settings>>();
 
             _logger.LogInformation("Executing database migrations");
-            await context.Database.MigrateAsync();
+            
+            if (!context.Database.IsInMemory())
+            {
+                await context.Database.MigrateAsync();
+            }            
 
             var healthCheckConfigurations = settings.Value?
                                 .HealthChecks?
@@ -86,5 +91,6 @@ namespace HealthChecks.UI.Core.HostedService
 
             await context.SaveChangesAsync();
         }
-    }
+    }   
+
 }

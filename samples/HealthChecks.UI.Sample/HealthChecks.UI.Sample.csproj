@@ -11,6 +11,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
   </ItemGroup>
 

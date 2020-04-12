@@ -56,12 +56,6 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings SetHealthCheckDatabaseConnectionString(string connectionString)
-        {
-            HealthCheckDatabaseConnectionString = connectionString;
-            return this;
-        }
-
         public Settings UseApiEndpointHttpMessageHandler(Func<IServiceProvider, HttpClientHandler> apiEndpointHttpHandler)
         {
             ApiEndpointHttpHandler = apiEndpointHttpHandler;

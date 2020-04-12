@@ -10,6 +10,11 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 # Sections
 
+## Previous versions documentation
+
+- [NetCore 2.2](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-2.2/README.md)
+- [NetCore 3.0](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.0/README.md)
+
 ## HealthChecks
 
 - [Health Checks](#Health-Checks)
@@ -18,6 +23,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 ## HealthChecks UI
 
 - [UI](#HealthCheckUI)
+- [UI Storage Providers](#UI-Storage-Providers)
 - [History Timeline](#Health-status-history-timeline)
 - [Configuration](#Configuration)
 - [Webhooks and Failure Notifications](#Webhooks-and-Failure-Notifications)
@@ -159,6 +165,8 @@ services.AddHealthChecks()
 
 ## HealthCheckUI
 
+![HealthChecksUI](./doc/images/ui-home.png)
+
 [UI Changelog](./doc/ui-changelog.md)
 
 The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
@@ -166,11 +174,17 @@ The project HealthChecks.UI is a minimal UI interface that stores and shows the 
 To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**
 
 ```csharp
+
+using HealthChecks.UI.Core;
+using HealthChecks.UI.InMemory.Storage;
+
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddHealthChecksUI();
+        services
+        .AddHealthChecksUI()
+        .AddInMemoryStorage()
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -195,7 +209,16 @@ Do not confuse this UI api endpoint with the endpoints we have to configure to d
 
 When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
-![HealthChecksUI](./doc/images/ui-home.png)
+### UI Storage Providers
+
+HealthChecks UI offers several storage providers, available as different nuget packages.
+
+The current supported databases are:
+
+- [HealthChecks.UI.InMemory.Storage](https://www.nuget.org/packages/HealthChecks.UI.InMemory.Storage)
+- [HealthChecks.UI.SqlServer.Storage](https://www.nuget.org/packages/HealthChecks.UI.SqlServer.Storage)
+- [HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/HealthChecks.UI.SQLite.Storage)
+- [HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/HealthChecks.UI.PostgreSQL.Storage)
 
 ### Health status history timeline
 
@@ -261,7 +284,8 @@ You can configure these Healthchecks and webhooks by using _IConfiguration_ prov
        setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
        setup.AddHealthCheckEndpoint("endpoint2", "http://remoteendpoint:9000/healthz");
        setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?code=ax3rt56s", payload: "{...}");
-    });
+    })
+    .AddSqlServer("connectionString");
 ```
 
 **Note**: The previous configuration section was HealthChecks-UI, but due to incompatibilies with Azure Web App environment variables the section has been moved to HealthChecksUI. The UI is retro compatible and it will check the new section first, and fallback to the old section if the new section has not been declared.
@@ -270,8 +294,6 @@ You can configure these Healthchecks and webhooks by using _IConfiguration_ prov
     2.- EvaluationTimeInSeconds: Number of elapsed seconds between health checks.
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
-
-All health checks results are stored into a SqLite database persisted to disk with _healthcheckdb_ name. This database is created on the WebContentRoot, _HostDefaults.ContentRootKey_, directory by default. Optionally you can specify the Sqlite connection string using the setting _HealthCheckDatabaseConnectionString_. Environment variables in _HealthCheckDatabaseConnectionString_ are automatically expanded, for example, _%APPDATA%\\healthchecksdb_.
 
 ```json
 {
@@ -291,8 +313,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
       }
     ],
     "EvaluationTimeInSeconds": 10,
-    "MinimumSecondsBetweenFailureNotifications": 60,
-    "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
+    "MinimumSecondsBetweenFailureNotifications": 60
   }
 }
 ```
@@ -314,7 +335,8 @@ Sample:
        setup.AddHealthCheckEndpoint("endpoint1", "/health-databases");
        setup.AddHealthCheckEndpoint("endpoint2", "health-messagebrokers");
        setup.AddWebhookNotification("webhook1", uri: "/notify", payload: "{...}");
-    });
+    })
+    .AddSqlServer("connectionString");
 ```
 
 You can also use relative urls when using IConfiguration providers like appsettings.json
@@ -390,7 +412,8 @@ services.AddHealthChecksUI(setupSettings: setup =>
             }
         };
     });
-});
+})
+.AddInMemoryStorage();
 
 ```
 

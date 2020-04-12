@@ -44,8 +44,7 @@ namespace FunctionalTests.UI.Configuration
                             .AddWebhookNotification(name: webhookName, uri: webhookUri, payload: webhookPayload,
                                 restorePayload: webhookRestorePayload)
                             .SetEvaluationTimeInSeconds(evaluationTimeInSeconds)
-                            .SetMinimumSecondsBetweenFailureNotifications(minimumSeconds)
-                            .SetHealthCheckDatabaseConnectionString(databaseConnection);
+                            .SetMinimumSecondsBetweenFailureNotifications(minimumSeconds);                            
                     }).AddInMemoryStorage();
                 });
 
@@ -224,7 +223,7 @@ namespace FunctionalTests.UI.Configuration
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddHealthChecksUI(setupSettings: setup => setup.SetHealthCheckDatabaseConnectionString("Data Source=hcdb"))
+                    .AddHealthChecksUI()
                     .Services
                     .AddRouting();
 
@@ -254,7 +253,7 @@ namespace FunctionalTests.UI.Configuration
                 .ConfigureServices(services =>
                 {
                     services.
-                    AddHealthChecksUI(setupSettings: setup => setup.SetHealthCheckDatabaseConnectionString("Data Source=hcdb"));
+                    AddHealthChecksUI();
 
                 }).Configure(app => app.UseHealthChecksUI());
 

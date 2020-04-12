@@ -1,20 +1,14 @@
 ﻿using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
-using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S;
 using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.Core.Notifications;
-using k8s;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -33,16 +27,17 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOptions<KubernetesDiscoverySettings>()
                 .Configure<IConfiguration>((settings, configuration) =>
                 {
-                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);                    
+                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
                 });
-                
+
+            services.TryAddSingleton<ServerAddressesService>();
+            services.TryAddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
+            services.TryAddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
+
             services
-                .AddSingleton<ServerAddressesService>()
                 .AddHostedService<UIInitializationHostedService>()
                 .AddHostedService<HealthCheckCollectorHostedService>()
                 .AddKubernetesDiscoveryService()
-                .AddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>()
-                .AddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>()
                 .AddApiEndpointHttpClient()
                 .AddWebhooksEndpointHttpClient();
 
@@ -82,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
         static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services)
         {
             services
-                .AddHostedService<KubernetesDiscoveryHostedService>()                
+                .AddHostedService<KubernetesDiscoveryHostedService>()
                 .AddHttpClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME);
 
             return services;

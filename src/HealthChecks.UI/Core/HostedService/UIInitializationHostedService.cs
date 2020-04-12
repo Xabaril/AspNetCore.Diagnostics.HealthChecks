@@ -48,12 +48,11 @@ namespace HealthChecks.UI.Core.HostedService
             var configuration = sp.GetRequiredService<IConfiguration>();
             var settings = sp.GetRequiredService<IOptions<Settings>>();
 
-            _logger.LogInformation("Executing database migrations");
-            
-            if (!context.Database.IsInMemory())
+            if (!context.Database.IsInMemory() && (await context.Database.GetPendingMigrationsAsync()).Any())
             {
+                _logger.LogInformation("Executing database migrations");
                 await context.Database.MigrateAsync();
-            }            
+            }
 
             var healthCheckConfigurations = settings.Value?
                                 .HealthChecks?
@@ -91,6 +90,6 @@ namespace HealthChecks.UI.Core.HostedService
 
             await context.SaveChangesAsync();
         }
-    }   
+    }
 
 }

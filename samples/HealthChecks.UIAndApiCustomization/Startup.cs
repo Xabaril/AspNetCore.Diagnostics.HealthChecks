@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.InMemory.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ namespace HealthChecks.UIAndApi
 
             services
                 .AddHealthChecksUI()
+                .AddInMemoryStorage()
                 //                .AddHealthChecksUI(setupSettings: settings =>
                 //                {
                 //                    settings

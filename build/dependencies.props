@@ -110,7 +110,7 @@
     <HealthCheckConsul>3.1.0</HealthCheckConsul>
     <HealthCheckUI>3.1.1</HealthCheckUI>
     <HealthCheckUICore>3.1.0</HealthCheckUICore>
-    <HealthCheckUIClient>3.1.0</HealthCheckUIClient>
+    <HealthCheckUIClient>3.1.1</HealthCheckUIClient>
     <HealthCheckUISqlServerStorage>3.1.0</HealthCheckUISqlServerStorage>
     <HealthCheckUISQLiteStorage>3.1.0</HealthCheckUISQLiteStorage>
     <HealthChecksUIPostgreSQLStorage>3.1.0</HealthChecksUIPostgreSQLStorage>

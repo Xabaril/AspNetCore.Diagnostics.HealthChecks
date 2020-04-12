@@ -220,6 +220,42 @@ The current supported databases are:
 - [HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/HealthChecks.UI.SQLite.Storage)
 - [HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/HealthChecks.UI.PostgreSQL.Storage)
 
+All the storage providers are extensions of HealthChecksUIBuilder:
+
+**InMemory**
+
+```csharp
+  services
+    .AddHealthChecksUI()
+    .AddInMemoryStorage()
+```
+
+**Sql Server**
+
+```csharp
+  services
+    .AddHealthChecksUI()
+    .AddSqlServer("connectionString");
+```
+
+**Postgre SQL**
+
+```csharp
+
+  services
+    .AddHealthChecksUI()
+    .AddPostgreSqlStorage("connectionString");
+
+```
+
+**Sqlite**
+
+```csharp
+  services
+    .AddHealthChecksUI()
+    .AddSqliteStorage($"Data Source=sqlite.db");
+```
+
 ### Health status history timeline
 
 By clicking details button in the healthcheck row you can preview the health status history timeline:

@@ -8,11 +8,12 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
     public class ProviderTestHelper
     {
         public const int DefaultHostTimeout = 1000;
+        public const int DefaultCollectorTimeout = 5000;
 
         public static List<(string Name, string Uri)> Endpoints = new List<(string Name, string Uri)>
         {
-            ("host1", "http://server1/health"),
-            ("host2", "http://server2/health")
+            ("host1", "http://localhost/health"),
+            ("host2", "http://localhost/health")
         };
 
         public static string SqlServerConnectionString(ExecutionFixture fixture) =>

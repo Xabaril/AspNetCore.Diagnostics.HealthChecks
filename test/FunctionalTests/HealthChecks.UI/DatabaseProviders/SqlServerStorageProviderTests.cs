@@ -1,14 +1,19 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.UI.Client;
+using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,55 +31,35 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
         [Fact]
-        public async Task create_the_database_and_seed_configuration()
+        public async Task seed_database_and_serve_stored_executions()
         {
-            var reset = new ManualResetEventSlim(false);
+            var hostReset = new ManualResetEventSlim(false);
+            var collectorReset = new ManualResetEventSlim(false);
 
-            var webHostBuilder = new WebHostBuilder()
-                .UseKestrel()
-                .ConfigureServices(services =>
-                {
-                    services.AddHealthChecksUI(setup =>
-                    {
-                        foreach (var item in ProviderTestHelper.Endpoints)
-                        {
-                            setup.AddHealthCheckEndpoint(item.Name, item.Uri);
-                        }
-                    })
-                    .AddSqlServerStorage(ProviderTestHelper.SqlServerConnectionString(_fixture))
-                    .Services
-                    .AddRouting();
-
-                }).Configure(app =>
-                {
-                    app
-                    .UseRouting()
-                    .UseEndpoints(endpoints =>
-                    {
-                        endpoints.MapHealthChecksUI();
-                    });
-
-                    var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-                    lifetime.ApplicationStarted.Register(() =>
-                    {
-                        reset.Set();
-                    });
-
-                }).UseStartup<DefaultStartup>();
+            var webHostBuilder = HostBuilderHelper.Create(
+                   hostReset,
+                   collectorReset,
+                   configureUI: config => config.AddSqlServerStorage(ProviderTestHelper.SqlServerConnectionString(_fixture)));
 
             var host = new TestServer(webHostBuilder);
 
-            reset.Wait(ProviderTestHelper.DefaultHostTimeout);
+            hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
             var configurations = await context.Configurations.ToListAsync();
             var host1 = ProviderTestHelper.Endpoints[0];
-            var host2 = ProviderTestHelper.Endpoints[1];
+
 
             configurations[0].Name.Should().Be(host1.Name);
             configurations[0].Uri.Should().Be(host1.Uri);
-            configurations[1].Name.Should().Be(host2.Name);
-            configurations[1].Uri.Should().Be(host2.Uri);
+
+            using var client = host.CreateClient();
+
+            collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
+
+            var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api");
+            report.First().Name.Should().Be(ProviderTestHelper.Endpoints[0].Name);
+
         }
     }
 }

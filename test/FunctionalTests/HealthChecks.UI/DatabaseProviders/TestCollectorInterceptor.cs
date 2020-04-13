@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 {
-    internal class TestCollectorInterceptor: IHealthCheckCollectorInterceptor
+    internal class TestCollectorInterceptor : IHealthCheckCollectorInterceptor
     {
         private readonly ManualResetEventSlim _resetEvent;
 

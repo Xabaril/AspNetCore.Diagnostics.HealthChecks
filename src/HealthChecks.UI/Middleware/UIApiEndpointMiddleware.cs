@@ -78,14 +78,14 @@ namespace HealthChecks.UI.Middleware
                                     .AsNoTracking()
                                     .SingleOrDefaultAsync();
 
-                        execution.History = await db.HealthCheckExecutionHistories
-                                        .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
-                                        .OrderByDescending(eh => eh.On)
-                                        .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                                        .ToListAsync();
-
-                        if(execution != null)
+                        if (execution != null)
                         {
+                            execution.History = await db.HealthCheckExecutionHistories
+                                .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
+                                .OrderByDescending(eh => eh.On)
+                                .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
+                                 .ToListAsync();
+
                             healthChecksExecutions.Add(execution);
                         }
                     }

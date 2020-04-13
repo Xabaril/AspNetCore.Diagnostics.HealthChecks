@@ -216,10 +216,10 @@ HealthChecks UI offers several storage providers, available as different nuget p
 
 The current supported databases are:
 
-- [HealthChecks.UI.InMemory.Storage](https://www.nuget.org/packages/HealthChecks.UI.InMemory.Storage)
-- [HealthChecks.UI.SqlServer.Storage](https://www.nuget.org/packages/HealthChecks.UI.SqlServer.Storage)
-- [HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/HealthChecks.UI.SQLite.Storage)
-- [HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/HealthChecks.UI.PostgreSQL.Storage)
+- [AspNetCore.HealthChecks.UI.InMemory.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.InMemory.Storage)
+- [AspNetCore.HealthChecks.UI.SqlServer.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SqlServer.Storage)
+- [AspNetCore.HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SQLite.Storage)
+- [AspNetCore.HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.PostgreSQL.Storage)
 
 All the storage providers are extensions of HealthChecksUIBuilder:
 

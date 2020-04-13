@@ -1,25 +1,12 @@
-﻿using Amazon.DynamoDBv2.Model;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FunctionalTests.Base;
-using HealthChecks.UI.Client;
-using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
-using HealthChecks.UI.Core.HostedService;
 using HealthChecks.UI.InMemory.Storage;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
-using MongoDB.Bson.IO;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -35,7 +22,10 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             var reset = new ManualResetEventSlim(false);
             var collectorReset = new ManualResetEventSlim(false);
 
-            var webHostBuilder = HostBuilderHelper.Create(reset, collectorReset, configureUI: setup => setup.AddInMemoryStorage());
+            var webHostBuilder = HostBuilderHelper.Create(
+                reset,
+                collectorReset,
+                configureUI: setup => setup.AddInMemoryStorage());
 
             var host = new TestServer(webHostBuilder);
 
@@ -58,7 +48,3 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
         }
     }
 }
-
-
-
-

@@ -13,5 +13,7 @@ namespace HealthChecks.UI.Image.Configuration
         public const string UI_RESOURCES_PATH = "ui_resources_path";
         public const string UI_WEBHOOKS_PATH = "ui_webhooks_path";
         public const string UI_NO_RELATIVE_PATHS = "ui_no_relative_paths";
+        public const string STORAGE_PROVIDER = "storage_provider";
+        public const string STORAGE_CONNECTION = "storage_connection";
     }
 }

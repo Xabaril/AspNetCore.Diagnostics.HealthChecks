@@ -41,7 +41,6 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             var configurations = await context.Configurations.ToListAsync();
             var host1 = ProviderTestHelper.Endpoints[0];
 
-
             configurations[0].Name.Should().Be(host1.Name);
             configurations[0].Uri.Should().Be(host1.Uri);
 

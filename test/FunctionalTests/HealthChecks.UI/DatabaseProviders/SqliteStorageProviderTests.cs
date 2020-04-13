@@ -12,6 +12,7 @@ using Xunit;
 
 namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 {
+    [Collection("execution")]
     public class sqlite_storage_should
     {
         [Fact]

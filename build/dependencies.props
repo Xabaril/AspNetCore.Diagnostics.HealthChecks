@@ -108,13 +108,13 @@
     <HealthCheckHangfire>3.1.0</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.1.0</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.0</HealthCheckConsul>
-    <HealthCheckUI>3.1.1</HealthCheckUI>
-    <HealthCheckUICore>3.1.0</HealthCheckUICore>
-    <HealthCheckUIClient>3.1.1</HealthCheckUIClient>
-    <HealthCheckUISqlServerStorage>3.1.0</HealthCheckUISqlServerStorage>
-    <HealthCheckUISQLiteStorage>3.1.0</HealthCheckUISQLiteStorage>
-    <HealthChecksUIPostgreSQLStorage>3.1.0</HealthChecksUIPostgreSQLStorage>
-    <HealthCheckUIInMemoryStorage>3.1.0</HealthCheckUIInMemoryStorage>
+    <HealthCheckUI>3.1.1-preview1</HealthCheckUI>
+    <HealthCheckUICore>3.1.1-preview1</HealthCheckUICore>
+    <HealthCheckUIClient>3.1.1-preview1</HealthCheckUIClient>
+    <HealthCheckUISqlServerStorage>3.1.1-preview1</HealthCheckUISqlServerStorage>
+    <HealthCheckUISQLiteStorage>3.1.1-preview1</HealthCheckUISQLiteStorage>
+    <HealthChecksUIPostgreSQLStorage>3.1.1-preview1</HealthChecksUIPostgreSQLStorage>
+    <HealthCheckUIInMemoryStorage>3.1.1-preview1</HealthCheckUIInMemoryStorage>
     <HealthCheckPublisherAppplicationInsights>3.1.0</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.1.0</HealthCheckPublisherPrometheus>

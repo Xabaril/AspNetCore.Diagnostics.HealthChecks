@@ -33,7 +33,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
                    collectorReset,
                    configureUI: config => config.AddSqlServerStorage(ProviderTestHelper.SqlServerConnectionString(_fixture)));
 
-            var host = new TestServer(webHostBuilder);
+            using var host = new TestServer(webHostBuilder);
 
             hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
@@ -49,7 +49,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
 
             var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api");
-            report.First().Name.Should().Be(ProviderTestHelper.Endpoints[0].Name);
+            report.First().Name.Should().Be(host1.Name);
         }
     }
 }

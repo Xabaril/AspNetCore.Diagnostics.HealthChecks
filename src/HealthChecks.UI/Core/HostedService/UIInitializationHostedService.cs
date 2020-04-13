@@ -21,11 +21,16 @@ namespace HealthChecks.UI.Core.HostedService
     {
         private readonly IServiceProvider _provider;
         private readonly ILogger<UIInitializationHostedService> _logger;
+        private readonly Settings _settings;
 
-        public UIInitializationHostedService(IServiceProvider provider, ILogger<UIInitializationHostedService> logger)
+        public UIInitializationHostedService(
+            IServiceProvider provider,
+            ILogger<UIInitializationHostedService> logger,
+            IOptions<Settings> settings)
         {
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -48,7 +53,7 @@ namespace HealthChecks.UI.Core.HostedService
             var configuration = sp.GetRequiredService<IConfiguration>();
             var settings = sp.GetRequiredService<IOptions<Settings>>();
 
-            if (!context.Database.IsInMemory() && (await context.Database.GetPendingMigrationsAsync()).Any())
+            if (await ShouldMigrateDatabase(context))
             {
                 _logger.LogInformation("Executing database migrations");
                 await context.Database.MigrateAsync();
@@ -89,6 +94,13 @@ namespace HealthChecks.UI.Core.HostedService
             }
 
             await context.SaveChangesAsync();
+        }
+
+        private async Task<bool> ShouldMigrateDatabase(HealthChecksDb context)
+        {
+            return (!_settings.DisableMigrations  &&
+                !context.Database.IsInMemory() &&
+                (await context.Database.GetPendingMigrationsAsync()).Any());
         }
     }
 

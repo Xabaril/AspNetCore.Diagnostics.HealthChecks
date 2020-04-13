@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -39,6 +40,7 @@ namespace FunctionalTests.UI.Configuration
                     services.AddHealthChecksUI(setupSettings: settings =>
                     {
                         settings
+                            .DisableDatabaseMigrations()
                             .AddHealthCheckEndpoint(name: healthCheckName, uri: healthCheckUri)
                             .AddWebhookNotification(name: webhookName, uri: webhookUri, payload: webhookPayload,
                                 restorePayload: webhookRestorePayload)
@@ -257,6 +259,68 @@ namespace FunctionalTests.UI.Configuration
 
             serverAddressesService.Should().NotBeNull();
             serverAddressesService.Addresses.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void have_enabled_database_migrations_by_default()
+        {
+            var webhost = new WebHostBuilder()
+             .UseStartup<DefaultStartup>()
+             .ConfigureServices(services =>
+             {
+                 services.AddHealthChecksUI()
+                 .AddInMemoryStorage();
+             });
+
+            var serviceProvider = webhost.Build().Services;
+            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+
+            UISettings.DisableMigrations.Should().Be(false);
+        }
+
+        [Fact]
+        public void allow_disable_running_database_migrations_in_ui_setup()
+        {
+            var webhost = new WebHostBuilder()
+             .UseStartup<DefaultStartup>()
+             .ConfigureServices(services =>
+             {
+                 services
+                 .AddHealthChecksUI(setup => setup.DisableDatabaseMigrations())
+                 .AddInMemoryStorage();
+             });
+
+            var serviceProvider = webhost.Build().Services;
+            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+
+            UISettings.DisableMigrations.Should().Be(true);
+        }
+
+        [Fact]
+        public void allow_disable_running_database_migrations_using_configuration_providers()
+        {
+            var webhost = new WebHostBuilder()
+             .UseStartup<DefaultStartup>()
+             .ConfigureAppConfiguration(config =>
+             {
+                 config.Sources.Clear();
+
+                 config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string,string>("HealthChecksUI:DisableMigrations", "true")
+                    });
+             })
+             .ConfigureServices(services =>
+             {
+                 services
+                 .AddHealthChecksUI()
+                 .AddInMemoryStorage();
+             });
+
+            var serviceProvider = webhost.Build().Services;
+            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+
+            UISettings.DisableMigrations.Should().Be(true);
         }
     }
 }

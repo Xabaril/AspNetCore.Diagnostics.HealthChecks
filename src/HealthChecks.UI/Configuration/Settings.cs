@@ -9,6 +9,7 @@ namespace HealthChecks.UI.Configuration
     {
         internal List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
         internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
+        internal bool DisableMigrations { get; set; } = false;
         internal int MaximumExecutionHistoriesPerEndpoint { get; private set; } = 100;
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;        
@@ -43,6 +44,11 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
+        public Settings DisableDatabaseMigrations()
+        {
+            DisableMigrations = true;
+            return this;
+        }
         public Settings SetEvaluationTimeInSeconds(int seconds)
         {
             EvaluationTimeInSeconds = seconds;

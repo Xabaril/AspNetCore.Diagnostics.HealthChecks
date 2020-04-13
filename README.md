@@ -24,6 +24,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 - [UI](#HealthCheckUI)
 - [UI Storage Providers](#UI-Storage-Providers)
+- [UI Database Migrations](#UI-Database-Migrations)
 - [History Timeline](#Health-status-history-timeline)
 - [Configuration](#Configuration)
 - [Webhooks and Failure Notifications](#Webhooks-and-Failure-Notifications)
@@ -254,6 +255,26 @@ All the storage providers are extensions of HealthChecksUIBuilder:
   services
     .AddHealthChecksUI()
     .AddSqliteStorage($"Data Source=sqlite.db");
+
+```
+
+### UI Database Migrations
+
+**Database Migrations** are enabled by default, if you need to disable migrations you can use the AddHealthChecksUI setup:
+
+```csharp
+  services
+    .AddHealthChecksUI(setup => setup.DisableDatabaseMigrations())
+    .AddInMemoryStorage();
+```
+
+Or you can use IConfiguration providers, like json file or environment variables:
+
+```json
+ "HealthChecksUI": {
+   "DisableMigrations": true
+ }
+
 ```
 
 ### Health status history timeline

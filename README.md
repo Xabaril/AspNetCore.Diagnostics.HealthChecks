@@ -283,6 +283,18 @@ By clicking details button in the healthcheck row you can preview the health sta
 
 ![Timeline](./doc/images/timeline.png)
 
+**Note**: HealthChecks UI saves an execution history entry in the database whenever a HealthCheck status changes from Healthy to Unhealthy and viceversa.
+
+This information is displayed in the status history timeline but we do not perform purge or cleanup tasks in users databases. In order to limit the maximum history entries that are sent by the UI Api middleware to the frontend you can do a database cleanup or set the maximum history entries served by endpoint using:
+
+```csharp
+  services.AddHealthChecksUI(setup =>
+  {
+     // Set the maximum history entries by endpoint that will be served by the UI api middleware
+      setup.MaximumHistoryEntriesPerEndpoint(50);
+  });
+```
+
 **HealthChecksUI** is also available as a _docker image_ You can read more about [HealthChecks UI Docker image](./doc/ui-docker.md).
 
 ### Configuration

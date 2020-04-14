@@ -39,6 +39,8 @@ namespace HealthChecks.UI.StorageProviders
                 .Services
                 .AddHealthChecksUI(setup =>
                 {
+                    //Maximum history entries by endpoint
+                    setup.MaximumHistoryEntriesPerEndpoint(50);
                     //One endpoint is configured in appsettings, let's add another one programatically
                     setup.AddHealthCheckEndpoint("Endpoint2", "/random-health");
                 })

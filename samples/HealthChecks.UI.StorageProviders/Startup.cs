@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HealthChecks.UI.Client;
-using HealthChecks.UI.InMemory.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -45,11 +44,11 @@ namespace HealthChecks.UI.StorageProviders
                     setup.AddHealthCheckEndpoint("Endpoint2", "/random-health");
                 })
                 //Uncomment the options below to use different database providers
-                .AddSqlServerStorage("server=localhost;initial catalog=healthchecksui;user id=sa;password=Password12!");
+                //.AddSqlServerStorage("server=localhost;initial catalog=healthchecksui;user id=sa;password=Password12!");
                 //.AddSqliteStorage("Data Source = healthchecks.db");
                 //.AddInMemoryStorage();
                 //.AddPostgreSqlStorage("Host=localhost;Username=postgres;Password=Password12!;Database=healthchecksui");
-
+                .AddMySqlStorage("Host=localhost;User Id=root;Password=root;Database=UI");
 
         }
 

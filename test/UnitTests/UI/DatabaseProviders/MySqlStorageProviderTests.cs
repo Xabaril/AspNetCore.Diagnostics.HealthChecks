@@ -1,17 +1,17 @@
-﻿using FluentAssertions;
-using HealthChecks.UI.Core.Data;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Hosting;
 using UnitTests.Base;
 using Xunit;
+using Microsoft.Extensions.DependencyInjection;
+using HealthChecks.UI.Core.Data;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace UnitTests.UI.DatabaseProviders
 {
-    public class postgre_sql_storage_provider_should
+    public class mysql_storage_provider_should
     {
-        private const string ProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL";
+        private const string ProviderName = "Pomelo.EntityFrameworkCore.MySql";
         [Fact]
         public void register_healthchecksdb_context_with_migrations()
         {
@@ -21,7 +21,7 @@ namespace UnitTests.UI.DatabaseProviders
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI()
-                    .AddPostgreSqlStorage("connectionString", options => customOptionsInvoked = true);
+                    .AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI", options => customOptionsInvoked = true);
                 })
                 .UseStartup<DefaultStartup>();
 

@@ -1,12 +1,6 @@
 ﻿using HealthChecks.UI.Image.Configuration;
-using HealthChecks.UI.InMemory.Storage;
-using Microsoft.Azure.Management.ResourceManager.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -23,6 +23,11 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
                  "Server=127.0.0.1;Port=5432;User ID=postgres;Password=Password12!;database=ui" :
                  "Server=127.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=ui";
 
+        public static string MySqlConnectionString(ExecutionFixture fixture) =>
+                      fixture.IsAppVeyorExecution ?
+                 "Host=localhost;User Id=root;Password=Password12!;Database=UI" :
+                 "Host=localhost;User Id=root;Password=Password12!;Database=UI";
+
         public static string SqliteConnectionString() => "Data Source = sqlite.db";
     }
 }

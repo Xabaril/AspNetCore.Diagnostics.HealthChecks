@@ -220,6 +220,7 @@ The current supported databases are:
 - [AspNetCore.HealthChecks.UI.SqlServer.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SqlServer.Storage)
 - [AspNetCore.HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SQLite.Storage)
 - [AspNetCore.HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.PostgreSQL.Storage)
+- [AspNetCore.HealthChecks.UI.MySql.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.MySql.Storage)
 
 All the storage providers are extensions of HealthChecksUIBuilder:
 
@@ -246,6 +247,16 @@ All the storage providers are extensions of HealthChecksUIBuilder:
   services
     .AddHealthChecksUI()
     .AddPostgreSqlStorage("connectionString");
+
+```
+
+**MySql**
+
+```csharp
+
+  services
+    .AddHealthChecksUI()
+    .AddMySqlStorage("connectionString");
 
 ```
 

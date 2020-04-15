@@ -46,9 +46,9 @@ namespace HealthChecks.UI.StorageProviders
                 //Uncomment the options below to use different database providers
                 //.AddSqlServerStorage("server=localhost;initial catalog=healthchecksui;user id=sa;password=Password12!");
                 //.AddSqliteStorage("Data Source = healthchecks.db");
-                //.AddInMemoryStorage();
+                .AddInMemoryStorage();
                 //.AddPostgreSqlStorage("Host=localhost;Username=postgres;Password=Password12!;Database=healthchecksui");
-                .AddMySqlStorage("Host=localhost;User Id=root;Password=root;Database=UI");
+                //.AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI");
 
         }
 

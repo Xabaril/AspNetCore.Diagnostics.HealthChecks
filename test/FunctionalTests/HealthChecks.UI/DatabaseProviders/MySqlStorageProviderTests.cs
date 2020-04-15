@@ -4,6 +4,7 @@ using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,9 +14,14 @@ using Xunit;
 namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
 {
     [Collection("execution")]
-    public class inmemory_storage_should
+    public class mysql_storage_should
     {
+        private readonly ExecutionFixture _fixture;
 
+        public mysql_storage_should(ExecutionFixture fixture)
+        {
+            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
+        }
         [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {
@@ -25,7 +31,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             var webHostBuilder = HostBuilderHelper.Create(
                    hostReset,
                    collectorReset,
-                   configureUI: config => config.AddInMemoryStorage());
+                   configureUI: config => config.AddMySqlStorage(ProviderTestHelper.MySqlConnectionString(_fixture)));
 
             using var host = new TestServer(webHostBuilder);
 
@@ -34,6 +40,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             var context = host.Services.GetRequiredService<HealthChecksDb>();
             var configurations = await context.Configurations.ToListAsync();
             var host1 = ProviderTestHelper.Endpoints[0];
+
 
             configurations[0].Name.Should().Be(host1.Name);
             configurations[0].Uri.Should().Be(host1.Uri);

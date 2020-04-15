@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using FluentAssertions;
+using HealthChecks.UI.Core.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using UnitTests.Base;
 using Xunit;
-using Microsoft.Extensions.DependencyInjection;
-using HealthChecks.UI.InMemory.Storage;
-using HealthChecks.UI.Core.Data;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace UnitTests.UI.DatabaseProviders
 {

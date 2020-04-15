@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.InMemory.Storage;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 

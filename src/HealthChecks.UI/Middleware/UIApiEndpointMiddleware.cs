@@ -45,51 +45,23 @@ namespace HealthChecks.UI.Middleware
 
                 foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
-                    //Temporal query bifurcation until sqlite provider bug is fixed
-                    //https://github.com/dotnet/efcore/issues/19178
-                    if (db.Database.ProviderName != "Microsoft.EntityFrameworkCore.Sqlite")
+
+                    var execution = await db.Executions
+                                .Include(le => le.Entries)
+                                .Where(le => le.Name == item.Name)
+                                .AsNoTracking()
+                                .SingleOrDefaultAsync();
+
+                    if (execution != null)
                     {
-                        var entity = await db.Executions
-                       .Include(le => le.Entries)
-                       .Select(e => new
-                       {
-                           Execution = e,
-                           History = db.HealthCheckExecutionHistories
-                                   .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == e.Id)
-                                   .OrderByDescending(eh => eh.On)
-                                   .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                                   .ToList()
-                       })
-                       .Where(le => le.Execution.Name == item.Name)
-                       .AsNoTracking()
-                       .SingleOrDefaultAsync();
+                        execution.History = await db.HealthCheckExecutionHistories
+                            .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
+                            .OrderByDescending(eh => eh.On)
+                            .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
+                             .ToListAsync();
 
-                        if (entity != null)
-                        {
-                            entity.Execution.History = entity.History;
-                            healthChecksExecutions.Add(entity.Execution);
-                        }
+                        healthChecksExecutions.Add(execution);
                     }
-                    else
-                    {
-                        var execution = await db.Executions
-                                    .Include(le => le.Entries)
-                                    .Where(le => le.Name == item.Name)
-                                    .AsNoTracking()
-                                    .SingleOrDefaultAsync();
-
-                        if (execution != null)
-                        {
-                            execution.History = await db.HealthCheckExecutionHistories
-                                .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
-                                .OrderByDescending(eh => eh.On)
-                                .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                                 .ToListAsync();
-
-                            healthChecksExecutions.Add(execution);
-                        }
-                    }
-
                 }
 
                 var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);

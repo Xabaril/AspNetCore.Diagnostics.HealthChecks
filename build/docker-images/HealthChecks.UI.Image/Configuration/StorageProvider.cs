@@ -29,6 +29,11 @@ namespace HealthChecks.UI.Image.Configuration
                 {
                     SetupProvider = (builder, connection) => builder.AddPostgreSqlStorage(connection),
                     RequiresConnectionString = true,
+                },
+                [StorageProviderEnum.MySql] = new StorageProvider
+                {
+                    SetupProvider = (builder, connection) => builder.AddMySqlStorage(connection),
+                    RequiresConnectionString = true,
                 }
             };
         }
@@ -45,6 +50,7 @@ namespace HealthChecks.UI.Image.Configuration
         InMemory = 0,
         SqlServer = 1,
         Sqlite = 2,
-        PostgreSql = 3
+        PostgreSql = 3,
+        MySql = 4
     }
 }

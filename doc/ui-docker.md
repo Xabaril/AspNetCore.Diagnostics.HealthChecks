@@ -55,19 +55,19 @@ You should use environment variables to configure Azure App Confuration Service 
 
 The existing environment variables are explained below:
 
-| Environment Variable        | Description                                                                                      | Notes                                          |
-| --------------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| storage_provider            | Configures an storage provider. Available options are SqlServer, Sqlite, PostgreSql and InMemory | InMemory by default                            |
-| storage_connection          | Configured the connection string for the selected provider                                       | Not set by default                             |
-| ui_path                     | Configures the frontend spa segment                                                              | /healthchecks-ui                               |
-| ui_api_path                 | Configures the path where api middleware will be served                                          | /healthchecks-api                              |
-| ui_webhooks_path            | Configures the path where webhooksm middleware will be served                                    | /healthchecks-webhooks                         |
-| ui_resources_path           | Configures the path where static files will be served                                            | /ui/resources                                  |
-| ui_no_relative_paths        | Disables relative paths for UI frontend resources                                                | false                                          |
-| AAC_Enabled                 | Enables AAC config provider                                                                      | Not set by default                             |
-| AAC_ConnectionString        | Connection string to configuration service                                                       | If set, Managed Service Identity won't be used |
-| AAC_ManagedIdentityEndpoint | Your AAC endpoint to connect using Managed Identity                                              | Sample: https://your-endpoint.azconfig.io      |
-| AAC_Label                   | Filter configuration keys containing this label                                                  | Sample: HealthChecksConfig                     |
+| Environment Variable        | Description                                                                                             | Notes                                          |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| storage_provider            | Configures an storage provider. Available options are SqlServer, Sqlite, PostgreSql, MySql and InMemory | InMemory by default                            |
+| storage_connection          | Configured the connection string for the selected provider                                              | Not set by default                             |
+| ui_path                     | Configures the frontend spa segment                                                                     | /healthchecks-ui                               |
+| ui_api_path                 | Configures the path where api middleware will be served                                                 | /healthchecks-api                              |
+| ui_webhooks_path            | Configures the path where webhooksm middleware will be served                                           | /healthchecks-webhooks                         |
+| ui_resources_path           | Configures the path where static files will be served                                                   | /ui/resources                                  |
+| ui_no_relative_paths        | Disables relative paths for UI frontend resources                                                       | false                                          |
+| AAC_Enabled                 | Enables AAC config provider                                                                             | Not set by default                             |
+| AAC_ConnectionString        | Connection string to configuration service                                                              | If set, Managed Service Identity won't be used |
+| AAC_ManagedIdentityEndpoint | Your AAC endpoint to connect using Managed Identity                                                     | Sample: https://your-endpoint.azconfig.io      |
+| AAC_Label                   | Filter configuration keys containing this label                                                         | Sample: HealthChecksConfig                     |
 
 As table explains, if **AAC_ConnectionString** is set, the image will connect to AAC using that connection string.
 If you want to connect using managed identity service only specify **AAC_ManagedIdentityEndpoint** environment variable.

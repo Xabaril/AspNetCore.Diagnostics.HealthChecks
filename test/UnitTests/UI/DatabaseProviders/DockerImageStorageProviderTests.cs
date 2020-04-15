@@ -17,6 +17,7 @@ namespace UnitTests.UI.DatabaseProviders
         private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
         private const string PostgreProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL";
         private const string InMemoryProviderName = "Microsoft.EntityFrameworkCore.InMemory";
+        private const string MySqlProviderName = "Pomelo.EntityFrameworkCore.MySql";
 
         [Fact]
         public void fail_with_invalid_storage_provider_value()
@@ -36,7 +37,7 @@ namespace UnitTests.UI.DatabaseProviders
             Assert.Throws<ArgumentException>(() => hostBuilder.Build());
         }
         [Fact]
-        public void register__sql_server()
+        public void register_sql_server()
         {
             var hostBuilder = new WebHostBuilder()
                 .ConfigureAppConfiguration(config =>
@@ -192,5 +193,47 @@ namespace UnitTests.UI.DatabaseProviders
             var context = host.Services.GetRequiredService<HealthChecksDb>();
             context.Database.ProviderName.Equals(InMemoryProviderName);
         }
+
+        [Fact]
+        public void register_mysql()
+        {
+            var hostBuilder = new WebHostBuilder()
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.Sources.Clear();
+
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.MySql.ToString()),
+                        new KeyValuePair<string,string>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
+
+                    });
+                })
+                .UseStartup<Startup>();
+
+            var host = hostBuilder.Build();
+
+            var context = host.Services.GetRequiredService<HealthChecksDb>();
+            context.Database.ProviderName.Equals(MySqlProviderName);
+        }
+
+        [Fact]
+        public void fail_to_register_mysql_with_no_connection_string()
+        {
+            var hostBuilder = new WebHostBuilder()
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.Sources.Clear();
+
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.MySql.ToString())
+                    });
+                })
+                .UseStartup<Startup>();
+
+            Assert.Throws<ArgumentNullException>(() => hostBuilder.Build());
+        }
+
     }
 }

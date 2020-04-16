@@ -126,7 +126,6 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Password12!
-
     ports:
       - 1433:1433
 ```

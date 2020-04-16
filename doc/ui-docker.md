@@ -1,5 +1,17 @@
 # HealthChecks UI Docker Image
 
+## HealthChecks UI
+
+### Sections
+
+- [Custom Branding](#Custom-Branding)
+- [Configure UI Paths](<#Configure-UI-paths-(UI-path,-Api-path-and-resources-path)>)
+- [Storage Providers Configuration](#Storage-Providers-Configuration)
+- [Azure App Configuration Service](#Azure-App-Configuration-Service)
+- [Environment variables table](#Environment-variables-table)
+- [Samples](#Samples)
+- [Docker Compose Sample](#Sample-Docker-Compose)
+
 _HealthChecks_ is available as a docker image on [DockerHub](https://hub.docker.com/r/xabarilcoding/healthchecksui/). This image is a simple ASP.NET Core project with the _HealthCheckUI_ middleware.
 
 ```bash
@@ -13,7 +25,7 @@ You can use environment variables to configure all properties on _HealthChecksUI
 docker run --name ui -p 5000:80 -e 'HealthChecksUI:HealthChecks:0:Name=httpBasic' -e 'HealthChecksUI:HealthChecks:0:Uri=http://the-healthchecks-server-path' -d xabarilcoding/healthchecksui:latest
 ```
 
-## Use a custom css stylesheet for branding
+## Custom Branding
 
 Since version 3.0.3 you can use an environment variable and a volume to configure your own css stylesheet and display your own branding within the UI:
 
@@ -91,3 +103,30 @@ az container create --resource-group group-name  --name container-name -e 'AAC_E
 ```
 
 Read the [DockerHub full description](https://hub.docker.com/r/xabarilcoding/healthchecksui/) to get more information about HealthChecksUI docker configuration.
+
+## Sample Docker Compose
+
+```yaml
+version: "3.7"
+services:
+  healthchecks:
+    image: healthchecksui
+    depends_on:
+      - sqlserver
+    environment:
+      - storage_provider=SqlServer
+      - storage_connection=Server=sqlserver,1433;User Id=sa;Password=Password12!;Initial Catalog=DockerUI
+      - Logging:LogLevel:Default=Debug
+      - Logging:Loglevel:Microsoft=Warning
+      - Logging:LogLevel:HealthChecks=Debug
+    ports:
+      - 5000:80
+  sqlserver:
+    image: microsoft/mssql-server-linux
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password12!
+
+    ports:
+      - 1433:1433
+```

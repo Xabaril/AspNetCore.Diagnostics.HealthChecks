@@ -13,6 +13,7 @@ namespace HealthChecks.Aws.S3
             {
                 throw new ArgumentNullException(nameof(bucketOptions));
             }
+
             if (bucketOptions.S3Config == null)
             {
                 throw new ArgumentNullException(nameof(S3BucketOptions.S3Config));
@@ -24,22 +25,32 @@ namespace HealthChecks.Aws.S3
         {
             try
             {
-                bool keysProvided = !string.IsNullOrEmpty(_bucketOptions.AccessKey) &&
-                                    !string.IsNullOrEmpty(_bucketOptions.SecretKey);
+                AWSCredentials credentials = _bucketOptions.Credentials;
+                if (credentials == null)
+                {
+                    if (!string.IsNullOrEmpty(_bucketOptions.AccessKey) && !string.IsNullOrEmpty(_bucketOptions.SecretKey))
+                    {
+                        // for backwards compatibility we create the basic credentials if the old fields are used
+                        // but if they are not specified we fallback to using the default profile
+                        credentials = new BasicAWSCredentials(_bucketOptions.AccessKey, _bucketOptions.SecretKey);
+                    }
+                }
 
+                bool keysProvided = credentials != null;
+
                 var client = keysProvided
                     ? new AmazonS3Client(_bucketOptions.AccessKey, _bucketOptions.SecretKey, _bucketOptions.S3Config)
-                    : new AmazonS3Client(_bucketOptions.S3Config);
-
-                using (client)
-                {
-                    var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
-
-                    if (_bucketOptions.CustomResponseCheck != null)
-                    {
-                        return _bucketOptions.CustomResponseCheck.Invoke(response)
-                            ? HealthCheckResult.Healthy()
-                            : new HealthCheckResult(context.Registration.FailureStatus, description: "Custom response check is not satisfied.");
+                    : new AmazonS3Client(_bucketOptions.S3Config);
+
+                using (client)
+                {
+                    var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
+
+                    if (_bucketOptions.CustomResponseCheck != null)
+                    {
+                        return _bucketOptions.CustomResponseCheck.Invoke(response)
+                            ? HealthCheckResult.Healthy()
+                            : new HealthCheckResult(context.Registration.FailureStatus, description: "Custom response check is not satisfied.");
                     }
                 }
                 return HealthCheckResult.Healthy();

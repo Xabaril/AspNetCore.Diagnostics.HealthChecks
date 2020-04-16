@@ -11,10 +11,7 @@ namespace HealthChecks.DynamoDb
         public DynamoDbHealthCheck(DynamoDBOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            if (string.IsNullOrEmpty(options.AccessKey))
-                throw new ArgumentNullException(nameof(DynamoDBOptions.AccessKey));
-            if (string.IsNullOrEmpty(options.SecretKey))
-                throw new ArgumentNullException(nameof(DynamoDBOptions.SecretKey));
+
             if (options.RegionEndpoint == null)
                 throw new ArgumentNullException(nameof(DynamoDBOptions.RegionEndpoint));
         }
@@ -23,8 +20,23 @@ namespace HealthChecks.DynamoDb
         {
             try
             {
-                var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
-                var client = new AmazonDynamoDBClient(credentials, _options.RegionEndpoint);
+                AWSCredentials? credentials = _options.Credentials;
+
+                if (credentials == null)
+                {
+#pragma warning disable CS0618 // Type or member is obsolete
+                    if (!string.IsNullOrEmpty(_options.AccessKey) && !string.IsNullOrEmpty(_options.SecretKey))
+                    {
+                        // for backwards compatibility we create the basic credentials if the old fields are used
+                        // but if they are not specified we fallback to using the default profile
+                        credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
+                    }
+#pragma warning restore CS0618 // Type or member is obsolete
+                }
+
+                var client = credentials != null
+                    ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
+                    : new AmazonDynamoDBClient(_options.RegionEndpoint);
 
                 _ = await client.ListTablesAsync(cancellationToken);
                 return HealthCheckResult.Healthy();

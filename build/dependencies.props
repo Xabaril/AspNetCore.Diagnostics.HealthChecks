@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
-    <NetStandardTargetVersion>netstandard2.1</NetStandardTargetVersion>
+    <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
     <NetCoreTargetVersion>netcoreapp3.1</NetCoreTargetVersion>
     <MicrosoftNETTestSdk>16.5.0</MicrosoftNETTestSdk>
     <LangVersion>latest</LangVersion>
@@ -87,49 +87,49 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>3.1.0</HealthCheckIdSvr>
-    <HealthCheckSqlServer>3.1.0</HealthCheckSqlServer>
-    <HealthCheckSqlite>3.1.0</HealthCheckSqlite>
-    <HealthCheckUri>3.1.0</HealthCheckUri>
-    <HealthCheckRedis>3.1.0</HealthCheckRedis>
-    <HealthCheckRabbitMQ>3.1.0</HealthCheckRabbitMQ>
-    <HealthCheckEventStore>3.1.0</HealthCheckEventStore>
-    <HealthCheckElasticsearch>3.1.0</HealthCheckElasticsearch>
-    <HealthCheckSolr>3.1.0</HealthCheckSolr>
-    <HealthCheckOracle>3.1.0</HealthCheckOracle>
-    <HealthCheckNpgSql>3.1.0</HealthCheckNpgSql>
-    <HealthCheckMongoDB>3.1.0</HealthCheckMongoDB>
-    <HealthCheckMySql>3.1.0</HealthCheckMySql>
-    <HealthCheckKafka>3.1.1</HealthCheckKafka>
-    <HealthCheckSystem>3.1.0</HealthCheckSystem>
-    <HealthCheckNetwork>3.1.0</HealthCheckNetwork>
-    <HealthCheckDynamoDb>3.1.0</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>3.1.0</HealthCheckCosmosDb>
-    <HealthCheckDocumentDb>3.1.0</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>3.1.0</HealthCheckAzureStorage>
-    <HealthCheckHangfire>3.1.0</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>3.1.0</HealthCheckAzureServiceBus>
-    <HealthCheckConsul>3.1.0</HealthCheckConsul>
-    <HealthCheckUI>3.1.1-preview2</HealthCheckUI>
-    <HealthCheckUICore>3.1.1-preview2</HealthCheckUICore>
-    <HealthCheckUIClient>3.1.1-preview2</HealthCheckUIClient>
-    <HealthCheckUISqlServerStorage>3.1.1-preview2</HealthCheckUISqlServerStorage>
-    <HealthCheckUISQLiteStorage>3.1.1-preview2</HealthCheckUISQLiteStorage>
-    <HealthChecksUIPostgreSQLStorage>3.1.1-preview2</HealthChecksUIPostgreSQLStorage>
-    <HealthCheckUIInMemoryStorage>3.1.1-preview2</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>3.1.1-preview2</HealthCheckUIMySqlStorage>
-    <HealthCheckPublisherAppplicationInsights>3.1.0</HealthCheckPublisherAppplicationInsights>
-    <HealthCheckPublisherDatadog>3.1.0</HealthCheckPublisherDatadog>
-    <HealthCheckPublisherPrometheus>3.1.0</HealthCheckPublisherPrometheus>
-    <HealthCheckAWSS3>3.1.0</HealthCheckAWSS3>
-    <HealthCheckKeyVault>3.1.0</HealthCheckKeyVault>
-    <HealthCheckPublisherSeq>3.1.0</HealthCheckPublisherSeq>
-    <HealthCheckRavenDB>3.1.0</HealthCheckRavenDB>
-    <HealthCheckKubernetes>3.1.0</HealthCheckKubernetes>
-    <HealthCheckSignalR>3.1.0</HealthCheckSignalR>
-    <HealthCheckCloudFirestore>3.1.0</HealthCheckCloudFirestore>
-    <HealthCheckIoTHub>3.1.0</HealthCheckIoTHub>
-    <HealthCheckIbmMQ>3.1.0</HealthCheckIbmMQ>
-    <HealthChecksUIK8sOperator>3.1.0-beta.1</HealthChecksUIK8sOperator>
+    <HealthCheckIdSvr>3.1.1</HealthCheckIdSvr>
+    <HealthCheckSqlServer>3.1.1</HealthCheckSqlServer>
+    <HealthCheckSqlite>3.1.1</HealthCheckSqlite>
+    <HealthCheckUri>3.1.1</HealthCheckUri>
+    <HealthCheckRedis>3.1.1</HealthCheckRedis>
+    <HealthCheckRabbitMQ>3.1.1</HealthCheckRabbitMQ>
+    <HealthCheckEventStore>3.1.1</HealthCheckEventStore>
+    <HealthCheckElasticsearch>3.1.1</HealthCheckElasticsearch>
+    <HealthCheckSolr>3.1.1</HealthCheckSolr>
+    <HealthCheckOracle>3.1.1</HealthCheckOracle>
+    <HealthCheckNpgSql>3.1.1</HealthCheckNpgSql>
+    <HealthCheckMongoDB>3.1.1</HealthCheckMongoDB>
+    <HealthCheckMySql>3.1.1</HealthCheckMySql>
+    <HealthCheckKafka>3.1.2</HealthCheckKafka>
+    <HealthCheckSystem>3.1.1</HealthCheckSystem>
+    <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
+    <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
+    <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
+    <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>3.1.1</HealthCheckAzureStorage>
+    <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
+    <HealthCheckAzureServiceBus>3.1.1</HealthCheckAzureServiceBus>
+    <HealthCheckConsul>3.1.1</HealthCheckConsul>
+    <HealthCheckUI>3.1.1-preview3</HealthCheckUI>
+    <HealthCheckUICore>3.1.1-preview3</HealthCheckUICore>
+    <HealthCheckUIClient>3.1.1-preview3</HealthCheckUIClient>
+    <HealthCheckUISqlServerStorage>3.1.1-preview3</HealthCheckUISqlServerStorage>
+    <HealthCheckUISQLiteStorage>3.1.1-preview3</HealthCheckUISQLiteStorage>
+    <HealthChecksUIPostgreSQLStorage>3.1.1-preview3</HealthChecksUIPostgreSQLStorage>
+    <HealthCheckUIInMemoryStorage>3.1.1-preview3</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>3.1.1-preview3</HealthCheckUIMySqlStorage>
+    <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
+    <HealthCheckPublisherPrometheus>3.1.1</HealthCheckPublisherPrometheus>
+    <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
+    <HealthCheckKeyVault>3.1.1</HealthCheckKeyVault>
+    <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>
+    <HealthCheckRavenDB>3.1.1</HealthCheckRavenDB>
+    <HealthCheckKubernetes>3.1.1</HealthCheckKubernetes>
+    <HealthCheckSignalR>3.1.1</HealthCheckSignalR>
+    <HealthCheckCloudFirestore>3.1.1</HealthCheckCloudFirestore>
+    <HealthCheckIoTHub>3.1.1</HealthCheckIoTHub>
+    <HealthCheckIbmMQ>3.1.1</HealthCheckIbmMQ>
+    <HealthChecksUIK8sOperator>3.1.0-beta.2</HealthChecksUIK8sOperator>
   </PropertyGroup>
 </Project>

@@ -1,3 +1,13 @@
+**3.1.1**
+
+- [Breaking Change] The UI no longer uses sqlite internally. A storage provider must be configured using HealthChecksUIBuilder storage package extensions.
+- Added new storage providers (SqlServer, InMemory, Sqlite, MySql and PostreSQL)
+- Added new storage providers [configuration environment variables for docker image](./ui-docker.md)
+
+**3.1.0**
+
+- Updated UI and dependencies to NetStandard 2.1
+
 **3.0.11**
 
 - Fix issue #449 (Kubernetes Discovery service was not considering configured namespaces)

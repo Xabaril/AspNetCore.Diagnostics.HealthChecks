@@ -19,8 +19,9 @@ namespace HealthChecks.UI.Image
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services                
+            services
                 .AddHealthChecksUI()
+                .AddStorageProvider(Configuration)                
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 

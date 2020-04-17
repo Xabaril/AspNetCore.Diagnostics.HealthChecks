@@ -94,6 +94,12 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.SqlServer.Storage\HealthChecks.UI.SqlServer.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj -c Release -o .\artifacts --include-symbols --no-build }
@@ -134,6 +140,12 @@ else {
     exec { & dotnet pack .\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.UI\HealthChecks.UI.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.SqlServer.Storage\HealthChecks.UI.SqlServer.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Publisher.Datadog\HealthChecks.Publisher.Datadog.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }

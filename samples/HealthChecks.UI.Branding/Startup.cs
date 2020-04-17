@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using HealthChecks.UI.Client;
+﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Branding
 {
@@ -57,7 +55,8 @@ namespace HealthChecks.UI.Branding
                                                  payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                                                  restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
 
-                })
+                }).AddInMemoryStorage()
+                  .Services
                 .AddControllers();
         }
 

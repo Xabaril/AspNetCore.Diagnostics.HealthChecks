@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>    
+    <ProjectReference Include="..\..\build\docker-images\HealthChecks.UI.Image\HealthChecks.UI.Image.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj" />    
@@ -43,6 +44,11 @@
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.SqlServer.Storage\HealthChecks.UI.SqlServer.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj" />

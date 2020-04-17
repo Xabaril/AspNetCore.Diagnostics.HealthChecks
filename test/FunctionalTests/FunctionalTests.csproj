@@ -9,7 +9,7 @@
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />    
     <PackageReference Include="xunit" Version="$(xunit)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
@@ -39,6 +39,12 @@
     <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.SqlServer.Storage\HealthChecks.UI.SqlServer.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
   </ItemGroup>

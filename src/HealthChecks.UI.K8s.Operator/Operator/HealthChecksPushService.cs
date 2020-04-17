@@ -61,7 +61,6 @@ namespace HealthChecks.UI.K8s.Operator
 
         private static (string address, V1ServicePort port) GetServiceAddress(V1Service service)
         {
-
             string IpAddress = default;
 
             if (service.Spec.Type == ServiceType.LoadBalancer)

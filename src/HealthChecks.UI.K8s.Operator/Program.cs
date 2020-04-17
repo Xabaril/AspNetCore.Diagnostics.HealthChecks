@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Controller;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -14,59 +18,53 @@ namespace HealthChecks.UI.K8s.Operator
     {
         static void Main(string[] args)
         {
-            var provider = InitializeProvider();
+            var host = CreateHostBuilder(args).Build();
 
-            var logger = provider.GetService<ILogger<K8sOperator>>();
+            var diagnostics = host.Services.GetRequiredService<OperatorDiagnostics>();
 
-            var @operator = provider.GetRequiredService<IKubernetesOperator>();
-
-            var cancelTokenSource = new CancellationTokenSource();
-
-            logger.LogInformation("Healthchecks Operator is starting...");
-
-            _ = @operator.RunAsync(cancelTokenSource.Token);
-
-            var reset = new ManualResetEventSlim(false);
-
-            Console.CancelKeyPress += (s, a) =>
+            try
             {
-                logger.LogInformation("Healthchecks Operator is shutting down...");
-                @operator.Dispose();
-                cancelTokenSource.Cancel();
-
-                reset.Set();
-            };
-
-            reset.Wait();
-        }
-        private static IKubernetes GetKubernetesClient()
-        {
-            var config = KubernetesClientConfiguration.IsInCluster() ?
-                KubernetesClientConfiguration.InClusterConfig() :
-                KubernetesClientConfiguration.BuildConfigFromConfigFile();
-
-            return new Kubernetes(config);
+                host.Run();
+            }
+            catch (Exception exception)
+            {
+                diagnostics.OperatorThrow(exception);
+            }
         }
 
-        private static IServiceProvider InitializeProvider()
-        {
-            var services = new ServiceCollection();
-            services.AddLogging(config =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureServices((hostContext, services) =>
             {
-                config.AddConsole();
-                config.AddFilter(typeof(Program).Namespace, LogLevel.Information);
-                config.AddFilter("Microsoft", LogLevel.None);
+                services.AddHostedService<HealthChecksOperator>()
+                .AddSingleton<IKubernetes>(sp =>
+                {
+                    var config = KubernetesClientConfiguration.IsInCluster() ?
+                                   KubernetesClientConfiguration.InClusterConfig() :
+                                   KubernetesClientConfiguration.BuildConfigFromConfigFile();
+
+                    return new Kubernetes(config);
+                })
+                .AddTransient<IHealthChecksController, HealthChecksController>()
+                .AddSingleton<OperatorDiagnostics>()
+                .AddSingleton<DeploymentHandler>()
+                .AddSingleton<ServiceHandler>()
+                .AddSingleton<SecretHandler>()
+                .AddSingleton<HealthCheckServiceWatcher>();
+
+            }).ConfigureLogging((context, builder) =>
+            {
+                var logger = new LoggerConfiguration()
+                    .MinimumLevel.Information()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                    .Enrich.WithProperty("Application", nameof(K8sOperator))
+                    .Enrich.FromLogContext()
+                    .WriteTo.ColoredConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception:lj}")
+                    .CreateLogger();
+
+                builder.ClearProviders();
+                builder.AddSerilog(logger, dispose: true);
             });
-            services.AddSingleton(sp => GetKubernetesClient());
-            services.AddTransient<IKubernetesOperator, HealthChecksOperator>();
-            services.AddTransient<IHealthChecksController, HealthChecksController>();
-            services.AddSingleton<DeploymentHandler>();
-            services.AddSingleton<ServiceHandler>();
-            services.AddSingleton<SecretHandler>();
-            services.AddSingleton<HealthCheckServiceWatcher>();
-
-            return services.BuildServiceProvider();
-        }
     }
 }
 

@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: healthchecks-ui-k8s-operator-deploy
+  name: healthchecks-ui-k8s-operator
 spec:
   replicas: 1
   template:
@@ -9,7 +9,15 @@ spec:
       labels:
         app: healthchecks-ui-k8s-operator
     spec:
+      serviceAccountName: healthchecks-admin
       containers:
         - name: healthchecks-ui-k8s-operator
           image: xabarilcoding/healthchecksui-k8s-operator
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 300m
+            limits:
+              memory: 200Mi
+              cpu: 500m

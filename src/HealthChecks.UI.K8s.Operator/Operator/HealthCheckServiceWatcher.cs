@@ -1,3 +1,4 @@
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator
@@ -13,16 +15,20 @@ namespace HealthChecks.UI.K8s.Operator
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
-        private Watcher<V1Service> _watcher;
+        private readonly OperatorDiagnostics _diagnostics;
         private Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
 
-        public HealthCheckServiceWatcher(IKubernetes client, ILogger<K8sOperator> logger)
+        public HealthCheckServiceWatcher(
+            IKubernetes client,
+            ILogger<K8sOperator> logger,
+            OperatorDiagnostics diagnostics)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
         }
 
-        internal Watcher<V1Service> Watch(HealthCheckResource resource, CancellationToken token)
+        internal Task Watch(HealthCheckResource resource, CancellationToken token)
         {
             Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
 
@@ -34,17 +40,17 @@ namespace HealthChecks.UI.K8s.Operator
                     watch: true,
                     cancellationToken: token);
 
-                _watcher = response.Watch<V1Service, V1ServiceList>(
+                var watcher = response.Watch<V1Service, V1ServiceList>(
                     onEvent: async (type, item) => await OnServiceDiscoveredAsync(type, item, resource),
-                    onError: e => _logger.LogError(e, "Error in service watcher: {message}", e.Message)
+                    onError: e => _diagnostics.ServiceWatcherThrow(e)
                 );
 
-                _watchers.Add(resource, _watcher);
+                _diagnostics.ServiceWatcherStarting(resource.Metadata.NamespaceProperty);
 
-                return _watcher;
+                _watchers.Add(resource, watcher);
             }
 
-            return null;
+            return Task.CompletedTask;
         }
 
         internal void Stopwatch(HealthCheckResource resource)
@@ -55,8 +61,8 @@ namespace HealthChecks.UI.K8s.Operator
                 var svcResource = _watchers.Keys.FirstOrDefault(filter);
                 if (svcResource != null)
                 {
-                    _logger.LogInformation("Stopping services watcher for namespace {namespace}", resource.Metadata.NamespaceProperty);
-                    _watchers[svcResource].Dispose();
+                    _diagnostics.ServiceWatcherStopped(resource.Metadata.NamespaceProperty);
+                    _watchers[svcResource]?.Dispose();
                     _watchers.Remove(svcResource);
                 }
             }
@@ -83,7 +89,16 @@ namespace HealthChecks.UI.K8s.Operator
 
         public void Dispose()
         {
-            _watchers.Values.ToList().ForEach(w => w?.Dispose());
+            _watchers.Values.ToList().ForEach(w =>
+            {
+                if (w != null && w.Watching) w.Dispose();
+            });
+        }
+
+        private class ServiceWatch
+        {
+            WatchEventType EventType { get; set; }
+            V1Service Service { get; set; }
         }
     }
 }

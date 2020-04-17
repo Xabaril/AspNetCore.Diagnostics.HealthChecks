@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: healthchecks-admin
-    namespace: default
+    namespace: healthchecks
 roleRef:
   kind: ClusterRole
   name: healthchecks-admin

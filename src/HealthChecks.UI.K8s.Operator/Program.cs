@@ -13,7 +13,6 @@ using HealthChecks.UI.K8s.Operator.Diagnostics;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-
     class Program
     {
         static void Main(string[] args)

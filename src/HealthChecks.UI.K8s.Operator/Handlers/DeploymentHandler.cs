@@ -113,7 +113,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                                 {
                                     new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.DefaultUIPath),
                                     new V1EnvVar("enable_push_endpoint", "true"),
-                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret")))
+                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
+                                    new V1EnvVar("Logging__LogLevel__Default", "Debug"),                                    
+                                    new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__System", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
                                 }
                             }
                         }

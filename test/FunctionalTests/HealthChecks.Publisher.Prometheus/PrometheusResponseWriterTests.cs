@@ -37,8 +37,7 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        ResponseWriter = (context, report) =>
-                            PrometheusResponseWriter.WritePrometheusResultText(context, report)
+                        ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
                     });
                 }));
 
@@ -64,8 +63,7 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        ResponseWriter = (context, report) =>
-                            PrometheusResponseWriter.WritePrometheusResultText(context, report)
+                        ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
                     });
                 }));
 

@@ -8,7 +8,7 @@ namespace HealthChecks.Publisher.Prometheus
 {
     public sealed class PrometheusResponseWriter : LivenessPrometheusMetrics
     {
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok = false)
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok)
         {
             var instance = new PrometheusResponseWriter();
             instance.WriteMetricsFromHealthReport(report);
@@ -27,6 +27,10 @@ namespace HealthChecks.Publisher.Prometheus
 
                 await context.Response.WriteAsync(content, Encoding.UTF8);
             }
+        }
+
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) {
+            await WritePrometheusResultText(context, report, false);
         }
     }
 }

@@ -164,6 +164,23 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
+## HealthChecks Prometheus Exporter
+If you need an endpoint to consume from prometheus instead of using Prometheus Gateway you could install **AspNetCore.HealthChecks.Publisher.Prometheus**.
+
+```powershell
+install-package AspNetcore.HealthChecks.Publisher.Prometheus
+```
+
+Use the *ApplicationBuilder* extension method to add the endpoint with the metrics:
+```csharp
+// default endpoint: /healthmetrics
+app.UseHealthChecksPrometheusExporter()
+
+// You could customize the endpoint
+app.UseHealthChecksPrometheusExporter("/my-health-metrics")
+```
+
+
 ## HealthCheckUI
 
 ![HealthChecksUI](./doc/images/ui-home.png)

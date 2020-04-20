@@ -43,6 +43,11 @@ spec:
               type: string
             imagePullPolicy:
               type: string
+            stylesheetPath:
+              type: string
+              pattern: ^[^\/][^.]+$
+            stylesheetContent:
+              type: string
             serviceAnnotations:
               type: array
               items:

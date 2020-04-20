@@ -4,6 +4,7 @@ using k8s.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
@@ -129,6 +130,24 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             {
                 _logger.LogInformation("Adding annotation {Annotation} to ui deployment with value {AnnotationValue}", annotation.Name, annotation.Value);
                 metadata.Annotations.Add(annotation.Name, annotation.Value);
+            }
+
+            if (resource.HasBrandingConfigured())
+            {
+                var specification = spec.Template.Spec;
+                var container = specification.Containers.First();
+                var volumeName = "healthchecks-volume";
+
+                if (specification.Volumes == null) specification.Volumes = new List<V1Volume>();
+                if (container.VolumeMounts == null) container.VolumeMounts = new List<V1VolumeMount>();
+
+                specification.Volumes.Add(new V1Volume(name: "healthchecks-volume",
+                    configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));
+
+                var mountPath = resource.Spec.StylesheetPath.Split('/')[0];
+
+                container.Env.Add(new V1EnvVar("ui_stylesheet", resource.Spec.StylesheetPath));
+                container.VolumeMounts.Add(new V1VolumeMount($"app/{mountPath}", volumeName));
             }
 
             return new V1Deployment(metadata: metadata, spec: spec);

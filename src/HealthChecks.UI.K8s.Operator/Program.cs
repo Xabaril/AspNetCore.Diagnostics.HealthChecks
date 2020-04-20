@@ -49,6 +49,7 @@ namespace HealthChecks.UI.K8s.Operator
                 .AddSingleton<DeploymentHandler>()
                 .AddSingleton<ServiceHandler>()
                 .AddSingleton<SecretHandler>()
+                .AddSingleton<ConfigMaphandler>()
                 .AddSingleton<HealthCheckServiceWatcher>();
 
             }).ConfigureLogging((context, builder) =>

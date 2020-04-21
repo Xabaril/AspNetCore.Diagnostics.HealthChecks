@@ -141,13 +141,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 if (specification.Volumes == null) specification.Volumes = new List<V1Volume>();
                 if (container.VolumeMounts == null) container.VolumeMounts = new List<V1VolumeMount>();
 
-                specification.Volumes.Add(new V1Volume(name: "healthchecks-volume",
+                specification.Volumes.Add(new V1Volume(name: volumeName,
                     configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));
 
-                var mountPath = resource.Spec.StylesheetPath.Split('/')[0];
-
-                container.Env.Add(new V1EnvVar("ui_stylesheet", resource.Spec.StylesheetPath));
-                container.VolumeMounts.Add(new V1VolumeMount($"app/{mountPath}", volumeName));
+                container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.StylesPath}/{Constants.StyleSheetName}"));
+                container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.StylesPath}", volumeName));
             }
 
             return new V1Deployment(metadata: metadata, spec: spec);

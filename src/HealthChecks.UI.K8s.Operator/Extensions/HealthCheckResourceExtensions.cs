@@ -18,6 +18,7 @@ namespace HealthChecks.UI.K8s.Operator.Extensions
         }
 
         public static bool HasBrandingConfigured(this HealthCheckResource resource) =>
-                resource.Spec.StylesheetContent.NotEmpty() && resource.Spec.StylesheetPath.NotEmpty();
+                resource.Spec.StylesheetContent.NotEmpty();
+            
     }
 }

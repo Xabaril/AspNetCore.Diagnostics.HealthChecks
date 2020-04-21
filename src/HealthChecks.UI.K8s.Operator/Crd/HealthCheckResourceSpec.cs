@@ -14,7 +14,6 @@ namespace HealthChecks.UI.K8s.Operator
         public string HealthChecksScheme { get; set; }
         public string Image { get; set; }
         public string ImagePullPolicy { get; set; }
-        public string StylesheetPath { get; set; }
         public string StylesheetContent { get; set; }
         public List<NameValueObject> ServiceAnnotations { get; set; } = new List<NameValueObject>();
         public List<NameValueObject> DeploymentAnnotations { get; set; } = new List<NameValueObject>();

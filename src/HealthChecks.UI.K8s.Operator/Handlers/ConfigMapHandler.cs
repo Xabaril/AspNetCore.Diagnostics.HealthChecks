@@ -61,18 +61,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         }
         public V1ConfigMap Build(HealthCheckResource resource)
         {
-            string path = resource.Spec.StylesheetPath;
-
-            if(path.Contains(SPLIT_CHAR))
-            {
-                path = path.Split(SPLIT_CHAR)[^1];
-            }
-
             return new V1ConfigMap
             {
                 BinaryData = new Dictionary<string, byte[]>
                 {
-                    [path] = Encoding.UTF8.GetBytes(resource.Spec.StylesheetContent)
+                    [Constants.StyleSheetName] = Encoding.UTF8.GetBytes(resource.Spec.StylesheetContent)
                 },                
                 Metadata = new V1ObjectMeta
                 {

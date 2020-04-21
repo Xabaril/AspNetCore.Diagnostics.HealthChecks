@@ -42,10 +42,7 @@ spec:
             image:
               type: string
             imagePullPolicy:
-              type: string
-            stylesheetPath:
-              type: string
-              pattern: ^[^\/][^.]+$
+              type: string            
             stylesheetContent:
               type: string
             serviceAnnotations:

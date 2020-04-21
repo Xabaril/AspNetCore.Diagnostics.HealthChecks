@@ -32,7 +32,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 ## HealthChecks UI and Kubernetes
 
-- Kubernetes Operator (Documentation in progress)
+- [Kubernetes Operator](#UI-Kubernetes-Operator)
 - [Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
 
 ## HealthChecks and Devops
@@ -496,6 +496,12 @@ services.AddHealthChecksUI(setupSettings: setup =>
 .AddInMemoryStorage();
 
 ```
+
+## UI Kubernetes Operator
+
+If you are running your workloads in kubernetes, you can benefit from it and have your healthchecks environment ready and monitoring in seconds.
+
+You can get for information in our [HealthChecks Operator docs](./doc/k8s-operator.md)
 
 ## UI Kubernetes automatic services discovery
 

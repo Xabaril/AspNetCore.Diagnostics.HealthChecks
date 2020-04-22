@@ -30,7 +30,7 @@
     <StackExchangeRedis>2.0.513</StackExchangeRedis>
     <RabbitMQClient>5.0.1</RabbitMQClient>
     <RavenDBClient>4.1.3</RavenDBClient>
-    <OracleManagedDataAccessCore>2.18.3</OracleManagedDataAccessCore>
+    <OracleManagedDataAccessCore>2.19.60</OracleManagedDataAccessCore>
     <Npgsql>3.2.6</Npgsql>
     <MongoDBDriver>2.5.0</MongoDBDriver>
     <MySqlConnector>0.40.4</MySqlConnector>
@@ -81,7 +81,7 @@
     <HealthCheckRabbitMQ>2.2.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>2.2.3</HealthCheckEventStore>
     <HealthCheckElasticsearch>2.2.4</HealthCheckElasticsearch>
-    <HealthCheckOracle>2.2.0</HealthCheckOracle>
+    <HealthCheckOracle>2.2.1</HealthCheckOracle>
     <HealthCheckNpgSql>2.2.1</HealthCheckNpgSql>
     <HealthCheckMongoDB>2.2.3</HealthCheckMongoDB>
     <HealthCheckMySql>2.2.0</HealthCheckMySql>

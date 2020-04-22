@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FunctionalTests.Base;
 using HealthChecks.Publisher.Prometheus;
-using HealthChecks.Publisher.Prometheus.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +35,9 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecksPrometheusExporter("/health");
+                    app.UseHealthChecks("/health", new HealthCheckOptions {
+                        ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
+                    });
                 }));
 
             var response = await sut.CreateRequest("/health")
@@ -59,7 +60,9 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecksPrometheusExporter("/health");
+                    app.UseHealthChecks("/health", new HealthCheckOptions {
+                        ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
+                    });
                 }));
 
             var response = await sut.CreateRequest("/health")

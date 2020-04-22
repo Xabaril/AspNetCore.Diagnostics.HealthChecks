@@ -121,6 +121,8 @@
     <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.1.1</HealthCheckPublisherPrometheus>
+    <!-- TODO: check which version is the correct one --> 
+    <HealthCheckPrometheusMetrics>3.1.1-preview</HealthCheckPrometheusMetrics>
     <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
     <HealthCheckKeyVault>3.1.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>

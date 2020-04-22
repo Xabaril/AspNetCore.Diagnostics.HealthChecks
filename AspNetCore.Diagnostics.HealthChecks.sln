@@ -129,7 +129,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.PostgreSQL.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.StorageProviders", "samples\HealthChecks.UI.StorageProviders\HealthChecks.UI.StorageProviders.csproj", "{E3162C66-F57D-4517-AD15-8A513278DD66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.MySql.Storage", "src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj", "{C755B50A-61F6-46D2-B5D0-51AE25CAFB70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.MySql.Storage", "src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj", "{C755B50A-61F6-46D2-B5D0-51AE25CAFB70}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Prometheus.Metrics", "src\HealthChecks.Prometheus.Metrics\HealthChecks.Prometheus.Metrics.csproj", "{A292F77F-DAC9-4539-A9A1-E4FFA5FADDFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -349,6 +351,10 @@ Global
 		{C755B50A-61F6-46D2-B5D0-51AE25CAFB70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C755B50A-61F6-46D2-B5D0-51AE25CAFB70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C755B50A-61F6-46D2-B5D0-51AE25CAFB70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A292F77F-DAC9-4539-A9A1-E4FFA5FADDFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A292F77F-DAC9-4539-A9A1-E4FFA5FADDFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A292F77F-DAC9-4539-A9A1-E4FFA5FADDFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A292F77F-DAC9-4539-A9A1-E4FFA5FADDFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -407,6 +413,7 @@ Global
 		{62511278-8E38-4753-A6AF-5C770BC0D4DC} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E3162C66-F57D-4517-AD15-8A513278DD66} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 		{C755B50A-61F6-46D2-B5D0-51AE25CAFB70} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{A292F77F-DAC9-4539-A9A1-E4FFA5FADDFD} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Publisher.Prometheus.Extensions {
+namespace HealthChecks.Prometheus.Metrics.Extensions {
     public static class PrometheusHealthCheckMiddleware {
         public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, string metricsEndpointName = "/healthmetrics") 
         {

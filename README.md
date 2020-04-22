@@ -41,7 +41,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 ## HealthChecks Tutorials
 
-- [Tutorials, Demos and walkthroughs](#Tutorials,-demos-and-walkthroughs-on-ASP.NET-Core-HealthChecks)
+- [Tutorials, Demos and walkthroughs](#tutorials-demos-and-walkthroughs-on-aspnet-core-healthchecks)
 
 ## Health Checks
 

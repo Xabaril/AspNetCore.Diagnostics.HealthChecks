@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace HealthChecks.UI.Core.Notifications
 {
@@ -73,9 +74,9 @@ namespace HealthChecks.UI.Core.Notifications
                     }
 
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
-                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
-                        .Replace(Keys.FAILURE_BOOKMARK, failure)
-                        .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
+                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, HttpUtility.JavaScriptStringEncode(name))
+                        .Replace(Keys.FAILURE_BOOKMARK, HttpUtility.JavaScriptStringEncode(failure))
+                        .Replace(Keys.DESCRIPTIONS_BOOKMARK, HttpUtility.JavaScriptStringEncode(description));
 
 
                     Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);

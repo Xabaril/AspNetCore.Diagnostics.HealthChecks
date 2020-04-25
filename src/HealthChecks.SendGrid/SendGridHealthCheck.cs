@@ -50,7 +50,7 @@ namespace HealthChecks.SendGrid
                         null,
                         new Dictionary<string, object>
                         {
-                            { "responseStatusCode", response.StatusCode }
+                            { "responseStatusCode", (int)response.StatusCode }
                         });
                 }
 

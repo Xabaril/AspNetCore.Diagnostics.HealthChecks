@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
-                sp => new SendGridHealthCheck(apiKey,() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName)), 
+                sp => new SendGridHealthCheck(apiKey, () => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName)), 
                 failureStatus,
                 tags,
                 timeout));

@@ -79,6 +79,7 @@
     <SolrNetCore>1.0.19</SolrNetCore>
     <IBMMQDotnetClient>9.1.4</IBMMQDotnetClient>
     <PomeloEntityFrameworkCoreMySql>3.1.1</PomeloEntityFrameworkCoreMySql>
+    <SendGrid>9.14.0</SendGrid>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -131,5 +132,6 @@
     <HealthCheckIoTHub>3.1.1</HealthCheckIoTHub>
     <HealthCheckIbmMQ>3.1.1</HealthCheckIbmMQ>
     <HealthChecksUIK8sOperator>3.1.0-beta.7</HealthChecksUIK8sOperator>
+    <HealthCheckSendGrid>3.1.1-beta.1</HealthCheckSendGrid>
   </PropertyGroup>
 </Project>

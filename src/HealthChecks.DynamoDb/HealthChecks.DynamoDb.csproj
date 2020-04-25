@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;DynamoDb;AWS</PackageTags>
     <Description>HealthChecks.DynamoDb is the health check package for AWS DynamoDb.</Description>
     <Version>$(HealthCheckDynamoDb)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.DynamoDb</PackageId>
   </PropertyGroup>
   <ItemGroup>

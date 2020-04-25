@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Health;MongoDb</PackageTags>
     <Description>HealthChecks.MongoDb is the health check package for MongoDb.</Description>
     <Version>$(HealthCheckMongoDB)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.MongoDb</PackageId>
   </PropertyGroup> 
   <ItemGroup>

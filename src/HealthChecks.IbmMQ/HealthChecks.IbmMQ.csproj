@@ -5,7 +5,6 @@
     <PackageTags>HealthCheck;IbmMQ</PackageTags>
     <Description>HealthChecks.IbmMQ is the health check package for IbmMQ.</Description>
     <Version>$(HealthCheckIbmMQ)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.IbmMQ</PackageId>
   </PropertyGroup>
 

@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Consul</PackageTags>
     <Description>HealthChecks.Consul is the health check package for Consul Server.</Description>
     <Version>$(HealthCheckConsul)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Consul</PackageId>
   </PropertyGroup>
   <ItemGroup>

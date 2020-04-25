@@ -5,7 +5,6 @@
     <Description>HealthChecks.Network is the health check package for network services.</Description>
     <PackageTags>HealthCheck;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Version>$(HealthCheckNetwork)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Network</PackageId>
   </PropertyGroup>
 

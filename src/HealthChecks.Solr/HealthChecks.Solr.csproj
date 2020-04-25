@@ -4,7 +4,6 @@
     <Description>HealthChecks.solr is the health check package for solr.</Description>
     <PackageTags>HealthCheck;Health;solr</PackageTags>
     <Version>$(HealthCheckSolr)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Solr</PackageId>
   </PropertyGroup>
   <ItemGroup>

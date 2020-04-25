@@ -6,7 +6,6 @@
     <Version>$(HealthCheckUI)</Version>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
     <PackageId>AspNetCore.HealthChecks.UI</PackageId>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

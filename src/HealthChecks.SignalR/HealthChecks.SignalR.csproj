@@ -4,7 +4,6 @@
     <Description>HealthChecks.SignalR is the health check package for SignalR.</Description>
     <PackageTags>HealthCheck;Health;SignalR</PackageTags>
     <Version>$(HealthCheckSignalR)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.SignalR</PackageId>
   </PropertyGroup>
   <ItemGroup>

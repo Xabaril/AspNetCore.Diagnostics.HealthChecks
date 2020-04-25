@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Azure;IoT Hub</PackageTags>
     <Description>HealthChecks.Azure.IoTHub is the health check package for Azure IoT Hub.</Description>
     <Version>$(HealthCheckIoTHub)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Azure.IoTHub</PackageId>
   </PropertyGroup>
   <ItemGroup>

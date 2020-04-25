@@ -5,7 +5,6 @@
     <Description>HealthChecks.UI.MySql.Storage package contains the required classes to use the MySql database provider in the UI</Description>
     <PackageTags>HealthCheck;HealthChecks;MySql</PackageTags>
     <Version>$(HealthCheckUIMySqlStorage)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.UI.MySql.Storage</PackageId>
   </PropertyGroup>
 

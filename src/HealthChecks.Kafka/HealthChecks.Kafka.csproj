@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Health;Kafka;Confluent</PackageTags>
     <Description>HealthChecks.Kafka is the health check package for Kafka.</Description>
     <Version>$(HealthCheckKafka)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Kafka</PackageId>
   </PropertyGroup>
   <ItemGroup>

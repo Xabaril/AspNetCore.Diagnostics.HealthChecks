@@ -4,7 +4,6 @@
     <Description>HealthChecks.Redis is the health check package for Redis.</Description>
     <PackageTags>HealthCheck;Health;Redis</PackageTags>
     <Version>$(HealthCheckRedis)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Redis</PackageId>
   </PropertyGroup>
   <ItemGroup>

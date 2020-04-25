@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Azure Key Vault;Secrets</PackageTags>
     <Description>HealthChecks.AzureKeyVault is the health check package for Azure Key Vault secrets</Description>
     <Version>$(HealthCheckKeyVault)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.AzureKeyVault</PackageId>
   </PropertyGroup>
   <ItemGroup>

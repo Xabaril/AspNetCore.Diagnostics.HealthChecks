@@ -5,7 +5,6 @@
     <Description>HealthChecks.UI.SqlServer.Storage package contains the required classes to use SqlServer provider in the UI</Description>
     <PackageTags>HealthCheck;HealthChecks;SqlServer</PackageTags>
     <Version>$(HealthCheckUISqlServerStorage)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.UI.SqlServer.Storage</PackageId>
   </PropertyGroup>
 

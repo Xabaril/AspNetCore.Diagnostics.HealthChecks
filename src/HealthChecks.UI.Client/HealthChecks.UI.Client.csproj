@@ -5,7 +5,6 @@
     <PackageTags>HealthCheck;UI;Client</PackageTags>
     <Description>HealthChecks.UI.Client contains some mandatory abstractions to work with HealthChecks.UI.</Description>
     <Version>$(HealthCheckUIClient)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.UI.Client</PackageId>
   </PropertyGroup>
   <ItemGroup>

@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Azure;ServiceBus;EventHub</PackageTags>
     <Description>HealthChecks.AzureServiceBus is the health check package for Azure EventHub, and Azure Service Bus Queues and Topics.</Description>
     <Version>$(HealthCheckAzureServiceBus)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.AzureServiceBus</PackageId>
   </PropertyGroup>
   

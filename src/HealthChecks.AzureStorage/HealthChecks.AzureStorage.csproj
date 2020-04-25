@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.AzureStorage is the health check package for Blobs, Tables and Queues.</Description>
     <Version>$(HealthCheckAzureStorage)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.AzureStorage</PackageId>
   </PropertyGroup>
   <ItemGroup>

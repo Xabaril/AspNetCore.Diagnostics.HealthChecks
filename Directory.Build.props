@@ -5,6 +5,7 @@
   <PropertyGroup>
     <EnableSourceLink>false</EnableSourceLink>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <!-- Disable Sourcelink on non Windows machines due to a bug -->

@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Azure;CosmosDb</PackageTags>
     <Description>HealthChecks.CosmosDb is the health check package for Azure CosmosDb.</Description>
     <Version>$(HealthCheckCosmosDb)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.CosmosDb</PackageId>
   </PropertyGroup>
   <ItemGroup>

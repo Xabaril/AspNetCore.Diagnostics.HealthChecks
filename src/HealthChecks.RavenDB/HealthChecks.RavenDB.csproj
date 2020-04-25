@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Health;RavenDB</PackageTags>
     <Description>HealthChecks.RavenDB is the health check package for RavenDB.</Description>
     <Version>$(HealthCheckRavenDB)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.RavenDB</PackageId>
   </PropertyGroup>
   <ItemGroup>

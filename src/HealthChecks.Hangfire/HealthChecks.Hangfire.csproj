@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Hangfire</PackageTags>
     <Description>HealthChecks.Hangfire is the health check package for Hangfire.</Description>
     <Version>$(HealthCheckHangfire)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Hangfire</PackageId>
   </PropertyGroup>
   <ItemGroup>

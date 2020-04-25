@@ -4,7 +4,6 @@
     <Description>HealthChecks.Elasticsearch is the health check package for Elasticsearch.</Description>
     <PackageTags>HealthCheck;Health;Elasticsearch</PackageTags>
     <Version>$(HealthCheckElasticsearch)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Elasticsearch</PackageId>
   </PropertyGroup>
   <ItemGroup>

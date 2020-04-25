@@ -4,7 +4,6 @@
     <Description>HealthChecks.SqlServer is the health check package for SqlServer.</Description>
     <PackageTags>HealthCheck;Health;Sql Server</PackageTags>
     <Version>$(HealthCheckSqlServer)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.SqlServer</PackageId>
   </PropertyGroup>
   <ItemGroup>

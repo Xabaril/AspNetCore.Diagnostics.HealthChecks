@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;CloudFirestore</PackageTags>
     <Description>HealthChecks.Gcp.CloudFirestore is the health check package for the Firebase Cloud Firebase realtime database.</Description>
     <Version>$(HealthCheckCloudFirestore)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Gcp.CloudFirestore</PackageId>
   </PropertyGroup>
   

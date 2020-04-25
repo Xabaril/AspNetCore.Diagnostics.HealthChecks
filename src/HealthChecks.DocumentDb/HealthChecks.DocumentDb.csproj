@@ -4,7 +4,6 @@
     <PackageTags>HealthCheck;Azure;DocumentDb</PackageTags>
     <Description>HealthChecks.DocumentDb is the health check package for Azure DocumentDb.</Description>
     <Version>$(HealthCheckDocumentDb)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.DocumentDb</PackageId>
   </PropertyGroup>
   <ItemGroup>

@@ -5,7 +5,6 @@
     <Description>HealthChecks.UI.InMemory.Storage package contains the required classes to use InMemory provider in the UI</Description>
     <PackageTags>HealthCheck;HealthChecks;InMemory</PackageTags>
     <Version>$(HealthCheckUIInMemoryStorage)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.UI.InMemory.Storage</PackageId>
   </PropertyGroup>
 

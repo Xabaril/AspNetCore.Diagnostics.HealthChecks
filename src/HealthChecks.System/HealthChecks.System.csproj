@@ -4,7 +4,6 @@
     <Description>HealthChecks.System is the system health check package.</Description>
     <PackageTags>HealthCheck;Beat;Health;System;Ping;Disk Storage</PackageTags>
     <Version>$(HealthCheckSystem)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.System</PackageId>
   </PropertyGroup>
   <ItemGroup>

@@ -5,7 +5,6 @@
     <Description>HealthChecks.NpgSql is a health check for Postgress Sql.</Description>
     <PackageTags>HealthCheck;Beat;Health;Postgress</PackageTags>
     <Version>$(HealthCheckNpgSql)</Version>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.NpgSql</PackageId>
   </PropertyGroup>
   <ItemGroup>

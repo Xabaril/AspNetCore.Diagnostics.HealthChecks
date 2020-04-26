@@ -1,12 +1,7 @@
 ﻿<Project>
   <Import Project="build/dependencies.props" />
 
-  <!-- Temporal - Waiting for a netcoreapp 3.0 version of Github Source Link -->
-  <PropertyGroup>
-    <EnableSourceLink>false</EnableSourceLink>
-    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
-  </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
       <PrivateAssets>all</PrivateAssets>
@@ -20,5 +15,5 @@
     <EnableSourceLink>false</EnableSourceLink>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
   </PropertyGroup>
-  
+
 </Project>

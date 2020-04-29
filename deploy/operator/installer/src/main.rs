@@ -16,7 +16,7 @@ const API_HC_REPOSITORY: &str =
 const RAW_HC_REPOSITORY: &str =
     "https://raw.githubusercontent.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/master";
 const OPERATOR_CRD_PATH: &str = "deploy/operator/crd/healthcheck-crd.yaml";
-const OPERATOR_TREE: &str = "31bb25e1778dd3af99501ca457d0ef653ea31618";
+const OPERATOR_TREE: &str = "c49f85b12dfd756881d564a9bd6392743d723a8e";
 const USER_AGENT: &str = "Operator Installer Agent";
 
 #[derive(Debug, PartialEq)]

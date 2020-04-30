@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SendGridHealthCheckExtensions
     {
-        private const string NAME = "sendgrid";
+        internal const string NAME = "sendgrid";
 
         /// <summary>
         /// Add a health check for SendGrid.
@@ -30,8 +30,8 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddHttpClient(registrationName);
 
             return builder.Add(new HealthCheckRegistration(
-                registrationName,
-                sp => new SendGridHealthCheck(apiKey, () => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName)), 
+                name ?? NAME,
+                sp => new SendGridHealthCheck(apiKey, sp.GetRequiredService<IHttpClientFactory>()), 
                 failureStatus,
                 tags,
                 timeout));

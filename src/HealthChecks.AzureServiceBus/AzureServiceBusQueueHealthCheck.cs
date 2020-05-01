@@ -22,16 +22,8 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Action<Message> configuringMessage = null, bool requiresSession = false)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-            if (string.IsNullOrEmpty(queueName))
-            {
-                throw new ArgumentNullException(nameof(queueName));
-            }
-            _connectionString = connectionString;
-            _queueName = queueName;
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _queueName = queueName ?? throw new ArgumentNullException(nameof(queueName));
             _configuringMessage = configuringMessage;
             _requiresSession = requiresSession;
         }

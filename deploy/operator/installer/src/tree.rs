@@ -8,6 +8,7 @@ pub struct Tree {
 pub struct TreeDefinition {
     pub path: String,
     pub url: String,
+    pub sha: String,
     #[serde(rename(deserialize = "type"))]
     pub file_type: String,
 }

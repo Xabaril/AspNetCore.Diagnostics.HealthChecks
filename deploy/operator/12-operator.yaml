@@ -5,6 +5,9 @@ metadata:
   namespace: healthchecks
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: healthchecks-ui-k8s-operator
   template:
     metadata:
       labels:

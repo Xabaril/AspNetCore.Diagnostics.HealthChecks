@@ -132,10 +132,22 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 metadata.Annotations.Add(annotation.Name, annotation.Value);
             }
 
+            var specification = spec.Template.Spec;
+            var container = specification.Containers.First();
+
+            for (int i = 0; i < resource.Spec.Webhooks.Count(); i++)
+            {
+                var webhook = resource.Spec.Webhooks[i];
+                _logger.LogInformation("Adding webhook configuration for webhook {Webhook}", webhook.Name);
+
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Name", webhook.Name));
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Uri", webhook.Uri));
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Payload", webhook.Payload));
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__RestoredPayload", webhook.RestoredPayload));
+            }
+
             if (resource.HasBrandingConfigured())
             {
-                var specification = spec.Template.Spec;
-                var container = specification.Containers.First();
                 var volumeName = "healthchecks-volume";
 
                 if (specification.Volumes == null) specification.Volumes = new List<V1Volume>();

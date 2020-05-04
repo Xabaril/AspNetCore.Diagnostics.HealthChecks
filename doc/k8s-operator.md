@@ -54,6 +54,7 @@ The [HealthCheck operator definition](https://github.com/Xabaril/AspNetCore.Diag
 | stylesheetContent     | css content used to brand the UI                                     | none                                                 |
 | serviceAnnotations    | name / value array to use custom annotations in UI service           | none                                                 |
 | deploymentAnnotations | name / value array to use custom annotations in UI Deployment        | none                                                 |
+| webhooks              | webhook array object (name, uri, payload and restoredPayload)        | none                                                 |
 
 ## Sample HealthChecks Operator Tutorial
 
@@ -237,3 +238,40 @@ healthchecks-ui-svc LoadBalancer 10.0.20.73 **51.138.24.168** 80:31343/TCP 16h
 Your UI endpoint will be listening in http://51.138.24.168/healthchecks and the labeled service should appear automatically.
 
 ![HealthChecksUIBranding](./images/ui-branding-2.jpg)
+
+## Webhooks Configuration
+
+You can configure webhook notifications by using the webhooks yaml array element. Each webhook definition requires a name, a uri and unhealthy notification and restore payloads.
+
+The UI hosted service will automatically trigger configured webhooks with the defined `payload` whenever a healthcheck reports unhealthy and will use `restoredPayload` to notify the healthcheck is up and running again.
+
+```yaml
+apiVersion: "aspnetcore.ui/v1"
+kind: HealthCheck
+metadata:
+  name: healthchecks-ui
+spec:
+  name: healthchecks-ui
+  servicesLabel: HealthChecks
+  stylesheetContent: >
+    :root {    
+      --primaryColor: #0f519f;
+      --secondaryColor: #f4f4f4;  
+      --bgMenuActive: #0f519f;
+      --bgButton: #0f519f;      
+      --bgAside: var(--primaryColor);   
+    }
+  webhooks:
+    - name: requestcatcher1
+      uri: https://healthchecks.requestcatcher.com
+      payload: '{ message: "Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]"}'
+      restoredPayload: '{ message: "[[LIVENESS]] is back to life"}'
+    - name: requestcatcher2
+      uri: https://healthchecks2.requestcatcher.com
+      payload: '{ message: "Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]"}'
+      restoredPayload: '{ message: "[[LIVENESS]] is back to life"}'
+```
+
+Once your webhooks are specified in the yaml definition, you can check if they are correctly configured in the UI webhooks section:
+
+![Webhooks](./images/ui-webhooks2.png)

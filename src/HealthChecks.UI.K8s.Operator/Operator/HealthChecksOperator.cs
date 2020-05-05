@@ -20,6 +20,8 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly ILogger<K8sOperator> _logger;
         private readonly CancellationTokenSource _operatorCts = new CancellationTokenSource();
         private readonly Channel<ResourceWatch> _channel;
+        private const int WaitForReplicaDelay = 5000;
+        private const int WaitForReplicaRetries = 10;
 
         public HealthChecksOperator(
             IKubernetes client,
@@ -106,6 +108,7 @@ namespace HealthChecks.UI.K8s.Operator
                         if (item.EventType == WatchEventType.Added)
                         {
                             await _controller.DeployAsync(item.Resource);
+                            await WaitForAvailableReplicas(item.Resource);
                             await _serviceWatcher.Watch(item.Resource, _operatorCts.Token);
                         }
                         else if (item.EventType == WatchEventType.Deleted)
@@ -118,6 +121,26 @@ namespace HealthChecks.UI.K8s.Operator
                     {
                         _diagnostics.OperatorThrow(ex);
                     }
+                }
+            }
+        }
+
+        private async Task WaitForAvailableReplicas(HealthCheckResource resource)
+        {
+            int retries = 1;
+            int availableReplicas = 0;
+
+            while (retries <= WaitForReplicaRetries && availableReplicas == 0)
+            {
+                var deployment = await _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
+
+                availableReplicas = deployment.Status.AvailableReplicas ?? 0;
+
+                if (availableReplicas == 0)
+                {
+                    _logger.LogInformation("The UI replica {Name} is not available yet, retrying...{Retries}/{MaxRetries}", deployment.Metadata.Name, retries, WaitForReplicaRetries);
+                    await Task.Delay(WaitForReplicaDelay);
+                    retries++;
                 }
             }
         }

@@ -107,9 +107,12 @@ namespace HealthChecks.UI.K8s.Operator
                     {
                         if (item.EventType == WatchEventType.Added)
                         {
-                            await _controller.DeployAsync(item.Resource);
-                            await WaitForAvailableReplicas(item.Resource);
-                            await _serviceWatcher.Watch(item.Resource, _operatorCts.Token);
+                            _ = Task.Run(async () =>
+                            {
+                                await _controller.DeployAsync(item.Resource);
+                                await WaitForAvailableReplicas(item.Resource);
+                                await _serviceWatcher.Watch(item.Resource, _operatorCts.Token);
+                            });
                         }
                         else if (item.EventType == WatchEventType.Deleted)
                         {
@@ -138,7 +141,7 @@ namespace HealthChecks.UI.K8s.Operator
 
                 if (availableReplicas == 0)
                 {
-                    _logger.LogInformation("The UI replica {Name} is not available yet, retrying...{Retries}/{MaxRetries}", deployment.Metadata.Name, retries, WaitForReplicaRetries);
+                    _logger.LogInformation("The UI replica {Name} in {Namespace} is not available yet, retrying...{Retries}/{MaxRetries}", deployment.Metadata.Name, resource.Metadata.NamespaceProperty, retries, WaitForReplicaRetries);
                     await Task.Delay(WaitForReplicaDelay);
                     retries++;
                 }

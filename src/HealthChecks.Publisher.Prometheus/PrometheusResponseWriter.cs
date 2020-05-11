@@ -29,7 +29,8 @@ namespace HealthChecks.Publisher.Prometheus
             }
         }
 
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) {
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) 
+        {
             await WritePrometheusResultText(context, report, false);
         }
     }

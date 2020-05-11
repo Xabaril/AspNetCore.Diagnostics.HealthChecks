@@ -4,8 +4,11 @@
 - Added new storage providers (SqlServer, InMemory, Sqlite, MySql and PostreSQL)
 - Added new storage providers [configuration environment variables for docker image](./ui-docker.md)
 - UI now reacts to services updates (health checks path / scheme) and removals from k8s operator
+- Bugfix - The UI now refreshes correctly when the k8s operator removes last endpoint
+- UI preview5 now allows updating stored configurations in startup #516
+- UI preview6 changes default webhook description message and enumerates failing liveness names
 
-**3.1.0**
+  **3.1.0**
 
 - Updated UI and dependencies to NetStandard 2.1
 

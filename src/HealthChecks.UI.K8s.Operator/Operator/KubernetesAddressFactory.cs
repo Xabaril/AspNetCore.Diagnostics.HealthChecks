@@ -19,7 +19,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 healthScheme = service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation];
             }
 
-            if (string.IsNullOrEmpty(healthScheme))
+            if (healthScheme.IsEmpty())
             {
                 healthScheme = Constants.DefaultScheme;
             }
@@ -45,7 +45,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 healthPath = service.Metadata.Annotations[Constants.HealthCheckPathAnnotation];
             }
 
-            if (string.IsNullOrEmpty(healthPath))
+            if (healthPath.IsEmpty())
             {
                 healthPath = Constants.DefaultHealthPath;
             }

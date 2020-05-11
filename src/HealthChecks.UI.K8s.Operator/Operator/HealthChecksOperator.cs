@@ -54,15 +54,15 @@ namespace HealthChecks.UI.K8s.Operator
         {
             _diagnostics.OperatorShuttingDown();
             _operatorCts.Cancel();
-            
-            if(_watcher != null && _watcher.Watching)
+
+            if (_watcher != null && _watcher.Watching)
             {
                 _watcher.Dispose();
             }
 
             _serviceWatcher.Dispose();
             _channel.Writer.Complete();
-            
+
             return Task.CompletedTask;
         }
 
@@ -101,15 +101,22 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 while (_channel.Reader.TryRead(out ResourceWatch item))
                 {
-                    if (item.EventType == WatchEventType.Added)
+                    try
                     {
-                        await _controller.DeployAsync(item.Resource);
-                        await _serviceWatcher.Watch(item.Resource, _operatorCts.Token);
+                        if (item.EventType == WatchEventType.Added)
+                        {
+                            await _controller.DeployAsync(item.Resource);
+                            await _serviceWatcher.Watch(item.Resource, _operatorCts.Token);
+                        }
+                        else if (item.EventType == WatchEventType.Deleted)
+                        {
+                            await _controller.DeleteDeploymentAsync(item.Resource);
+                            _serviceWatcher.Stopwatch(item.Resource);
+                        }
                     }
-                    else if (item.EventType == WatchEventType.Deleted)
+                    catch (Exception ex)
                     {
-                        await _controller.DeleteDeploymentAsync(item.Resource);
-                        _serviceWatcher.Stopwatch(item.Resource);
+                        _diagnostics.OperatorThrow(ex);
                     }
                 }
             }

@@ -1,10 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: healthchecks-ui-k8s-operator
   namespace: healthchecks
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: healthchecks-ui-k8s-operator
   template:
     metadata:
       labels:
@@ -13,7 +16,7 @@ spec:
       serviceAccountName: healthchecks-admin
       containers:
         - name: healthchecks-ui-k8s-operator
-          image: xabarilcoding/healthchecksui-k8s-operator
+          image: xabarilcoding/healthchecksui-k8s-operator:latest
           imagePullPolicy: Always
           resources:
             requests:

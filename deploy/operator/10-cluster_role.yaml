@@ -6,10 +6,11 @@ rules:
   - apiGroups:
       - "" #core API group
     resources:
-      - "services"
-      - "pods"
-      - "deployments"
-      - "secrets"
+      - services
+      - pods
+      - deployments
+      - secrets
+      - configmaps
     verbs:
       - "*"
   - apiGroups:

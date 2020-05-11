@@ -21,7 +21,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<V1Secret> GetOrCreate(HealthCheckResource resource)
+        public async Task<V1Secret> GetOrCreateAsync(HealthCheckResource resource)
         {
             var secret = await Get(resource);
             if (secret != null) return secret;

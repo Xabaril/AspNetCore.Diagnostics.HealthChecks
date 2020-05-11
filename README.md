@@ -32,7 +32,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 ## HealthChecks UI and Kubernetes
 
-- Kubernetes Operator (Documentation in progress)
+- [Kubernetes Operator](#UI-Kubernetes-Operator)
 - [Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
 
 ## HealthChecks and Devops
@@ -41,7 +41,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 ## HealthChecks Tutorials
 
-- [Tutorials, Demos and walkthroughs](#Tutorials,-demos-and-walkthroughs-on-ASP.NET-Core-HealthChecks)
+- [Tutorials, Demos and walkthroughs](#tutorials-demos-and-walkthroughs-on-aspnet-core-healthchecks)
 
 ## Health Checks
 
@@ -110,6 +110,7 @@ Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.SignalR
 Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
+Install-Package AspNetCore.HealthChecks.SendGrid
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -513,6 +514,12 @@ services.AddHealthChecksUI(setupSettings: setup =>
 .AddInMemoryStorage();
 
 ```
+
+## UI Kubernetes Operator
+
+If you are running your workloads in kubernetes, you can benefit from it and have your healthchecks environment ready and monitoring in seconds.
+
+You can get for information in our [HealthChecks Operator docs](./doc/k8s-operator.md)
 
 ## UI Kubernetes automatic services discovery
 

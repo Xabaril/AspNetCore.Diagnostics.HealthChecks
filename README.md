@@ -57,8 +57,10 @@ HealthChecks packages include health checks for:
 - RabbitMQ
 - IbmMQ
 - Elasticsearch
+- CosmosDb
 - Solr
 - Redis
+- SendGrid
 - System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
@@ -67,6 +69,7 @@ HealthChecks packages include health checks for:
 - Azure IoT Hub
 - Amazon DynamoDb
 - Amazon S3
+- Google Cloud Firestore
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
 - MongoDB
 - Kafka
@@ -86,6 +89,7 @@ Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.Elasticsearch
+Install-Package AspNetCore.HealthChecks.CosmosDb
 Install-Package AspNetCore.HealthChecks.Solr
 Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore

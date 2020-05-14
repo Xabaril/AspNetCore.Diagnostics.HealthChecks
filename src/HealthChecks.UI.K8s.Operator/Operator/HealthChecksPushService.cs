@@ -38,7 +38,7 @@ namespace HealthChecks.UI.K8s.Operator
                 string name = healthCheck.Name;
                 string uri = healthCheck.Uri;
 
-                logger.LogInformation("[PushService] Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", type, name, uri, uiAddress);
+                logger.LogInformation("[PushService] Namespace {Namespace} - Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", resource.Metadata.NamespaceProperty, type, name, uri, uiAddress);
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 

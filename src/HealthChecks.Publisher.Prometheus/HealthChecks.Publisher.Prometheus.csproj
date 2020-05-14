@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
     <PackageTags>HealthCheck;Publisher;Prometheus;Prometheus Gateway</PackageTags>
-    <Description>HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
+    <Description>[Deprecated! Use pull model with AspNetCore.HealthChecks.Prometheus.Metrics package instead] HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
     <Version>$(HealthCheckPublisherPrometheus)</Version>
     <PackageId>AspNetCore.HealthChecks.Publisher.Prometheus</PackageId>
   </PropertyGroup>

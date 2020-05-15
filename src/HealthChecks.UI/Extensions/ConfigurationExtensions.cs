@@ -1,7 +1,5 @@
 using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.Configuration
 {

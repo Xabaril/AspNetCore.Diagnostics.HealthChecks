@@ -1,6 +1,5 @@
 ﻿using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Microsoft.Extensions.DependencyInjection

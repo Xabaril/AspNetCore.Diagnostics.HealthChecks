@@ -1,8 +1,6 @@
 ﻿using k8s;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Controller;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using Microsoft.Extensions.Logging;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

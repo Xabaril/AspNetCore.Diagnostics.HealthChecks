@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HealthChecks.UI.Image.Configuration
+﻿namespace HealthChecks.UI.Image.Configuration
 {
     public class UIKeys
     {

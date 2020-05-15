@@ -1,13 +1,13 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FunctionalTests.Base;
 using FunctionalTests.HealthChecks.Publisher.Prometheus;
-using HealthChecks.Prometheus.Metrics.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FunctionalTests.HealthChecks.Prometheus.Metrics

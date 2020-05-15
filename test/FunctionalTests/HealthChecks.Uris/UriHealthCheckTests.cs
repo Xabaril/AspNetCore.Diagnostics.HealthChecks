@@ -1,10 +1,13 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.Uris;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -69,6 +72,82 @@ namespace FunctionalTests.HealthChecks.Uris
                    app.UseHealthChecks("/health", new HealthCheckOptions()
                    {
                        Predicate = r => r.Tags.Contains("uris")
+                   });
+               });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task be_healthy_if_content_matches()
+        {
+            var uri = new Uri("https://httpstat.us/200");
+
+            var webHostBuilder = new WebHostBuilder()
+               .UseStartup<DefaultStartup>()
+               .ConfigureServices(services =>
+               {
+                   services.AddHealthChecks()
+                    .AddUrlGroup(
+                       uri,
+                       uriOptionsSetup: opts => opts.AddCustomHeader("Accept", "*/*"),
+                       httpMethod: HttpMethod.Get,
+                       expectedContent: "200 OK",
+                       tags: new string[] { "uris" });
+               })
+               .Configure(app =>
+               {
+                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   {
+                       Predicate = r => r.Tags.Contains("uris"),
+                   });
+               });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task be_healthy_if_content_func_matches()
+        {
+            var uri = new Uri("https://httpbin.org/get");
+
+            var webHostBuilder = new WebHostBuilder()
+               .UseStartup<DefaultStartup>()
+               .ConfigureServices(services =>
+               {
+                   services.AddHealthChecks()
+                    .AddUrlGroup(
+                       uri, 
+                       httpMethod: HttpMethod.Get,
+                       contentCheckFunc: async httpContent =>
+                       {
+                           var json = await httpContent.ReadAsStringAsync();
+                           var jToken = JToken.Parse(json);
+                           if (jToken["url"].Value<string>() == "https://httpbin.org/get")
+                           {
+                               return new ExpectedContentResult();
+                           }
+                           return new UnexpectedContentResult("Url property didn't match.");
+                       }, 
+                       tags: new string[] { "uris" });
+               })
+               .Configure(app =>
+               {
+                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   {
+                       Predicate = r => r.Tags.Contains("uris"),
                    });
                });
 
@@ -204,6 +283,74 @@ namespace FunctionalTests.HealthChecks.Uris
             response.StatusCode
                     .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
+
+
+        [Fact]
+        public async Task be_unhealthy_if_content_doesnt_match()
+        {
+            var uri = new Uri("https://httpbin.org/get");
+
+            var webHostBuilder = new WebHostBuilder()
+               .UseStartup<DefaultStartup>()
+               .ConfigureServices(services =>
+               {
+                   services.AddHealthChecks()
+                    .AddUrlGroup(
+                       uri,
+                       httpMethod: HttpMethod.Get,
+                       expectedContent: "something random",
+                       tags: new string[] { "uris" });
+               })
+               .Configure(app =>
+               {
+                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   {
+                       Predicate = r => r.Tags.Contains("uris"),
+                   });
+               });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
+
+        [Fact]
+        public async Task be_unhealthy_if_content_func_doesnt_match()
+        {
+            var uri = new Uri("https://httpbin.org/get");
+
+            var webHostBuilder = new WebHostBuilder()
+               .UseStartup<DefaultStartup>()
+               .ConfigureServices(services =>
+               {
+                   services.AddHealthChecks()
+                    .AddUrlGroup(
+                       uri,
+                       httpMethod: HttpMethod.Get,
+                       contentCheckFunc: async httpContent => await Task.FromResult(new UnexpectedContentResult("Just cuz")),
+                       tags: new string[] { "uris" });
+               })
+               .Configure(app =>
+               {
+                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   {
+                       Predicate = r => r.Tags.Contains("uris"),
+                   });
+               });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
+
         [Fact]
         public async Task be_healthy_if_request_sucess_and_default_timeout_is_configured()
         {

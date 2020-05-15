@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using HealthChecks.Prometheus.Metrics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 
-namespace HealthChecks.Prometheus.Metrics.Extensions 
+namespace Microsoft.AspNetCore.Builder
 {
     public static class PrometheusHealthCheckMiddleware 
     {

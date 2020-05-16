@@ -17,6 +17,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Consul\HealthChecks.Consul.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />

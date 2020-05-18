@@ -79,6 +79,7 @@ HealthChecks packages include health checks for:
 - Hangfire
 - SignalR
 - Kubernetes
+- ArangoDB
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
@@ -115,6 +116,7 @@ Install-Package AspNetCore.HealthChecks.SignalR
 Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 Install-Package AspNetCore.HealthChecks.SendGrid
+Install-Package AspNetCore.HealthChecks.ArangoDb
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

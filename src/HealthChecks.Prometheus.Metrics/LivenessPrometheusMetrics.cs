@@ -1,7 +1,5 @@
-﻿using System.IO;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
-using Prometheus.Advanced;
 
 namespace HealthChecks.Prometheus.Metrics
 {
@@ -11,26 +9,28 @@ namespace HealthChecks.Prometheus.Metrics
         private const string HealthCheckLabelName = "healthcheck";
         private readonly Gauge _healthChecksDuration;
         private readonly Gauge _healthChecksResult;
-        protected readonly ICollectorRegistry Registry;
+        protected readonly CollectorRegistry Registry;
 
         internal LivenessPrometheusMetrics()
         {
-            _healthChecksResult = global::Prometheus.Metrics.CreateGauge("healthcheck",
+            // TODO: Allow injecting a custom registry
+            Registry = global::Prometheus.Metrics.DefaultRegistry;
+            var factory = global::Prometheus.Metrics.WithCustomRegistry(Registry);
+
+            _healthChecksResult = factory.CreateGauge("healthcheck",
                 "Shows raw health check status (0 = Unhealthy, 1 = Degraded, 2 = Healthy)", new GaugeConfiguration
                 {
                     LabelNames = new[] {HealthCheckLabelName},
                     SuppressInitialValue = false
                 });
 
-            _healthChecksDuration = global::Prometheus.Metrics.CreateGauge("healthcheck_duration_seconds",
+            _healthChecksDuration = factory.CreateGauge("healthcheck_duration_seconds",
                 "Shows duration of the health check execution in seconds",
                 new GaugeConfiguration
                 {
                     LabelNames = new[] {HealthCheckLabelName},
                     SuppressInitialValue = false
                 });
-
-            Registry = DefaultCollectorRegistry.Instance;
         }
         protected void WriteMetricsFromHealthReport(HealthReport report)
         {
@@ -42,15 +42,6 @@ namespace HealthChecks.Prometheus.Metrics
                 _healthChecksDuration.Labels(reportEntry.Key)
                     .Set(reportEntry.Value.Duration.TotalSeconds);
             }
-        }
-        protected static Stream CollectionToStreamWriter(ICollectorRegistry registry)
-        {
-            var metrics = registry.CollectAll();
-            var stream = new MemoryStream();
-            ScrapeHandler.ProcessScrapeRequest(metrics, ContentType, stream);
-
-            stream.Position = 0;
-            return stream;
         }
     }
 }

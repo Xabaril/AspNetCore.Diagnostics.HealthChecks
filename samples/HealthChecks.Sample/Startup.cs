@@ -57,6 +57,7 @@ namespace HealthChecks.Sample
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 })
+                .UseHealthChecksPrometheusExporter("/metrics")
                 .UseRouting()
                 .UseEndpoints(config => config.MapDefaultControllerRoute());
         }

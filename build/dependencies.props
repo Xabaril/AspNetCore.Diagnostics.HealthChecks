@@ -70,7 +70,7 @@
     <NewtonsoftJson>12.0.2</NewtonsoftJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
-    <PrometheusNet>2.1.3</PrometheusNet>
+    <PrometheusNet>3.5.0</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>

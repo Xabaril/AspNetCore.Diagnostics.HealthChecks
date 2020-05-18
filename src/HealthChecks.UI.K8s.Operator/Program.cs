@@ -42,6 +42,7 @@ namespace HealthChecks.UI.K8s.Operator
 
                     return new Kubernetes(config);
                 })
+                .AddHttpClient()
                 .AddTransient<IHealthChecksController, HealthChecksController>()
                 .AddSingleton<OperatorDiagnostics>()
                 .AddSingleton<DeploymentHandler>()

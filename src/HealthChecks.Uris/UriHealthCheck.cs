@@ -48,7 +48,7 @@ namespace HealthChecks.Uris
                     using (var timeoutSource = new CancellationTokenSource(timeout))
                     using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
                     {
-                        var response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
+                        var response = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, linkedSource.Token);
 
                         if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {

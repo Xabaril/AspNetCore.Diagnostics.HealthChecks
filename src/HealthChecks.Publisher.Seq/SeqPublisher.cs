@@ -70,7 +70,7 @@ namespace HealthChecks.Publisher.Seq
                 var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}");
                 pushMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                (await httpClient.SendAsync(pushMessage))
+                (await httpClient.SendAsync(pushMessage, HttpCompletionOption.ResponseHeadersRead))
                     .EnsureSuccessStatusCode();
             }
             catch (Exception ex)

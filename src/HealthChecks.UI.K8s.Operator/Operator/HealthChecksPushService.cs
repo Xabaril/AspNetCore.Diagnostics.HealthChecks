@@ -42,13 +42,13 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
-                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}",
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}");
+                request.Content = new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }), Encoding.UTF8, "application/json");
 
-                  new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
-                  {
-                      PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                  }), Encoding.UTF8, "application/json"));
-
+                var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 logger.LogInformation("[PushService] Notification result for {name} - status code: {statuscode}", notificationService.Metadata.Name, response.StatusCode);
 

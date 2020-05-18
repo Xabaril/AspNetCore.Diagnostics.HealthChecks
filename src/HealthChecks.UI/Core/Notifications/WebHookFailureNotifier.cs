@@ -122,8 +122,10 @@ namespace HealthChecks.UI.Core.Notifications
         {
             try
             {
-                var payload = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
-                var response = await _httpClient.PostAsync(uri, payload);
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+                request.Content = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE);
+
+                var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogError("The webhook notification has not executed successfully for {name} webhook. The error code is {statuscode}.", name, response.StatusCode);

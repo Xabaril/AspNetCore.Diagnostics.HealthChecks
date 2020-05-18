@@ -121,8 +121,8 @@
     <HealthCheckUIMySqlStorage>3.1.1-preview3</HealthCheckUIMySqlStorage>
     <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
-    <HealthCheckPublisherPrometheus>3.1.2</HealthCheckPublisherPrometheus>
-    <HealthCheckPrometheusMetrics>3.1.2</HealthCheckPrometheusMetrics>
+    <HealthCheckPublisherPrometheus>3.1.3</HealthCheckPublisherPrometheus>
+    <HealthCheckPrometheusMetrics>3.1.3</HealthCheckPrometheusMetrics>
     <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
     <HealthCheckKeyVault>3.1.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>

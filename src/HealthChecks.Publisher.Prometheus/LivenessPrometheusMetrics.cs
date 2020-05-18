@@ -13,7 +13,6 @@ namespace HealthChecks.Publisher.Prometheus
 
         internal LivenessPrometheusMetrics()
         {
-            // TODO: Allow injecting a custom registry
             Registry = Metrics.DefaultRegistry;
             var factory = Metrics.WithCustomRegistry(Registry);
 

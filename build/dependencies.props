@@ -63,8 +63,8 @@
     <MicrosoftAzureCosmosDB>3.1.1</MicrosoftAzureCosmosDB>
     <GoogleCloudFirestore>1.0.0</GoogleCloudFirestore>
     <HangfireCore>1.7.6</HangfireCore>
-    <MicrosoftAzureCosmosTable>2.0.0-preview</MicrosoftAzureCosmosTable>
-    <AzureStorageBlobs>12.4.1</AzureStorageBlobs>
+    <MicrosoftAzureCosmosTable>1.0.7</MicrosoftAzureCosmosTable>
+    <AzureStorageBlobs>12.4.2</AzureStorageBlobs>
     <AzureStorageQueues>12.3.0</AzureStorageQueues>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
@@ -110,7 +110,7 @@
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>3.1.1</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>3.2.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.2.1</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>

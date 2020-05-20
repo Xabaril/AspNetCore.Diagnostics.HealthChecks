@@ -31,7 +31,6 @@ namespace HealthChecks.AzureStorage
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Table '{_tableName}' not exists");
                     }
                 }
-
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

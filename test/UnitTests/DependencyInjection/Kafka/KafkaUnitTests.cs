@@ -4,7 +4,6 @@ using HealthChecks.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 

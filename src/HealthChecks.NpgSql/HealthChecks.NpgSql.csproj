@@ -2,26 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <Description>HealthChecks.NpgSql is a health check for Postgress Sql.</Description>
     <PackageTags>HealthCheck;Beat;Health;Postgress</PackageTags>
     <Version>$(HealthCheckNpgSql)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-    <Company>$(Company)</Company>
-    <Authors>$(Authors)</Authors>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.NpgSql</PackageId>
-    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="$(Npgsql)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 

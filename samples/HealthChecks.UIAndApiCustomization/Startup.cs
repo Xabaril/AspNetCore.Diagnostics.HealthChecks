@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -19,6 +18,7 @@ namespace HealthChecks.UIAndApi
 
             services
                 .AddHealthChecksUI()
+                .AddInMemoryStorage()
                 //                .AddHealthChecksUI(setupSettings: settings =>
                 //                {
                 //                    settings
@@ -26,6 +26,7 @@ namespace HealthChecks.UIAndApi
                 //                        .AddWebhookNotification("webhook1", "http://webhook", "mypayload")
                 //                        .SetEvaluationTimeInSeconds(16);
                 //                })
+                .Services
                 .AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-1")
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-2")

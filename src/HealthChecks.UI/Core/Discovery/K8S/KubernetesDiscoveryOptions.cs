@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace HealthChecks.UI.Core.Discovery.K8S
 {

@@ -43,6 +43,48 @@ spec:
               type: string
             imagePullPolicy:
               type: string
+            stylesheetContent:
+              type: string
+            serviceAnnotations:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: string
+            deployAnnotations:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: string
+                required:
+                  - name
+                  - value
+            webhooks:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  uri:
+                    type: string
+                  payload:
+                    type: string
+                  restoredPayload:
+                    type: string
+                required:
+                  - name
+                  - uri
+                  - payload
+                  - restoredPayload
+
           required:
             - name
             - servicesLabel

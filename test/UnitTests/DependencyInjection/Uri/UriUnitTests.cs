@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using HealthChecks.SqlServer;
 using HealthChecks.Uris;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

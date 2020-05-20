@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.TestHost;
 using HealthChecks.UI.Core;
 using FluentAssertions;
-using FunctionalTests.Base;
-using System.Threading.Tasks;
 
 namespace FunctionalTests.HealthChecks.UI
 {
@@ -50,7 +45,7 @@ namespace FunctionalTests.HealthChecks.UI
 
             var testServer = new TestServer(host, featureCollection);
         }
-        
+
     }
 
 }

@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.Client;
-using HealthChecks.UI.Configuration;
+﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
@@ -25,7 +24,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly HttpClient _httpClient;
         private readonly ILogger<HealthCheckReportCollector> _logger;
         private readonly ServerAddressesService _serverAddressService;
-
+        private readonly IEnumerable<IHealthCheckCollectorInterceptor> _interceptors;
         private static readonly Dictionary<int, Uri> endpointAddresses = new Dictionary<int, Uri>();
 
         public HealthCheckReportCollector(
@@ -34,13 +33,15 @@ namespace HealthChecks.UI.Core.HostedService
             IOptions<Settings> settings,
             IHttpClientFactory httpClientFactory,
             ILogger<HealthCheckReportCollector> logger,
-            ServerAddressesService serverAddressService)
+            ServerAddressesService serverAddressService,
+            IEnumerable<IHealthCheckCollectorInterceptor> interceptors)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
             _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _serverAddressService = serverAddressService ?? throw new ArgumentNullException(nameof(serverAddressService));
+            _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
         }
         public async Task Collect(CancellationToken cancellationToken)
@@ -58,6 +59,11 @@ namespace HealthChecks.UI.Core.HostedService
                         break;
                     }
 
+                    foreach (var interceptor in _interceptors)
+                    {
+                        await interceptor.OnCollectExecuting(item);
+                    }
+
                     var healthReport = await GetHealthReport(item);
 
                     if (healthReport.Status != UIHealthStatus.Healthy)
@@ -73,9 +79,15 @@ namespace HealthChecks.UI.Core.HostedService
                     }
 
                     await SaveExecutionHistory(item, healthReport);
+
+                    foreach (var interceptor in _interceptors)
+                    {
+                        await interceptor.OnCollectExecuted(healthReport);
+                    }
                 }
 
                 _logger.LogDebug("HealthReportCollector has completed.");
+
             }
         }
         private async Task<UIHealthReport> GetHealthReport(HealthCheckConfiguration configuration)
@@ -146,7 +158,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
-                
+
                 if (execution.Uri != configuration.Uri)
                 {
                     UpdateUris(execution, configuration);

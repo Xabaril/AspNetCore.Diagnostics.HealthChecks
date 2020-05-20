@@ -1,25 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <PackageTags>HealthCheck;Health;Sqlite</PackageTags>
     <Description>HealthChecks.Sqlite is the health check package for Sqlite.</Description>
     <Version>$(HealthCheckSqlite)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-    <Company>$(Company)</Company>
-    <Authors>$(Authors)</Authors>
     <LangVesrion>latest</LangVesrion>
     <PackageId>AspNetCore.HealthChecks.Sqlite</PackageId>
-    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="$(MicrosoftDataSqlite)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

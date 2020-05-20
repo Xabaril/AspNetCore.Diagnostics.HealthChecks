@@ -1,27 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <PackageTags>HealthCheck;CloudFirestore</PackageTags>
     <Description>HealthChecks.Gcp.CloudFirestore is the health check package for the Firebase Cloud Firebase realtime database.</Description>
     <Version>$(HealthCheckCloudFirestore)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-    <Company>$(Company)</Company>
-    <Authors>$(Authors)</Authors>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.Gcp.CloudFirestore</PackageId>
-    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Firestore" Version="$(GoogleCloudFirestore)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>

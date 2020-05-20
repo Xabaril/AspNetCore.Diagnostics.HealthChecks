@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <Description>HealthChecks.UI.InMemory.Storage package contains the required classes to use InMemory provider in the UI</Description>
+    <PackageTags>HealthCheck;HealthChecks;InMemory</PackageTags>
+    <Version>$(HealthCheckUIInMemoryStorage)</Version>
+    <PackageId>AspNetCore.HealthChecks.UI.InMemory.Storage</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCoreInMemory)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+  </ItemGroup>
+
+</Project>

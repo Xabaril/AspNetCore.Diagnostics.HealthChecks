@@ -1,8 +1,6 @@
-﻿using HealthChecks.Publisher.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
+﻿using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Publisher.ApplicationInsights

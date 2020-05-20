@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
-using System.Threading.Tasks;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ

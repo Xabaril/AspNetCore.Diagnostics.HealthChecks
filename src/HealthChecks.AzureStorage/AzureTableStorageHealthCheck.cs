@@ -1,12 +1,12 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureTableStorageHealthCheck
+	public class AzureTableStorageHealthCheck
         : IHealthCheck
     {
         private readonly string _connectionString;

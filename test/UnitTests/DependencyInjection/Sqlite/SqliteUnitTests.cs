@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using HealthChecks.Sqlite;
-using HealthChecks.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;

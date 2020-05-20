@@ -4,6 +4,7 @@ using k8s;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Net;
@@ -17,8 +18,9 @@ namespace HealthChecks.UI.Core.Discovery.K8S
     {
         private readonly KubernetesDiscoverySettings _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
+        private readonly IHostApplicationLifetime _hostLifetime;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IKubernetes _discoveryClient;
+        private IKubernetes _discoveryClient;
         private readonly HttpClient _clusterServiceClient;
         private readonly KubernetesAddressFactory _addressFactory;
 
@@ -26,17 +28,17 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
-            KubernetesDiscoverySettings discoveryOptions,
+            IOptions<KubernetesDiscoverySettings> discoveryOptions,
             IHttpClientFactory httpClientFactory,
-            IKubernetes discoveryClient,
-            ILogger<KubernetesDiscoveryHostedService> logger)
+            ILogger<KubernetesDiscoveryHostedService> logger,
+            IHostApplicationLifetime hostLifetime)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _discoveryOptions = discoveryOptions ?? throw new ArgumentNullException(nameof(discoveryOptions));
+            _discoveryOptions = discoveryOptions?.Value ?? throw new ArgumentNullException(nameof(discoveryOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _discoveryClient = discoveryClient ?? throw new ArgumentNullException(nameof(discoveryClient));
+            _hostLifetime = hostLifetime ?? throw new ArgumentNullException(nameof(hostLifetime));            
             _clusterServiceClient = httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME) ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _addressFactory = new KubernetesAddressFactory(discoveryOptions);
+            _addressFactory = new KubernetesAddressFactory(_discoveryOptions);
 
         }
         public Task StartAsync(CancellationToken cancellationToken)
@@ -50,11 +52,32 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return Task.CompletedTask;
         }
+        private Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            _hostLifetime.ApplicationStarted.Register(async () =>
+            {
+                if (_discoveryOptions.Enabled)
+                {
+                    try
+                    {
+                        _discoveryClient = InitializeKubernetesClient();
+                        await StartK8sService(cancellationToken);
+                    }
+                    catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+                    {
+                        // We are halting, task cancellation is expected.
+                    }
+                }
+
+            });
+
+            return Task.CompletedTask;
+        }
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
-        private async Task ExecuteAsync(CancellationToken cancellationToken)
+        private async Task StartK8sService(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -125,6 +148,33 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             });
 
             return livenessDb.SaveChangesAsync();
+        }
+
+        private IKubernetes InitializeKubernetesClient()
+        {
+            KubernetesClientConfiguration kubernetesConfig;
+
+            if (!string.IsNullOrEmpty(_discoveryOptions.ClusterHost) && !string.IsNullOrEmpty(_discoveryOptions.Token))
+            {
+                kubernetesConfig = new KubernetesClientConfiguration
+                {
+                    Host = _discoveryOptions.ClusterHost,
+                    AccessToken = _discoveryOptions.Token,
+                    // Some cloud services like Azure AKS use self-signed certificates not valid for httpclient.
+                    // With this method we allow invalid certificates
+                    SkipTlsVerify = true
+                };
+            }
+            else if (KubernetesClientConfiguration.IsInCluster())
+            {
+                kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
+            }
+            else
+            {
+                kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            }
+
+            return new Kubernetes(kubernetesConfig);
         }
     }
 }

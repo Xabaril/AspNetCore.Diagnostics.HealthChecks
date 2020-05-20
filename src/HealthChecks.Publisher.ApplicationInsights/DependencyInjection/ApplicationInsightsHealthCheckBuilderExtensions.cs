@@ -1,5 +1,4 @@
 ﻿using HealthChecks.Publisher.ApplicationInsights;
-using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;

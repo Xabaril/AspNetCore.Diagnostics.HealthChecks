@@ -2,15 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Timeout;
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,6 +30,8 @@ namespace HealthChecks.UIAndApi
 
             services
                 .AddHealthChecksUI()
+                .AddInMemoryStorage()
+                .Services
                 .AddHealthChecks()
                 .AddCheck<RandomHealthCheck>("random")
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"))

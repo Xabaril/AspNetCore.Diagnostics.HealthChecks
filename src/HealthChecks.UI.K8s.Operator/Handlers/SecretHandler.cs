@@ -4,7 +4,6 @@ using k8s.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +20,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<V1Secret> GetOrCreate(HealthCheckResource resource)
+        public async Task<V1Secret> GetOrCreateAsync(HealthCheckResource resource)
         {
             var secret = await Get(resource);
             if (secret != null) return secret;

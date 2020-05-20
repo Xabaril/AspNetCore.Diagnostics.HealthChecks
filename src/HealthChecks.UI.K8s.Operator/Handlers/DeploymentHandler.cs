@@ -4,6 +4,7 @@ using k8s.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
@@ -63,12 +64,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public V1Deployment Build(HealthCheckResource resource)
         {
-
             var metadata = new V1ObjectMeta
             {
                 OwnerReferences = new List<V1OwnerReference> {
                     resource.CreateOwnerReference()
                 },
+                Annotations = new Dictionary<string, string>(),
                 Labels = new Dictionary<string, string>
                 {
                     ["app"] = resource.Spec.Name
@@ -94,7 +95,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         Labels = new Dictionary<string, string>
                         {
                             ["app"] = resource.Spec.Name
-                        }
+                        },
                     },
                     Spec = new V1PodSpec
                     {
@@ -113,13 +114,51 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                                 {
                                     new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.DefaultUIPath),
                                     new V1EnvVar("enable_push_endpoint", "true"),
-                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret")))
+                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
+                                    new V1EnvVar("Logging__LogLevel__Default", "Debug"),
+                                    new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__System", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
                                 }
                             }
                         }
                     }
                 }
             };
+
+            foreach (var annotation in resource.Spec.DeploymentAnnotations)
+            {
+                _logger.LogInformation("Adding annotation {Annotation} to ui deployment with value {AnnotationValue}", annotation.Name, annotation.Value);
+                metadata.Annotations.Add(annotation.Name, annotation.Value);
+            }
+
+            var specification = spec.Template.Spec;
+            var container = specification.Containers.First();
+
+            for (int i = 0; i < resource.Spec.Webhooks.Count(); i++)
+            {
+                var webhook = resource.Spec.Webhooks[i];
+                _logger.LogInformation("Adding webhook configuration for webhook {Webhook}", webhook.Name);
+
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Name", webhook.Name));
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Uri", webhook.Uri));
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Payload", webhook.Payload));
+                container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__RestoredPayload", webhook.RestoredPayload));
+            }
+
+            if (resource.HasBrandingConfigured())
+            {
+                var volumeName = "healthchecks-volume";
+
+                if (specification.Volumes == null) specification.Volumes = new List<V1Volume>();
+                if (container.VolumeMounts == null) container.VolumeMounts = new List<V1VolumeMount>();
+
+                specification.Volumes.Add(new V1Volume(name: volumeName,
+                    configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));
+
+                container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.StylesPath}/{Constants.StyleSheetName}"));
+                container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.StylesPath}", volumeName));
+            }
 
             return new V1Deployment(metadata: metadata, spec: spec);
         }

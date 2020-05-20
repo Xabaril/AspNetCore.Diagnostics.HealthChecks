@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
-    <NetStandardTargetVersion>netstandard2.1</NetStandardTargetVersion>
+    <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
     <NetCoreTargetVersion>netcoreapp3.1</NetCoreTargetVersion>
     <MicrosoftNETTestSdk>16.5.0</MicrosoftNETTestSdk>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
-    <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
     <RepositoryUrl>https://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
@@ -21,15 +21,19 @@
     <MicrosoftAspNetCoreJwtBearer>3.1.3</MicrosoftAspNetCoreJwtBearer>
     <MicrosoftExtensionsHttp>3.1.3</MicrosoftExtensionsHttp>
     <MicrosoftExtensionsDependencyInjection>3.1.3</MicrosoftExtensionsDependencyInjection>
+    <MicrosoftExtensionsDependencyInjectionAbstractions>3.1.3</MicrosoftExtensionsDependencyInjectionAbstractions>
     <MicrosoftAspNetCoreTestHost>3.1.3</MicrosoftAspNetCoreTestHost>
     <MicrosoftExtensionsLoggingConsole>3.1.3</MicrosoftExtensionsLoggingConsole>
     <MicrosoftEntityFrameworkCore>3.1.3</MicrosoftEntityFrameworkCore>
     <MicrosoftEntityFrameworkCoreDesign>3.1.3</MicrosoftEntityFrameworkCoreDesign>
+    <MicrosoftEntityFrameworkCoreSqlServer>3.1.3</MicrosoftEntityFrameworkCoreSqlServer>
     <MicrosoftEntityFrameworkCoreSqlite>3.1.3</MicrosoftEntityFrameworkCoreSqlite>
     <MicrosoftEntityFrameworkCoreSqliteDesign>1.1.6</MicrosoftEntityFrameworkCoreSqliteDesign>
+    <MicrosoftEntityFrameworkCoreInMemory>3.1.3</MicrosoftEntityFrameworkCoreInMemory>
     <MicrosoftExtensionsConfigurationJson>3.1.3</MicrosoftExtensionsConfigurationJson>
     <MicrosoftAspNetCoreSignalRClient>3.0.0</MicrosoftAspNetCoreSignalRClient>
     <SystemDataSqlClient>4.7.0</SystemDataSqlClient>
+    <NpgsqlEntityFrameworkCorePostgreSQL>3.1.3</NpgsqlEntityFrameworkCorePostgreSQL>
     <MicrosoftDataSqlClient>1.1.1</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>3.1.3</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
@@ -47,11 +51,11 @@
     <StackExchangeRedis>2.0.601</StackExchangeRedis>
     <RabbitMQClient>5.1.1</RabbitMQClient>
     <RavenDBClient>4.2.3</RavenDBClient>
-    <OracleManagedDataAccessCore>2.19.31</OracleManagedDataAccessCore>
+    <OracleManagedDataAccessCore>2.19.60</OracleManagedDataAccessCore>
     <Npgsql>4.0.10</Npgsql>
     <MongoDBDriver>2.9.1</MongoDBDriver>
     <MySqlConnector>0.56.0</MySqlConnector>
-    <ConfluentKafka>1.3.0</ConfluentKafka>
+    <ConfluentKafka>1.4.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
     <NEST>7.3.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
@@ -68,7 +72,7 @@
     <NewtonsoftJson>12.0.2</NewtonsoftJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
-    <PrometheusNet>2.1.3</PrometheusNet>
+    <PrometheusNet>3.5.0</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
@@ -76,6 +80,9 @@
     <KubernetesClient>1.6.10</KubernetesClient>
     <SolrNetCore>1.0.19</SolrNetCore>
     <IBMMQDotnetClient>9.1.4</IBMMQDotnetClient>
+    <PomeloEntityFrameworkCoreMySql>3.1.1</PomeloEntityFrameworkCoreMySql>
+    <SendGrid>9.14.0</SendGrid>
+    <ArangoDBNetStandard>1.0.0-alpha02</ArangoDBNetStandard>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -84,43 +91,52 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>3.1.0</HealthCheckIdSvr>
-    <HealthCheckSqlServer>3.1.0</HealthCheckSqlServer>
-    <HealthCheckSqlite>3.1.0</HealthCheckSqlite>
-    <HealthCheckUri>3.1.0</HealthCheckUri>
-    <HealthCheckRedis>3.1.0</HealthCheckRedis>
-    <HealthCheckRabbitMQ>3.1.0</HealthCheckRabbitMQ>
-    <HealthCheckEventStore>3.1.0</HealthCheckEventStore>
-    <HealthCheckElasticsearch>3.1.0</HealthCheckElasticsearch>
-    <HealthCheckSolr>3.1.0</HealthCheckSolr>
-    <HealthCheckOracle>3.1.0</HealthCheckOracle>
-    <HealthCheckNpgSql>3.1.0</HealthCheckNpgSql>
-    <HealthCheckMongoDB>3.1.0</HealthCheckMongoDB>
-    <HealthCheckMySql>3.1.0</HealthCheckMySql>
-    <HealthCheckKafka>3.1.0</HealthCheckKafka>
-    <HealthCheckSystem>3.1.0</HealthCheckSystem>
-    <HealthCheckNetwork>3.1.0</HealthCheckNetwork>
-    <HealthCheckDynamoDb>3.1.0</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>3.1.0</HealthCheckCosmosDb>
-    <HealthCheckDocumentDb>3.1.0</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>3.1.0</HealthCheckAzureStorage>
-    <HealthCheckHangfire>3.1.0</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>3.1.0</HealthCheckAzureServiceBus>
-    <HealthCheckConsul>3.1.0</HealthCheckConsul>
-    <HealthCheckUI>3.1.0</HealthCheckUI>
-    <HealthCheckUIClient>3.1.0</HealthCheckUIClient>
-    <HealthCheckPublisherAppplicationInsights>3.1.0</HealthCheckPublisherAppplicationInsights>
-    <HealthCheckPublisherDatadog>3.1.0</HealthCheckPublisherDatadog>
-    <HealthCheckPublisherPrometheus>3.1.0</HealthCheckPublisherPrometheus>
-    <HealthCheckAWSS3>3.1.0</HealthCheckAWSS3>
-    <HealthCheckKeyVault>3.1.0</HealthCheckKeyVault>
-    <HealthCheckPublisherSeq>3.1.0</HealthCheckPublisherSeq>
-    <HealthCheckRavenDB>3.1.0</HealthCheckRavenDB>
-    <HealthCheckKubernetes>3.1.0</HealthCheckKubernetes>
-    <HealthCheckSignalR>3.1.0</HealthCheckSignalR>
-    <HealthCheckCloudFirestore>3.1.0</HealthCheckCloudFirestore>
-    <HealthCheckIoTHub>3.1.0</HealthCheckIoTHub>
-    <HealthCheckIbmMQ>3.1.0</HealthCheckIbmMQ>
-    <HealthChecksUIK8sOperator>3.1.0-beta.1</HealthChecksUIK8sOperator>
+    <HealthCheckIdSvr>3.1.1</HealthCheckIdSvr>
+    <HealthCheckSqlServer>3.1.1</HealthCheckSqlServer>
+    <HealthCheckSqlite>3.1.1</HealthCheckSqlite>
+    <HealthCheckUri>3.1.1</HealthCheckUri>
+    <HealthCheckRedis>3.1.1</HealthCheckRedis>
+    <HealthCheckRabbitMQ>3.1.1</HealthCheckRabbitMQ>
+    <HealthCheckEventStore>3.1.1</HealthCheckEventStore>
+    <HealthCheckElasticsearch>3.1.1</HealthCheckElasticsearch>
+    <HealthCheckSolr>3.1.1</HealthCheckSolr>
+    <HealthCheckOracle>3.1.2</HealthCheckOracle>
+    <HealthCheckNpgSql>3.1.1</HealthCheckNpgSql>
+    <HealthCheckMongoDB>3.1.1</HealthCheckMongoDB>
+    <HealthCheckMySql>3.1.1</HealthCheckMySql>
+    <HealthCheckKafka>3.1.2</HealthCheckKafka>
+    <HealthCheckSystem>3.1.1</HealthCheckSystem>
+    <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
+    <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
+    <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
+    <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
+    <HealthCheckAzureStorage>3.1.1</HealthCheckAzureStorage>
+    <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
+    <HealthCheckAzureServiceBus>3.2.1</HealthCheckAzureServiceBus>
+    <HealthCheckConsul>3.1.1</HealthCheckConsul>
+    <HealthCheckUI>3.1.1-preview6</HealthCheckUI>
+    <HealthCheckUICore>3.1.1-preview3</HealthCheckUICore>
+    <HealthCheckUIClient>3.1.1-preview3</HealthCheckUIClient>
+    <HealthCheckUISqlServerStorage>3.1.1-preview3</HealthCheckUISqlServerStorage>
+    <HealthCheckUISQLiteStorage>3.1.1-preview3</HealthCheckUISQLiteStorage>
+    <HealthChecksUIPostgreSQLStorage>3.1.1-preview3</HealthChecksUIPostgreSQLStorage>
+    <HealthCheckUIInMemoryStorage>3.1.1-preview3</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>3.1.1-preview3</HealthCheckUIMySqlStorage>
+    <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
+    <HealthCheckPublisherPrometheus>3.1.3</HealthCheckPublisherPrometheus>
+    <HealthCheckPrometheusMetrics>3.1.3</HealthCheckPrometheusMetrics>
+    <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
+    <HealthCheckKeyVault>3.1.1</HealthCheckKeyVault>
+    <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>
+    <HealthCheckRavenDB>3.1.1</HealthCheckRavenDB>
+    <HealthCheckKubernetes>3.1.1</HealthCheckKubernetes>
+    <HealthCheckSignalR>3.1.1</HealthCheckSignalR>
+    <HealthCheckCloudFirestore>3.1.1</HealthCheckCloudFirestore>
+    <HealthCheckIoTHub>3.1.1</HealthCheckIoTHub>
+    <HealthCheckIbmMQ>3.1.1</HealthCheckIbmMQ>
+    <HealthChecksUIK8sOperator>3.1.0-beta.8</HealthChecksUIK8sOperator>
+    <HealthCheckSendGrid>3.1.1-preview1</HealthCheckSendGrid>
+    <HealthCheckArangoDb>3.1.1-preview1</HealthCheckArangoDb>
   </PropertyGroup>
 </Project>

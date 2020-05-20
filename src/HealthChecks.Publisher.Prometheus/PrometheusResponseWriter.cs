@@ -1,32 +1,28 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.Prometheus
 {
     public sealed class PrometheusResponseWriter : LivenessPrometheusMetrics
     {
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok = false)
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok)
         {
             var instance = new PrometheusResponseWriter();
             instance.WriteMetricsFromHealthReport(report);
 
-            using (var resultStream = CollectionToStreamWriter(instance.Registry))
+            context.Response.ContentType = ContentType;
+            if (alwaysReturnHttp200Ok)
             {
-                var content = await new StreamContent(resultStream)
-                   .ReadAsStringAsync();
-
-                context.Response.ContentType = ContentType;
-
-                if (alwaysReturnHttp200Ok)
-                {
-                    context.Response.StatusCode = StatusCodes.Status200OK;
-                }
-
-                await context.Response.WriteAsync(content, Encoding.UTF8);
+                context.Response.StatusCode = StatusCodes.Status200OK;
             }
+
+            await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
+        }
+
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) 
+        {
+            await WritePrometheusResultText(context, report, false);
         }
     }
 }

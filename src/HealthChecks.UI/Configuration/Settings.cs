@@ -72,7 +72,7 @@ namespace HealthChecks.UI.Configuration
         {
             var delegatingHandlerType = typeof(T);
 
-            if(!DelegatingHandlerTypes.ContainsKey(delegatingHandlerType.FullName))
+            if (!DelegatingHandlerTypes.ContainsKey(delegatingHandlerType.FullName))
             {
                 DelegatingHandlerTypes.Add(delegatingHandlerType.FullName, delegatingHandlerType); 
             }

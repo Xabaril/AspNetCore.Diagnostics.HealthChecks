@@ -17,7 +17,7 @@ using YamlDotNet.Core.Tokens;
 
 namespace FunctionalTests.HealthChecks.UI.Configuration
 {
-
+    [Collection("execution")]
     public class UI_configuration_should
     {
         [Fact]

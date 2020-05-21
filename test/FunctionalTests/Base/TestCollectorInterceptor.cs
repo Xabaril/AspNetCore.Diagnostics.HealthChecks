@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
+namespace FunctionalTests.Base
 {
     internal class TestCollectorInterceptor : IHealthCheckCollectorInterceptor
     {

@@ -1,5 +1,4 @@
 using System;
-using System.Security.Policy;
 using HealthChecks.UI.Image.Configuration.Helpers;
 
 namespace HealthChecks.UI.Image.Configuration

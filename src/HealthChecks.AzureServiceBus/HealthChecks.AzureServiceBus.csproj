@@ -1,27 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
     <PackageTags>HealthCheck;Azure;ServiceBus;EventHub</PackageTags>
     <Description>HealthChecks.AzureServiceBus is the health check package for Azure EventHub, and Azure Service Bus Queues and Topics.</Description>
     <Version>$(HealthCheckAzureServiceBus)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-    <Company>$(Company)</Company>
-    <Authors>$(Authors)</Authors>
-    <LangVersion>latest</LangVersion>
     <PackageId>AspNetCore.HealthChecks.AzureServiceBus</PackageId>
-    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.EventHubs" Version="$(MicrosoftAzureEventHubs)" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="$(MicrosoftAzureServiceBus)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

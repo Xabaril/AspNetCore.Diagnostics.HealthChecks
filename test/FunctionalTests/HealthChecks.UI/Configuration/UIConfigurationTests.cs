@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using FluentAssertions;
@@ -7,7 +6,6 @@ using FunctionalTests.Base;
 using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
-using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

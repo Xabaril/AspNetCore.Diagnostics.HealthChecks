@@ -11,12 +11,8 @@ use crossterm::{
 use std::io::{stdout, Write};
 use std::process::{exit, Command};
 
-const API_HC_REPOSITORY: &str =
-    "https://api.github.com/repos/Xabaril/AspNetCore.Diagnostics.HealthChecks";
-const RAW_HC_REPOSITORY: &str =
-    "https://raw.githubusercontent.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/master";
+const REPOSITORY_PATH: &str = "Xabaril/AspNetCore.Diagnostics.HealthChecks";
 const OPERATOR_CRD_PATH: &str = "deploy/operator/crd/healthcheck-crd.yaml";
-const OPERATOR_TREE: &str = "31bb25e1778dd3af99501ca457d0ef653ea31618";
 const USER_AGENT: &str = "Operator Installer Agent";
 
 #[derive(Debug, PartialEq)]
@@ -59,27 +55,20 @@ fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
             "Reading yaml definition files from healthchecks repository",
         );
 
-        let tree_url = format!("{}/git/trees/{}", API_HC_REPOSITORY, OPERATOR_TREE);
+        let deploy_tree = get_operator_tree("master", |t| t.path == "deploy").await;
+        let operator_tree = get_operator_tree(&deploy_tree.sha, |t| t.path == "operator").await;
+        println!("Master operator tree is {}", operator_tree.url);
 
-        let client = surf::Client::new();
-        let resp: Tree = client
-            .get(tree_url)
-            .set_header("USER-AGENT", USER_AGENT)
-            .recv_json()
-            .await?;
-
-        let mut blobs = resp
-            .tree
-            .into_iter()
-            .filter(|t| t.file_type == "blob")
-            .collect::<Vec<TreeDefinition>>();
+        let mut blobs = get_operator_blobs(operator_tree.url).await;
 
         blobs.sort_by(|a, b| a.path.cmp(&b.path));
 
         for definition in blobs {
             let definition_path = format!(
                 "{}/{}/{}",
-                RAW_HC_REPOSITORY, "deploy/operator", definition.path
+                operator_raw_path(),
+                "deploy/operator",
+                definition.path
             );
             if definition_path.contains("namespace") && k8s_command == K8sCommand::Delete {
                 continue;
@@ -110,7 +99,7 @@ fn check_kubectl() {
 
 fn execute_crd(command: &K8sCommand) {
     display(Color::Green, "Processing Custom Resource Definition");
-    let crd_path = format!("{}/{}", RAW_HC_REPOSITORY, OPERATOR_CRD_PATH);
+    let crd_path = format!("{}/{}", operator_raw_path(), OPERATOR_CRD_PATH);
     execute_definition(crd_path, &command)
 }
 
@@ -140,6 +129,44 @@ fn display_deploy() {
     )
 }
 
+async fn get_operator_tree<P>(identifier: &str, predicate: P) -> TreeDefinition
+where
+    P: FnMut(&TreeDefinition) -> bool,
+{
+    let client = surf::Client::new();
+    let resp: Tree = client
+        .get(operator_tree_url(identifier))
+        .set_header("USER-AGENT", USER_AGENT)
+        .recv_json()
+        .await
+        .unwrap();
+
+    return resp
+        .tree
+        .into_iter()
+        .filter(predicate)
+        .collect::<Vec<TreeDefinition>>()
+        .first()
+        .unwrap()
+        .clone();
+}
+
+async fn get_operator_blobs(uri: String) -> Vec<TreeDefinition> {
+    let client = surf::Client::new();
+    let resp: Tree = client
+        .get(uri)
+        .set_header("USER-AGENT", USER_AGENT)
+        .recv_json()
+        .await
+        .unwrap();
+
+    return resp
+        .tree
+        .into_iter()
+        .filter(|t| t.file_type == "blob")
+        .collect::<Vec<TreeDefinition>>();
+}
+
 fn display(color: Color, text: &str) {
     execute!(
         stdout(),
@@ -148,4 +175,19 @@ fn display(color: Color, text: &str) {
         ResetColor
     )
     .unwrap();
+}
+
+fn operator_api_path() -> String {
+    format!("https://api.github.com/repos/{}", REPOSITORY_PATH)
+}
+
+fn operator_raw_path() -> String {
+    format!(
+        "https://raw.githubusercontent.com/{}/master",
+        REPOSITORY_PATH
+    )
+}
+
+fn operator_tree_url(identifier: &str) -> String {
+    format!("{}/git/trees/{}", operator_api_path(), identifier)
 }

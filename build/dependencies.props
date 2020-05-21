@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
-    <PackageLicenseUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
     <RepositoryUrl>https://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
@@ -47,6 +47,7 @@
     <MicrosoftSourceLinkGithub>1.0.0</MicrosoftSourceLinkGithub>
     <FluentAssertions>5.9.0</FluentAssertions>
     <xunit>2.4.1</xunit>
+    <NSubstitute>4.2.1</NSubstitute>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
     <StackExchangeRedis>2.0.601</StackExchangeRedis>
     <RabbitMQClient>5.1.1</RabbitMQClient>
@@ -63,14 +64,16 @@
     <MicrosoftAzureCosmosDB>3.1.1</MicrosoftAzureCosmosDB>
     <GoogleCloudFirestore>1.0.0</GoogleCloudFirestore>
     <HangfireCore>1.7.6</HangfireCore>
-    <WindowsAzureStorage>9.3.3</WindowsAzureStorage>
+    <MicrosoftAzureCosmosTable>1.0.7</MicrosoftAzureCosmosTable>
+    <AzureStorageBlobs>12.4.2</AzureStorageBlobs>
+    <AzureStorageQueues>12.3.0</AzureStorageQueues>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.101.69</AWSSDKDynamoDBv2>
     <NewtonsoftJson>12.0.2</NewtonsoftJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
-    <PrometheusNet>2.1.3</PrometheusNet>
+    <PrometheusNet>3.5.0</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
     <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
@@ -79,6 +82,8 @@
     <SolrNetCore>1.0.19</SolrNetCore>
     <IBMMQDotnetClient>9.1.4</IBMMQDotnetClient>
     <PomeloEntityFrameworkCoreMySql>3.1.1</PomeloEntityFrameworkCoreMySql>
+    <SendGrid>9.14.0</SendGrid>
+    <ArangoDBNetStandard>1.0.0-alpha02</ArangoDBNetStandard>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -106,11 +111,11 @@
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>3.1.1</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>3.2.0</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>3.1.1</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>3.2.1</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>
-    <HealthCheckUI>3.1.1-preview5</HealthCheckUI>
+    <HealthCheckUI>3.1.1-preview6</HealthCheckUI>
     <HealthCheckUICore>3.1.1-preview3</HealthCheckUICore>
     <HealthCheckUIClient>3.1.1-preview3</HealthCheckUIClient>
     <HealthCheckUISqlServerStorage>3.1.1-preview3</HealthCheckUISqlServerStorage>
@@ -120,7 +125,8 @@
     <HealthCheckUIMySqlStorage>3.1.1-preview3</HealthCheckUIMySqlStorage>
     <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
-    <HealthCheckPublisherPrometheus>3.1.1</HealthCheckPublisherPrometheus>
+    <HealthCheckPublisherPrometheus>3.1.3</HealthCheckPublisherPrometheus>
+    <HealthCheckPrometheusMetrics>3.1.3</HealthCheckPrometheusMetrics>
     <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
     <HealthCheckKeyVault>3.1.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>
@@ -130,6 +136,8 @@
     <HealthCheckCloudFirestore>3.1.1</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.1.1</HealthCheckIoTHub>
     <HealthCheckIbmMQ>3.1.1</HealthCheckIbmMQ>
-    <HealthChecksUIK8sOperator>3.1.0-beta.7</HealthChecksUIK8sOperator>
+    <HealthChecksUIK8sOperator>3.1.0-beta.8</HealthChecksUIK8sOperator>
+    <HealthCheckSendGrid>3.1.1-preview1</HealthCheckSendGrid>
+    <HealthCheckArangoDb>3.1.1-preview1</HealthCheckArangoDb>
   </PropertyGroup>
 </Project>

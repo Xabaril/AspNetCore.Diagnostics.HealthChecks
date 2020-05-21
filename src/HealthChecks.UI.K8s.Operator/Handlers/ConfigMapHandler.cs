@@ -4,10 +4,7 @@ using k8s.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.Encodings;
-using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers

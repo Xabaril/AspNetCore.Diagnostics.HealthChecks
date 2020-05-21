@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HealthChecks.UI
+﻿namespace HealthChecks.UI
 {
     internal class Keys
     {

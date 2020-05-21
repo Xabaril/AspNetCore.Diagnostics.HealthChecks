@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureTableStorageHealthCheck
+	public class AzureTableStorageHealthCheck
         : IHealthCheck
     {
         private readonly string _connectionString;
@@ -22,17 +21,16 @@ namespace HealthChecks.AzureStorage
             try
             {
                 var storageAccount = CloudStorageAccount.Parse(_connectionString);
-                var blobClient = storageAccount.CreateCloudTableClient();
+                var tableClient = storageAccount.CreateCloudTableClient();
 
                 if (!string.IsNullOrEmpty(_tableName))
                 {
-                    var table = blobClient.GetTableReference(_tableName);
-                    if (!await table.ExistsAsync())
+                    var table = tableClient.GetTableReference(_tableName);
+                    if (!await table.ExistsAsync(cancellationToken))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Table '{_tableName}' not exists");
                     }
                 }
-
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

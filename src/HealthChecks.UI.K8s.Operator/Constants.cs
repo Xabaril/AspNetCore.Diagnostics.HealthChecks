@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HealthChecks.UI.K8s.Operator
+﻿namespace HealthChecks.UI.K8s.Operator
 {
     internal class Constants
     {

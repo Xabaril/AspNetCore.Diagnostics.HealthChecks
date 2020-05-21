@@ -1,17 +1,13 @@
 ﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
-using HealthChecks.UI.Core.Discovery.K8S;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -80,6 +76,20 @@ namespace HealthChecks.UI.Core.HostedService
             else if (isInitialized && healthCheckConfigurations.Any())
             {
                 var dbConfigurations = await context.Configurations.ToListAsync();
+
+                var existingConfigurations = dbConfigurations
+                    .Where(hc => healthCheckConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
+
+                foreach (var item in existingConfigurations)
+                {
+                    var uri = healthCheckConfigurations.First(hc => hc.Name == item.Name).Uri;
+                    if (!uri.Equals(item.Uri, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        item.Uri = uri;
+                        _logger.LogInformation("Updating service {service} to new uri: {uri}", item.Name, item.Uri);
+                    }
+                }
+
                 var newConfigurations = healthCheckConfigurations
                     .Where(hc => !dbConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
 
@@ -87,7 +97,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     foreach (var item in newConfigurations)
                     {
-                        _logger.LogInformation($"Adding new service {item.Name} to database");
+                        _logger.LogInformation("Adding new service {service} to database", item.Name);
                         await context.AddAsync(item);
                     }
                 }
@@ -98,7 +108,7 @@ namespace HealthChecks.UI.Core.HostedService
 
         private async Task<bool> ShouldMigrateDatabase(HealthChecksDb context)
         {
-            return (!_settings.DisableMigrations  &&
+            return (!_settings.DisableMigrations &&
                 !context.Database.IsInMemory() &&
                 (await context.Database.GetPendingMigrationsAsync()).Any());
         }

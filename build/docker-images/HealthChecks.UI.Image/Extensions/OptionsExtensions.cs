@@ -1,10 +1,6 @@
 ﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Image.Configuration;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Image.Extensions
 {

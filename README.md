@@ -57,8 +57,10 @@ HealthChecks packages include health checks for:
 - RabbitMQ
 - IbmMQ
 - Elasticsearch
+- CosmosDb
 - Solr
 - Redis
+- SendGrid
 - System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
@@ -67,6 +69,7 @@ HealthChecks packages include health checks for:
 - Azure IoT Hub
 - Amazon DynamoDb
 - Amazon S3
+- Google Cloud Firestore
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
 - MongoDB
 - Kafka
@@ -76,6 +79,7 @@ HealthChecks packages include health checks for:
 - Hangfire
 - SignalR
 - Kubernetes
+- ArangoDB
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
@@ -86,6 +90,7 @@ Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.Elasticsearch
+Install-Package AspNetCore.HealthChecks.CosmosDb
 Install-Package AspNetCore.HealthChecks.Solr
 Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore
@@ -110,6 +115,8 @@ Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.SignalR
 Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
+Install-Package AspNetCore.HealthChecks.SendGrid
+Install-Package AspNetCore.HealthChecks.ArangoDb
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -163,6 +170,23 @@ services.AddHealthChecks()
         .AddDatadogPublisher("myservice.healthchecks")
         .AddPrometheusGatewayPublisher();
 ```
+
+## HealthChecks Prometheus Exporter
+If you need an endpoint to consume from prometheus instead of using Prometheus Gateway you could install **AspNetCore.HealthChecks.Publisher.Prometheus**.
+
+```powershell
+install-package AspNetcore.HealthChecks.Publisher.Prometheus
+```
+
+Use the *ApplicationBuilder* extension method to add the endpoint with the metrics:
+```csharp
+// default endpoint: /healthmetrics
+app.UseHealthChecksPrometheusExporter()
+
+// You could customize the endpoint
+app.UseHealthChecksPrometheusExporter("/my-health-metrics")
+```
+
 
 ## HealthCheckUI
 

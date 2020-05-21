@@ -16,6 +16,7 @@ namespace HealthChecks.UI.Configuration
         internal Func<IServiceProvider, HttpMessageHandler> ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient> ApiEndpointHttpClientConfig { get; private set; }
         internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
+        internal Dictionary<string, Type> DelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
         internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
@@ -64,6 +65,18 @@ namespace HealthChecks.UI.Configuration
         public Settings UseApiEndpointHttpMessageHandler(Func<IServiceProvider, HttpClientHandler> apiEndpointHttpHandler)
         {
             ApiEndpointHttpHandler = apiEndpointHttpHandler;
+            return this;
+        }
+
+        public Settings UseApiEndpointDelegatingHandler<T>() where T : DelegatingHandler
+        {
+            var delegatingHandlerType = typeof(T);
+
+            if (!DelegatingHandlerTypes.ContainsKey(delegatingHandlerType.FullName))
+            {
+                DelegatingHandlerTypes.Add(delegatingHandlerType.FullName, delegatingHandlerType); 
+            }
+            
             return this;
         }
 

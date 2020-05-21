@@ -47,6 +47,7 @@
     <MicrosoftSourceLinkGithub>1.0.0</MicrosoftSourceLinkGithub>
     <FluentAssertions>5.9.0</FluentAssertions>
     <xunit>2.4.1</xunit>
+    <NSubstitute>4.2.1</NSubstitute>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
     <StackExchangeRedis>2.0.601</StackExchangeRedis>
     <RabbitMQClient>5.1.1</RabbitMQClient>

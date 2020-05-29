@@ -10,13 +10,18 @@ namespace HealthChecks.RabbitMQ
         : IHealthCheck
     {
         private IConnection _connection;
-
+        
+        private IConnectionFactory _factory;
         private Uri _rabbitConnectionString;
         private SslOption _sslOption;
 
         public RabbitMQHealthCheck(IConnection connection)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+        }
+        public RabbitMQHealthCheck(IConnectionFactory factory)
+        {
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption ssl)
@@ -48,19 +53,18 @@ namespace HealthChecks.RabbitMQ
         {
             if(_connection == null )
             {
-                var connectionFactory = new ConnectionFactory()
+                if (_factory == null)
                 {
-                    Uri = _rabbitConnectionString,
-                    AutomaticRecoveryEnabled = true,
-                    UseBackgroundThreadsForIO = true
-                };
-
-                if (_sslOption != null)
-                {
-                    connectionFactory.Ssl = _sslOption;
+                    _factory = new ConnectionFactory()
+                    {
+                        Uri = _rabbitConnectionString,
+                        AutomaticRecoveryEnabled = true,
+                        UseBackgroundThreadsForIO = true,
+                        Ssl = _sslOption ?? new SslOption()
+                    };
                 }
 
-                _connection = connectionFactory.CreateConnection();
+                _connection = _factory.CreateConnection();
             }
         }
     }

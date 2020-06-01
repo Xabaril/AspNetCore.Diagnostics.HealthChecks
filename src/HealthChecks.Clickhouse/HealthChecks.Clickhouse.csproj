@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <Description>HealthChecks.Clickhouse is a health check for Clickhouse.</Description>
+    <PackageTags>HealthCheck;Beat;Health;Clickhouse</PackageTags>
+    <Version>$(HealthCheckClickhouse)</Version>
+    <PackageId>AspNetCore.HealthChecks.Clickhouse</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ClickHouse.Ado" Version="1.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+</Project>

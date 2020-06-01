@@ -54,6 +54,7 @@
     <RavenDBClient>4.2.3</RavenDBClient>
     <OracleManagedDataAccessCore>2.19.60</OracleManagedDataAccessCore>
     <Npgsql>4.0.10</Npgsql>
+    <ClickHouseAdo>1.2.1</ClickHouseAdo>
     <MongoDBDriver>2.9.1</MongoDBDriver>
     <MySqlConnector>0.56.0</MySqlConnector>
     <ConfluentKafka>1.4.0</ConfluentKafka>
@@ -103,6 +104,7 @@
     <HealthCheckSolr>3.1.1</HealthCheckSolr>
     <HealthCheckOracle>3.1.2</HealthCheckOracle>
     <HealthCheckNpgSql>3.1.1</HealthCheckNpgSql>
+    <HealthCheckClickhouse>3.1.1</HealthCheckClickhouse>
     <HealthCheckMongoDB>3.1.1</HealthCheckMongoDB>
     <HealthCheckMySql>3.1.1</HealthCheckMySql>
     <HealthCheckKafka>3.1.2</HealthCheckKafka>

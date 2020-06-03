@@ -1,4 +1,5 @@
-﻿using HealthChecks.UI.Client;
+﻿using FunctionalTests.Base;
+using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;

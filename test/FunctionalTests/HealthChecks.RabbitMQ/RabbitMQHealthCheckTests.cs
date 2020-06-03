@@ -33,9 +33,36 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddRabbitMQ(rabbitConnectionString: connectionString, tags: new string[] { "rabbitmq" });
-                //services.AddHealthChecks()
-                // .AddRabbitMQ(connectionString, sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
+                 .AddRabbitMQ(rabbitConnectionString: connectionString,tags: new string[] { "rabbitmq" });
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions()
+                {
+                    Predicate = r => r.Tags.Contains("rabbitmq")
+                });
+            });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+        }
+
+        [SkipOnAppVeyor]
+        public async Task be_healthy_if_rabbitmq_is_available_using_ssloption()
+        {
+            var connectionString = @"amqp://localhost:5672";
+
+            var webHostBuilder = new WebHostBuilder()
+            .UseStartup<DefaultStartup>()
+            .ConfigureServices(services =>
+            {
+                services.AddHealthChecks()
+                 .AddRabbitMQ(rabbitConnectionString: connectionString, sslOption: new SslOption(serverName: "localhost", enabled: false), tags: new string[] { "rabbitmq" });
             })
             .Configure(app =>
             {

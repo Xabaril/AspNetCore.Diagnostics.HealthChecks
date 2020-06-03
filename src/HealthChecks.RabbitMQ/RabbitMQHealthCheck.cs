@@ -12,8 +12,8 @@ namespace HealthChecks.RabbitMQ
         private IConnection _connection;
         
         private IConnectionFactory _factory;
-        private Uri _rabbitConnectionString;
-        private SslOption _sslOption;
+        private readonly Uri _rabbitConnectionString;
+        private readonly SslOption _sslOption;
 
         public RabbitMQHealthCheck(IConnection connection)
         {

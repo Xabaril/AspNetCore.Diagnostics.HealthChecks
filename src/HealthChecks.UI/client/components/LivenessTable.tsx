@@ -45,16 +45,19 @@ export class LivenessTable extends React.Component<LivenessTableProps> {
     if (discoveryService != null) {
       let discoveryServiceImage = discoveryServices.find(
         ds => ds.name === discoveryService
-      )!.image;
-      return (
-        <img
-          className="discovery-icon"
-          src={discoveryServiceImage}
-          title="Kubernetes discovered liveness"
-        />
       );
+      if(discoveryServiceImage != null && discoveryServiceImage.image != null)
+      {
+        return (
+            <img
+                className="discovery-icon"
+                src={discoveryServiceImage.image}
+                title="Kubernetes discovered liveness"
+            />
+        );
+      }
+      
     }
-
     return null;
   }
 

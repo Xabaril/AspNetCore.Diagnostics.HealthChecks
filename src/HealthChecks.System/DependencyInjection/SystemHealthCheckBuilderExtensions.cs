@@ -173,6 +173,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="serviceName">The name of the service</param>
         /// <param name="predicate">Process[] predicate to configure checks</param>
+        /// <<param name="machineName">Machine where the service resides in. Optional  q</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'windowsservice' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -182,7 +183,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddWindowsServiceHealthCheck(
-            this IHealthChecksBuilder builder, string serviceName, Func<ServiceController, bool> predicate, string name = default,
+            this IHealthChecksBuilder builder, string serviceName, Func<ServiceController, bool> predicate,
+            string machineName = default,
+            string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
 
@@ -196,7 +199,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? WINDOWS_SERVICE_NAME,
-                sp => new WindowsServiceHealthCheck(serviceName, predicate),
+                sp => new WindowsServiceHealthCheck(serviceName, predicate, machineName),
                 failureStatus,
                 tags,
                 timeout));

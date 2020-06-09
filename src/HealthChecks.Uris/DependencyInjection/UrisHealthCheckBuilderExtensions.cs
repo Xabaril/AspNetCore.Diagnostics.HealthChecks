@@ -163,6 +163,47 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+        /// <summary>
+        /// Add a health check for single uri.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="uriProvider">Factory for providing the uri to check.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+        /// <param name="failureStatus"></param>
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns></returns>
+        public static IHealthChecksBuilder AddUrlGroup(
+            this IHealthChecksBuilder builder,
+            Func<IServiceProvider, Uri> uriProvider,
+            string name = null,
+            HealthStatus? failureStatus = null,
+            IEnumerable<string> tags = null,
+            TimeSpan? timeout = null)
+        {
+            builder.Services.AddHttpClient();
+            var registrationName = name ?? NAME;
+
+            return builder.Add(
+                new HealthCheckRegistration(
+                    registrationName,
+                    sp =>
+                    {
+                        var uri = uriProvider(sp);
+                        var uriHealthCheckOptions = new UriHealthCheckOptions().AddUri(uri, null);
+
+                        var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+
+                        return new UriHealthCheck(
+                            uriHealthCheckOptions,
+                            () => httpClientFactory.CreateClient(registrationName));
+                    },
+                    failureStatus,
+                    tags,
+                    timeout));
+        }
         private static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
         {
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();

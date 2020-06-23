@@ -261,7 +261,7 @@ All the storage providers are extensions of HealthChecksUIBuilder:
 ```csharp
   services
     .AddHealthChecksUI()
-    .AddSqlServer("connectionString");
+    .AddSqlServerStorage("connectionString");
 ```
 
 **Postgre SQL**

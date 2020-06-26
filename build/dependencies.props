@@ -103,7 +103,7 @@
     <HealthCheckSolr>3.1.1</HealthCheckSolr>
     <HealthCheckOracle>3.1.2</HealthCheckOracle>
     <HealthCheckNpgSql>3.1.1</HealthCheckNpgSql>
-    <HealthCheckMongoDB>3.1.1</HealthCheckMongoDB>
+    <HealthCheckMongoDB>3.1.2</HealthCheckMongoDB>
     <HealthCheckMySql>3.1.1</HealthCheckMySql>
     <HealthCheckKafka>3.1.2</HealthCheckKafka>
     <HealthCheckSystem>3.1.2</HealthCheckSystem>

@@ -86,14 +86,14 @@ export class PollingInterval extends React.Component<PollingIntervalProps, Polli
                         value={this.state.editing}
                         onChange={this.onPollingIntervalChange}
                         type="number"
-                        className="polling-input"
+                        data-oninput="validity.valid && value > 0 ||(value=10)"
                         title={`Miminum value: ${clientOptions.minimumPollingIntervalSeconds}`}
                     />
                     <label>seconds</label>
                     <button
                         onClick={this.configurePolling}
                         type="button"
-                        className="btn btn-light btn-sm polling-save"
+                        className="hc-button"                        
                         disabled={!this.state.canSave}
                     >Change</button>
                 </>

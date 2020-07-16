@@ -43,5 +43,37 @@ namespace UnitTests.HealthChecks.DependencyInjection.DynamoDb
             registration.Name.Should().Be("my-dynamodb-group");
             check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
         }
+        [Fact]
+        public void add_health_check_when_no_credentials_provided()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddDynamoDb(_ => { _.RegionEndpoint = RegionEndpoint.CNNorth1; });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("dynamodb");
+            check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
+        }
+        [Fact]
+        public void add_health_check_when_no_option_provided()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddDynamoDb();
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("dynamodb");
+            check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
+        }
     }
 }

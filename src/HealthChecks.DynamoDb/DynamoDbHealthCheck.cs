@@ -14,16 +14,25 @@ namespace HealthChecks.DynamoDb
         public DynamoDbHealthCheck(DynamoDBOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            if (string.IsNullOrEmpty(options.AccessKey)) throw new ArgumentNullException(nameof(DynamoDBOptions.AccessKey));
-            if (string.IsNullOrEmpty(options.SecretKey)) throw new ArgumentNullException(nameof(DynamoDBOptions.SecretKey));
-            if (options.RegionEndpoint == null) throw new ArgumentNullException(nameof(DynamoDBOptions.RegionEndpoint));
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
-                var client = new AmazonDynamoDBClient(credentials, _options.RegionEndpoint);
+                var client = new AmazonDynamoDBClient();
+                var keysProvided = !string.IsNullOrEmpty(_options.AccessKey) &&
+                                   !string.IsNullOrEmpty(_options.SecretKey);
+                var regionProvided = _options.RegionEndpoint == null;
+                
+                if (keysProvided)
+                {
+                    var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
+                    client = regionProvided ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint) : new AmazonDynamoDBClient(credentials);
+                }
+                else if(regionProvided)
+                {
+                    client = new AmazonDynamoDBClient( _options.RegionEndpoint);
+                }
 
                 await client.ListTablesAsync(cancellationToken);
                 return HealthCheckResult.Healthy();

@@ -28,14 +28,14 @@ namespace HealthChecks.Publisher.Seq
         }
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
-            var level = "Information";
+            var level = _options.DefaultInputLevel.ToString();
             switch (report.Status)
             {
                 case HealthStatus.Degraded:
-                    level = "Warning";
+                    level = SeqInputLevel.Warning.ToString();
                     break;
                 case HealthStatus.Unhealthy:
-                    level = "Error";
+                    level = SeqInputLevel.Error.ToString();
                     break;
             }
 

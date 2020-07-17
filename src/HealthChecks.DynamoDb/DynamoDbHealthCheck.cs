@@ -29,7 +29,8 @@ namespace HealthChecks.DynamoDb
                     var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
                     client = regionProvided ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint) : new AmazonDynamoDBClient(credentials);
                 }
-                else if(regionProvided)
+                else if (regionProvided)
+
                 {
                     client = new AmazonDynamoDBClient( _options.RegionEndpoint);
                 }

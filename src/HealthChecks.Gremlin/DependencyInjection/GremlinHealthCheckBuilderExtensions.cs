@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Apache TinkerPop Gremlin database.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="connectionOptionsFactory">A factory to build the Gremblin connection data to use.</param>
+        /// <param name="connectionOptionsFactory">A factory to build the Gremlin connection data to use.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'gremlin' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

@@ -70,6 +70,7 @@
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.101.69</AWSSDKDynamoDBv2>
+    <GremlinNet>3.4.7</GremlinNet>
     <NewtonsoftJson>12.0.2</NewtonsoftJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
@@ -109,6 +110,7 @@
     <HealthCheckSystem>3.1.2</HealthCheckSystem>
     <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
+    <HealthCheckGremlin>3.1.1</HealthCheckGremlin>
     <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>3.2.0</HealthCheckAzureStorage>

@@ -31,7 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             _ = connectionOptionsFactory ?? throw new ArgumentNullException(nameof(connectionOptionsFactory));
 
-
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
                 sp => new GremlinHealthCheck(connectionOptionsFactory(sp)),

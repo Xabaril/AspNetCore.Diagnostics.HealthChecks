@@ -68,7 +68,10 @@ namespace HealthChecks.UI.Core.HostedService
 
                     if (healthReport.Status != UIHealthStatus.Healthy)
                     {
-                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                        if (! _settings.NotifyUnHealthyOnceTimeUntilChange || await ShouldNotify(item.Name, healthReport))
+                        {
+                            await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                        } 
                     }
                     else
                     {
@@ -147,6 +150,32 @@ namespace HealthChecks.UI.Core.HostedService
                 .Include(le => le.Entries)
                 .Where(le => le.Name == configuration.Name)
                 .SingleOrDefaultAsync();
+        }
+
+        private async Task<bool> ShouldNotify(string healthCheckName , UIHealthReport report )
+        {
+            var lastNotifications = await _db.Failures
+               .Where(lf => lf.HealthCheckName.ToLower() == healthCheckName.ToLower())
+               .OrderByDescending(lf => lf.LastNotified)
+               .Take(2).ToListAsync();
+
+            if (lastNotifications == null)
+            {
+                return true;
+            }
+
+            if (lastNotifications.Count == 2)
+            {
+                var first = lastNotifications[0];
+                var second = lastNotifications[1];
+                if (first.IsUpAndRunning == second.IsUpAndRunning)
+                {
+                    return false;
+                }
+
+            }
+
+            return true;
         }
         private async Task SaveExecutionHistory(HealthCheckConfiguration configuration, UIHealthReport healthReport)
         {

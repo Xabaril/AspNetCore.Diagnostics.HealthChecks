@@ -12,7 +12,8 @@ namespace HealthChecks.UI.Configuration
         internal bool DisableMigrations { get; set; } = false;
         internal int MaximumExecutionHistoriesPerEndpoint { get; private set; } = 100;
         internal int EvaluationTimeInSeconds { get; set; } = 10;
-        internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;        
+        internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        internal bool NotifyUnHealthyOnceTimeUntilChange { get; set; } = false;
         internal Func<IServiceProvider, HttpMessageHandler> ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient> ApiEndpointHttpClientConfig { get; private set; }
         internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
@@ -48,6 +49,11 @@ namespace HealthChecks.UI.Configuration
         public Settings DisableDatabaseMigrations()
         {
             DisableMigrations = true;
+            return this;
+        }
+
+        public Settings NotifyUnHealthyOnceTimeUntilChangeToAvoideNotificationSpam() {
+            NotifyUnHealthyOnceTimeUntilChange = true;
             return this;
         }
         public Settings SetEvaluationTimeInSeconds(int seconds)

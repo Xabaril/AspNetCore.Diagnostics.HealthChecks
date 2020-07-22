@@ -152,7 +152,8 @@ namespace HealthChecks.UI.Core.HostedService
                 .SingleOrDefaultAsync();
         }
 
-        private async Task<bool> ShouldNotify(string healthCheckName , UIHealthReport report )
+        private async Task<bool> ShouldNotify(string healthCheckName , UIHealthReport report)
+
         {
             var lastNotifications = await _db.Failures
                .Where(lf => lf.HealthCheckName.ToLower() == healthCheckName.ToLower())

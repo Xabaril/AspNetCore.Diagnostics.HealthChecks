@@ -173,7 +173,6 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     return false;
                 }
-
             }
 
             return true;

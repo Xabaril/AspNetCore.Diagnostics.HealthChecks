@@ -26,12 +26,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services
-                .AddSingleton(sp => new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption));
-
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+                new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption),
                 failureStatus,
                 tags,
                 timeout));
@@ -53,12 +50,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Uri rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services
-                .AddSingleton(sp => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
-
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+                new RabbitMQHealthCheck(rabbitConnectionString, sslOption),
                 failureStatus,
                 tags,
                 timeout));
@@ -80,7 +74,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services.AddSingleton(sp => 
+            builder.Services.AddSingleton(sp =>
             {
                 var connection = sp.GetService<IConnection>();
                 var connectionFactory = sp.GetService<IConnectionFactory>();
@@ -123,12 +117,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services
-                .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactory(sp)));
-
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+                sp => new RabbitMQHealthCheck(connectionFactory(sp)),
                 failureStatus,
                 tags,
                 timeout));
@@ -150,12 +141,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services
-                .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)));
-
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+                sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)),
                 failureStatus,
                 tags,
                 timeout));

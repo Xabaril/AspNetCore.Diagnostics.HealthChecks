@@ -487,7 +487,7 @@ To add your custom styles sheet, use the UI setup method:
    .UseRouting()
    .UseEndpoints(config =>
     {
-      config.AddHealthChecksUI(setup =>
+      config.MapHealthChecksUI(setup =>
       {
         setup.AddCustomStylesheet("dotnet.css");
       });

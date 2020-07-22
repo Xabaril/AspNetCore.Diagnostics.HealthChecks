@@ -52,7 +52,7 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings NotifyUnHealthyOnceTimeUntilChangeToAvoideNotificationSpam() {
+        public Settings NotifyUnHealthyOnceTimeUntilChangeToAvoidNotificationSpam() {
             NotifyUnHealthyOnceTimeUntilChange = true;
             return this;
         }

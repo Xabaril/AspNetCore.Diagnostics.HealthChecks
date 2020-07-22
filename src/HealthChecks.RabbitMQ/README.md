@@ -78,3 +78,20 @@ public void ConfigureServices(IServiceCollection services)
         });
 }
 ```
+
+Or you register IConnectionFactory and then the healthcheck will create a single connection for that one.
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+   services
+        .AddSingleton<IConnectionFactory>(sp=>
+            new ConnectionFactory()
+            {
+                Uri = new Uri("amqps://user:pass@host/vhost"),
+                AutomaticRecoveryEnabled = true
+            })
+        .AddHealthChecks()
+        .AddRabbitMQ();
+}
+```

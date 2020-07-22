@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using RabbitMQ.Client;
 using System;
 using System.Net;
@@ -217,56 +216,22 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
         }
 
         [SkipOnAppVeyor]
-        public async Task be_create_one_connection_if_calling_health_multiple_times()
-        {
-            var factoryMock = new Mock<IConnectionFactory>();
-            var connectionMock = new Mock<IConnection>();
-            factoryMock.Setup(m => m.CreateConnection()).Returns(connectionMock.Object);
-
-            var webHostBuilder = new WebHostBuilder()
-            .UseStartup<DefaultStartup>()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton<IConnectionFactory>(factoryMock.Object)
-                    .AddHealthChecks()
-                    .AddRabbitMQ(tags: new string[] { "rabbitmq" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
-                {
-                    Predicate = r => r.Tags.Contains("rabbitmq")
-                });
-            });
-
-            var server = new TestServer(webHostBuilder);
-
-            await server.CreateRequest($"/health").GetAsync();
-            await server.CreateRequest($"/health").GetAsync();
-            await server.CreateRequest($"/health").GetAsync();
-
-            factoryMock.Verify(m => m.CreateConnection(), Times.Exactly(1), "expected one connection to be created");
-        }
-
-        [SkipOnAppVeyor]
         public async Task be_not_crash_on_startup_when_rabbitmq_is_down_at_startup()
         {
-            var factoryMock = new Mock<IConnectionFactory>();
-            var connectionMock = new Mock<IConnection>();
-            
-            // Given rabbitMQ is not ready yet at the first attempt of calling /health
-            factoryMock.SetupSequence(m => m.CreateConnection())
-                .Throws(new Exception("RabbitMQ is not ready yet"))
-                .Returns(connectionMock.Object);
-
             var webHostBuilder = new WebHostBuilder()
             .UseStartup<DefaultStartup>()
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton<IConnectionFactory>(factoryMock.Object)
-                    //.AddSingleton<IConnection>(ci => factoryMock.Object.CreateConnection()) // uncomment this and the test will fail
+                    .AddSingleton<IConnectionFactory>(sp=>
+                    {
+                        return new ConnectionFactory()
+                        {
+                            Uri = new Uri("amqp://localhost:3333"),
+                            AutomaticRecoveryEnabled = true,
+                            Ssl = new SslOption(serverName: "localhost", enabled: false)
+                        };
+                    })
                     .AddHealthChecks()
                     .AddRabbitMQ(tags: new string[] { "rabbitmq" });
             })
@@ -283,10 +248,6 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             var response1 = await server.CreateRequest($"/health").GetAsync();
             response1.StatusCode
                .Should().Be(HttpStatusCode.ServiceUnavailable);
-
-            var response2 = await server.CreateRequest($"/health").GetAsync();
-            response2.StatusCode
-               .Should().Be(HttpStatusCode.OK);
         }
     }
 }

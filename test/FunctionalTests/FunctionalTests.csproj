@@ -10,7 +10,6 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
-    <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="NSubstitute" Version="$(NSubstitute)" />    
     <PackageReference Include="xunit" Version="$(xunit)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />

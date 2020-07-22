@@ -97,7 +97,7 @@
     <HealthCheckSqlite>3.1.1</HealthCheckSqlite>
     <HealthCheckUri>3.1.2</HealthCheckUri>
     <HealthCheckRedis>3.1.1</HealthCheckRedis>
-    <HealthCheckRabbitMQ>3.1.2</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>3.1.3</HealthCheckRabbitMQ>
     <HealthCheckEventStore>3.1.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>3.1.1</HealthCheckElasticsearch>
     <HealthCheckSolr>3.1.1</HealthCheckSolr>

@@ -13,9 +13,12 @@ namespace HealthChecks.CosmosDb
         private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new ConcurrentDictionary<string, CosmosClient>();
 
         private readonly string _connectionString;
-        public CosmosDbHealthCheck(string connectionString)
+        private readonly string _database;
+
+        public CosmosDbHealthCheck(string connectionString, string database)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _database = database;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -34,6 +37,13 @@ namespace HealthChecks.CosmosDb
                     }
                 }
                 await cosmosDbClient.ReadAccountAsync();
+
+                if (_database != null)
+                {
+                    var database = cosmosDbClient.GetDatabase(_database);
+                    await database.ReadAsync();
+                }
+
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

@@ -85,11 +85,11 @@ namespace HealthChecks.AzureKeyVault
         /// <summary>
         /// Add a Azure Key Vault secret to be checked
         /// </summary>
-        /// <param name="secretIdentifier">The secret to be checked</param>
+        /// <param name="secretName">The secret to be checked</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions AddSecret(string secretIdentifier)
+        public AzureKeyVaultOptions AddSecret(string secretName)
         {
-            _secrets.Add(secretIdentifier);
+            _secrets.Add(secretName);
 
             return this;
         }
@@ -97,11 +97,11 @@ namespace HealthChecks.AzureKeyVault
         /// <summary>
         /// Add a Azure Key Vault cryptographic key to be checked
         /// </summary>
-        /// <param name="keyIdentifier">The cryptographic key to be checked</param>
+        /// <param name="keyName">The cryptographic key to be checked</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions AddKey(string keyIdentifier)
+        public AzureKeyVaultOptions AddKey(string keyName)
         {
-            _keys.Add(keyIdentifier);
+            _keys.Add(keyName);
 
             return this;
         }
@@ -109,12 +109,12 @@ namespace HealthChecks.AzureKeyVault
         /// <summary>
         /// Add a Azure Key Vault certificate key to be checked
         /// </summary>
-        /// <param name="certificateIdentifier">The certificate key to be checked</param>
+        /// <param name="certificateName">The certificate key to be checked</param>
         /// /// <param name="checkExpired">Certificate expiration date should be checked. It the certificate is expired a exception will be thrown</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions AddCertificate(string certificateIdentifier, bool checkExpired = false)
+        public AzureKeyVaultOptions AddCertificate(string certificateName, bool checkExpired = false)
         {
-            _certificates.Add((certificateIdentifier, checkExpired));
+            _certificates.Add((certificateName, checkExpired));
 
             return this;
         }

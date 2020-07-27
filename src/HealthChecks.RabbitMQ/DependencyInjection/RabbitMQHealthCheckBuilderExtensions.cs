@@ -26,9 +26,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            builder.Services
+                .AddSingleton(sp => new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption),
+                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
@@ -50,9 +53,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Uri rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            builder.Services
+                .AddSingleton(sp => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new RabbitMQHealthCheck(rabbitConnectionString, sslOption),
+                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
@@ -71,33 +77,31 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        [Obsolete(@"If the service provider only contains a registration for IConnetionFactory this overload create healthcheck without reusing the connection and this can produce port exhaustion.
-             On future versions we only support this overload when service provider have IConnection registered.")]
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            builder.Services.AddSingleton(sp =>
+            {
+                var connection = sp.GetService<IConnection>();
+                var connectionFactory = sp.GetService<IConnectionFactory>();
+
+                if (connection != null)
+                {
+                    return new RabbitMQHealthCheck(connection);
+                }
+                else if (connectionFactory != null)
+                {
+                    return new RabbitMQHealthCheck(connectionFactory);
+                }
+                else
+                {
+                    throw new ArgumentException($"Either an IConnection or IConnectionFactory must be registered with the service provider");
+                }
+            });
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp =>
-                {
-                    var connection = sp.GetService<IConnection>();
-                    var connectionFactory = sp.GetService<IConnectionFactory>();
-
-                    if (connection != null)
-                    {
-                        return new RabbitMQHealthCheck(connection);
-                    }
-                    else if (connectionFactory != null)
-                    {
-                        connection = connectionFactory.CreateConnection();
-
-                        return new RabbitMQHealthCheck(connection);
-                    }
-                    else
-                    {
-                        throw new ArgumentException($"Either an IConnection or IConnectionFactory must be registered with the service provider");
-                    }
-                },
+                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
@@ -119,9 +123,12 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            builder.Services
+                .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactory(sp)));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RabbitMQHealthCheck(connectionFactory(sp)),
+                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
@@ -140,33 +147,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        [Obsolete("Using IConnetionFactory create healthcheck without reusing the connection and this can produce port exhaustion.")]
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            builder.Services
+               .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp).CreateConnection()),
+                sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
-        }
-
-        private static IConnection CreateConnection(string rabbitConnectionString, SslOption ssl)
-        {
-            var connectionFactory = new ConnectionFactory()
-            {
-                Uri = new Uri(rabbitConnectionString),
-                AutomaticRecoveryEnabled = true,
-                UseBackgroundThreadsForIO = true
-            };
-
-            if (ssl != null)
-            {
-                connectionFactory.Ssl = ssl;
-            }
-
-            return connectionFactory.CreateConnection();
         }
     }
 }

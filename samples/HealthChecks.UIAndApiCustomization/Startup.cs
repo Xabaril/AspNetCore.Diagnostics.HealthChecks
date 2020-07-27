@@ -1,20 +1,32 @@
-﻿using HealthChecks.UI.Client;
+﻿using HealthChecks.UIAndApi.Options;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 
 namespace HealthChecks.UIAndApi
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             //
             //  This project configure health checks for asp.net core project and UI
             //  in the same project with some ui path customizations. 
             // 
+
+            services.Configure<RemoteOptions>(options => _configuration.Bind(options));
 
             services
                 .AddHealthChecksUI()
@@ -30,7 +42,14 @@ namespace HealthChecks.UIAndApi
                 .AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-1")
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-2")
-                .AddUrlGroup(new Uri("http://httpbin.org/status/500"), name: "uri-3")
+                .AddUrlGroup(
+                    sp =>
+                    {
+                        var remoteOptions = sp.GetRequiredService<IOptions<RemoteOptions>>().Value;
+                        return remoteOptions.RemoteDependency;
+                    },
+                    "uri-3")
+                .AddUrlGroup(new Uri("http://httpbin.org/status/500"), name: "uri-4")
                 .Services
                 .AddControllers();
         }

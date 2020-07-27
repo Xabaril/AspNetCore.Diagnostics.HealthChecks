@@ -25,8 +25,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.UriGroup
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("uri-group");
-            check.GetType().Should().Be(typeof(UriHealthCheck));
-
+            check.Should().BeOfType<UriHealthCheck>();
         }
 
         [Fact]
@@ -43,7 +42,23 @@ namespace UnitTests.HealthChecks.DependencyInjection.UriGroup
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("my-uri-group");
-            check.GetType().Should().Be(typeof(UriHealthCheck));
+            check.Should().BeOfType<UriHealthCheck>();
+        }
+
+        [Fact]
+        public void add_health_check_when_configured_through_service_provider()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddUrlGroup(sp => new Uri("http://httpbin.org/status/200"));
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            check.Should().BeOfType<UriHealthCheck>();
         }
     }
 }

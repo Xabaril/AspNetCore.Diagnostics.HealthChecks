@@ -35,17 +35,18 @@ namespace HealthChecks.MongoDb
                 if (!string.IsNullOrEmpty(_specifiedDatabase))
                 {
                     // some users can't list all databases depending on database privileges, with
-                    // this you can list only collection on specified database.
+                    // this you can list only collections on specified database.
                     // Related with issue #43
 
-                    await (await mongoClient
-                         .GetDatabase(_specifiedDatabase)
-                         .ListCollectionsAsync(cancellationToken: cancellationToken)).FirstAsync(cancellationToken);
+                    using var cursor = await mongoClient
+                        .GetDatabase(_specifiedDatabase)
+                        .ListCollectionNamesAsync(cancellationToken: cancellationToken);
+                    await cursor.FirstAsync(cancellationToken);
                 }
                 else
                 {
-                    await mongoClient
-                        .ListDatabasesAsync(cancellationToken);
+                    using var cursor = await mongoClient.ListDatabaseNamesAsync(cancellationToken);
+                    await cursor.FirstOrDefaultAsync(cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();

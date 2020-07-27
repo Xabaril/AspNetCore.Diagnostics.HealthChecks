@@ -7,6 +7,7 @@
 - Bugfix - The UI now refreshes correctly when the k8s operator removes last endpoint
 - UI preview5 now allows updating stored configurations in startup #516
 - UI preview6 changes default webhook description message and enumerates failing liveness names
+- UI preview7 adds the ability to register API custom delegating handlers and webhooks message content escaping
 
   **3.1.0**
 

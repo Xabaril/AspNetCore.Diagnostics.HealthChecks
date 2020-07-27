@@ -95,18 +95,18 @@
     <HealthCheckIdSvr>3.1.1</HealthCheckIdSvr>
     <HealthCheckSqlServer>3.1.1</HealthCheckSqlServer>
     <HealthCheckSqlite>3.1.1</HealthCheckSqlite>
-    <HealthCheckUri>3.1.1</HealthCheckUri>
+    <HealthCheckUri>3.1.2</HealthCheckUri>
     <HealthCheckRedis>3.1.1</HealthCheckRedis>
-    <HealthCheckRabbitMQ>3.1.1</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>3.1.4</HealthCheckRabbitMQ>
     <HealthCheckEventStore>3.1.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>3.1.1</HealthCheckElasticsearch>
     <HealthCheckSolr>3.1.1</HealthCheckSolr>
     <HealthCheckOracle>3.1.2</HealthCheckOracle>
     <HealthCheckNpgSql>3.1.1</HealthCheckNpgSql>
-    <HealthCheckMongoDB>3.1.1</HealthCheckMongoDB>
+    <HealthCheckMongoDB>3.1.2</HealthCheckMongoDB>
     <HealthCheckMySql>3.1.1</HealthCheckMySql>
     <HealthCheckKafka>3.1.2</HealthCheckKafka>
-    <HealthCheckSystem>3.1.1</HealthCheckSystem>
+    <HealthCheckSystem>3.1.2</HealthCheckSystem>
     <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
@@ -115,14 +115,14 @@
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.2.1</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>
-    <HealthCheckUI>3.1.1-preview6</HealthCheckUI>
-    <HealthCheckUICore>3.1.1-preview3</HealthCheckUICore>
-    <HealthCheckUIClient>3.1.1-preview3</HealthCheckUIClient>
-    <HealthCheckUISqlServerStorage>3.1.1-preview3</HealthCheckUISqlServerStorage>
-    <HealthCheckUISQLiteStorage>3.1.1-preview3</HealthCheckUISQLiteStorage>
-    <HealthChecksUIPostgreSQLStorage>3.1.1-preview3</HealthChecksUIPostgreSQLStorage>
-    <HealthCheckUIInMemoryStorage>3.1.1-preview3</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>3.1.1-preview3</HealthCheckUIMySqlStorage>
+    <HealthCheckUI>3.1.1</HealthCheckUI>
+    <HealthCheckUICore>3.1.1</HealthCheckUICore>
+    <HealthCheckUIClient>3.1.1</HealthCheckUIClient>
+    <HealthCheckUISqlServerStorage>3.1.1</HealthCheckUISqlServerStorage>
+    <HealthCheckUISQLiteStorage>3.1.1</HealthCheckUISQLiteStorage>
+    <HealthChecksUIPostgreSQLStorage>3.1.1</HealthChecksUIPostgreSQLStorage>
+    <HealthCheckUIInMemoryStorage>3.1.1</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>3.1.1</HealthCheckUIMySqlStorage>
     <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.1.3</HealthCheckPublisherPrometheus>
@@ -136,7 +136,7 @@
     <HealthCheckCloudFirestore>3.1.1</HealthCheckCloudFirestore>
     <HealthCheckIoTHub>3.1.1</HealthCheckIoTHub>
     <HealthCheckIbmMQ>3.1.1</HealthCheckIbmMQ>
-    <HealthChecksUIK8sOperator>3.1.0-beta.8</HealthChecksUIK8sOperator>
+    <HealthChecksUIK8sOperator>3.1.0</HealthChecksUIK8sOperator>
     <HealthCheckSendGrid>3.1.1-preview1</HealthCheckSendGrid>
     <HealthCheckArangoDb>3.1.1-preview1</HealthCheckArangoDb>
   </PropertyGroup>

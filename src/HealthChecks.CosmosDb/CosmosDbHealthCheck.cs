@@ -15,6 +15,10 @@ namespace HealthChecks.CosmosDb
         private readonly string _connectionString;
         private readonly string _database;
 
+        public CosmosDbHealthCheck(string connectionString) : this(connectionString, default)
+        {
+        }
+
         public CosmosDbHealthCheck(string connectionString, string database)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));

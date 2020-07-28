@@ -49,7 +49,7 @@
     <xunit>2.4.1</xunit>
     <NSubstitute>4.2.1</NSubstitute>
     <xunitrunnervisualstudio>2.4.1</xunitrunnervisualstudio>
-    <StackExchangeRedis>2.0.601</StackExchangeRedis>
+    <StackExchangeRedis>2.1.58</StackExchangeRedis>
     <RabbitMQClient>5.1.1</RabbitMQClient>
     <RavenDBClient>4.2.3</RavenDBClient>
     <OracleManagedDataAccessCore>2.19.60</OracleManagedDataAccessCore>
@@ -96,7 +96,7 @@
     <HealthCheckSqlServer>3.1.1</HealthCheckSqlServer>
     <HealthCheckSqlite>3.1.1</HealthCheckSqlite>
     <HealthCheckUri>3.1.2</HealthCheckUri>
-    <HealthCheckRedis>3.1.1</HealthCheckRedis>
+    <HealthCheckRedis>3.1.2</HealthCheckRedis>
     <HealthCheckRabbitMQ>3.1.4</HealthCheckRabbitMQ>
     <HealthCheckEventStore>3.1.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>3.1.1</HealthCheckElasticsearch>

@@ -84,5 +84,30 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+        /// <summary>
+        /// Add a health check for Azure Service Bus Subscription.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionString">The Azure ServiceBus connection string to be used.</param>
+        /// <param name="topicName">The topic name of the topic to check.</param>
+        /// <param name="subscriptionName">The subscription name of the topic to check.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureServiceBusSubscription(this IHealthChecksBuilder builder, string connectionString, string topicName, string subscriptionName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            return builder.Add(new HealthCheckRegistration(
+                name ?? AZURETOPIC_NAME,
+                sp => new AzureServiceBusSubscriptionHealthCheck(connectionString, topicName, subscriptionName), 
+                failureStatus,
+                tags,
+                timeout));
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _topicName;
         private readonly string _subscriptionName;
 
-
         public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName)
         {
             if (string.IsNullOrEmpty(connectionString))

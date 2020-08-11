@@ -54,7 +54,6 @@ namespace HealthChecks.AzureServiceBus
                 }
 
                 await managementClient.GetSubscriptionRuntimeInfoAsync(_topicName, _subscriptionName, cancellationToken);
-
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

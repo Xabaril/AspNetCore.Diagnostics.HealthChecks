@@ -45,7 +45,6 @@ namespace HealthChecks.AzureServiceBus
                 var connectionKey = $"{_connectionString}_{_topicName}_{_subscriptionName}";
                 if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
-
                     managementClient = new ManagementClient(_connectionString);
                     if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
                     {

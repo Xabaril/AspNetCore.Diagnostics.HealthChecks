@@ -14,7 +14,6 @@ namespace HealthChecks.AzureServiceBus
         private readonly string _connectionString;
         private readonly string _queueName;
 
-
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
         {
             if (string.IsNullOrEmpty(connectionString))

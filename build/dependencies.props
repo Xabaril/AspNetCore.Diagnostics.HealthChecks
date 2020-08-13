@@ -55,7 +55,7 @@
     <OracleManagedDataAccessCore>2.19.60</OracleManagedDataAccessCore>
     <Npgsql>4.0.10</Npgsql>
     <MongoDBDriver>2.9.1</MongoDBDriver>
-    <MySqlConnector>0.56.0</MySqlConnector>
+    <MySqlConnector>1.0.0</MySqlConnector>
     <ConfluentKafka>1.4.0</ConfluentKafka>
     <SSHNet>2016.1.0</SSHNet>
     <NEST>7.3.0</NEST>

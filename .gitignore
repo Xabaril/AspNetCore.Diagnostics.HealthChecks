@@ -334,3 +334,4 @@ ASALocalRun/
 
 # Azure DevOps tasks ignores
 AzureDevOpsTasks/**/*.vsix
+.DS_Store

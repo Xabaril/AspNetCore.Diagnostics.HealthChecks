@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs"
+    },
+    "exclude": [
+    "node_modules",
+    "Asp.NetCoreHealthCheckVerification/node_modules"
+  ]
+}

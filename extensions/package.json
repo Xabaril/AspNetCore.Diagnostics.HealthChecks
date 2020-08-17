@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "package": "npm run clean  && npm run compile  && tfx extension create  --rev-version",
+    "gallery-publish": "tfx extension publish --rev-version",
+    "clean": "rimraf ./*.vsix",
+    "compile": "tsc -p .",
+    "install-task-lib": "cd Asp.NetCoreHealthCheckVerification && npm install --save-dev"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.7",
+    "tfx-cli": "^0.7.10",
+    "typescript": "2.3.4"
+  },
+  "name": "vstsexttask",
+  "private": true,
+  "version": "0.0.1"
+}

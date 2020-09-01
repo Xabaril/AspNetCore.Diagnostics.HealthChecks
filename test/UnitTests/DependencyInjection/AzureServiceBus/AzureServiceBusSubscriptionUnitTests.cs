@@ -24,7 +24,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopic");
+            registration.Name.Should().Be("azuresubscription");
             check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
         }
 
@@ -34,7 +34,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var services = new ServiceCollection();
             services.AddHealthChecks()
                 .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName",
-                name: "azuretopiccheck");
+                name: "azuresubscriptioncheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -42,7 +42,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopiccheck");
+            registration.Name.Should().Be("azuresubscriptioncheck");
             check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
         }
 

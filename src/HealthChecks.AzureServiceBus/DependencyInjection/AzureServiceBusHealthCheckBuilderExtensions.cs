@@ -10,6 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string AZUREEVENTHUB_NAME = "azureeventhub";
         const string AZUREQUEUE_NAME = "azurequeue";
         const string AZURETOPIC_NAME = "azuretopic";
+        const string AZURESUBSCRIPTION_NAME = "azuresubscription";
 
         /// <summary>
         /// Add a health check for specified Azure Event Hub.
@@ -103,7 +104,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddAzureServiceBusSubscription(this IHealthChecksBuilder builder, string connectionString, string topicName, string subscriptionName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
-                name ?? AZURETOPIC_NAME,
+                name ?? AZURESUBSCRIPTION_NAME,
                 sp => new AzureServiceBusSubscriptionHealthCheck(connectionString, topicName, subscriptionName), 
                 failureStatus,
                 tags,

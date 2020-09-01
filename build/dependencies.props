@@ -113,7 +113,7 @@
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>3.2.0</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>3.2.1</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>3.2.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>
     <HealthCheckUI>3.1.1</HealthCheckUI>
     <HealthCheckUICore>3.1.1</HealthCheckUICore>

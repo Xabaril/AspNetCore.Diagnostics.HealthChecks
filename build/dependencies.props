@@ -109,7 +109,7 @@
     <HealthCheckSystem>3.1.2</HealthCheckSystem>
     <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>3.1.1</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>3.1.2</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>3.2.0</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>

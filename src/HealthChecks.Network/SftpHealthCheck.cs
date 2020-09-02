@@ -32,7 +32,7 @@ namespace HealthChecks.Network
 
                     using (var sftpClient = new SftpClient(connectionInfo))
                     {
-                        sftpClient.Connect();                        
+                        sftpClient.Connect();
 
                         var connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
                         if (connectionSuccess)

@@ -81,6 +81,6 @@ namespace FunctionalTests.HealthChecks.Network
               .GetAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-        }     
+        }
     }
 }

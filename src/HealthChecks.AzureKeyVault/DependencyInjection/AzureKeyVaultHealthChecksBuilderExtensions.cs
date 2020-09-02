@@ -1,4 +1,5 @@
-﻿using HealthChecks.AzureKeyVault;
+﻿using Azure.Core;
+using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Add a health check for Azure Key Vault. Default behaviour is using Managed Service Identity, to use Client Secrets call UseClientSecrets in setup action
         /// </summary>
+        /// <param name="keyVaultServiceUri">The AzureKeyVault service uri.</param>
+        /// <param name="credential">The credential to authenticate with AzureKeyVault service.</param>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup"> Setup action to configure Azure Key Vault options.</param>    
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurekeyvault' will be used for the name.</param>
@@ -22,15 +25,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddAzureKeyVault(this IHealthChecksBuilder builder, Action<AzureKeyVaultOptions> setup,
+        public static IHealthChecksBuilder AddAzureKeyVault(this IHealthChecksBuilder builder, Uri keyVaultServiceUri, TokenCredential credential, Action<AzureKeyVaultOptions> setup,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new AzureKeyVaultOptions();
             setup?.Invoke(options);
-            
+
             return builder.Add(new HealthCheckRegistration(
                name ?? KEYVAULT_NAME,
-               sp => new AzureKeyVaultHealthCheck(options),
+               sp => new AzureKeyVaultHealthCheck(keyVaultServiceUri, credential, options),
                failureStatus,
                tags,
                timeout));

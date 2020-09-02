@@ -7,9 +7,11 @@
     <PackageId>AspNetCore.HealthChecks.AzureKeyVault</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="$(MicrosoftAzureServicesAppAuthentication)" />
+    <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="$(MicrosoftAzureKeyVault)" />
+    <PackageReference Include="Azure.Security.KeyVault.Keys" Version="$(MicrosoftAzureKeyVault)" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="$(MicrosoftAzureKeyVault)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.Azure.KeyVault" Version="$(MicrosoftAzureKeyVault)" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="$(MicrosoftAzureServicesAppAuthentication)" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="$(MicrosoftIdentityModelClientsActiveDirectory)" />
   </ItemGroup>
 </Project>

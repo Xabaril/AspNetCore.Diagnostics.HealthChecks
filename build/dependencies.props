@@ -61,12 +61,11 @@
     <NEST>7.3.0</NEST>
     <SystemBuffers>4.5.0</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
-    <MicrosoftAzureCosmosDB>3.1.1</MicrosoftAzureCosmosDB>
     <GoogleCloudFirestore>1.0.0</GoogleCloudFirestore>
     <HangfireCore>1.7.6</HangfireCore>
-    <MicrosoftAzureCosmosTable>1.0.7</MicrosoftAzureCosmosTable>
-    <AzureStorageBlobs>12.4.2</AzureStorageBlobs>
-    <AzureStorageQueues>12.3.0</AzureStorageQueues>
+    <AzureCosmos>4.0.0-preview3</AzureCosmos>
+    <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
+    <AzureStorageQueues>12.4.2</AzureStorageQueues>
     <MicrosoftAzureEventHubs>2.2.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>3.2.1</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.3.101.69</AWSSDKDynamoDBv2>
@@ -75,7 +74,7 @@
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
     <PrometheusNet>3.5.0</PrometheusNet>
     <AWSSKDS3>3.3.29</AWSSKDS3>
-    <MicrosoftAzureKeyVault>3.0.4</MicrosoftAzureKeyVault>
+    <MicrosoftAzureKeyVault>4.1.0</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>3.3.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.18.1</MicrosoftAzureDevices>
     <KubernetesClient>1.6.10</KubernetesClient>
@@ -109,9 +108,9 @@
     <HealthCheckSystem>3.1.2</HealthCheckSystem>
     <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>3.1.2</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>3.2.0-preview</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>
-    <HealthCheckAzureStorage>3.2.0</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>3.3.0</HealthCheckAzureStorage>
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.2.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>
@@ -128,7 +127,7 @@
     <HealthCheckPublisherPrometheus>3.1.3</HealthCheckPublisherPrometheus>
     <HealthCheckPrometheusMetrics>3.1.3</HealthCheckPrometheusMetrics>
     <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
-    <HealthCheckKeyVault>3.1.1</HealthCheckKeyVault>
+    <HealthCheckKeyVault>3.2.0</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>3.1.1</HealthCheckRavenDB>
     <HealthCheckKubernetes>3.1.1</HealthCheckKubernetes>

@@ -107,7 +107,7 @@
     <HealthCheckMySql>3.1.1</HealthCheckMySql>
     <HealthCheckKafka>3.1.2</HealthCheckKafka>
     <HealthCheckSystem>3.1.2</HealthCheckSystem>
-    <HealthCheckNetwork>3.1.1</HealthCheckNetwork>
+    <HealthCheckNetwork>3.1.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>3.1.1</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>3.1.2</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>3.1.1</HealthCheckDocumentDb>

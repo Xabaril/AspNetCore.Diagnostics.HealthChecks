@@ -18,7 +18,7 @@ namespace HealthChecks.UI.Core.Data.Configuration
                 .IsRequired(true);
 
             builder.Property(le => le.Name)
-                .HasMaxLength(50)
+                .HasMaxLength(500)
                 .IsRequired(false);
 
             builder.Property(le => le.Description)

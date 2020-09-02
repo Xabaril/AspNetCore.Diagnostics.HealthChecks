@@ -116,7 +116,7 @@
     <HealthCheckAzureServiceBus>3.2.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>
     <HealthCheckUI>3.1.1</HealthCheckUI>
-    <HealthCheckUICore>3.1.1</HealthCheckUICore>
+    <HealthCheckUICore>3.1.2</HealthCheckUICore>
     <HealthCheckUIClient>3.1.1</HealthCheckUIClient>
     <HealthCheckUISqlServerStorage>3.1.1</HealthCheckUISqlServerStorage>
     <HealthCheckUISQLiteStorage>3.1.1</HealthCheckUISQLiteStorage>

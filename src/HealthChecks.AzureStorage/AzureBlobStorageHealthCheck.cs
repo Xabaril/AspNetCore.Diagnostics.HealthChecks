@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +16,9 @@ namespace HealthChecks.AzureStorage
 
         private readonly string _connectionString;
         private readonly string _containerName;
+
+        private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder
+            = new ConcurrentDictionary<string, BlobServiceClient>();
 
         public AzureBlobStorageHealthCheck(string connectionString, string containerName = default)
         {
@@ -58,18 +62,23 @@ namespace HealthChecks.AzureStorage
 
         private BlobServiceClient GetBlobServiceClient()
         {
-            BlobServiceClient blobServiceClient;
+            var serviceUri = _connectionString ?? _blobServiceUri.ToString();
 
-            if (_blobServiceUri != null && _azureCredential != null)
+            if (!_blobClientsHolder.TryGetValue(serviceUri, out BlobServiceClient client))
             {
-                blobServiceClient = new BlobServiceClient(_blobServiceUri, _azureCredential);
-            }
-            else
-            {
-                blobServiceClient = new BlobServiceClient(_connectionString);
+                if (_connectionString != null)
+                {
+                    client = new BlobServiceClient(_connectionString);
+                }
+                else
+                {
+                    client = new BlobServiceClient(_blobServiceUri, _azureCredential);
+                }
+
+                _blobClientsHolder.TryAdd(serviceUri, client);
             }
 
-            return blobServiceClient;
+            return client;
         }
     }
 }

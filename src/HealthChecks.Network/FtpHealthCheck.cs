@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.Network.Extensions;
 
 namespace HealthChecks.Network
 {
@@ -22,7 +23,7 @@ namespace HealthChecks.Network
                 {
                     var ftpRequest = CreateFtpWebRequest(host, createFile, credentials);
 
-                    using (var ftpResponse = (FtpWebResponse)await ftpRequest.GetResponseAsync())
+                    using (var ftpResponse = (FtpWebResponse)await ftpRequest.GetResponseAsync().WithCancellationTokenAsync(cancellationToken))
                     {
                         if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated
                             && ftpResponse.StatusCode != FtpStatusCode.ClosingData)

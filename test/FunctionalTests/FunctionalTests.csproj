@@ -15,6 +15,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(MicrosoftAspNetCoreSignalR)" />
+    <PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />
   </ItemGroup>
   
   <ItemGroup>

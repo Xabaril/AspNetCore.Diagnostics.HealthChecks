@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="blobServiceUri">The Azure Storage Blob service Uri like <see cref="https://myaccount.blob.core.windows.net"/>. </param>
-        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see cref="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
+        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
         /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <c>null</c> then container name check is not executed. </param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureblob' will be used for the name.</param>
         /// <param name="failureStatus">
@@ -89,8 +89,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure Queue Storage.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="queueServiceUri">The Azure Queue service Uri like <see cref="https://myaccount.blob.core.windows.net"/>. </param>
-        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see cref="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
+        /// <param name="queueServiceUri">The Azure Queue service Uri like <see href="https://myaccount.blob.core.windows.net"/>. </param>
+        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
         /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <c>null</c> then queue name check is not executed. </param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">

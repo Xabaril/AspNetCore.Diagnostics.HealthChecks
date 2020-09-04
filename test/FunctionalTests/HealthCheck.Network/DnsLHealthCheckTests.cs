@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.Network;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;

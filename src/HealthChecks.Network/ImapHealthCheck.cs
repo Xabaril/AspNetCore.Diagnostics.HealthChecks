@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.Network.Extensions;
 
 namespace HealthChecks.Network
 {
@@ -30,7 +31,7 @@ namespace HealthChecks.Network
             {
                 using (var imapConnection = new ImapConnection(_options))
                 {
-                    if (await imapConnection.ConnectAsync())
+                    if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken))
                     {
                         if (_options.AccountOptions.Login)
                         {

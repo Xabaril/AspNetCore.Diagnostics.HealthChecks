@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.Network;
 using HealthChecks.Network.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -314,6 +316,23 @@ namespace FunctionalTests.HealthChecks.Network
                 .GetAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
+
+        [Fact]
+        public async Task respect_configured_timeout_and_throw_operation_cancelled_exception()
+        {
+            var options = new ImapHealthCheckOptions() { Host = "invalid", Port = 993 };
+            options.LoginWith("user", "pass");
+
+            var imapHealthCheck = new ImapHealthCheck(options);
+
+            var result = await imapHealthCheck.CheckHealthAsync(new HealthCheckContext
+            {
+                Registration = new HealthCheckRegistration("imap", instance: imapHealthCheck, failureStatus: HealthStatus.Degraded,
+                    null, timeout: null)
+            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
+
+            result.Exception.Should().BeOfType<OperationCanceledException>();
         }
     }
 }

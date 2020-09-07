@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Prometheus.Metrics\HealthChecks.Prometheus.Metrics.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj" />

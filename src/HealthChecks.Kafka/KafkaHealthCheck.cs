@@ -34,7 +34,7 @@ namespace HealthChecks.Kafka
                     Value = $"Check Kafka healthy on {DateTime.UtcNow}"
                 };
 
-                var result = await _producer.ProduceAsync(_topic, message);
+                var result = await _producer.ProduceAsync(_topic, message, cancellationToken);
 
                 if (result.Status == PersistenceStatus.NotPersisted)
                 {

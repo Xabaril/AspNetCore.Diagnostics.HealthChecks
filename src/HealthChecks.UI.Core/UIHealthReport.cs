@@ -81,7 +81,7 @@ namespace HealthChecks.UI.Core
         public IReadOnlyDictionary<string, object> Data { get; set; }
         public string Description { get; set; }
         public TimeSpan Duration { get; set; }
-        public string Exception { get; set; }
+        public dynamic Exception { get; set; }
         public UIHealthStatus Status { get; set; }
     }
 }

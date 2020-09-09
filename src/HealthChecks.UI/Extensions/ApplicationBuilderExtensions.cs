@@ -25,13 +25,14 @@ namespace Microsoft.AspNetCore.Builder
 
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 
-            app.Map(options.ApiPath, appBuilder => appBuilder.UseMiddleware<UIApiEndpointMiddleware>());
-
-            app.Map(options.WebhookPath, appBuilder => {
+            app.Map(options.ApiPath, appBuilder =>
+            {
                 appBuilder
                 .UseMiddleware<UIApiRequestLimitingMidleware>()
-                .UseMiddleware<UIWebHooksApiMiddleware>();
+                .UseMiddleware<UIApiEndpointMiddleware>();
             });
+
+            app.Map(options.WebhookPath, appBuilder => appBuilder.UseMiddleware<UIWebHooksApiMiddleware>());
 
             app.Map($"{options.ApiPath}/{Keys.HEALTHCHECKSUI_SETTINGS_PATH}", appBuilder => appBuilder.UseMiddleware<UISettingsMiddleware>());
 

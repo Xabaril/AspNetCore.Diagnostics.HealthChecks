@@ -33,6 +33,18 @@ spec:
               type: number
             uiPath:
               type: string
+              pattern: "^/"
+            uiApiPath:
+              type: string
+              pattern: "^/"
+            uiResourcesPath:
+              type: string
+              pattern: "^/"
+            uiWebhooksPath:
+              type: string
+              pattern: "^/"
+            uiNoRelativePaths:
+              type: boolean
             servicesLabel:
               type: string
             healthChecksPath:

@@ -20,5 +20,15 @@
         public const string PushServiceAuthKey = "key";
         public const string StylesPath = "css";
         public const string StyleSheetName = "styles";
+
+        internal class Deployment
+        {
+            internal class Operation
+            {
+                public const string Add = "Add";
+                public const string Delete = "Delete";
+                public const string Patch = "Patch";
+            }
+        }
     }
 }

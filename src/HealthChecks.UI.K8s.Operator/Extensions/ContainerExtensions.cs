@@ -6,8 +6,9 @@ namespace HealthChecks.UI.K8s.Operator {
     public static class ContainerExtensions {
         internal static void MapCustomUIPaths(this V1Container container, HealthCheckResource resource, OperatorDiagnostics diagnostics) {
 
-            container.Env.Add(new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.DefaultUIPath));
-            diagnostics.UiPathConfigured(nameof(resource.Spec.UiPath), resource.Spec.UiPath);
+            var uiPath = resource.Spec.UiPath ?? Constants.DefaultUIPath;
+            container.Env.Add(new V1EnvVar("ui_path", uiPath));
+            diagnostics.UiPathConfigured(nameof(resource.Spec.UiPath), uiPath);
 
             if (!string.IsNullOrEmpty(resource.Spec.UiApiPath))
             {

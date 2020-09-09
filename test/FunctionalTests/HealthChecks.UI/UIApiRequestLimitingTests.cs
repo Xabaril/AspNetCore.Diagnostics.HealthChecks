@@ -23,7 +23,6 @@ using Xunit;
 namespace FunctionalTests.HealthChecks.UI
 {
 
-    [Collection("execution")]
     public class ui_api_request_limiting
     {
         [Fact]
@@ -37,8 +36,8 @@ namespace FunctionalTests.HealthChecks.UI
                    {
                        services
                             .AddRouting()
-                           .AddHealthChecks()                           
-                           .AddAsyncCheck("Delayed", async() =>
+                           .AddHealthChecks()
+                           .AddAsyncCheck("Delayed", async () =>
                            {
                                await Task.Delay(200);
                                return HealthCheckResult.Healthy();
@@ -49,7 +48,7 @@ namespace FunctionalTests.HealthChecks.UI
                                setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                                setup.SetApiMaxActiveRequests(maxActiveRequests);
                            })
-                           .AddInMemoryStorage();
+                           .AddInMemoryStorage(databaseName: "LimitingTests");
 
                    })
                    .Configure(app =>
@@ -100,7 +99,7 @@ namespace FunctionalTests.HealthChecks.UI
                            {
                                setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                            })
-                           .AddInMemoryStorage();
+                           .AddInMemoryStorage(databaseName: "LimitingTests");
 
                    })
                    .Configure(app =>

@@ -1,3 +1,4 @@
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
@@ -6,18 +7,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static HealthChecks.UI.K8s.Operator.Constants;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
-    public class DeploymentHandler
+    internal class DeploymentHandler
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
+        private readonly OperatorDiagnostics _operatorDiagnostics;
 
-        public DeploymentHandler(IKubernetes client, ILogger<K8sOperator> logger)
+        public DeploymentHandler(IKubernetes client, ILogger<K8sOperator> logger, OperatorDiagnostics operatorDiagnostics)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _operatorDiagnostics = operatorDiagnostics ?? throw new ArgumentNullException(nameof(operatorDiagnostics));
         }
 
         public Task<V1Deployment> Get(HealthCheckResource resource)
@@ -38,11 +42,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
 
-                _logger.LogInformation("Deployment {deployment} has been created", deployment.Metadata.Name);
+                _operatorDiagnostics.DeploymentCreated(deployment.Metadata.Name);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error creating deployment: {error}", ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(deployment.Metadata.Name, Deployment.Operation.Add, ex.Message);
             }
 
             return deployment;
@@ -58,7 +62,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error deleting deployment for hc resource: {name} - err: {error}", resource.Spec.Name, ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(resource.Spec.Name, Deployment.Operation.Delete, ex.Message);
             }
         }
 
@@ -77,6 +81,28 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 Name = $"{resource.Spec.Name}-deploy",
                 NamespaceProperty = resource.Metadata.NamespaceProperty
             };
+
+            var uiContainer = new V1Container
+            {
+                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DefaultPullPolicy,
+                Name = Constants.PodName,
+                Image = resource.Spec.Image ?? Constants.ImageName,
+                Ports = new List<V1ContainerPort>
+                                {
+                                    new V1ContainerPort(80)
+                                },
+                Env = new List<V1EnvVar>
+                                {
+                                    new V1EnvVar("enable_push_endpoint", "true"),
+                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
+                                    new V1EnvVar("Logging__LogLevel__Default", "Debug"),
+                                    new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__System", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
+                                }
+            };
+
+            uiContainer.MapCustomUIPaths(resource, _operatorDiagnostics);
 
             var spec = new V1DeploymentSpec
             {
@@ -101,26 +127,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                     {
                         Containers = new List<V1Container>
                         {
-                            new V1Container
-                            {
-                                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DefaultPullPolicy,
-                                Name = Constants.PodName,
-                                Image = resource.Spec.Image ?? Constants.ImageName,
-                                Ports = new List<V1ContainerPort>
-                                {
-                                    new V1ContainerPort(80)
-                                },
-                                Env = new List<V1EnvVar>
-                                {
-                                    new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.DefaultUIPath),
-                                    new V1EnvVar("enable_push_endpoint", "true"),
-                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
-                                    new V1EnvVar("Logging__LogLevel__Default", "Debug"),
-                                    new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
-                                    new V1EnvVar("Logging__LogLevel__System", "Warning"),
-                                    new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
-                                }
-                            }
+                           uiContainer
                         }
                     }
                 }

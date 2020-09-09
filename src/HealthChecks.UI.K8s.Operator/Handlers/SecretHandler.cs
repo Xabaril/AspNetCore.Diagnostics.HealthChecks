@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
-    public class SecretHandler
+    internal class SecretHandler
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;

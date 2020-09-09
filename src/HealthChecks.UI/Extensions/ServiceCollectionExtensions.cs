@@ -36,7 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
             services.TryAddScoped<IHealthCheckReportCollector, HealthCheckReportCollector>();
 
-            services                
+            services
                 .AddHostedService<UIInitializationHostedService>()
                 .AddHostedService<HealthCheckCollectorHostedService>()
                 .AddKubernetesDiscoveryService()

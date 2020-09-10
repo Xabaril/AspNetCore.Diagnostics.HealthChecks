@@ -38,7 +38,20 @@ The [HealthCheck operator definition](https://github.com/Xabaril/AspNetCore.Diag
 | Field         | Description                                                                        |
 | ------------- | :--------------------------------------------------------------------------------- |
 | name          | Name of the healthcheck resource                                                   |
+| scope         | Cluster / Namespaced                                                               |
 | servicesLabel | The label the operator service watcher will use to detected healthchecks endpoints |
+
+
+### Scope definition (Cluster or Namespaced)
+
+The scope field (Cluster or Namespaced) is mandatory and will specify to the operator whether it should watch for healthchecks services in the
+same namespace where the UI resource is created or watch to all services in all namespaces.
+
+If you wan't to have different UI's for different namespaced services you should use **Namespaced**
+
+If you wan't to have a single UI that monitors all the healthchecks from the cluster you should use **Cluster**
+
+Note: The UI resources created by the operator (deployment, service, configmap, secret, etc) will always be created in the metadata specified namespace.
 
 ### Optional fields
 
@@ -76,6 +89,8 @@ metadata:
   namespace: demo
 spec:
   name: healthchecks-ui
+  scope: Namespaced #The UI will be created at specified namespace (demo) and will watch healthchecks services in demo namespace only
+  #scope: Cluster The UI will be created at specified namespace (demo) but will watch healthcheck services across all namespaces
   servicesLabel: HealthChecks
   serviceType: LoadBalancer
   stylesheetContent: >

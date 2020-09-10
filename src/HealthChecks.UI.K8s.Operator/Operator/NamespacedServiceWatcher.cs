@@ -1,4 +1,5 @@
 using HealthChecks.UI.K8s.Operator.Diagnostics;
+using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
@@ -11,24 +12,28 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    internal class HealthCheckServiceWatcher : IDisposable
+    internal class NamespacedServiceWatcher : IDisposable
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
         private readonly OperatorDiagnostics _diagnostics;
+        private readonly NotificationHandler _notificationHandler;
         private readonly IHttpClientFactory _httpClientFactory;
         private Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
 
-        public HealthCheckServiceWatcher(
+        public NamespacedServiceWatcher(
             IKubernetes client,
             ILogger<K8sOperator> logger,
             OperatorDiagnostics diagnostics, 
+            NotificationHandler notificationHandler,
             IHttpClientFactory httpClientFactory)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
+            _notificationHandler = notificationHandler;
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
         }
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)
@@ -36,7 +41,7 @@ namespace HealthChecks.UI.K8s.Operator
             Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
 
             if (!_watchers.Keys.Any(filter))
-            {
+            {                
                 var response = _client.ListNamespacedServiceWithHttpMessagesAsync(
                     namespaceParameter: resource.Metadata.NamespaceProperty,
                     labelSelector: $"{resource.Spec.ServicesLabel}",
@@ -44,7 +49,7 @@ namespace HealthChecks.UI.K8s.Operator
                     cancellationToken: token);
 
                 var watcher = response.Watch<V1Service, V1ServiceList>(
-                    onEvent: async (type, item) => await OnServiceDiscoveredAsync(type, item, resource),
+                    onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
                     onError: e => _diagnostics.ServiceWatcherThrow(e)
                 );
 
@@ -97,12 +102,6 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 if (w != null && w.Watching) w.Dispose();
             });
-        }
-
-        private class ServiceWatch
-        {
-            WatchEventType EventType { get; set; }
-            V1Service Service { get; set; }
         }
     }
 }

@@ -6,6 +6,7 @@ namespace HealthChecks.UI.K8s.Operator
     public class HealthCheckResourceSpec
     {
         public string Name { get; set; }
+        public string Scope { get; set; }
         public string PortNumber { get; set; }
         public string ServiceType { get; set; }
         public string UiPath { get; set; }

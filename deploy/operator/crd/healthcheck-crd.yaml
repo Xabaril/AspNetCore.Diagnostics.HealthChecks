@@ -23,6 +23,11 @@ spec:
           properties:
             name:
               type: string
+            scope:
+             type: string
+             enum:
+               - Cluster
+               - Namespaced
             serviceType:
               type: string
               enum:
@@ -99,4 +104,5 @@ spec:
 
           required:
             - name
+            - scope
             - servicesLabel

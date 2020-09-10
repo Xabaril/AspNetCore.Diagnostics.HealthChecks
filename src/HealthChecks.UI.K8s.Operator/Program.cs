@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using HealthChecks.UI.K8s.Operator.Diagnostics;
+using HealthChecks.UI.K8s.Operator.Operator;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -49,7 +50,9 @@ namespace HealthChecks.UI.K8s.Operator
                 .AddSingleton<ServiceHandler>()
                 .AddSingleton<SecretHandler>()
                 .AddSingleton<ConfigMaphandler>()
-                .AddSingleton<HealthCheckServiceWatcher>();
+                .AddSingleton<NotificationHandler>()
+                .AddSingleton<NamespacedServiceWatcher>()
+                .AddSingleton<ClusterServiceWatcher>();
 
             }).ConfigureLogging((context, builder) =>
             {

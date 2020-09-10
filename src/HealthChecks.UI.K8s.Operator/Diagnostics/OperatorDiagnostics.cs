@@ -39,7 +39,7 @@ namespace HealthChecks.UI.K8s.Operator.Diagnostics
 
         public void ServiceWatcherThrow(Exception exception)
         {
-            _logger.LogError(exception, "The operator service watcher threw an unhandled exception");
+            _logger.LogError(exception.Message, "The operator service watcher threw an unhandled exception");
         }
 
         public void UiPathConfigured(string path, string value)

@@ -17,7 +17,7 @@
         internal const string HEALTHCHECKSUI_RESOURCES_TARGET = "#uiResourcePath#";
         internal const string HEALTHCHECKSUI_STYLESHEETS_TARGET = "#customstylesheets#";
         internal const string HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET = "#asideMenuOpened#";
-        internal const string HEALTHCHECKSUI_SETTINGS__ENDPOINT_TARGET = "#uiSettingsEndpoint#";
+        internal const string HEALTHCHECKSUI_SETTINGS_ENDPOINT_TARGET = "#uiSettingsEndpoint#";
         internal const string DEFAULT_RESPONSE_CONTENT_TYPE = "application/json";
         internal const string LIVENESS_BOOKMARK = "[[LIVENESS]]";
         internal const string FAILURE_BOOKMARK = "[[FAILURE]]";

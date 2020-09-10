@@ -19,7 +19,7 @@ namespace HealthChecks.UI.Core
 
             var settingsPath = $"{options.ApiPath}/{Keys.HEALTHCHECKS_SETTINGS_ENDPOINT}";
 
-            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_SETTINGS__ENDPOINT_TARGET, settingsPath);
+            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_SETTINGS_ENDPOINT_TARGET, settingsPath);
 
             var webhooksPath = options.UseRelativeWebhookPath ? options.WebhookPath.AsRelativeResource() : options.WebhookPath;
 

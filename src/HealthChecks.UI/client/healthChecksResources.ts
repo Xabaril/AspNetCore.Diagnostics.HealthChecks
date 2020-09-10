@@ -15,7 +15,7 @@ export const discoveryServices = [
   { name: 'kubernetes', image: kubernetesIcon }
 ];
 
-const getStatusConfig = (status: string) =>
+const getStatusConfig =   (status: string) =>
   imageResources.find(s => s.state == status);
 
 export { getStatusConfig };

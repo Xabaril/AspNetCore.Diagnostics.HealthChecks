@@ -6,6 +6,7 @@ import { LivenessTable } from '../components/LivenessTable';
 import { useQuery } from 'react-query';
 import { getHealthChecks } from '../api/fetchers';
 import { LivenessMenu } from '../components/LivenessMenu';
+import { AlertPanel } from '../components/AlertPanel';
 const healthChecksIntervalStorageKey = 'healthchecks-ui-polling';
 
 interface LivenessState {
@@ -19,13 +20,13 @@ interface LivenessProps {
 }
 
 const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) => {
-    
+
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const [fetchInterval, setFetchInterval] = useState<number | false>(apiSettings.pollingInterval);
     const [running, setRunning] = useState<boolean>(true);
 
     const { data: livenessData, isError } = useQuery("healthchecks", getHealthChecks,
-        { refetchInterval: fetchInterval, keepPreviousData: true });
+        { refetchInterval: fetchInterval, keepPreviousData: true, retry: 1 });
 
     useEffect(() => {
         if (!running) {
@@ -66,10 +67,13 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
         <article className="hc-liveness">
             <header className="hc-liveness__header">
                 <h1>Health Checks status</h1>
-                <LivenessMenu 
-                    running={running} 
-                    onRunningClick={() => setRunning(!running)}/>
+                <LivenessMenu
+                    running={running}
+                    onRunningClick={() => setRunning(!running)} />
             </header>
+            {isError ? (
+                <AlertPanel message="Could not retrieve health checks data" />
+            ) : null}
             <div className="hc-liveness__container">
                 <div
                     className="hc-table-container"
@@ -80,11 +84,6 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
                             collapseAll={collapseAll}
                             livenessData={livenessData!}
                         />) : null}
-                    {isError ? (
-                        <div className="w-100 alert alert-danger" role="alert">
-                            Could not retrieve health checks data
-                        </div>
-                    ) : null}
                 </div>
             </div>
         </article>

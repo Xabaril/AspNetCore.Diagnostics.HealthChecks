@@ -31,7 +31,6 @@ namespace HealthChecks.UI.K8s.Operator
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _notificationHandler = notificationHandler;
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
         }

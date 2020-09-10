@@ -18,7 +18,6 @@ namespace HealthChecks.UI.K8s.Operator.Operator
         private readonly ILogger<K8sOperator> _logger;
         private readonly OperatorDiagnostics _diagnostics;
         private readonly NotificationHandler _notificationHandler;
-        private readonly IHttpClientFactory _httpClientFactory;
         private Watcher<V1Service> _watcher;
         public ClusterServiceWatcher(
           IKubernetes client,
@@ -30,8 +29,6 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _notificationHandler = notificationHandler;
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
         }
 

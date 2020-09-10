@@ -2,21 +2,22 @@ import React, { FunctionComponent, useState } from "react";
 
 
 interface LivenessMenuProps {
-   running: boolean
-   onRunningClick: () => void;
+    pollingInterval: number,
+    running: boolean
+    onRunningClick: () => void;
 }
 
-const LivenessMenu : FunctionComponent<LivenessMenuProps> = ({running, onRunningClick}) => {
+const LivenessMenu: FunctionComponent<LivenessMenuProps> = ({ running, onRunningClick, pollingInterval }) => {
     return (
-    <div className="hc-refesh-group">
-
-        <button
-            onClick={onRunningClick}
-            type="button"
-            className="hc-button">
-            {running ? "Stop" : "Start"}
-        </button>
-    </div>)
+        <div className="hc-refesh-group">
+            <span>Polling interval: <b>{pollingInterval}</b> secs</span>
+            <button
+                onClick={onRunningClick}
+                type="button"
+                className="hc-button">
+                {running ? "Stop polling" : "Start polling"}
+            </button>
+        </div>)
 };
 
-export {LivenessMenu};
+export { LivenessMenu };

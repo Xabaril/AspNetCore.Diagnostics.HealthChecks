@@ -28,11 +28,11 @@ const App: FunctionComponent<AppProps> = ({ uiSettings }) => {
   };
 
 
-  if (isError) {
-    return <AlertPanel message="Error retrivieng UI api settings from endpoint" />    
-  }
+  // if (isError) {
+  //   return <AlertPanel message="Error retrivieng UI api settings from endpoint" />    
+  // }
 
-  if (apiSettings == undefined) return null;
+  // if (apiSettings == undefined) return null;
 
   return (
     <main id="outer-container">
@@ -64,7 +64,7 @@ const App: FunctionComponent<AppProps> = ({ uiSettings }) => {
         />
         <Route
           path="/healthchecks"
-          render={() => <LivenessPage apiSettings={{ pollingInterval: apiSettings.pollingInterval }} />}
+          render={() => <LivenessPage apiSettings={{ pollingInterval: 5 }} />}
         />
         <Route
           path="/webhooks"

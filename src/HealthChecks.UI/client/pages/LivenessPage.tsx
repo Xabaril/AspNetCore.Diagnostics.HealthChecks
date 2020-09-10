@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 import { getHealthChecks } from '../api/fetchers';
 import { LivenessMenu } from '../components/LivenessMenu';
 import { AlertPanel } from '../components/AlertPanel';
-const healthChecksIntervalStorageKey = 'healthchecks-ui-polling';
+
 
 interface LivenessState {
     error: Nullable<string>;
@@ -22,7 +22,7 @@ interface LivenessProps {
 const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) => {
 
     const tableContainerRef = useRef<HTMLDivElement>(null);
-    const [fetchInterval, setFetchInterval] = useState<number | false>(apiSettings.pollingInterval);
+    const [fetchInterval, setFetchInterval] = useState<number | false>(apiSettings.pollingInterval * 1000);
     const [running, setRunning] = useState<boolean>(true);
 
     const { data: livenessData, isError } = useQuery("healthchecks", getHealthChecks,
@@ -33,7 +33,7 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
             setFetchInterval(false);
             return;
         }
-        setFetchInterval(apiSettings.pollingInterval);
+        setFetchInterval(apiSettings.pollingInterval * 1000);
     }, [running]);
 
     const expandAll = useCallback(() => {
@@ -68,6 +68,7 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
             <header className="hc-liveness__header">
                 <h1>Health Checks status</h1>
                 <LivenessMenu
+                    pollingInterval={apiSettings.pollingInterval}
                     running={running}
                     onRunningClick={() => setRunning(!running)} />
             </header>

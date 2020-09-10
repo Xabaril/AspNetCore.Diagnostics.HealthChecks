@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent, useState } from 'react';
+import React, { Component, FunctionComponent, useEffect, useState } from 'react';
 import { Check, ExecutionHistory } from '../typings/models';
 import { LivenessDetail } from './LivenessDetail';
 import { LivenessPanel } from './LivenessPanel';
@@ -16,7 +16,7 @@ interface CheckTableState {
 }
 
 const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => {
-    
+
     const [isOpenPanel, setOpenPanel] = useState<boolean>(false);
     const [selectedHistory, setSelectedHistory] = useState<Nullable<ExecutionHistory[]>>(null);
     const [selectedHealthcheck, setSelectedHealthcheck] = useState<Nullable<Check>>(null);
@@ -26,12 +26,21 @@ const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => 
         setSelectedHistory(history);
         setSelectedHealthcheck(healthCheck);
     }
+    
+    useEffect(() => {
+        let interval  = 0;
+        if(!isOpenPanel) {
+            interval = setTimeout(() => {
+                setSelectedHealthcheck(null);
+                setSelectedHistory(null);
+            }, 200);
+        }
 
-    const closePanel = () => {
-        setOpenPanel(false);
-        setSelectedHistory(null);
-        setSelectedHealthcheck(null);
-    }
+        return () => {
+            if(interval != 0) clearInterval(interval);
+        };
+
+    },[isOpenPanel]);
 
     const renderTable = () => {
 
@@ -62,30 +71,29 @@ const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => 
             );
     }
 
-    const renderPanel = selectedHealthcheck != null && isOpenPanel;
     return (
         <>
             <table className="hc-checks-table">
                 <thead className="hc-checks-table__header">
                     <tr>
-                        <th>Name</th>
-                        <th>Health</th>
-                        <th>Description</th>
-                        <th>Duration</th>
-                        <th>Details</th>
+                        <th style={{ width: "20%" }}>Name</th>
+                        <th style={{ width: "10%" }}>Health</th>
+                        <th style={{ width: "40%" }}>Description</th>
+                        <th style={{ width: "20%" }}>Duration</th>
+                        <th style={{ width: "10%" }}>Details</th>
                     </tr>
                 </thead>
                 <tbody className="hc-checks-table__body">{renderTable()}</tbody>
             </table>
-            {renderPanel &&
-                <LivenessPanel
-                    onClosePanel={closePanel}>
-                    <LivenessDetail
-                        healthcheck={selectedHealthcheck!}
-                        executionHistory={selectedHistory!}>
-                    </LivenessDetail>
-                </LivenessPanel>
-            }
+            <LivenessPanel
+                visible={isOpenPanel}
+                onClosePanel={() => setOpenPanel(false)}>
+                <LivenessDetail
+                    healthcheck={selectedHealthcheck!}
+                    executionHistory={selectedHistory!}>
+                </LivenessDetail>
+            </LivenessPanel>
+
         </>
     );
 }

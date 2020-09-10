@@ -14,6 +14,8 @@ interface LivenessDetailsProps {
 }
 
 const LivenessDetail: FunctionComponent<LivenessDetailsProps> = props => {
+  if(props.healthcheck === null ) return null;
+  
   return (
       <section className="hc-liveness-detail">
       <header>

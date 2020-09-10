@@ -312,11 +312,6 @@ h4 {
   border-width: 1px 0 1px 1px;
 }
 
-.hc-checks-table__body td > * {
-  vertical-align: middle;
-  display: inline-block;
-}
-
 .hc-checks-table__header th {
   text-transform: uppercase;
   text-align: center;
@@ -333,10 +328,16 @@ h4 {
   color: var(--fcNegative);
   padding: 0.5rem;
   height: 2rem;
+  min-width: 3.5rem;
 }
+
 
 .hc-button:hover {
   background-image: var(--bgImageDarken);
+}
+
+.hc-button:focus {
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.50);
 }
 
 .hc-liveness {
@@ -440,15 +441,13 @@ h4 {
     overflow-y: auto;
     background-color: var(--bgSecondary);
     box-shadow: 0 0.375em 1em 0 rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease-in-out 0.3s;
+    transition: all 0.2s ease-in-out;
 }
 
 .hc-liveness-detail {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    transition: right 0.3s ease-in-out 0.3s;
-    display: block;
+    height: 100%;    
 }
 
 .hc-liveness-detail--open {
@@ -461,7 +460,6 @@ h4 {
     overflow-y: auto;
     display: flex;
     justify-content: center;
-
 }
 
 .hc-liveness-detail .hc-status {
@@ -561,18 +559,9 @@ h4 {
 .alert-panel {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-  padding-top: 1rem;
-  padding-bottom:1.25rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  display: inline-block;
+  padding: 1rem; 
   color: #000!important;
-  background-color: #ffdddd!important;
-  border: 1px solid #ccc!important;
-  border-radius: 3%;
-}
-
-.alert-panel i {
-  position: relative;
-  top: 0.40rem;
+  background-color: #ffdddd!important;  
+  display:flex;
+  align-items: center;
 }

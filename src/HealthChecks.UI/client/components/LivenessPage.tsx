@@ -1,13 +1,16 @@
-import * as React from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { HealthChecksClient } from '../healthChecksClient';
 import moment from 'moment';
-import { Liveness } from '../typings/models';
+import { Liveness, UIApiSettings } from '../typings/models';
 import { LivenessTable } from './LivenessTable';
-const DarkHeartIcon = require('../../assets/svg/dark-heart.svg');
-const ExpandIcon = require('../../assets/svg/expand.svg');
-const CollapseIcon = require('../../assets/svg/collapse.svg');
-const PlusIcon = require('../../assets/svg/plus.svg');
-const MinusIcon = require('../../assets/svg/minus.svg');
+import DarkHeartIcon from '../../assets/svg/dark-heart.svg';
+import ExpandIcon from '../../assets/svg/expand.svg';
+import CollapseIcon from '../../assets/svg/collapse.svg';
+import PlusIcon from '../../assets/svg/plus.svg';
+import MinusIcon from '../../assets/svg/minus.svg';
+import { useQuery } from 'react-query';
+import { getHealthChecks } from '../api/fetchers';
+import uiSettings from '../config/UISettings';
 
 const healthChecksIntervalStorageKey = 'healthchecks-ui-polling';
 
@@ -18,10 +21,91 @@ interface LivenessState {
 }
 
 interface LivenessProps {
-    endpoint: string;
+    apiSettings: UIApiSettings
 }
 
-export class LivenessPage extends React.Component<
+const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) => {
+    const tableContainerRef = useRef<HTMLDivElement>(null);
+    const [fetchInterval, setFetchInterval] = useState<number | false>(apiSettings.pollingInterval);
+    const [running, setRunning] = useState<boolean>(true);
+
+    const { data: livenessData, isError } = useQuery("healthchecks", getHealthChecks,
+        { refetchInterval: fetchInterval, keepPreviousData: true });
+
+    useEffect(() => {
+        if (!running) {
+            setFetchInterval(false);
+            return;
+        }
+        setFetchInterval(apiSettings.pollingInterval);
+    }, [running]);
+
+    const expandAll = useCallback((event: any) => {
+        var tableElement = tableContainerRef.current!;
+        Array.from(
+            tableElement.getElementsByClassName('hc-checks-table-container')
+        ).forEach((el: any) => el.classList.remove('is-hidden'));
+
+        Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
+            (el: any) => {
+                el.innerHTML = 'remove';
+                el.setAttribute('title', 'hide info');
+            }
+        );
+    }, [tableContainerRef]);
+
+    const collapseAll = useCallback((event: any) => {
+        var tableElement = tableContainerRef.current!;
+        Array.from(
+            tableElement.getElementsByClassName('hc-checks-table-container')
+        ).forEach((el: any) => el.classList.add('is-hidden'));
+
+        Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
+            (el: any) => {
+                el.innerHTML = 'add';
+                el.setAttribute('title', 'expand info');
+            });
+    }, [tableContainerRef]);
+
+    return (
+        <article className="hc-liveness">
+            <header className="hc-liveness__header">
+                <h1>Health Checks status</h1>
+                <div className="hc-refesh-group">
+
+                    <button
+                        onClick={() => setRunning(!running)}
+                        type="button"
+                        className="hc-button">
+                        {running ? "Stop" : "Start"}
+                    </button>
+                </div>
+            </header>
+            <div className="hc-liveness__container">
+                <div
+                    className="hc-table-container"
+                    ref={tableContainerRef}>
+                    {livenessData != undefined ? (
+                        <LivenessTable
+                            expandAll={expandAll}
+                            collapseAll={collapseAll}
+                            livenessData={livenessData!}
+                        />) : null}
+                    {isError ? (
+                        <div className="w-100 alert alert-danger" role="alert">
+                            Could not retrieve health checks data
+                        </div>
+                    ) : null}
+                </div>
+            </div>
+        </article>
+    );
+
+};
+
+export { LivenessPage };
+
+export class LivenessPage2 extends React.Component<
     LivenessProps,
     LivenessState
     > {
@@ -29,7 +113,7 @@ export class LivenessPage extends React.Component<
     private _lifenessTable: any;
     constructor(props: LivenessProps) {
         super(props);
-        this._healthChecksClient = new HealthChecksClient(this.props.endpoint);
+        this._healthChecksClient = new HealthChecksClient("");
         this.initPolling = this.initPolling.bind(this);
         this.onPollinIntervalChange = this.onPollinIntervalChange.bind(this);
         this.expandAll = this.expandAll.bind(this);
@@ -85,7 +169,7 @@ export class LivenessPage extends React.Component<
         );
     }
 
-    configuredInterval(): string | number {
+    configuredInterval(): undefined | number {
         let configuredInterval =
             localStorage.getItem(healthChecksIntervalStorageKey) ||
             this.state.pollingIntervalSetting;

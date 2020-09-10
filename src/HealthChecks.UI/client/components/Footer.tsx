@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 
-const Footer: React.SFC<any> = (props) => {
+const Footer: FunctionComponent = () => {
     return <div id="footer">
      <span>Xabaril Team @ {new Date().getFullYear()}</span>
     </div>

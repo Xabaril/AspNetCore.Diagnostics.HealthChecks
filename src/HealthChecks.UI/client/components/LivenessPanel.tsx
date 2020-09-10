@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 
 interface IDetailPanelProps {
   children: React.ReactNode;
   onClosePanel: any;
 }
 
-const LivenessPanel = ({
+const LivenessPanel: FunctionComponent<IDetailPanelProps> = ({
   children,
   onClosePanel
-}: IDetailPanelProps) => (
+}) => (
   <aside
     className="hc-liveness-panel">
     <button className="hc-action-btn" onClick={() => onClosePanel()}>

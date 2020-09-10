@@ -16,7 +16,7 @@ export class HealthChecksClient {
         });
     }
 
-    startPolling(interval: string | number, onTimeElapsedCallback: () => void) {
+    startPolling(interval: undefined | number, onTimeElapsedCallback: () => void) {
         this.stopPolling();
         this._pollingInterval = setInterval(onTimeElapsedCallback, interval);
     }

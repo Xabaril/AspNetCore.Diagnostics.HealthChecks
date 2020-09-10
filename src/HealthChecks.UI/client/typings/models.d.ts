@@ -39,3 +39,7 @@ interface WebHook {
     host: string;
     payload: string;
 }
+
+export interface UIApiSettings {
+    pollingInterval: number
+}

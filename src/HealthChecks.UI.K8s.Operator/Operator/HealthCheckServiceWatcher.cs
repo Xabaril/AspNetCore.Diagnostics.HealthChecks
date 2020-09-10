@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,16 +16,19 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
         private readonly OperatorDiagnostics _diagnostics;
+        private readonly IHttpClientFactory _httpClientFactory;
         private Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
 
         public HealthCheckServiceWatcher(
             IKubernetes client,
             ILogger<K8sOperator> logger,
-            OperatorDiagnostics diagnostics)
+            OperatorDiagnostics diagnostics, 
+            IHttpClientFactory httpClientFactory)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)
@@ -83,7 +87,8 @@ namespace HealthChecks.UI.K8s.Operator
                 uiService,
                 service,
                 secret,
-                _logger);
+                _logger, 
+                _httpClientFactory);
         }
 
         public void Dispose()

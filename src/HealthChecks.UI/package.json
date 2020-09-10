@@ -13,7 +13,6 @@
   "author": "Xabaril Team",
   "license": "ISC",
   "dependencies": {
-    "classnames": "^2.2.6",
     "moment": "2.27.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -29,7 +28,6 @@
     "@types/react-vertical-timeline-component": "^3.0.0",
     "awesome-typescript-loader": "5.2.1",
     "css-loader": "^4.3.0",
-    "file-loader": "^6.1.0",
     "style-loader": "^1.2.1",
     "typescript": "4.0.2",
     "uglifycss": "0.0.29",

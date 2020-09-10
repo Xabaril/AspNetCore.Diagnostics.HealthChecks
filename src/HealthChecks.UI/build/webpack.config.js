@@ -20,12 +20,12 @@ module.exports = {
             },
             {
                 loader: 'url-loader',
-                test: /\.(png|jpg|gif|svg)$/
+                test: /\.(png|jpg|gif|svg|woff2)$/
             },
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
-            }
+            }           
         ]
     },
     plugins: [

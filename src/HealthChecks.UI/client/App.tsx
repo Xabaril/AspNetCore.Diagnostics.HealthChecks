@@ -1,24 +1,21 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Route, Redirect, NavLink } from 'react-router-dom';
-import { LivenessPage } from './components/LivenessPage';
-import { WebhooksPage } from './components/WebhooksPage';
+import { LivenessPage } from './pages/LivenessPage';
+import { WebhooksPage } from './pages/WebhooksPage';
 import { AsideMenu } from './components/AsideMenu';
 import  WhiteGearIcon from '../assets/svg/white-gear.svg';
 import WhiteHeartIcon from '../assets/svg/heart-check.svg';
-import  SelectedHeartIcon from '../assets/svg/heart-check.svg';
 import { UISettings } from './config/UISettings';
-import { useQuery } from 'react-query';
-import fetchers from './api/fetchers';
 
 interface AppProps {
-  uiSettings: UISettings
+    uiSettings: UISettings;
 }
 
 interface AppState {
   menuOpen: boolean;
 }
 
-const App : FunctionComponent<AppProps> = ({uiSettings}) => {
+const App: FunctionComponent<AppProps> = ({uiSettings}) => {
 
   const [asidemenuOpened, setAsideMenu] = useState<boolean>(uiSettings.asideMenuOpened);
  //const {data: apiSettings} = useQuery("uiApiSettings", fetchers.getUIApiSettings);

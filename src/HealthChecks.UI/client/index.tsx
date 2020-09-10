@@ -7,7 +7,6 @@ import uiSettings from "./config/UISettings";
 
 let endpoint = `${window.location.origin}${window.uiEndpoint}`;
 
-
 ReactDOM.render(
     <HashRouter>
         <App uiSettings={uiSettings}/>

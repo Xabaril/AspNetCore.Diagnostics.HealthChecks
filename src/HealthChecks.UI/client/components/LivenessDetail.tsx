@@ -14,7 +14,6 @@ interface LivenessDetailsProps {
 }
 
 const LivenessDetail: FunctionComponent<LivenessDetailsProps> = props => {
-
   return (
       <section className="hc-liveness-detail">
       <header>

@@ -6,6 +6,8 @@ import { AsideMenu } from './components/AsideMenu';
 import  WhiteGearIcon from '../assets/svg/white-gear.svg';
 import WhiteHeartIcon from '../assets/svg/heart-check.svg';
 import { UISettings } from './config/UISettings';
+import { isError, useQuery } from 'react-query';
+import fetchers from './api/fetchers';
 
 interface AppProps {
     uiSettings: UISettings;
@@ -18,13 +20,18 @@ interface AppState {
 const App: FunctionComponent<AppProps> = ({uiSettings}) => {
 
   const [asidemenuOpened, setAsideMenu] = useState<boolean>(uiSettings.asideMenuOpened);
- //const {data: apiSettings} = useQuery("uiApiSettings", fetchers.getUIApiSettings);
+  const {data: apiSettings, isError} = useQuery("uiApiSettings", fetchers.getUIApiSettings);
 
   const toggleMenu = () => {
     setAsideMenu(!asidemenuOpened);
   };
 
-  //if(apiSettings == undefined) return null;
+  
+ if (isError) {
+  return <div  className="w-100 alert alert-danger" role="alert">Error retrivieng UI api settings from endpoint</div>
+}
+
+ if(apiSettings == undefined) return null;
 
   return (
     <main id="outer-container">
@@ -56,7 +63,7 @@ const App: FunctionComponent<AppProps> = ({uiSettings}) => {
         />
         <Route
           path="/healthchecks"
-          render={() => <LivenessPage apiSettings={{pollingInterval: 5000}} />}
+          render={() => <LivenessPage apiSettings={{pollingInterval: apiSettings.pollingInterval}} />}
         />
         <Route
           path="/webhooks"

@@ -19,6 +19,7 @@ interface LivenessProps {
 }
 
 const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) => {
+    
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const [fetchInterval, setFetchInterval] = useState<number | false>(apiSettings.pollingInterval);
     const [running, setRunning] = useState<boolean>(true);

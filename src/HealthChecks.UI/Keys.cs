@@ -6,6 +6,7 @@
         internal const string HEALTHCHECKSUI_SECTION_SETTING_KEY = "HealthChecksUI";
         internal const string HEALTHCHECKS_DEFAULT_PATH = "hc";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_LABEL = "HealthChecks";
+        internal const string HEALTHCHECKS_SETTINGS_ENDPOINT = "ui-settings";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_ANNOTATION = "HealthChecksPath";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_ANNOTATION = "HealthChecksPort";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_ANNOTATION = "HealthChecksScheme";
@@ -16,6 +17,7 @@
         internal const string HEALTHCHECKSUI_RESOURCES_TARGET = "#uiResourcePath#";
         internal const string HEALTHCHECKSUI_STYLESHEETS_TARGET = "#customstylesheets#";
         internal const string HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET = "#asideMenuOpened#";
+        internal const string HEALTHCHECKSUI_SETTINGS__ENDPOINT_TARGET = "#uiSettingsEndpoint#";
         internal const string DEFAULT_RESPONSE_CONTENT_TYPE = "application/json";
         internal const string LIVENESS_BOOKMARK = "[[LIVENESS]]";
         internal const string FAILURE_BOOKMARK = "[[FAILURE]]";

@@ -16,6 +16,7 @@ interface CheckTableState {
 }
 
 const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => {
+    
     const [isOpenPanel, setOpenPanel] = useState<boolean>(false);
     const [selectedHistory, setSelectedHistory] = useState<Nullable<ExecutionHistory[]>>(null);
     const [selectedHealthcheck, setSelectedHealthcheck] = useState<Nullable<Check>>(null);

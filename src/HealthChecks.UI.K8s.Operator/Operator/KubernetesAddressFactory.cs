@@ -10,12 +10,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
         {
             var defaultPort = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort);
             var port = GetServicePort(service)?.Port ?? defaultPort;
-            var address = GetLoadBalancerAddress(service);
-
-            if(string.IsNullOrEmpty(address))
-            {
-                address = service.Spec.ClusterIP;
-            }
+            var address = service.Spec.ClusterIP;
 
             string healthScheme = resource.Spec.HealthChecksScheme;
 

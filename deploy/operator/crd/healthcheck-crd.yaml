@@ -23,6 +23,11 @@ spec:
           properties:
             name:
               type: string
+            scope:
+             type: string
+             enum:
+               - Cluster
+               - Namespaced
             serviceType:
               type: string
               enum:
@@ -33,6 +38,18 @@ spec:
               type: number
             uiPath:
               type: string
+              pattern: "^/"
+            uiApiPath:
+              type: string
+              pattern: "^/"
+            uiResourcesPath:
+              type: string
+              pattern: "^/"
+            uiWebhooksPath:
+              type: string
+              pattern: "^/"
+            uiNoRelativePaths:
+              type: boolean
             servicesLabel:
               type: string
             healthChecksPath:
@@ -87,4 +104,5 @@ spec:
 
           required:
             - name
+            - scope
             - servicesLabel

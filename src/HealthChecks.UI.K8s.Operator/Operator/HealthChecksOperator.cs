@@ -1,5 +1,6 @@
 ﻿using HealthChecks.UI.K8s.Operator.Controller;
 using HealthChecks.UI.K8s.Operator.Diagnostics;
+using HealthChecks.UI.K8s.Operator.Operator;
 using k8s;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using static HealthChecks.UI.K8s.Operator.Constants;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -15,7 +17,8 @@ namespace HealthChecks.UI.K8s.Operator
         private Watcher<HealthCheckResource> _watcher;
         private readonly IKubernetes _client;
         private readonly IHealthChecksController _controller;
-        private readonly HealthCheckServiceWatcher _serviceWatcher;
+        private readonly NamespacedServiceWatcher _serviceWatcher;
+        private readonly ClusterServiceWatcher _clusterServiceWatcher;
         private readonly OperatorDiagnostics _diagnostics;
         private readonly ILogger<K8sOperator> _logger;
         private readonly CancellationTokenSource _operatorCts = new CancellationTokenSource();
@@ -26,7 +29,8 @@ namespace HealthChecks.UI.K8s.Operator
         public HealthChecksOperator(
             IKubernetes client,
             IHealthChecksController controller,
-            HealthCheckServiceWatcher serviceWatcher,
+            NamespacedServiceWatcher serviceWatcher,
+            ClusterServiceWatcher clusterServiceWatcher,
             OperatorDiagnostics diagnostics,
             ILogger<K8sOperator> logger)
         {
@@ -34,6 +38,7 @@ namespace HealthChecks.UI.K8s.Operator
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
             _serviceWatcher = serviceWatcher ?? throw new ArgumentNullException(nameof(serviceWatcher));
+            _clusterServiceWatcher = clusterServiceWatcher ?? throw new ArgumentNullException(nameof(clusterServiceWatcher));
             _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -63,6 +68,7 @@ namespace HealthChecks.UI.K8s.Operator
             }
 
             _serviceWatcher.Dispose();
+            _clusterServiceWatcher.Dispose();
             _channel.Writer.Complete();
 
             return Task.CompletedTask;
@@ -111,13 +117,13 @@ namespace HealthChecks.UI.K8s.Operator
                             {
                                 await _controller.DeployAsync(item.Resource);
                                 await WaitForAvailableReplicas(item.Resource);
-                                await _serviceWatcher.Watch(item.Resource, _operatorCts.Token);
+                                await StartServiceWatcher(item.Resource);
                             });
                         }
                         else if (item.EventType == WatchEventType.Deleted)
                         {
                             await _controller.DeleteDeploymentAsync(item.Resource);
-                            _serviceWatcher.Stopwatch(item.Resource);
+                            StopServiceWatcher(item.Resource);
                         }
                     }
                     catch (Exception ex)
@@ -126,6 +132,36 @@ namespace HealthChecks.UI.K8s.Operator
                     }
                 }
             }
+        }
+
+        private async Task StartServiceWatcher(HealthCheckResource resource)
+        {
+            Func<Task> startWatcher = async () => await _serviceWatcher.Watch(resource, _operatorCts.Token);
+            Func<Task> startClusterWatcher = async () => await _clusterServiceWatcher.Watch(resource, _operatorCts.Token);
+
+            var start = resource.Spec.Scope switch
+            {
+                Deployment.Scope.Namespaced => startWatcher,
+                Deployment.Scope.Cluster => startClusterWatcher,
+                _ => throw new ArgumentOutOfRangeException(nameof(resource.Spec.Scope))
+            };
+
+            await start();
+        }
+
+        private void StopServiceWatcher(HealthCheckResource resource)
+        {
+            Action stopWatcher = () => _serviceWatcher.Stopwatch(resource);
+            Action stopClusterWatcher = () => _clusterServiceWatcher.Stopwatch(resource);
+
+            var stop = resource.Spec.Scope switch
+            {
+                Deployment.Scope.Namespaced => stopWatcher,
+                Deployment.Scope.Cluster => stopClusterWatcher,
+                _ => throw new ArgumentOutOfRangeException(nameof(resource.Spec.Scope))
+            };
+
+            stop();
         }
 
         private async Task WaitForAvailableReplicas(HealthCheckResource resource)

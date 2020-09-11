@@ -19,7 +19,8 @@ namespace HealthChecks.UI.K8s.Operator
             V1Service uiService,
             V1Service notificationService,
             V1Secret endpointSecret,
-            ILogger<K8sOperator> logger)
+            ILogger<K8sOperator> logger, 
+            IHttpClientFactory httpClientFactory)
         {
             var address = KubernetesAddressFactory.CreateHealthAddress(notificationService, resource);
             var uiAddress = KubernetesAddressFactory.CreateAddress(uiService, resource);
@@ -31,7 +32,7 @@ namespace HealthChecks.UI.K8s.Operator
                 Uri = address
             };
 
-            using var client = new HttpClient();
+            var client = httpClientFactory.CreateClient();
             try
             {
                 string type = healthCheck.Type.ToString();

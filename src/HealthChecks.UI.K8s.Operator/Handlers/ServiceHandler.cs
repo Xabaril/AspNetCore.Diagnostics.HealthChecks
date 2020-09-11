@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
-    public class ServiceHandler
+    internal class ServiceHandler
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;

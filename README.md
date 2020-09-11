@@ -80,6 +80,7 @@ HealthChecks packages include health checks for:
 - SignalR
 - Kubernetes
 - ArangoDB
+- Gremlin
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
@@ -117,6 +118,7 @@ Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 Install-Package AspNetCore.HealthChecks.SendGrid
 Install-Package AspNetCore.HealthChecks.ArangoDb
+Install-Package AspNetCore.HealthChecks.Gremlin
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -172,13 +174,15 @@ services.AddHealthChecks()
 ```
 
 ## HealthChecks Prometheus Exporter
+
 If you need an endpoint to consume from prometheus instead of using Prometheus Gateway you could install **AspNetCore.HealthChecks.Publisher.Prometheus**.
 
 ```powershell
 install-package AspNetcore.HealthChecks.Publisher.Prometheus
 ```
 
-Use the *ApplicationBuilder* extension method to add the endpoint with the metrics:
+Use the _ApplicationBuilder_ extension method to add the endpoint with the metrics:
+
 ```csharp
 // default endpoint: /healthmetrics
 app.UseHealthChecksPrometheusExporter()
@@ -186,7 +190,6 @@ app.UseHealthChecksPrometheusExporter()
 // You could customize the endpoint
 app.UseHealthChecksPrometheusExporter("/my-health-metrics")
 ```
-
 
 ## HealthCheckUI
 

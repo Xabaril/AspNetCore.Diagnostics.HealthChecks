@@ -29,6 +29,12 @@
                 public const string Delete = "Delete";
                 public const string Patch = "Patch";
             }
+
+            internal class Scope
+            {
+                public const string Cluster = "Cluster";
+                public const string Namespaced = "Namespaced";
+            }
         }
     }
 }

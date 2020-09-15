@@ -72,6 +72,7 @@
     <AWSSDKDynamoDBv2>3.3.101.69</AWSSDKDynamoDBv2>
     <GremlinNet>3.4.7</GremlinNet>
     <NewtonsoftJson>12.0.2</NewtonsoftJson>
+    <SystemTextJson>4.7.2</SystemTextJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.10.0</MicrosoftApplicationInsights>
     <PrometheusNet>3.5.0</PrometheusNet>
@@ -117,14 +118,14 @@
     <HealthCheckHangfire>3.1.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>3.2.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>3.1.1</HealthCheckConsul>
-    <HealthCheckUI>3.1.1</HealthCheckUI>
-    <HealthCheckUICore>3.1.1</HealthCheckUICore>
-    <HealthCheckUIClient>3.1.1</HealthCheckUIClient>
-    <HealthCheckUISqlServerStorage>3.1.1</HealthCheckUISqlServerStorage>
-    <HealthCheckUISQLiteStorage>3.1.1</HealthCheckUISQLiteStorage>
-    <HealthChecksUIPostgreSQLStorage>3.1.1</HealthChecksUIPostgreSQLStorage>
-    <HealthCheckUIInMemoryStorage>3.1.1</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>3.1.1</HealthCheckUIMySqlStorage>
+    <HealthCheckUI>3.1.2</HealthCheckUI>
+    <HealthCheckUICore>3.1.2</HealthCheckUICore>
+    <HealthCheckUIClient>3.1.2</HealthCheckUIClient>
+    <HealthCheckUISqlServerStorage>3.1.2</HealthCheckUISqlServerStorage>
+    <HealthCheckUISQLiteStorage>3.1.2</HealthCheckUISQLiteStorage>
+    <HealthChecksUIPostgreSQLStorage>3.1.2</HealthChecksUIPostgreSQLStorage>
+    <HealthCheckUIInMemoryStorage>3.1.2</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>3.1.2</HealthCheckUIMySqlStorage>
     <HealthCheckPublisherAppplicationInsights>3.1.1</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>3.1.1</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>3.1.3</HealthCheckPublisherPrometheus>

@@ -1,12 +1,13 @@
-import React from 'react';
-const MenuIcon = require('../../assets/svg/menu.svg');
+import React, { FunctionComponent } from 'react';
+import MenuIcon from '../../assets/svg/menu.svg';
+
 interface AsideMenuProps {
   onClick: () => void;
   children: any;
   isOpen: boolean;
 }
 
-const AsideMenu = (props: AsideMenuProps) => {
+const AsideMenu : FunctionComponent<AsideMenuProps> = (props: AsideMenuProps) => {
   return (
     <aside className={`hc-aside ${props.isOpen ? 'is-open' : ''}`}>
       <button

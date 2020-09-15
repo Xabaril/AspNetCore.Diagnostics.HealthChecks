@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, FunctionComponent, useEffect, useState } from 'react';
 import { Check, ExecutionHistory } from '../typings/models';
 import { LivenessDetail } from './LivenessDetail';
 import { LivenessPanel } from './LivenessPanel';
@@ -14,49 +14,53 @@ interface CheckTableState {
     selectedHistory: Nullable<Array<ExecutionHistory>>;
     selectedHealthcheck: Nullable<Check>;
 }
-export class CheckTable extends Component<CheckTableProps, CheckTableState> {
-    constructor(props: CheckTableProps) {
-        super(props);
-        this.state = {
-            isOpenPanel: false,
-            selectedHistory: null,
-            selectedHealthcheck: null
+
+const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => {
+
+    const [isOpenPanel, setOpenPanel] = useState<boolean>(false);
+    const [selectedHistory, setSelectedHistory] = useState<Nullable<ExecutionHistory[]>>(null);
+    const [selectedHealthcheck, setSelectedHealthcheck] = useState<Nullable<Check>>(null);
+
+    const openPanel = (healthCheck: Check, history: Array<ExecutionHistory>) => {
+        setOpenPanel(true);
+        setSelectedHistory(history);
+        setSelectedHealthcheck(healthCheck);
+    }
+    
+    useEffect(() => {
+        let interval  = 0;
+        if(!isOpenPanel) {
+            interval = setTimeout(() => {
+                setSelectedHealthcheck(null);
+                setSelectedHistory(null);
+            }, 200);
+        }
+
+        return () => {
+            if(interval != 0) clearInterval(interval);
         };
 
-        this.renderTable = this.renderTable.bind(this);
-        this.openPanel = this.openPanel.bind(this);
-        this.closePanel = this.closePanel.bind(this);
-    }
+    },[isOpenPanel]);
 
-    openPanel(healthCheck: Check, history: Array<ExecutionHistory>) {
-        this.setState(
-            {
-                isOpenPanel: true,
-                selectedHistory: history,
-                selectedHealthcheck: healthCheck
-            });
-    }
+    const renderTable = () => {
 
-    closePanel() {
-        this.setState(
-            {
-                isOpenPanel: false,
-                selectedHealthcheck: null,
-                selectedHistory: null
-            });
-    }
-
-    renderTable() {
-        const props = this.props;
-        return !Array.isArray(props.checks) ? (
+        return !Array.isArray(checks) ? (
             <tr>
-                <td colSpan={5}>{props.checks}</td>
+                <td colSpan={5}>{checks}</td>
             </tr>
-        ) : (
-                props.checks.map((item, index) => {
+        ) : (                
+                checks.map((item, index) => {
+                    
+                    let tags = null;
+
+                    if(item.tags) {                        
+                        tags = item.tags.map(t => <span className="tag">{t}</span>);
+                    }
+
                     return (
                         <tr key={index}>
                             <td>{item.name}</td>
+                            <td>{tags}</td>
                             <td>
                                 <Status status={item.status}></Status>
                             </td>
@@ -65,7 +69,7 @@ export class CheckTable extends Component<CheckTableProps, CheckTableState> {
                             <td>
                                 <button
                                     className="hc-action-btn"
-                                    onClick={() => this.openPanel(item, props.history.filter(h => h.name == item.name))}>
+                                    onClick={() => openPanel(item, history.filter(h => h.name == item.name))}>
                                     <i className="material-icons">history</i>
                                 </button>
                             </td>
@@ -75,33 +79,32 @@ export class CheckTable extends Component<CheckTableProps, CheckTableState> {
             );
     }
 
-    render() {
-        const renderPanel = this.state.selectedHealthcheck != null &&
-            this.state.isOpenPanel;
-        return (
-            <>
-                <table className="hc-checks-table">
-                    <thead className="hc-checks-table__header">
-                        <tr>
-                            <th>Name</th>
-                            <th>Health</th>
-                            <th>Description</th>
-                            <th>Duration</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody className="hc-checks-table__body">{this.renderTable()}</tbody>
-                </table>
-                {renderPanel &&
-                    <LivenessPanel
-                        onClosePanel={this.closePanel}>
-                        <LivenessDetail
-                            healthcheck={this.state.selectedHealthcheck!}
-                            executionHistory={this.state.selectedHistory!}>
-                        </LivenessDetail>
-                    </LivenessPanel>
-                }
-            </>
-        );
-    }
+    return (
+        <>
+            <table className="hc-checks-table">
+                <thead className="hc-checks-table__header">
+                    <tr>
+                        <th style={{ width: "20%" }}>Name</th>
+                        <th style={{ width: "10%" }}>Tags</th>
+                        <th style={{ width: "10%" }}>Health</th>
+                        <th style={{ width: "30%" }}>Description</th>
+                        <th style={{ width: "20%" }}>Duration</th>
+                        <th style={{ width: "10%" }}>Details</th>
+                    </tr>
+                </thead>
+                <tbody className="hc-checks-table__body">{renderTable()}</tbody>
+            </table>
+            <LivenessPanel
+                visible={isOpenPanel}
+                onClosePanel={() => setOpenPanel(false)}>
+                <LivenessDetail
+                    healthcheck={selectedHealthcheck!}
+                    executionHistory={selectedHistory!}>
+                </LivenessDetail>
+            </LivenessPanel>
+
+        </>
+    );
 }
+
+export { CheckTable };

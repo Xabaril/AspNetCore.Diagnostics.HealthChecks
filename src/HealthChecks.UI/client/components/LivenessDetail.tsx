@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import {
   VerticalTimeline,
   VerticalTimelineElement
@@ -11,11 +11,11 @@ import moment from 'moment';
 interface LivenessDetailsProps {
     healthcheck: Check;
     executionHistory: Array<ExecutionHistory>;
-
 }
 
-const LivenessDetail: React.SFC<LivenessDetailsProps> = props => {
-
+const LivenessDetail: FunctionComponent<LivenessDetailsProps> = props => {
+  if(props.healthcheck === null ) return null;
+  
   return (
       <section className="hc-liveness-detail">
       <header>

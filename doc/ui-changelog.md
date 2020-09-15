@@ -1,3 +1,18 @@
+**3.1.2**
+
+- Updated React and other package.json library versions
+- Added Health Checks Execution tags #194
+- The UI no longer has a inteval configuration button. The polling interval is configured in the backend using setup.SetEvaluationTimeInSeconds(seconds);
+- Added Start / Stop polling button #597
+- Added UI settings middleware
+- Added Request Limiting Middleware and setup method to configure max api active requests with setup.SetApiMaxActiveRequests(value);
+- Improved healthcheck table styling for better rows alignment. #607
+- Added animation for execution history panel
+- Fonts and icons are now embedded in the javascript bundle for users running the UI in no-internet connection environments #607
+- Customize Header Text using setup.SetHeaderText(text) - Default is Health Checks Status #562
+- Fixed incorrect name length in HealthCheckExecutionHistories #577
+- Updated Storage Providers EF Core migrations
+
 **3.1.1**
 
 - [Breaking Change] The UI no longer uses sqlite internally. A storage provider must be configured using HealthChecksUIBuilder storage package extensions.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HealthChecks.UI.Core.Data
 {
@@ -13,5 +14,7 @@ namespace HealthChecks.UI.Core.Data
         public string Description { get; set; }
 
         public TimeSpan Duration { get; set; }
+
+        public List<string> Tags { get; set; }
     }
 }

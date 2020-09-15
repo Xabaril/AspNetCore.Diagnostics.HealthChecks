@@ -104,6 +104,9 @@ namespace HealthChecks.UI.PostgreSQL.Storage.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Tags")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HealthCheckExecutionId");
@@ -125,8 +128,8 @@ namespace HealthChecks.UI.PostgreSQL.Storage.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("character varying(500)")
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("On")
                         .HasColumnType("timestamp without time zone");

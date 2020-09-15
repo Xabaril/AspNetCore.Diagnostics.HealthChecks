@@ -24,15 +24,15 @@ namespace HealthChecks.UI.Branding
             services
                 //.AddDemoAuthentication()
                 .AddHealthChecks()
-                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process" })
+                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process", "memory" })
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
                 .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
                 .Services
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
+                    setup.SetHeaderText("Branding Demo - Health Checks Status");
                     setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
-                    setup.AddHealthCheckEndpoint("endpoint2", "health-process");
-
+                    setup.AddHealthCheckEndpoint("endpoint2", "health-process");                    
                     //Webhook endpoint with custom notification hours, and custom failure and description messages
 
                     setup.AddWebhookNotification("webhook1", uri: "https://healthchecks2.requestcatcher.com/",

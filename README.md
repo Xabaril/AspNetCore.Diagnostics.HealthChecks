@@ -237,6 +237,32 @@ Do not confuse this UI api endpoint with the endpoints we have to configure to d
 
 When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
+### UI Polling interval 
+
+You can configure the polling interval in seconds for the UI inside the setup method. Default value is 10 seconds:
+
+```csharp
+ .AddHealthChecksUI(setupSettings: setup =>
+  {
+     setup.SetEvaluationTimeInSeconds(5); //Configures the UI to poll for healthchecks updates every 5 seconds
+  });
+```
+
+### UI API max active requests
+
+You can configure max active requests to the HealthChecks UI backend api using the setup method. Default value is 3 active requests:
+
+
+```csharp
+ .AddHealthChecksUI(setupSettings: setup =>
+  {
+     setup.SetApiMaxActiveRequests(1); 
+     //Only one active request will be executed at a time. 
+     //All the excedent requests will result in 429 (Too many requests)
+  });
+```
+
+
 ### UI Storage Providers
 
 HealthChecks UI offers several storage providers, available as different nuget packages.

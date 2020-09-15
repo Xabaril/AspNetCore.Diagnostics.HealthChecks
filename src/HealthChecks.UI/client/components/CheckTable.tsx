@@ -48,11 +48,19 @@ const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => 
             <tr>
                 <td colSpan={5}>{checks}</td>
             </tr>
-        ) : (
+        ) : (                
                 checks.map((item, index) => {
+                    
+                    let tags = null;
+
+                    if(item.tags) {                        
+                        tags = item.tags.map(t => <span className="tag">{t}</span>);
+                    }
+
                     return (
                         <tr key={index}>
                             <td>{item.name}</td>
+                            <td>{tags}</td>
                             <td>
                                 <Status status={item.status}></Status>
                             </td>
@@ -77,8 +85,9 @@ const CheckTable: FunctionComponent<CheckTableProps> = ({ checks, history }) => 
                 <thead className="hc-checks-table__header">
                     <tr>
                         <th style={{ width: "20%" }}>Name</th>
+                        <th style={{ width: "10%" }}>Tags</th>
                         <th style={{ width: "10%" }}>Health</th>
-                        <th style={{ width: "40%" }}>Description</th>
+                        <th style={{ width: "30%" }}>Description</th>
                         <th style={{ width: "20%" }}>Duration</th>
                         <th style={{ width: "10%" }}>Details</th>
                     </tr>

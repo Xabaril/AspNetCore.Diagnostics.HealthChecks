@@ -104,6 +104,9 @@ namespace HealthChecks.UI.SqlServer.Storage.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HealthCheckExecutionId");
@@ -125,8 +128,8 @@ namespace HealthChecks.UI.SqlServer.Storage.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("On")
                         .HasColumnType("datetime2");

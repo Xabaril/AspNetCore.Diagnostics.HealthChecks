@@ -24,6 +24,7 @@ export interface Check {
     status: string;
     description: string;
     duration: string;
+    tags: string[]
 }
 
 export interface ExecutionHistory {
@@ -31,7 +32,7 @@ export interface ExecutionHistory {
     description: string;
     id: number;
     status: string;
-    on: string;
+    on: string;    
 }
 
 interface WebHook {

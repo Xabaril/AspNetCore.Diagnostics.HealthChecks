@@ -188,6 +188,7 @@ namespace HealthChecks.UI.Core.HostedService
                         existing.Status = item.Status;
                         existing.Description = item.Description;
                         existing.Duration = item.Duration;
+                        existing.Tags = item.Tags;
                     }
                     else
                     {

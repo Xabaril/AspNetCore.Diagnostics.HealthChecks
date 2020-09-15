@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Branding
             services
                 //.AddDemoAuthentication()
                 .AddHealthChecks()
-                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process" })
+                .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process", "memory" })
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
                 .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
                 .Services

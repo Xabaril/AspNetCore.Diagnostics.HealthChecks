@@ -565,3 +565,19 @@ h4 {
   display:flex;
   align-items: center;
 }
+
+.tag {
+  background-color: var(--primaryColor);
+  color: white;
+  font-size: 10px;  
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  margin-right: 2px;
+  margin-left: 2px;
+  height: 16px;  
+  min-width: 4px;
+  max-width: 112px;  
+  border: 1px solid;
+  display: inline-block;
+}

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HealthChecks.UI.Core
 {
@@ -47,6 +48,8 @@ namespace HealthChecks.UI.Core
                     entry.Description = item.Value.Description ?? message;
                 }
 
+                entry.Tags = item.Value.Tags;
+
                 uiReport.Entries.Add(item.Key, entry);
             }
 
@@ -83,5 +86,6 @@ namespace HealthChecks.UI.Core
         public TimeSpan Duration { get; set; }
         public string Exception { get; set; }
         public UIHealthStatus Status { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }

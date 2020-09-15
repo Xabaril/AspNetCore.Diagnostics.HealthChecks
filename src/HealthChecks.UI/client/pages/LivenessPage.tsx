@@ -29,6 +29,10 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
         { refetchInterval: fetchInterval, keepPreviousData: true, retry: 1 });
 
     useEffect(() => {
+        console.log(`Configured polling interval: ${fetchInterval} milliseconds`);
+    }, []);
+
+    useEffect(() => {
         if (!running) {
             setFetchInterval(false);
             return;

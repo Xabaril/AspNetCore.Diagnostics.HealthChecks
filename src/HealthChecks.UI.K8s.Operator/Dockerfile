@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.201-buster AS build
 WORKDIR /src
 COPY ["src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj", "src/HealthChecks.UI.K8s.Operator/"]
 RUN dotnet restore "src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj"

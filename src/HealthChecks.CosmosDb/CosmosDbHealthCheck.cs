@@ -37,6 +37,7 @@ namespace HealthChecks.CosmosDb
                         cosmosDbClient = _connections[_connectionString];
                     }
                 }
+
                 await cosmosDbClient.ReadAccountAsync();
 
                 if (_database != null)

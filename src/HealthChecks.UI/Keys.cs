@@ -25,5 +25,7 @@
         internal const string HEALTH_CHECK_HTTP_CLIENT_NAME = "health-checks";
         internal const string HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME = "health-checks-webhooks";
         internal const string K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME = "k8s-cluster-service";
+        internal const string HEALTHCHECKSUI_SETTINGS_TARGET = "#uiSettingsPath";
+        internal const string HEALTHCHECKSUI_SETTINGS_PATH = "ui-settings";
     }
 }

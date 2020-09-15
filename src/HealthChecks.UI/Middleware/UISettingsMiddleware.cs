@@ -37,7 +37,8 @@ namespace HealthChecks.UI.Middleware
         {
             return new
             {
-                PollingInterval = Settings.EvaluationTimeInSeconds
+                PollingInterval = Settings.EvaluationTimeInSeconds,
+                HeaderText = Settings.HeaderText
             };
         }
     }

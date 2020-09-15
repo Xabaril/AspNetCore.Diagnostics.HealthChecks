@@ -64,7 +64,7 @@ const App: FunctionComponent<AppProps> = ({ uiSettings }) => {
         />
         <Route
           path="/healthchecks"
-          render={() => <LivenessPage apiSettings={{ pollingInterval: apiSettings.pollingInterval }} />}
+          render={() => <LivenessPage apiSettings={apiSettings} />}
         />
         <Route
           path="/webhooks"

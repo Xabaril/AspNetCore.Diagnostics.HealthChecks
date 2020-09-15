@@ -2,12 +2,13 @@
 
 - Updated React and other package.json library versions
 - The UI no longer has a inteval configuration button. The polling interval is configured in the backend using setup.SetEvaluationTimeInSeconds(seconds);
-- Added Start / Stop polling button
+- Added Start / Stop polling button #597
 - Added UI settings middleware
 - Added Request Limiting Middleware and setup method to configure max api active requests with setup.SetApiMaxActiveRequests(value);
-- Improved healthcheck table styling for better rows alignment.
+- Improved healthcheck table styling for better rows alignment. #607
 - Added animation for execution history panel
-- Fonts and icons are now embedded in the javascript bundle for users running the UI in no-internet connection environments
+- Fonts and icons are now embedded in the javascript bundle for users running the UI in no-internet connection environments #607
+- Customize Header Text using setup.SetHeaderText(text) - Default is Health Checks Status #562
 
 **3.1.1**
 

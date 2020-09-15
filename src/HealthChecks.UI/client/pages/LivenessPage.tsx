@@ -70,7 +70,7 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
     return (
         <article className="hc-liveness">
             <header className="hc-liveness__header">
-                <h1>Health Checks status</h1>
+                <h1>{apiSettings.headerText}</h1>
                 <LivenessMenu
                     pollingInterval={apiSettings.pollingInterval}
                     running={running}

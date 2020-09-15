@@ -41,5 +41,6 @@ interface WebHook {
 }
 
 export interface UIApiSettings {
-    pollingInterval: number
+    pollingInterval: number,
+    headerText: string
 }

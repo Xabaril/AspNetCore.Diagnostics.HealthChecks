@@ -7,6 +7,7 @@
 - Added Request Limiting Middleware and setup method to configure max api active requests with setup.SetApiMaxActiveRequests(value);
 - Improved healthcheck table styling for better rows alignment.
 - Added animation for execution history panel
+- Fonts and icons are now embedded in the javascript bundle for users running the UI in no-internet connection environments
 
 **3.1.1**
 

@@ -34,19 +34,19 @@ namespace FunctionalTests.HealthChecks.Neo4j
             };
 
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                   .AddNeo4j(_ => options, tags: new[] { "test-neo4j" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("test-neo4j")
-                   });
-               });
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddNeo4j(_ => options, tags: new[] {"test-neo4j"});
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("test-neo4j")
+                    });
+                });
 
             var server = new TestServer(webHostBuilder);
 
@@ -71,7 +71,7 @@ namespace FunctionalTests.HealthChecks.Neo4j
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddNeo4j(_ => options, tags: new[] { "test-neo4j" });
+                        .AddNeo4j(_ => options, tags: new[] {"test-neo4j"});
                 })
                 .Configure(app =>
                 {
@@ -105,7 +105,7 @@ namespace FunctionalTests.HealthChecks.Neo4j
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddNeo4j(_ => options, tags: new[] { "test-neo4j" });
+                        .AddNeo4j(_ => options, tags: new[] {"test-neo4j"});
                 })
                 .Configure(app =>
                 {

@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import { HealthChecksClient } from '../healthChecksClient';
 import { WebHook } from '../typings/models';
 import ReactJson from 'react-json-view';
 import { chunkArray } from '../utils/array';
@@ -7,6 +6,7 @@ import GearIcon from '../../assets/svg/gear.svg';
 import { useQuery } from 'react-query';
 import fetchers from '../api/fetchers';
 import { AlertPanel } from '../components/AlertPanel';
+import { useUserStore } from '../stores/userStore';
 
 
 interface WebHooksPageState {
@@ -15,7 +15,9 @@ interface WebHooksPageState {
 
 const WebhooksPage = () => {
 
-  const { data: webhooks, isError } = useQuery("webhooks", fetchers.getWebhooks, {retry: 1});
+  const authService = useUserStore(state => state.authService);
+
+  const { data: webhooks, isError } = useQuery("webhooks", () => fetchers.getWebhooks(authService!), {retry: 1});  
 
   const renderWebhooks = (webhooks: Array<WebHook>) => {
     let webHooksChunk = chunkArray(webhooks, 2);

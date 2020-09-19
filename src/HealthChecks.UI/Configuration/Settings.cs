@@ -20,6 +20,7 @@ namespace HealthChecks.UI.Configuration
         internal Dictionary<string, Type> DelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
         internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
 
+        internal OidcOptions OidcOptions { get; private set; }
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
@@ -45,6 +46,16 @@ namespace HealthChecks.UI.Configuration
                 CustomMessageFunc = customMessageFunc,
                 CustomDescriptionFunc = customDescriptionFunc
             });
+            return this;
+        }
+
+        public Settings AddOidc(Action<OidcOptions> setup)
+        {
+            var oidcOptions = new OidcOptions();
+            setup(oidcOptions);
+
+            OidcOptions = oidcOptions;
+
             return this;
         }
 
@@ -135,5 +146,14 @@ namespace HealthChecks.UI.Configuration
         internal Func<UIHealthReport, bool> ShouldNotifyFunc { get; set; }
         internal Func<UIHealthReport, string> CustomMessageFunc { get; set; }
         internal Func<UIHealthReport, string> CustomDescriptionFunc { get; set; }
+    }
+
+    public class OidcOptions
+    {
+        public string Authority { get; set; }
+        public string ClientId { get; set; }
+        public string ResponseType { get; set; } = "code";
+        public string Scope { get; set; }
+        public string BackendAuthorizationPolicy = null;
     }
 }

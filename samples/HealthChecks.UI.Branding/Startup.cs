@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HealthChecks.UI.Branding
 {
@@ -28,8 +30,28 @@ namespace HealthChecks.UI.Branding
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
                 .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
                 .Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(config =>
+                {
+                    config.Authority = "https://demo.identityserver.io";
+                    config.Audience = "api";
+                    config.SaveToken = true;
+
+                }).Services
+                .AddAuthorization(config =>
+                {
+                    config.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    
+                })
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
+                    setup.AddOidc(setup =>
+                    {
+                        setup.ClientId = "interactive.public.short";
+                        setup.Authority = "https://demo.identityserver.io";
+                        setup.Scope = "openid profile email api";
+                    });
+                    
                     setup.SetHeaderText("Branding Demo - Health Checks Status");
                     setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
                     setup.AddHealthCheckEndpoint("endpoint2", "health-process");                    
@@ -83,7 +105,6 @@ namespace HealthChecks.UI.Branding
                    config.MapHealthChecksUI(setup =>
                    {
                        setup.AddCustomStylesheet("dotnet.css");
-
                    })
                    //.RequireAuthorization("AuthUserPolicy")
                    ;

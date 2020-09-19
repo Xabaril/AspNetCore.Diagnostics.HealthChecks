@@ -14,12 +14,14 @@
   "license": "ISC",
   "dependencies": {
     "moment": "2.27.0",
+    "oidc-client": "^1.10.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-json-view": "1.19.1",
     "react-query": "^2.15.4",
     "react-router-dom": "5.2.0",
-    "react-vertical-timeline-component": "^3.0.2"
+    "react-vertical-timeline-component": "^3.0.2",
+    "zustand": "^3.1.2"
   },
   "devDependencies": {
     "@types/react": "16.9.49",

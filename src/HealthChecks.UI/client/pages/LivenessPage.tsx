@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { HealthChecksClient } from '../healthChecksClient';
 import moment from 'moment';
 import { Liveness, UIApiSettings } from '../typings/models';
 import { LivenessTable } from '../components/LivenessTable';
@@ -7,6 +6,7 @@ import { useQuery } from 'react-query';
 import { getHealthChecks } from '../api/fetchers';
 import { LivenessMenu } from '../components/LivenessMenu';
 import { AlertPanel } from '../components/AlertPanel';
+import { useUserStore } from '../stores/userStore';
 
 
 interface LivenessState {
@@ -24,8 +24,9 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const [fetchInterval, setFetchInterval] = useState<number | false>(apiSettings.pollingInterval * 1000);
     const [running, setRunning] = useState<boolean>(true);
+    const authService = useUserStore(state => state.authService);
 
-    const { data: livenessData, isError } = useQuery("healthchecks", getHealthChecks,
+    const { data: livenessData, isError } = useQuery("healthchecks", () => getHealthChecks(authService!),
         { refetchInterval: fetchInterval, keepPreviousData: true, retry: 1 });
 
     useEffect(() => {

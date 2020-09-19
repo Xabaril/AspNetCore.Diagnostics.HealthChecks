@@ -26,7 +26,7 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
     const [running, setRunning] = useState<boolean>(true);
     const authService = useUserStore(state => state.authService);
 
-    const { data: livenessData, isError } = useQuery("healthchecks", () => getHealthChecks(authService!),
+    const { data: livenessData, isError } = useQuery("healthchecks", getHealthChecks,
         { refetchInterval: fetchInterval, keepPreviousData: true, retry: 1 });
 
     useEffect(() => {

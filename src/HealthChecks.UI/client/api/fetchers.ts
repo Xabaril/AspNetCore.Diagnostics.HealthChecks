@@ -1,11 +1,11 @@
 import { Liveness, UIApiSettings, WebHook } from "../typings/models"
 import uiSettings from '../config/UISettings';
 import { AuthService } from "../auth/authService";
+import { userStoreState } from "../stores/userStore";
 
 
-export const getHealthChecks = async (authService: AuthService): Promise<Liveness[]> => {
-
-    const healthchecksData = await fetch(uiSettings.uiApiEndpoint, getAuthorizedHeaders(authService));
+export const getHealthChecks = async (): Promise<Liveness[]> => {
+    const healthchecksData = await fetch(uiSettings.uiApiEndpoint, getAuthorizedHeaders());
     return healthchecksData.json();
 }
 
@@ -15,14 +15,16 @@ export const getUIApiSettings = async (): Promise<UIApiSettings> => {
     return uiApiSettings.json();
 }
 
-export const getWebhooks = async (authService: AuthService | null): Promise<WebHook[]> => {
-    const webhooks = await fetch(uiSettings.webhookEndpoint, getAuthorizedHeaders(authService));
+export const getWebhooks = async (): Promise<WebHook[]> => {
+    const webhooks = await fetch(uiSettings.webhookEndpoint, getAuthorizedHeaders());
     return webhooks.json();
 }
 
-const getAuthorizedHeaders = (authService: AuthService | null): RequestInit | undefined => {
+const getAuthorizedHeaders = (): RequestInit | undefined => {
 
-    if (!authService) return undefined;
+    const authService = userStoreState().authService;
+
+    if (authService == null) return undefined;
 
     const token = authService.getAccessToken();
 
@@ -34,7 +36,7 @@ const getAuthorizedHeaders = (authService: AuthService | null): RequestInit | un
             }
         }
     }
-    
+
     return undefined;
 }
 

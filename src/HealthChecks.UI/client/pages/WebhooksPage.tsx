@@ -17,7 +17,7 @@ const WebhooksPage = () => {
 
   const authService = useUserStore(state => state.authService);
 
-  const { data: webhooks, isError } = useQuery("webhooks", () => fetchers.getWebhooks(authService!), {retry: 1});  
+  const { data: webhooks, isError } = useQuery("webhooks", fetchers.getWebhooks, {retry: 1});  
 
   const renderWebhooks = (webhooks: Array<WebHook>) => {
     let webHooksChunk = chunkArray(webhooks, 2);

@@ -66,7 +66,7 @@ namespace FunctionalTests.HealthChecks.UI
             using var client = server.CreateClient();
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", credentials.AccessToken);
-            var response = await client.GetAsync("healthchecks-api");
+            var response = await client.GetAsync("/healthchecks-api");
 
             response.StatusCode.Should().Be(StatusCodes.Status200OK);
         }

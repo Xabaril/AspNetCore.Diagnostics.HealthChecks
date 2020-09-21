@@ -49,7 +49,7 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings AddOidc(Action<OidcOptions> setup)
+        public Settings AddOidcClientAuthentication(Action<OidcOptions> setup)
         {
             var oidcOptions = new OidcOptions();
             setup(oidcOptions);

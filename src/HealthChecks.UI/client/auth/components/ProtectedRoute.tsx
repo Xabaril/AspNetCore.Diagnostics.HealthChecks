@@ -4,9 +4,11 @@ import { useUserStore } from '../../stores/userStore';
 
 export const ProtectedRoute: FunctionComponent<PropsWithChildren<any>> = ({ children }) => {
 
-    const [authService,
+    const [
+        authService,
         setUser,
-        user] = useUserStore(state => [state.authService!, state.setUser, state.user]);
+        user
+    ] = useUserStore(state => [state.authService!, state.setUser, state.user]);
 
     useEffect(() => {
         const login = async () => {
@@ -14,7 +16,7 @@ export const ProtectedRoute: FunctionComponent<PropsWithChildren<any>> = ({ chil
             if (!loggedIn) {
                 authService.signInRedirect();
             } else {
-                const user = await authService.getUser();                
+                const user = await authService.getUser();
                 setUser(user!);
             }
         }
@@ -23,7 +25,7 @@ export const ProtectedRoute: FunctionComponent<PropsWithChildren<any>> = ({ chil
 
     return (
         <>
-           {user ? children: <span>Loading...</span>}
+            {user ? children : <span>Loading...</span>}
         </>
     )
 }

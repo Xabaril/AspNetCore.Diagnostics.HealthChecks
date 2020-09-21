@@ -45,7 +45,7 @@ namespace HealthChecks.UI.Branding
                 })
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
-                    setup.AddOidc(setup =>
+                    setup.AddOidcClientAuthentication(setup =>
                     {
                         setup.ClientId = "interactive.public.short";
                         setup.Authority = "https://demo.identityserver.io";

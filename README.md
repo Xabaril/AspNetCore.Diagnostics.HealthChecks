@@ -197,6 +197,9 @@ app.UseHealthChecksPrometheusExporter()
 
 // You could customize the endpoint
 app.UseHealthChecksPrometheusExporter("/my-health-metrics")
+
+// Customize HTTP status code returned(prometheus will not read health metrics when a default HTTP 503 is returned)
+app.UseHealthChecksPrometheusExporter("/my-health-metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)
 ```
 
 ## HealthCheckUI

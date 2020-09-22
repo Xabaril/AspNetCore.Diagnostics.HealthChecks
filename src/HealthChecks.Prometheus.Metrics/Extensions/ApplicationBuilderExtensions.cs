@@ -7,7 +7,13 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class PrometheusHealthCheckMiddleware 
     {
-        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, PathString endpoint, Action<HealthCheckOptions> configure = null)
+        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder,
+            PathString endpoint)
+        {
+            return applicationBuilder.UseHealthChecksPrometheusExporter(endpoint, null);
+        }
+
+        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, PathString endpoint, Action<HealthCheckOptions> configure)
         {
             var options = new HealthCheckOptions
             {

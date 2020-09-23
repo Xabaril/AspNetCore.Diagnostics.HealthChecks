@@ -17,7 +17,7 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_API_TARGET, apiPath);
 
-            var settingsPath = $"{options.ApiPath}/{Keys.HEALTHCHECKS_SETTINGS_ENDPOINT}";
+            var settingsPath = $"{apiPath}/{Keys.HEALTHCHECKS_SETTINGS_ENDPOINT}";
 
             resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_SETTINGS_ENDPOINT_TARGET, settingsPath);
 

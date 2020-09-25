@@ -25,14 +25,15 @@ namespace HealthChecks.Publisher.Seq
         }
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
-            var level = _options.DefaultInputLevel.ToString();
+            var level = _options.DefaultInputLevel;
+
             switch (report.Status)
             {
                 case HealthStatus.Degraded:
-                    level = SeqInputLevel.Warning.ToString();
+                    level = SeqInputLevel.Warning;
                     break;
                 case HealthStatus.Unhealthy:
-                    level = SeqInputLevel.Error.ToString();
+                    level = SeqInputLevel.Error;
                     break;
             }
 
@@ -44,7 +45,7 @@ namespace HealthChecks.Publisher.Seq
                     {
                         Timestamp = DateTimeOffset.UtcNow,
                         MessageTemplate = $"[{Assembly.GetEntryAssembly().GetName().Name} - HealthCheck Result]",
-                        Level = level,
+                        Level = level.ToString(),
                         Properties = new Dictionary<string, object>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },

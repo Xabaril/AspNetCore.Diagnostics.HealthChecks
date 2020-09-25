@@ -132,7 +132,7 @@
     <HealthCheckPrometheusMetrics>3.1.4</HealthCheckPrometheusMetrics>
     <HealthCheckAWSS3>3.1.1</HealthCheckAWSS3>
     <HealthCheckKeyVault>3.2.0</HealthCheckKeyVault>
-    <HealthCheckPublisherSeq>3.1.1</HealthCheckPublisherSeq>
+    <HealthCheckPublisherSeq>3.2.0</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>3.1.1</HealthCheckRavenDB>
     <HealthCheckKubernetes>3.1.1</HealthCheckKubernetes>
     <HealthCheckSignalR>3.1.1</HealthCheckSignalR>

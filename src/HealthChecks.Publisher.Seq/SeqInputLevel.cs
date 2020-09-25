@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HealthChecks.Publisher.Seq
+﻿namespace HealthChecks.Publisher.Seq
 {
     public enum SeqInputLevel
     {

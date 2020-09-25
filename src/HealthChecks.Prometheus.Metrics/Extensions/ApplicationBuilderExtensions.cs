@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class PrometheusHealthCheckMiddleware 
+    public static class PrometheusHealthCheckMiddleware
     {
-        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder,
-            PathString endpoint)
+        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, PathString endpoint)
         {
-            return applicationBuilder.UseHealthChecksPrometheusExporter(endpoint, null);
+            return applicationBuilder.UseHealthChecksPrometheusExporter(endpoint, configure: null);
         }
 
         public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, PathString endpoint, Action<HealthCheckOptions> configure)
@@ -20,6 +19,7 @@ namespace Microsoft.AspNetCore.Builder
                 ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
             };
             configure?.Invoke(options);
+
             applicationBuilder.UseHealthChecks(endpoint, options);
             return applicationBuilder;
         }

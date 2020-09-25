@@ -14,9 +14,6 @@ namespace HealthChecks.Publisher.Seq
 {
     public class SeqPublisher : IHealthCheckPublisher
     {
-        private const string EVENT_NAME = "AspNetCoreHealthCheckResult";
-        private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
-        private const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
 
         private readonly SeqOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
@@ -28,14 +25,14 @@ namespace HealthChecks.Publisher.Seq
         }
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
-            var level = "Information";
+            var level = _options.DefaultInputLevel.ToString();
             switch (report.Status)
             {
                 case HealthStatus.Degraded:
-                    level = "Warning";
+                    level = SeqInputLevel.Warning.ToString();
                     break;
                 case HealthStatus.Unhealthy:
-                    level = "Error";
+                    level = SeqInputLevel.Error.ToString();
                     break;
             }
 
@@ -46,14 +43,15 @@ namespace HealthChecks.Publisher.Seq
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = EVENT_NAME,
+                        MessageTemplate = $"[{Assembly.GetEntryAssembly().GetName().Name} - HealthCheck Result]",
                         Level = level,
                         Properties = new Dictionary<string, object>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },
                             { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
-                            { METRIC_STATUS_NAME, (int)report.Status },
-                            { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
+                            { "Status", report.Status.ToString() },
+                            { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
+                            { "RawReport" , JsonConvert.SerializeObject(report)}
                         }
                     }
                 }
@@ -87,6 +85,7 @@ namespace HealthChecks.Publisher.Seq
             public DateTimeOffset Timestamp { get; set; }
             public string Level { get; set; }
             public string MessageTemplate { get; set; }
+            public string RawReport { get; set; }
             public Dictionary<string, object> Properties { get; set; }
         }
     }

@@ -1,3 +1,7 @@
+**3.1.3**
+
+- Fixed ui-settings middleware not respecting relative paths #642 (Thanks to @bogataj)
+
 **3.1.2**
 
 - Updated React and other package.json library versions

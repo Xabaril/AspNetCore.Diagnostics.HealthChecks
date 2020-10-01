@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HealthChecks.CosmosDb
 {
@@ -9,25 +11,19 @@ namespace HealthChecks.CosmosDb
         private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new();
 
         private readonly string _connectionString;
-        private readonly string? _database;
-        private readonly IEnumerable<string>? _containers;
+        private readonly string _database;
+        private readonly IEnumerable<string> _collections;
 
-        public CosmosDbHealthCheck(string connectionString)
-            : this(connectionString, default, default)
-        {
-        }
-
-        public CosmosDbHealthCheck(string connectionString, string database)
-            : this(connectionString, database, default)
+        public CosmosDbHealthCheck(string connectionString) : this(connectionString, default, default) { }
+        public CosmosDbHealthCheck(string connectionString, string database) : this(connectionString, database, default)
         {
             _database = database;
         }
-
-        public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
+        public CosmosDbHealthCheck(string connectionString, string database, IEnumerable<string> collections)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _database = database;
-            _containers = containers;
+            _collections = collections;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -52,12 +48,12 @@ namespace HealthChecks.CosmosDb
                     var database = cosmosDbClient.GetDatabase(_database);
                     await database.ReadAsync();
 
-                    if (_containers != null && _containers.Any())
+                    if (_collections != null && _collections.Any())
                     {
-                        foreach (var container in _containers)
+                        foreach (var collection in _collections)
                         {
-                            await database.GetContainer(container)
-                                .ReadContainerAsync();
+                            var container = database.GetContainer(collection);
+                            await container.ReadContainerAsync();
                         }
                     }
                 }

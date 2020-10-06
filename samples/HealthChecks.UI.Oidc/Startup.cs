@@ -36,7 +36,6 @@ namespace HealthChecks.UI.Oidc
                 .AddCookie(options =>
                 {
                     options.SlidingExpiration = true;
-
                 })
                 .AddOpenIdConnect(options =>
                 {

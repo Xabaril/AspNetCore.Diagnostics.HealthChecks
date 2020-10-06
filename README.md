@@ -577,11 +577,11 @@ HealthChecks can be used as [Release Gates for Azure DevOps](https://docs.micros
 
 Check this [README](./extensions/README.md) on how to configure it.
 
-## Protected HealthCheck.UI with OpendId Connect
+## Protected HealthChecks.UI with OpendId Connect
 
-There are some scenarios where you can find usefull to restrict access for users on HealthChecks UI, maybe for users who belong to some role, based on some claim value etc.
+There are some scenarios where you can find useful to restrict access for users on HealthChecks UI, maybe for users who belong to some role, based on some claim value etc.
 
-We can leverage the ASP.NET Core Authentication/Authorization features for easily implement it. You can see a fully functional example using IdentityServer4 [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/tree/master/samples/HealthChecks.UI.Oidc) but you can use Azure AD, Auth0, Okta, etc.
+We can leverage the ASP.NET Core Authentication/Authorization features to easily implement it. You can see a fully functional example using IdentityServer4 [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/tree/master/samples/HealthChecks.UI.Oidc) but you can use Azure AD, Auth0, Okta, etc.
 
 Check this [README](./extensions/README.md) on how to configure it.
 

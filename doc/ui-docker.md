@@ -61,7 +61,7 @@ Configuring a large amount of healthchecks and webhooks will require to pass a l
 
 By using Azure App Configuration service you can centralize HealthChecks configuration in Azure and bind it directly to the executing container at ease.
 
-You should use environment variables to configure Azure App Confuration Service (AAC from now for brevity) in the UI docker image.
+You should use environment variables to configure Azure App Configuration Service (AAC from now for brevity) in the UI docker image.
 
 ## Environment variables table
 

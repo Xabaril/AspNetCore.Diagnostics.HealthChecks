@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>HealthCheck;AWS;S3;Simple Storage Service</PackageTags>
     <Description>HealthChecks.Aws.S3 is the health check package for S3 Buckets and files.</Description>
     <Version>$(HealthCheckAWSS3)</Version>

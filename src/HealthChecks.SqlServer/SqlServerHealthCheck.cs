@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
@@ -11,10 +11,18 @@ namespace HealthChecks.SqlServer
     {
         private readonly string _connectionString;
         private readonly string _sql;
+        private readonly Action<SqlConnection> _beforeOpen;
+
         public SqlServerHealthCheck(string sqlserverconnectionstring, string sql)
         {
             _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+        }
+        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection> beforeOpen)
+        {
+            _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
+            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            _beforeOpen = beforeOpen;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -22,6 +30,7 @@ namespace HealthChecks.SqlServer
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
+                    _beforeOpen?.Invoke(connection);
                     await connection.OpenAsync(cancellationToken);
 
                     using (var command = connection.CreateCommand())

@@ -1,7 +1,8 @@
-﻿using HealthChecks.SqlServer;
+using HealthChecks.SqlServer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -30,9 +31,10 @@ namespace Microsoft.Extensions.DependencyInjection
             string name = default, 
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default,
-            TimeSpan? timeout = default)
+            TimeSpan? timeout = default,
+            Action<SqlConnection> beforeOpen = default)
         {
-            return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags,timeout);
+            return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags, timeout, beforeOpen);
         }
 
         /// <summary>
@@ -56,7 +58,8 @@ namespace Microsoft.Extensions.DependencyInjection
             string name = default,
             HealthStatus? failureStatus = default, 
             IEnumerable<string> tags = default,
-            TimeSpan? timeout = default)
+            TimeSpan? timeout = default,
+            Action<SqlConnection> beforeOpen = default)
         {
             if (connectionStringFactory == null)
             {
@@ -65,7 +68,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new SqlServerHealthCheck(connectionStringFactory(sp), healthQuery ?? HEALTH_QUERY),
+                sp => new SqlServerHealthCheck(connectionStringFactory(sp), healthQuery ?? HEALTH_QUERY, beforeOpen),
                 failureStatus,
                 tags,
                 timeout));

@@ -23,7 +23,7 @@ namespace HealthChecks.Gcp.CloudFirestore
                 {
                     var inexistantCollections = _cloudFirestoreOptions.RequiredCollections
                         .Except(currentRootCollections);
-                    
+
                     if (inexistantCollections.Any())
                     {
                         return new HealthCheckResult(
@@ -44,15 +44,11 @@ namespace HealthChecks.Gcp.CloudFirestore
         {
             var collections = new List<string>();
 
-            using (var enumerator = _cloudFirestoreOptions.FirestoreDatabase
-                .ListRootCollectionsAsync()
-                .GetEnumerator())
+            await foreach (var item in _cloudFirestoreOptions.FirestoreDatabase.ListRootCollectionsAsync())
             {
-                while (await enumerator.MoveNext(cancellationToken))
-                {
-                    collections.Add(enumerator.Current.Id);
-                }
+                collections.Add(item.Id);
             }
+
             return collections;
         }
     }

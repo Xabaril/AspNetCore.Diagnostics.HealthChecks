@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <Description>HealthChecks.NpgSql is a health check for Postgress Sql.</Description>
     <PackageTags>HealthCheck;Beat;Health;Postgress</PackageTags>
     <Version>$(HealthCheckNpgSql)</Version>

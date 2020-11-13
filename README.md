@@ -191,13 +191,13 @@ Use the _ApplicationBuilder_ extension method to add the endpoint with the metri
 
 ```csharp
 // default endpoint: /healthmetrics
-app.UseHealthChecksPrometheusExporter()
+app.UseHealthChecksPrometheusExporter();
 
 // You could customize the endpoint
-app.UseHealthChecksPrometheusExporter("/my-health-metrics")
+app.UseHealthChecksPrometheusExporter("/my-health-metrics");
 
 // Customize HTTP status code returned(prometheus will not read health metrics when a default HTTP 503 is returned)
-app.UseHealthChecksPrometheusExporter("/my-health-metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)
+app.UseHealthChecksPrometheusExporter("/my-health-metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
 ```
 
 ## HealthCheckUI
@@ -221,7 +221,7 @@ public class Startup
     {
         services
         .AddHealthChecksUI()
-        .AddInMemoryStorage()
+        .AddInMemoryStorage();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -289,7 +289,7 @@ All the storage providers are extensions of HealthChecksUIBuilder:
 ```csharp
   services
     .AddHealthChecksUI()
-    .AddInMemoryStorage()
+    .AddInMemoryStorage();
 ```
 
 **Sql Server**

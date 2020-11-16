@@ -11,18 +11,13 @@ namespace HealthChecks.SqlServer
     {
         private readonly string _connectionString;
         private readonly string _sql;
-        private readonly Action<SqlConnection> _beforeOpen;
+        private readonly Action<SqlConnection> _beforeOpenConnectionConfigurer;
 
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql)
+        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection> beforeOpenConnectionConfigurer = null)
         {
             _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
-        }
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection> beforeOpen)
-        {
-            _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
-            _beforeOpen = beforeOpen;
+            _beforeOpenConnectionConfigurer = beforeOpenConnectionConfigurer;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
@@ -30,15 +25,14 @@ namespace HealthChecks.SqlServer
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
-                    _beforeOpen?.Invoke(connection);
-                    await connection.OpenAsync(cancellationToken);
+                    _beforeOpenConnectionConfigurer?.Invoke(connection);
 
+                    await connection.OpenAsync(cancellationToken);
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
                         await command.ExecuteScalarAsync(cancellationToken);
                     }
-
                     return HealthCheckResult.Healthy();
                 }
             }

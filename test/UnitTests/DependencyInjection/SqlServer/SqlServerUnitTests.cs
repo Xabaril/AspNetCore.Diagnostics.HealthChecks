@@ -41,7 +41,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
                 Assert.Equal(connectionstring, connection.ConnectionString);
             };
             services.AddHealthChecks()
-                .AddSqlServer(connectionstring, beforeOpen: beforeOpen);
+                .AddSqlServer(connectionstring, beforeOpenConnectionConfigurer: beforeOpen);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

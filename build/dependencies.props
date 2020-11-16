@@ -26,6 +26,7 @@
     <MicrosoftExtensionsHttp>5.0.0</MicrosoftExtensionsHttp>
     <MicrosoftExtensionsDependencyInjection>5.0.0</MicrosoftExtensionsDependencyInjection>
     <MicrosoftExtensionsDependencyInjectionAbstractions>5.0.0</MicrosoftExtensionsDependencyInjectionAbstractions>
+    <MicrosoftExtensionsHttpPolly>5.0.0</MicrosoftExtensionsHttpPolly> 
     <MicrosoftAspNetCoreTestHost>3.1.3</MicrosoftAspNetCoreTestHost>
     <MicrosoftExtensionsLoggingConsole>3.1.3</MicrosoftExtensionsLoggingConsole>
     <MicrosoftEntityFrameworkCore>3.1.3</MicrosoftEntityFrameworkCore>

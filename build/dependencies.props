@@ -99,7 +99,7 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>3.1.1</HealthCheckIdSvr>
-    <HealthCheckSqlServer>3.1.1</HealthCheckSqlServer>
+    <HealthCheckSqlServer>3.2.0</HealthCheckSqlServer>
     <HealthCheckSqlite>3.1.1</HealthCheckSqlite>
     <HealthCheckUri>3.1.2</HealthCheckUri>
     <HealthCheckRedis>3.1.2</HealthCheckRedis>

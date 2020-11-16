@@ -110,7 +110,7 @@ Read the [DockerHub full description](https://hub.docker.com/r/xabarilcoding/hea
 version: "3.7"
 services:
   healthchecks:
-    image: healthchecksui
+    image: xabarilcoding/healthchecksui
     depends_on:
       - sqlserver
     environment:

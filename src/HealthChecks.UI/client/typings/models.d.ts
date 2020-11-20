@@ -41,7 +41,15 @@ interface WebHook {
     payload: string;
 }
 
+export interface OidcOptions {
+    clientId: string,
+    authority: string,
+    scope: string,
+    responseType: string
+}
+
 export interface UIApiSettings {
     pollingInterval: number,
-    headerText: string
+    headerText: string,
+    oidcOptions: OidcOptions
 }

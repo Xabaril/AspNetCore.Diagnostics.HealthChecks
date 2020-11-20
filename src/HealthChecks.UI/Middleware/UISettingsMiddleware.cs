@@ -4,8 +4,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace HealthChecks.UI.Middleware
 {

@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HealthChecks.UI.Branding
 {
@@ -27,7 +29,7 @@ namespace HealthChecks.UI.Branding
                 .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process", "memory" })
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
                 .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
-                .Services
+                .Services                                
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.SetHeaderText("Branding Demo - Health Checks Status");
@@ -64,8 +66,6 @@ namespace HealthChecks.UI.Branding
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting()
-               .UseAuthentication()
-               .UseAuthorization()
                .UseEndpoints(config =>
                {
                    config.MapHealthChecks("/health-random", new HealthCheckOptions
@@ -83,10 +83,7 @@ namespace HealthChecks.UI.Branding
                    config.MapHealthChecksUI(setup =>
                    {
                        setup.AddCustomStylesheet("dotnet.css");
-
-                   })
-                   //.RequireAuthorization("AuthUserPolicy")
-                   ;
+                   });                  
 
                    config.MapDefaultControllerRoute();
                });

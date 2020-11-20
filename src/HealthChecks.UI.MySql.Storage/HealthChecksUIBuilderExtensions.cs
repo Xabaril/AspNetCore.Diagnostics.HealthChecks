@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddDbContext<HealthChecksDb>(options =>
             {
                 configureOptions?.Invoke(options);
-                options.UseMySql(connectionString, s => s.MigrationsAssembly("HealthChecks.UI.MySql.Storage"));
+                options.UseMySql(connectionString,  ServerVersion.AutoDetect(connectionString), s => s.MigrationsAssembly("HealthChecks.UI.MySql.Storage"));
             });
 
             return builder;

@@ -30,7 +30,7 @@ namespace HealthChecks.Sample
              * https://github.com/aspnet/Extensions/issues/639 and the workaround proposed by @NatMarchand
              * or register all hosted service before call AddHealthChecks.
              */
-
+            services.AddApplicationInsightsTelemetry();
             services.AddHealthChecks()
                 //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:5672", name: "rabbit1")
                 //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:6672", name: "rabbit2")

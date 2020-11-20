@@ -22,7 +22,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
                  {
                      setup
-                     .UseKeyVaultUrl("https://keyvault/")
                      .AddSecret("supersecret")
                      .AddKey("mycryptokey");
                  });
@@ -45,9 +44,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
             services.AddHealthChecks()
                 .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
                  {
-                     setup
-                     .UseKeyVaultUrl("https://keyvault/")
-                     .UseClientSecrets("client", "secret");
+                     setup.AddSecret("secret").AddKey("client");
 
                  }, name: "keyvaultcheck");
 
@@ -72,7 +69,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
                  {
                      setup
-                     .UseKeyVaultUrl("invalid URI")
                      .AddSecret("mysecret")
                      .AddKey("mycryptokey");
                  });

@@ -12,7 +12,6 @@ namespace HealthChecks.Sample
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseApplicationInsights();
+                .UseStartup<Startup>();
     }
 }

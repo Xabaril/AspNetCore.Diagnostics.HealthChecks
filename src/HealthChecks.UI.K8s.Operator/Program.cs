@@ -64,6 +64,8 @@ namespace HealthChecks.UI.K8s.Operator
                     .WriteTo.ColoredConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception:lj}")
                     .CreateLogger();
 
+                Log.Logger = logger;
+
                 builder.ClearProviders();
                 builder.AddSerilog(logger, dispose: true);
             });

@@ -24,11 +24,17 @@ namespace HealthChecks.UI.Image.Configuration
             }
         }
 
-        public static bool UseConnectionString => 
+        public static bool UseConnectionString =>
             EnvironmentVariable.HasValue(AzureAppConfigurationKeys.ConnectionString) ? true : false;
 
-        public static bool UseLabel => 
+        public static bool UseLabel =>
             EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Label) ? true : false;
+
+        public static bool UseCacheExpiration => 
+            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.CacheExpiration) 
+            && double.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.CacheExpiration), out var _);
+
+        public static double CacheExpiration => double.Parse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.CacheExpiration));
 
         public static string ConnectionString => 
             EnvironmentVariable.GetValue(AzureAppConfigurationKeys.ConnectionString);

@@ -80,6 +80,7 @@ The existing environment variables are explained below:
 | AAC_ConnectionString        | Connection string to configuration service                                                              | If set, Managed Service Identity won't be used |
 | AAC_ManagedIdentityEndpoint | Your AAC endpoint to connect using Managed Identity                                                     | Sample: https://your-endpoint.azconfig.io      |
 | AAC_Label                   | Filter configuration keys containing this label                                                         | Sample: HealthChecksConfig                     |
+| AAC_CacheExpiration         | Cache expiration time before a refresh operation is triggered                                           | Sample: 60, default: 30                        |
 
 As table explains, if **AAC_ConnectionString** is set, the image will connect to AAC using that connection string.
 If you want to connect using managed identity service only specify **AAC_ManagedIdentityEndpoint** environment variable.

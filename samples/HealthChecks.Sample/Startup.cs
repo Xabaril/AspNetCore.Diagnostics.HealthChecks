@@ -31,7 +31,9 @@ namespace HealthChecks.Sample
              * or register all hosted service before call AddHealthChecks.
              */
 
-            services.AddHealthChecks()
+            services
+                .AddApplicationInsightsTelemetry()
+                .AddHealthChecks()
                 //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:5672", name: "rabbit1")
                 //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:6672", name: "rabbit2")
                 //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])

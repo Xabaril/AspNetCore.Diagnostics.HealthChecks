@@ -104,7 +104,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREQUEUE_NAME,
-               sp => new AzureQueueStorageHealthCheck(queueServiceUri,credential, queueName),
+               sp => new AzureQueueStorageHealthCheck(queueServiceUri, credential, queueName),
                failureStatus,
                tags,
                timeout));

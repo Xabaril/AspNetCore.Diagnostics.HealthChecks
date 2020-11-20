@@ -56,7 +56,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
         public void Dispose()
         {
-            if(_watcher != null && _watcher.Watching)
+            if (_watcher != null && _watcher.Watching)
             {
                 _watcher.Dispose();
             }

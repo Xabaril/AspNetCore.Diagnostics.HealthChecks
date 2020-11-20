@@ -41,9 +41,9 @@ namespace HealthChecks.SendGrid
                 var response = await client.SendEmailAsync(msg, cancellationToken);
 
                 if (response.StatusCode != HttpStatusCode.OK)
-                { 
-                    return  new HealthCheckResult(context.Registration.FailureStatus, 
-                        $"Sending an email to SendGrid using the sandbox mode is not responding with 200 OK, the current status is {response.StatusCode}", 
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus,
+                        $"Sending an email to SendGrid using the sandbox mode is not responding with 200 OK, the current status is {response.StatusCode}",
                         null,
                         new Dictionary<string, object>
                         {

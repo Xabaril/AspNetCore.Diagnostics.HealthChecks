@@ -17,7 +17,7 @@ namespace HealthChecks.UI.Middleware
 
         public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
         {
-            _ =  settings ?? throw new ArgumentNullException(nameof(settings));
+            _ = settings ?? throw new ArgumentNullException(nameof(settings));
             Settings = settings.Value;
 
             _jsonSerializationSettings = new JsonSerializerSettings()

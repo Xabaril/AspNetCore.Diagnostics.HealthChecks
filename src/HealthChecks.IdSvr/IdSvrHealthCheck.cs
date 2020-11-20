@@ -28,7 +28,7 @@ namespace HealthChecks.IdSvr
                     return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
                 }
 
-                return HealthCheckResult.Healthy();       
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

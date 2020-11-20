@@ -9,7 +9,7 @@ namespace HealthChecks.Kubernetes
         public KubernetesHealthCheckOptions WithConfiguration(KubernetesClientConfiguration configuration)
         {
             Configuration = configuration;
-            Options =  new KubernetesHealthCheckOptions();
+            Options = new KubernetesHealthCheckOptions();
             return Options;
         }
     }

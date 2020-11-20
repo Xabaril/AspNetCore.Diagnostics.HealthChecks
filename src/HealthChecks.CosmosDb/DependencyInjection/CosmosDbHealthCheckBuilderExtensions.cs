@@ -100,7 +100,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? TABLE_NAME,
-               sp => new TableServiceHealthCheck(endpoint,credentials,tableName),
+               sp => new TableServiceHealthCheck(endpoint, credentials, tableName),
                failureStatus,
                tags,
                timeout));

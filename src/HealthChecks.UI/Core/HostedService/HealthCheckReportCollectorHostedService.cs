@@ -60,7 +60,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     await Collect(cancellationToken);
                 }
-                catch(TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+                catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
                     // We are halting, task cancellation is expected.
                 }

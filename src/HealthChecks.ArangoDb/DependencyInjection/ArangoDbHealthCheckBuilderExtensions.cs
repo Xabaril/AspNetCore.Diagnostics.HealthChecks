@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddArangoDb(this IHealthChecksBuilder builder,
             Func<IServiceProvider, ArangoDbOptions> connectionOptionsFactory,
             string name = default,
-            HealthStatus? failureStatus = default, 
+            HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default,
             TimeSpan? timeout = default)
         {
@@ -36,7 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new ArangoDbHealthCheck(connectionOptionsFactory(sp)), 
+                sp => new ArangoDbHealthCheck(connectionOptionsFactory(sp)),
                 failureStatus,
                 tags,
                 timeout));

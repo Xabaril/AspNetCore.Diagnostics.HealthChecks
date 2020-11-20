@@ -24,7 +24,7 @@ namespace HealthChecks.UI.K8s.Operator
         public NamespacedServiceWatcher(
             IKubernetes client,
             ILogger<K8sOperator> logger,
-            OperatorDiagnostics diagnostics, 
+            OperatorDiagnostics diagnostics,
             NotificationHandler notificationHandler,
             IHttpClientFactory httpClientFactory)
         {
@@ -91,7 +91,7 @@ namespace HealthChecks.UI.K8s.Operator
                 uiService,
                 service,
                 secret,
-                _logger, 
+                _logger,
                 _httpClientFactory);
         }
 

@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
             setup?.Invoke(options);
 
             var registrationName = name ?? NAME;
-            
+
             builder.Services.AddSingleton<IHealthCheckPublisher>(sp =>
             {
                 return new SeqPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName), options);

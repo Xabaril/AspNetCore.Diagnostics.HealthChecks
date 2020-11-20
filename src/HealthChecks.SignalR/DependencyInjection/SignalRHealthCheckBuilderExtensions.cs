@@ -22,9 +22,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, string url, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default,TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, string url, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            Func<HubConnection> hubConnectionBuilder = () => 
+            Func<HubConnection> hubConnectionBuilder = () =>
                 new HubConnectionBuilder()
                     .WithUrl(url)
                     .Build();
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, Func<HubConnection> hubConnectionBuilder, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default,TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, Func<HubConnection> hubConnectionBuilder, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(
                 new HealthCheckRegistration(

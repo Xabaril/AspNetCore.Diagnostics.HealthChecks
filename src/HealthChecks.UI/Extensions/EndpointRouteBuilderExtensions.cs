@@ -55,7 +55,7 @@ namespace Microsoft.AspNetCore.Builder
 
             var endpointConventionBuilders =
                 new List<IEndpointConventionBuilder>(
-                    new[] {apiEndpoint, webhooksEndpoint, settingsEndpoint}.Union(resourcesEndpoints));
+                    new[] { apiEndpoint, webhooksEndpoint, settingsEndpoint }.Union(resourcesEndpoints));
 
             return new HealthCheckUIConventionBuilder(endpointConventionBuilders);
         }

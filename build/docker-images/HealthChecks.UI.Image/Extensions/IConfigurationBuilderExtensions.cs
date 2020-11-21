@@ -20,7 +20,7 @@ namespace HealthChecks.UI.Image.Extensions
             {
                 setupConfig(options);
 
-                if(AzureAppConfiguration.UseCacheExpiration)
+                if (AzureAppConfiguration.UseCacheExpiration)
                 {
                     options.ConfigureRefresh(config =>
                     {

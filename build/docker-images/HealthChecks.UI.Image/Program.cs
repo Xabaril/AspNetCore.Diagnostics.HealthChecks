@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Image
                         config.AddFilter(typeof(Program).Namespace, LogLevel.Information);
                     })
                     .ConfigureAppConfiguration((context, builder) =>
-                    {                    
+                    {
                         if (AzureAppConfiguration.Enabled)
                         {
                             builder.UseAzureAppConfiguration();

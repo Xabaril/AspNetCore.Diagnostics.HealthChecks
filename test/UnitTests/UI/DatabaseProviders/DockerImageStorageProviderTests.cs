@@ -193,7 +193,7 @@ namespace UnitTests.UI.DatabaseProviders
             context.Database.ProviderName.Equals(InMemoryProviderName);
         }
 
-        [Fact(Skip ="Ignored meanwhile pomelo is not update to 1.0")]
+        [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
         public void register_mysql()
         {
             //

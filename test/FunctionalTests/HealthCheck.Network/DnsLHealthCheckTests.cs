@@ -39,7 +39,7 @@ namespace FunctionalTests.HealthChecks.Network
                {
                    services.AddHealthChecks()
                     .AddDnsResolveHealthCheck(setup =>
-                    {                        
+                    {
                         setup.ResolveHost(targetHost).To(targetHostIpAddresses)
                         .ResolveHost(targetHost2).To(targetHost2IpAddresses);
                     }, tags: new string[] { "dns" });

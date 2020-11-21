@@ -31,9 +31,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var options = new AzureKeyVaultOptions();
             setup?.Invoke(options);
-            
-            if(keyVaultServiceUri == null) throw new ArgumentNullException(nameof(keyVaultServiceUri));
-            if(credential == null) throw new ArgumentNullException(nameof(credential));
+
+            if (keyVaultServiceUri == null) throw new ArgumentNullException(nameof(keyVaultServiceUri));
+            if (credential == null) throw new ArgumentNullException(nameof(credential));
 
             return builder.Add(new HealthCheckRegistration(
                name ?? KEYVAULT_NAME,

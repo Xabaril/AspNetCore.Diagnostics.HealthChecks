@@ -21,13 +21,13 @@ namespace HealthChecks.UI.Image
         {
             services
                 .AddHealthChecksUI()
-                .AddStorageProvider(Configuration)                
+                .AddStorageProvider(Configuration)
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             if (bool.TryParse(Configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
             {
-                if(string.IsNullOrEmpty(Configuration[PushServiceKeys.PushEndpointSecret]))
+                if (string.IsNullOrEmpty(Configuration[PushServiceKeys.PushEndpointSecret]))
                 {
                     throw new Exception($"{PushServiceKeys.PushEndpointSecret} environment variable has not been configured");
                 }

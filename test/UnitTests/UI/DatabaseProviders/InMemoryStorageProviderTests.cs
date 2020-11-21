@@ -26,7 +26,7 @@ namespace UnitTests.UI.DatabaseProviders
             var services = hostBuilder.Build().Services;
             var context = services.GetService<HealthChecksDb>();
 
-            context.Should().NotBeNull();            
+            context.Should().NotBeNull();
             context.Database.ProviderName.Should().Be(ProviderName);
             customOptionsInvoked.Should().BeTrue();
         }

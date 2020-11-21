@@ -34,7 +34,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
         public void add_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
-            var customCheckName = "my-"+ _defaultCheckName;
+            var customCheckName = "my-" + _defaultCheckName;
 
             services.AddHealthChecks()
                 .AddRabbitMQ(_fakeConnectionString, name: customCheckName);

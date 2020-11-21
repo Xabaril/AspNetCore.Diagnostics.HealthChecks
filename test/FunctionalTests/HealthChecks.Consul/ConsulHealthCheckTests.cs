@@ -30,7 +30,7 @@ namespace FunctionalTests.HealthChecks.Consul
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                       .AddConsul(setup=>
+                       .AddConsul(setup =>
                        {
                            setup.HostName = "localhost";
                            setup.Port = 8500;

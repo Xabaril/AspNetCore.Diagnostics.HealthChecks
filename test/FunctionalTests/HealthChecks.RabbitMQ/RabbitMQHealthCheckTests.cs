@@ -33,7 +33,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddRabbitMQ(rabbitConnectionString: connectionString,tags: new string[] { "rabbitmq" });
+                 .AddRabbitMQ(rabbitConnectionString: connectionString, tags: new string[] { "rabbitmq" });
             })
             .Configure(app =>
             {
@@ -223,7 +223,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton<IConnectionFactory>(sp=>
+                    .AddSingleton<IConnectionFactory>(sp =>
                     {
                         return new ConnectionFactory()
                         {

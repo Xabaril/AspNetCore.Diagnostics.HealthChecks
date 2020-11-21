@@ -80,7 +80,7 @@ namespace FunctionalTests.HealthChecks.Prometheus.Metrics
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecksPrometheusExporter("/health",options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
+                    app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
                 }));
 
             var response = await sut.CreateRequest("/health")

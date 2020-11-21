@@ -64,13 +64,13 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 services.AddHealthChecks()
                 .AddAzureKeyVault(null, new MockTokenCredentials(), setup =>
                  {
-                     setup                     
+                     setup
                      .AddSecret("mysecret")
                      .AddKey("mycryptokey");
                  });
             });
         }
-        
+
         [Fact]
         public void fail_when_invalid_credential_provided_in_configuration()
         {
@@ -81,7 +81,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 services.AddHealthChecks()
                     .AddAzureKeyVault(new Uri("http://localhost"), null, setup =>
                     {
-                        setup                     
+                        setup
                             .AddSecret("mysecret")
                             .AddKey("mycryptokey");
                     });

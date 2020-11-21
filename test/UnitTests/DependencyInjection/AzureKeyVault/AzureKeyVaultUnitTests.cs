@@ -55,19 +55,36 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         }
 
         [Fact]
-        public void fail_when_invalidad_uri_provided_in_configuration()
+        public void fail_when_invalid_uri_provided_in_configuration()
         {
             var services = new ServiceCollection();
 
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
+                .AddAzureKeyVault(null, new MockTokenCredentials(), setup =>
                  {
                      setup                     
                      .AddSecret("mysecret")
                      .AddKey("mycryptokey");
                  });
+            });
+        }
+        
+        [Fact]
+        public void fail_when_invalid_credential_provided_in_configuration()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                services.AddHealthChecks()
+                    .AddAzureKeyVault(new Uri("http://localhost"), null, setup =>
+                    {
+                        setup                     
+                            .AddSecret("mysecret")
+                            .AddKey("mycryptokey");
+                    });
             });
         }
     }

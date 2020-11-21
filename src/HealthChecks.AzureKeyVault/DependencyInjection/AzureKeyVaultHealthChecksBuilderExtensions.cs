@@ -3,6 +3,7 @@ using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -30,6 +31,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var options = new AzureKeyVaultOptions();
             setup?.Invoke(options);
+            
+            if(keyVaultServiceUri == null) throw new ArgumentNullException(nameof(keyVaultServiceUri));
+            if(credential == null) throw new ArgumentNullException(nameof(credential));
 
             return builder.Add(new HealthCheckRegistration(
                name ?? KEYVAULT_NAME,

@@ -41,7 +41,6 @@ The [HealthCheck operator definition](https://github.com/Xabaril/AspNetCore.Diag
 | scope         | Cluster / Namespaced                                                               |
 | servicesLabel | The label the operator service watcher will use to detected healthchecks endpoints |
 
-
 ### Scope definition (Cluster or Namespaced)
 
 The scope field (Cluster or Namespaced) is mandatory and will specify to the operator whether it should watch for healthchecks services in the
@@ -63,7 +62,7 @@ Note: The UI resources created by the operator (deployment, service, configmap, 
 | uiApiPath             | Location where the UI backend API will be served                     | UI defaults                                          |
 | uiResourcesPath       | Location where the UI static files resources will be served          | UI defaults                                          |
 | uiWebhooksPath        | Location where the Webhooks api                                      | UI defaults                                          |
-| uiNoRelativePaths     | Disable UI front-end relative paths                                  | false                                                | 
+| uiNoRelativePaths     | Disable UI front-end relative paths                                  | false                                                |
 | healthChecksPath      | Path where the UI will collect health from endpoints                 | /health (Can be overriden with a service annotation) |
 | healthChecksScheme    | Scheme to be used to collect health from endpoints                   | http (Can be overriden with a service annotation)    |
 | image                 | Image to be used by the UI                                           | xabarilcoding/healthchecksui:latest                  |
@@ -273,12 +272,12 @@ spec:
   name: healthchecks-ui
   servicesLabel: HealthChecks
   stylesheetContent: >
-    :root {    
+    :root {
       --primaryColor: #0f519f;
-      --secondaryColor: #f4f4f4;  
+      --secondaryColor: #f4f4f4;
       --bgMenuActive: #0f519f;
-      --bgButton: #0f519f;      
-      --bgAside: var(--primaryColor);   
+      --bgButton: #0f519f;
+      --bgAside: var(--primaryColor);
     }
   webhooks:
     - name: requestcatcher1

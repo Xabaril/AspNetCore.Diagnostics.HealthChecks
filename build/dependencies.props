@@ -1,9 +1,5 @@
 <Project>
-  <PropertyGroup Label="SDK Versions">
-    <!--delete bellow-->
-    <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp3.1</NetCoreTargetVersion>
-    <!--delete previous core and netstandard versions-->
+  <PropertyGroup Label="SDK Versions">    
     <NetFrameworkVersion>net5.0</NetFrameworkVersion>
     <MicrosoftNETTestSdk>16.8.0</MicrosoftNETTestSdk>
     <LangVersion>latest</LangVersion>

@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import { HealthChecksClient } from '../healthChecksClient';
 import { WebHook } from '../typings/models';
 import ReactJson from 'react-json-view';
 import { chunkArray } from '../utils/array';
@@ -15,13 +14,13 @@ interface WebHooksPageState {
 
 const WebhooksPage = () => {
 
-  const { data: webhooks, isError } = useQuery("webhooks", fetchers.getWebhooks, {retry: 1});
+  const { data: webhooks, isError } = useQuery("webhooks", fetchers.getWebhooks, {retry: 1});  
 
   const renderWebhooks = (webhooks: Array<WebHook>) => {
     let webHooksChunk = chunkArray(webhooks, 2);
     let components: any[] = [];
     for (let chunkWebhooks of webHooksChunk) {
-      var component = (
+      const component = (
         <>
           {chunkWebhooks.map((webhook, index) => {
             return (

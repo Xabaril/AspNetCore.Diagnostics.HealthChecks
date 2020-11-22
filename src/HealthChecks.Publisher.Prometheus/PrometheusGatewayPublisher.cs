@@ -33,7 +33,7 @@ namespace HealthChecks.Publisher.Prometheus
                 throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
             }
         }
-       
+
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             WriteMetricsFromHealthReport(report);

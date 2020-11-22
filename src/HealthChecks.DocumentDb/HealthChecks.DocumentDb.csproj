@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>HealthCheck;Azure;DocumentDb</PackageTags>
     <Description>HealthChecks.DocumentDb is the health check package for Azure DocumentDb.</Description>
     <Version>$(HealthCheckDocumentDb)</Version>

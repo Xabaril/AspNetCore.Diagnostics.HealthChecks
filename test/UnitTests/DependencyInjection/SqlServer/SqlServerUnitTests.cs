@@ -33,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
         public void invoke_beforeOpen_when_defined()
         {
             var services = new ServiceCollection();
-            bool invoked=false;
+            bool invoked = false;
             const string connectionstring = "Server=(local);Database=foo;User Id=bar;Password=baz;Connection Timeout=1";
             Action<SqlConnection> beforeOpen = connection =>
             {

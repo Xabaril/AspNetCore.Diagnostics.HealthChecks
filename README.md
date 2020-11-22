@@ -12,14 +12,15 @@
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET Core** versions supported: 2.2, 3.0 and 3.1
+**ASP.NET Core** versions supported: 5.0, 3.1, 3.0 and 2.2
 
 # Sections
 
 ## Previous versions documentation
 
-- [NetCore 2.2](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-2.2/README.md)
+- [NetCore 3.1](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.1/README.md)
 - [NetCore 3.0](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.0/README.md)
+- [NetCore 2.2](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-2.2/README.md)
 
 ## HealthChecks
 

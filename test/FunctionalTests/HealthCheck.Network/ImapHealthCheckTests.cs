@@ -183,7 +183,7 @@ namespace FunctionalTests.HealthChecks.Network
                    });
                });
 
-          
+
             var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -245,7 +245,7 @@ namespace FunctionalTests.HealthChecks.Network
                   });
               });
 
-          
+
             var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -263,12 +263,12 @@ namespace FunctionalTests.HealthChecks.Network
                   services.AddHealthChecks()
                    .AddImapHealthCheck(setup =>
                    {
-                      setup.Host = _host;
-                      setup.Port = 143;
-                      setup.ConnectionType = ImapConnectionType.STARTTLS;
-                      setup.AllowInvalidRemoteCertificates = true;
-                      setup.LoginWith(_validAccount, _validPassword);
-                      setup.CheckFolderExists("INBOX");
+                       setup.Host = _host;
+                       setup.Port = 143;
+                       setup.ConnectionType = ImapConnectionType.STARTTLS;
+                       setup.AllowInvalidRemoteCertificates = true;
+                       setup.LoginWith(_validAccount, _validPassword);
+                       setup.CheckFolderExists("INBOX");
                    }, tags: new string[] { "imap" });
               })
               .Configure(app =>

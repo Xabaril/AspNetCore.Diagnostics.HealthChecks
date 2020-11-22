@@ -24,13 +24,13 @@ namespace HealthChecks.Network
             _port = port;
         }
         public SftpConfigurationBuilder AddPasswordAuthentication(string password)
-        {   
+        {
             AuthenticationMethods.Add(new PasswordAuthenticationMethod(_userName, password));
 
             return this;
         }
         public SftpConfigurationBuilder AddPrivateKeyAuthentication(string privateKey, string passphrase)
-        {            
+        {
             if (string.IsNullOrEmpty(privateKey)) throw new ArgumentNullException(nameof(privateKey));
             if (string.IsNullOrEmpty(passphrase)) throw new ArgumentNullException(nameof(passphrase));
 
@@ -60,7 +60,7 @@ namespace HealthChecks.Network
                 throw new Exception("No AuthenticationMethods have been configured for Sftp Configuration");
             }
 
-            var sftpConfiguration =  new SftpConfiguration(_host, _port, _userName, AuthenticationMethods);
+            var sftpConfiguration = new SftpConfiguration(_host, _port, _userName, AuthenticationMethods);
             if (_fileCreationOptions.createFile)
             {
                 sftpConfiguration.CreateRemoteFile(_fileCreationOptions.remotePath);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Sqlite
 {
-    public class SqliteHealthCheck 
+    public class SqliteHealthCheck
         : IHealthCheck
     {
         private readonly string _connectionString;

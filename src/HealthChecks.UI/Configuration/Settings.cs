@@ -19,7 +19,6 @@ namespace HealthChecks.UI.Configuration
         internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
         internal Dictionary<string, Type> DelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
         internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
-
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
         public Settings AddHealthCheckEndpoint(string name, string uri)

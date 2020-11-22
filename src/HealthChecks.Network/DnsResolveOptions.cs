@@ -9,5 +9,5 @@ namespace HealthChecks.Network
         {
             ConfigureHosts.Add(host, registration);
         }
-    }    
+    }
 }

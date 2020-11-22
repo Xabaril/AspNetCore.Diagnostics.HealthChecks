@@ -39,7 +39,7 @@ namespace FunctionalTests.HealthChecks.SignalR
                     .AddSignalRHub(
                         () => new HubConnectionBuilder()
                                 .WithUrl("http://localhost/test", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
-                                .Build(), 
+                                .Build(),
                         tags: new string[] { "signalr" });
              })
              .Configure(app =>
@@ -54,7 +54,7 @@ namespace FunctionalTests.HealthChecks.SignalR
                      .UseEndpoints(config =>
                      {
                          config.MapHub<TestHub>("/test");
-                     });                     
+                     });
              });
 
             server = new TestServer(webHostBuilder);

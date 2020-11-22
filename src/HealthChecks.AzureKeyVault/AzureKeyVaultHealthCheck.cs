@@ -68,7 +68,7 @@ namespace HealthChecks.AzureKeyVault
 
         private KeyClient CreateKeyClient()
         {
-            if (!_keyClientsHolder.TryGetValue(_keyVaultUri,out KeyClient client))
+            if (!_keyClientsHolder.TryGetValue(_keyVaultUri, out KeyClient client))
             {
                 client = new KeyClient(_keyVaultUri, _azureCredential);
                 _keyClientsHolder.TryAdd(_keyVaultUri, client);

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>HealthCheck;Gremlin;TinkerPop;GraphDB</PackageTags>
     <Description>HealthChecks.Gremlin is the health check package for Gremlin.</Description>
     <Version>$(HealthCheckGremlin)</Version>

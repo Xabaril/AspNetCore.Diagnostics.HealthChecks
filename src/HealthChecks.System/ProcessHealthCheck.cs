@@ -16,11 +16,11 @@ namespace HealthChecks.System
             _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {            
+        {
             try
             {
                 var processes = Process.GetProcessesByName(_processName);
-                
+
                 if (_predicate(processes))
                 {
                     return Task.FromResult(HealthCheckResult.Healthy());
@@ -30,7 +30,7 @@ namespace HealthChecks.System
             {
                 return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
             }
-        
+
             return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
         }
     }

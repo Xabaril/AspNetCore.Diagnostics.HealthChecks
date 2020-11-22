@@ -1,5 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
-
+import React, { FunctionComponent, useEffect} from "react";
 
 interface LivenessMenuProps {
     pollingInterval: number,
@@ -8,8 +7,10 @@ interface LivenessMenuProps {
 }
 
 const LivenessMenu: FunctionComponent<LivenessMenuProps> = ({ running, onRunningClick, pollingInterval }) => {
+
+
     return (
-        <div className="hc-refesh-group">
+        <div className="hc-refesh-group">            
             <span>Polling interval: <b>{pollingInterval}</b> secs</span>
             <button
                 onClick={onRunningClick}

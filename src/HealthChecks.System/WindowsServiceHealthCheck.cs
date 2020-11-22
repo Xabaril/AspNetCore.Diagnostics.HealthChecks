@@ -40,7 +40,7 @@ namespace HealthChecks.System
             return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
         }
 
-        private  ServiceController GetServiceController() =>
+        private ServiceController GetServiceController() =>
             !string.IsNullOrEmpty(_machineName)
                 ? new ServiceController(_serviceName, _machineName)
                 : new ServiceController(_serviceName);

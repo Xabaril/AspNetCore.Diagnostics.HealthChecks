@@ -16,7 +16,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.DynamoDb
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddDynamoDb(_ => { _.AccessKey = "key";_.SecretKey = "key";_.RegionEndpoint = RegionEndpoint.CNNorth1; });
+                .AddDynamoDb(_ => { _.AccessKey = "key"; _.SecretKey = "key"; _.RegionEndpoint = RegionEndpoint.CNNorth1; });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

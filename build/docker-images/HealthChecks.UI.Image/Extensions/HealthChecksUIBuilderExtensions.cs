@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 targetProvider.SetupProvider(builder, connectionString);
             }
             else
-            { 
+            {
                 throw new ArgumentException($"Variable {UIKeys.STORAGE_PROVIDER} has an invalid value: {configuredStorage}." +
                     $" Available providers are {string.Join(" , ", Enum.GetNames(typeof(StorageProviderEnum)))}");
             }

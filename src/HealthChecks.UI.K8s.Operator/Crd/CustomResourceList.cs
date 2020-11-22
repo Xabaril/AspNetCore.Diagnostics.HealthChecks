@@ -8,5 +8,5 @@ namespace HealthChecks.UI.K8s.Operator.Crd
     {
         public V1ListMeta Metadata { get; set; }
         public List<CustomResource> Items { get; set; }
-    }    
+    }
 }

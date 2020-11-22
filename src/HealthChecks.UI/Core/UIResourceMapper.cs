@@ -67,7 +67,7 @@ namespace HealthChecks.UI.Core
                     });
                 });
             }
-            
+
         }
     }
 }

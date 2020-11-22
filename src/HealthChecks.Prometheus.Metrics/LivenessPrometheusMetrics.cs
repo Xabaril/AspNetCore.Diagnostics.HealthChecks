@@ -19,7 +19,7 @@ namespace HealthChecks.Prometheus.Metrics
             _healthChecksResult = factory.CreateGauge("healthcheck",
                 "Shows raw health check status (0 = Unhealthy, 1 = Degraded, 2 = Healthy)", new GaugeConfiguration
                 {
-                    LabelNames = new[] {HealthCheckLabelName},
+                    LabelNames = new[] { HealthCheckLabelName },
                     SuppressInitialValue = false
                 });
 
@@ -27,7 +27,7 @@ namespace HealthChecks.Prometheus.Metrics
                 "Shows duration of the health check execution in seconds",
                 new GaugeConfiguration
                 {
-                    LabelNames = new[] {HealthCheckLabelName},
+                    LabelNames = new[] { HealthCheckLabelName },
                     SuppressInitialValue = false
                 });
         }

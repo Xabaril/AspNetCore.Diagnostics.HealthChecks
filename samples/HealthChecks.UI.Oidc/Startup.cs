@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -36,6 +37,7 @@ namespace HealthChecks.UI.Oidc
                 .AddCookie(options =>
                 {
                     options.SlidingExpiration = true;
+
                 })
                 .AddOpenIdConnect(options =>
                 {
@@ -58,7 +60,7 @@ namespace HealthChecks.UI.Oidc
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

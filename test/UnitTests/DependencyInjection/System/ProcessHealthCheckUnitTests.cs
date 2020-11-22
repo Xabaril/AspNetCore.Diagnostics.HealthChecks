@@ -46,7 +46,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.System
 
             services.AddHealthChecks()
                 .AddProcessHealthCheck("dotnet", p => p?.Any() ?? false);
-            
+
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 

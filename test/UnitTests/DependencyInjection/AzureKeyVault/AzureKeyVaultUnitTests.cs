@@ -22,7 +22,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                 .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
                  {
                      setup
-                     .UseKeyVaultUrl("https://keyvault/")
                      .AddSecret("supersecret")
                      .AddKey("mycryptokey");
                  });
@@ -43,13 +42,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
-                 {
-                     setup
-                     .UseKeyVaultUrl("https://keyvault/")
-                     .UseClientSecrets("client", "secret");
-
-                 }, name: "keyvaultcheck");
+                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(),options=> { }, name: "keyvaultcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -62,20 +55,36 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         }
 
         [Fact]
-        public void fail_when_invalidad_uri_provided_in_configuration()
+        public void fail_when_invalid_uri_provided_in_configuration()
         {
             var services = new ServiceCollection();
 
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
+                .AddAzureKeyVault(null, new MockTokenCredentials(), setup =>
                  {
                      setup
-                     .UseKeyVaultUrl("invalid URI")
                      .AddSecret("mysecret")
                      .AddKey("mycryptokey");
                  });
+            });
+        }
+
+        [Fact]
+        public void fail_when_invalid_credential_provided_in_configuration()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                services.AddHealthChecks()
+                    .AddAzureKeyVault(new Uri("http://localhost"), null, setup =>
+                    {
+                        setup
+                            .AddSecret("mysecret")
+                            .AddKey("mycryptokey");
+                    });
             });
         }
     }

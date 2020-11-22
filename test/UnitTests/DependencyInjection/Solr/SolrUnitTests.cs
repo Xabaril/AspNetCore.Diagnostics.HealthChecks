@@ -16,7 +16,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.SignalR
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddSolr("https://solr.com","solRCore");
+                .AddSolr("https://solr.com", "solRCore");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

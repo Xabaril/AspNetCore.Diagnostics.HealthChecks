@@ -37,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                registrationName,
-               sp =>  new IoTHubHealthCheck(options),
+               sp => new IoTHubHealthCheck(options),
                failureStatus,
                tags,
                timeout));

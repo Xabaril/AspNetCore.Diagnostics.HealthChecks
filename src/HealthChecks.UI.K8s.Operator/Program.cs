@@ -36,13 +36,15 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 services.AddHostedService<HealthChecksOperator>()
                 .AddSingleton<IKubernetes>(sp =>
-                {
-                    var config = KubernetesClientConfiguration.IsInCluster() ?
-                                   KubernetesClientConfiguration.InClusterConfig() :
-                                   KubernetesClientConfiguration.BuildConfigFromConfigFile();
+               {
+                   var config = KubernetesClientConfiguration.IsInCluster() ?
+                                  KubernetesClientConfiguration.InClusterConfig() :
+                                  KubernetesClientConfiguration.BuildConfigFromConfigFile();
 
-                    return new Kubernetes(config);
-                })
+                   Log.Logger.Information("Starting Kubernetes client using host: {host}", config.Host);
+
+                   return new Kubernetes(config);
+               })
                 .AddHttpClient()
                 .AddTransient<IHealthChecksController, HealthChecksController>()
                 .AddSingleton<OperatorDiagnostics>()
@@ -63,6 +65,8 @@ namespace HealthChecks.UI.K8s.Operator
                     .Enrich.FromLogContext()
                     .WriteTo.ColoredConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception:lj}")
                     .CreateLogger();
+
+                Log.Logger = logger;
 
                 builder.ClearProviders();
                 builder.AddSerilog(logger, dispose: true);

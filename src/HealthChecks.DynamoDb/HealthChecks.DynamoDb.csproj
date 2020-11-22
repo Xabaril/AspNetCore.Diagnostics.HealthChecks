@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>HealthCheck;DynamoDb;AWS</PackageTags>
     <Description>HealthChecks.DynamoDb is the health check package for AWS DynamoDb.</Description>
     <Version>$(HealthCheckDynamoDb)</Version>

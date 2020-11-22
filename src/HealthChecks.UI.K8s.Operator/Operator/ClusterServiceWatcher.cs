@@ -41,7 +41,11 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
             _watcher = response.Watch<V1Service, V1ServiceList>(
                 onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
-                onError: e => _diagnostics.ServiceWatcherThrow(e)
+                onError: e =>
+                {
+                    _diagnostics.ServiceWatcherThrow(e);
+                    Watch(resource, token);
+                }
             );
 
             _diagnostics.ServiceWatcherStarting("All");
@@ -56,7 +60,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
         public void Dispose()
         {
-            if(_watcher != null && _watcher.Watching)
+            if (_watcher != null && _watcher.Watching)
             {
                 _watcher.Dispose();
             }

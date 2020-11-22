@@ -37,12 +37,12 @@ namespace HealthChecks.Redis
                 await connection.GetDatabase()
                     .PingAsync();
 
-				return HealthCheckResult.Healthy();
-			}
+                return HealthCheckResult.Healthy();
+            }
             catch (Exception ex)
             {
-				return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-			}
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            }
         }
     }
 }

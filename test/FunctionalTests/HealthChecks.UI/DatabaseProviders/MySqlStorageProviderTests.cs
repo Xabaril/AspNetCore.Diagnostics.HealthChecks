@@ -23,7 +23,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
+        [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {
             var hostReset = new ManualResetEventSlim(false);

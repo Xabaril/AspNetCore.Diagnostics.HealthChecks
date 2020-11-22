@@ -3,6 +3,7 @@ using HealthChecks.AzureStorage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using Azure.Storage.Blobs;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -25,11 +26,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureBlobStorage(this IHealthChecksBuilder builder, string connectionString, string containerName = default, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureBlobStorage(this IHealthChecksBuilder builder, string connectionString, string containerName = default, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default,BlobClientOptions clientOptions = null)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZURESTORAGE_NAME,
-               sp => new AzureBlobStorageHealthCheck(connectionString, containerName),
+               sp => new AzureBlobStorageHealthCheck(connectionString, containerName, clientOptions),
                failureStatus,
                tags,
                timeout));

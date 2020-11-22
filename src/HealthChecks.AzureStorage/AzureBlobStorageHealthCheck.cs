@@ -16,21 +16,24 @@ namespace HealthChecks.AzureStorage
 
         private readonly string _connectionString;
         private readonly string _containerName;
+        private readonly BlobClientOptions _clientOptions;
 
         private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder
             = new ConcurrentDictionary<string, BlobServiceClient>();
 
-        public AzureBlobStorageHealthCheck(string connectionString, string containerName = default)
+        public AzureBlobStorageHealthCheck(string connectionString, string containerName = default, BlobClientOptions clientOptions = null)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _containerName = containerName;
+            _clientOptions = clientOptions;
         }
 
-        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string containerName = default)
+        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string containerName = default,BlobClientOptions clientOptions=null)
         {
             _blobServiceUri = blobServiceUri ?? throw new ArgumentNullException(nameof(blobServiceUri));
             _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
             _containerName = containerName;
+            _clientOptions = clientOptions;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -68,11 +71,11 @@ namespace HealthChecks.AzureStorage
             {
                 if (_connectionString != null)
                 {
-                    client = new BlobServiceClient(_connectionString);
+                    client = new BlobServiceClient(_connectionString,_clientOptions);
                 }
                 else
                 {
-                    client = new BlobServiceClient(_blobServiceUri, _azureCredential);
+                    client = new BlobServiceClient(_blobServiceUri, _azureCredential, _clientOptions);
                 }
 
                 _blobClientsHolder.TryAdd(serviceUri, client);

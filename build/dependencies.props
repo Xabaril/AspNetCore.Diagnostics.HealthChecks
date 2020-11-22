@@ -140,7 +140,7 @@
     <HealthCheckIoTHub>3.1.1</HealthCheckIoTHub>
     <HealthCheckIbmMQ>3.1.1</HealthCheckIbmMQ>
     <HealthChecksUIK8sOperator>3.1.1</HealthChecksUIK8sOperator>
-    <HealthCheckSendGrid>3.1.1</HealthCheckSendGrid>
+    <HealthCheckSendGrid>3.2.0</HealthCheckSendGrid>
     <HealthCheckArangoDb>3.1.1-preview1</HealthCheckArangoDb>
   </PropertyGroup>
 </Project>

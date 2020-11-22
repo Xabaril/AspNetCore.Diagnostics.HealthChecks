@@ -28,7 +28,7 @@ namespace HealthChecks.AzureStorage
             _clientOptions = clientOptions;
         }
 
-        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string containerName = default,BlobClientOptions clientOptions=null)
+        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string containerName = default, BlobClientOptions clientOptions = null)
         {
             _blobServiceUri = blobServiceUri ?? throw new ArgumentNullException(nameof(blobServiceUri));
             _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
@@ -71,7 +71,7 @@ namespace HealthChecks.AzureStorage
             {
                 if (_connectionString != null)
                 {
-                    client = new BlobServiceClient(_connectionString,_clientOptions);
+                    client = new BlobServiceClient(_connectionString, _clientOptions);
                 }
                 else
                 {

@@ -18,12 +18,11 @@ namespace UnitTests.Uris
     public class uris_healthcheck_should
     {
         private const string RequestUri = "http://localhost/mock";
+        private const string hcname = "uri-healthcheck";
         [Fact]
         public async Task use_configured_http_client_and_handler_with_default_overload()
         {
             var services = new ServiceCollection();
-            var hcname = "uri-healthcheck";
-
 
             Action<HttpClient> clientConfigurationCallback = (HttpClient client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
 
@@ -50,8 +49,7 @@ namespace UnitTests.Uris
         public async Task use_configured_http_client_and_handler_when_configuring_method()
         {
             var services = new ServiceCollection();
-            var hcname = "uri-healthcheck";
-            
+
             Action<HttpClient> clientConfigurationCallback = (HttpClient client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
 
             Func<HttpMessageHandler> configureHttpClientHandler = () => GetMockedStatusCodeHandler(StatusCodes.Status500InternalServerError);
@@ -76,8 +74,6 @@ namespace UnitTests.Uris
         public async Task use_configured_http_client_and_handler_when_using_setup_method()
         {
             var services = new ServiceCollection();
-            var hcname = "uri-healthcheck";
-
 
             Action<HttpClient> clientConfigurationCallback = (HttpClient client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
 
@@ -105,7 +101,6 @@ namespace UnitTests.Uris
         public void create_healthcheck_with_no_configured_httpclient_or_handler()
         {
             var services = new ServiceCollection();
-            var hcname = "uri-healthcheck";
 
             services
                 .AddHealthChecks()

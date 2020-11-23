@@ -214,14 +214,14 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
 
-        static Action<HttpClient> NullHttpClientCallback = (client) => { };
-        static Func<HttpMessageHandler> NullHttpMessageHandlerCallback = () => new HttpClientHandler();
+        static Action<HttpClient> EmptyHttpClientCallback = (client) => { };
+        static Func<HttpMessageHandler> DefaultHttpMessageHandlerCallback = () => new HttpClientHandler();
 
         private static void ConfigureUrisClient(IHealthChecksBuilder builder, Action<HttpClient> configureHttpclient, Func<HttpMessageHandler> configureHttpMessageHandler, string registrationName)
         {
             builder.Services.AddHttpClient(registrationName)
-                .ConfigureHttpClient(configureHttpclient ?? NullHttpClientCallback)
-                .ConfigurePrimaryHttpMessageHandler(configureHttpMessageHandler ?? NullHttpMessageHandlerCallback);
+                .ConfigureHttpClient(configureHttpclient ?? EmptyHttpClientCallback)
+                .ConfigurePrimaryHttpMessageHandler(configureHttpMessageHandler ?? DefaultHttpMessageHandlerCallback);
         }
 
     }

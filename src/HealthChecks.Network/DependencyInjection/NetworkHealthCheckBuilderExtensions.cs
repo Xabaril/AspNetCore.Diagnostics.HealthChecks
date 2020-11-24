@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -11,6 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string SFTP_NAME = "sftp";
         const string FTP_NAME = "ftp";
         const string DNS_NAME = "dns";
+        const string DNS_COUNT_NAME = "dns-host-count";
         const string IMAP_NAME = "imap";
         const string SMTP_NAME = "smtp";
         const string TCP_NAME = "tcp";
@@ -124,6 +126,37 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                 name ?? DNS_NAME,
                 sp => new DnsResolveHealthCheck(options),
+                failureStatus,
+                tags));
+        }
+
+        /// <summary>
+        /// Add a Healthcheck to resolve a hostname and verify the number of resolved address is within the configured minimum and maximum
+        /// </summary>   
+        /// <remarks>
+        /// Add host configurations using setup.ResolveHost(host).To(registrations);
+        /// </remarks>     
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">Action to add hosts and configure minimum and maximum resolved addresses</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'dns' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddDnsResolveHostCountHealthCheck(this IHealthChecksBuilder builder,
+            Action<DnsResolveCountOptions> setup, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default)
+        {
+            var options = new DnsResolveCountOptions();
+            setup?.Invoke(options);
+
+            if (!options.HostRegistrations.Any()) throw new ArgumentNullException(nameof(options), "No dns hosts have been registered");
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? DNS_COUNT_NAME,
+                sp => new DnsResolveHostCountHealthCheck(options),
                 failureStatus,
                 tags));
         }

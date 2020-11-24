@@ -24,9 +24,9 @@ namespace UnitTests.Uris
         {
             var services = new ServiceCollection();
 
-            Action<HttpClient> clientConfigurationCallback = (HttpClient client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
+            Action<IServiceProvider, HttpClient> clientConfigurationCallback = (_ , client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
 
-            Func<HttpMessageHandler> configureHttpClientHandler = () => GetMockedStatusCodeHandler(StatusCodes.Status200OK);
+            Func<IServiceProvider, HttpMessageHandler> configureHttpClientHandler = _ => GetMockedStatusCodeHandler(StatusCodes.Status200OK);
 
             services
                 .AddHealthChecks()
@@ -37,8 +37,8 @@ namespace UnitTests.Uris
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
-
             var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
+
             result.Status.Should().Be(HealthStatus.Healthy);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
             client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").Should().BeTrue();
@@ -48,11 +48,17 @@ namespace UnitTests.Uris
         [Fact]
         public async Task use_configured_http_client_and_handler_when_configuring_method()
         {
+            var headerName = "X-API-KEY";
             var services = new ServiceCollection();
 
-            Action<HttpClient> clientConfigurationCallback = (HttpClient client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
+            services.AddSingleton(new ApiKeyConfiguration { HeaderName = headerName });
 
-            Func<HttpMessageHandler> configureHttpClientHandler = () => GetMockedStatusCodeHandler(StatusCodes.Status500InternalServerError);
+            Action<IServiceProvider, HttpClient> clientConfigurationCallback = (sp, client) => {
+                var keyConfiguration = sp.GetRequiredService<ApiKeyConfiguration>();
+                client.DefaultRequestHeaders.Add(keyConfiguration.HeaderName, keyConfiguration.HeaderValue);
+            };
+
+            Func<IServiceProvider, HttpMessageHandler> configureHttpClientHandler = _ => GetMockedStatusCodeHandler(StatusCodes.Status500InternalServerError);
 
             services
                 .AddHealthChecks()
@@ -60,14 +66,13 @@ namespace UnitTests.Uris
 
             var sp = services.BuildServiceProvider();
             var options = sp.GetService<IOptions<HealthCheckServiceOptions>>();
-
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
             var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
 
             result.Status.Should().Be(HealthStatus.Unhealthy);
-            client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").Should().BeTrue();
+            client.DefaultRequestHeaders.Any(s => s.Key == headerName).Should().BeTrue();
         }
 
         [Fact]
@@ -75,9 +80,9 @@ namespace UnitTests.Uris
         {
             var services = new ServiceCollection();
 
-            Action<HttpClient> clientConfigurationCallback = (HttpClient client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
+            Action<IServiceProvider, HttpClient> clientConfigurationCallback = (_, client) => client.DefaultRequestHeaders.Add("MockHeader", "value");
 
-            Func<HttpMessageHandler> configureHttpClientHandler = () => GetMockedStatusCodeHandler(400);
+            Func<IServiceProvider, HttpMessageHandler> configureHttpClientHandler = _ => GetMockedStatusCodeHandler(400);
 
             services
                 .AddHealthChecks()
@@ -85,11 +90,9 @@ namespace UnitTests.Uris
 
             var sp = services.BuildServiceProvider();
             var options = sp.GetService<IOptions<HealthCheckServiceOptions>>();
-
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
-
             var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
 
             client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").Should().BeTrue();
@@ -108,7 +111,6 @@ namespace UnitTests.Uris
 
             var sp = services.BuildServiceProvider();
             var options = sp.GetService<IOptions<HealthCheckServiceOptions>>();
-
             var registration = options.Value.Registrations.First();
             var hc = registration.Factory(sp);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
@@ -125,5 +127,10 @@ namespace UnitTests.Uris
 
             return handler;
         }
+    }
+    internal class ApiKeyConfiguration
+    {
+        public string HeaderName = "X-API-KEY";
+        public string HeaderValue = "my-api-key";
     }
 }

@@ -24,7 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default, Action<HttpClient> configureClient = null, Func<HttpMessageHandler> configureHttpMessageHandler = null)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, string name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default, 
+            Action<IServiceProvider, HttpClient> configureClient = null, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler = null)
         {
             var registrationName = name ?? NAME;
             ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
@@ -55,8 +57,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="configureClient">An optional to configure the Uris HealthCheck http client</param>
+        /// <param name="configureHttpMessageHandler">An optional to configure the Uris HealthCheck http client message handler</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default, Action<HttpClient> configureClient = null, Func<HttpMessageHandler> configureHttpMessageHandler = null)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Uri uri, HttpMethod httpMethod, string name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default,
+            Action<IServiceProvider, HttpClient> configureClient = null, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler = null)
         {
             var registrationName = name ?? NAME;
             ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
@@ -87,8 +93,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="configureClient">An optional to configure the Uris HealthCheck http client</param>
+        /// <param name="configureHttpMessageHandler">An optional to configure the Uris HealthCheck http client message handler</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default, Action<HttpClient> configureClient = null, Func<HttpMessageHandler> configureHttpMessageHandler = null)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, string name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default,
+            Action<IServiceProvider, HttpClient> configureClient = null, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler = null)
         {
             var registrationName = name ?? NAME;
             ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
@@ -113,8 +123,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="configureClient">An optional to configure the Uris HealthCheck http client</param>
+        /// <param name="configureHttpMessageHandler">An optional to configure the Uris HealthCheck http client message handler</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, HttpMethod httpMethod, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default, Action<HttpClient> configureClient = null, Func<HttpMessageHandler> configureHttpMessageHandler = null)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, IEnumerable<Uri> uris, HttpMethod httpMethod, string name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default,
+            Action<IServiceProvider, HttpClient> configureClient = null, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler = null)
         {
             var registrationName = name ?? NAME;
             ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
@@ -145,8 +159,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="configureClient">An optional to configure the Uris HealthCheck http client</param>
+        /// <param name="configureHttpMessageHandler">An optional to configure the Uris HealthCheck http client message handler</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Action<UriHealthCheckOptions> uriOptions, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default, Action<HttpClient> configureClient = null, Func<HttpMessageHandler> configureHttpMessageHandler = null)
+        public static IHealthChecksBuilder AddUrlGroup(this IHealthChecksBuilder builder, Action<UriHealthCheckOptions> uriOptions, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default, TimeSpan? timeout = default,
+            Action<IServiceProvider, HttpClient> configureClient = null, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler = null)
         {
 
             var registrationName = name ?? NAME;
@@ -176,7 +194,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns></returns>
+        /// <param name="configureClient">An optional to configure the Uris HealthCheck http client</param>
+        /// <param name="configureHttpMessageHandler">An optional to configure the Uris HealthCheck http client message handler</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder,
             Func<IServiceProvider, Uri> uriProvider,
@@ -184,7 +204,7 @@ namespace Microsoft.Extensions.DependencyInjection
             HealthStatus? failureStatus = null,
             IEnumerable<string> tags = null,
             TimeSpan? timeout = null,
-            Action<HttpClient> configureClient = null, Func<HttpMessageHandler> configureHttpMessageHandler = null)
+            Action<IServiceProvider, HttpClient> configureClient = null, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler = null)
         {
             var registrationName = name ?? NAME;
             ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
@@ -214,10 +234,10 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
 
-        static Action<HttpClient> EmptyHttpClientCallback = (client) => { };
-        static Func<HttpMessageHandler> DefaultHttpMessageHandlerCallback = () => new HttpClientHandler();
+        static Action<IServiceProvider, HttpClient> EmptyHttpClientCallback = (_, _) => { };
+        static Func<IServiceProvider, HttpMessageHandler> DefaultHttpMessageHandlerCallback = _ => new HttpClientHandler();
 
-        private static void ConfigureUrisClient(IHealthChecksBuilder builder, Action<HttpClient> configureHttpclient, Func<HttpMessageHandler> configureHttpMessageHandler, string registrationName)
+        private static void ConfigureUrisClient(IHealthChecksBuilder builder, Action<IServiceProvider, HttpClient> configureHttpclient, Func<IServiceProvider, HttpMessageHandler> configureHttpMessageHandler, string registrationName)
         {
             builder.Services.AddHttpClient(registrationName)
                 .ConfigureHttpClient(configureHttpclient ?? EmptyHttpClientCallback)

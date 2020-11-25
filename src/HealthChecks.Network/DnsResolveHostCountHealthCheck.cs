@@ -31,7 +31,9 @@ namespace HealthChecks.Network
                     var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken);
                     var totalAddresses = ipAddresses.Count();
 
-                    if (totalAddresses < minHosts || totalAddresses > maxHosts)
+
+
+                    if (totalAddresses < minHosts || (maxHosts.HasValue && totalAddresses > maxHosts.Value))
                     {
                         resolutionsAboveThreshold.Add((entry.Key, totalAddresses));
                     }

@@ -99,7 +99,7 @@
     <HealthCheckIdSvr>5.0.0-preview1</HealthCheckIdSvr>
     <HealthCheckSqlServer>5.0.0-preview1</HealthCheckSqlServer>
     <HealthCheckSqlite>5.0.0-preview1</HealthCheckSqlite>
-    <HealthCheckUri>5.0.0-preview1</HealthCheckUri>
+    <HealthCheckUri>5.0.0-preview2</HealthCheckUri>
     <HealthCheckRedis>5.0.0-preview1</HealthCheckRedis>
     <HealthCheckRabbitMQ>5.0.0-preview1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>5.0.0-preview1</HealthCheckEventStore>

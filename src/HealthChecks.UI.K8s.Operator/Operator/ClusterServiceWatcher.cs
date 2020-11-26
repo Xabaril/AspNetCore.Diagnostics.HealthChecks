@@ -23,8 +23,8 @@ namespace HealthChecks.UI.K8s.Operator.Operator
           IKubernetes client,
           ILogger<K8sOperator> logger,
           OperatorDiagnostics diagnostics,
-          NotificationHandler notificationHandler,
-          IHttpClientFactory httpClientFactory)
+          NotificationHandler notificationHandler
+          )
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

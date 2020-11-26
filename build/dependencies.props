@@ -87,6 +87,7 @@
     <SendGrid>9.21.1</SendGrid>
     <ArangoDBNetStandard>1.0.0-alpha03</ArangoDBNetStandard>
     <SystemServiceProcessServiceController>5.0.0</SystemServiceProcessServiceController>
+    <RichardSzalayMockHttp>6.0.0</RichardSzalayMockHttp>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">

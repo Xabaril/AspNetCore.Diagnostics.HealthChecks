@@ -25,6 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
+        /// <param name="queryValidator">An optional func to validate the object returned by the sql query.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder,
             string connectionString,
@@ -33,9 +34,10 @@ namespace Microsoft.Extensions.DependencyInjection
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default,
             TimeSpan? timeout = default,
-            Action<SqlConnection> beforeOpenConnectionConfigurer = default)
+            Action<SqlConnection> beforeOpenConnectionConfigurer = default,
+            Func<object, HealthCheckResult> queryValidator = default)
         {
-            return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags, timeout, beforeOpenConnectionConfigurer);
+            return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags, timeout, beforeOpenConnectionConfigurer, queryValidator);
         }
 
         /// <summary>
@@ -52,6 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
+        /// <param name="queryValidator">An optional func to validate the object returned by the healthQuery.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder,
             Func<IServiceProvider, string> connectionStringFactory,
@@ -60,7 +63,8 @@ namespace Microsoft.Extensions.DependencyInjection
             HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default,
             TimeSpan? timeout = default,
-            Action<SqlConnection> beforeOpenConnectionConfigurer = default)
+            Action<SqlConnection> beforeOpenConnectionConfigurer = default,
+            Func<object, HealthCheckResult> queryValidator = default)
         {
             if (connectionStringFactory == null)
             {
@@ -69,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new SqlServerHealthCheck(connectionStringFactory(sp), healthQuery ?? HEALTH_QUERY, beforeOpenConnectionConfigurer),
+                sp => new SqlServerHealthCheck(connectionStringFactory(sp), healthQuery ?? HEALTH_QUERY, beforeOpenConnectionConfigurer, queryValidator),
                 failureStatus,
                 tags,
                 timeout));

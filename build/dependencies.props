@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup Label="SDK Versions">    
     <NetFrameworkVersion>net5.0</NetFrameworkVersion>
+    <NetStandardVersion>netstandard2.0</NetStandardVersion>
     <MicrosoftNETTestSdk>16.8.0</MicrosoftNETTestSdk>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -99,7 +100,7 @@
     <HealthCheckIdSvr>5.0.0-preview1</HealthCheckIdSvr>
     <HealthCheckSqlServer>5.0.0-preview1</HealthCheckSqlServer>
     <HealthCheckSqlite>5.0.0-preview1</HealthCheckSqlite>
-    <HealthCheckUri>5.0.0-preview2</HealthCheckUri>
+    <HealthCheckUri>5.0.0-preview3</HealthCheckUri>
     <HealthCheckRedis>5.0.0-preview1</HealthCheckRedis>
     <HealthCheckRabbitMQ>5.0.0-preview1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>5.0.0-preview1</HealthCheckEventStore>

@@ -34,7 +34,7 @@ namespace HealthChecks.SqlServer
                     {
                         command.CommandText = _sql;
                         var queryResult = await command.ExecuteScalarAsync(cancellationToken);
-                        if (null != _queryValidator)
+                        if (_queryValidator != null)
                         {
                             return _queryValidator(queryResult);
                         }

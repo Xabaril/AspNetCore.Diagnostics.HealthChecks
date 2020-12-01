@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthCheck.Network
+namespace FunctionalTests.HealthChecks.Network
 {
     [Collection("execution")]
     public class tcp_healthcheck_should

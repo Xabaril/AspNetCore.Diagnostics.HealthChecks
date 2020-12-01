@@ -112,7 +112,7 @@
     <HealthCheckMySql>5.0.0-preview1</HealthCheckMySql>
     <HealthCheckKafka>5.0.0-preview1</HealthCheckKafka>
     <HealthCheckSystem>5.0.0-preview1</HealthCheckSystem>
-    <HealthCheckNetwork>5.0.0-preview1</HealthCheckNetwork>
+    <HealthCheckNetwork>5.0.0-preview2</HealthCheckNetwork>
     <HealthCheckDynamoDb>5.0.0-preview1</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>5.0.0-preview1</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.0-preview1</HealthCheckGremlin>

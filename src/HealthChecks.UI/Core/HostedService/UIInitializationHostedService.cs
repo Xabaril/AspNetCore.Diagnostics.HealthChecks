@@ -17,15 +17,18 @@ namespace HealthChecks.UI.Core.HostedService
     {
         private readonly IServiceProvider _provider;
         private readonly ILogger<UIInitializationHostedService> _logger;
+        private readonly HealthCheckDbOptions _healthCheckDbOptions;
         private readonly Settings _settings;
 
         public UIInitializationHostedService(
             IServiceProvider provider,
             ILogger<UIInitializationHostedService> logger,
+            HealthCheckDbOptions healthCheckDbOptions,
             IOptions<Settings> settings)
         {
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _healthCheckDbOptions = healthCheckDbOptions ?? throw new ArgumentNullException(nameof(healthCheckDbOptions));
             _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
         }
 
@@ -108,9 +111,7 @@ namespace HealthChecks.UI.Core.HostedService
 
         private async Task<bool> ShouldMigrateDatabase(HealthChecksDb context)
         {
-            return (!_settings.DisableMigrations &&
-                !context.Database.IsInMemory() &&
-                (await context.Database.GetPendingMigrationsAsync()).Any());
+            return (!_healthCheckDbOptions.DatabaseMigrationsEnabled && (await context.Database.GetPendingMigrationsAsync()).Any());
         }
     }
 

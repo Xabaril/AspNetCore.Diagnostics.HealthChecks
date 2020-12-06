@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Core;
+using HealthChecks.UI.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -9,18 +10,17 @@ namespace HealthChecks.UI.Configuration
     {
         internal List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
         internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
-        internal bool DisableMigrations { get; set; } = false;
         internal int MaximumExecutionHistoriesPerEndpoint { get; private set; } = 100;
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int ApiMaxActiveRequests { get; private set; } = 3;
-        internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;        
         internal Func<IServiceProvider, HttpMessageHandler> ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient> ApiEndpointHttpClientConfig { get; private set; }
         internal Func<IServiceProvider, HttpMessageHandler> WebHooksEndpointHttpHandler { get; private set; }
         internal Dictionary<string, Type> DelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
         internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
         internal string HeaderText { get; private set; } = "Health Checks Status";
-
+        
         public Settings AddHealthCheckEndpoint(string name, string uri)
         {
             HealthChecks.Add(new HealthCheckSetting

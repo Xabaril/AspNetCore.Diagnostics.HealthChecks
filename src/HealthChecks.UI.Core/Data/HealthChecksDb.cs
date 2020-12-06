@@ -6,6 +6,12 @@ namespace HealthChecks.UI.Core.Data
     public class HealthChecksDb
         : DbContext
     {
+        private readonly HealthCheckDbOptions _healthcheckOptions;
+
+        public HealthChecksDb(DbContextOptions<HealthChecksDb> options, HealthCheckDbOptions healthcheckOptions) : base(options)
+        {
+            _healthcheckOptions = healthcheckOptions;
+        }
         public DbSet<HealthCheckConfiguration> Configurations { get; set; }
 
         public DbSet<HealthCheckExecution> Executions { get; set; }
@@ -16,10 +22,15 @@ namespace HealthChecks.UI.Core.Data
 
         public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
 
-        public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options) { }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (!string.IsNullOrEmpty(_healthcheckOptions?.Schema))
+            {
+                modelBuilder.HasDefaultSchema(_healthcheckOptions.Schema);
+            }
+
             modelBuilder.ApplyConfiguration(new HealthCheckConfigurationMap());
             modelBuilder.ApplyConfiguration(new HealthCheckExecutionMap());
             modelBuilder.ApplyConfiguration(new HealthCheckExecutionEntryMap());

@@ -1,4 +1,5 @@
 ﻿using HealthChecks.UI.Client;
+using HealthChecks.Uris;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -39,7 +40,18 @@ namespace HealthChecks.Sample
                 //.AddIdentityServer(new Uri("http://localhost:6060"))
                 //.AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
                 //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
-                .AddApplicationInsightsPublisher(saveDetailedReport:true);
+                .AddUrlGroup(opt =>
+                {
+                    opt.AddUri(new Uri($"https://httpbin.org/status/500"));
+
+                    opt.AddResponseData(ResponseData.Body);
+                    opt.AddResponseData(ResponseData.HttpVerb);
+                    opt.AddResponseData(ResponseData.Reason);
+                    opt.AddResponseData(ResponseData.Status);
+                    opt.AddResponseData(ResponseData.Url);
+
+                })
+                .AddApplicationInsightsPublisher(saveDetailedReport: true);
 
             services.AddControllers();
         }
@@ -72,7 +84,7 @@ namespace HealthChecks.Sample
                     return Task.FromResult(HealthCheckResult.Healthy());
                 }
 
-                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed",exception:new InvalidCastException("Invalid cast from to to to")));
+                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed", exception: new InvalidCastException("Invalid cast from to to to")));
             }
 
         }

@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
+using HealthChecks.UI.Client;
+using HealthChecks.Uris;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -151,7 +153,7 @@ namespace FunctionalTests.HealthChecks.Uris
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                   .AddUrlGroup(opt=>
+                   .AddUrlGroup(opt =>
                    {
                        opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(1)));
                    }, tags: new string[] { "uris" });
@@ -205,7 +207,7 @@ namespace FunctionalTests.HealthChecks.Uris
                     .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
         [Fact]
-        public async Task be_healthy_if_request_sucess_and_default_timeout_is_configured()
+        public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
         {
             var uri = new Uri($"https://httpbin.org/delay/2");
 
@@ -237,7 +239,7 @@ namespace FunctionalTests.HealthChecks.Uris
                     .Should().Be(HttpStatusCode.OK);
         }
         [Fact]
-        public async Task be_healthy_if_request_sucess_and_timeout_is_configured()
+        public async Task be_healthy_if_request_success_and_timeout_is_configured()
         {
             var uri = new Uri($"https://httpbin.org/delay/2");
 
@@ -266,6 +268,92 @@ namespace FunctionalTests.HealthChecks.Uris
 
             response.StatusCode
                     .Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task be_healthy_if_request_success_and_response_data_is_configured()
+        {
+            string url = "https://httpbin.org/status/200";
+            var uri = new Uri(url);
+
+            var webHostBuilder = new WebHostBuilder()
+              .UseStartup<DefaultStartup>()
+              .ConfigureServices(services =>
+              {
+                  services.AddHealthChecks()
+                   .AddUrlGroup(opt =>
+                   {
+                       opt.AddUri(uri);
+
+                       opt.AddResponseData(ResponseData.Body);
+                       opt.AddResponseData(ResponseData.HttpVerb);
+                       opt.AddResponseData(ResponseData.Reason);
+                       opt.AddResponseData(ResponseData.Status);
+                       opt.AddResponseData(ResponseData.Url);
+
+                   }, tags: new string[] { "uris" });
+              })
+              .Configure(app =>
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  {
+                      Predicate = r => r.Tags.Contains("uris"),
+                      ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                  });
+              });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            var resultAsString = await response.Content.ReadAsStringAsync();
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            resultAsString.Should().ContainCheckAndResult(url, 200, "OK", string.Empty, "GET");
+        }
+
+        [Fact]
+        public async Task be_unhealthy_if_request_success_and_response_data_is_configured()
+        {
+            string url = "https://httpbin.org/status/500";
+            var uri = new Uri(url);
+
+            var webHostBuilder = new WebHostBuilder()
+              .UseStartup<DefaultStartup>()
+              .ConfigureServices(services =>
+              {
+                  services.AddHealthChecks()
+                   .AddUrlGroup(opt =>
+                   {
+                       opt.AddUri(uri);
+
+                       opt.AddResponseData(ResponseData.Body);
+                       opt.AddResponseData(ResponseData.HttpVerb);
+                       opt.AddResponseData(ResponseData.Reason);
+                       opt.AddResponseData(ResponseData.Status);
+                       opt.AddResponseData(ResponseData.Url);
+
+                   }, tags: new string[] { "uris" });
+              })
+              .Configure(app =>
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions()
+                  {
+                      Predicate = r => r.Tags.Contains("uris"),
+                      ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                  });
+              });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            var resultAsString = await response.Content.ReadAsStringAsync();
+
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            resultAsString.Should().ContainCheckAndResult(url, 500, "INTERNAL SERVER ERROR", string.Empty, "GET");
         }
     }
 }

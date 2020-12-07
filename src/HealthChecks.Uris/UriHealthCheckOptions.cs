@@ -27,7 +27,7 @@ namespace HealthChecks.Uris
         private readonly List<(string Name, string Value)> _headers = new List<(string Name, string Value)>();
 
         internal IEnumerable<(string Name, string Value)> Headers => _headers;
-
+       
         public UriOptions(Uri uri)
         {
             Uri = uri;
@@ -113,6 +113,11 @@ namespace HealthChecks.Uris
 
             return this;
         }
+        public UriHealthCheckOptions AddResponseData(ResponseData data)
+        {
+            _responseData.Add(data);
+            return this;
+        }
         public UriHealthCheckOptions ExpectHttpCode(int codeToExpect)
         {
             ExpectedHttpCodes = (codeToExpect, codeToExpect);
@@ -134,5 +139,18 @@ namespace HealthChecks.Uris
 
             return options;
         }
+
+        private readonly List<ResponseData> _responseData = new List<ResponseData>();
+
+        internal IList<ResponseData> ResponseData => _responseData;
+    }
+
+    public enum ResponseData
+    {
+        Url,
+        Status,
+        Reason,
+        Body,
+        HttpVerb
     }
 }

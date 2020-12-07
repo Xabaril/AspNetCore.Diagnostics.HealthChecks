@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +27,8 @@ namespace HealthChecks.Uris
 
             try
             {
+                var data = new Dictionary<string, object>();
+
                 foreach (var item in _options.UrisOptions)
                 {
                     if (cancellationToken.IsCancellationRequested)
@@ -50,15 +54,27 @@ namespace HealthChecks.Uris
                     {
                         var response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
 
+                        if (_options.ResponseData.Contains(ResponseData.Url))
+                            data.Add($"url{(idx > 0 ? $"-{idx}" : string.Empty)}", response.RequestMessage.RequestUri.ToString());
+                        if (_options.ResponseData.Contains(ResponseData.Status))
+                            data.Add($"status{(idx > 0 ? $"-{idx}" : string.Empty)}", (int)response.StatusCode);
+                        if (_options.ResponseData.Contains(ResponseData.Reason))
+                            data.Add($"reason{(idx > 0 ? $"-{idx}" : string.Empty)}", response.ReasonPhrase);
+                        if (_options.ResponseData.Contains(ResponseData.Body))
+                            data.Add($"body{(idx > 0 ? $"-{idx}" : string.Empty)}", await response.Content?.ReadAsStringAsync());
+                        if (_options.ResponseData.Contains(ResponseData.HttpVerb))
+                            data.Add($"verb{(idx > 0 ? $"-{idx}" : string.Empty)}", response.RequestMessage.Method.Method);
+
                         if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.", data: data);
                         }
 
                         ++idx;
                     }
                 }
-                return HealthCheckResult.Healthy();
+
+                return HealthCheckResult.Healthy(data: data);
             }
             catch (Exception ex)
             {

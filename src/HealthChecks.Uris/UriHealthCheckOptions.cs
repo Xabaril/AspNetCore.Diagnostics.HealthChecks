@@ -13,6 +13,7 @@ namespace HealthChecks.Uris
         IUriOptions ExpectHttpCode(int codeToExpect);
         IUriOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect);
         IUriOptions AddCustomHeader(string name, string value);
+        IUriOptions ExpectContent(string expectedContent);
     }
     public class UriOptions : IUriOptions
     {
@@ -21,6 +22,8 @@ namespace HealthChecks.Uris
         public TimeSpan Timeout { get; private set; }
 
         public (int Min, int Max)? ExpectedHttpCodes { get; private set; }
+        
+        public string ExpectedContent { get; private set; }
 
         public Uri Uri { get; }
 
@@ -67,6 +70,12 @@ namespace HealthChecks.Uris
             Timeout = timeout;
             return this;
         }
+
+        IUriOptions IUriOptions.ExpectContent(string expectedContent)
+        {
+            ExpectedContent = expectedContent;
+            return this;
+        }
     }
 
     public class UriHealthCheckOptions
@@ -76,6 +85,7 @@ namespace HealthChecks.Uris
         internal HttpMethod HttpMethod { get; private set; }
         internal TimeSpan Timeout { get; private set; }
         internal (int Min, int Max) ExpectedHttpCodes { get; private set; }
+        internal string ExpectedContent { get; private set; }
 
         public UriHealthCheckOptions()
         {
@@ -121,6 +131,11 @@ namespace HealthChecks.Uris
         public UriHealthCheckOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect)
         {
             ExpectedHttpCodes = (minCodeToExpect, maxCodeToExpect);
+            return this;
+        }
+        public UriHealthCheckOptions ExpectContent(string expectedContent)
+        {
+            ExpectedContent = expectedContent;
             return this;
         }
         internal static UriHealthCheckOptions CreateFromUris(IEnumerable<Uri> uris)

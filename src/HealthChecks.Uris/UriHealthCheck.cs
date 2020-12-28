@@ -60,7 +60,7 @@ namespace HealthChecks.Uris
                             var responseBody = await response.Content.ReadAsStringAsync();
                             if (responseBody != item.ExpectedContent)
                             {
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the reponsebody!");
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the responsebody!");
                             }
                         }
 

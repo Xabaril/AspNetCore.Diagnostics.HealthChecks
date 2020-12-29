@@ -89,6 +89,7 @@
     <ArangoDBNetStandard>1.0.0-alpha03</ArangoDBNetStandard>
     <SystemServiceProcessServiceController>5.0.0</SystemServiceProcessServiceController>
     <RichardSzalayMockHttp>6.0.0</RichardSzalayMockHttp>
+	<InfluxDBClient>1.14.0</InfluxDBClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -145,5 +146,6 @@
     <HealthChecksUIK8sOperator>5.0.0-preview1</HealthChecksUIK8sOperator>
     <HealthCheckSendGrid>5.0.0-preview1</HealthCheckSendGrid>
     <HealthCheckArangoDb>5.0.0-preview1</HealthCheckArangoDb>
+	<HealthCheckInfluxDB>5.0.0-preview1</HealthCheckInfluxDB>
   </PropertyGroup>
 </Project>

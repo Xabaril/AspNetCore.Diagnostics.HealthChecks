@@ -195,7 +195,5 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
-
-       
     }
 }

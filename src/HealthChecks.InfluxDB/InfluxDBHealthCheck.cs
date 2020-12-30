@@ -12,40 +12,34 @@ namespace HealthChecks.InfluxDB
     {
         private readonly InfluxDBClient _influxdb_client;
 
-        public InfluxDBHealthCheck(string url, string username, char[] password) => _influxdb_client = InfluxDBClientFactory.Create(url,username,password);
+        public InfluxDBHealthCheck(string url, string username, char[] password) => _influxdb_client = InfluxDBClientFactory.Create(url, username, password);
 
-        public InfluxDBHealthCheck(string url, string token) => _influxdb_client = InfluxDBClientFactory.Create(url,token);
+        public InfluxDBHealthCheck(string url, string token) => _influxdb_client = InfluxDBClientFactory.Create(url, token);
 
         public InfluxDBHealthCheck(InfluxDBClientOptions options) => _influxdb_client = InfluxDBClientFactory.Create(options);
 
         /// <summary>
         /// CreateV1
         /// </summary>
-        public InfluxDBHealthCheck(string url, string username, char[] password, string database, string retentionPolicy) => _influxdb_client = InfluxDBClientFactory.CreateV1( url,  username, password,  database,  retentionPolicy);
-
+        public InfluxDBHealthCheck(string url, string username, char[] password, string database, string retentionPolicy) => _influxdb_client = InfluxDBClientFactory.CreateV1(url, username, password, database, retentionPolicy);
 
         public InfluxDBHealthCheck(string influxDBConnectionString) => _influxdb_client = InfluxDBClientFactory.Create(influxDBConnectionString);
+
         public InfluxDBHealthCheck(InfluxDBClient influxdb_client) => _influxdb_client = influxdb_client;
 
         public InfluxDBHealthCheck(Uri influxDBConnectionString) => _influxdb_client = InfluxDBClientFactory.Create(influxDBConnectionString.ToString());
-    
-      
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                return Task.Run(async () =>
-                {
-                    var h = await _influxdb_client.HealthAsync();
-                    var hcr = new HealthCheckResult(h.Status == HealthCheck.StatusEnum.Pass ? HealthStatus.Healthy : HealthStatus.Unhealthy, $"{h.Name} {h.Version} {h.Message}");
-                    return hcr;
-                });
-
+                var h = await _influxdb_client.HealthAsync();
+                var hcr = new HealthCheckResult(h.Status == HealthCheck.StatusEnum.Pass ? HealthStatus.Healthy : HealthStatus.Unhealthy, $"{h.Name} {h.Version} {h.Message}");
+                return hcr;
             }
             catch (Exception ex)
             {
-                return Task.FromResult(
-                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
     }

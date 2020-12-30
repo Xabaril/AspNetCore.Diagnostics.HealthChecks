@@ -162,7 +162,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for InfluxDB services using connection string.
+        /// Add a health check for InfluxDB  services using <see cref="InfluxDBClient"/> from service provider 
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'InfluxDB' will be used for the name.</param>
@@ -177,16 +177,14 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddSingleton(sp =>
             {
-                 
                 var influxdb_client = sp.GetService<InfluxDBClient>();
-
                 if (influxdb_client != null)
                 {
                     return new InfluxDBHealthCheck(influxdb_client);
                 }
                 else
                 {
-                    throw new ArgumentException($"Either an InfluxDBClient must be registered with the service provider");
+                    throw new ArgumentException($"An InfluxDBClient must be registered with the service provider");
                 }
             });
 

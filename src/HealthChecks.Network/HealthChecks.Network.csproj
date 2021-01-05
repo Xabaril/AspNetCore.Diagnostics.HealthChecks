@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <Description>HealthChecks.Network is the health check package for network services.</Description>
     <PackageTags>HealthCheck;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Version>$(HealthCheckNetwork)</Version>

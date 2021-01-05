@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <Description>HealthChecks.solr is the health check package for solr.</Description>
     <PackageTags>HealthCheck;Health;solr</PackageTags>
     <Version>$(HealthCheckSolr)</Version>

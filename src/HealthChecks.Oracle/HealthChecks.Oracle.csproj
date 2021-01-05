@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <Description>HealthChecks.Oracle is the health check package for Oracle Database.</Description>
     <PackageTags>HealthCheck;Health;Oracle</PackageTags>
     <Version>$(HealthCheckOracle)</Version>

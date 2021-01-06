@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <Description>HealthChecks.System is the system health check package.</Description>
     <PackageTags>HealthCheck;Beat;Health;System;Ping;Disk Storage</PackageTags>
     <Version>$(HealthCheckSystem)</Version>

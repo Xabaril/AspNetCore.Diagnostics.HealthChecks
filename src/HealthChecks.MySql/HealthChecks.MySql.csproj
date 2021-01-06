@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
     <PackageTags>HealthChecks;HealthCheck;Health;MySQL</PackageTags>
     <Version>$(HealthCheckMySql)</Version>

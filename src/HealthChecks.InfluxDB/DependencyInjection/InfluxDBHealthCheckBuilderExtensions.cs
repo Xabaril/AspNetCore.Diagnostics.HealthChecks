@@ -137,6 +137,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
         /// <summary>
+
         /// Add a health check for InfluxDB services using connection string.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>

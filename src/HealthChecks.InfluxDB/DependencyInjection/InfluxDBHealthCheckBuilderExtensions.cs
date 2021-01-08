@@ -106,7 +106,6 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services
                 .AddSingleton(sp => new InfluxDBHealthCheck(url, token));
 
-
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
                 sp => sp.GetRequiredService<InfluxDBHealthCheck>(),

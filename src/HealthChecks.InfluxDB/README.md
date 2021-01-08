@@ -1,6 +1,6 @@
 # InfluxDB Health Check
 
-This health check verifies the ability to communicate with a InfluxDB server
+This health check verifies the ability to communicate with a InfluxDB server.
 
 ## Example Usage
 

@@ -128,7 +128,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddInfluxDB(this IHealthChecksBuilder builder, string url, string username, char[] password, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services
-                .AddSingleton(sp => new InfluxDBHealthCheck(url, username,password));
+                .AddSingleton(sp => new InfluxDBHealthCheck(url, username, password));
+
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

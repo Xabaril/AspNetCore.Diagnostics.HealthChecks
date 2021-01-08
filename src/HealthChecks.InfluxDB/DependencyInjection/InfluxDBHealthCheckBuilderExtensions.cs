@@ -186,7 +186,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 else
                 {
-                    throw new ArgumentException($"An InfluxDBClient must be registered with the service provider");
+                    throw new ArgumentException($"An InfluxDBClient must be registered within the service provider");
+
                 }
             });
 

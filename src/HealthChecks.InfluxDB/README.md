@@ -32,7 +32,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services.AddSingleton<InfluxDBClient>(sp=>
               {
-                 return  InfluxDBClientFactory.Create("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
+                 return InfluxDBClientFactory.Create("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
               })
             .AddHealthChecks()
             .AddInfluxDB();

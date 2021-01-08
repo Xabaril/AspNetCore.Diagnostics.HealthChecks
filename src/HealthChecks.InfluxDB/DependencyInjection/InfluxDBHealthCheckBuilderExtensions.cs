@@ -1,7 +1,6 @@
 ﻿using HealthChecks.InfluxDB;
 using InfluxDB.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-
 using System;
 using System.Collections.Generic;
 

@@ -25,7 +25,7 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 If you are sharing a single `InfluxDBClient` for every time a health check is requested,
-you must ensure automatic recovery is enable so that the InfluxDBClient can be re-established if lost.
+you must ensure automatic recovery is enabled so that the `InfluxDBClient` can be re-established if lost.
 
 ```cs
 public void ConfigureServices(IServiceCollection services)

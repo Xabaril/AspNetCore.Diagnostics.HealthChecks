@@ -13,7 +13,7 @@ With all of the following examples, you can additionally add the following param
 
 ### Basic
 
-This will create a new `InfluxDBClient` and reuse on every request to get the health check result. Use
+This will create a new `InfluxDBClient` and reuse it on every request to get the health check result. Use
 the extension method where you provide the `Uri` to connect with. 
 
 ```cs

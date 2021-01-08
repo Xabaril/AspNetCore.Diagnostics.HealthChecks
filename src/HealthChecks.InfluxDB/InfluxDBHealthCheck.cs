@@ -34,7 +34,8 @@ namespace HealthChecks.InfluxDB
             try
             {
                 var h = await _influxdb_client.HealthAsync();
-                var hcr = new HealthCheckResult(h.Status == HealthCheck.StatusEnum.Pass ? HealthStatus.Healthy : HealthStatus.Unhealthy, $"{h.Name} {h.Version} {h.Message}");
+                var hcr = new HealthCheckResult(h.Status == HealthCheck.StatusEnum.Pass ? HealthStatus.Healthy : context.Registration.FailureStatus, $"{h.Name} {h.Version} {h.Message}");
+
                 return hcr;
             }
             catch (Exception ex)

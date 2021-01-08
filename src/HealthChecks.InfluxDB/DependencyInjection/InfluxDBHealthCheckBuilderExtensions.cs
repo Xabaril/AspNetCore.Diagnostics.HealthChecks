@@ -163,7 +163,8 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for InfluxDB  services using <see cref="InfluxDBClient"/> from service provider 
+        /// Add a health check for InfluxDB services using <see cref="InfluxDBClient"/> from service provider.
+
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'InfluxDB' will be used for the name.</param>

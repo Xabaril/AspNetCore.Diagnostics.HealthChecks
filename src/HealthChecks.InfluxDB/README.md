@@ -30,7 +30,7 @@ you must ensure automatic recovery is enabled so that the `InfluxDBClient` can b
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddSingleton<InfluxDBClient>(sp=>
+    services.AddSingleton<InfluxDBClient>(sp =>
               {
                  return InfluxDBClientFactory.Create("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
               })

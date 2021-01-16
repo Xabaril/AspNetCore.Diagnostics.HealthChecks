@@ -98,7 +98,7 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>5.0.1</HealthCheckIdSvr>
-    <HealthCheckSqlServer>5.0.1</HealthCheckSqlServer>
+    <HealthCheckSqlServer>5.0.2</HealthCheckSqlServer>
     <HealthCheckSqlite>5.0.1</HealthCheckSqlite>
     <HealthCheckUri>5.0.1</HealthCheckUri>
     <HealthCheckRedis>5.0.1</HealthCheckRedis>

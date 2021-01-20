@@ -26,9 +26,9 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, webhooksPath);
 
-            
+
             var resourcePath = options.UseRelativeResourcesPath ? options.ResourcesPath.AsRelativeResource() : options.ResourcesPath;
-            
+
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_RESOURCES_TARGET, resourcePath);
 
@@ -41,7 +41,7 @@ namespace HealthChecks.UI.Core
         public static ICollection<UIStylesheet> GetCustomStylesheets(this UIResource resource, Options options)
         {
             List<UIStylesheet> styleSheets = new List<UIStylesheet>();
-            
+
             if (!options.CustomStylesheets.Any())
             {
                 resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_STYLESHEETS_TARGET, string.Empty);
@@ -52,18 +52,18 @@ namespace HealthChecks.UI.Core
             {
                 styleSheets.Add(UIStylesheet.Create(options, stylesheet));
             }
-            
+
             var htmlStyles = styleSheets.Select
                 (s =>
             {
                 var linkHref = options.UseRelativeResourcesPath ? s.ResourcePath.AsRelativeResource() : s.ResourcePath;
                 return $"<link rel='stylesheet' href='{linkHref}'/>";
             });
-            
+
             resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_STYLESHEETS_TARGET,
                 string.Join("\n", htmlStyles));
 
             return styleSheets;
         }
-    }    
+    }
 }

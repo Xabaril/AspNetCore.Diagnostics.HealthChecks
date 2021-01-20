@@ -4,7 +4,7 @@ namespace FunctionalTests.Base
 {
     [CollectionDefinition("execution")]
     public class CollectionExecutionFixture
-        :ICollectionFixture<ExecutionFixture>
+        : ICollectionFixture<ExecutionFixture>
     {
     }
 }

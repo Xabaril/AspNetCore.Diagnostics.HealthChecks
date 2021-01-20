@@ -9,7 +9,7 @@ namespace HealthChecks.Network.Extensions
         public static async Task WithCancellationTokenAsync(this Task task, CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<bool>();
-            
+
             cancellationToken.Register(() =>
             {
                 tcs.SetResult(true);
@@ -22,11 +22,11 @@ namespace HealthChecks.Network.Extensions
 
             await task;
         }
-        
+
         public static async Task<T> WithCancellationTokenAsync<T>(this Task<T> task, CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<T>();
-            
+
             cancellationToken.Register(() =>
             {
                 tcs.SetResult(default(T));
@@ -38,7 +38,7 @@ namespace HealthChecks.Network.Extensions
             }
             else
             {
-                return await task;    
+                return await task;
             }
         }
     }

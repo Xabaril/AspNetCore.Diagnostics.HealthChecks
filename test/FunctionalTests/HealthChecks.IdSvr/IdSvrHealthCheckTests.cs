@@ -59,7 +59,7 @@ namespace FunctionalTests.HealthChecks.IdSvr
                     services.AddHealthChecks()
                     .AddIdentityServer(new Uri("http://localhost:8888"), tags: new string[] { "idsvr" });
                 })
-                .Configure(app=>
+                .Configure(app =>
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions()
                     {

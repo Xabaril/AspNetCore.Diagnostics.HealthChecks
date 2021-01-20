@@ -24,7 +24,7 @@ namespace HealthChecks.UI.K8s.Operator
         public NamespacedServiceWatcher(
             IKubernetes client,
             ILogger<K8sOperator> logger,
-            OperatorDiagnostics diagnostics, 
+            OperatorDiagnostics diagnostics,
             NotificationHandler notificationHandler,
             IHttpClientFactory httpClientFactory)
         {
@@ -49,7 +49,11 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var watcher = response.Watch<V1Service, V1ServiceList>(
                     onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
-                    onError: e => _diagnostics.ServiceWatcherThrow(e)
+                    onError: e =>
+                    {
+                        _diagnostics.ServiceWatcherThrow(e);
+                        Watch(resource, token);
+                    }
                 );
 
                 _diagnostics.ServiceWatcherStarting(resource.Metadata.NamespaceProperty);
@@ -91,7 +95,7 @@ namespace HealthChecks.UI.K8s.Operator
                 uiService,
                 service,
                 secret,
-                _logger, 
+                _logger,
                 _httpClientFactory);
         }
 

@@ -38,7 +38,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Azure.IoTHub
                  .AddAzureIoTHub(options =>
                  {
                      options.AddConnectionString("the-iot-connection-string");
-                 },name:"iothubcheck");
+                 }, name: "iothubcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

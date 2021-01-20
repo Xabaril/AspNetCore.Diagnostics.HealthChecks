@@ -105,7 +105,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURESUBSCRIPTION_NAME,
-                sp => new AzureServiceBusSubscriptionHealthCheck(connectionString, topicName, subscriptionName), 
+                sp => new AzureServiceBusSubscriptionHealthCheck(connectionString, topicName, subscriptionName),
                 failureStatus,
                 tags,
                 timeout));

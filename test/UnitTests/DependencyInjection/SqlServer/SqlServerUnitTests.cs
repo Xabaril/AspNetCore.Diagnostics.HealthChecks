@@ -1,9 +1,11 @@
-﻿using FluentAssertions;
+using System;
+using FluentAssertions;
 using HealthChecks.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
@@ -28,11 +30,35 @@ namespace UnitTests.HealthChecks.DependencyInjection.SqlServer
         }
 
         [Fact]
+        public void invoke_beforeOpen_when_defined()
+        {
+            var services = new ServiceCollection();
+            bool invoked = false;
+            const string connectionstring = "Server=(local);Database=foo;User Id=bar;Password=baz;Connection Timeout=1";
+            Action<SqlConnection> beforeOpen = connection =>
+            {
+                invoked = true;
+                Assert.Equal(connectionstring, connection.ConnectionString);
+            };
+            services.AddHealthChecks()
+                .AddSqlServer(connectionstring, beforeOpenConnectionConfigurer: beforeOpen);
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            Record.ExceptionAsync(() => check.CheckHealthAsync(new HealthCheckContext())).GetAwaiter().GetResult();
+            Assert.True(invoked);
+        }
+
+        [Fact]
         public void add_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddSqlServer("connectionstring",name:"my-sql-server-1");
+                .AddSqlServer("connectionstring", name: "my-sql-server-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

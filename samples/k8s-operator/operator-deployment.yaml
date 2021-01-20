@@ -1,0 +1,22 @@
+apiVersion: "aspnetcore.ui/v1"
+kind: HealthCheck
+metadata:
+  name: healthchecks-ui
+  namespace: default
+spec:
+  name: healthchecks-ui
+  scope: Cluster
+  servicesLabel: HealthChecks
+  serviceType: LoadBalancer
+  stylesheetContent: >
+    :root {    
+      --primaryColor: #2a3950;
+      --secondaryColor: #f4f4f4;
+      --bgMenuActive: #e1b015;
+      --bgButton: #e1b015;
+      --logoImageUrl: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/WoW_icon.svg/1200px-WoW_icon.svg.png');
+      --bgAside: var(--primaryColor);   
+    }
+  serviceAnnotations:
+    - name: my-super-annotation
+      value: "true"

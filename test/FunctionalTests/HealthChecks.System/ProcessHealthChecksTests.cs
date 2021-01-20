@@ -22,7 +22,8 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddProcessHealthCheck("dotnet", p => {
+                        .AddProcessHealthCheck("dotnet", p =>
+                        {
                             var proc = p.First();
                             return !proc.HasExited && proc.Responding;
                         });

@@ -33,7 +33,7 @@ deploy:
   - provider: NuGet
     name: production
     api_key:
-      secure: dRGsXgd/P/zV2x0og9REDXX+MamPcpx3COpzaUhlBF3QV+JzBH6gMI32vx79cN1s
+      secure: KLHh/osoOFvO5bWn01FKo6nPpXJTO2d5JtXJav+uzij74RpytHmdD/QWrdMR5pb0
     skip_symbols: true
     on:
       appveyor_repo_tag: true

@@ -35,7 +35,7 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions 
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
                     });
@@ -61,7 +61,8 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions {
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
                         ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText
                     });
                 }));
@@ -89,7 +90,7 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         ResponseWriter = (context, report) =>
-                            PrometheusResponseWriter.WritePrometheusResultText(context, report,alwaysReturnHttp200Ok:true)
+                            PrometheusResponseWriter.WritePrometheusResultText(context, report, alwaysReturnHttp200Ok: true)
                     });
                 }));
 
@@ -118,7 +119,7 @@ namespace FunctionalTests.HealthChecks.Publisher.Prometheus
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         ResponseWriter = (context, report) =>
-                            PrometheusResponseWriter.WritePrometheusResultText(context, report,alwaysReturnHttp200Ok:true)
+                            PrometheusResponseWriter.WritePrometheusResultText(context, report, alwaysReturnHttp200Ok: true)
                     });
                 }));
 

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Azure Key Vault;Secrets</PackageTags>
     <Description>HealthChecks.AzureKeyVault is the health check package for Azure Key Vault secrets</Description>
     <Version>$(HealthCheckKeyVault)</Version>

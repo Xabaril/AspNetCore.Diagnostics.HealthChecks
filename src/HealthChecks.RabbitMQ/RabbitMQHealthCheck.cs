@@ -10,7 +10,7 @@ namespace HealthChecks.RabbitMQ
         : IHealthCheck
     {
         private IConnection _connection;
-        
+
         private IConnectionFactory _factory;
         private readonly Uri _rabbitConnectionString;
         private readonly SslOption _sslOption;
@@ -51,7 +51,7 @@ namespace HealthChecks.RabbitMQ
 
         private void EnsureConnection()
         {
-            if(_connection == null )
+            if (_connection == null)
             {
                 if (_factory == null)
                 {

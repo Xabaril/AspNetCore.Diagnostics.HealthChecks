@@ -4,8 +4,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace HealthChecks.UI.Middleware
 {
@@ -17,7 +17,7 @@ namespace HealthChecks.UI.Middleware
 
         public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
         {
-            _ =  settings ?? throw new ArgumentNullException(nameof(settings));
+            _ = settings ?? throw new ArgumentNullException(nameof(settings));
             Settings = settings.Value;
 
             _jsonSerializationSettings = new JsonSerializerSettings()

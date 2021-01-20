@@ -35,7 +35,7 @@ namespace HealthChecks.Kubernetes
             {
                 var result = await _client.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
                     resourceCheck.Namespace, cancellationToken: cancellationToken);
-                
+
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }
             catch (Exception ex)

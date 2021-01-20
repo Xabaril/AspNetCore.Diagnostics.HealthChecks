@@ -15,7 +15,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddPingHealthCheck(_=> { });
+                .AddPingHealthCheck(_ => { });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -31,7 +31,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddPingHealthCheck(_=> { }, name: "my-ping-1");
+                .AddPingHealthCheck(_ => { }, name: "my-ping-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -127,7 +127,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddDnsResolveHealthCheck(_ => {  }, name: "my-dns-1");
+                .AddDnsResolveHealthCheck(_ => { }, name: "my-dns-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

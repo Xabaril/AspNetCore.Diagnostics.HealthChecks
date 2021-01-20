@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;SendGrid</PackageTags>
     <Description>HealthChecks.SendGrid is the health check package for SendGrid.</Description>
     <Version>$(HealthCheckSendGrid)</Version>

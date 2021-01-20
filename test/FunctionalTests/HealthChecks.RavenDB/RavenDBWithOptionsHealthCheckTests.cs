@@ -40,7 +40,7 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 }
 
             }
-            catch  { }
+            catch { }
         }
 
         [SkipOnAppVeyor]

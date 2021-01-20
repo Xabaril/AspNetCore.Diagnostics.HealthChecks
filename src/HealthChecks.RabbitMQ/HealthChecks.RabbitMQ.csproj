@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Health;RabbitMQ</PackageTags>
     <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.</Description>
     <Version>$(HealthCheckRabbitMQ)</Version>

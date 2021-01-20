@@ -32,7 +32,7 @@ namespace UnitTests
             services.AddHealthChecks().AddElasticsearch(setup =>
             {
                 settings = setup;
-            }, timeout: new TimeSpan(0,0,7));
+            }, timeout: new TimeSpan(0, 0, 7));
 
             settings.RequestTimeout.Should().HaveValue();
             settings.RequestTimeout.Should().Be(new TimeSpan(0, 0, 7));

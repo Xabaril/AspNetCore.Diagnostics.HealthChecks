@@ -27,11 +27,11 @@ namespace HealthChecks.Aws.S3
             {
                 bool keysProvided = !string.IsNullOrEmpty(_bucketOptions.AccessKey) &&
                                     !string.IsNullOrEmpty(_bucketOptions.SecretKey);
-                
+
                 AmazonS3Client client = keysProvided
                     ? new AmazonS3Client(_bucketOptions.AccessKey, _bucketOptions.SecretKey, _bucketOptions.S3Config)
                     : new AmazonS3Client(_bucketOptions.S3Config);
-                
+
                 using (client)
                 {
                     var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);

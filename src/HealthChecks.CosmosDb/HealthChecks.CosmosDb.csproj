@@ -8,7 +8,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Cosmos" Version="$(AzureCosmos)" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.16.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Azure.Data.Tables" Version="$(AzureDataTables)"/>
+    <PackageReference Include="Azure.Data.Tables" Version="$(AzureDataTables)" />
   </ItemGroup>
 </Project>

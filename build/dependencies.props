@@ -39,7 +39,7 @@
     <MicrosoftDataSqlClient>2.1.1</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>5.0.1</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.12.0</MicrosoftAzureDocumentDbCore>
-    <MicrosoftAzureCosmosDB>3.2.0</MicrosoftAzureCosmosDB>
+    <MicrosoftAzureCosmosDB>3.16.0</MicrosoftAzureCosmosDB>
     <MicrosoftAzureEventHubs>4.1.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>5.1.0</MicrosoftAzureServiceBus>
     <MicrosoftIdentityModelClientsActiveDirectory>5.2.8</MicrosoftIdentityModelClientsActiveDirectory>

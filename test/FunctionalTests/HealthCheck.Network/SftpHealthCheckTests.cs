@@ -39,7 +39,7 @@ namespace FunctionalTests.HealthChecks.Network
                                         .Build();
 
                         setup.AddHost(cfg);
-                    }, tags: new string[] { "sftp" });
+                    }, tags: new string[] { "sftp" }, timeout: TimeSpan.FromSeconds(5));
                })
                .Configure(app =>
                {
@@ -197,7 +197,7 @@ namespace FunctionalTests.HealthChecks.Network
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
-        
+
             response.EnsureSuccessStatusCode();
         }
 

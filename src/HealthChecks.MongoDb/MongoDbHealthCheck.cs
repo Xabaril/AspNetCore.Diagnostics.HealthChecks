@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Driver;
 using System;
 using System.Collections.Concurrent;
@@ -10,7 +10,7 @@ namespace HealthChecks.MongoDb
     public class MongoDbHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<MongoClientSettings, MongoClient> _mongoClient = new ConcurrentDictionary<MongoClientSettings, MongoClient>();
+        private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new ConcurrentDictionary<string, MongoClient>();
         private readonly MongoClientSettings _mongoClientSettings;
         private readonly string _specifiedDatabase;
         public MongoDbHealthCheck(string connectionString, string databaseName = default)
@@ -30,22 +30,23 @@ namespace HealthChecks.MongoDb
         {
             try
             {
-                var mongoClient = _mongoClient.GetOrAdd(_mongoClientSettings, settings => new MongoClient(settings));
+                var mongoClient = _mongoClient.GetOrAdd(_mongoClientSettings.ToString(), _ => new MongoClient(_mongoClientSettings));
 
                 if (!string.IsNullOrEmpty(_specifiedDatabase))
                 {
                     // some users can't list all databases depending on database privileges, with
-                    // this you can list only collection on specified database.
+                    // this you can list only collections on specified database.
                     // Related with issue #43
 
-                    await (await mongoClient
-                         .GetDatabase(_specifiedDatabase)
-                         .ListCollectionsAsync(cancellationToken: cancellationToken)).FirstAsync(cancellationToken);
+                    using var cursor = await mongoClient
+                        .GetDatabase(_specifiedDatabase)
+                        .ListCollectionNamesAsync(cancellationToken: cancellationToken);
+                    await cursor.FirstAsync(cancellationToken);
                 }
                 else
                 {
-                    await mongoClient
-                        .ListDatabasesAsync(cancellationToken);
+                    using var cursor = await mongoClient.ListDatabaseNamesAsync(cancellationToken);
+                    await cursor.FirstOrDefaultAsync(cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();

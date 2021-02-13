@@ -5,7 +5,8 @@
         public static Task<(bool result, string name)[]> PreserveMultipleExceptions(this Task<(bool, string)[]> task)
         {
             var tcs = new TaskCompletionSource<(bool, string)[]>();
-            task.ContinueWith(t => {
+            task.ContinueWith(t =>
+            {
                 switch (t.Status)
                 {
                     case TaskStatus.Canceled:

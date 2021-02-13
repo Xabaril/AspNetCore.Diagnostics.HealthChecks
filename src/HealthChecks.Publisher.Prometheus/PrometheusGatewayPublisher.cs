@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Prometheus.Advanced;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Prometheus;
 
 namespace HealthChecks.Publisher.Prometheus
 {
@@ -32,7 +33,7 @@ namespace HealthChecks.Publisher.Prometheus
                 throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
             }
         }
-       
+
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             WriteMetricsFromHealthReport(report);
@@ -43,8 +44,11 @@ namespace HealthChecks.Publisher.Prometheus
         {
             try
             {
-                using (var outStream = CollectionToStreamWriter(Registry))
+                using (var outStream = new MemoryStream())
                 {
+                    await Registry.CollectAndExportAsTextAsync(outStream);
+                    outStream.Position = 0;
+
                     var response = await _httpClientFactory()
                         .PostAsync(_targetUrl, new StreamContent(outStream));
 

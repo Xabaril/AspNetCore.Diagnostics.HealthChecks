@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -10,18 +10,23 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
+    <PackageReference Include="NSubstitute" Version="$(NSubstitute)" />    
     <PackageReference Include="xunit" Version="$(xunit)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(MicrosoftAspNetCoreSignalR)" />
+    <PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Consul\HealthChecks.Consul.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Prometheus.Metrics\HealthChecks.Prometheus.Metrics.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
@@ -39,6 +44,12 @@
     <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.SqlServer.Storage\HealthChecks.UI.SqlServer.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
   </ItemGroup>

@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
+﻿using Azure.Core;
+using Azure.Storage.Queues;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,31 +13,43 @@ namespace HealthChecks.AzureStorage
     {
         private readonly string _connectionString;
         private readonly string _queueName;
+
+        private readonly TokenCredential _azureCredential;
+        private readonly Uri _queueServiceUri;
+
+        private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder
+           = new ConcurrentDictionary<string, QueueServiceClient>();
+
         public AzureQueueStorageHealthCheck(string connectionString, string queueName = default)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _queueName = queueName;
         }
+
+        public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string queueName = default)
+        {
+            _queueServiceUri = queueServiceUri ?? throw new ArgumentNullException(nameof(queueServiceUri));
+            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
+            _queueName = queueName;
+        }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var storageAccount = CloudStorageAccount.Parse(_connectionString);
-                var blobClient = storageAccount.CreateCloudQueueClient();
-
-                var serviceProperties = await blobClient.GetServicePropertiesAsync(
-                    new QueueRequestOptions(),
-                    operationContext: null,
-                    cancellationToken: cancellationToken);
+                var queueServiceClient = GetQueueServiceClient();
+                var serviceProperties = await queueServiceClient.GetPropertiesAsync(cancellationToken);
 
                 if (!string.IsNullOrEmpty(_queueName))
                 {
-                    var queue = blobClient.GetQueueReference(_queueName);
-                    if (!await queue.ExistsAsync())
+                    var queueClient = queueServiceClient.GetQueueClient(_queueName);
+
+                    if (!await queueClient.ExistsAsync(cancellationToken))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Queue '{_queueName}' not exists");
                     }
-                    await queue.FetchAttributesAsync();
+
+                    await queueClient.GetPropertiesAsync(cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();
@@ -45,6 +58,27 @@ namespace HealthChecks.AzureStorage
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
+        }
+
+        private QueueServiceClient GetQueueServiceClient()
+        {
+            var serviceUri = _connectionString ?? _queueServiceUri.ToString();
+
+            if (!_queueClientsHolder.TryGetValue(serviceUri, out QueueServiceClient client))
+            {
+                if (_connectionString != null)
+                {
+                    client = new QueueServiceClient(_connectionString);
+                }
+                else
+                {
+                    client = new QueueServiceClient(_queueServiceUri, _azureCredential);
+                }
+
+                _queueClientsHolder.TryAdd(serviceUri, client);
+            }
+
+            return client;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.Client;
-using HealthChecks.UI.Configuration;
+﻿using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace HealthChecks.UI.Core.Notifications
 {
@@ -62,21 +62,22 @@ namespace HealthChecks.UI.Core.Notifications
                 {
                     bool shouldNotify = webHook.ShouldNotifyFunc?.Invoke(report) ?? true;
 
-                    if (!shouldNotify) {
+                    if (!shouldNotify)
+                    {
                         _logger.LogInformation("Webhook notification will not be sent because of user configuration");
                         continue;
                     };
 
-                    if(!isHealthy)
+                    if (!isHealthy)
                     {
                         failure = webHook.CustomMessageFunc?.Invoke(report) ?? GetFailedMessageFromContent(report);
                         description = webHook.CustomDescriptionFunc?.Invoke(report) ?? GetFailedDescriptionsFromContent(report);
                     }
 
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;
-                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, name)
-                        .Replace(Keys.FAILURE_BOOKMARK, failure)
-                        .Replace(Keys.DESCRIPTIONS_BOOKMARK, description);
+                    payload = payload.Replace(Keys.LIVENESS_BOOKMARK, HttpUtility.JavaScriptStringEncode(name))
+                        .Replace(Keys.FAILURE_BOOKMARK, HttpUtility.JavaScriptStringEncode(failure))
+                        .Replace(Keys.DESCRIPTIONS_BOOKMARK, HttpUtility.JavaScriptStringEncode(description));
 
 
                     Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);
@@ -139,19 +140,16 @@ namespace HealthChecks.UI.Core.Notifications
         {
             var failedChecks = healthReport.Entries.Values
                 .Count(c => c.Status != UIHealthStatus.Healthy);
+            var plural = PluralizeHealthcheck(failedChecks);
 
-            return $"There are at least {failedChecks} HealthChecks failing.";
+            return $"There {plural.plural} at least {failedChecks} {plural.noun} failing.";
         }
         private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
         {
-            const string JOIN_SYMBOL = "|";
+            var failedChecks = healthReport.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+            var plural = PluralizeHealthcheck(failedChecks.Count());
 
-            var failedChecksDescription = healthReport.Entries.Values
-                .Where(c => c.Status != UIHealthStatus.Healthy)
-                .Select(x => x.Description)
-                .Aggregate((first, after) => $"{first} {JOIN_SYMBOL} {after}");
-
-            return failedChecksDescription;
+            return $"{string.Join(" , ", failedChecks.Select(f => f.Key))} {plural.noun} {plural.plural} failing";
         }
         public void Dispose()
         {
@@ -160,5 +158,10 @@ namespace HealthChecks.UI.Core.Notifications
                 _db.Dispose();
             }
         }
+
+        private (string plural, string noun) PluralizeHealthcheck(int count) =>
+            count > 1 ?
+            ("are", "healthchecks") :
+            ("is", "healthcheck");
     }
 }

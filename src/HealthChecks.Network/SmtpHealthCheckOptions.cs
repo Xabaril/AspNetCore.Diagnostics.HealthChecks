@@ -9,8 +9,8 @@ namespace HealthChecks.Network
         public void LoginWith(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName)) throw new ArgumentNullException(nameof(userName));
-            
+
             AccountOptions = (Login: true, Account: (userName, password));
-        }      
-    }  
+        }
+    }
 }

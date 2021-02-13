@@ -6,7 +6,7 @@ namespace HealthChecks.UI.Core
     {
         public string Content { get; internal set; }
         public string ContentType { get; }
-        public string FileName { get;}
+        public string FileName { get; }
 
         private UIResource(string fileName, string content, string contentType)
         {

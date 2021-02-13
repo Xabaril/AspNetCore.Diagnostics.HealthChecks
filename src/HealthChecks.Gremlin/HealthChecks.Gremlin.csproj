@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>HealthCheck;Gremlin;TinkerPop;GraphDB</PackageTags>
+    <Description>HealthChecks.Gremlin is the health check package for Gremlin.</Description>
+    <Version>$(HealthCheckGremlin)</Version>
+    <PackageId>AspNetCore.HealthChecks.Gremlin</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Gremlin.Net" Version="$(GremlinNet)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+</Project>

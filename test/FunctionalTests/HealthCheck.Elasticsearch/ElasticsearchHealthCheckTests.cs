@@ -18,7 +18,7 @@ namespace FunctionalTests.HealthChecks.Elasticsearch
         private readonly ExecutionFixture _fixture;
 
         public elasticsearch_healthcheck_should(ExecutionFixture fixture)
-        { 
+        {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 

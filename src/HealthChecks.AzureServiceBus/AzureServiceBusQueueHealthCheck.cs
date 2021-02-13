@@ -1,8 +1,7 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,29 +10,24 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusQueueHealthCheck
         : IHealthCheck
     {
-        private const string TEST_MESSAGE = "HealthCheckTest";
-        private const string TEST_SESSIONID = "TestSessionId";
-        private static readonly ConcurrentDictionary<string, QueueClient> _queueClientConnections = new ConcurrentDictionary<string, QueueClient>();
-
+        private static readonly ConcurrentDictionary<string, ManagementClient> _managementClientConnections = new ConcurrentDictionary<string, ManagementClient>();
         private readonly string _connectionString;
         private readonly string _queueName;
-        private readonly bool _requiresSession;
-        private readonly Action<Message> _configuringMessage;
 
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, Action<Message> configuringMessage = null, bool requiresSession = false)
+        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
+
             if (string.IsNullOrEmpty(queueName))
             {
                 throw new ArgumentNullException(nameof(queueName));
             }
+
             _connectionString = connectionString;
             _queueName = queueName;
-            _configuringMessage = configuringMessage;
-            _requiresSession = requiresSession;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -41,27 +35,18 @@ namespace HealthChecks.AzureServiceBus
             try
             {
                 var connectionKey = $"{_connectionString}_{_queueName}";
-                if (!_queueClientConnections.TryGetValue(connectionKey, out var queueClient))
+                if (!_managementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
-                    queueClient = new QueueClient(_connectionString, _queueName, ReceiveMode.PeekLock, RetryPolicy.NoRetry);
+                    managementClient = new ManagementClient(_connectionString);
 
-                    if (!_queueClientConnections.TryAdd(connectionKey, queueClient))
+                    if (!_managementClientConnections.TryAdd(connectionKey, managementClient))
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New QueueClient connection can't be added into dictionary.");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New management client connection can't be added into dictionary.");
                     }
                 }
 
-                var message = new Message(Encoding.UTF8.GetBytes(TEST_MESSAGE));
-                if (_requiresSession)
-                {
-                    message.SessionId = TEST_SESSIONID;
-                }
-                _configuringMessage?.Invoke(message);
+                await managementClient.GetQueueRuntimeInfoAsync(_queueName, cancellationToken);
 
-                var scheduledMessageId = await queueClient.ScheduleMessageAsync(message,
-                    new DateTimeOffset(DateTime.UtcNow).AddHours(2));
-
-                await queueClient.CancelScheduledMessageAsync(scheduledMessageId);
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

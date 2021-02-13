@@ -2,13 +2,25 @@
 
 [![Build history](https://buildstats.info/appveyor/chart/xabaril/aspnetcore-diagnostics-healthchecks)](https://ci.appveyor.com/project/xabaril/aspnetcore-diagnostics-healthchecks/history)
 
+![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=Docker%20UI%20Version&logo=dsd&sort=date)
+![ui pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui.svg?label=Docker%20UI%20Pulls)
+
+![k8s version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui-k8s-operator?label=k8s%20Operator%20Version&logo=dsd&sort=date)
+![k8s pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui-k8s-operator.svg?label=k8s%20Operator%20Pulls)
+
 # AspNetCore.Diagnostics.HealthChecks
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET Core** versions supported: 2.2, 3.0
+**ASP.NET Core** versions supported: 5.0, 3.1, 3.0 and 2.2
 
 # Sections
+
+## Previous versions documentation
+
+- [NetCore 3.1](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.1/README.md)
+- [NetCore 3.0](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.0/README.md)
+- [NetCore 2.2](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-2.2/README.md)
 
 ## HealthChecks
 
@@ -18,6 +30,8 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 ## HealthChecks UI
 
 - [UI](#HealthCheckUI)
+- [UI Storage Providers](#UI-Storage-Providers)
+- [UI Database Migrations](#UI-Database-Migrations)
 - [History Timeline](#Health-status-history-timeline)
 - [Configuration](#Configuration)
 - [Webhooks and Failure Notifications](#Webhooks-and-Failure-Notifications)
@@ -25,7 +39,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 ## HealthChecks UI and Kubernetes
 
-- Kubernetes Operator (Documentation in progress)
+- [Kubernetes Operator](#UI-Kubernetes-Operator)
 - [Kubernetes automatic services discovery](#UI-Kubernetes-automatic-services-discovery)
 
 ## HealthChecks and Devops
@@ -34,7 +48,7 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 ## HealthChecks Tutorials
 
-- [Tutorials, Demos and walkthroughs](#Tutorials,-demos-and-walkthroughs-on-ASP.NET-Core-HealthChecks)
+- [Tutorials, Demos and walkthroughs](#tutorials-demos-and-walkthroughs-on-aspnet-core-healthchecks)
 
 ## Health Checks
 
@@ -50,8 +64,10 @@ HealthChecks packages include health checks for:
 - RabbitMQ
 - IbmMQ
 - Elasticsearch
+- CosmosDb
 - Solr
 - Redis
+- SendGrid
 - System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
 - Azure Storage: Blob, Queue and Table
@@ -60,6 +76,7 @@ HealthChecks packages include health checks for:
 - Azure IoT Hub
 - Amazon DynamoDb
 - Amazon S3
+- Google Cloud Firestore
 - Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
 - MongoDB
 - Kafka
@@ -69,8 +86,10 @@ HealthChecks packages include health checks for:
 - Hangfire
 - SignalR
 - Kubernetes
+- ArangoDB
+- Gremlin
 
-> We support netcoreapp 2.2 and the new netcoreapp 3.0. Please use 2.2.X package version for .NET Core 2.2 and 3.0.X for .NET Core 3.0
+> We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
 ```PowerShell
 Install-Package AspNetCore.HealthChecks.System
@@ -79,6 +98,7 @@ Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.Elasticsearch
+Install-Package AspNetCore.HealthChecks.CosmosDb
 Install-Package AspNetCore.HealthChecks.Solr
 Install-Package AspNetCore.HealthChecks.Redis
 Install-Package AspNetCore.HealthChecks.EventStore
@@ -103,6 +123,9 @@ Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.SignalR
 Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
+Install-Package AspNetCore.HealthChecks.SendGrid
+Install-Package AspNetCore.HealthChecks.ArangoDb
+Install-Package AspNetCore.HealthChecks.Gremlin
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
@@ -157,7 +180,30 @@ services.AddHealthChecks()
         .AddPrometheusGatewayPublisher();
 ```
 
+## HealthChecks Prometheus Exporter
+
+If you need an endpoint to consume from prometheus instead of using Prometheus Gateway you could install **AspNetCore.HealthChecks.Publisher.Prometheus**.
+
+```powershell
+install-package AspNetcore.HealthChecks.Publisher.Prometheus
+```
+
+Use the _ApplicationBuilder_ extension method to add the endpoint with the metrics:
+
+```csharp
+// default endpoint: /healthmetrics
+app.UseHealthChecksPrometheusExporter();
+
+// You could customize the endpoint
+app.UseHealthChecksPrometheusExporter("/my-health-metrics");
+
+// Customize HTTP status code returned(prometheus will not read health metrics when a default HTTP 503 is returned)
+app.UseHealthChecksPrometheusExporter("/my-health-metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
+```
+
 ## HealthCheckUI
+
+![HealthChecksUI](./doc/images/ui-home.png)
 
 [UI Changelog](./doc/ui-changelog.md)
 
@@ -166,11 +212,17 @@ The project HealthChecks.UI is a minimal UI interface that stores and shows the 
 To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**
 
 ```csharp
+
+using HealthChecks.UI.Core;
+using HealthChecks.UI.InMemory.Storage;
+
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddHealthChecksUI();
+        services
+        .AddHealthChecksUI()
+        .AddInMemoryStorage();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -195,13 +247,125 @@ Do not confuse this UI api endpoint with the endpoints we have to configure to d
 
 When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
-![HealthChecksUI](./doc/images/ui-home.png)
+### UI Polling interval
+
+You can configure the polling interval in seconds for the UI inside the setup method. Default value is 10 seconds:
+
+```csharp
+ .AddHealthChecksUI(setupSettings: setup =>
+  {
+     setup.SetEvaluationTimeInSeconds(5); //Configures the UI to poll for healthchecks updates every 5 seconds
+  });
+```
+
+### UI API max active requests
+
+You can configure max active requests to the HealthChecks UI backend api using the setup method. Default value is 3 active requests:
+
+```csharp
+ .AddHealthChecksUI(setupSettings: setup =>
+  {
+     setup.SetApiMaxActiveRequests(1);
+     //Only one active request will be executed at a time.
+     //All the excedent requests will result in 429 (Too many requests)
+  });
+```
+
+### UI Storage Providers
+
+HealthChecks UI offers several storage providers, available as different nuget packages.
+
+The current supported databases are:
+
+- [AspNetCore.HealthChecks.UI.InMemory.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.InMemory.Storage)
+- [AspNetCore.HealthChecks.UI.SqlServer.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SqlServer.Storage)
+- [AspNetCore.HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SQLite.Storage)
+- [AspNetCore.HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.PostgreSQL.Storage)
+- [AspNetCore.HealthChecks.UI.MySql.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.MySql.Storage)
+
+All the storage providers are extensions of HealthChecksUIBuilder:
+
+**InMemory**
+
+```csharp
+  services
+    .AddHealthChecksUI()
+    .AddInMemoryStorage();
+```
+
+**Sql Server**
+
+```csharp
+  services
+    .AddHealthChecksUI()
+    .AddSqlServerStorage("connectionString");
+```
+
+**Postgre SQL**
+
+```csharp
+
+  services
+    .AddHealthChecksUI()
+    .AddPostgreSqlStorage("connectionString");
+
+```
+
+**MySql**
+
+```csharp
+
+  services
+    .AddHealthChecksUI()
+    .AddMySqlStorage("connectionString");
+
+```
+
+**Sqlite**
+
+```csharp
+  services
+    .AddHealthChecksUI()
+    .AddSqliteStorage($"Data Source=sqlite.db");
+
+```
+
+### UI Database Migrations
+
+**Database Migrations** are enabled by default, if you need to disable migrations you can use the AddHealthChecksUI setup:
+
+```csharp
+  services
+    .AddHealthChecksUI(setup => setup.DisableDatabaseMigrations())
+    .AddInMemoryStorage();
+```
+
+Or you can use IConfiguration providers, like json file or environment variables:
+
+```json
+ "HealthChecksUI": {
+   "DisableMigrations": true
+ }
+
+```
 
 ### Health status history timeline
 
 By clicking details button in the healthcheck row you can preview the health status history timeline:
 
 ![Timeline](./doc/images/timeline.png)
+
+**Note**: HealthChecks UI saves an execution history entry in the database whenever a HealthCheck status changes from Healthy to Unhealthy and viceversa.
+
+This information is displayed in the status history timeline but we do not perform purge or cleanup tasks in users databases. In order to limit the maximum history entries that are sent by the UI Api middleware to the frontend you can do a database cleanup or set the maximum history entries served by endpoint using:
+
+```csharp
+  services.AddHealthChecksUI(setup =>
+  {
+     // Set the maximum history entries by endpoint that will be served by the UI api middleware
+      setup.MaximumHistoryEntriesPerEndpoint(50);
+  });
+```
 
 **HealthChecksUI** is also available as a _docker image_ You can read more about [HealthChecks UI Docker image](./doc/ui-docker.md).
 
@@ -261,7 +425,8 @@ You can configure these Healthchecks and webhooks by using _IConfiguration_ prov
        setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
        setup.AddHealthCheckEndpoint("endpoint2", "http://remoteendpoint:9000/healthz");
        setup.AddWebhookNotification("webhook1", uri: "http://httpbin.org/status/200?code=ax3rt56s", payload: "{...}");
-    });
+    })
+    .AddSqlServer("connectionString");
 ```
 
 **Note**: The previous configuration section was HealthChecks-UI, but due to incompatibilies with Azure Web App environment variables the section has been moved to HealthChecksUI. The UI is retro compatible and it will check the new section first, and fallback to the old section if the new section has not been declared.
@@ -270,8 +435,6 @@ You can configure these Healthchecks and webhooks by using _IConfiguration_ prov
     2.- EvaluationTimeInSeconds: Number of elapsed seconds between health checks.
     3.- Webhooks: If any health check returns a *Failure* result, this collections will be used to notify the error status. (Payload is the json payload and must be escaped. For more information see the notifications documentation section)
     4.- MinimumSecondsBetweenFailureNotifications: The minimum seconds between failure notifications to avoid receiver flooding.
-
-All health checks results are stored into a SqLite database persisted to disk with _healthcheckdb_ name. This database is created on the WebContentRoot, _HostDefaults.ContentRootKey_, directory by default. Optionally you can specify the Sqlite connection string using the setting _HealthCheckDatabaseConnectionString_. Environment variables in _HealthCheckDatabaseConnectionString_ are automatically expanded, for example, _%APPDATA%\\healthchecksdb_.
 
 ```json
 {
@@ -291,8 +454,7 @@ All health checks results are stored into a SqLite database persisted to disk wi
       }
     ],
     "EvaluationTimeInSeconds": 10,
-    "MinimumSecondsBetweenFailureNotifications": 60,
-    "HealthCheckDatabaseConnectionString": "Data Source=[PUT-MY-PATH-HERE]\\healthchecksdb"
+    "MinimumSecondsBetweenFailureNotifications": 60
   }
 }
 ```
@@ -314,7 +476,8 @@ Sample:
        setup.AddHealthCheckEndpoint("endpoint1", "/health-databases");
        setup.AddHealthCheckEndpoint("endpoint2", "health-messagebrokers");
        setup.AddWebhookNotification("webhook1", uri: "/notify", payload: "{...}");
-    });
+    })
+    .AddSqlServer("connectionString");
 ```
 
 You can also use relative urls when using IConfiguration providers like appsettings.json
@@ -390,9 +553,16 @@ services.AddHealthChecksUI(setupSettings: setup =>
             }
         };
     });
-});
+})
+.AddInMemoryStorage();
 
 ```
+
+## UI Kubernetes Operator
+
+If you are running your workloads in kubernetes, you can benefit from it and have your healthchecks environment ready and monitoring in seconds.
+
+You can get for information in our [HealthChecks Operator docs](./doc/k8s-operator.md)
 
 ## UI Kubernetes automatic services discovery
 
@@ -405,6 +575,14 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 ## HealthChecks as Release Gates for Azure DevOps Pipelines
 
 HealthChecks can be used as [Release Gates for Azure DevOps](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/gates?view=azure-devops) using this [Visual Studio Market place Extension](https://marketplace.visualstudio.com/items?itemName=luisfraile.vss-services-aspnetcorehealthcheck-extensions).
+
+Check this [README](./extensions/README.md) on how to configure it.
+
+## Protected HealthChecks.UI with OpendId Connect
+
+There are some scenarios where you can find useful to restrict access for users on HealthChecks UI, maybe for users who belong to some role, based on some claim value etc.
+
+We can leverage the ASP.NET Core Authentication/Authorization features to easily implement it. You can see a fully functional example using IdentityServer4 [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/tree/master/samples/HealthChecks.UI.Oidc) but you can use Azure AD, Auth0, Okta, etc.
 
 Check this [README](./extensions/README.md) on how to configure it.
 
@@ -422,7 +600,7 @@ Check this [README](./extensions/README.md) on how to configure it.
 
 AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas), Eduard Tomás [@eiximenis](https://github.com/eiximenis) and Eva Crespo [@evacrespob](https://github.com/evacrespob)
 
-_Our valued committers are_: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup, Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r, David Bottiau @odonno,ZeWizard @zeWizard, Ruslan Popovych @rpopovych, @jnovick, Marcos Palacios @mpcmarcos, Gerard Godone-Maresca @ggmaresca, Facundo @fglaeser
+_Our valued committers are_: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup, Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r, David Bottiau @odonno,ZeWizard @zeWizard, Ruslan Popovych @rpopovych, @jnovick, Marcos Palacios @mpcmarcos, Gerard Godone-Maresca @ggmaresca, Facundo @fglaeser, Daniel Nordström @SpaceOgre, @mphelt
 
 If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
 

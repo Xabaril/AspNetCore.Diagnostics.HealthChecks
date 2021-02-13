@@ -1,10 +1,13 @@
-﻿using FluentAssertions;
+﻿using Azure.Core;
+using FluentAssertions;
 using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
@@ -16,13 +19,12 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureKeyVault(setup =>
-               {
-                   setup
-                   .UseKeyVaultUrl("https://keyvault/")
-                   .AddSecret("supersecret")
-                   .AddKey("mycryptokey");
-               });
+                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), setup =>
+                 {
+                     setup
+                     .AddSecret("supersecret")
+                     .AddKey("mycryptokey");
+                 });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -40,13 +42,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureKeyVault(setup =>
-                {
-                    setup
-                    .UseKeyVaultUrl("https://keyvault/")
-                    .UseClientSecrets("client", "secret");
-
-                }, name: "keyvaultcheck");
+                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(),options=> { }, name: "keyvaultcheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -59,21 +55,50 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         }
 
         [Fact]
-        public void fail_when_invalidad_uri_provided_in_configuration()
+        public void fail_when_invalid_uri_provided_in_configuration()
         {
             var services = new ServiceCollection();
 
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                .AddAzureKeyVault(setup =>
-                {
-                    setup
-                    .UseKeyVaultUrl("invalid URI")
-                    .AddSecret("mysecret")
-                    .AddKey("mycryptokey");
-                });
+                .AddAzureKeyVault(null, new MockTokenCredentials(), setup =>
+                 {
+                     setup
+                     .AddSecret("mysecret")
+                     .AddKey("mycryptokey");
+                 });
             });
+        }
+
+        [Fact]
+        public void fail_when_invalid_credential_provided_in_configuration()
+        {
+            var services = new ServiceCollection();
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                services.AddHealthChecks()
+                    .AddAzureKeyVault(new Uri("http://localhost"), null, setup =>
+                    {
+                        setup
+                            .AddSecret("mysecret")
+                            .AddKey("mycryptokey");
+                    });
+            });
+        }
+    }
+
+    public class MockTokenCredentials : TokenCredential
+    {
+        public override AccessToken GetToken(TokenRequestContext requestContext, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override ValueTask<AccessToken> GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

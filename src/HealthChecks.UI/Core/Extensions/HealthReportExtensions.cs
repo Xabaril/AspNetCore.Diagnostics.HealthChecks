@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Client;
+﻿using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +16,9 @@ namespace Microsoft.Extensions.Diagnostics.HealthChecks
                     {
                         Name = item.Key,
                         Status = item.Value.Status,
-                        Description  = item.Value.Description,
-                        Duration = item.Value.Duration
+                        Description = item.Value.Description,
+                        Duration = item.Value.Duration,
+                        Tags = item.Value.Tags?.ToList() ?? null
                     };
                 }).ToList();
         }

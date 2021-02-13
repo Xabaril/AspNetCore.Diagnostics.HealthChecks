@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
-using System.Threading.Tasks;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
@@ -23,7 +18,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRabbitMQ(rabbitMQConnectionString: _fakeConnectionString);
+                .AddRabbitMQ(rabbitConnectionString: _fakeConnectionString);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -39,7 +34,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
         public void add_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
-            var customCheckName = "my-"+ _defaultCheckName;
+            var customCheckName = "my-" + _defaultCheckName;
 
             services.AddHealthChecks()
                 .AddRabbitMQ(_fakeConnectionString, name: customCheckName);

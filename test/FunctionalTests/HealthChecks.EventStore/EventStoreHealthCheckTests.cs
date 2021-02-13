@@ -23,16 +23,40 @@ namespace FunctionalTests.HealthChecks.EventStore
         }
 
         [SkipOnAppVeyor]
-        public async Task be_healthy_if_eventstore_is_available()
+        public async Task be_healthy_if_eventstore_is_available_with_uri_format()
         {
-            var connectionString = "tcp://localhost:1113";
-
             var webHostBuilder = new WebHostBuilder()
             .UseStartup<DefaultStartup>()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddEventStore(connectionString, tags: new string[] { "eventstore" });
+                 .AddEventStore("ConnectTo=tcp://localhost:1113", tags: new string[] { "eventstore" });
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions()
+                {
+                    Predicate = r => r.Tags.Contains("eventstore")
+                });
+            });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+        }
+        [SkipOnAppVeyor]
+        public async Task be_healthy_if_eventstore_is_available()
+        {
+            var webHostBuilder = new WebHostBuilder()
+            .UseStartup<DefaultStartup>()
+            .ConfigureServices(services =>
+            {
+                services.AddHealthChecks()
+                 .AddEventStore("ConnectTo=tcp://localhost:1113; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
             })
             .Configure(app =>
             {

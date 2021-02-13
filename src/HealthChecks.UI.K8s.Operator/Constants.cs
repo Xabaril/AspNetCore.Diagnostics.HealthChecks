@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HealthChecks.UI.K8s.Operator
+﻿namespace HealthChecks.UI.K8s.Operator
 {
     internal class Constants
     {
@@ -22,5 +18,23 @@ namespace HealthChecks.UI.K8s.Operator
         public const string DefaultScheme = "http";
         public const string DefaultHealthPath = "health";
         public const string PushServiceAuthKey = "key";
+        public const string StylesPath = "css";
+        public const string StyleSheetName = "styles";
+
+        internal class Deployment
+        {
+            internal class Operation
+            {
+                public const string Add = "Add";
+                public const string Delete = "Delete";
+                public const string Patch = "Patch";
+            }
+
+            internal class Scope
+            {
+                public const string Cluster = "Cluster";
+                public const string Namespaced = "Namespaced";
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Linq;
 using System.Net;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Network
 {
-    public class DnsResolveHealthCheck 
+    public class DnsResolveHealthCheck
         : IHealthCheck
     {
         private readonly DnsResolveOptions _options;
@@ -21,7 +22,7 @@ namespace HealthChecks.Network
             {
                 foreach (var item in _options.ConfigureHosts.Values)
                 {
-                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host);
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken);
 
                     foreach (var ipAddress in ipAddresses)
                     {

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -32,10 +31,10 @@ namespace FunctionalTests.Base
         {
             var attribute = testMethod.Method.ToRuntimeMethod()
                 .GetCustomAttributes(typeof(SkipOnPlatformAttribute)).FirstOrDefault();
-            
+
             if (attribute != null)
             {
-                foreach (var platform in ((SkipOnPlatformAttribute) attribute).Platforms)
+                foreach (var platform in ((SkipOnPlatformAttribute)attribute).Platforms)
                 {
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Create(platform)))
                     {
@@ -44,7 +43,7 @@ namespace FunctionalTests.Base
                     }
                 }
             }
-            
+
             return new[]
             {
                 new XunitTestCase(_diagnosticMessageSink, TestMethodDisplay.Method, TestMethodDisplayOptions.All ,testMethod)

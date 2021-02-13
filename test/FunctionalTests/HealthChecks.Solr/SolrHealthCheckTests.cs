@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,7 +25,7 @@ namespace FunctionalTests.HealthChecks.Solr
         [SkipOnAppVeyor]
         public async Task be_healthy_if_solr_is_available()
         {
-                
+
             var webHostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()
                .ConfigureServices(services =>
@@ -77,7 +76,7 @@ namespace FunctionalTests.HealthChecks.Solr
             response.StatusCode
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
-        
+
         [SkipOnAppVeyor]
         public async Task be_unhealthy_if_solr_is_not_available()
         {

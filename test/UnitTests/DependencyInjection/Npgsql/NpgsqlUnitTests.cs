@@ -33,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Npgsql
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddNpgSql("connectionstring",name:"my-npg-1");
+                .AddNpgSql("connectionstring", name: "my-npg-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

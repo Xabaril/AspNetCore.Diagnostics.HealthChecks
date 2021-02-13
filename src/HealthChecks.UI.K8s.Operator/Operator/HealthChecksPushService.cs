@@ -19,7 +19,8 @@ namespace HealthChecks.UI.K8s.Operator
             V1Service uiService,
             V1Service notificationService,
             V1Secret endpointSecret,
-            ILogger<K8sOperator> logger)
+            ILogger<K8sOperator> logger,
+            IHttpClientFactory httpClientFactory)
         {
             var address = KubernetesAddressFactory.CreateHealthAddress(notificationService, resource);
             var uiAddress = KubernetesAddressFactory.CreateAddress(uiService, resource);
@@ -31,14 +32,14 @@ namespace HealthChecks.UI.K8s.Operator
                 Uri = address
             };
 
-            using var client = new HttpClient();
+            var client = httpClientFactory.CreateClient();
             try
             {
                 string type = healthCheck.Type.ToString();
                 string name = healthCheck.Name;
                 string uri = healthCheck.Uri;
 
-                logger.LogInformation("[PushService] Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", type, name, uri, uiAddress);
+                logger.LogInformation("[PushService] Namespace {Namespace} - Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", resource.Metadata.NamespaceProperty, type, name, uri, uiAddress);
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
@@ -61,7 +62,6 @@ namespace HealthChecks.UI.K8s.Operator
 
         private static (string address, V1ServicePort port) GetServiceAddress(V1Service service)
         {
-
             string IpAddress = default;
 
             if (service.Spec.Type == ServiceType.LoadBalancer)

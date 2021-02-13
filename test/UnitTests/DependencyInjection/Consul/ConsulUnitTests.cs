@@ -42,7 +42,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Consul
                     setup.HostName = "hostname";
                     setup.Port = 8500;
                     setup.RequireHttps = false;
-                },name:"my-consul-group");
+                }, name: "my-consul-group");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

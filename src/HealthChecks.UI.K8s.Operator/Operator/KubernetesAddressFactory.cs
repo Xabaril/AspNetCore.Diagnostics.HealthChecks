@@ -9,22 +9,8 @@ namespace HealthChecks.UI.K8s.Operator.Operator
         public static string CreateAddress(V1Service service, HealthCheckResource resource)
         {
             var defaultPort = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort);
-
-            var port = service.Spec.Type switch
-            {
-                ServiceType.LoadBalancer => GetServicePort(service)?.Port ?? defaultPort,
-                ServiceType.ClusterIP => GetServicePort(service)?.Port ?? defaultPort,
-                ServiceType.NodePort => GetServicePort(service)?.NodePort ?? defaultPort,
-                _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
-            };
-
-            var address = service.Spec.Type switch
-            {
-                ServiceType.LoadBalancer => GetLoadBalancerAddress(service),
-                ServiceType.NodePort => GetLoadBalancerAddress(service),
-                ServiceType.ClusterIP => service.Spec.ClusterIP,
-                _ => throw new NotSupportedException($"{service.Spec.Type} port type not supported")
-            };
+            var port = GetServicePort(service)?.Port ?? defaultPort;
+            var address = service.Spec.ClusterIP;
 
             string healthScheme = resource.Spec.HealthChecksScheme;
 
@@ -33,7 +19,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 healthScheme = service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation];
             }
 
-            if (string.IsNullOrEmpty(healthScheme))
+            if (healthScheme.IsEmpty())
             {
                 healthScheme = Constants.DefaultScheme;
             }
@@ -59,7 +45,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 healthPath = service.Metadata.Annotations[Constants.HealthCheckPathAnnotation];
             }
 
-            if (string.IsNullOrEmpty(healthPath))
+            if (healthPath.IsEmpty())
             {
                 healthPath = Constants.DefaultHealthPath;
             }

@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -35,7 +34,7 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] {"privatememory"});
+                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] { "privatememory" });
                 })
                 .Configure(app =>
                 {
@@ -61,7 +60,7 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] {"privatememory"});
+                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] { "privatememory" });
                 })
                 .Configure(app =>
                 {
@@ -88,7 +87,7 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddWorkingSetHealthCheck(maximumMemory, tags: new string[] {"workingset"});
+                        .AddWorkingSetHealthCheck(maximumMemory, tags: new string[] { "workingset" });
                 })
                 .Configure(app =>
                 {
@@ -114,7 +113,7 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] {"privatememory"});
+                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] { "privatememory" });
                 })
                 .Configure(app =>
                 {
@@ -140,7 +139,7 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: new string[] {"virtualmemory"});
+                        .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: new string[] { "virtualmemory" });
                 })
                 .Configure(app =>
                 {
@@ -166,7 +165,7 @@ namespace FunctionalTests.HealthChecks.System
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: new string[] {"virtualmemory"});
+                        .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: new string[] { "virtualmemory" });
                 })
                 .Configure(app =>
                 {

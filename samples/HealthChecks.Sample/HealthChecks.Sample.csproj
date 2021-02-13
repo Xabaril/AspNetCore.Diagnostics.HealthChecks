@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,14 +9,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="$(MicrosoftApplicationInsights)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Prometheus.Metrics\HealthChecks.Prometheus.Metrics.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />

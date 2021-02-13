@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,11 @@ namespace HealthChecks.Sample
              * or register all hosted service before call AddHealthChecks.
              */
 
-            services.AddHealthChecks()
+            services
+                .AddApplicationInsightsTelemetry()
+                .AddHealthChecks()
+                //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:5672", name: "rabbit1")
+                //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:6672", name: "rabbit2")
                 //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
                 .AddCheck<RandomHealthCheck>("random")
                 //.AddIdentityServer(new Uri("http://localhost:6060"))
@@ -54,6 +59,7 @@ namespace HealthChecks.Sample
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 })
+                .UseHealthChecksPrometheusExporter("/metrics")
                 .UseRouting()
                 .UseEndpoints(config => config.MapDefaultControllerRoute());
         }

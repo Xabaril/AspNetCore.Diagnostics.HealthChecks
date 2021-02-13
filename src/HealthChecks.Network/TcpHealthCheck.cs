@@ -3,6 +3,7 @@ using System;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.Network.Extensions;
 
 namespace HealthChecks.Network
 {
@@ -22,7 +23,7 @@ namespace HealthChecks.Network
                 {
                     using (var tcpClient = new TcpClient())
                     {
-                        await tcpClient.ConnectAsync(host, port);
+                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
 
                         if (!tcpClient.Connected)
                         {

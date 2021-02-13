@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
@@ -10,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
-    public class ServiceHandler
+    internal class ServiceHandler
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
@@ -64,6 +62,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 OwnerReferences = new List<V1OwnerReference> {
                     resource.CreateOwnerReference()
                 },
+                Annotations = new Dictionary<string, string>(),
                 Labels = new Dictionary<string, string>
                 {
                     ["app"] = resource.Spec.Name
@@ -85,6 +84,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                     }
                 }
             };
+
+            foreach (var annotation in resource.Spec.ServiceAnnotations)
+            {
+                _logger.LogInformation("Adding annotation {Annotation} to ui service with value {AnnotationValue}", annotation.Name, annotation.Value);
+                meta.Annotations.Add(annotation.Name, annotation.Value);
+            }
 
             return new V1Service(metadata: meta, spec: spec);
         }

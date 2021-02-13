@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <Description>HealthChecks.UI.PostgreSQL.Storage package contains the required classes to use Postgres NpgSql provider in the UI</Description>
+    <PackageTags>HealthCheck;HealthChecks;PostgreSQL</PackageTags>
+    <Version>$(HealthChecksUIPostgreSQLStorage)</Version>
+    <PackageId>AspNetCore.HealthChecks.UI.PostgreSQL.Storage</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(NpgsqlEntityFrameworkCorePostgreSQL)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+  </ItemGroup>
+
+</Project>

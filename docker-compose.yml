@@ -146,4 +146,16 @@ services:
         - MQ_QMGR_NAME=QM.TEST.01
         - MQ_APP_PASSWORD=12345678
         - MQ_ENABLE_METRICS=true
-        
+    arangodb:
+        image: arangodb/arangodb:latest
+        ports:
+        - "8529:8529"
+        environment:
+        - ARANGO_ROOT_PASSWORD=strongArangoDbPassword
+    gremlin:
+        image: tinkerpop/gremlin-server
+        ports:
+        - "8182:8182"
+        environment:
+        - VIRTUAL_HOST=gremlin.docker
+        - VIRTUAL_PORT=8182

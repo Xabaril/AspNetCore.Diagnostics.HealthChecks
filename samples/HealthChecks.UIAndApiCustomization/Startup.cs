@@ -64,6 +64,7 @@ namespace HealthChecks.UIAndApi
                     {
                         setup.UIPath = "/show-health-ui"; // this is ui path in your browser
                         setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
+                        setup.PageTitle = "Health Checks UI"; // the page title in <head>
                     });
 
                     config.MapDefaultControllerRoute();

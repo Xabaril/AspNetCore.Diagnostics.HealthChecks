@@ -12,6 +12,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+
 #pragma warning disable 618
 
 namespace FunctionalTests.HealthChecks.RavenDB
@@ -35,18 +36,16 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 {
                     store.Initialize();
 
-
                     store.Maintenance.Server.Send(
                         new CreateDatabaseOperation(new DatabaseRecord("Demo")));
                 }
-
             }
             catch { }
         }
+
         [SkipOnAppVeyor]
         public async Task be_healthy_if_ravendb_is_available()
         {
-
             var webHostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
@@ -139,7 +138,11 @@ namespace FunctionalTests.HealthChecks.RavenDB
                 {
                     services
                     .AddHealthChecks()
-                    .AddRavenDB(setup => setup.Urls = new[] { ConnectionString }, "ThisDatabaseReallyDoesnExist", tags: new string[] { "ravendb" });
+                    .AddRavenDB(setup =>
+                    {
+                        setup.Urls = new[] { ConnectionString };
+                        setup.Database = "ThisDatabaseReallyDoesnExist";
+                    }, "ThisDatabaseReallyDoesnExist", tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {

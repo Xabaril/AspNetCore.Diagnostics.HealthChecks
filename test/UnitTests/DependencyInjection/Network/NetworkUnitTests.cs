@@ -219,5 +219,39 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
             registration.Name.Should().Be("tcp-1");
             check.GetType().Should().Be(typeof(TcpHealthCheck));
         }
+
+        [Fact]
+        public void add_ssl_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddSslHealthCheck(options => { options.AddHost("the-host"); });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("ssl");
+            check.GetType().Should().Be(typeof(SslHealthCheck));
+        }
+
+        [Fact]
+        public void add_named_ssl_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddSslHealthCheck(options => { options.AddHost("the-host", port: 111, checkLeftDays: 120); }, name: "ssl-1");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("ssl-1");
+            check.GetType().Should().Be(typeof(SslHealthCheck));
+        }
     }
 }

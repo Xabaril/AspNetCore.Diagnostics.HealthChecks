@@ -39,7 +39,7 @@
     <MicrosoftDataSqlClient>2.1.1</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>5.0.1</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.12.0</MicrosoftAzureDocumentDbCore>
-    <MicrosoftAzureCosmosDB>3.16.0</MicrosoftAzureCosmosDB>
+    <MicrosoftAzureCosmosDB>3.17.0</MicrosoftAzureCosmosDB>
     <MicrosoftAzureEventHubs>4.1.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>5.1.0</MicrosoftAzureServiceBus>
     <MicrosoftIdentityModelClientsActiveDirectory>5.2.8</MicrosoftIdentityModelClientsActiveDirectory>
@@ -67,7 +67,7 @@
     <AzureCosmos>4.0.0-preview3</AzureCosmos>
     <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
     <AzureStorageQueues>12.4.2</AzureStorageQueues>
-    <AzureDataTables>3.0.0-beta.3</AzureDataTables>
+    <AzureDataTables>3.0.0-beta.5</AzureDataTables>
     <MicrosoftAzureEventHubs>4.3.1</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>5.0.0</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.5.1.10</AWSSDKDynamoDBv2>
@@ -114,7 +114,7 @@
     <HealthCheckSystem>5.0.1</HealthCheckSystem>
     <HealthCheckNetwork>5.0.2</HealthCheckNetwork>
     <HealthCheckDynamoDb>5.0.1</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>5.0.1</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>5.0.2</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>

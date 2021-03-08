@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -163,9 +161,9 @@ namespace FunctionalTests.HealthChecks.Network
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().Contain(HealthStatus.Degraded.ToString());
+            resultAsString.Should().Contain(HealthStatus.Unhealthy.ToString());
         }
 
         [Fact]

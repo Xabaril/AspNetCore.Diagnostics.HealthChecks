@@ -22,6 +22,6 @@ namespace HealthChecks.Network
         /// <summary>
         /// Configure the address family.
         /// </summary>
-        public AddressFamily AddressFamily { get; set; } = AddressFamily.InterNetworkV6;
+        public AddressFamily AddressFamily { get; set; } = AddressFamily.InterNetwork;
     }
 }

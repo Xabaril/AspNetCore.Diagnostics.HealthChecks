@@ -16,6 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string IMAP_NAME = "imap";
         const string SMTP_NAME = "smtp";
         const string TCP_NAME = "tcp";
+        const string SSL_NAME = "ssl";
 
         /// <summary>
         /// Add a health check for network ping.
@@ -240,6 +241,34 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                 name ?? TCP_NAME,
                 sp => new TcpHealthCheck(options),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        /// <summary>
+        /// Add a health check for SSL connection and validate the certificate.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">The action to configure Ssl connection parameters.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'tcp' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddSslHealthCheck(this IHealthChecksBuilder builder,
+            Action<SslHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            var options = new SslHealthCheckOptions();
+            setup?.Invoke(options);
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? SSL_NAME,
+                sp => new SslHealthCheck(options),
                 failureStatus,
                 tags,
                 timeout));

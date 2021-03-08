@@ -77,7 +77,7 @@ HealthChecks packages include health checks for:
 - Amazon DynamoDb
 - Amazon S3
 - Google Cloud Firestore
-- Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
+- Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap, Ssl
 - MongoDB
 - Kafka
 - Identity Server

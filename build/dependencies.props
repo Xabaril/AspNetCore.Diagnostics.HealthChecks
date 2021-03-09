@@ -52,7 +52,7 @@
     <xunitrunnervisualstudio>2.4.3</xunitrunnervisualstudio>
     <StackExchangeRedis>2.1.58</StackExchangeRedis>
     <RabbitMQClient>6.2.1</RabbitMQClient>
-    <RavenDBClient>5.0.3</RavenDBClient>
+    <RavenDBClient>5.1.5</RavenDBClient>
     <OracleManagedDataAccessCore>2.19.91</OracleManagedDataAccessCore>
     <Npgsql>5.0.3</Npgsql>
     <MongoDBDriver>2.11.3</MongoDBDriver>
@@ -136,7 +136,7 @@
     <HealthCheckAWSS3>5.0.1</HealthCheckAWSS3>
     <HealthCheckKeyVault>5.0.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>5.0.1</HealthCheckPublisherSeq>
-    <HealthCheckRavenDB>5.0.1</HealthCheckRavenDB>
+    <HealthCheckRavenDB>5.0.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>5.0.1</HealthCheckKubernetes>
     <HealthCheckSignalR>5.0.1</HealthCheckSignalR>
     <HealthCheckCloudFirestore>5.0.1</HealthCheckCloudFirestore>

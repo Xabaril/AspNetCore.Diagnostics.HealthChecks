@@ -49,7 +49,7 @@ namespace HealthChecks.RavenDB
             {
                 var value = Stores.GetOrAdd(_options, o =>
                 {
-                    var s = new DocumentStore
+                    var store = new DocumentStore
                     {
                         Urls = o.Urls,
                         Certificate = o.Certificate
@@ -57,10 +57,10 @@ namespace HealthChecks.RavenDB
 
                     try
                     {
-                        s.Initialize();
+                        store.Initialize();
                         return new DocumentStoreHolder
                         {
-                            Store = s,
+                            Store = store,
                             Legacy = false
                         };
                     }
@@ -68,7 +68,7 @@ namespace HealthChecks.RavenDB
                     {
                         try
                         {
-                            s.Dispose();
+                            store.Dispose();
                         }
                         catch
                         {
@@ -97,7 +97,6 @@ namespace HealthChecks.RavenDB
                     catch (ClientVersionMismatchException e) when (e.Message.Contains(nameof(RouteNotFoundException)))
                     {
                         value.Legacy = true;
-
                         await CheckDatabaseHealthAsync(store, _options.Database, value.Legacy, cancellationToken);
                     }
 
@@ -116,7 +115,9 @@ namespace HealthChecks.RavenDB
 
         private static Task CheckServerHealthAsync(IDocumentStore store, CancellationToken cancellationToken)
         {
-            return store.Maintenance.Server.SendAsync(ServerHealthCheck, cancellationToken);
+            return store.Maintenance
+                .Server
+                .SendAsync(ServerHealthCheck, cancellationToken);
         }
 
         private static async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)

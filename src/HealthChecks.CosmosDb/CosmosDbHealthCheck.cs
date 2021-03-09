@@ -12,18 +12,21 @@ namespace HealthChecks.CosmosDb
 
         private readonly string _connectionString;
         private readonly string _database;
-        private readonly IEnumerable<string> _collections;
+        private readonly IEnumerable<string> _containers;
 
-        public CosmosDbHealthCheck(string connectionString) : this(connectionString, default, default) { }
-        public CosmosDbHealthCheck(string connectionString, string database) : this(connectionString, database, default)
+        public CosmosDbHealthCheck(string connectionString) 
+            : this(connectionString, default, default) { }
+
+        public CosmosDbHealthCheck(string connectionString, string database) 
+            : this(connectionString, database, default)
         {
             _database = database;
         }
-        public CosmosDbHealthCheck(string connectionString, string database, IEnumerable<string> collections)
+        public CosmosDbHealthCheck(string connectionString, string database, IEnumerable<string> containers)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _database = database;
-            _collections = collections;
+            _containers = containers;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -48,12 +51,12 @@ namespace HealthChecks.CosmosDb
                     var database = cosmosDbClient.GetDatabase(_database);
                     await database.ReadAsync();
 
-                    if (_collections != null && _collections.Any())
+                    if (_containers != null && _containers.Any())
                     {
-                        foreach (var collection in _collections)
+                        foreach (var container in _containers)
                         {
-                            var container = database.GetContainer(collection);
-                            await container.ReadContainerAsync();
+                            await database.GetContainer(container)
+                                .ReadContainerAsync();
                         }
                     }
                 }

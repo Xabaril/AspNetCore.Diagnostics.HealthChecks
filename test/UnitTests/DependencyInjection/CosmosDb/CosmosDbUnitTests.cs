@@ -47,7 +47,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.CosmosDb
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddCosmosDb("myconnectionstring", "dabasename", collections: new[] { "first-collection", "second_collections" });
+                .AddCosmosDbCollection("myconnectionstring", "dabasename", collections: new[] { "first-collection", "second_collections" });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

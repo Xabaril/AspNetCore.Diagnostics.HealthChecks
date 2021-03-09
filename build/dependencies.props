@@ -114,7 +114,7 @@
     <HealthCheckSystem>5.0.1</HealthCheckSystem>
     <HealthCheckNetwork>5.0.4</HealthCheckNetwork>
     <HealthCheckDynamoDb>5.0.1</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>5.0.2</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>5.0.3</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>

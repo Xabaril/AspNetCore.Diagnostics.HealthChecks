@@ -58,7 +58,7 @@
     <MongoDBDriver>2.11.3</MongoDBDriver>
     <MySqlConnector>1.1.0</MySqlConnector>
     <ConfluentKafka>1.5.2</ConfluentKafka>
-    <SSHNet>2016.1.0</SSHNet>
+    <SSHNet>2020.0.1</SSHNet>
     <NEST>7.9.0</NEST>
     <SystemBuffers>4.5.1</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>

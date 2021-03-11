@@ -47,7 +47,7 @@ namespace HealthChecks.AzureApplicationInsights
 
             while (index < m_appInsightsUrls.Length)
             {
-                using(var httpClient = new HttpClient())
+                using (var httpClient = new HttpClient())
                 {
                     try
                     {

@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.AzureApplicationInsights\HealthChecks.AzureApplicationInsights.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj" />

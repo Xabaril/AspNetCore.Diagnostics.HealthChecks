@@ -358,6 +358,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin", "src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj", "{256B649E-9631-44AB-B577-96B3627C889E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin.Tests", "test\HealthChecks.AzureDigitalTwin.Tests\HealthChecks.AzureDigitalTwin.Tests.csproj", "{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureApplicationInsights", "src\HealthChecks.AzureApplicationInsights\HealthChecks.AzureApplicationInsights.csproj", "{F70E001A-D231-473B-B582-067633DE446E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -765,6 +766,10 @@ Global
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F70E001A-D231-473B-B582-067633DE446E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F70E001A-D231-473B-B582-067633DE446E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F70E001A-D231-473B-B582-067633DE446E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F70E001A-D231-473B-B582-067633DE446E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -871,6 +876,7 @@ Global
 		{531ABAB1-F4B5-4EAE-B310-6CB55D8FA4FD} = {A5A8CE48-FF38-4A49-9E59-0EC1FC4474C0}
 		{256B649E-9631-44AB-B577-96B3627C889E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{F70E001A-D231-473B-B582-067633DE446E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

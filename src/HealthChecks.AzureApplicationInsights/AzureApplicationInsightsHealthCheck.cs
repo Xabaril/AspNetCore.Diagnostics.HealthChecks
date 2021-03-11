@@ -33,7 +33,7 @@ namespace HealthChecks.AzureApplicationInsights
             {
                 return await CheckHealthAsyncInternal(context, cancellationToken);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }

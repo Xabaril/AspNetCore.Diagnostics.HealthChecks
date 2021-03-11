@@ -31,7 +31,7 @@ namespace HealthChecks.AzureApplicationInsights
         {
             try
             {
-                return await CheckHealthAsyncInternal(context,cancellationToken);
+                return await CheckHealthAsyncInternal(context, cancellationToken);
             }
             catch(Exception ex)
             {

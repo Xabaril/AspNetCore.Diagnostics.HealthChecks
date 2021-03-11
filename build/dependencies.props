@@ -54,7 +54,7 @@
     <HealthChecksUIK8sOperator>5.0.1</HealthChecksUIK8sOperator>
     <HealthCheckSendGrid>5.0.1</HealthCheckSendGrid>
     <HealthCheckArangoDb>5.0.1</HealthCheckArangoDb>
-	<HealthCheckAzureApplicationInsights>5.0.1</HealthCheckAzureApplicationInsights>
+    <HealthCheckAzureApplicationInsights>5.0.1</HealthCheckAzureApplicationInsights>
   </PropertyGroup>
 
 </Project>

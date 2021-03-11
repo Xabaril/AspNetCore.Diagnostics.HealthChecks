@@ -19,7 +19,7 @@ namespace HealthChecks.AzureApplicationInsights
 
         public AzureApplicationInsightsHealthCheck(string instrumentationKey)
         {
-            if(string.IsNullOrWhiteSpace(instrumentationKey))
+            if (string.IsNullOrWhiteSpace(instrumentationKey))
             {
                 throw new ArgumentNullException(nameof(instrumentationKey));
             }

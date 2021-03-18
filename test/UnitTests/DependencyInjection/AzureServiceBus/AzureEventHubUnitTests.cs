@@ -34,7 +34,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         public void add_health_check_when_properly_configured_using_eventhubconnectionfactory()
         {
             Func<IServiceProvider,EventHubConnection> factory = 
-                _ => new EventHubConnection("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", "hubname");
+                _ => new EventHubConnection("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", "hubnameconnection");
             var services = new ServiceCollection();
             services.AddHealthChecks()
                 .AddAzureEventHub(factory);
@@ -83,7 +83,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureeventhub");
+            registration.Name.Should().Be("azureeventhubcheck");
             check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
         }
 

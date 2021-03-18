@@ -68,8 +68,6 @@
     <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
     <AzureStorageQueues>12.4.2</AzureStorageQueues>
     <AzureDataTables>3.0.0-beta.5</AzureDataTables>
-    <MicrosoftAzureEventHubs>4.3.1</MicrosoftAzureEventHubs>
-    <MicrosoftAzureServiceBus>5.0.0</MicrosoftAzureServiceBus>
     <AWSSDKDynamoDBv2>3.5.1.10</AWSSDKDynamoDBv2>
     <GremlinNet>3.4.8</GremlinNet>
     <NewtonsoftJson>12.0.3</NewtonsoftJson>
@@ -89,6 +87,8 @@
     <ArangoDBNetStandard>1.0.0-alpha03</ArangoDBNetStandard>
     <SystemServiceProcessServiceController>5.0.0</SystemServiceProcessServiceController>
     <RichardSzalayMockHttp>6.0.0</RichardSzalayMockHttp>
+    <AzureMessagingEventHubs>5.3.1</AzureMessagingEventHubs>
+    <AzureMessagingServiceBus>7.1.1</AzureMessagingServiceBus>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -119,7 +119,7 @@
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>5.0.1</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>5.0.1</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>5.0.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>5.0.1</HealthCheckConsul>
     <HealthCheckUI>5.0.1</HealthCheckUI>
     <HealthCheckUICore>5.0.1</HealthCheckUICore>

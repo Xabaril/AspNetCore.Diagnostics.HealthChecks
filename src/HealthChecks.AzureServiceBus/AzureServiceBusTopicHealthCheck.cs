@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.ServiceBus.Management;
+﻿using Azure.Messaging.ServiceBus.Administration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
@@ -10,7 +10,9 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusTopicHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ManagementClient> _managementClients = new ConcurrentDictionary<string, ManagementClient>();
+        private static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> _managementClientConnections
+            = new ConcurrentDictionary<string, ServiceBusAdministrationClient>();
+
 
         private readonly string _connectionString;
         private readonly string _topicName;
@@ -36,17 +38,17 @@ namespace HealthChecks.AzureServiceBus
             try
             {
                 var connectionKey = $"{_connectionString}_{_topicName}";
-                if (!_managementClients.TryGetValue(connectionKey, out var managementClient))
+                if (!_managementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
-                    managementClient = new ManagementClient(_connectionString);
+                    managementClient = new ServiceBusAdministrationClient(_connectionString);
 
-                    if (!_managementClients.TryAdd(connectionKey, managementClient))
+                    if (!_managementClientConnections.TryAdd(connectionKey, managementClient))
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New Management Client can't be added into dictionary.");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New service bus administration client can't be added into dictionary.");
                     }
                 }
 
-                await managementClient.GetTopicRuntimeInfoAsync(_topicName);
+                _ = await managementClient.GetTopicRuntimePropertiesAsync(_topicName, cancellationToken);
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

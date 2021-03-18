@@ -167,6 +167,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.StylesPath}", volumeName));
             }
 
+            if (resource.HasStorageConfigured())
+            {
+                container.Env.Add(new V1EnvVar("storage_provider", resource.Spec.StorageProvider));
+                container.Env.Add(new V1EnvVar("storage_connection", resource.Spec.StorageConnection));
+            }
+
             return new V1Deployment(metadata: metadata, spec: spec);
         }
     }

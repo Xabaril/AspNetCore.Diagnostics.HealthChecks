@@ -93,5 +93,28 @@ namespace FunctionalTests.HealthChecks.Prometheus.Metrics
             resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Unhealthy);
             resultAsString.Should().Contain("health_status 0");
         }
+
+        [SkipOnAppVeyor]
+        public async Task be_health_status_unhealthy_when_one_health_check_is_healthy_and_another_unhealthy()
+        {
+            var sut = new TestServer(new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddCheck("healthy", check => HealthCheckResult.Healthy())
+                        .AddCheck("unhealthy", check => HealthCheckResult.Unhealthy());
+                })
+                .Configure(app => app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)));
+
+            var response = await sut.CreateRequest("/health")
+                .GetAsync();
+
+            response.EnsureSuccessStatusCode();
+            var resultAsString = await response.Content.ReadAsStringAsync();
+            resultAsString.Should().ContainCheckAndResult("healthy", HealthStatus.Healthy);
+            resultAsString.Should().ContainCheckAndResult("unhealthy", HealthStatus.Unhealthy);
+            resultAsString.Should().Contain("health_status 0");
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace HealthChecks.Solr
     public class SolrHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new ConcurrentDictionary<string, SolrConnection>();
+        private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new();
 
         private readonly SolrOptions _options;
 

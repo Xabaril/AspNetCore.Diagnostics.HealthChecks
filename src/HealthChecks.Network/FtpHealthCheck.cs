@@ -23,13 +23,12 @@ namespace HealthChecks.Network
                 {
                     var ftpRequest = CreateFtpWebRequest(host, createFile, credentials);
 
-                    using (var ftpResponse = (FtpWebResponse)await ftpRequest.GetResponseAsync().WithCancellationTokenAsync(cancellationToken))
+                    using var ftpResponse = (FtpWebResponse) await ftpRequest.GetResponseAsync()
+                        .WithCancellationTokenAsync(cancellationToken);
+                    if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated
+                        && ftpResponse.StatusCode != FtpStatusCode.ClosingData)
                     {
-                        if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated
-                            && ftpResponse.StatusCode != FtpStatusCode.ClosingData)
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error connecting to ftp host {host} with exit code {ftpResponse.StatusCode}");
-                        }
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error connecting to ftp host {host} with exit code {ftpResponse.StatusCode}");
                     }
                 }
 
@@ -55,10 +54,8 @@ namespace HealthChecks.Network
 
                 ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 
-                using (var stream = ftpRequest.GetRequestStream())
-                {
-                    stream.Write(new byte[] { 0x0 }, 0, 1);
-                }
+                using var stream = ftpRequest.GetRequestStream();
+                stream.Write(new byte[] { 0x0 }, 0, 1);
             }
             else
             {

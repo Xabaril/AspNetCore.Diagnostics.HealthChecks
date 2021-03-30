@@ -32,7 +32,7 @@ namespace HealthChecks.SignalR
             }
             finally
             {
-                await connection?.DisposeAsync().AsTask();
+                if (connection != null) await connection?.DisposeAsync().AsTask();
             }
         }
     }

@@ -10,7 +10,7 @@ namespace HealthChecks.CosmosDb
     public class TableServiceHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, TableServiceClient> _connections = new ConcurrentDictionary<string, TableServiceClient>();
+        private static readonly ConcurrentDictionary<string, TableServiceClient> _connections = new();
 
         private readonly string _connectionString;
         private readonly string _tableName;
@@ -45,7 +45,7 @@ namespace HealthChecks.CosmosDb
 
                     if (!_connections.TryAdd(tableServiceKey, tableServiceClient))
                     {
-                        tableServiceClient = _connections[_connectionString];
+                        tableServiceClient = _connections[_connectionString ?? throw new InvalidOperationException()];
                     }
                 }
 

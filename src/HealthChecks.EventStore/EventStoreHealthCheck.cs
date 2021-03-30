@@ -51,13 +51,13 @@ namespace HealthChecks.EventStore
                     var tcs = new TaskCompletionSource<HealthCheckResult>();
 
                     //connected
-                    connection.Connected += (s, e) =>
+                    connection.Connected += (_, _) =>
                     {
                         tcs.TrySetResult(HealthCheckResult.Healthy());
                     };
 
                     //connection closed after configured amount of failed reconnections
-                    connection.Closed += (s, e) =>
+                    connection.Closed += (_, e) =>
                     {
                         tcs.TrySetResult(new HealthCheckResult(
                             status: context.Registration.FailureStatus,
@@ -65,7 +65,7 @@ namespace HealthChecks.EventStore
                     };
 
                     //connection error
-                    connection.ErrorOccurred += (s, e) =>
+                    connection.ErrorOccurred += (_, e) =>
                     {
                         tcs.TrySetResult(new HealthCheckResult(
                             status: context.Registration.FailureStatus,

@@ -1,5 +1,4 @@
 ﻿using HealthChecks.Publisher.Seq;
-using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

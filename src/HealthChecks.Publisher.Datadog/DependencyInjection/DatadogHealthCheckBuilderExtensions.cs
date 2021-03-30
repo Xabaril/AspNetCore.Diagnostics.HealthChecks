@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddDatadogPublisher(this IHealthChecksBuilder builder, string serviceCheckName, string datadogAgentName = "127.0.0.1", string[] defaultTags = default)
         {
             builder.Services
-                .AddSingleton<IHealthCheckPublisher>(sp =>
+                .AddSingleton<IHealthCheckPublisher>(_ =>
                 {
                     var dogStatsdService = new DogStatsdService();
 

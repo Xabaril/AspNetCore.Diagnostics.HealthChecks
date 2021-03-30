@@ -24,12 +24,10 @@ namespace HealthChecks.System
         {
             try
             {
-                using (var sc = GetServiceController())
+                using var sc = GetServiceController();
+                if (_predicate(sc))
                 {
-                    if (_predicate(sc))
-                    {
-                        return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, exception: null));
-                    }
+                    return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, exception: null));
                 }
             }
             catch (Exception ex)

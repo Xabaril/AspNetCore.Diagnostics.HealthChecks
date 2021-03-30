@@ -24,11 +24,9 @@ namespace HealthChecks.IbmMQ
         {
             try
             {
-                using (var connection = new MQQueueManager(_queueManager, _connectionProperties))
-                {
-                    return Task.FromResult(
-                        HealthCheckResult.Healthy());
-                }
+                using var connection = new MQQueueManager(_queueManager, _connectionProperties);
+                return Task.FromResult(
+                    HealthCheckResult.Healthy());
             }
             catch (Exception ex)
             {

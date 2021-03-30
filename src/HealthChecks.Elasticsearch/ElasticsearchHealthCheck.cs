@@ -10,7 +10,7 @@ namespace HealthChecks.Elasticsearch
     public class ElasticsearchHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new ConcurrentDictionary<string, ElasticClient>();
+        private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new();
 
         private readonly ElasticsearchOptions _options;
 

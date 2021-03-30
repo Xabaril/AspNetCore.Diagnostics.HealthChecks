@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services
-                .AddSingleton(sp => new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption));
+                .AddSingleton(_ => new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
@@ -42,6 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="rabbitMQConnectionString">The RabbitMQ connection string to be used.</param>
+        /// <param name="rabbitConnectionString"/>
         /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
         /// <param name="failureStatus">
@@ -54,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Uri rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services
-                .AddSingleton(sp => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
+                .AddSingleton(_ => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

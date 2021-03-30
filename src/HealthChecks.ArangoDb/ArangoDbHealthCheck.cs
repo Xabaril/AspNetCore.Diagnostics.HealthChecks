@@ -20,14 +20,12 @@ namespace HealthChecks.ArangoDb
         {
             try
             {
-                using (var transport = await GetTransport(_options))
-                using (var adb = new ArangoDBClient(transport))
-                {
-                    var databases = await adb.Database.GetCurrentDatabaseInfoAsync();
-                    return databases.Error
-                        ? new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.")
-                        : HealthCheckResult.Healthy();
-                }
+                using var transport = await GetTransport(_options);
+                using var adb = new ArangoDBClient(transport);
+                var databases = await adb.Database.GetCurrentDatabaseInfoAsync();
+                return databases.Error
+                    ? new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.")
+                    : HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

@@ -44,16 +44,14 @@ namespace HealthChecks.Publisher.Prometheus
         {
             try
             {
-                using (var outStream = new MemoryStream())
-                {
-                    await Registry.CollectAndExportAsTextAsync(outStream);
-                    outStream.Position = 0;
+                await using var outStream = new MemoryStream();
+                await Registry.CollectAndExportAsTextAsync(outStream);
+                outStream.Position = 0;
 
-                    var response = await _httpClientFactory()
-                        .PostAsync(_targetUrl, new StreamContent(outStream));
+                var response = await _httpClientFactory()
+                    .PostAsync(_targetUrl, new StreamContent(outStream));
 
-                    response.EnsureSuccessStatusCode();
-                }
+                response.EnsureSuccessStatusCode();
             }
             catch (ScrapeFailedException ex)
             {

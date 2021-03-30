@@ -13,9 +13,9 @@ namespace HealthChecks.SqlServer
         private readonly string _sql;
         private readonly Action<SqlConnection> _beforeOpenConnectionConfigurer;
 
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection> beforeOpenConnectionConfigurer = null)
+        public SqlServerHealthCheck(string sqlServerConnectionString, string sql, Action<SqlConnection> beforeOpenConnectionConfigurer = null)
         {
-            _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
+            _connectionString = sqlServerConnectionString ?? throw new ArgumentNullException(nameof(sqlServerConnectionString));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
             _beforeOpenConnectionConfigurer = beforeOpenConnectionConfigurer;
         }
@@ -23,18 +23,16 @@ namespace HealthChecks.SqlServer
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    _beforeOpenConnectionConfigurer?.Invoke(connection);
+                using var connection = new SqlConnection(_connectionString);
+                _beforeOpenConnectionConfigurer?.Invoke(connection);
 
-                    await connection.OpenAsync(cancellationToken);
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-                    return HealthCheckResult.Healthy();
+                await connection.OpenAsync(cancellationToken);
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = _sql;
+                    await command.ExecuteScalarAsync(cancellationToken);
                 }
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

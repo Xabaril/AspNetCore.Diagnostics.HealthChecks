@@ -22,20 +22,18 @@ namespace HealthChecks.NpgSql
         {
             try
             {
-                using (var connection = new NpgsqlConnection(_connectionString))
+                await using var connection = new NpgsqlConnection(_connectionString);
+                _connectionAction?.Invoke(connection);
+
+                await connection.OpenAsync(cancellationToken);
+
+                using (var command = connection.CreateCommand())
                 {
-                    _connectionAction?.Invoke(connection);
-
-                    await connection.OpenAsync(cancellationToken);
-
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    command.CommandText = _sql;
+                    await command.ExecuteScalarAsync(cancellationToken);
                 }
+
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

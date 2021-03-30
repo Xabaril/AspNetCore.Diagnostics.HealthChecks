@@ -21,14 +21,12 @@ namespace HealthChecks.Network
             {
                 foreach (var (host, port) in _options.ConfiguredHosts)
                 {
-                    using (var tcpClient = new TcpClient(_options.AddressFamily))
-                    {
-                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
+                    using var tcpClient = new TcpClient(_options.AddressFamily);
+                    await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
 
-                        if (!tcpClient.Connected)
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
-                        }
+                    if (!tcpClient.Connected)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
                     }
                 }
 

@@ -39,17 +39,17 @@ namespace HealthChecks.Publisher.Seq
 
             var events = new RawEvents
             {
-                Events = new RawEvent[]
+                Events = new[]
                 {
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = $"[{Assembly.GetEntryAssembly().GetName().Name} - HealthCheck Result]",
+                        MessageTemplate = $"[{Assembly.GetEntryAssembly()?.GetName().Name} - HealthCheck Result]",
                         Level = level.ToString(),
                         Properties = new Dictionary<string, object>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },
-                            { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                            { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
                             { "Status", report.Status.ToString() },
                             { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
                             { "RawReport" , JsonConvert.SerializeObject(report)}

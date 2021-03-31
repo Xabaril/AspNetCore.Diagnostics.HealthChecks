@@ -6,10 +6,8 @@ using Azure.Core;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusQueueHealthCheck
-        : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private readonly string _endPoint;
         private readonly string _queueName;
         private readonly TokenCredential _tokenCredential;
 
@@ -32,7 +30,6 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(queueName));
             }
 
-            _endPoint = endPoint;
             _tokenCredential = tokenCredential ;
             _queueName = queueName;
         }
@@ -41,12 +38,12 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var connectionKey = $"{GetFirstPartOfKey()}_{_queueName}";
-                if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
+
+                if (!ManagementClientConnections.TryGetValue(GetConnectionKey(), out var managementClient))
                 {
                     managementClient = CreateManagementClient();
 
-                    if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
+                    if (!ManagementClientConnections.TryAdd(GetConnectionKey(), managementClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "No service bus administration client connection can't be added into dictionary.");
                     }
@@ -63,5 +60,9 @@ namespace HealthChecks.AzureServiceBus
         }
 
 
+        protected override string GetConnectionKey()
+        {
+           return $"{Prefix}_{_queueName}";
+        }
     }
 }

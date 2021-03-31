@@ -36,7 +36,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var connectionKey = $"{GetFirstPartOfKey()}_{_topicName}";
+                var connectionKey = $"{GetConnectionKey()}_{_topicName}";
                 if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
                     managementClient = CreateManagementClient();
@@ -54,6 +54,11 @@ namespace HealthChecks.AzureServiceBus
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
+        }
+
+        protected override string GetConnectionKey()
+        {
+            return $"{Prefix}_{_topicName}";
         }
     }
 }

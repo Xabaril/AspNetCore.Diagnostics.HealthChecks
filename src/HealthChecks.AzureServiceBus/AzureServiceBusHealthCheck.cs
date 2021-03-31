@@ -1,17 +1,20 @@
-﻿namespace HealthChecks.AzureServiceBus
-{
-    using System;
-    using System.Collections.Concurrent;
-    using Azure.Core;
-    using Azure.Messaging.ServiceBus.Administration;
+﻿using System;
+using System.Collections.Concurrent;
+using Azure.Core;
+using Azure.Messaging.ServiceBus.Administration;
 
+namespace HealthChecks.AzureServiceBus
+{
     public abstract class AzureServiceBusHealthCheck
     {
-        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> ManagementClientConnections = new ConcurrentDictionary<string, ServiceBusAdministrationClient>()
-
+        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
+            ManagementClientConnections = new ();
         protected string ConnectionString { get; }
-        protected string Endpoint { get; }
-        protected TokenCredential TokenCredential { get; }
+
+        protected string Prefix => ConnectionString ?? Endpoint;
+
+        private string Endpoint { get; }
+        private TokenCredential TokenCredential { get; }
 
         protected AzureServiceBusHealthCheck (string connectionString)
         {
@@ -28,7 +31,6 @@
             TokenCredential = tokenCredential;
         }
 
-
         protected ServiceBusAdministrationClient CreateManagementClient()
         {
             ServiceBusAdministrationClient managementClient;
@@ -44,9 +46,6 @@
             return managementClient;
         }
 
-        protected string GetFirstPartOfKey()
-        {
-            return ConnectionString ?? Endpoint;
-        }
+        protected abstract string GetConnectionKey();
     }
 }

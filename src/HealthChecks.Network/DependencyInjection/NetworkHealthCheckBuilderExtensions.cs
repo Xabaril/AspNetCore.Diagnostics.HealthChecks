@@ -208,7 +208,10 @@ namespace Microsoft.Extensions.DependencyInjection
             Action<SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services.Configure(setup);
+            if (setup != null)
+            {
+                builder.Services.Configure(setup);
+            }
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? SMTP_NAME,

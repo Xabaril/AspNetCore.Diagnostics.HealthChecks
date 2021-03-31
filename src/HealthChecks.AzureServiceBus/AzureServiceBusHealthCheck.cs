@@ -1,35 +1,47 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Azure.Core;
-using Azure.Messaging.ServiceBus.Administration;
-
-namespace HealthChecks.AzureServiceBus
+﻿namespace HealthChecks.AzureServiceBus
 {
+    using System;
+    using System.Collections.Concurrent;
+    using Azure.Core;
+    using Azure.Messaging.ServiceBus.Administration;
+
     public abstract class AzureServiceBusHealthCheck
     {
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
-            ManagementClientConnections = new ();
-        protected string ConnectionString { get; }
+            ManagementClientConnections = new();
 
-        protected string Prefix => ConnectionString ?? Endpoint;
-
-        private string Endpoint { get; }
-        private TokenCredential TokenCredential { get; }
-
-        protected AzureServiceBusHealthCheck (string connectionString)
+        protected AzureServiceBusHealthCheck(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentNullException(nameof(connectionString));
             }
+
             ConnectionString = connectionString;
         }
 
-        protected AzureServiceBusHealthCheck (string endpoint, TokenCredential tokenCredential)
+        protected AzureServiceBusHealthCheck(string endpoint, TokenCredential tokenCredential)
         {
+            if (string.IsNullOrEmpty(endpoint))
+            {
+                throw new ArgumentNullException(nameof(endpoint));
+            }
+
+            if (tokenCredential == null)
+            {
+                throw new ArgumentNullException(nameof(tokenCredential));
+            }
+
             Endpoint = endpoint;
             TokenCredential = tokenCredential;
         }
+
+        private string ConnectionString { get; }
+
+        protected string Prefix => ConnectionString ?? Endpoint;
+
+        private string Endpoint { get; }
+        private TokenCredential TokenCredential { get; }
 
         protected ServiceBusAdministrationClient CreateManagementClient()
         {

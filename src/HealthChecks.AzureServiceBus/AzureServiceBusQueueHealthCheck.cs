@@ -9,8 +9,6 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _queueName;
-        private readonly TokenCredential _tokenCredential;
-
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {
@@ -18,8 +16,6 @@ namespace HealthChecks.AzureServiceBus
             {
                 throw new ArgumentNullException(nameof(queueName));
             }
-
-            _queueName = queueName;
         }
 
         public AzureServiceBusQueueHealthCheck(string endPoint, string queueName, TokenCredential tokenCredential) :
@@ -30,7 +26,6 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(queueName));
             }
 
-            _tokenCredential = tokenCredential ;
             _queueName = queueName;
         }
 
@@ -38,7 +33,6 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-
                 if (!ManagementClientConnections.TryGetValue(GetConnectionKey(), out var managementClient))
                 {
                     managementClient = CreateManagementClient();

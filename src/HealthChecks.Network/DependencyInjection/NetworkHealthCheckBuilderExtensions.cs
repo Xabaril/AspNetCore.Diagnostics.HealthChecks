@@ -205,13 +205,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddSmtpHealthCheck(this IHealthChecksBuilder builder,
-            Action<SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
+            Action<SmtpHealthCheckOptions> setup = null, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            if (setup != null)
-            {
-                builder.Services.Configure(setup);
-            }
+            builder.Services.Configure(setup ?? (_ => { }));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? SMTP_NAME,

@@ -10,6 +10,14 @@
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
             ManagementClientConnections = new();
 
+        private string ConnectionString { get; }
+
+        protected string Prefix => ConnectionString ?? Endpoint;
+
+        private string Endpoint { get; }
+        private TokenCredential TokenCredential { get; }
+
+
         protected AzureServiceBusHealthCheck(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
@@ -36,12 +44,6 @@
             TokenCredential = tokenCredential;
         }
 
-        private string ConnectionString { get; }
-
-        protected string Prefix => ConnectionString ?? Endpoint;
-
-        private string Endpoint { get; }
-        private TokenCredential TokenCredential { get; }
 
         protected ServiceBusAdministrationClient CreateManagementClient()
         {

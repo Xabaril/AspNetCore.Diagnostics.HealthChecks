@@ -218,6 +218,21 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
 
+        public static IHealthChecksBuilder AddSmtpHealthCheck(this IHealthChecksBuilder builder,
+            Action<IServiceProvider, SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default, TimeSpan? timeout = default) =>
+            builder.Add(new HealthCheckRegistration(
+                name ?? SMTP_NAME,
+                sp =>
+                {
+                    var options = new SmtpHealthCheckOptions();
+                    setup?.Invoke(sp, options);
+                    return new SmtpHealthCheck(options);
+                },
+                failureStatus,
+                tags,
+                timeout));
+        
         /// <summary>
         /// Add a health check for network TCP connection.
         /// </summary>

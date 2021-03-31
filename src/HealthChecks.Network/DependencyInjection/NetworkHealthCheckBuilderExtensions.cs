@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -207,21 +208,34 @@ namespace Microsoft.Extensions.DependencyInjection
             Action<SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            var options = new SmtpHealthCheckOptions();
-            setup?.Invoke(options);
+            builder.Services.Configure(setup);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? SMTP_NAME,
-                sp => new SmtpHealthCheck(options),
+                sp => new SmtpHealthCheck(sp.GetRequiredService<IOptionsMonitor<SmtpHealthCheckOptions>>().CurrentValue),
                 failureStatus,
                 tags,
                 timeout));
         }
 
+        /// <summary>
+        /// Add a health check for network SMTP connection.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">The action to configure SMTP connection parameters.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'smtp' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddSmtpHealthCheck(this IHealthChecksBuilder builder,
             Action<IServiceProvider, SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default, TimeSpan? timeout = default) =>
-            builder.Add(new HealthCheckRegistration(
+            IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            return builder.Add(new HealthCheckRegistration(
                 name ?? SMTP_NAME,
                 sp =>
                 {
@@ -232,7 +246,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags,
                 timeout));
-        
+        }
+
         /// <summary>
         /// Add a health check for network TCP connection.
         /// </summary>

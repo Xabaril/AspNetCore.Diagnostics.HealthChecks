@@ -1,33 +1,39 @@
-﻿using Azure.Messaging.ServiceBus.Administration;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
-using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
+
 namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusQueueHealthCheck
-        : IHealthCheck
+        : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> _managementClientConnections 
-            = new ConcurrentDictionary<string, ServiceBusAdministrationClient>();
-
-        private readonly string _connectionString;
+        private readonly string _endPoint;
         private readonly string _queueName;
+        private readonly TokenCredential _tokenCredential;
 
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
+
+        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
             if (string.IsNullOrEmpty(queueName))
             {
                 throw new ArgumentNullException(nameof(queueName));
             }
 
-            _connectionString = connectionString;
+            _queueName = queueName;
+        }
+
+        public AzureServiceBusQueueHealthCheck(string endPoint, string queueName, TokenCredential tokenCredential) :
+            base(endPoint, tokenCredential)
+        {
+            if (string.IsNullOrEmpty(queueName))
+            {
+                throw new ArgumentNullException(nameof(queueName));
+            }
+
+            _endPoint = endPoint;
+            _tokenCredential = tokenCredential ;
             _queueName = queueName;
         }
 
@@ -35,12 +41,12 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var connectionKey = $"{_connectionString}_{_queueName}";
-                if (!_managementClientConnections.TryGetValue(connectionKey, out var managementClient))
+                var connectionKey = $"{GetFirstPartOfKey()}_{_queueName}";
+                if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
-                    managementClient = new ServiceBusAdministrationClient(_connectionString);
+                    managementClient = CreateManagementClient();
 
-                    if (!_managementClientConnections.TryAdd(connectionKey, managementClient))
+                    if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "No service bus administration client connection can't be added into dictionary.");
                     }
@@ -55,5 +61,7 @@ namespace HealthChecks.AzureServiceBus
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
+
+
     }
 }

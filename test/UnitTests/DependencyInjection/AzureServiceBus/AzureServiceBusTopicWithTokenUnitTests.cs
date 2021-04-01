@@ -1,15 +1,15 @@
+using FluentAssertions;
+using global::Azure.Identity;
+using global::HealthChecks.AzureServiceBus;
+using global::System;
+using global::System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Xunit;
+
 namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 {
-    using FluentAssertions;
-    using global::Azure.Identity;
-    using global::HealthChecks.AzureServiceBus;
-    using global::System;
-    using global::System.Linq;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Diagnostics.HealthChecks;
-    using Microsoft.Extensions.Options;
-    using Xunit;
-
     public class azure_service_bus_topic_registration_with_token_should
     {
         [Fact]

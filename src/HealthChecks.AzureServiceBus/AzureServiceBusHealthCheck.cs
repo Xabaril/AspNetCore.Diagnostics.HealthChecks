@@ -1,10 +1,10 @@
-﻿namespace HealthChecks.AzureServiceBus
-{
-    using System;
-    using System.Collections.Concurrent;
-    using Azure.Core;
-    using Azure.Messaging.ServiceBus.Administration;
+﻿using System;
+using System.Collections.Concurrent;
+using Azure.Core;
+using Azure.Messaging.ServiceBus.Administration;
 
+namespace HealthChecks.AzureServiceBus
+{
     public abstract class AzureServiceBusHealthCheck
     {
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>

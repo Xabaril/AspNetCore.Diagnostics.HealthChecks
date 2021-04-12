@@ -68,14 +68,14 @@
     <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
     <AzureStorageQueues>12.4.2</AzureStorageQueues>
     <AzureDataTables>3.0.0-beta.5</AzureDataTables>
-    <AWSSDKDynamoDBv2>3.5.1.10</AWSSDKDynamoDBv2>
+    <AWSSDKDynamoDBv2>3.7.0.10</AWSSDKDynamoDBv2>
     <GremlinNet>3.4.8</GremlinNet>
     <NewtonsoftJson>12.0.3</NewtonsoftJson>
     <SystemTextJson>4.7.2</SystemTextJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.16.0</MicrosoftApplicationInsights>
     <PrometheusNet>4.0.0</PrometheusNet>
-    <AWSSKDS3>3.5.3.4</AWSSKDS3>
+    <AWSSKDS3>3.7.0.10</AWSSKDS3>
     <MicrosoftAzureKeyVault>4.2.0-beta.3</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>5.1.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.27.3</MicrosoftAzureDevices>
@@ -113,7 +113,7 @@
     <HealthCheckKafka>5.0.1</HealthCheckKafka>
     <HealthCheckSystem>5.0.1</HealthCheckSystem>
     <HealthCheckNetwork>5.0.4</HealthCheckNetwork>
-    <HealthCheckDynamoDb>5.0.1</HealthCheckDynamoDb>
+    <HealthCheckDynamoDb>5.0.2</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>5.0.3</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
@@ -133,7 +133,7 @@
     <HealthCheckPublisherDatadog>5.0.1</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>5.0.1</HealthCheckPublisherPrometheus>
     <HealthCheckPrometheusMetrics>5.0.1</HealthCheckPrometheusMetrics>
-    <HealthCheckAWSS3>5.0.1</HealthCheckAWSS3>
+    <HealthCheckAWSS3>5.0.2</HealthCheckAWSS3>
     <HealthCheckKeyVault>5.0.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>5.0.1</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>5.0.2</HealthCheckRavenDB>

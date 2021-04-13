@@ -28,7 +28,7 @@ namespace HealthChecks.AzureServiceBus
             if (!connectionString.Contains(EntityPathSegment))
             {
                 throw new ArgumentException(
-                    "Connection string did not contain an event hub name.",
+                    "Connection string should contain event hub name.",
                     nameof(connectionString)
                 );
             }

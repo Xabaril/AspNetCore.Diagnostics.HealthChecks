@@ -19,7 +19,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddAzureKeyVault(new Uri("azure-key-vault-uri",new DefaultAzureCredential(),options=>
+        .AddAzureKeyVault(new Uri("azure-key-vault-uri"),new DefaultAzureCredential(),options=>
         {
             options.AddSecret("secretname")
                 .AddKey("keyname")

@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.UI.Core.Data
+﻿namespace HealthChecks.UI.Data
 {
     public class HealthCheckConfiguration
     {
@@ -12,8 +12,8 @@
 
         public void Deconstruct(out string uri, out string name)
         {
-            uri = this.Uri;
-            name = this.Name;
+            uri = Uri;
+            name = Name;
         }
     }
 }

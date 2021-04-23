@@ -123,6 +123,7 @@
     <HealthCheckConsul>5.0.1</HealthCheckConsul>
     <HealthCheckUI>5.0.1</HealthCheckUI>
     <HealthCheckUICore>5.0.1</HealthCheckUICore>
+    <HealthCheckUIData>5.0.1</HealthCheckUIData>
     <HealthCheckUIClient>5.0.1</HealthCheckUIClient>
     <HealthCheckUISqlServerStorage>5.0.1</HealthCheckUISqlServerStorage>
     <HealthCheckUISQLiteStorage>5.0.1</HealthCheckUISQLiteStorage>

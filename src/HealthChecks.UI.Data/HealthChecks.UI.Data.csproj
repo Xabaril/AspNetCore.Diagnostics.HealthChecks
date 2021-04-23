@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <Description>HealthChecks.UI.Data package containing builder and model definitions</Description>
+    <PackageTags>HealthCheck;HealthChecks;Data</PackageTags>
+    <Version>$(HealthCheckUIData)</Version>
+    <PackageId>AspNetCore.HealthChecks.UI.Data</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCore)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsDependencyInjectionAbstractions)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="System.Text.Json" Version="$(SystemTextJson)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+  </ItemGroup>
+</Project>

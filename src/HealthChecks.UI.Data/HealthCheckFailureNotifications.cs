@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HealthChecks.UI.Core.Data
+namespace HealthChecks.UI.Data
 {
     public class HealthCheckFailureNotification
     {

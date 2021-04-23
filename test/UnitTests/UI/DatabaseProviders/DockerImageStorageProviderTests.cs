@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Core.Data;
+﻿using HealthChecks.UI.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
 using Microsoft.AspNetCore.Hosting;

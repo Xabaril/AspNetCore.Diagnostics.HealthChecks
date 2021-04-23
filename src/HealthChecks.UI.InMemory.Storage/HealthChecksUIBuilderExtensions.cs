@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Core.Data;
+﻿using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 

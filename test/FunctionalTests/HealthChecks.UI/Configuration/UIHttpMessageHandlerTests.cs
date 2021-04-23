@@ -1,6 +1,6 @@
 ﻿using FunctionalTests.Base;
 using HealthChecks.UI.Core;
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;

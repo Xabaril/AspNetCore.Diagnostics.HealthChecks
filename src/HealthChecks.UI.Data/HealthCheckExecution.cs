@@ -1,7 +1,8 @@
-﻿using System;
+﻿using HealthChecks.UI.Core;
+using System;
 using System.Collections.Generic;
 
-namespace HealthChecks.UI.Core.Data
+namespace HealthChecks.UI.Data
 {
     public class HealthCheckExecution
     {

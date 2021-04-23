@@ -1,7 +1,7 @@
-﻿using HealthChecks.UI.Core.Data.Configuration;
+﻿using HealthChecks.UI.Data.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace HealthChecks.UI.Core.Data
+namespace HealthChecks.UI.Data
 {
     public class HealthChecksDb
         : DbContext

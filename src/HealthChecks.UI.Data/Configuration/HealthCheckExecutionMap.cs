@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
-namespace HealthChecks.UI.Core.Data.Configuration
+namespace HealthChecks.UI.Data.Configuration
 {
     class HealthCheckExecutionMap
         : IEntityTypeConfiguration<HealthCheckExecution>

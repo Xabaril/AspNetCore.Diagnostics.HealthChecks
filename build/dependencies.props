@@ -17,6 +17,8 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package Versions">
+    <AzureDigitalTwinsCore>1.2.0</AzureDigitalTwinsCore>
+    <AzureIdentity>1.3.0</AzureIdentity>
     <MicrosoftExtensionsDiagnosticsHealthChecks>5.0.1</MicrosoftExtensionsDiagnosticsHealthChecks>
     <MicrosoftAspNetCoreJwtBearer>5.0.1</MicrosoftAspNetCoreJwtBearer>
     <MicrosoftAspNetCoreOpenIdConnect>5.0.1</MicrosoftAspNetCoreOpenIdConnect>
@@ -42,6 +44,8 @@
     <MicrosoftAzureCosmosDB>3.17.0</MicrosoftAzureCosmosDB>
     <MicrosoftAzureEventHubs>4.1.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>5.1.0</MicrosoftAzureServiceBus>
+    <MicrosoftAzureManagementDigitalTwins>1.1.0</MicrosoftAzureManagementDigitalTwins>
+    <MicrosoftAzureManagementResourceManagerFluent>1.37.1</MicrosoftAzureManagementResourceManagerFluent>
     <MicrosoftIdentityModelClientsActiveDirectory>5.2.8</MicrosoftIdentityModelClientsActiveDirectory>
     <MicrosoftAzureServicesAppAuthentication>1.3.1</MicrosoftAzureServicesAppAuthentication>
     <MicrosoftAspNetCoreSignalR>1.1.0</MicrosoftAspNetCoreSignalR>
@@ -117,6 +121,7 @@
     <HealthCheckCosmosDb>5.0.3</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
+    <HealthCheckAzureDigitalTwin>5.0.1</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>5.0.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>5.0.2</HealthCheckAzureServiceBus>

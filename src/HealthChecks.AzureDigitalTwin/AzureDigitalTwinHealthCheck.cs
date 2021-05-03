@@ -2,6 +2,7 @@
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Rest;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -18,12 +19,20 @@ namespace HealthChecks.AzureDigitalTwin
         private readonly string _clientId;
         private readonly string _clientSecret;
         private readonly string _tenantId;
+        private readonly ServiceClientCredentials _credentials;
 
         public AzureDigitalTwinHealthCheck(string clientId, string clientSecret, string tenantId)
         {
             _clientId = (!string.IsNullOrEmpty(clientId)) ? clientId : throw new ArgumentNullException(nameof(clientId));
             _clientSecret = (!string.IsNullOrEmpty(clientSecret)) ? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
             _tenantId = (!string.IsNullOrEmpty(tenantId)) ? tenantId : throw new ArgumentNullException(nameof(tenantId));
+
+            _credentials = new AzureCredentialsFactory().FromServicePrincipal(_clientId, _clientSecret, _tenantId, AzureEnvironment.AzureGlobalCloud);
+        }
+
+        public AzureDigitalTwinHealthCheck(ServiceClientCredentials credentials)
+        {
+            _credentials = (credentials is not null) ? credentials : throw new ArgumentNullException(nameof(credentials));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -32,8 +41,7 @@ namespace HealthChecks.AzureDigitalTwin
             {
                 if (!_managementClientConnections.TryGetValue(_clientId, out var managementClient))
                 {
-                    var credentials = new AzureCredentialsFactory().FromServicePrincipal(_clientId, _clientSecret, _tenantId, AzureEnvironment.AzureGlobalCloud);
-                    managementClient = new AzureDigitalTwinsManagementClient(new Uri("https://management.azure.com"), credentials);
+                    managementClient = new AzureDigitalTwinsManagementClient(new Uri("https://management.azure.com"), _credentials);
 
                     if (!_managementClientConnections.TryAdd(_clientId, managementClient))
                     {
@@ -41,7 +49,7 @@ namespace HealthChecks.AzureDigitalTwin
                     }
                 }
 
-                var result = await managementClient.Operations.ListWithHttpMessagesAsync(cancellationToken: cancellationToken);
+                await managementClient.Operations.ListWithHttpMessagesAsync(cancellationToken: cancellationToken);
 
                 return HealthCheckResult.Healthy();
             }

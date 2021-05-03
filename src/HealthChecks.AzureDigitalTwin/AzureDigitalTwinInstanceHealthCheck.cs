@@ -4,14 +4,12 @@ using Azure.Identity;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HealthChecks.AzureDigitalTwin
 {
-    public class AzureDigitalTwinModelsHealthCheck
+    public class AzureDigitalTwinInstanceHealthCheck
            : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, DigitalTwinsClient> _digitalTwinClientConnections
@@ -22,9 +20,9 @@ namespace HealthChecks.AzureDigitalTwin
         private readonly string _tenantId;
         private readonly TokenCredential _credentials;
         private readonly string _hostName;
-        private readonly string[] _models;
+        private readonly string _instanceName;
 
-        public AzureDigitalTwinModelsHealthCheck(string clientId, string clientSecret, string tenantId, string hostName, string[] models)
+        public AzureDigitalTwinInstanceHealthCheck(string clientId, string clientSecret, string tenantId, string hostName, string instanceName)
         {
             _clientId = (!string.IsNullOrEmpty(clientId)) ? clientId : throw new ArgumentNullException(nameof(clientId));
             _clientSecret = (!string.IsNullOrEmpty(clientSecret)) ? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
@@ -32,15 +30,15 @@ namespace HealthChecks.AzureDigitalTwin
             _credentials = new ClientSecretCredential(_tenantId, _clientId, _clientSecret);
 
             _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
-            _models = models.Any() ? models : throw new ArgumentNullException(nameof(models));
+            _instanceName = (!string.IsNullOrEmpty(instanceName)) ? hostName : throw new ArgumentNullException(nameof(instanceName));
         }
 
-        public AzureDigitalTwinModelsHealthCheck(TokenCredential credentials, string hostName, string[] models)
+        public AzureDigitalTwinInstanceHealthCheck(TokenCredential credentials, string hostName, string instanceName)
         {
             _credentials = (credentials is not null) ? credentials : throw new ArgumentNullException(nameof(credentials));
 
             _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
-            _models = models.Any() ? models : throw new ArgumentNullException(nameof(models));
+            _instanceName = (!string.IsNullOrEmpty(instanceName)) ? hostName : throw new ArgumentNullException(nameof(instanceName));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -57,23 +55,9 @@ namespace HealthChecks.AzureDigitalTwin
                     }
                 }
 
-                var response = managementClient.GetModelsAsync(cancellationToken: cancellationToken);
-                var models = new List<DigitalTwinsModelData>();
-                await foreach (var model in response) models.Add(model);
+                await managementClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken);
+                return HealthCheckResult.Healthy();
 
-                var unregistered = _models.Where(x => !models.Any(m => m.Id == x));
-                var unmapped = models.Where(x => !_models.Contains(x.Id)).Select(x => x.Id);
-                return unregistered.Any() || unmapped.Any()
-                    ? new HealthCheckResult(
-                        context.Registration.FailureStatus,
-                        "The digital twin is out of sync with the models provided",
-                        null,
-                        new Dictionary<string, object>()
-                        {
-                            [nameof(unregistered)] = unregistered,
-                            [nameof(unmapped)] = unmapped
-                        })
-                    : HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

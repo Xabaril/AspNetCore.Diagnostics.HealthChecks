@@ -8,12 +8,14 @@ This health check can check the Digital Twin:
 
 - liveness connection status.
 - state of the model definition
+- status of an instance
 
 With all of the following examples, you can additionally add the following parameters:
 
 - `name`: The health check name.
   <br/>Default for liveness if not specified is `azuredigitaltwin`.
   <br/>Default for model state if not specified is `azuredigitaltwinmodels`.
+  <br/>Default for model state if not specified is `azuredigitaltwininstance`.
 - `failureStatus`: The `HealthStatus` that should be reported when the health check fails. Default is `HealthStatus.Unhealthy`.
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.
@@ -26,6 +28,8 @@ This health check provide the liveness status for the Azure Digital Twin resourc
 
 ### Example Usage
 
+You can add health check with the default client arguments...
+
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
@@ -35,6 +39,19 @@ public void ConfigureServices(IServiceCollection services)
             "MyDigitalTwinClientId",
             "MyDigitalTwinClientSecret",
             "TenantId")
+}
+```
+
+... or with the service client credentials flow that you want:
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    ServiceClientCredentials myCredentials = <my_credentials_flow>;
+    services
+        .AddHealthChecks()
+        .AddAzureDigitalTwin(
+            myCredentials)
 }
 ```
 
@@ -52,6 +69,8 @@ If the health check detect an `out of sync` models return the data with those el
 
 <br/>_C# Configuration:_
 
+You can also add health check with the default client arguments...
+
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
@@ -65,6 +84,23 @@ public void ConfigureServices(IServiceCollection services)
             new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" })
 }
 ```
+
+... or with the token credentials flow that you want:
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    TokenCredentials myCredentials = <my_credentials_flow>;
+    services
+        .AddHealthChecks()
+        .AddAzureDigitalTwinModels(
+            myCredentials,
+            new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" },
+            failureStatus: HealthStatus.Degraded)
+}
+```
+
+<small>NOTE: This sample provides a Degraded status if this Health Check fails because it will check for a non sync model state (instead of a real connection status), and the resource is responding at the client call.</small>
 
 <br/>_Failure status response:_
 
@@ -81,5 +117,46 @@ azuredigitaltwinmodels:
   exception: null,
   status: 1,
   tags: [ "ready" ]
+}
+```
+
+---
+
+## _Digital Twin Instance Health Check_
+
+This health check returns the status of a given instance.
+
+### Example Usage
+
+<br/>_C# Configuration:_
+
+You can also add health check with the default client arguments...
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services
+        .AddHealthChecks()
+        .AddAzureDigitalTwinInstance(
+            "MyDigitalTwinClientId",
+            "MyDigitalTwinClientSecret",
+            "TenantId",
+            "https://my-awesome-dt-host",
+            "my_dt_instance_name")
+}
+```
+
+... or with the token credentials flow that you want:
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    TokenCredentials myCredentials = <my_credentials_flow>;
+    services
+        .AddHealthChecks()
+        .AddAzureDigitalTwinModels(
+            myCredentials,
+            "https://my-awesome-dt-host",
+            "my_dt_instance_name")
 }
 ```

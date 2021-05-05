@@ -15,8 +15,8 @@ namespace HealthChecks.AzureServiceBus
         protected string Prefix => ConnectionString ?? Endpoint;
 
         private string Endpoint { get; }
-        private TokenCredential TokenCredential { get; }
 
+        private TokenCredential TokenCredential { get; }
 
         protected AzureServiceBusHealthCheck(string connectionString)
         {

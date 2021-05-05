@@ -60,6 +60,6 @@ namespace HealthChecks.AzureServiceBus
             return managementClient;
         }
 
-        protected abstract string GetConnectionKey();
+        protected abstract string ConnectionKey { get; }
     }
 }

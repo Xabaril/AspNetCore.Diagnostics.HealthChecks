@@ -36,10 +36,10 @@
     <MicrosoftAspNetCoreSignalRClient>5.0.1</MicrosoftAspNetCoreSignalRClient>
     <SystemDataSqlClient>4.8.2</SystemDataSqlClient>
     <NpgsqlEntityFrameworkCorePostgreSQL>5.0.1</NpgsqlEntityFrameworkCorePostgreSQL>
-    <MicrosoftDataSqlClient>2.1.0</MicrosoftDataSqlClient>
+    <MicrosoftDataSqlClient>2.1.1</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>5.0.1</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.12.0</MicrosoftAzureDocumentDbCore>
-    <MicrosoftAzureCosmosDB>3.2.0</MicrosoftAzureCosmosDB>
+    <MicrosoftAzureCosmosDB>3.17.0</MicrosoftAzureCosmosDB>
     <MicrosoftAzureEventHubs>4.1.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>5.1.0</MicrosoftAzureServiceBus>
     <MicrosoftIdentityModelClientsActiveDirectory>5.2.8</MicrosoftIdentityModelClientsActiveDirectory>
@@ -52,13 +52,13 @@
     <xunitrunnervisualstudio>2.4.3</xunitrunnervisualstudio>
     <StackExchangeRedis>2.1.58</StackExchangeRedis>
     <RabbitMQClient>6.2.1</RabbitMQClient>
-    <RavenDBClient>5.0.3</RavenDBClient>
+    <RavenDBClient>5.1.5</RavenDBClient>
     <OracleManagedDataAccessCore>2.19.91</OracleManagedDataAccessCore>
-    <Npgsql>5.0.0-preview1</Npgsql>
+    <Npgsql>5.0.3</Npgsql>
     <MongoDBDriver>2.11.3</MongoDBDriver>
     <MySqlConnector>1.1.0</MySqlConnector>
     <ConfluentKafka>1.5.2</ConfluentKafka>
-    <SSHNet>2016.1.0</SSHNet>
+    <SSHNet>2020.0.1</SSHNet>
     <NEST>7.9.0</NEST>
     <SystemBuffers>4.5.1</SystemBuffers>
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
@@ -67,17 +67,15 @@
     <AzureCosmos>4.0.0-preview3</AzureCosmos>
     <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
     <AzureStorageQueues>12.4.2</AzureStorageQueues>
-    <AzureDataTables>3.0.0-beta.3</AzureDataTables>
-    <MicrosoftAzureEventHubs>4.3.1</MicrosoftAzureEventHubs>
-    <MicrosoftAzureServiceBus>5.0.0</MicrosoftAzureServiceBus>
-    <AWSSDKDynamoDBv2>3.5.1.10</AWSSDKDynamoDBv2>
+    <AzureDataTables>3.0.0-beta.5</AzureDataTables>
+    <AWSSDKDynamoDBv2>3.7.0.10</AWSSDKDynamoDBv2>
     <GremlinNet>3.4.8</GremlinNet>
     <NewtonsoftJson>12.0.3</NewtonsoftJson>
     <SystemTextJson>4.7.2</SystemTextJson>
     <EventStoreClient>5.0.2</EventStoreClient>
     <MicrosoftApplicationInsights>2.16.0</MicrosoftApplicationInsights>
     <PrometheusNet>4.0.0</PrometheusNet>
-    <AWSSKDS3>3.5.3.4</AWSSKDS3>
+    <AWSSKDS3>3.7.0.10</AWSSKDS3>
     <MicrosoftAzureKeyVault>4.2.0-beta.3</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>5.1.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.27.3</MicrosoftAzureDevices>
@@ -90,6 +88,8 @@
     <SystemServiceProcessServiceController>5.0.0</SystemServiceProcessServiceController>
     <RichardSzalayMockHttp>6.0.0</RichardSzalayMockHttp>
     <InfluxDBClient>1.14.0</InfluxDBClient>
+    <AzureMessagingEventHubs>5.3.1</AzureMessagingEventHubs>
+    <AzureMessagingServiceBus>7.1.1</AzureMessagingServiceBus>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -99,28 +99,28 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>5.0.1</HealthCheckIdSvr>
-    <HealthCheckSqlServer>5.0.1</HealthCheckSqlServer>
+    <HealthCheckSqlServer>5.0.2</HealthCheckSqlServer>
     <HealthCheckSqlite>5.0.1</HealthCheckSqlite>
     <HealthCheckUri>5.0.1</HealthCheckUri>
-    <HealthCheckRedis>5.0.1</HealthCheckRedis>
+    <HealthCheckRedis>5.0.2</HealthCheckRedis>
     <HealthCheckRabbitMQ>5.0.1</HealthCheckRabbitMQ>
     <HealthCheckEventStore>5.0.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>5.0.1</HealthCheckElasticsearch>
     <HealthCheckSolr>5.0.1</HealthCheckSolr>
     <HealthCheckOracle>5.0.1</HealthCheckOracle>
-    <HealthCheckNpgSql>5.0.1</HealthCheckNpgSql>
+    <HealthCheckNpgSql>5.0.2</HealthCheckNpgSql>
     <HealthCheckMongoDB>5.0.1</HealthCheckMongoDB>
     <HealthCheckMySql>5.0.1</HealthCheckMySql>
     <HealthCheckKafka>5.0.1</HealthCheckKafka>
     <HealthCheckSystem>5.0.1</HealthCheckSystem>
-    <HealthCheckNetwork>5.0.1</HealthCheckNetwork>
-    <HealthCheckDynamoDb>5.0.1</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>5.0.1</HealthCheckCosmosDb>
+    <HealthCheckNetwork>5.0.4</HealthCheckNetwork>
+    <HealthCheckDynamoDb>5.0.2</HealthCheckDynamoDb>
+    <HealthCheckCosmosDb>5.0.3</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>5.0.1</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>5.0.1</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>5.0.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>5.0.1</HealthCheckConsul>
     <HealthCheckUI>5.0.1</HealthCheckUI>
     <HealthCheckUICore>5.0.1</HealthCheckUICore>
@@ -134,10 +134,10 @@
     <HealthCheckPublisherDatadog>5.0.1</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>5.0.1</HealthCheckPublisherPrometheus>
     <HealthCheckPrometheusMetrics>5.0.1</HealthCheckPrometheusMetrics>
-    <HealthCheckAWSS3>5.0.1</HealthCheckAWSS3>
+    <HealthCheckAWSS3>5.0.2</HealthCheckAWSS3>
     <HealthCheckKeyVault>5.0.1</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>5.0.1</HealthCheckPublisherSeq>
-    <HealthCheckRavenDB>5.0.1</HealthCheckRavenDB>
+    <HealthCheckRavenDB>5.0.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>5.0.1</HealthCheckKubernetes>
     <HealthCheckSignalR>5.0.1</HealthCheckSignalR>
     <HealthCheckCloudFirestore>5.0.1</HealthCheckCloudFirestore>

@@ -21,7 +21,7 @@ namespace HealthChecks.Network
             {
                 foreach (var (host, port) in _options.ConfiguredHosts)
                 {
-                    using (var tcpClient = new TcpClient())
+                    using (var tcpClient = new TcpClient(_options.AddressFamily))
                     {
                         await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
 

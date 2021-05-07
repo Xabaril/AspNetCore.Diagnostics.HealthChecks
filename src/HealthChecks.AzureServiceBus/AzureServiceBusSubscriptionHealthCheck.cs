@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.ServiceBus.Management;
+﻿using Azure.Messaging.ServiceBus.Administration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
@@ -9,8 +9,9 @@ namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusSubscriptionHealthCheck : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ManagementClient> ManagementClientConnections =
-            new ConcurrentDictionary<string, ManagementClient>();
+        private static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> _managementClientConnections =
+            new ConcurrentDictionary<string, ServiceBusAdministrationClient>();
+
         private readonly string _connectionString;
         private readonly string _topicName;
         private readonly string _subscriptionName;
@@ -42,17 +43,17 @@ namespace HealthChecks.AzureServiceBus
             try
             {
                 var connectionKey = $"{_connectionString}_{_topicName}_{_subscriptionName}";
-                if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
+                if (!_managementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
-                    managementClient = new ManagementClient(_connectionString);
-                    if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
+                    managementClient = new ServiceBusAdministrationClient(_connectionString);
+                    if (!_managementClientConnections.TryAdd(connectionKey, managementClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description:
-                            "New management client connection can't be added into dictionary.");
+                            "New service bus administration client connection can't be added into dictionary.");
                     }
                 }
 
-                await managementClient.GetSubscriptionRuntimeInfoAsync(_topicName, _subscriptionName, cancellationToken);
+                _ = await managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

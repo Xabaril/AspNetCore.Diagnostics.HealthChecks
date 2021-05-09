@@ -36,7 +36,7 @@
     <MicrosoftAspNetCoreSignalRClient>5.0.1</MicrosoftAspNetCoreSignalRClient>
     <SystemDataSqlClient>4.8.2</SystemDataSqlClient>
     <NpgsqlEntityFrameworkCorePostgreSQL>5.0.1</NpgsqlEntityFrameworkCorePostgreSQL>
-    <MicrosoftDataSqlClient>2.1.1</MicrosoftDataSqlClient>
+    <MicrosoftDataSqlClient>2.1.2</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>5.0.1</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.12.0</MicrosoftAzureDocumentDbCore>
     <MicrosoftAzureCosmosDB>3.17.0</MicrosoftAzureCosmosDB>
@@ -98,7 +98,7 @@
 
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckIdSvr>5.0.1</HealthCheckIdSvr>
-    <HealthCheckSqlServer>5.0.2</HealthCheckSqlServer>
+    <HealthCheckSqlServer>5.0.3</HealthCheckSqlServer>
     <HealthCheckSqlite>5.0.1</HealthCheckSqlite>
     <HealthCheckUri>5.0.1</HealthCheckUri>
     <HealthCheckRedis>5.0.2</HealthCheckRedis>

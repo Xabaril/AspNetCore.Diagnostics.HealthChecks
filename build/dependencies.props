@@ -117,6 +117,7 @@
     <HealthCheckDynamoDb>5.0.2</HealthCheckDynamoDb>
     <HealthCheckCosmosDb>5.0.3</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
+    <HealthCheckNeo4j>5.0.1</HealthCheckNeo4j>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>5.0.1</HealthCheckHangfire>

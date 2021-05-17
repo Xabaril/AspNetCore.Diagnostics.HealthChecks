@@ -8,17 +8,29 @@ namespace HealthChecks.UI.K8s.Operator.Operator
     {
         public static string CreateAddress(V1Service service, HealthCheckResource resource)
         {
-            var defaultPort = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort);
-            var port = GetServicePort(service)?.Port ?? defaultPort;
-            var address = service.Spec.ClusterIP;
+            string address = string.Empty;
+
+            var port = GetServicePortValue(service) ?? Constants.DefaultPort;
+
+            switch (service.Spec.Type)
+            {
+                case ServiceType.LoadBalancer:
+                case ServiceType.NodePort:
+                    address = GetLoadBalancerAddress(service);
+                    break;
+                case ServiceType.ClusterIP:
+                    address = service.Spec.ClusterIP;
+                    break;
+                case ServiceType.ExternalName:
+                    address = service.Spec.ExternalName;
+                    break;
+            }
 
             string healthScheme = resource.Spec.HealthChecksScheme;
-
             if (service.Metadata.Annotations?.ContainsKey(Constants.HealthCheckSchemeAnnotation) ?? false)
             {
                 healthScheme = service.Metadata.Annotations[Constants.HealthCheckSchemeAnnotation];
             }
-
             if (healthScheme.IsEmpty())
             {
                 healthScheme = Constants.DefaultScheme;
@@ -26,11 +38,11 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
             if (address.Contains(":"))
             {
-                return $"{healthScheme}://[{address}]:{port}";
+                return $"{healthScheme}://[{address}]{port}";
             }
             else
             {
-                return $"{healthScheme}://{address}:{port}";
+                return $"{healthScheme}://{address}{port}";
             }
         }
 
@@ -65,6 +77,26 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             return service.Spec.ClusterIP;
         }
 
+        private static string GetServicePortValue(V1Service service)
+        {
+            int? port;
+            switch (service.Spec.Type)
+            {
+                case ServiceType.LoadBalancer:
+                case ServiceType.ClusterIP:
+                case ServiceType.ExternalName:
+                    port = GetServicePort(service)?.Port;
+                    break;
+                case ServiceType.NodePort:
+                    port = GetServicePort(service)?.NodePort;
+                    break;
+                default:
+                    port = null;
+                    break;
+            }
+
+            return port is null ? string.Empty : $":{port.Value}";
+        }
         private static V1ServicePort GetServicePort(V1Service service)
         {
             return service.Spec.Ports.FirstOrDefault();

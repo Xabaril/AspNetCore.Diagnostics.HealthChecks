@@ -3,7 +3,6 @@ using System;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using HealthChecks.Network.Extensions;
 
 namespace HealthChecks.Network
 {
@@ -23,14 +22,12 @@ namespace HealthChecks.Network
             {
                 foreach (var (host, timeout) in configuredHosts)
                 {
-                    using (var ping = new Ping())
-                    {
-                        var pingReply = await ping.SendPingAsync(host, timeout);
+                    using var ping = new Ping();
+                    var pingReply = await ping.SendPingAsync(host, timeout);
 
-                        if (pingReply.Status != IPStatus.Success)
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ping check for host {host} is failed with status reply:{pingReply.Status}");
-                        }
+                    if (pingReply.Status != IPStatus.Success)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ping check for host {host} is failed with status reply:{pingReply.Status}");
                     }
                 }
 

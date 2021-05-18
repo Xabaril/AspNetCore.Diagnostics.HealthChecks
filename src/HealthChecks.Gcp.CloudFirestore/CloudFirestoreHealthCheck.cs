@@ -10,27 +10,31 @@ namespace HealthChecks.Gcp.CloudFirestore
     public class CloudFirestoreHealthCheck : IHealthCheck
     {
         private readonly CloudFirestoreOptions _cloudFirestoreOptions;
+
         public CloudFirestoreHealthCheck(CloudFirestoreOptions cloudFirestoreOptions)
         {
-            _cloudFirestoreOptions = cloudFirestoreOptions ?? throw new ArgumentNullException(nameof(cloudFirestoreOptions));
+            _cloudFirestoreOptions =
+                cloudFirestoreOptions ?? throw new ArgumentNullException(nameof(cloudFirestoreOptions));
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             try
             {
                 var currentRootCollections = await GetRootCollectionsAsync(cancellationToken);
-                if (_cloudFirestoreOptions.RequiredCollections != null)
-                {
-                    var inexistantCollections = _cloudFirestoreOptions.RequiredCollections
-                        .Except(currentRootCollections);
+                if (_cloudFirestoreOptions.RequiredCollections == null) return HealthCheckResult.Healthy();
+                var existentCollections = _cloudFirestoreOptions.RequiredCollections
+                    .Except(currentRootCollections);
 
-                    if (inexistantCollections.Any())
-                    {
-                        return new HealthCheckResult(
-                            context.Registration.FailureStatus,
-                            description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'"))
-                        );
-                    }
+                var collections = existentCollections.ToList();
+                if (collections.Any())
+                {
+                    return new HealthCheckResult(
+                        context.Registration.FailureStatus,
+                        description: "Collections not found: " +
+                                     string.Join(", ", collections.Select(c => "'" + c + "'"))
+                    );
                 }
 
                 return HealthCheckResult.Healthy();
@@ -40,11 +44,13 @@ namespace HealthChecks.Gcp.CloudFirestore
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
+
         private async Task<List<string>> GetRootCollectionsAsync(CancellationToken cancellationToken)
         {
             var collections = new List<string>();
 
-            await foreach (var item in _cloudFirestoreOptions.FirestoreDatabase.ListRootCollectionsAsync())
+            await foreach (var item in _cloudFirestoreOptions.FirestoreDatabase.ListRootCollectionsAsync()
+                .WithCancellation(cancellationToken))
             {
                 collections.Add(item.Id);
             }

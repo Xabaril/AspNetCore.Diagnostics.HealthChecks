@@ -18,7 +18,7 @@ namespace HealthChecks.Network.Core
             private set
             {
                 _connectionType = value;
-                UseSSL = ConnectionType == ImapConnectionType.SSL_TLS ? true : false;
+                UseSSL = ConnectionType == ImapConnectionType.SSL_TLS;
             }
         }
 

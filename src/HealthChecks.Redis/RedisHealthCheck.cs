@@ -10,7 +10,7 @@ namespace HealthChecks.Redis
     public class RedisHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new ConcurrentDictionary<string, ConnectionMultiplexer>();
+        private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new();
         private readonly string _redisConnectionString;
 
         public RedisHealthCheck(string redisConnectionString)
@@ -47,7 +47,7 @@ namespace HealthChecks.Redis
                     {
                         var clusterInfo = await server.ExecuteAsync("CLUSTER", "INFO");
 
-                        if (clusterInfo is object && !clusterInfo.IsNull)
+                        if (clusterInfo is not null && !clusterInfo.IsNull)
                         {
                             if (!clusterInfo.ToString()
                                 .Contains("cluster_state:ok"))

@@ -3,7 +3,6 @@ using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace HealthChecks.Gremlin
 {
     public class GremlinOptions

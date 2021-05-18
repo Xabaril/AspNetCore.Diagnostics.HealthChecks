@@ -20,18 +20,16 @@ namespace HealthChecks.Sqlite
         {
             try
             {
-                using (var connection = new SqliteConnection(_connectionString))
+                using var connection = new SqliteConnection(_connectionString);
+                await connection.OpenAsync(cancellationToken);
+
+                using (var command = connection.CreateCommand())
                 {
-                    await connection.OpenAsync(cancellationToken);
-
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    command.CommandText = _sql;
+                    await command.ExecuteScalarAsync(cancellationToken);
                 }
+
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

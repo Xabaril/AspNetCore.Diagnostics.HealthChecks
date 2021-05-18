@@ -8,8 +8,8 @@ namespace HealthChecks.System
 {
     public class ProcessHealthCheck : IHealthCheck
     {
-        private string _processName;
-        private Func<Process[], bool> _predicate;
+        private readonly string _processName;
+        private readonly Func<Process[], bool> _predicate;
         public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
         {
             _processName = processName ?? throw new ArgumentNullException(nameof(processName));

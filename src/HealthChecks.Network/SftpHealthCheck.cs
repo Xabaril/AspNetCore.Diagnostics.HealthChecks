@@ -30,26 +30,20 @@ namespace HealthChecks.Network
                         connectionInfo.Timeout = context.Registration.Timeout;
                     }
 
-                    using (var sftpClient = new SftpClient(connectionInfo))
-                    {
-                        sftpClient.Connect();
+                    using var sftpClient = new SftpClient(connectionInfo);
+                    sftpClient.Connect();
 
-                        var connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
-                        if (connectionSuccess)
-                        {
-                            if (item.FileCreationOptions.createFile)
-                            {
-                                using (var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1))
-                                {
-                                    sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            return Task.FromResult(
-                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
-                        }
+                    var connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
+                    if (connectionSuccess)
+                    {
+                        if (!item.FileCreationOptions.createFile) continue;
+                        using var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1);
+                        sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
+                    }
+                    else
+                    {
+                        return Task.FromResult(
+                            new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
                     }
                 }
 

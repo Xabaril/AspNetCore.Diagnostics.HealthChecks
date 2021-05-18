@@ -67,7 +67,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     properties: new Dictionary<string, string>()
                     {
                         { nameof(Environment.MachineName), Environment.MachineName },
-                        { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                        { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
                         { HEALTHCHECK_NAME, reportEntry.Key }
                     },
                     metrics: new Dictionary<string, double>()
@@ -83,7 +83,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     properties: new Dictionary<string, string>()
                     {
                         { nameof(Environment.MachineName), Environment.MachineName },
-                        { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                        { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
                         { HEALTHCHECK_NAME, reportEntry.Key }
                     },
                     metrics: new Dictionary<string, double>()
@@ -99,7 +99,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 properties: new Dictionary<string, string>
                 {
                     { nameof(Environment.MachineName), Environment.MachineName },
-                    { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name }
+                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name }
                 },
                 metrics: new Dictionary<string, double>
                 {

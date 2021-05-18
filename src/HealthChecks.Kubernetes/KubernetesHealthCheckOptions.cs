@@ -14,10 +14,10 @@ namespace HealthChecks.Kubernetes
         public KubernetesHealthCheckOptions CheckDeployment(string name, Func<V1Deployment, bool> condition,
             string @namespace = DefaultNamespace)
         {
-            Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Deployment);
+            bool DelegateCheck(IKubernetesObject o) => condition(o as V1Deployment);
 
             var deploymentCheck =
-                KubernetesResourceCheck.Create<V1Deployment>(name, @namespace, delegateCheck);
+                KubernetesResourceCheck.Create<V1Deployment>(name, @namespace, DelegateCheck);
 
             Registrations.Add(deploymentCheck);
 
@@ -26,10 +26,10 @@ namespace HealthChecks.Kubernetes
         public KubernetesHealthCheckOptions CheckPod(string name, Func<V1Pod, bool> condition,
             string @namespace = DefaultNamespace)
         {
-            Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Pod);
+            bool DelegateCheck(IKubernetesObject o) => condition(o as V1Pod);
 
             var podCheck =
-                KubernetesResourceCheck.Create<V1Pod>(name, @namespace, delegateCheck);
+                KubernetesResourceCheck.Create<V1Pod>(name, @namespace, DelegateCheck);
 
             Registrations.Add(podCheck);
 
@@ -38,10 +38,10 @@ namespace HealthChecks.Kubernetes
         public KubernetesHealthCheckOptions CheckService(string name, Func<V1Service, bool> condition,
             string @namespace = DefaultNamespace)
         {
-            Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Service);
+            bool DelegateCheck(IKubernetesObject o) => condition(o as V1Service);
 
             var serviceCheck =
-                KubernetesResourceCheck.Create<V1Service>(name, @namespace, delegateCheck);
+                KubernetesResourceCheck.Create<V1Service>(name, @namespace, DelegateCheck);
 
             Registrations.Add(serviceCheck);
 

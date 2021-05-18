@@ -18,13 +18,13 @@ namespace HealthChecks.Network.Core
             private set
             {
                 _connectionType = value;
-                UseSSL = ConnectionType == SmtpConnectionType.SSL ? true : false;
+                UseSSL = ConnectionType == SmtpConnectionType.SSL;
             }
         }
         public SmtpConnection(SmtpConnectionOptions options)
             : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options;
             ConnectionType = _options.ConnectionType;
             ComputeDefaultValues();
         }

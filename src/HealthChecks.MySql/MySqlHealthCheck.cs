@@ -18,17 +18,15 @@ namespace HealthChecks.MySql
         {
             try
             {
-                using (var connection = new MySqlConnection(_connectionString))
+                await using var connection = new MySqlConnection(_connectionString);
+                await connection.OpenAsync(cancellationToken);
+
+                if (!await connection.PingAsync(cancellationToken))
                 {
-                    await connection.OpenAsync(cancellationToken);
-
-                    if (!await connection.PingAsync(cancellationToken))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
                 }
+
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

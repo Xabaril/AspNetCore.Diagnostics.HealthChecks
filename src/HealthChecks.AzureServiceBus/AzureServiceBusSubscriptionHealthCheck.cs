@@ -10,7 +10,7 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusSubscriptionHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> _managementClientConnections =
-            new ConcurrentDictionary<string, ServiceBusAdministrationClient>();
+            new();
 
         private readonly string _connectionString;
         private readonly string _topicName;

@@ -17,7 +17,7 @@ namespace HealthChecks.Network.Core
 
         protected TcpClient _tcpClient;
         protected Stream _stream;
-        protected Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
+        protected Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> _validateRemoteCertificate = (_, _, _, _) => true;
         private bool _disposed;
         private readonly bool _allowInvalidCertificates;
 

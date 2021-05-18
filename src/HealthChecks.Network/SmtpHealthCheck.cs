@@ -19,26 +19,22 @@ namespace HealthChecks.Network
         {
             try
             {
-                using (var smtpConnection = new SmtpConnection(_options))
+                using var smtpConnection = new SmtpConnection(_options);
+                if (await smtpConnection.ConnectAsync())
                 {
-                    if (await smtpConnection.ConnectAsync())
-                    {
-                        if (_options.AccountOptions.Login)
-                        {
-                            var (user, password) = _options.AccountOptions.Account;
+                    if (!_options.AccountOptions.Login) return HealthCheckResult.Healthy();
+                    var (user, password) = _options.AccountOptions.Account;
 
-                            if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken))
-                            {
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server{_options.Host}:{_options.Port} with configured credentials");
-                            }
-                        }
-
-                        return HealthCheckResult.Healthy();
-                    }
-                    else
+                    if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken))
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not connect to smtp server {_options.Host}:{_options.Port} - SSL : {_options.ConnectionType}");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server{_options.Host}:{_options.Port} with configured credentials");
                     }
+
+                    return HealthCheckResult.Healthy();
+                }
+                else
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not connect to smtp server {_options.Host}:{_options.Port} - SSL : {_options.ConnectionType}");
                 }
             }
             catch (Exception ex)

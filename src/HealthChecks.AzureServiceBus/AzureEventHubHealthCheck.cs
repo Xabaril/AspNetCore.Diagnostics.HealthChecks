@@ -13,7 +13,7 @@ namespace HealthChecks.AzureServiceBus
     {
         const string EntityPathSegment = "EntityPath=";
 
-        private static readonly ConcurrentDictionary<string, EventHubProducerClient> _eventHubConnections = new ConcurrentDictionary<string, EventHubProducerClient>();
+        private static readonly ConcurrentDictionary<string, EventHubProducerClient> _eventHubConnections = new();
         private readonly string _eventHubConnectionString;
 
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)

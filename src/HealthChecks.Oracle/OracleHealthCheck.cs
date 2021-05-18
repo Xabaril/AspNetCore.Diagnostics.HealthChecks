@@ -20,16 +20,14 @@ namespace HealthChecks.Oracle
         {
             try
             {
-                using (var connection = new OracleConnection(_connectionString))
+                using var connection = new OracleConnection(_connectionString);
+                await connection.OpenAsync(cancellationToken);
+                using (var command = connection.CreateCommand())
                 {
-                    await connection.OpenAsync(cancellationToken);
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-                    return HealthCheckResult.Healthy();
+                    command.CommandText = _sql;
+                    await command.ExecuteScalarAsync(cancellationToken);
                 }
+                return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {

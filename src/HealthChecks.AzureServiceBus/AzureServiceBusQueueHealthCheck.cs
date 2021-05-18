@@ -16,6 +16,8 @@ namespace HealthChecks.AzureServiceBus
             {
                 throw new ArgumentNullException(nameof(queueName));
             }
+
+            _queueName = queueName;
         }
 
         public AzureServiceBusQueueHealthCheck(string endPoint, string queueName, TokenCredential tokenCredential) :
@@ -43,7 +45,7 @@ namespace HealthChecks.AzureServiceBus
                     }
                 }
 
-                await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
+                _ = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
 
                 return HealthCheckResult.Healthy();
             }

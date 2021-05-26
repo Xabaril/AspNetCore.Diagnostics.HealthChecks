@@ -29,6 +29,7 @@ namespace HealthChecks.AzureServiceBus
             }
 
             _eventHubConnectionString = connectionString.Contains(EntityPathSegment) ? connectionString : $"{connectionString};{EntityPathSegment}{eventHubName}";
+            _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(_eventHubConnectionString));
         }
 
         public AzureEventHubHealthCheck(EventHubConnection connection)
@@ -39,10 +40,7 @@ namespace HealthChecks.AzureServiceBus
             }
 
             _eventHubConnectionString = $"{connection.FullyQualifiedNamespace};{EntityPathSegment}{connection.EventHubName}";
-            if(!_eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(connection)))
-            {
-                throw new InvalidOperationException("EventHubProducerClient can't be created using the specified connection.");
-            }
+            _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(connection));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

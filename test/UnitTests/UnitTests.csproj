@@ -45,6 +45,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Neo4j\HealthChecks.Neo4j.csproj" />    
     <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />

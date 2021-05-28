@@ -67,6 +67,7 @@ HealthChecks packages include health checks for:
 - CosmosDb
 - Solr
 - Redis
+- Neo4j
 - SendGrid
 - System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
@@ -107,6 +108,7 @@ Install-Package AspNetCore.HealthChecks.AzureServiceBus
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.Azure.IoTHub
 Install-Package AspNetCore.HealthChecks.MySql
+Install-Package AspNetCore.HealthChecks.Neo4j
 Install-Package AspNetCore.HealthChecks.DocumentDb
 Install-Package AspNetCore.HealthChecks.SqLite
 Install-Package AspNetCore.HealthChecks.RavenDB

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <Description>HealthChecks.Neo4j is the health check package for Neo4j.</Description>
+    <PackageTags>HealthCheck;Health;Neo4j</PackageTags>
+    <Version>$(HealthCheckNeo4j)</Version>
+    <LangVersion>latest</LangVersion>
+    <PackageId>AspNetCore.HealthChecks.Neo4j</PackageId>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Neo4j.Driver" Version="$(Neo4jDriver)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

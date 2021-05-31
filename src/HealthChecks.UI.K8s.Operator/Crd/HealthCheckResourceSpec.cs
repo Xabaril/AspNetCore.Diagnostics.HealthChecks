@@ -20,6 +20,8 @@ namespace HealthChecks.UI.K8s.Operator
         public string Image { get; set; }
         public string ImagePullPolicy { get; set; }
         public string StylesheetContent { get; set; }
+        public string StorageProvider { get; set; }
+        public string StorageConnection { get; set; }
         public List<NameValueObject> ServiceAnnotations { get; set; } = new List<NameValueObject>();
         public List<NameValueObject> DeploymentAnnotations { get; set; } = new List<NameValueObject>();
         public List<WebHookObject> Webhooks { get; set; } = new List<WebHookObject>();

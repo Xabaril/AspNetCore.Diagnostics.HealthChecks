@@ -83,7 +83,7 @@
     <MicrosoftAzureKeyVault>4.2.0-beta.3</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>5.1.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.27.3</MicrosoftAzureDevices>
-    <KubernetesClient>3.0.12</KubernetesClient>
+    <KubernetesClient>5.0.10</KubernetesClient>
     <SolrNetCore>1.0.19</SolrNetCore>
     <IBMMQDotnetClient>9.2.0.1</IBMMQDotnetClient>
     <PomeloEntityFrameworkCoreMySql>5.0.0-alpha.2</PomeloEntityFrameworkCoreMySql>

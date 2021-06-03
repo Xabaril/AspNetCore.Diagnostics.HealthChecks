@@ -1,6 +1,6 @@
 ﻿using HealthChecks.UI.Configuration;
-using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
+using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

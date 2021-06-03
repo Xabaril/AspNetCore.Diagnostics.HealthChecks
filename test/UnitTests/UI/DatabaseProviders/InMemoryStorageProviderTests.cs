@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using UnitTests.Base;

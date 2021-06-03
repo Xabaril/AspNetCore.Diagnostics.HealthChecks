@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-namespace HealthChecks.UI.Core.Data.Configuration
+namespace HealthChecks.UI.Data.Configuration
 {
     class HealthCheckExecutionEntryMap
         : IEntityTypeConfiguration<HealthCheckExecutionEntry>

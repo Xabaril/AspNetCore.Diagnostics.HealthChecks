@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace HealthChecks.UI.Core.Data.Configuration
+namespace HealthChecks.UI.Data.Configuration
 {
     public class HealthCheckFailureNotificationsMap
         : IEntityTypeConfiguration<HealthCheckFailureNotification>

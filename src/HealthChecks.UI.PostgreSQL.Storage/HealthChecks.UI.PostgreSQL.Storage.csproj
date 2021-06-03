@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+    <ProjectReference Include="..\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj" />
   </ItemGroup>
 
 </Project>

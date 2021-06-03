@@ -1,5 +1,5 @@
-﻿using HealthChecks.UI.Core.Data;
-using HealthChecks.UI.Core.Discovery.K8S.Extensions;
+﻿using HealthChecks.UI.Core.Discovery.K8S.Extensions;
+using HealthChecks.UI.Data;
 using k8s;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

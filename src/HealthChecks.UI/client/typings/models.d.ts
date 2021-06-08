@@ -6,6 +6,7 @@ export interface HttpRequest {
 }
 export interface Liveness {
   name: string;
+  baseUrl: string;
   onStateFrom: string;
   lastExecuted: string;
   status: string;

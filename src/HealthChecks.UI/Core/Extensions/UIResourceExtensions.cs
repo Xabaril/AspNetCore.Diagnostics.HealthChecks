@@ -26,7 +26,6 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, webhooksPath);
 
-
             var resourcePath = options.UseRelativeResourcesPath ? options.ResourcesPath.AsRelativeResource() : options.ResourcesPath;
 
             resource.Content = resource.Content
@@ -34,6 +33,9 @@ namespace HealthChecks.UI.Core
 
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET, options.AsideMenuOpened.ToString().ToLower());
+
+            resource.Content = resource.Content
+                .Replace(Keys.HEALTHCHECKSUI_MAIN_UI_PAGE_TITLE, options.PageTitle);
 
             return resource;
         }

@@ -45,17 +45,17 @@ namespace HealthChecks.AzureDigitalTwin
         {
             try
             {
-                if (!_digitalTwinClientConnections.TryGetValue(_clientId, out var managementClient))
+                if (!_digitalTwinClientConnections.TryGetValue(_clientId, out var digitalTwinClient))
                 {
-                    managementClient = new DigitalTwinsClient(new Uri(_hostName), _credentials);
+                    digitalTwinClient = new DigitalTwinsClient(new Uri(_hostName), _credentials);
 
-                    if (!_digitalTwinClientConnections.TryAdd(_clientId, managementClient))
+                    if (!_digitalTwinClientConnections.TryAdd(_clientId, digitalTwinClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "No digital twin administration client connection can't be added into dictionary.");
                     }
                 }
 
-                await managementClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken);
+                await digitalTwinClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken);
                 return HealthCheckResult.Healthy();
 
             }

@@ -59,11 +59,10 @@ public void ConfigureServices(IServiceCollection services)
 
 ## _Digital Twin Model Health Check_
 
-This health check receibe a list of models id, and check if the Digital Twin has all models match with them.
+This health check receives a list of models id, and check if the Digital Twin has all models match with them.
 If the health check detect an `out of sync` models return the data with those elements:
 
 - `unregistered`: those models that exist in model definition but not in the Digital Twin
-- `unmapped`: those models that exist in the Digital Twin but not in model definition
 
 ### Example Usage
 
@@ -109,8 +108,7 @@ azuredigitaltwinmodels:
 {
   data:
   {
-    unregistered: [ "my:dt:definition_b;1" ],
-    unmapped: [ "my:dt:definition_c;1" ]
+    unregistered: [ "my:dt:definition_b;1" ]
   },
   description: "The digital twin is out of sync with the models provided",
   duration: "00:00:17.6056085",

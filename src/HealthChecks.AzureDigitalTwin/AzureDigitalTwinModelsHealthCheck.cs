@@ -47,31 +47,29 @@ namespace HealthChecks.AzureDigitalTwin
         {
             try
             {
-                if (!_digitalTwinClientConnections.TryGetValue(_clientId, out var managementClient))
+                if (!_digitalTwinClientConnections.TryGetValue(_clientId, out var digitalTwinClient))
                 {
-                    managementClient = new DigitalTwinsClient(new Uri(_hostName), _credentials);
+                    digitalTwinClient = new DigitalTwinsClient(new Uri(_hostName), _credentials);
 
-                    if (!_digitalTwinClientConnections.TryAdd(_clientId, managementClient))
+                    if (!_digitalTwinClientConnections.TryAdd(_clientId, digitalTwinClient))
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: "No digital twin administration client connection can't be added into dictionary.");
                     }
                 }
 
-                var response = managementClient.GetModelsAsync(cancellationToken: cancellationToken);
+                var response = digitalTwinClient.GetModelsAsync(cancellationToken: cancellationToken);
                 var models = new List<DigitalTwinsModelData>();
                 await foreach (var model in response) models.Add(model);
 
                 var unregistered = _models.Where(x => !models.Any(m => m.Id == x));
-                var unmapped = models.Where(x => !_models.Contains(x.Id)).Select(x => x.Id);
-                return unregistered.Any() || unmapped.Any()
+                return unregistered.Any()
                     ? new HealthCheckResult(
                         context.Registration.FailureStatus,
                         "The digital twin is out of sync with the models provided",
                         null,
                         new Dictionary<string, object>()
                         {
-                            [nameof(unregistered)] = unregistered,
-                            [nameof(unmapped)] = unmapped
+                            [nameof(unregistered)] = unregistered
                         })
                     : HealthCheckResult.Healthy();
             }

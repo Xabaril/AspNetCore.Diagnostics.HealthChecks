@@ -59,7 +59,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ## _Digital Twin Model Health Check_
 
-This health check receives a list of models id, and check if the Digital Twin has all models match with them.
+This health check receives a list of models ids, and check if the Digital Twin has all models match with them.
 If the health check detect an `out of sync` models return the data with those elements:
 
 - `unregistered`: those models that exist in model definition but not in the Digital Twin

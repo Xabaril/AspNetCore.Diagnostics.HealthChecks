@@ -91,28 +91,25 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 {
                     var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
 
-                    if (services != null)
+                    foreach (var item in services)
                     {
-                        foreach (var item in services.Items)
+                        try
                         {
-                            try
-                            {
-                                var serviceAddress = _addressFactory.CreateAddress(item);
+                            var serviceAddress = _addressFactory.CreateAddress(item);
 
-                                if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
+                            if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
+                            {
+                                var statusCode = await CallClusterService(serviceAddress);
+                                if (IsValidHealthChecksStatusCode(statusCode))
                                 {
-                                    var statusCode = await CallClusterService(serviceAddress);
-                                    if (IsValidHealthChecksStatusCode(statusCode))
-                                    {
-                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
-                                        _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
-                                    }
+                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                    _logger.LogInformation("Registered discovered liveness service {ServiceName} in namespace {ServiceNamespace} with address {ServiceAddress}", item.Metadata.Name, item.Metadata.NamespaceProperty, serviceAddress);
                                 }
                             }
-                            catch (Exception)
-                            {
-                                _logger.LogError($"Error discovering service {item.Metadata.Name}. It might not be visible");
-                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Error discovering service {ServiceName} in namespace {ServiceNamespace}. It might not be visible", item.Metadata.Name, item.Metadata.NamespaceProperty);
                         }
                     }
                 }

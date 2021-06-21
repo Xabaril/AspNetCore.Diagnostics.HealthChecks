@@ -76,7 +76,7 @@
     <MicrosoftApplicationInsights>2.16.0</MicrosoftApplicationInsights>
     <PrometheusNet>4.0.0</PrometheusNet>
     <AWSSKDS3>3.7.0.10</AWSSKDS3>
-    <MicrosoftAzureKeyVault>4.2.0-beta.3</MicrosoftAzureKeyVault>
+    <MicrosoftAzureKeyVault>4.2.0</MicrosoftAzureKeyVault>
     <DogStatsDCSharpClient>5.1.0</DogStatsDCSharpClient>
     <MicrosoftAzureDevices>1.27.3</MicrosoftAzureDevices>
     <KubernetesClient>3.0.12</KubernetesClient>

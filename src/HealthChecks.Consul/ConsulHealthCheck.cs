@@ -31,7 +31,7 @@ namespace HealthChecks.Consul
                         .Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
                 }
                 var result = await client
-                    .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", cancellationToken);
+                    .GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
                 return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus, description: "Consul response was not a successful HTTP status code");
             }

@@ -21,7 +21,7 @@ namespace HealthChecks.IdSvr
             try
             {
                 var httpClient = _httpClientFactory();
-                var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, cancellationToken);
+                var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {

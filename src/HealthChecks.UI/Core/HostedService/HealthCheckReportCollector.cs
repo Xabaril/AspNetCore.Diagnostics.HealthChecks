@@ -98,7 +98,8 @@ namespace HealthChecks.UI.Core.HostedService
             {
                 var absoluteUri = GetEndpointUri(configuration);
 
-                var response = await _httpClient.GetAsync(absoluteUri);
+                var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
 
                 return await response.As<UIHealthReport>();
             }

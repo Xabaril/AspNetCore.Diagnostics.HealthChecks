@@ -135,7 +135,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         }
         async Task<HttpStatusCode> CallClusterService(string host)
         {
-            var response = await _clusterServiceClient.GetAsync(host);
+            var response = await _clusterServiceClient.GetAsync(host, HttpCompletionOption.ResponseHeadersRead);
             return response.StatusCode;
         }
         Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)

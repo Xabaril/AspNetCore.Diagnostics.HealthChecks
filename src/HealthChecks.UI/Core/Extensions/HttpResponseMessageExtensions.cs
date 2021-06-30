@@ -5,7 +5,7 @@ namespace System.Net.Http
 {
     public static class HttpResponseMessageExtensions
     {
-        public static async Task<TContent> As<TContent>(this HttpResponseMessage response)
+        public static async Task<TContent> As<TContent>(this HttpResponseMessage response, params JsonConverter[] converters)
         {
             if (response != null)
             {
@@ -14,7 +14,7 @@ namespace System.Net.Http
 
                 if (body != null)
                 {
-                    var content = JsonConvert.DeserializeObject<TContent>(body);
+                    var content = JsonConvert.DeserializeObject<TContent>(body, converters);
 
                     if (content != null)
                     {

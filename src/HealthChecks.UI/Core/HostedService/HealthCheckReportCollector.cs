@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly ServerAddressesService _serverAddressService;
         private readonly IEnumerable<IHealthCheckCollectorInterceptor> _interceptors;
         private static readonly Dictionary<int, Uri> endpointAddresses = new Dictionary<int, Uri>();
+        private readonly UIHealthReportConverter _healthReportConverter = new();
 
         public HealthCheckReportCollector(
             HealthChecksDb db,
@@ -100,7 +103,7 @@ namespace HealthChecks.UI.Core.HostedService
 
                 var response = await _httpClient.GetAsync(absoluteUri);
 
-                return await response.As<UIHealthReport>();
+                return await response.As<UIHealthReport>(_healthReportConverter);
             }
             catch (Exception exception)
             {
@@ -269,6 +272,30 @@ namespace HealthChecks.UI.Core.HostedService
             execution.OnStateFrom = lastExecutionTime;
             execution.LastExecuted = lastExecutionTime;
             execution.Status = healthReport.Status;
+        }
+
+        public class UIHealthReportConverter : JsonConverter
+        {
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+                => WriteJson(writer, value, serializer);
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                var json = JObject.Load(reader);
+                var healthReport = JsonConvert.DeserializeObject<UIHealthReport>(json.ToString());
+
+                // Account for invalid de-serializations.
+                if (!Enum.IsDefined(healthReport.Status) ||
+                    healthReport.Entries == null)
+                {
+                    return null;
+                }
+
+                return healthReport;
+            }
+
+            public override bool CanConvert(Type objectType)
+                => objectType == typeof(UIHealthReport);
         }
     }
 }

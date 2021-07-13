@@ -134,7 +134,7 @@
     <HealthCheckPublisherPrometheus>5.0.1</HealthCheckPublisherPrometheus>
     <HealthCheckPrometheusMetrics>5.0.1</HealthCheckPrometheusMetrics>
     <HealthCheckAWSS3>5.0.2</HealthCheckAWSS3>
-    <HealthCheckKeyVault>5.0.1</HealthCheckKeyVault>
+    <HealthCheckKeyVault>5.0.2</HealthCheckKeyVault>
     <HealthCheckPublisherSeq>5.0.1</HealthCheckPublisherSeq>
     <HealthCheckRavenDB>5.0.2</HealthCheckRavenDB>
     <HealthCheckKubernetes>5.0.1</HealthCheckKubernetes>

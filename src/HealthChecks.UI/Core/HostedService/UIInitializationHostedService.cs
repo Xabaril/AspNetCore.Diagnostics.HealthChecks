@@ -60,6 +60,7 @@ namespace HealthChecks.UI.Core.HostedService
                                 .Select(s => new HealthCheckConfiguration
                                 {
                                     Name = s.Name,
+                                    BaseUrl = s.BaseUrl,
                                     Uri = s.Uri
                                 });
 

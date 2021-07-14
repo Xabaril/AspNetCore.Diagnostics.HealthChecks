@@ -1,4 +1,5 @@
-﻿using Azure.Data.Tables;
+﻿using Azure;
+using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
@@ -48,17 +49,13 @@ namespace HealthChecks.CosmosDb
                         tableServiceClient = _connections[_connectionString];
                     }
                 }
+                var tableClient = tableServiceClient.GetTableClient(_tableName);
+                _ = await tableClient.GetAccessPoliciesAsync();
 
-                var tables = tableServiceClient.GetTablesAsync(cancellationToken: cancellationToken);
-
-                await foreach (var item in tables)
-                {
-                    if (item.TableName.Equals(_tableName, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        return HealthCheckResult.Healthy();
-                    }
-                }
-
+                return HealthCheckResult.Healthy();
+            }
+            catch (RequestFailedException ex) when (ex.Status == 404)
+            {
                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"Table with name {_tableName} does not exist.");
             }
             catch (Exception ex)

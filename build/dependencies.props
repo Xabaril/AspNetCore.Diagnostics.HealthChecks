@@ -39,7 +39,7 @@
     <MicrosoftDataSqlClient>2.1.2</MicrosoftDataSqlClient>
     <MicrosoftDataSqlite>5.0.1</MicrosoftDataSqlite>
     <MicrosoftAzureDocumentDbCore>2.12.0</MicrosoftAzureDocumentDbCore>
-    <MicrosoftAzureCosmosDB>3.17.0</MicrosoftAzureCosmosDB>
+    <MicrosoftAzureCosmosDB>3.20.0</MicrosoftAzureCosmosDB>
     <MicrosoftAzureEventHubs>4.1.0</MicrosoftAzureEventHubs>
     <MicrosoftAzureServiceBus>5.1.0</MicrosoftAzureServiceBus>
     <MicrosoftIdentityModelClientsActiveDirectory>5.2.8</MicrosoftIdentityModelClientsActiveDirectory>
@@ -64,10 +64,9 @@
     <MicrosoftAzureDocumentDbCore>2.6.0</MicrosoftAzureDocumentDbCore>
     <GoogleCloudFirestore>2.2.0</GoogleCloudFirestore>
     <HangfireCore>1.7.6</HangfireCore>
-    <AzureCosmos>4.0.0-preview3</AzureCosmos>
     <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
     <AzureStorageQueues>12.4.2</AzureStorageQueues>
-    <AzureDataTables>3.0.0-beta.5</AzureDataTables>
+    <AzureDataTables>12.1.0</AzureDataTables>
     <AWSSDKDynamoDBv2>3.7.0.10</AWSSDKDynamoDBv2>
     <GremlinNet>3.4.8</GremlinNet>
     <NewtonsoftJson>12.0.3</NewtonsoftJson>
@@ -114,7 +113,7 @@
     <HealthCheckSystem>5.0.1</HealthCheckSystem>
     <HealthCheckNetwork>5.0.4</HealthCheckNetwork>
     <HealthCheckDynamoDb>5.0.2</HealthCheckDynamoDb>
-    <HealthCheckCosmosDb>5.0.3</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>5.0.4</HealthCheckCosmosDb>
     <HealthCheckGremlin>5.0.1</HealthCheckGremlin>
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>

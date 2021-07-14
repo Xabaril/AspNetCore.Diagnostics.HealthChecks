@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Prometheus.Metrics\HealthChecks.Prometheus.Metrics.csproj" />

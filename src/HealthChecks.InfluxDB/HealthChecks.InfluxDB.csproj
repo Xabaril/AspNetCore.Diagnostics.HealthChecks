@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <PackageTags>HealthCheck;Health;InfluxDB</PackageTags>
+    <Description>HealthChecks.InfluxDB is the health check package for InfluxDB.</Description>
+    <Version>$(HealthCheckInfluxDB)</Version>
+    <PackageId>AspNetCore.HealthChecks.InfluxDB</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="InfluxDB.Client" Version="$(InfluxDBClient)" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+  </ItemGroup>
+</Project>

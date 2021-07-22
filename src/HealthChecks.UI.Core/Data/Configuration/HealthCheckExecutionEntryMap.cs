@@ -20,6 +20,9 @@ namespace HealthChecks.UI.Core.Data.Configuration
             builder.Property(le => le.Status)
                .IsRequired(true);
 
+            builder.Property(le => le.Data)
+                .IsRequired(false);
+
             builder.Property(le => le.Description)
                 .IsRequired(false);
 

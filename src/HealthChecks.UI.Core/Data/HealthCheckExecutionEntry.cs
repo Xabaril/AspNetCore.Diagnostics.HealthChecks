@@ -16,5 +16,7 @@ namespace HealthChecks.UI.Core.Data
         public TimeSpan Duration { get; set; }
 
         public List<string> Tags { get; set; }
+
+        public string Data { get; set; }
     }
 }

@@ -24,6 +24,7 @@ export interface Check {
   status: string;
   description: string;
   duration: string;
+  data: string;
   tags: string[];
 }
 

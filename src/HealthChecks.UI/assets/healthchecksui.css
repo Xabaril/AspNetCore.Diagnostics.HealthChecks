@@ -462,6 +462,12 @@ h4 {
     justify-content: center;
 }
 
+.hc-liveness-detail__data {
+    display: block;
+    padding: 0.5rem;
+    background-color: var(--midGrayColor);
+}
+
 .hc-liveness-detail .hc-status {
   font-size: 0.75rem;
 }

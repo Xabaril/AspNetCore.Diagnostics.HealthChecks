@@ -6,6 +6,7 @@ import {
 import 'react-vertical-timeline-component/style.min.css';
 import { ExecutionHistory, Check } from '../typings/models';
 import { Status } from './Status';
+import { LivenessData } from "./LivenessData";
 import moment from 'moment';
 
 interface LivenessDetailsProps {
@@ -22,6 +23,7 @@ const LivenessDetail: FunctionComponent<LivenessDetailsProps> = props => {
         <h2>{props.healthcheck.name}</h2>
         <Status status={props.healthcheck.status}></Status>
       </header>
+      <LivenessData healthcheck={props.healthcheck} />
       <div className="hc-liveness-detail__body">
         {props.executionHistory.length > 0 && (
           <VerticalTimeline className="hc-timeline">

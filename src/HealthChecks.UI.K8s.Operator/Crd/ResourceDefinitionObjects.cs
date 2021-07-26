@@ -6,6 +6,15 @@
         public string Value { get; set; }
     }
 
+    public class TolerationObject
+    {
+        public string Key { get; set; }
+        public string Operator { get; set; }
+        public string Value { get; set; }
+        public string Effect { get; set; }
+        public long? Seconds { get; set; }
+    }
+
     public class WebHookObject
     {
         public string Name { get; set; }

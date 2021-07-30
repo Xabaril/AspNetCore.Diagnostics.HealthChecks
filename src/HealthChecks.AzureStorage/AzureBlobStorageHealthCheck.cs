@@ -41,9 +41,9 @@ namespace HealthChecks.AzureStorage
             try
             {
                 var blobServiceClient = GetBlobServiceClient();
-                await foreach (var container in blobServiceClient.GetBlobContainersAsync(cancellationToken: cancellationToken))
+                await foreach (var page in blobServiceClient.GetBlobContainersAsync(cancellationToken: cancellationToken).AsPages(pageSizeHint: 1))
                 {
-                    // We are just validating that we have access to list the containers.
+                    break;
                 }
 
                 if (!string.IsNullOrEmpty(_containerName))

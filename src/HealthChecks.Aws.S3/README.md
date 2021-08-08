@@ -1,6 +1,6 @@
-# AWS S3 Health Check
+# Amazon S3 Health Check
 
-This health check verifies the ability to communicate with Amazon AWS S3. For more information about Amazon AWS S3 please check and .NET please check the [Github Project](https://github.com/aws/aws-sdk-net/)
+This health check verifies the ability to communicate with [Amazon S3](https://aws.amazon.com/s3/).
 
 ## Example Usage
 
@@ -11,7 +11,7 @@ With all of the following examples, you can additionally add the following param
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.
 
-### Basic
+### Load credentials from the application's default configuration
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -20,8 +20,40 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddS3(options =>
         {
-            BucketName = "bucket-name",
-            AccessKey = "access-key"
+            options.BucketName = "bucket-name";
+        });
+}
+```
+
+### Directly pass credentials
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services
+        .AddHealthChecks()
+        .AddS3(options =>
+        {
+            options.BucketName = "bucket-name";
+            options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
+        });
+}
+```
+
+### Specify region endpoint
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services
+        .AddHealthChecks()
+        .AddS3(options =>
+        {
+            options.BucketName = "bucket-name";
+            options.S3Config = new AmazonS3Config()
+            {
+                RegionEndpoint = RegionEndpoint.EUCentral1
+            };
         });
 }
 ```

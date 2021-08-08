@@ -34,11 +34,12 @@ namespace HealthChecks.DynamoDb
 #pragma warning restore CS0618 // Type or member is obsolete
                 }
 
-                var client = credentials != null
+                using var client = credentials != null
                     ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
                     : new AmazonDynamoDBClient(_options.RegionEndpoint);
 
                 _ = await client.ListTablesAsync(cancellationToken);
+
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

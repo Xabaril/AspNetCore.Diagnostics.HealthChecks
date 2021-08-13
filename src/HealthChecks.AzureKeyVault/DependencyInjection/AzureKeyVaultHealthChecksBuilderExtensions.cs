@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure Key Vault. Default behaviour is using Managed Service Identity, to use Client Secrets call UseClientSecrets in setup action
         /// </summary>
         /// <param name="keyVaultServiceUri">The AzureKeyVault service uri.</param>
-        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
+        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential, you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup"> Setup action to configure Azure Key Vault options.</param>    
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurekeyvault' will be used for the name.</param>
@@ -65,7 +65,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure Key Vault. Default behaviour is using Managed Service Identity, to use Client Secrets call UseClientSecrets in setup action
         /// </summary>
         /// <param name="keyVaultServiceUriFactory">A factory to build the key vault URI to use.</param>
-        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
+        /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential, you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup"> Setup action to configure Azure Key Vault options.</param>    
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurekeyvault' will be used for the name.</param>

@@ -10,6 +10,8 @@
 
         public string DiscoveryService { get; set; }
 
+        public string Group { get; set; }
+
         public void Deconstruct(out string uri, out string name)
         {
             uri = this.Uri;

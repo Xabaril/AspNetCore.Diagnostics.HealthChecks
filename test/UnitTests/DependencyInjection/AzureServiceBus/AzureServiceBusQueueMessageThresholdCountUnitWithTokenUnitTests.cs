@@ -27,7 +27,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azurequeuethreshold");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueMessageThresholdCountHealthCheck));
+            check.GetType().Should().Be(typeof(AzureServiceBusQueueMessageCountThresholdHealthCheck));
 
         }
 
@@ -46,7 +46,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azureservicebusqueuemessagethresholdcheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueMessageThresholdCountHealthCheck));
+            check.GetType().Should().Be(typeof(AzureServiceBusQueueMessageCountThresholdHealthCheck));
         }
 
         [Fact]

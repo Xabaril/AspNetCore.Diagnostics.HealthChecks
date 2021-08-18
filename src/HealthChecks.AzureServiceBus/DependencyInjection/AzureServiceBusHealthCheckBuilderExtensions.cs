@@ -140,7 +140,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUETHESHOLD_NAME,
-                sp => new AzureServiceBusQueueMessageThresholdCountHealthCheck(connectionString, queueName, degradedThresholdCount, unhealthyThresholdCount),
+                sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(connectionString, queueName, degradedThresholdCount, unhealthyThresholdCount),
                 failureStatus,
                 tags,
                 timeout));
@@ -169,7 +169,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUETHESHOLD_NAME,
-                sp => new AzureServiceBusQueueMessageThresholdCountHealthCheck(endpoint, queueName, tokenCredential, degradedThresholdCount, unhealthyThresholdCount),
+                sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(endpoint, queueName, tokenCredential, degradedThresholdCount, unhealthyThresholdCount),
                 failureStatus,
                 tags,
                 timeout));

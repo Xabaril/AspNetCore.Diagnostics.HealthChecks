@@ -6,13 +6,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusQueueMessageThresholdCountHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _queueName;
         private readonly int _degradedThreshold;
         private readonly int _unhealthyThreshold;
 
-        public AzureServiceBusQueueMessageThresholdCountHealthCheck(string connectionString, string queueName, int degradedThreshold = 5, int unhealthyThreshold = 10) 
+        public AzureServiceBusQueueMessageCountThresholdHealthCheck(string connectionString, string queueName, int degradedThreshold = 5, int unhealthyThreshold = 10) 
             : base(connectionString)
         {
             _queueName = queueName;
@@ -20,7 +20,7 @@ namespace HealthChecks.AzureServiceBus
             _unhealthyThreshold = unhealthyThreshold;
         }
 
-        public AzureServiceBusQueueMessageThresholdCountHealthCheck(string endpoint, string queueName, TokenCredential tokenCredential,  int degradedThreshold = 5, int unhealthyThreshold = 10) 
+        public AzureServiceBusQueueMessageCountThresholdHealthCheck(string endpoint, string queueName, TokenCredential tokenCredential,  int degradedThreshold = 5, int unhealthyThreshold = 10) 
             : base(endpoint, tokenCredential)
         {
             _queueName = queueName;

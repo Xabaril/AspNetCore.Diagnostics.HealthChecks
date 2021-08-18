@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         const string AZUREQUEUE_NAME = "azurequeue";
         const string AZURETOPIC_NAME = "azuretopic";
         const string AZUREQUEUETHESHOLD_NAME = "azurequeuethreshold";
+        const string AZUREDEADLETTERQUEUETHESHOLD_NAME = "azuredeadletterqueuethreshold";
         const string AZURESUBSCRIPTION_NAME = "azuresubscription";
 
         /// <summary>
@@ -170,6 +171,63 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUETHESHOLD_NAME,
                 sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(endpoint, queueName, tokenCredential, degradedThresholdCount, unhealthyThresholdCount),
+                failureStatus,
+                tags,
+                timeout));
+        }
+        
+        /// <summary>
+        /// Add a health check for specified Azure Service Bus Dead letter Queue message threshold
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionString">The azure service bus connection string to be used.</param>
+        /// <param name="queueName">The name of the queue to check.</param>
+        /// <param name="degradedThresholdCount">Number of <see cref="Azure.Messaging.ServiceBus.Administration.ActiveMessageCount"/> in the queue before message health check returned <see cref="HealthStatus.Degraded"/></param>
+        /// <param name="unhealthyThresholdCount">Number of <see cref="Azure.Messaging.ServiceBus.Administration.ActiveMessageCount"/> in the queue before message health check returned <see cref="HealthStatus.Unhealthy"/></param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="configuringMessage">Message configuration Action, usually used when queue is partitioned or with duplication detection feature enabled Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureServiceBusDeadLetterQueueMessageCountThreshold(this IHealthChecksBuilder builder, string connectionString, string queueName, int degradedThresholdCount = 5, int unhealthyThresholdCount = 10, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            return builder.Add(new HealthCheckRegistration(
+                name ?? AZUREDEADLETTERQUEUETHESHOLD_NAME,
+                sp => new AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck(connectionString, queueName, degradedThresholdCount, unhealthyThresholdCount),
+                failureStatus,
+                tags,
+                timeout));
+        }
+        
+        /// <summary>
+        /// Add a health check for specified Azure Service Bus Dead letter Queue message threshold
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+        /// <param name="queueName">The name of the queue to check.</param>
+        /// <param name="tokenCredential">The token credential for auth>
+        /// <param name="degradedThresholdCount">Number of <see cref="Azure.Messaging.ServiceBus.Administration.ActiveMessageCount"/> in the queue before message health check returned <see cref="HealthStatus.Degraded"/></param>
+        /// <param name="unhealthyThresholdCount">Number of <see cref="Azure.Messaging.ServiceBus.Administration.ActiveMessageCount"/> in the queue before message health check returned <see cref="HealthStatus.Unhealthy"/></param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="configuringMessage">Message configuration Action, usually used when queue is partitioned or with duplication detection feature enabled Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureServiceBusDeadLetterQueueMessageCountThreshold(this IHealthChecksBuilder builder, string endpoint, string queueName,TokenCredential tokenCredential, int degradedThresholdCount = 5, int unhealthyThresholdCount = 10, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            return builder.Add(new HealthCheckRegistration(
+                name ?? AZUREDEADLETTERQUEUETHESHOLD_NAME,
+                sp => new AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck(endpoint, queueName, tokenCredential, degradedThresholdCount, unhealthyThresholdCount),
                 failureStatus,
                 tags,
                 timeout));

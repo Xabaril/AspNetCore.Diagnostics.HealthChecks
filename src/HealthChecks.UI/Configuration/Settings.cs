@@ -21,12 +21,13 @@ namespace HealthChecks.UI.Configuration
         internal Action<IServiceProvider, HttpClient> WebHooksEndpointHttpClientConfig { get; private set; }
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
-        public Settings AddHealthCheckEndpoint(string name, string uri)
+        public Settings AddHealthCheckEndpoint(string name, string uri, string group = default)
         {
             HealthChecks.Add(new HealthCheckSetting
             {
                 Name = name,
-                Uri = uri
+                Uri = uri,
+                Group = group
             });
 
             return this;
@@ -123,6 +124,7 @@ namespace HealthChecks.UI.Configuration
     {
         public string Name { get; set; }
         public string Uri { get; set; }
+        public string Group { get; set; }
     }
 
     public class WebHookNotification

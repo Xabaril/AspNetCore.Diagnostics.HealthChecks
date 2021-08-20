@@ -60,7 +60,8 @@ namespace HealthChecks.UI.Core.HostedService
                                 .Select(s => new HealthCheckConfiguration
                                 {
                                     Name = s.Name,
-                                    Uri = s.Uri
+                                    Uri = s.Uri,
+                                    Group = s.Group,
                                 });
 
             bool isInitialized = await context.Configurations.AnyAsync();

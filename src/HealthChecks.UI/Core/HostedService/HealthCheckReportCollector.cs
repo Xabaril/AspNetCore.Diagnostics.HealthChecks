@@ -226,6 +226,7 @@ namespace HealthChecks.UI.Core.HostedService
                     Entries = healthReport.ToExecutionEntries(),
                     Status = healthReport.Status,
                     Name = configuration.Name,
+                    Group = configuration.Group,
                     Uri = configuration.Uri,
                     DiscoveryService = configuration.DiscoveryService
                 };

@@ -43,7 +43,7 @@ namespace HealthChecks.UI.Middleware
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 
-                foreach (var item in healthChecks.OrderBy(h => h.Id))
+                foreach (var item in healthChecks.OrderBy(h => h.Group).ThenBy(h => h.Name))
                 {
 
                     var execution = await db.Executions

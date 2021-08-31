@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HealthChecks.UI.Core;
 
 namespace HealthChecks.UI.Middleware
 {
@@ -41,30 +42,60 @@ namespace HealthChecks.UI.Middleware
                 var healthChecks = await db.Configurations
                       .ToListAsync();
 
-                var healthChecksExecutions = new List<HealthCheckExecution>();
-
-                foreach (var item in healthChecks.OrderBy(h => h.Group).ThenBy(h => h.Name))
+                var groupedHealthCheckExecutions = new List<GroupedHealthCheckExecutions>();
+                foreach (var group in healthChecks.GroupBy(check => check.Group).OrderBy(group => group.Key))
                 {
+                    var healthCheckExecutions = new List<HealthCheckExecution>(group.Count());
 
-                    var execution = await db.Executions
-                                .Include(le => le.Entries)
-                                .Where(le => le.Name == item.Name)
-                                .AsNoTracking()
-                                .SingleOrDefaultAsync();
-
-                    if (execution != null)
+                    var lastStateChanged = new DateTime?();
+                    var lastExecution = new DateTime?();
+                    var status = UIHealthStatus.Healthy;
+                    foreach (var item in group.OrderBy(item => item.Name))
                     {
-                        execution.History = await db.HealthCheckExecutionHistories
-                            .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
-                            .OrderByDescending(eh => eh.On)
-                            .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                             .ToListAsync();
+                        var execution = await db.Executions
+                            .Include(le => le.Entries)
+                            .Where(le => le.Name == item.Name && le.Group == item.Group)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+                        if (execution != null)
+                        {
+                            execution.History = await db.HealthCheckExecutionHistories
+                                .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
+                                .OrderByDescending(eh => eh.On)
+                                .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
+                                .ToListAsync();
 
-                        healthChecksExecutions.Add(execution);
+                            if (!lastStateChanged.HasValue || lastStateChanged.Value < execution.OnStateFrom)
+                                lastStateChanged = execution.OnStateFrom;
+
+                            if (!lastExecution.HasValue || lastExecution.Value < execution.LastExecuted)
+                                lastExecution = execution.LastExecuted;
+
+                            switch (status)
+                            {
+                                case UIHealthStatus.Healthy when execution.Status != UIHealthStatus.Healthy:
+                                case UIHealthStatus.Degraded when execution.Status == UIHealthStatus.Unhealthy:
+                                    status = execution.Status;
+                                    break;
+                            }
+
+                            healthCheckExecutions.Add(execution);
+                        }
                     }
-                }
 
-                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
+                    var groupedHealthCheckExecution = new GroupedHealthCheckExecutions
+                    {
+                        Name = group.Key,
+                        LastExecuted = lastExecution,
+                        OnStateFrom = lastStateChanged,
+                        Status = status,
+                        Executions = healthCheckExecutions
+                    };
+
+                    groupedHealthCheckExecutions.Add(groupedHealthCheckExecution);
+                }
+                
+                var responseContent = JsonConvert.SerializeObject(groupedHealthCheckExecutions, _jsonSerializationSettings);
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
 
                 await context.Response.WriteAsync(responseContent);

@@ -16,6 +16,14 @@ export interface Liveness {
   group: string;
 }
 
+export interface CustomGrouping {
+  executions: Liveness[];
+  lastExecuted: string;
+  name: string;
+  onStateFrom: string;
+  status: string;
+}
+
 export interface LivenessResult {
   checks: Array<Check> | string;
 }

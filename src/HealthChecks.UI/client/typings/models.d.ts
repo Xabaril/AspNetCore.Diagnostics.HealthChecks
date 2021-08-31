@@ -13,6 +13,7 @@ export interface Liveness {
   discoveryService: string;
   entries: Array<Check>;
   history: Array<ExecutionHistory>;
+  group: string;
 }
 
 export interface LivenessResult {

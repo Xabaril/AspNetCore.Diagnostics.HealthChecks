@@ -40,6 +40,11 @@ namespace HealthChecks.Uris
 
                     var requestMessage = new HttpRequestMessage(method, item.Uri);
 
+#if NET5_0_OR_GREATER
+                    requestMessage.Version = httpClient.DefaultRequestVersion;
+                    requestMessage.VersionPolicy = httpClient.DefaultVersionPolicy;
+#endif
+
                     foreach (var (Name, Value) in item.Headers)
                     {
                         requestMessage.Headers.Add(Name, Value);

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import moment from 'moment';
-import { Liveness, UIApiSettings } from '../typings/models';
+import { Liveness, CustomGrouping, UIApiSettings } from '../typings/models';
 import { LivenessTable } from '../components/LivenessTable';
 import { useQuery } from 'react-query';
 import { getHealthChecks } from '../api/fetchers';
@@ -11,7 +11,7 @@ import { AlertPanel } from '../components/AlertPanel';
 interface LivenessState {
     error: Nullable<string>;
     pollingIntervalSetting: string | number;
-    livenessData: Array<Liveness>;
+    livenessData: Array<CustomGrouping>;
 }
 
 interface LivenessProps {
@@ -45,6 +45,10 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
             tableElement.getElementsByClassName('hc-checks-table-container')
         ).forEach((el: any) => el.classList.remove('is-hidden'));
 
+        Array.from(
+            tableElement.getElementsByClassName('hc-table__row')
+        ).forEach((el: any) => el.classList.remove('is-hidden'));
+
         Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
             (el: any) => {
                 el.innerHTML = 'remove';
@@ -57,6 +61,10 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
         var tableElement = tableContainerRef.current!;
         Array.from(
             tableElement.getElementsByClassName('hc-checks-table-container')
+        ).forEach((el: any) => el.classList.add('is-hidden'));
+
+        Array.from(
+            tableElement.getElementsByClassName('hc-table__row')
         ).forEach((el: any) => el.classList.add('is-hidden'));
 
         Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(

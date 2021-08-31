@@ -254,6 +254,21 @@ h4 {
   background-image: var(--bgImageLigthen);
 }
 
+.groupRow {
+  cursor: pointer;
+  background-color: var(--bgTable);
+  border-bottom: 4px solid var(--bgMain);
+}
+
+.groupRow td {
+  padding: 0.5rem;
+}
+
+.groupRow:hover {
+  background-color: var(--primaryColor);
+  background-image: var(--bgImageLigthen);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -277,6 +292,11 @@ h4 {
 }
 
 .hc-checks-table-container.is-hidden {
+  display: none;
+  animation: fadeOut 1s;
+}
+
+.hc-table__row.is-hidden {
   display: none;
   animation: fadeOut 1s;
 }

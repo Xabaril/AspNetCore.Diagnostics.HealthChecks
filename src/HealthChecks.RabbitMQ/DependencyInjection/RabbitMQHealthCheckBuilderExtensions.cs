@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Uri rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             builder.Services
@@ -76,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default,
             HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -119,7 +119,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -146,7 +146,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
             string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {

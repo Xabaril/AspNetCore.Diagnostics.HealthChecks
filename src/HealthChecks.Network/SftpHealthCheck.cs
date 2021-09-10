@@ -25,10 +25,10 @@ namespace HealthChecks.Network
                 {
                     var connectionInfo = new ConnectionInfo(item.Host, item.Port, item.UserName, item.AuthenticationMethods.ToArray());
 
-                    if(context.Registration.Timeout > TimeSpan.Zero)
-                    {                        
+                    if (context.Registration.Timeout > TimeSpan.Zero)
+                    {
                         connectionInfo.Timeout = context.Registration.Timeout;
-                    }                    
+                    }
 
                     using (var sftpClient = new SftpClient(connectionInfo))
                     {

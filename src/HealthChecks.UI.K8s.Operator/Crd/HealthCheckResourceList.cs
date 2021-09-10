@@ -2,5 +2,5 @@
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    public class HealthCheckResourceList : CustomResourceList<HealthCheckResource> { }    
+    public class HealthCheckResourceList : CustomResourceList<HealthCheckResource> { }
 }

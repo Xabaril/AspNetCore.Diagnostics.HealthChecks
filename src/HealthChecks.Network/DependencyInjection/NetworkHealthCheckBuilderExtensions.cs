@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -11,9 +12,11 @@ namespace Microsoft.Extensions.DependencyInjection
         const string SFTP_NAME = "sftp";
         const string FTP_NAME = "ftp";
         const string DNS_NAME = "dns";
+        const string DNS_COUNT_NAME = "dns-host-count";
         const string IMAP_NAME = "imap";
         const string SMTP_NAME = "smtp";
         const string TCP_NAME = "tcp";
+        const string SSL_NAME = "ssl";
 
         /// <summary>
         /// Add a health check for network ping.
@@ -27,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddPingHealthCheck(this IHealthChecksBuilder builder,
             Action<PingHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
@@ -55,7 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddSftpHealthCheck(this IHealthChecksBuilder builder,
             Action<SftpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
@@ -83,7 +86,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddFtpHealthCheck(this IHealthChecksBuilder builder,
             Action<FtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
@@ -129,6 +132,37 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
+        /// Add a Healthcheck to resolve a hostname and verify the number of resolved address is within the configured minimum and maximum
+        /// </summary>   
+        /// <remarks>
+        /// Add host configurations using setup.ResolveHost(host).To(registrations);
+        /// </remarks>     
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">Action to add hosts and configure minimum and maximum resolved addresses</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'dns' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddDnsResolveHostCountHealthCheck(this IHealthChecksBuilder builder,
+            Action<DnsResolveCountOptions> setup, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default)
+        {
+            var options = new DnsResolveCountOptions();
+            setup?.Invoke(options);
+
+            if (!options.HostRegistrations.Any()) throw new ArgumentNullException(nameof(options), "No dns hosts have been registered");
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? DNS_COUNT_NAME,
+                sp => new DnsResolveHostCountHealthCheck(options),
+                failureStatus,
+                tags));
+        }
+
+        /// <summary>
         /// Add a health check for network IMAP connections.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
@@ -140,7 +174,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddImapHealthCheck(this IHealthChecksBuilder builder,
             Action<ImapHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = null)
@@ -168,7 +202,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddSmtpHealthCheck(this IHealthChecksBuilder builder,
             Action<SmtpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
@@ -196,7 +230,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddTcpHealthCheck(this IHealthChecksBuilder builder,
             Action<TcpHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
             IEnumerable<string> tags = default, TimeSpan? timeout = default)
@@ -207,6 +241,34 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                 name ?? TCP_NAME,
                 sp => new TcpHealthCheck(options),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        /// <summary>
+        /// Add a health check for SSL connection and validate the certificate.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">The action to configure Ssl connection parameters.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'tcp' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddSslHealthCheck(this IHealthChecksBuilder builder,
+            Action<SslHealthCheckOptions> setup, string name = default, HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            var options = new SslHealthCheckOptions();
+            setup?.Invoke(options);
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? SSL_NAME,
+                sp => new SslHealthCheck(options),
                 failureStatus,
                 tags,
                 timeout));

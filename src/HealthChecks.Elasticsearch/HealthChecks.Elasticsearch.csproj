@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <Description>HealthChecks.Elasticsearch is the health check package for Elasticsearch.</Description>
     <PackageTags>HealthCheck;Health;Elasticsearch</PackageTags>
     <Version>$(HealthCheckElasticsearch)</Version>

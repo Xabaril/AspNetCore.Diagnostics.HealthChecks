@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Health;Uri;Url;Uris;Urls</PackageTags>
     <Description>HealthChecks.Uris is a simple health check package for Uri groups.</Description>
     <Version>$(HealthCheckUri)</Version>

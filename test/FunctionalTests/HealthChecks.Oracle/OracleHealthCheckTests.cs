@@ -87,7 +87,7 @@ namespace FunctionalTests.HealthChecks.Oracle
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddOracle(connectionString,"SELECT 1 FROM InvalidDb", tags: new string[] { "oracle" });
+                    .AddOracle(connectionString, "SELECT 1 FROM InvalidDb", tags: new string[] { "oracle" });
                 })
                 .Configure(app =>
                 {

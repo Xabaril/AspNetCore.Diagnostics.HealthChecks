@@ -3,6 +3,7 @@ using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,12 +25,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
-        public static IHealthChecksBuilder AddAzureKeyVault(this IHealthChecksBuilder builder, Uri keyVaultServiceUri, TokenCredential credential, Action<AzureKeyVaultOptions> setup,
-            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureKeyVault(this IHealthChecksBuilder builder, Uri keyVaultServiceUri, TokenCredential credential, Action<AzureKeyVaultOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             var options = new AzureKeyVaultOptions();
             setup?.Invoke(options);
+
+            if (keyVaultServiceUri == null) throw new ArgumentNullException(nameof(keyVaultServiceUri));
+            if (credential == null) throw new ArgumentNullException(nameof(credential));
 
             return builder.Add(new HealthCheckRegistration(
                name ?? KEYVAULT_NAME,

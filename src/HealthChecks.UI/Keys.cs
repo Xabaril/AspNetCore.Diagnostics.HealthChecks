@@ -10,7 +10,7 @@
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_PATH_ANNOTATION = "HealthChecksPath";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_PORT_ANNOTATION = "HealthChecksPort";
         internal const string HEALTHCHECKS_DEFAULT_DISCOVERY_SCHEME_ANNOTATION = "HealthChecksScheme";
-        internal const string HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY = "HealthChecksUI:KubernetesDiscoveryService";        
+        internal const string HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY = "HealthChecksUI:KubernetesDiscoveryService";
         internal const string HEALTHCHECKSUI_MAIN_UI_RESOURCE = "index.html";
         internal const string HEALTHCHECKSUI_MAIN_UI_API_TARGET = "#apiPath#";
         internal const string HEALTHCHECKSUI_WEBHOOKS_API_TARGET = "#webhookPath#";

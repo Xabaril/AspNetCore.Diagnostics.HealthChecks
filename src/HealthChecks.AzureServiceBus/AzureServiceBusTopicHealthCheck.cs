@@ -1,52 +1,53 @@
-﻿using Microsoft.Azure.ServiceBus.Management;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusTopicHealthCheck
-        : IHealthCheck
+        : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ManagementClient> _managementClients = new ConcurrentDictionary<string, ManagementClient>();
-
-        private readonly string _connectionString;
         private readonly string _topicName;
 
-        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
+        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName) : base(connectionString)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
             if (string.IsNullOrEmpty(topicName))
             {
                 throw new ArgumentNullException(nameof(topicName));
             }
 
-
-            _connectionString = connectionString;
             _topicName = topicName;
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+
+        public AzureServiceBusTopicHealthCheck(string endpoint, string topicName, TokenCredential tokenCredential) : base(endpoint, tokenCredential)
+        {
+            if (string.IsNullOrEmpty(topicName))
+            {
+                throw new ArgumentNullException(nameof(topicName));
+            }
+
+            _topicName = topicName;
+        }
+
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                var connectionKey = $"{_connectionString}_{_topicName}";
-                if (!_managementClients.TryGetValue(connectionKey, out var managementClient))
+                var connectionKey = $"{ConnectionKey}_{_topicName}";
+                if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
                 {
-                    managementClient = new ManagementClient(_connectionString);
-
-                    if (!_managementClients.TryAdd(connectionKey, managementClient))
+                    managementClient = CreateManagementClient();
+                    if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New Management Client can't be added into dictionary.");
+                        return new HealthCheckResult(context.Registration.FailureStatus,
+                            "New service bus administration client can't be added into dictionary.");
                     }
                 }
 
-                await managementClient.GetTopicRuntimeInfoAsync(_topicName);
+                _ = await managementClient.GetTopicRuntimePropertiesAsync(_topicName, cancellationToken);
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
@@ -54,5 +55,7 @@ namespace HealthChecks.AzureServiceBus
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
+
+        protected override string ConnectionKey => $"{Prefix}_{_topicName}";
     }
 }

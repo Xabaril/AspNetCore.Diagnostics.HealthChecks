@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.Network
 {
-    public class DnsResolveHealthCheck 
+    public class DnsResolveHealthCheck
         : IHealthCheck
     {
         private readonly DnsResolveOptions _options;

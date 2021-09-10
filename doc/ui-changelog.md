@@ -1,3 +1,16 @@
+**5.0.0**
+
+- HealthChecks packages, UI, UI Docker Image and K8s Operator updated to framework .NET 5.0
+- Updated UI Docker Image Azure App Configuration legacy package and added environment variable for cache expiration (AAC_CacheExpiration)
+- Operator fixes (Fix regression and add reconnection on watch error)
+- Bumped third party package versions (more to come in the next release)
+- Added docker compose and operator samples
+- Removed OIDC integration inside the UI (A sample about how to protect the UI with OIDC has been added to samples folder)
+
+**3.1.3**
+
+- Fixed ui-settings middleware not respecting relative paths #642 (Thanks to @bogataj)
+
 **3.1.2**
 
 - Updated React and other package.json library versions

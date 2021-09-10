@@ -3,6 +3,7 @@ using HealthChecks.CosmosDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddCosmosDb(
             this IHealthChecksBuilder builder,
             string connectionString,
@@ -36,7 +37,41 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? COSMOS_NAME,
-               sp => new CosmosDbHealthCheck(connectionString, database),
+               sp => new CosmosDbHealthCheck(connectionString, database, Enumerable.Empty<string>()),
+               failureStatus,
+               tags,
+               timeout));
+        }
+
+
+        /// <summary>
+        /// Add a health check for Azure CosmosDb database and specified collections.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionString">CosmosDb full connection string.</param>
+        /// <param name="database">Database to check for existence.</param>
+        /// <param name="collections">Cosmos DB collections to check for existence.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddCosmosDbCollection(
+            this IHealthChecksBuilder builder,
+            string connectionString,
+            string database = default,
+            IEnumerable<string> collections = default,
+            string name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string> tags = default,
+            TimeSpan? timeout = default)
+        {
+            return builder.Add(new HealthCheckRegistration(
+               name ?? COSMOS_NAME,
+               sp => new CosmosDbHealthCheck(connectionString, database, collections),
                failureStatus,
                tags,
                timeout));
@@ -55,7 +90,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddAzureTable(
             this IHealthChecksBuilder builder,
             string connectionString,
@@ -87,7 +122,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns></param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddAzureTable(
             this IHealthChecksBuilder builder,
             Uri endpoint,
@@ -100,7 +135,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? TABLE_NAME,
-               sp => new TableServiceHealthCheck(endpoint,credentials,tableName),
+               sp => new TableServiceHealthCheck(endpoint, credentials, tableName),
                failureStatus,
                tags,
                timeout));

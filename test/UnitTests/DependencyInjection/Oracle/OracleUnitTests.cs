@@ -33,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Oracle
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddOracle("connectionstring",name:"my-oracle-1");
+                .AddOracle("connectionstring", name: "my-oracle-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

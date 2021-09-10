@@ -31,7 +31,7 @@ namespace HealthChecks.Kubernetes
                 }
 
                 var results = await Task.WhenAll(checks).PreserveMultipleExceptions();
-                
+
                 if (results.Any(r => !r.result))
                 {
                     var resultsNotMeetingConditions = results.Where(r => !r.result).Select(r => r.name);
@@ -43,7 +43,7 @@ namespace HealthChecks.Kubernetes
             }
             catch (AggregateException ex)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, string.Join(",", ex.InnerExceptions.Select(s=> s.Message)));
+                return new HealthCheckResult(context.Registration.FailureStatus, string.Join(",", ex.InnerExceptions.Select(s => s.Message)));
             }
             catch (Exception ex)
             {

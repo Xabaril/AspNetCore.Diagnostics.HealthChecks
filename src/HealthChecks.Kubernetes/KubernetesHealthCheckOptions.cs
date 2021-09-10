@@ -15,7 +15,7 @@ namespace HealthChecks.Kubernetes
             string @namespace = DefaultNamespace)
         {
             Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Deployment);
-            
+
             var deploymentCheck =
                 KubernetesResourceCheck.Create<V1Deployment>(name, @namespace, delegateCheck);
 
@@ -27,7 +27,7 @@ namespace HealthChecks.Kubernetes
             string @namespace = DefaultNamespace)
         {
             Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Pod);
-            
+
             var podCheck =
                 KubernetesResourceCheck.Create<V1Pod>(name, @namespace, delegateCheck);
 
@@ -39,7 +39,7 @@ namespace HealthChecks.Kubernetes
             string @namespace = DefaultNamespace)
         {
             Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Service);
-            
+
             var serviceCheck =
                 KubernetesResourceCheck.Create<V1Service>(name, @namespace, delegateCheck);
 

@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.Diagnostics.HealthChecks
                     {
                         Name = item.Key,
                         Status = item.Value.Status,
-                        Description  = item.Value.Description,
+                        Description = item.Value.Description,
                         Duration = item.Value.Duration,
                         Tags = item.Value.Tags?.ToList() ?? null
                     };

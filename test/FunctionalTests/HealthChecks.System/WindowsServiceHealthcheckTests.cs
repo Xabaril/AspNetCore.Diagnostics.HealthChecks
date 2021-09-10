@@ -30,13 +30,13 @@ namespace FunctionalTests.HealthChecks.System
             {
                 return;
             }
-            
+
             var webhostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddWindowsServiceHealthCheck("Windows Update", s => s.StartType  == ServiceStartMode.Manual);
+                        .AddWindowsServiceHealthCheck("Windows Update", s => s.StartType == ServiceStartMode.Manual);
                 })
                 .Configure(app =>
                 {
@@ -50,7 +50,7 @@ namespace FunctionalTests.HealthChecks.System
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_unhealthy_when_the_service_does_not_exist()
         {
@@ -91,7 +91,7 @@ namespace FunctionalTests.HealthChecks.System
                        Predicate = r => true
                    });
                });
-            
+
             var exception = Assert.Throws<PlatformNotSupportedException>(() =>
             {
                 var server = new TestServer(webhostBuilder);

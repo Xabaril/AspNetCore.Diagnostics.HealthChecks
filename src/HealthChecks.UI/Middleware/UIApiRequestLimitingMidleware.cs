@@ -18,7 +18,7 @@ namespace HealthChecks.UI.Middleware
         private readonly IOptions<Settings> _settings;
         private readonly ILogger<UIApiEndpointMiddleware> _logger;
         private readonly SemaphoreSlim _semaphore;
-        
+
         public UIApiRequestLimitingMidleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
@@ -37,7 +37,8 @@ namespace HealthChecks.UI.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if(!await _semaphore.WaitAsync(TimeSpan.Zero)) {
+            if (!await _semaphore.WaitAsync(TimeSpan.Zero))
+            {
                 context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
                 return;
             }
@@ -45,7 +46,7 @@ namespace HealthChecks.UI.Middleware
             try
             {
                 _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}",
-                    context.Connection.RemoteIpAddress, 
+                    context.Connection.RemoteIpAddress,
                     _semaphore.CurrentCount);
 
                 await _next(context);

@@ -34,7 +34,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             registration.Name.Should().Be("k8s");
             check.GetType().Should().Be(typeof(KubernetesHealthCheck));
         }
-        
+
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {

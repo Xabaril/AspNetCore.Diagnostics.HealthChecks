@@ -22,7 +22,7 @@ namespace HealthChecks.UI.Core.Data.Configuration
                 .IsRequired(false);
 
             builder.Property(le => le.Description)
-               .IsRequired(false);  
+               .IsRequired(false);
         }
     }
 }

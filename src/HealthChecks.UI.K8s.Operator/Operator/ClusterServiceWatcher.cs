@@ -23,8 +23,8 @@ namespace HealthChecks.UI.K8s.Operator.Operator
           IKubernetes client,
           ILogger<K8sOperator> logger,
           OperatorDiagnostics diagnostics,
-          NotificationHandler notificationHandler,
-          IHttpClientFactory httpClientFactory)
+          NotificationHandler notificationHandler
+          )
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -41,7 +41,11 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
             _watcher = response.Watch<V1Service, V1ServiceList>(
                 onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
-                onError: e => _diagnostics.ServiceWatcherThrow(e)
+                onError: e =>
+                {
+                    _diagnostics.ServiceWatcherThrow(e);
+                    Watch(resource, token);
+                }
             );
 
             _diagnostics.ServiceWatcherStarting("All");
@@ -56,7 +60,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
         public void Dispose()
         {
-            if(_watcher != null && _watcher.Watching)
+            if (_watcher != null && _watcher.Watching)
             {
                 _watcher.Dispose();
             }

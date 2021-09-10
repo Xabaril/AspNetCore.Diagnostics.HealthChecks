@@ -43,6 +43,22 @@ namespace UnitTests.HealthChecks.DependencyInjection.CosmosDb
             check.GetType().Should().Be(typeof(CosmosDbHealthCheck));
         }
         [Fact]
+        public void add_cosmosdb_health_check_when_properly_configured_with_database_and_collections()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddCosmosDbCollection("myconnectionstring", "dabasename", collections: new[] { "first-collection", "second_collections" });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("cosmosdb");
+            check.GetType().Should().Be(typeof(CosmosDbHealthCheck));
+        }
+        [Fact]
         public void add_cosmosdb_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();

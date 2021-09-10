@@ -20,7 +20,7 @@ namespace HealthChecks.Publisher.Prometheus
             await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
         }
 
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) 
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report)
         {
             await WritePrometheusResultText(context, report, false);
         }

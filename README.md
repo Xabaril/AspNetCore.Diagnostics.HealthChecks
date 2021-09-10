@@ -8,20 +8,19 @@
 ![k8s version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui-k8s-operator?label=k8s%20Operator%20Version&logo=dsd&sort=date)
 ![k8s pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui-k8s-operator.svg?label=k8s%20Operator%20Pulls)
 
-
-
 # AspNetCore.Diagnostics.HealthChecks
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET Core** versions supported: 2.2, 3.0 and 3.1
+**ASP.NET Core** versions supported: 5.0, 3.1, 3.0 and 2.2
 
 # Sections
 
 ## Previous versions documentation
 
-- [NetCore 2.2](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-2.2/README.md)
+- [NetCore 3.1](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.1/README.md)
 - [NetCore 3.0](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-3.0/README.md)
+- [NetCore 2.2](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/netcore-2.2/README.md)
 
 ## HealthChecks
 
@@ -78,7 +77,7 @@ HealthChecks packages include health checks for:
 - Amazon DynamoDb
 - Amazon S3
 - Google Cloud Firestore
-- Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap
+- Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap, Ssl
 - MongoDB
 - Kafka
 - Identity Server
@@ -183,20 +182,23 @@ services.AddHealthChecks()
 
 ## HealthChecks Prometheus Exporter
 
-If you need an endpoint to consume from prometheus instead of using Prometheus Gateway you could install **AspNetCore.HealthChecks.Publisher.Prometheus**.
+If you need an endpoint to consume from prometheus instead of using Prometheus Gateway you could install **AspNetCore.HealthChecks.Prometheus.Metrics**.
 
 ```powershell
-install-package AspNetcore.HealthChecks.Publisher.Prometheus
+install-package AspNetCore.HealthChecks.Prometheus.Metrics
 ```
 
 Use the _ApplicationBuilder_ extension method to add the endpoint with the metrics:
 
 ```csharp
 // default endpoint: /healthmetrics
-app.UseHealthChecksPrometheusExporter()
+app.UseHealthChecksPrometheusExporter();
 
 // You could customize the endpoint
-app.UseHealthChecksPrometheusExporter("/my-health-metrics")
+app.UseHealthChecksPrometheusExporter("/my-health-metrics");
+
+// Customize HTTP status code returned(prometheus will not read health metrics when a default HTTP 503 is returned)
+app.UseHealthChecksPrometheusExporter("/my-health-metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
 ```
 
 ## HealthCheckUI
@@ -220,7 +222,7 @@ public class Startup
     {
         services
         .AddHealthChecksUI()
-        .AddInMemoryStorage()
+        .AddInMemoryStorage();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -245,7 +247,7 @@ Do not confuse this UI api endpoint with the endpoints we have to configure to d
 
 When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
-### UI Polling interval 
+### UI Polling interval
 
 You can configure the polling interval in seconds for the UI inside the setup method. Default value is 10 seconds:
 
@@ -260,16 +262,14 @@ You can configure the polling interval in seconds for the UI inside the setup me
 
 You can configure max active requests to the HealthChecks UI backend api using the setup method. Default value is 3 active requests:
 
-
 ```csharp
  .AddHealthChecksUI(setupSettings: setup =>
   {
-     setup.SetApiMaxActiveRequests(1); 
-     //Only one active request will be executed at a time. 
+     setup.SetApiMaxActiveRequests(1);
+     //Only one active request will be executed at a time.
      //All the excedent requests will result in 429 (Too many requests)
   });
 ```
-
 
 ### UI Storage Providers
 
@@ -290,7 +290,7 @@ All the storage providers are extensions of HealthChecksUIBuilder:
 ```csharp
   services
     .AddHealthChecksUI()
-    .AddInMemoryStorage()
+    .AddInMemoryStorage();
 ```
 
 **Sql Server**
@@ -575,6 +575,14 @@ You can get more information [here](./doc/k8s-ui-discovery.md)
 ## HealthChecks as Release Gates for Azure DevOps Pipelines
 
 HealthChecks can be used as [Release Gates for Azure DevOps](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/gates?view=azure-devops) using this [Visual Studio Market place Extension](https://marketplace.visualstudio.com/items?itemName=luisfraile.vss-services-aspnetcorehealthcheck-extensions).
+
+Check this [README](./extensions/README.md) on how to configure it.
+
+## Protected HealthChecks.UI with OpendId Connect
+
+There are some scenarios where you can find useful to restrict access for users on HealthChecks UI, maybe for users who belong to some role, based on some claim value etc.
+
+We can leverage the ASP.NET Core Authentication/Authorization features to easily implement it. You can see a fully functional example using IdentityServer4 [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/tree/master/samples/HealthChecks.UI.Oidc) but you can use Azure AD, Auth0, Okta, etc.
 
 Check this [README](./extensions/README.md) on how to configure it.
 

@@ -15,7 +15,7 @@ namespace HealthChecks.UI
 
         public void Add(Action<EndpointBuilder> convention)
         {
-            foreach(var endpoint in _endpoints)
+            foreach (var endpoint in _endpoints)
             {
                 endpoint.Add(convention);
             }

@@ -15,7 +15,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddPingHealthCheck(_=> { });
+                .AddPingHealthCheck(_ => { });
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -31,7 +31,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddPingHealthCheck(_=> { }, name: "my-ping-1");
+                .AddPingHealthCheck(_ => { }, name: "my-ping-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -127,7 +127,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddDnsResolveHealthCheck(_ => {  }, name: "my-dns-1");
+                .AddDnsResolveHealthCheck(_ => { }, name: "my-dns-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -218,6 +218,40 @@ namespace UnitTests.HealthChecks.DependencyInjection.Network
 
             registration.Name.Should().Be("tcp-1");
             check.GetType().Should().Be(typeof(TcpHealthCheck));
+        }
+
+        [Fact]
+        public void add_ssl_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddSslHealthCheck(options => { options.AddHost("the-host"); });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("ssl");
+            check.GetType().Should().Be(typeof(SslHealthCheck));
+        }
+
+        [Fact]
+        public void add_named_ssl_health_check_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddSslHealthCheck(options => { options.AddHost("the-host", port: 111, checkLeftDays: 120); }, name: "ssl-1");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("ssl-1");
+            check.GetType().Should().Be(typeof(SslHealthCheck));
         }
     }
 }

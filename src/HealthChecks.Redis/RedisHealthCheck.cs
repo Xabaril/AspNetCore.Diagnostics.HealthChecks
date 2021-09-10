@@ -34,15 +34,42 @@ namespace HealthChecks.Redis
                     }
                 }
 
-                await connection.GetDatabase()
-                    .PingAsync();
+                foreach (var endPoint in connection.GetEndPoints(configuredOnly: true))
+                {
+                    var server = connection.GetServer(endPoint);
 
-				return HealthCheckResult.Healthy();
-			}
+                    if (server.ServerType != ServerType.Cluster)
+                    {
+                        await connection.GetDatabase().PingAsync();
+                        await server.PingAsync();
+                    }
+                    else
+                    {
+                        var clusterInfo = await server.ExecuteAsync("CLUSTER", "INFO");
+
+                        if (clusterInfo is object && !clusterInfo.IsNull)
+                        {
+                            if (!clusterInfo.ToString()
+                                .Contains("cluster_state:ok"))
+                            {
+                                //cluster info is not ok!
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is not on OK state for endpoint {endPoint}");
+                            }
+                        }
+                        else
+                        {
+                            //cluster info cannot be read for this cluster node 
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is null or can't be read for endpoint {endPoint}");
+                        }
+                    }
+                }
+
+                return HealthCheckResult.Healthy();
+            }
             catch (Exception ex)
             {
-				return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-			}
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            }
         }
     }
 }

@@ -63,7 +63,7 @@ namespace HealthChecks.ArangoDb
             {
                 return HttpApiTransport.UsingBasicAuth(new Uri(options.HostUri), options.Database, options.UserName, options.Password);
             }
-            
+
             return HttpApiTransport.UsingNoAuth(new Uri(options.HostUri), options.Database);
         }
     }

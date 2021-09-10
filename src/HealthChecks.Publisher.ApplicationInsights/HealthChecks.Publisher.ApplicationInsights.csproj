@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Publisher;Application Insights</PackageTags>
     <Description>HealthChecks.Publisher.ApplicationInsights is the health check publisher for Application Insights.</Description>
     <Version>$(HealthCheckPublisherAppplicationInsights)</Version>

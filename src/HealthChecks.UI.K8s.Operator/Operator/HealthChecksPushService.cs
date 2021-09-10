@@ -29,6 +29,7 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 Type = eventType,
                 notificationService.Metadata.Name,
+                Group = notificationService.Metadata.NamespaceProperty,
                 Uri = address
             };
 
@@ -37,9 +38,10 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 string type = healthCheck.Type.ToString();
                 string name = healthCheck.Name;
+                string group = healthCheck.Group;
                 string uri = healthCheck.Uri;
 
-                logger.LogInformation("[PushService] Namespace {Namespace} - Sending Type: {type} - Service {name} with uri : {uri} to ui endpoint: {address}", resource.Metadata.NamespaceProperty, type, name, uri, uiAddress);
+                logger.LogInformation("[PushService] Namespace {Namespace} - Sending Type: {type} - Service {name} in group {group} with uri : {uri} to ui endpoint: {address}", resource.Metadata.NamespaceProperty, type, name, group, uri, uiAddress);
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 

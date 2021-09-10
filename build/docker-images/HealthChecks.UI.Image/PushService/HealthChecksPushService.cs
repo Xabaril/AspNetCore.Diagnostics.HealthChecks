@@ -23,6 +23,7 @@ namespace HealthChecks.UI.Image.PushService
                 await _db.Configurations.AddAsync(new HealthCheckConfiguration
                 {
                     Name = name,
+                    Group = group,
                     Uri = uri,
                     DiscoveryService = "kubernetes"
                 });

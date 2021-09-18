@@ -7,11 +7,14 @@ namespace HealthChecks.Kafka
     {
         private readonly ProducerConfig _configuration;
         private readonly string _topic;
-        private IProducer<string, string>? _producer;
+        private readonly Action<LogMessage> _kafkaLogHandler;
 
-        public KafkaHealthCheck(ProducerConfig configuration, string? topic)
+        private IProducer<string, string> _producer;
+
+        public KafkaHealthCheck(ProducerConfig configuration, string topic, Action<LogMessage> kafkaLogHandler)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _kafkaLogHandler = kafkaLogHandler;
             _topic = topic ?? "healthchecks-topic";
         }
 
@@ -21,7 +24,13 @@ namespace HealthChecks.Kafka
             {
                 if (_producer == null)
                 {
-                    _producer = new ProducerBuilder<string, string>(_configuration).Build();
+                    var producerBuilder = new ProducerBuilder<string, string>(_configuration);
+                    if (_kafkaLogHandler != null)
+                    {
+                        producerBuilder.SetLogHandler((_, logMessage) => _kafkaLogHandler(logMessage));
+                    }
+                   
+                    _producer = producerBuilder.Build();
                 }
 
                 var message = new Message<string, string>

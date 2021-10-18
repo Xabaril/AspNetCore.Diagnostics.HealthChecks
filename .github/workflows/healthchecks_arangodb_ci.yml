@@ -2,13 +2,17 @@ name: HealthChecks Arango DB CI
 
 on:
   push:
-   
+   branches: [ master ]
+   paths:
+    - src/HealthChecks.ArangoDb/**
+    - test/HealthChecks.ArangoDb.Tests/**
+    - .github/workflows/healthchecks_arangodb_ci.yml
   pull_request:
     branches: [ master ]
     paths:
     - src/HealthChecks.ArangoDb/**
     - test/HealthChecks.ArangoDb.Tests/**
-
+    - .github/workflows/healthchecks_arangodb_ci.yml
 jobs:
   build:
     runs-on: ubuntu-latest

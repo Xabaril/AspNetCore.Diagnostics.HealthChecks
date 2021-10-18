@@ -2,7 +2,7 @@ name: HealthChecks Arango DB CI
 
 on:
   push:
-    branches: [ master ]
+    # branches: [ master ]
     paths:
     - src/HealthChecks.ArangoDb/**
     - test/HealthChecks.ArangoDb.Tests/**
@@ -22,7 +22,6 @@ jobs:
           - 8529:8529
         env: 
           ARANGO_ROOT_PASSWORD: strongArangoDbPassword
-        
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

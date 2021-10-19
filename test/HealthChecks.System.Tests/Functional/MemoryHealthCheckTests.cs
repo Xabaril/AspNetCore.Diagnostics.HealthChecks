@@ -1,28 +1,21 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
+using HealthChecks.System.Tests.Seedwork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.System
+namespace HealthChecks.System.Tests.Functional
 {
     [Collection("execution")]
     public class memory_healthcheck_should
     {
-        private readonly ExecutionFixture fixture;
-
-        public memory_healthcheck_should(ExecutionFixture fixture)
-        {
-            this.fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
+      
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_healthy_when_private_memory_does_not_exceed_the_maximum_established()
         {

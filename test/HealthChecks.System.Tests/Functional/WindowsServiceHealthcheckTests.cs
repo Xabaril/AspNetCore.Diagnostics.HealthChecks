@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
+using HealthChecks.System.Tests.Seedwork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -11,26 +11,15 @@ using System.ServiceProcess;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.System
+namespace HealthChecks.System.Tests.Functional
 {
     [Collection("execution")]
     public class windows_service__healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public windows_service__healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture;
-        }
+        
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_healthy_when_the_service_is_running()
         {
-            //AppVeyor does not run standard windows services
-            if (_fixture.IsAppVeyorExecution)
-            {
-                return;
-            }
-
             var webhostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>

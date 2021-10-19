@@ -1,30 +1,22 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.System
+namespace HealthChecks.System.Tests.Functional
 {
     [Collection("execution")]
     public class disk_storage_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
         private DriveInfo[] _drives = DriveInfo.GetDrives();
-
-        public disk_storage_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
+      
         [Fact]
         public async Task be_healthy_when_disks_have_more_free_space_than_configured()
         {

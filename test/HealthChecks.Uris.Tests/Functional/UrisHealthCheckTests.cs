@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -11,18 +10,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.Uris
+
+namespace HealthChecks.Uris.Tests.Functional
 {
-    [Collection("execution")]
-    public class uri_healthcheck_should
+    public class uris_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public uri_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
         [Fact]
         public async Task be_healthy_if_uri_is_available()
         {

@@ -1,0 +1,31 @@
+name: HealthChecks Arango DB CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.System/**
+    - test/HealthChecks.System.Tests/**
+    - .github/workflows/healthchecks_system_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.System/**
+    - test/HealthChecks.System.Tests/**
+    - .github/workflows/healthchecks_system_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.System/HealthChecks.System.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj --verbosity normal

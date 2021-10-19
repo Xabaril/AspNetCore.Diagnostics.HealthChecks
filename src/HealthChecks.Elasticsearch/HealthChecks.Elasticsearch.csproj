@@ -7,7 +7,7 @@
     <PackageId>AspNetCore.HealthChecks.Elasticsearch</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NEST" Version="$(Nest)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="NEST"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 </Project>

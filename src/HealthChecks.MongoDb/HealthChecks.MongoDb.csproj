@@ -7,7 +7,7 @@
     <PackageId>AspNetCore.HealthChecks.MongoDb</PackageId>
   </PropertyGroup> 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="$(MongoDBDriver)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="MongoDB.Driver"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 </Project>

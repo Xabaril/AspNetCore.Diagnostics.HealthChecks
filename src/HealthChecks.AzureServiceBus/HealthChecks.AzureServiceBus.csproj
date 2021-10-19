@@ -8,8 +8,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Azure.Messaging.EventHubs" Version="$(AzureMessagingEventHubs)" />
-    <PackageReference Include="Azure.Messaging.ServiceBus" Version="$(AzureMessagingServiceBus)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Azure.Messaging.EventHubs"/>
+    <PackageReference Include="Azure.Messaging.ServiceBus"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 </Project>

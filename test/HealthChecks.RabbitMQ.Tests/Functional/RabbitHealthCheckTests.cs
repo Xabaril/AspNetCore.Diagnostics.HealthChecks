@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -11,19 +10,12 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.RabbitMQ
+
+namespace HealthChecks.RabbitMQ.Tests.Functional
 {
-    [Collection("execution")]
     public class rabbitmq_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public rabbitmq_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_rabbitmq_is_available()
         {
             var connectionString = @"amqp://localhost:5672";
@@ -52,7 +44,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_ssloption()
         {
             var connectionString = @"amqp://localhost:5672";
@@ -82,7 +74,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
         }
 
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_unhealthy_if_rabbitmq_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -109,7 +101,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_iconnectionfactory()
         {
             var connectionString = @"amqp://localhost:5672";
@@ -146,7 +138,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_iconnection()
         {
             var connectionString = @"amqp://localhost:5672";
@@ -186,7 +178,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_and_specify_default_ssloption()
         {
             var connectionString = @"amqp://localhost:5672";
@@ -215,7 +207,7 @@ namespace FunctionalTests.HealthChecks.RabbitMQ
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_not_crash_on_startup_when_rabbitmq_is_down_at_startup()
         {
             var webHostBuilder = new WebHostBuilder()

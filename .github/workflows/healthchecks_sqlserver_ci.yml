@@ -1,4 +1,4 @@
-name: HealthChecks Arango DB CI
+name: HealthChecks SQL Server DB CI
 
 on:
   push:

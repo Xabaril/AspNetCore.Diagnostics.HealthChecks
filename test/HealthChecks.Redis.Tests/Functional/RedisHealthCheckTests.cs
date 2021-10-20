@@ -1,28 +1,19 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.Redis
+
+namespace HealthChecks.Redis.Tests.Functional
 {
-    [Collection("execution")]
     public class redis_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public redis_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_redis_is_available()
         {
             //read appveyor services default values on
@@ -54,7 +45,7 @@ namespace FunctionalTests.HealthChecks.Redis
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_multiple_redis_are_available()
         {
             //read appveyor services default values on

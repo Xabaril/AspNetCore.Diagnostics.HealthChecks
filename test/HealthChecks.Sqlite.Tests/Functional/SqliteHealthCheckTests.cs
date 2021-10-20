@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -9,18 +8,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.Sqlite
+
+namespace HealthChecks.Sqlite.Tests.Functional
 {
-    [Collection("execution")]
-    public class sqllite_healthcheck_should
+    public class sqlite_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public sqllite_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture;
-        }
-
         [Fact]
         public async void be_healthy_when_sqlite_is_available()
         {

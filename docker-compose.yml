@@ -4,10 +4,10 @@ services:
         image: mcr.microsoft.com/mssql/server
         restart: always
         ports:
-            - ${SQLSERVER_PORT}:1433
+            - 5433:1433
         environment:
             - ACCEPT_EULA=Y
-            - SA_PASSWORD=${SQLSERVER_PASSWORD}
+            - SA_PASSWORD=Password12!
     redis:
         image: redis:alpine
         ports:

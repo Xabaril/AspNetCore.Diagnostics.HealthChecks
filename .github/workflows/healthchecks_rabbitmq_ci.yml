@@ -1,0 +1,36 @@
+name: HealthChecks RabbitMQ CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.RabbitMQ/**
+    - test/HealthChecks.RabbitMQ.Tests/**
+    - .github/workflows/healthchecks_rabbitmq_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.RabbitMQ/**
+    - test/HealthChecks.RabbitMQ.Tests/**
+    - .github/workflows/healthchecks_rabbitmq_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: rabbitmq
+        ports:
+          - 5672:5672
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.RabbitMQ/HealthChecks.RabbitMQ.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.RabbitMQ/HealthChecks.RabbitMQ.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj --verbosity normal

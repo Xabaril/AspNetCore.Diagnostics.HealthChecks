@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup Label="Package Versions">
-    <PackageReference Update="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.1"/>
+    <PackageReference Update="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.0-rc.2.21480.10"/>
     <PackageReference Update="Microsoft.Extensions.Http" Version="5.0.0"/>                                     
     <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="5.0.1"/>                      
     <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0"/>          
@@ -55,22 +55,24 @@
     <PackageReference Update="IBMMQDotnetClient" Version="9.2.0.1"/>                                         
     <PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2"/>                      
     <PackageReference Update="SendGrid" Version="9.21.1"/>                                                   
-    <PackageReference Update="ArangoDBNetStandard" Version="1.0.0-alpha03"/>                                 
+    <PackageReference Update="ArangoDBNetStandard" Version="1.0.0-alpha04"/>                                 
     <PackageReference Update="System.ServiceProcess.ServiceController" Version="5.0.0"/>                       
     <PackageReference Update="Azure.Messaging.EventHubs" Version="5.3.1"/>                                     
     <PackageReference Update="Azure.Messaging.ServiceBus" Version="7.1.1"/>
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0"/>
-    <PackageReference Update="Microsoft.Extensions.Configuration.Json" Version="5.0.0"/>
+    <PackageReference Update="Microsoft.Extensions.Configuration.Json" Version="6.0.0-rc.2.21480.5"/>
     <PackageReference Update="Microsoft.Extensions.Http.Polly" Version="5.0.0"/>
     <PackageReference Update="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1"/>
     <PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1"/>
     
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.8.0"/>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
     <PackageReference Update="RichardSzalay.MockHttp" Version="6.0.0"/>                                       
-    <PackageReference Update="FluentAssertions" Version="5.9.0"/>                                            
+    <PackageReference Update="FluentAssertions" Version="6.1.0"/>                                            
     <PackageReference Update="xunit" Version="2.4.1"/>                                                       
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.3"/>
-    <PackageReference Update="NSubstitute" Version="4.2.1"/>
-    <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="5.0.1"/>                                 
+    <PackageReference Update="NSubstitute" Version="4.2.2"/>
+    <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.0-rc.2.21480.10"/>    
+  	<PackageReference Update="coverlet.collector" Version="3.1.0"/>
+
   </ItemGroup>
 </Project>

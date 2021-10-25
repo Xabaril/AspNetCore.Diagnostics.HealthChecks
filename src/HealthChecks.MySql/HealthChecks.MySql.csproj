@@ -7,7 +7,7 @@
     <PackageId>AspNetCore.HealthChecks.MySql</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="MySqlConnector"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 </Project>

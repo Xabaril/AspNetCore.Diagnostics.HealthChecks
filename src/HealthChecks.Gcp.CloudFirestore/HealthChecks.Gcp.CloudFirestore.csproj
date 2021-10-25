@@ -8,8 +8,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Firestore" Version="$(GoogleCloudFirestore)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Google.Cloud.Firestore"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 
 </Project>

@@ -7,8 +7,8 @@
     <PackageId>AspNetCore.HealthChecks.CosmosDb</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="$(MicrosoftAzureCosmosDB)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.Azure.Cosmos"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
     <PackageReference Include="Azure.Data.Tables" Version="$(AzureDataTables)" />
   </ItemGroup>
 </Project>

@@ -10,8 +10,8 @@
 
   <ItemGroup>
     
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsDependencyInjectionAbstractions)" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="$(PomeloEntityFrameworkCoreMySql)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql"/>
   </ItemGroup>
 
   <ItemGroup>

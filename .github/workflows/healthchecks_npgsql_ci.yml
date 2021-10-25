@@ -1,0 +1,39 @@
+name: HealthChecks NPGSQL DB CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.Npgsql/**
+    - test/HealthChecks.Npgsql.Tests/**
+    - .github/workflows/healthchecks_npgsql_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.Npgsql/**
+    - test/HealthChecks.Npgsql.Tests/**
+    - .github/workflows/healthchecks_npgsql_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      npgsql:
+        image: postgres
+        ports:
+          - 8010:5432
+        env: 
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Npgsql/HealthChecks.Npgsql.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Npgsql/HealthChecks.Npgsql.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal

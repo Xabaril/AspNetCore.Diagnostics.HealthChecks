@@ -1,21 +1,21 @@
 ﻿using FluentAssertions;
-using HealthChecks.Oracle;
+using HealthChecks.NpgSql;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.Oracle
+namespace HealthChecks.Npgsql.Tests.DependencyInjection
 {
-    public class oracle_registration_should
+    public class npgsql_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddOracle("connectionstring");
+                .AddNpgSql("connectionstring");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -23,8 +23,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.Oracle
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("oracle");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            registration.Name.Should().Be("npgsql");
+            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
 
         }
 
@@ -33,7 +33,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Oracle
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddOracle("connectionstring", name: "my-oracle-1");
+                .AddNpgSql("connectionstring", name: "my-npg-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -41,8 +41,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.Oracle
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-oracle-1");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            registration.Name.Should().Be("my-npg-1");
+            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
         }
     }
 }

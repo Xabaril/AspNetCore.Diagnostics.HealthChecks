@@ -1,27 +1,18 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.MySql
+
+namespace HealthChecks.MySql.Tests.Functional
 {
-    [Collection("execution")]
     public class mysql_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public mysql_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentException(nameof(fixture));
-        }
-
         [Fact]
         public async Task be_healthy_when_mysql_server_is_available()
         {

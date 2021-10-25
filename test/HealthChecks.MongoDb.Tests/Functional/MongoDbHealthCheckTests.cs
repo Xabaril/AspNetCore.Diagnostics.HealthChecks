@@ -1,27 +1,18 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.MongoDb
+
+namespace HealthChecks.MongoDb.Tests.Functional
 {
-    [Collection("execution")]
     public class mongodb_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public mongodb_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
         [Fact]
         public async Task be_healthy_listing_all_databases_if_mongodb_is_available()
         {

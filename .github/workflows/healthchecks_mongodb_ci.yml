@@ -1,0 +1,36 @@
+name: HealthChecks MongoDb CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.MongoDb/**
+    - test/HealthChecks.MongoDb.Tests/**
+    - .github/workflows/healthchecks_mongodb_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.MongoDb/**
+    - test/HealthChecks.MongoDb.Tests/**
+    - .github/workflows/healthchecks_mongodb_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.MongoDb.Tests/HealthChecks.MongoDb.Tests.csproj --verbosity normal

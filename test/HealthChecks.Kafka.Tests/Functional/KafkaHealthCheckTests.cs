@@ -1,29 +1,20 @@
 ﻿using Confluent.Kafka;
 using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.Kafka
+
+namespace HealthChecks.Kafka.Tests.Functional
 {
-    [Collection("execution")]
     public class kafka_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public kafka_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_unhealthy_if_kafka_is_unavailable()
         {
             var configuration = new ProducerConfig()
@@ -60,7 +51,7 @@ namespace FunctionalTests.HealthChecks.Kafka
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_kafka_is_available()
         {
             var configuration = new ProducerConfig()

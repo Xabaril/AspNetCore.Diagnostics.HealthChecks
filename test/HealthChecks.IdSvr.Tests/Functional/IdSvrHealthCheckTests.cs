@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -10,19 +9,12 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.IdSvr
+
+namespace HealthChecks.IdSvr.Tests.Functional
 {
-    [Collection("execution")]
     public class idsvr_healthcheck_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public idsvr_healthcheck_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
-        }
-
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_unhealthy_if_idsvr_is_unavailable()
         {
             var webHostBuilder = new WebHostBuilder()
@@ -49,7 +41,7 @@ namespace FunctionalTests.HealthChecks.IdSvr
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_if_idsvr_is_available()
         {
             var webHostBuilder = new WebHostBuilder()

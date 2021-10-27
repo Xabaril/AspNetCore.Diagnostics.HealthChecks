@@ -49,7 +49,7 @@ namespace HealthChecks.AzureServiceBus
                 if (properties.Value.DeadLetterMessageCount >= _unhealthyThreshold)
                     return HealthCheckResult.Unhealthy($"Message in dead letter queue {_queueName} exceeded the amount of messages allowed for the unhealthy threshold {_unhealthyThreshold}/{properties.Value.DeadLetterMessageCount}");
 
-                if(properties.Value.DeadLetterMessageCount >= _degradedThreshold)
+                if (properties.Value.DeadLetterMessageCount >= _degradedThreshold)
                     return HealthCheckResult.Degraded($"Message in dead letter queue {_queueName} exceeded the amount of messages allowed for the degraded threshold {_degradedThreshold}/{properties.Value.DeadLetterMessageCount}");
 
                 return HealthCheckResult.Healthy();

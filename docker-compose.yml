@@ -36,6 +36,8 @@ services:
         ports: 
           - "2113:2113"
           - ${EVENTSTORE_PORT}:1113
+        environment:
+            - EVENTSTORE_INSECURE=true
     mongodb:
         image: mongo
         ports:

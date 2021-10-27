@@ -26,7 +26,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
 
             registration.Name.Should().Be("azurequeuethreshold");
             check.GetType().Should().Be(typeof(AzureServiceBusQueueMessageCountThresholdHealthCheck));
-
         }
 
         [Fact]

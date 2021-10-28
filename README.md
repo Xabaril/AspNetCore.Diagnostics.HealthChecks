@@ -88,6 +88,7 @@ HealthChecks packages include health checks for:
 - Kubernetes
 - ArangoDB
 - Gremlin
+- Dapr
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
@@ -126,6 +127,7 @@ Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 Install-Package AspNetCore.HealthChecks.SendGrid
 Install-Package AspNetCore.HealthChecks.ArangoDb
 Install-Package AspNetCore.HealthChecks.Gremlin
+Install-Package AspNetCore.HealthChecks.Dapr
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.

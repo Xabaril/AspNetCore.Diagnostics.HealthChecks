@@ -141,6 +141,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gremlin", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.Oidc", "samples\HealthChecks.UI.Oidc\HealthChecks.UI.Oidc.csproj", "{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Dapr", "src\HealthChecks.Dapr\HealthChecks.Dapr.csproj", "{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -379,6 +381,10 @@ Global
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -442,6 +448,7 @@ Global
 		{E58B606C-EDC4-4238-AE66-C547904946FE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{46B0FE68-1739-49A1-AF1B-6817D54465A9} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

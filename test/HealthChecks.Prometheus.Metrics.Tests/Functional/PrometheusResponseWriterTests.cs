@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
-using FunctionalTests.Base;
-using FunctionalTests.HealthChecks.Publisher.Prometheus;
+using HealthChecks.Prometheus.Metrics.Tests.Functional;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -10,19 +9,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FunctionalTests.HealthChecks.Prometheus.Metrics
+namespace HealthChecks.Publisher.Prometheus.Tests.Functional
 {
-    [Collection("execution")]
-    public class prometheus_responsewriter_should
+    public class prometheus_response_writer_should
     {
-        private readonly ExecutionFixture _fixture;
-
-        public prometheus_responsewriter_should(ExecutionFixture fixture)
-        {
-            _fixture = fixture;
-        }
-
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_healthy_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
@@ -45,7 +36,7 @@ namespace FunctionalTests.HealthChecks.Prometheus.Metrics
             resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Healthy);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_unhealthy_and_return_503_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
@@ -68,7 +59,7 @@ namespace FunctionalTests.HealthChecks.Prometheus.Metrics
             resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
 
-        [SkipOnAppVeyor]
+        [Fact]
         public async Task be_unhealthy_and_return_configured_status_code_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()

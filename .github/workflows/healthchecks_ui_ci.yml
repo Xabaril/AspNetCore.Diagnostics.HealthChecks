@@ -1,0 +1,52 @@
+name: HealthChecks SQL Server DB CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.UI/**
+    - test/HealthChecks.UI.Tests/**
+    - .github/workflows/healthchecks_ui_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.UI/**
+    - test/HealthChecks.UI.Tests/**
+    - .github/workflows/healthchecks_ui_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server
+        ports:
+          - 5433:1433
+        env: 
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password12!
+      npgsql:
+        image: postgres
+        ports:
+          - 8010:5432
+        env: 
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Password12!
+      mysql:
+        image: mysql
+        ports:
+          - 3306:3306
+        env: 
+          MYSQL_ROOT_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal

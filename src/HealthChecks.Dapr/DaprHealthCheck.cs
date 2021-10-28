@@ -18,8 +18,8 @@ namespace HealthChecks.Dapr
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
       return await _daprClient.CheckHealthAsync(cancellationToken)
-        ? new HealthCheckResult(HealthStatus.Healthy, "Dapr Sidecar is healthy")
-        : new HealthCheckResult(HealthStatus.Unhealthy, "Dapr Sidecar is unhealthy");
+        ? new HealthCheckResult.Healthy()
+        : new HealthCheckResult(context.Registration.FailureStatus, "Dapr Sidecar is unhealthy");
     }
   }
 }

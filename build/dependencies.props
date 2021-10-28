@@ -88,6 +88,7 @@
     <RichardSzalayMockHttp>6.0.0</RichardSzalayMockHttp>
     <AzureMessagingEventHubs>5.3.1</AzureMessagingEventHubs>
     <AzureMessagingServiceBus>7.1.1</AzureMessagingServiceBus>
+    <DaprClient>1.4.0</DaprClient>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
@@ -144,5 +145,6 @@
     <HealthChecksUIK8sOperator>5.0.1</HealthChecksUIK8sOperator>
     <HealthCheckSendGrid>5.0.1</HealthCheckSendGrid>
     <HealthCheckArangoDb>5.0.1</HealthCheckArangoDb>
+    <HealthCheckDapr>5.0.1</HealthCheckDapr>
   </PropertyGroup>
 </Project>

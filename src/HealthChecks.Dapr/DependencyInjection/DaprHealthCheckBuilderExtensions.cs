@@ -22,18 +22,19 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
     /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-    public static IHealthChecksBuilder AddDapr(this IHealthChecksBuilder builder,
-                                               string name = default,
-                                               HealthStatus? failureStatus = default,
-                                               IEnumerable<string> tags = default,
-                                               TimeSpan? timeout = default)
+    public static IHealthChecksBuilder AddDapr(
+      this IHealthChecksBuilder builder,
+      string name = default,
+      HealthStatus? failureStatus = default,
+      IEnumerable<string> tags = default,
+      TimeSpan? timeout = default)
     {
       return builder.Add(new HealthCheckRegistration(
-         name ?? Name,
-         sp => new DaprHealthCheck(sp.GetRequiredService<DaprClient>()),
-         failureStatus,
-         tags,
-         timeout));
+        name ?? Name,
+        sp => new DaprHealthCheck(sp.GetRequiredService<DaprClient>()),
+        failureStatus,
+        tags,
+        timeout));
     }
   }
 }

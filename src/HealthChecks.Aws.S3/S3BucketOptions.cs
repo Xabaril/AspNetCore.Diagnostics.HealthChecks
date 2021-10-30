@@ -1,7 +1,6 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.Runtime;
-using System;
 
 namespace HealthChecks.Aws.S3
 {

@@ -50,7 +50,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddS3(options =>
         {
             options.BucketName = "bucket-name";
-            options.S3Config = new AmazonS3Config()
+            options.S3Config = new AmazonS3Config
             {
                 RegionEndpoint = RegionEndpoint.EUCentral1
             };

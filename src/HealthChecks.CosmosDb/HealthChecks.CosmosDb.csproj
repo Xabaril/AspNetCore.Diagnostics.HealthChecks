@@ -9,6 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
-    <PackageReference Include="Azure.Data.Tables" Version="$(AzureDataTables)" />
+    <PackageReference Include="Azure.Data.Tables"/>
   </ItemGroup>
 </Project>

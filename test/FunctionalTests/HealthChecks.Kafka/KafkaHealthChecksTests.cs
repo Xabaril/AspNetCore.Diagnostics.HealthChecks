@@ -32,8 +32,7 @@ namespace FunctionalTests.HealthChecks.Kafka
                 MessageSendMaxRetries = 0,
                 MessageTimeoutMs = 1500,
                 RequestTimeoutMs = 1500,
-                SocketTimeoutMs = 1500,
-                MetadataRequestTimeoutMs = 1500,
+                SocketTimeoutMs = 1500
             };
 
             var webHostBuilder = new WebHostBuilder()

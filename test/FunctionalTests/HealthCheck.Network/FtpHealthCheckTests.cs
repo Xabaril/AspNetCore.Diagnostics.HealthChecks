@@ -54,7 +54,7 @@ namespace FunctionalTests.HealthChecks.Network
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(StatusCodes.Status200OK);
+            response.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
         }
 
         [SkipOnAppVeyor]

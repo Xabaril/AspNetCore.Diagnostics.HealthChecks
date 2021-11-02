@@ -1,0 +1,36 @@
+name: HealthChecks Identity Server CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.IdSvr/**
+    - test/HealthChecks.IdSvr.Tests/**
+    - .github/workflows/healthchecks_idsvr_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.IdSvr/**
+    - test/HealthChecks.IdSvr.Tests/**
+    - .github/workflows/healthchecks_idsvr_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      idsvr:
+        image: nakah/identityserver4
+        ports:
+          - 8888:80
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.IdSvr/HealthChecks.IdSvr.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.IdSvr/HealthChecks.IdSvr.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.IdSvr.Tests/HealthChecks.IdSvr.Tests.csproj --verbosity normal

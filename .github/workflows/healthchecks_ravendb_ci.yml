@@ -1,0 +1,38 @@
+name: HealthChecks RavenDb CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.RavenDb/**
+    - test/HealthChecks.RavenDb.Tests/**
+    - .github/workflows/healthchecks_ravendb_ci.yml
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.RavenDb/**
+    - test/HealthChecks.RavenDb.Tests/**
+    - .github/workflows/healthchecks_ravendb_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      ravendb:
+        image: ravendb/ravendb
+        ports:
+          - 9030:8080
+        env: 
+          RAVEN_ARGS: --Setup.Mode=None
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj --verbosity normal

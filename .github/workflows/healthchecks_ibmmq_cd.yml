@@ -3,7 +3,7 @@ name: HealthChecks IbmMQ CD
 on:
   push:
     tags:       
-      - release-gremlin-*
+      - release-ibmq-*
 jobs:
   build:
     env:

@@ -1,4 +1,4 @@
-name: HealthChecks SolR CI
+name: HealthChecks SolR CD
 
 on:
   push:

@@ -101,7 +101,7 @@
     <HealthCheckSqlite>5.0.1</HealthCheckSqlite>
     <HealthCheckUri>5.0.1</HealthCheckUri>
     <HealthCheckRedis>5.0.2</HealthCheckRedis>
-    <HealthCheckRabbitMQ>5.0.1</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>5.0.2</HealthCheckRabbitMQ>
     <HealthCheckEventStore>5.0.1</HealthCheckEventStore>
     <HealthCheckElasticsearch>5.0.1</HealthCheckElasticsearch>
     <HealthCheckSolr>5.0.1</HealthCheckSolr>

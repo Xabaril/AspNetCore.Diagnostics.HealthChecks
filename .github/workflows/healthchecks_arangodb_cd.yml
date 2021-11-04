@@ -1,20 +1,13 @@
-name: HealthChecks Arango DB CI
+name: HealthChecks Arango DB CD
 
 on:
   push:
-   #branches: [ master ]
-   paths:
-    - src/HealthChecks.ArangoDb/**
-    - test/HealthChecks.ArangoDb.Tests/**
-    - .github/workflows/healthchecks_arangodb_ci.yml
-  pull_request:
-    #branches: [ master ]
-    paths:
-    - src/HealthChecks.ArangoDb/**
-    - test/HealthChecks.ArangoDb.Tests/**
-    - .github/workflows/healthchecks_arangodb_ci.yml
+    tags:       
+      - release-arangodb-*  # Push events to release-arangodb* 
 jobs:
   build:
+    env:
+      BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     services:
       arangodb:
@@ -35,3 +28,13 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish ArangoDb Health Check nuget
+      run: dotnet nuget push ./artifacts/HealthChecks.ArangoDb.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

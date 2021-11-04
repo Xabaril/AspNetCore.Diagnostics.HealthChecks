@@ -1,0 +1,40 @@
+name: HealthChecks SolR CD
+
+on:
+  push:
+    tags:       
+      - release-solr-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      consul:
+        image: solr:8.4.1
+        ports:
+          - 8983:8983
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.SolR/HealthChecks.SolR.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.SolR/HealthChecks.SolR.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.SolR/HealthChecks.SolR.csproj -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish SolR Health Check nuget
+      run: dotnet nuget push ./artifacts/HealthChecks.SolR.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

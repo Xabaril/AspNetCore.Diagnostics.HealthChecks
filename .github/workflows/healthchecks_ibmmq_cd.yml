@@ -1,0 +1,44 @@
+name: HealthChecks IbmMQ CD
+
+on:
+  push:
+    tags:       
+      - release-ibmq-*
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      consul:
+        image: ibmcom/mq
+        ports:
+          - 1414:1414
+          - 9157:9157
+        env:
+          MQ_QMGR_NAME: QM.TEST.01
+          MQ_APP_PASSWORD: 12345678
+          MQ_ENABLE_METRICS: true
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish IbmMQ Health Check nuget
+      run: dotnet nuget push ./artifacts/HealthChecks.IbmMQ.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

@@ -23,20 +23,6 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 
-
-		<!--<ItemGroup>
-			<PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
-			<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
-			<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
-			<PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
-			<PackageReference Include="NSubstitute" Version="$(NSubstitute)" />
-			<PackageReference Include="xunit" Version="$(xunit)" />
-			<PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
-			<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />-->
-		<!--<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(MicrosoftAspNetCoreSignalR)" />
-			<PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />-->
-		<!--</ItemGroup>-->
-
 	</ItemGroup>
 
 

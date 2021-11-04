@@ -12,6 +12,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <PackageReference Include="System.Text.Json" Version="$(SystemTextJson)" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 </Project>

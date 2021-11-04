@@ -2,13 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <Description>HealthChecks.UI.SQLite.Storage package contains the required classes to use SQLite provider in the UI</Description>
     <PackageTags>HealthCheck;HealthChecks;SQLite</PackageTags>
+    <Description>HealthChecks.UI.SQLite.Storage package contains the required classes to use SQLite provider in the UI</Description>
     <Version>$(HealthCheckUISQLiteStorage)</Version>
-    <PackageId>AspNetCore.HealthChecks.UI.SQLite.Storage</PackageId>
   </PropertyGroup>
 
-  <ItemGroup>    
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCoreSqlite)" />
   </ItemGroup>
 

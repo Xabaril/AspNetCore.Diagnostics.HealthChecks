@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 		.env = .env
 		build.ps1 = build.ps1
 		build\dependencies.props = build\dependencies.props
+		Directory.Build.props = Directory.Build.props
 		docker-compose.yml = docker-compose.yml
 		dotnet-install.ps1 = dotnet-install.ps1
 		install-sdk.ps1 = install-sdk.ps1
@@ -19,8 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FF4414C2-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalTests", "test\FunctionalTests\FunctionalTests.csproj", "{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.IdSvr", "src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj", "{332F4E33-7D1E-42F6-B509-2950D2B40188}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Uris", "src\HealthChecks.Uris\HealthChecks.Uris.csproj", "{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SqlServer", "src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj", "{6C9B61AA-BCFC-4230-9407-12B23E522580}"
@@ -28,8 +27,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Sqlite", "src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj", "{65E0BF0F-B3B6-4DFD-A3E3-F91FE02DA7D3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Redis", "src\HealthChecks.Redis\HealthChecks.Redis.csproj", "{44C9850D-B260-412F-AD74-0C930562C396}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RabbitMQ", "src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj", "{4E8CC4CC-49AA-4A64-92BF-008DB1944649}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Oracle", "src\HealthChecks.Oracle\HealthChecks.Oracle.csproj", "{CADA1206-3769-4AFD-B20A-E98270592648}"
 EndProject
@@ -139,7 +136,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ArangoDb", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gremlin", "src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj", "{46B0FE68-1739-49A1-AF1B-6817D54465A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.Oidc", "samples\HealthChecks.UI.Oidc\HealthChecks.UI.Oidc.csproj", "{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Oidc", "samples\HealthChecks.UI.Oidc\HealthChecks.UI.Oidc.csproj", "{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.OpenIdConnectServer", "src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj", "{2C40835D-206C-4170-A947-B6CCA96F2635}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Rabbitmq", "src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj", "{F1170F12-E36F-46E9-ADA7-6CB1346CDF19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,10 +152,6 @@ Global
 		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Release|Any CPU.Build.0 = Release|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -171,10 +168,6 @@ Global
 		{44C9850D-B260-412F-AD74-0C930562C396}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44C9850D-B260-412F-AD74-0C930562C396}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44C9850D-B260-412F-AD74-0C930562C396}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CADA1206-3769-4AFD-B20A-E98270592648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CADA1206-3769-4AFD-B20A-E98270592648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CADA1206-3769-4AFD-B20A-E98270592648}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -379,18 +372,24 @@ Global
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C40835D-206C-4170-A947-B6CCA96F2635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C40835D-206C-4170-A947-B6CCA96F2635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C40835D-206C-4170-A947-B6CCA96F2635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C40835D-206C-4170-A947-B6CCA96F2635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1170F12-E36F-46E9-ADA7-6CB1346CDF19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1170F12-E36F-46E9-ADA7-6CB1346CDF19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1170F12-E36F-46E9-ADA7-6CB1346CDF19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1170F12-E36F-46E9-ADA7-6CB1346CDF19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
-		{332F4E33-7D1E-42F6-B509-2950D2B40188} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{6C9B61AA-BCFC-4230-9407-12B23E522580} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{65E0BF0F-B3B6-4DFD-A3E3-F91FE02DA7D3} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{44C9850D-B260-412F-AD74-0C930562C396} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{CADA1206-3769-4AFD-B20A-E98270592648} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E6DCAE74-A1B1-4B23-879D-3D71BC13CFC6} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{28C46480-9F1D-4FCC-B65C-2B554C4342AB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
@@ -442,6 +441,8 @@ Global
 		{E58B606C-EDC4-4238-AE66-C547904946FE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{46B0FE68-1739-49A1-AF1B-6817D54465A9} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
+		{2C40835D-206C-4170-A947-B6CCA96F2635} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{F1170F12-E36F-46E9-ADA7-6CB1346CDF19} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

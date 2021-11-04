@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,14 +9,14 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
-    <PackageReference Include="NSubstitute" Version="$(NSubstitute)" />    
+    <PackageReference Include="NSubstitute" Version="$(NSubstitute)" />
     <PackageReference Include="xunit" Version="$(xunit)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(MicrosoftAspNetCoreSignalR)" />
     <PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj" />
@@ -53,13 +52,13 @@
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="id_rsa">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="HealthChecks.UI\Configuration\appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -5,7 +5,6 @@
     <PackageTags>HealthCheck;Publisher;Datadog</PackageTags>
     <Description>HealthChecks.Publisher.Datadog is the health check publisher for Datadog.</Description>
     <Version>$(HealthCheckPublisherDatadog)</Version>
-    <PackageId>AspNetCore.HealthChecks.Publisher.Datadog</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

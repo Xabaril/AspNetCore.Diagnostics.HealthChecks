@@ -2,13 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <AspNetCoreHostingModel>inprocess</AspNetCoreHostingModel>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />

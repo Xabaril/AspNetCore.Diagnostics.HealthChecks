@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;EventStore</PackageTags>
-    <Description>HealthChecks.EventStore is the health check package for EventStore.</Description>
-    <Version>$(HealthCheckEventStore)</Version>
+    <PackageTags>HealthCheck;Health;RabbitMQ</PackageTags>
+    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.</Description>
+    <Version>$(HealthCheckRabbitMQ)</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventStore.Client" Version="$(EventStoreClient)" />
+    <PackageReference Include="RabbitMQ.Client" Version="$(RabbitMQClient)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
   </ItemGroup>
 

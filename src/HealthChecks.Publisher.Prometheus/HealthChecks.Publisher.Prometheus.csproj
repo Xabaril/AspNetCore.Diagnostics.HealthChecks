@@ -5,11 +5,12 @@
     <PackageTags>HealthCheck;Publisher;Prometheus;Prometheus Gateway</PackageTags>
     <Description>[Deprecated! Use pull model with AspNetCore.HealthChecks.Prometheus.Metrics package instead] HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
     <Version>$(HealthCheckPublisherPrometheus)</Version>
-    <PackageId>AspNetCore.HealthChecks.Publisher.Prometheus</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App"/>
     <PackageReference Include="prometheus-net" Version="$(PrometheusNet)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
   </ItemGroup>
+
 </Project>

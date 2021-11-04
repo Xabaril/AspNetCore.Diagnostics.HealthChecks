@@ -1,5 +1,5 @@
 <Project>
-  <PropertyGroup Label="SDK Versions">    
+  <PropertyGroup Label="SDK Versions">
     <NetFrameworkVersion>net5.0</NetFrameworkVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
     <MicrosoftNETTestSdk>16.8.0</MicrosoftNETTestSdk>
@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
+    <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
     <RepositoryUrl>https://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
@@ -23,7 +24,7 @@
     <MicrosoftExtensionsHttp>5.0.0</MicrosoftExtensionsHttp>
     <MicrosoftExtensionsDependencyInjection>5.0.1</MicrosoftExtensionsDependencyInjection>
     <MicrosoftExtensionsDependencyInjectionAbstractions>5.0.0</MicrosoftExtensionsDependencyInjectionAbstractions>
-    <MicrosoftExtensionsHttpPolly>5.0.0</MicrosoftExtensionsHttpPolly> 
+    <MicrosoftExtensionsHttpPolly>5.0.0</MicrosoftExtensionsHttpPolly>
     <MicrosoftAspNetCoreTestHost>5.0.1</MicrosoftAspNetCoreTestHost>
     <MicrosoftExtensionsLoggingConsole>5.0.1</MicrosoftExtensionsLoggingConsole>
     <MicrosoftEntityFrameworkCore>5.0.1</MicrosoftEntityFrameworkCore>

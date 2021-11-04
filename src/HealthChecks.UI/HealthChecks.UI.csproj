@@ -1,11 +1,11 @@
 ﻿<Project Sdk=" Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
     <PackageTags>HealthCheck;UI</PackageTags>
+    <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
     <Version>$(HealthCheckUI)</Version>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
-    <PackageId>AspNetCore.HealthChecks.UI</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,4 +44,5 @@
     <Message Importance="high" Text="*** Uglifying css files *** " />
     <Exec Command="npm run buildcss:prod" ContinueOnError="false" />
   </Target>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿<Project>
   <Import Project="build/dependencies.props" />
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
       <PrivateAssets>all</PrivateAssets>

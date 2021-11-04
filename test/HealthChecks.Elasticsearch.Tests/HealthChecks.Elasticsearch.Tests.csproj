@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>$(NetFrameworkVersion)</TargetFramework>
@@ -7,18 +7,18 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-		<PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
-		<PackageReference Include="NSubstitute" Version="$(NSubstitute)" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
-		<PackageReference Include="xunit" Version="2.4.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+		<PackageReference Include="Microsoft.AspNetCore.TestHost"  />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json"  />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"  />
+		<PackageReference Include="FluentAssertions"  />
+		<PackageReference Include="NSubstitute"  />
+		<PackageReference Include="Microsoft.NET.Test.Sdk"  />
+		<PackageReference Include="xunit"  />
+		<PackageReference Include="xunit.runner.visualstudio" >
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.collector" Version="3.0.2">
+		<PackageReference Include="coverlet.collector" >
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -26,7 +26,7 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
 	</ItemGroup>
 
 </Project>

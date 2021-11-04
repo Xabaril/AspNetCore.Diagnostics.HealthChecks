@@ -4,7 +4,8 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;IdentityServer;IdSvr;OpenId;OpenIdConnect</PackageTags>
     <Description>HealthChecks.OpenIdConnectServer is the health check package for OpenIdConnect servers</Description>
-    <Version>$(HealthCheckIdSvr)</Version>
+    <Version>$(HealthCheckOpenIdConnectServer)</Version>
+    <RootNamespace>HealthChecks.IdSvr</RootNamespace> <!--For backward naming compatibility-->
   </PropertyGroup>
 
   <ItemGroup>

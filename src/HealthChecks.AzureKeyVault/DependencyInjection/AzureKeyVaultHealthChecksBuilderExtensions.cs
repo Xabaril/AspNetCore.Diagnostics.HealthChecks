@@ -78,14 +78,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddAzureKeyVault(this IHealthChecksBuilder builder, Func<IServiceProvider, Uri> keyVaultServiceUriFactory, TokenCredential credential, Action<IServiceProvider, AzureKeyVaultOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            if (keyVaultServiceUriFactory == null)
+            {
+                throw new ArgumentNullException(nameof(keyVaultServiceUriFactory));
+            }
+
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+
             var options = new AzureKeyVaultOptions();
-            
-            if (keyVaultServiceUriFactory == null) throw new ArgumentNullException(nameof(keyVaultServiceUriFactory));
-            if (credential == null) throw new ArgumentNullException(nameof(credential));
 
             return builder.Add(new HealthCheckRegistration(
                name ?? KEYVAULT_NAME,
-               sp => {
+               sp =>
+               {
                    setup?.Invoke(sp, options);
                    return new AzureKeyVaultHealthCheck(keyVaultServiceUriFactory(sp), credential, options);
                },

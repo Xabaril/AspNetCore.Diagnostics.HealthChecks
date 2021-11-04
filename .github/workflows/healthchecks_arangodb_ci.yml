@@ -29,6 +29,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.100-rc.2
+        include-prerelease: true
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
     - name: Build

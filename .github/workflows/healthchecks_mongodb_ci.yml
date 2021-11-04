@@ -27,7 +27,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
+        include-prerelease: true
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj
     - name: Build

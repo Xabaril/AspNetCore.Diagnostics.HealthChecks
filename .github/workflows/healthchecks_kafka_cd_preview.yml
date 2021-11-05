@@ -35,8 +35,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj --verbosity normal
+    # - name: Test
+    #   run: dotnet test ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj --verbosity normal
     - name: dotnet pack 
       run: dotnet pack ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget

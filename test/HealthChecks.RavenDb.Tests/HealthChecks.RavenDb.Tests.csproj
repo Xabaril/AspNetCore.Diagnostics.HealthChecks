@@ -26,7 +26,7 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\HealthChecks.RavenDb\HealthChecks.RavenDb.csproj" />
+	  <ProjectReference Include="..\..\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj" />
 	</ItemGroup>
 
 </Project>

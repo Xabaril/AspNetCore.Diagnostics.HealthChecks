@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HealthChecks.Npgsql.Tests.Functional
+namespace HealthChecks.NpgSql.Tests.Functional
 {
     public class DefaultStartup
     {

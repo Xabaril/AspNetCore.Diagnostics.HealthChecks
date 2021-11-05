@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 
-namespace HealthChecks.Npgsql.Tests.Functional
+namespace HealthChecks.NpgSql.Tests.Functional
 {
     public class npgsql_healthcheck_should
     {

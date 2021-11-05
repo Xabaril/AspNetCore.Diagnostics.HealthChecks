@@ -1,0 +1,44 @@
+name: HealthChecks RavenDb Preview CD
+
+on:
+  push:
+    tags:       
+      - release-ravendb-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc1.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    services:
+      ravendb:
+        image: ravendb/ravendb
+        ports:
+          - 9030:8080
+        env: 
+          RAVEN_ARGS: --Setup.Mode=None
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish RabbitMQ Health Check nuget
+      run: dotnet nuget push ./artifacts/HealthChecks.RavenDb.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

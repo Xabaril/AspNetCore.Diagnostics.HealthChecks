@@ -1,14 +1,15 @@
-name: HealthChecks Uris CD
+name: HealthChecks Uris Preview CD
 
 
 on:
   push:
     tags:       
-      - release-uris-*
+      - preview-uris-*
 jobs:
   build:
     env:
       BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc1.${{ github.run_number }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -24,7 +25,7 @@ jobs:
     - name: Test
       run: dotnet test ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj --verbosity normal
     - name: dotnet pack 
-      run: dotnet pack ./src/HealthChecks.Uris/HealthChecks.Uris.csproj -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+      run: dotnet pack ./src/HealthChecks.Uris/HealthChecks.Uris.csproj --version-suffix $VERSION_SUFFIX  -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2
       env:

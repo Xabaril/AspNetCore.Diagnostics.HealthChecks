@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.RavenDB/**
-    - test/HealthChecks.RavenDb.Tests/**
-    - .github/workflows/healthchecks_ravendb_ci.yml
+      - src/HealthChecks.RavenDB/**
+      - test/HealthChecks.RavenDb.Tests/**
+      - .github/workflows/healthchecks_ravendb_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

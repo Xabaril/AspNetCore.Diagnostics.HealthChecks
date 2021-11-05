@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Gremlin/**
-    - test/HealthChecks.Gremlin.Tests/**
-    - .github/workflows/healthchecks_gremlin_ci.yml
+      - src/HealthChecks.Gremlin/**
+      - test/HealthChecks.Gremlin.Tests/**
+      - .github/workflows/healthchecks_gremlin_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

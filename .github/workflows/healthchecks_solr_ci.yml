@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.SolR/**
-    - test/HealthChecks.SolR.Tests/**
-    - .github/workflows/healthchecks_solr_ci.yml
+      - src/HealthChecks.SolR/**
+      - test/HealthChecks.SolR.Tests/**
+      - .github/workflows/healthchecks_solr_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

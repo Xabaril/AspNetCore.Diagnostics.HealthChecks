@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.IbmMQ/**
-    - test/HealthChecks.IbmMQ.Tests/**
-    - .github/workflows/healthchecks_ibmmq_ci.yml
+      - src/HealthChecks.IbmMQ/**
+      - test/HealthChecks.IbmMQ.Tests/**
+      - .github/workflows/healthchecks_ibmmq_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Oracle/**
-    - test/HealthChecks.Oracle.Tests/**
-    - .github/workflows/healthchecks_oracle_ci.yml
+      - src/HealthChecks.Oracle/**
+      - test/HealthChecks.Oracle.Tests/**
+      - .github/workflows/healthchecks_oracle_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

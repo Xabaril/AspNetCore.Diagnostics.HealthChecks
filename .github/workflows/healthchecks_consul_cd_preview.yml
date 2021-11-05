@@ -4,7 +4,6 @@ on:
   push:
     tags:       
       - preview-consul-*  # Push events to release-arangodb* 
-
 jobs:
   build:
     env:

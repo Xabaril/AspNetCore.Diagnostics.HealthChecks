@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.NpgSql/**
-    - test/HealthChecks.Npgsql.Tests/**
-    - .github/workflows/healthchecks_npgsql_ci.yml
+      - src/HealthChecks.NpgSql/**
+      - test/HealthChecks.Npgsql.Tests/**
+      - .github/workflows/healthchecks_npgsql_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

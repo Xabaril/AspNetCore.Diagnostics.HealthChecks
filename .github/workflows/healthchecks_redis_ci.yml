@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Redis/**
-    - test/HealthChecks.Redis.Tests/**
-    - .github/workflows/healthchecks_redis_ci.yml
+      - src/HealthChecks.Redis/**
+      - test/HealthChecks.Redis.Tests/**
+      - .github/workflows/healthchecks_redis_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

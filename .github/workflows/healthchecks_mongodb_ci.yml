@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.MongoDb/**
-    - test/HealthChecks.MongoDb.Tests/**
-    - .github/workflows/healthchecks_mongodb_ci.yml
+      - src/HealthChecks.MongoDb/**
+      - test/HealthChecks.MongoDb.Tests/**
+      - .github/workflows/healthchecks_mongodb_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

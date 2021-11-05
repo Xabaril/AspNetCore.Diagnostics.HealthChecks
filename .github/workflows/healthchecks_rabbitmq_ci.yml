@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.RabbitMQ/**
-    - test/HealthChecks.RabbitMQ.Tests/**
-    - .github/workflows/healthchecks_rabbitmq_ci.yml
+      - src/HealthChecks.RabbitMQ/**
+      - test/HealthChecks.RabbitMQ.Tests/**
+      - .github/workflows/healthchecks_rabbitmq_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

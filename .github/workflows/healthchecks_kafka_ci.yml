@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Kafka/**
-    - test/HealthChecks.Kafka.Tests/**
-    - .github/workflows/healthchecks_kafka_ci.yml
+      - src/HealthChecks.Kafka/**
+      - test/HealthChecks.Kafka.Tests/**
+      - .github/workflows/healthchecks_kafka_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

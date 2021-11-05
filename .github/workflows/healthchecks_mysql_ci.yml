@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.MySql/**
-    - test/HealthChecks.MySql.Tests/**
-    - .github/workflows/healthchecks_mysql_ci.yml
+      - src/HealthChecks.MySql/**
+      - test/HealthChecks.MySql.Tests/**
+      - .github/workflows/healthchecks_mysql_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

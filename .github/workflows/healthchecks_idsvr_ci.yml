@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.IdSvr/**
-    - test/HealthChecks.IdSvr.Tests/**
-    - .github/workflows/healthchecks_idsvr_ci.yml
+      - src/HealthChecks.IdSvr/**
+      - test/HealthChecks.IdSvr.Tests/**
+      - .github/workflows/healthchecks_idsvr_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

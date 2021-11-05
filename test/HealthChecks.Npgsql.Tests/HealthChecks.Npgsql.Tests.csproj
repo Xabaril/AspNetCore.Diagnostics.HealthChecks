@@ -27,7 +27,7 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\HealthChecks.Npgsql\HealthChecks.Npgsql.csproj" />
+	  <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
 	</ItemGroup>
 
 </Project>

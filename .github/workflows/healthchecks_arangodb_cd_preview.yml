@@ -1,9 +1,9 @@
-name: HealthChecks Arango DB CD
+name: HealthChecks Arango DB Preview CD
 
 on:
   push:
     tags:       
-      - release-arangodb-*  # Push events to release-arangodb* 
+      - preview-arangodb-*  # Push events to release-arangodb* 
 jobs:
   build:
     env:
@@ -31,7 +31,7 @@ jobs:
     - name: Test
       run: dotnet test ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj --verbosity normal
     - name: dotnet pack 
-      run: dotnet pack ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj  --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+      run: dotnet pack ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2
       env:

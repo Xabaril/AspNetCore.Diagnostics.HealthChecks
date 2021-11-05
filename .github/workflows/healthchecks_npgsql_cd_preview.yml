@@ -26,13 +26,13 @@ jobs:
         dotnet-version: 6.0.x
         include-prerelease: true
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Npgsql/HealthChecks.Npgsql.csproj
+      run: dotnet restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Npgsql/HealthChecks.Npgsql.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal
     - name: dotnet pack 
-      run: dotnet pack ./src/HealthChecks.Npgsql/HealthChecks.Npgsql.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+      run: dotnet pack ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2
       env:
@@ -40,4 +40,4 @@ jobs:
       with:
         nuget-version: latest
     - name: Publish Npgsql Health Check nuget
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Npgsql.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.NpgSql.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

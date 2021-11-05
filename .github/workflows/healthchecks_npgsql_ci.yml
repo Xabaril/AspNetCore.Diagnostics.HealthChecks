@@ -4,7 +4,7 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Npgsql/**
+    - src/HealthChecks.NpgSql/**
     - test/HealthChecks.Npgsql.Tests/**
     - .github/workflows/healthchecks_npgsql_ci.yml
   pull_request:

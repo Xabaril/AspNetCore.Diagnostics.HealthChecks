@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Sqlite/**
-    - test/HealthChecks.Sqlite.Tests/**
-    - .github/workflows/healthchecks_sqlite_ci.yml
+      - src/HealthChecks.Sqlite/**
+      - test/HealthChecks.Sqlite.Tests/**
+      - .github/workflows/healthchecks_sqlite_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.UI/**
-    - test/HealthChecks.UI.Tests/**
-    - .github/workflows/healthchecks_ui_ci.yml
+      - src/HealthChecks.UI/**
+      - test/HealthChecks.UI.Tests/**
+      - .github/workflows/healthchecks_ui_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

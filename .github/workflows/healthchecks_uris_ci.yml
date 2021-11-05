@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.Uris/**
-    - test/HealthChecks.Uris.Tests/**
-    - .github/workflows/healthchecks_uris_ci.yml
+      - src/HealthChecks.Uris/**
+      - test/HealthChecks.Uris.Tests/**
+      - .github/workflows/healthchecks_uris_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

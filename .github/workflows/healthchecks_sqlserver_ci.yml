@@ -4,9 +4,11 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.SqlServer/**
-    - test/HealthChecks.SqlServer.Tests/**
-    - .github/workflows/healthchecks_sqlserver_ci.yml
+      - src/HealthChecks.SqlServer/**
+      - test/HealthChecks.SqlServer.Tests/**
+      - .github/workflows/healthchecks_sqlserver_ci.yml
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

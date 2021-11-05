@@ -37,4 +37,4 @@ jobs:
       with:
         nuget-version: latest
     - name: Publish IdSvr Health Check nuget
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.IdSvr.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.OpenIdConnectServer.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

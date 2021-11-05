@@ -3,7 +3,7 @@ name: HealthChecks NPGSQL DB Preview CD
 on:
   push:
     tags:       
-      - preview-network-*
+      - preview-npgsql-*
 jobs:
   build:
     env:

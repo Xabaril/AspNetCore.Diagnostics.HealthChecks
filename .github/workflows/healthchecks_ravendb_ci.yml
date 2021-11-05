@@ -10,7 +10,7 @@ on:
   pull_request:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.RavenDb/**
+    - src/HealthChecks.RavenDB/**
     - test/HealthChecks.RavenDb.Tests/**
     - .github/workflows/healthchecks_ravendb_ci.yml
 
@@ -32,8 +32,8 @@ jobs:
         dotnet-version: 6.0.x
         include-prerelease: true
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj
+      run: dotnet restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.RavenDb/HealthChecks.RavenDb.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDb.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj --verbosity normal

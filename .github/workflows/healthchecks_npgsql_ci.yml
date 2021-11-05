@@ -5,13 +5,13 @@ on:
     #branches: [ master ]
     paths:
     - src/HealthChecks.NpgSql/**
-    - test/HealthChecks.NpgSql.Tests/**
+    - test/HealthChecks.Npgsql.Tests/**
     - .github/workflows/healthchecks_npgsql_ci.yml
   pull_request:
     #branches: [ master ]
     paths:
     - src/HealthChecks.NpgSql/**
-    - test/HealthChecks.NpgSql.Tests/**
+    - test/HealthChecks.Npgsql.Tests/**
     - .github/workflows/healthchecks_npgsql_ci.yml
 
 jobs:
@@ -37,4 +37,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.NpgSql.Tests/HealthChecks.NpgSql.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal

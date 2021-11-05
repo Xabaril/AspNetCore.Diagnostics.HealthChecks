@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31825.309
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB8-43CF-B3A2-B70E648259D4}"
 EndProject
@@ -153,6 +153,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RabbitMQ.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Oracle.Tests", "test\HealthChecks.Oracle.Tests\HealthChecks.Oracle.Tests.csproj", "{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Npgsql.Tests", "test\HealthChecks.Npgsql.Tests\HealthChecks.Npgsql.Tests.csproj", "{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.MySql.Tests", "test\HealthChecks.MySql.Tests\HealthChecks.MySql.Tests.csproj", "{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.MongoDb.Tests", "test\HealthChecks.MongoDb.Tests\HealthChecks.MongoDb.Tests.csproj", "{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E}"
@@ -184,8 +186,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Tests", "test\HealthChecks.UI.Tests\HealthChecks.UI.Tests.csproj", "{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Prometheus.Tests", "test\HealthChecks.Publisher.Prometheus.Tests\HealthChecks.Publisher.Prometheus.Tests.csproj", "{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.NpgSql.Tests", "test\HealthChecks.NpgSql.Tests\HealthChecks.NpgSql.Tests.csproj", "{AC942F6B-889A-4406-8A7D-BDD01068B4CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -449,6 +449,10 @@ Global
 		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -513,10 +517,6 @@ Global
 		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC942F6B-889A-4406-8A7D-BDD01068B4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC942F6B-889A-4406-8A7D-BDD01068B4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC942F6B-889A-4406-8A7D-BDD01068B4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC942F6B-889A-4406-8A7D-BDD01068B4CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -586,6 +586,7 @@ Global
 		{75CC7014-0F72-44DF-A357-E03AF243EE95} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{2024BEDB-B31B-46B4-A978-22D1683B5DDF} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{0BB35C7F-B16C-48EF-8335-C2200D41E2BE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
@@ -602,7 +603,6 @@ Global
 		{F12C630F-AB61-4065-920D-2642A522ECA5} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
-		{AC942F6B-889A-4406-8A7D-BDD01068B4CE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

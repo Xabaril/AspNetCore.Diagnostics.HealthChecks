@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace HealthChecks.NpgSql.Tests.DependencyInjection
+namespace HealthChecks.Npgsql.Tests.DependencyInjection
 {
     public class npgsql_registration_should
     {

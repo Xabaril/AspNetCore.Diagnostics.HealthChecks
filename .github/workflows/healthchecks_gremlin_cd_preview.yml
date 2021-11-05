@@ -30,8 +30,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj --verbosity normal
+    # - name: Test
+    #   run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj --verbosity normal
     - name: dotnet pack 
       run: dotnet pack ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget

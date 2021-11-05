@@ -3,7 +3,7 @@ name: HealthChecks Oracle Preview CD
 on:
   push:
     tags:       
-      - release-oracle-*
+      - preview-oracle-*
 
 jobs:
   build:

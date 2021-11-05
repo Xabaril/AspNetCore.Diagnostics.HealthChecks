@@ -3,7 +3,7 @@ name: HealthChecks SolR Preview CD
 on:
   push:
     tags:       
-      - release-solr-*
+      - preview-solr-*
 
 jobs:
   build:

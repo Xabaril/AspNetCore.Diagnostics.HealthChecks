@@ -2,7 +2,7 @@ name: HealthChecks Redis Preview CD
 on:
   push:
     tags:       
-      - release-redis-*
+      - preview-redis-*
 
 jobs:
   build:

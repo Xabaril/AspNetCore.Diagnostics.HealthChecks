@@ -3,7 +3,7 @@ name: HealthChecks RavenDb Preview CD
 on:
   push:
     tags:       
-      - release-ravendb-*
+      - preview-ravendb-*
 
 jobs:
   build:

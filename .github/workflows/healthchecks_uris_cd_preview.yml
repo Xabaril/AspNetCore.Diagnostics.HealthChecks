@@ -4,7 +4,7 @@ name: HealthChecks Uris CD
 on:
   push:
     tags:       
-      - release-uris-*
+      - preview-uris-*
 jobs:
   build:
     env:

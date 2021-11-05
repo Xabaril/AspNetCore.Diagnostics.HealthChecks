@@ -3,7 +3,7 @@ name: HealthChecks RabbitMQ Preview CD
 on:
   push:
     tags:       
-      - release-rabbitmq-*
+      - preview-rabbitmq-*
 
 jobs:
   build:

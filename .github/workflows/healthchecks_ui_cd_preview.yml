@@ -4,7 +4,7 @@ name: HealthChecks SQL Server DB Preview CD
 on:
   push:
     tags:       
-      - release-ui-*
+      - preview-ui-*
 
 jobs:
   build:

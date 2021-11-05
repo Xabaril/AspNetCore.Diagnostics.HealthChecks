@@ -3,7 +3,7 @@ name: HealthChecks Sqlite Preview CD
 on:
   push:
     tags:       
-      - release-sqlite-*
+      - preview-sqlite-*
 
 jobs:
   build:

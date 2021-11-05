@@ -3,7 +3,7 @@ name: HealthChecks System Preview CD
 on:
   push:
     tags:       
-      - release-system-*
+      - preview-system-*
 
 jobs:
   build:

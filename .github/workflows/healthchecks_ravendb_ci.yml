@@ -4,7 +4,7 @@ on:
   push:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.RavenDb/**
+    - src/HealthChecks.RavenDB/**
     - test/HealthChecks.RavenDb.Tests/**
     - .github/workflows/healthchecks_ravendb_ci.yml
   pull_request:
@@ -34,6 +34,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDb.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj --verbosity normal

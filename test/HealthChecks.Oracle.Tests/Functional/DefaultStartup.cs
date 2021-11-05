@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HealthChecks.Sqlite.Tests.Functional
+namespace HealthChecks.Oracle.Tests.Functional
 {
     public class DefaultStartup
     {

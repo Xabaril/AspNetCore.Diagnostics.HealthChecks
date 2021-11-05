@@ -27,8 +27,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal
+    # - name: Test
+    #   run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal
     - name: dotnet pack 
       run: dotnet pack ./src/HealthChecks.Solr/HealthChecks.Solr.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget

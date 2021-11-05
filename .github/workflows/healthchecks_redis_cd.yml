@@ -28,7 +28,7 @@ jobs:
     - name: Test
       run: dotnet test ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj --verbosity normal
     - name: dotnet pack 
-      run: dotnet pack ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG --no-build --include-source --include-symbols -o ./artifacts
+      run: dotnet pack ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2
       env:
@@ -36,6 +36,6 @@ jobs:
       with:
         nuget-version: latest
     - name: Publish Redis Health Check nuget
-      run: dotnet nuget push ./artifacts/HealthChecks.Redis.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Redis.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
 
 

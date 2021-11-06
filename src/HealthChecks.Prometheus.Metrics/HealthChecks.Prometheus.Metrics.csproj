@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="prometheus-net" Version="$(PrometheusNet)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="prometheus-net"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthCheck"/>
   </ItemGroup>
 
 </Project>

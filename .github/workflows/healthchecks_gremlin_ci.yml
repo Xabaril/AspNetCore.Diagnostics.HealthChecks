@@ -1,0 +1,42 @@
+name: HealthChecks Gremlin CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+      - src/HealthChecks.Gremlin/**
+      - test/HealthChecks.Gremlin.Tests/**
+      - .github/workflows/healthchecks_gremlin_ci.yml
+    tags-ignore:
+      - preview-*
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.Gremlin/**
+    - test/HealthChecks.Gremlin.Tests/**
+    - .github/workflows/healthchecks_gremlin_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      gremlin:
+        image: tinkerpop/gremlin-server
+        ports:
+          - 8182:8182
+        env: 
+          VIRTUAL_HOST: gremlin.docker
+          VIRTUAL_PORT: 8182
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj --verbosity normal

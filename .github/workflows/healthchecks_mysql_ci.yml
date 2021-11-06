@@ -1,0 +1,41 @@
+name: HealthChecks MySql CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+      - src/HealthChecks.MySql/**
+      - test/HealthChecks.MySql.Tests/**
+      - .github/workflows/healthchecks_mysql_ci.yml
+    tags-ignore:
+      - preview-*
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.MySql/**
+    - test/HealthChecks.MySql.Tests/**
+    - .github/workflows/healthchecks_mysql_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql
+        ports:
+          - 3306:3306
+        env: 
+          MYSQL_ROOT_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj --verbosity normal

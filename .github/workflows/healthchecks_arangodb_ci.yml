@@ -1,0 +1,41 @@
+name: HealthChecks Arango DB CI
+
+on:
+  push:
+   #branches: [ master ]
+   paths:
+    - src/HealthChecks.ArangoDb/**
+    - test/HealthChecks.ArangoDb.Tests/**
+    - .github/workflows/healthchecks_arangodb_ci.yml
+   tags-ignore:
+    - preview-*
+    
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.ArangoDb/**
+    - test/HealthChecks.ArangoDb.Tests/**
+    - .github/workflows/healthchecks_arangodb_ci.yml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      arangodb:
+        image: arangodb/arangodb:latest
+        ports:
+          - 8529:8529
+        env: 
+          ARANGO_ROOT_PASSWORD: strongArangoDbPassword
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj --verbosity normal

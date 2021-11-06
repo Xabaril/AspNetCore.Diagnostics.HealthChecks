@@ -4,10 +4,10 @@ services:
         image: mcr.microsoft.com/mssql/server
         restart: always
         ports:
-            - ${SQLSERVER_PORT}:1433
+            - 5433:1433
         environment:
             - ACCEPT_EULA=Y
-            - SA_PASSWORD=${SQLSERVER_PASSWORD}
+            - SA_PASSWORD=Password12!
     redis:
         image: redis:alpine
         ports:
@@ -36,6 +36,8 @@ services:
         ports:
           - "2113:2113"
           - ${EVENTSTORE_PORT}:1113
+        environment:
+            - EVENTSTORE_INSECURE=true
     mongodb:
         image: mongo
         ports:
@@ -143,7 +145,7 @@ services:
         - "9157:9157"
         environment:
         - LICENSE=accept
-        - MQ_QMGR_NAME=QM.TEST.01
+        - MQ_QMGR_NAME=QM1
         - MQ_APP_PASSWORD=12345678
         - MQ_ENABLE_METRICS=true
     arangodb:

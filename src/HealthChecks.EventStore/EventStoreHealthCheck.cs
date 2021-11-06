@@ -25,6 +25,7 @@ namespace HealthChecks.EventStore
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
+            var a = "";
             try
             {
                 ConnectionSettingsBuilder connectionSettings;
@@ -72,7 +73,11 @@ namespace HealthChecks.EventStore
                             exception: e.Exception));
                     };
 
-                    using (cancellationToken.Register(() => connection.Close()))
+                    using (cancellationToken.Register(() =>
+                    {
+                        var a = "";
+                        connection.Close();
+                    }))
                     {
                         //completes after tcp connection init, but before successful connection and login
                         await connection.ConnectAsync();

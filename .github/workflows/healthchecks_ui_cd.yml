@@ -1,0 +1,59 @@
+name: HealthChecks SQL Server DB CD
+
+
+on:
+  push:
+    tags:       
+      - release-ui-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server
+        ports:
+          - 5433:1433
+        env: 
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password12!
+      npgsql:
+        image: postgres
+        ports:
+          - 8010:5432
+        env: 
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Password12!
+      mysql:
+        image: mysql
+        ports:
+          - 3306:3306
+        env: 
+          MYSQL_ROOT_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish UI Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+

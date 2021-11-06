@@ -1,0 +1,45 @@
+name: HealthChecks Network CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+      - src/HealthChecks.Network/**
+      - test/HealthChecks.Network.Tests/**
+      - .github/workflows/healthchecks_network_ci.yml
+    tags-ignore:
+      - preview-*
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.Network/**
+    - test/HealthChecks.Network.Tests/**
+    - .github/workflows/healthchecks_network_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      ftp:
+        image: bogem/ftp
+        ports:
+          - 21:21
+          - 47400-47470:47400-47470
+        env: 
+          FTP_USER: bob
+          FTP_PASS: 12345
+          PASV_ADDRESS: 127.0.0.1
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal

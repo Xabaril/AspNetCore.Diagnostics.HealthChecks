@@ -29,9 +29,9 @@ namespace HealthChecks.UI.Core.Data.Configuration
 
             builder.Property(le => le.Tags)
                 .HasConversion(
-                    v => JsonSerializer.Serialize(v, null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, null))
-
+                    v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                    v => JsonSerializer.Deserialize<List<string>>(v, default(JsonSerializerOptions))
+                )
                 .Metadata.SetValueComparer(new ValueComparer<List<string>>(
                                             (c1, c2) => c1.SequenceEqual(c2),
                                             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),

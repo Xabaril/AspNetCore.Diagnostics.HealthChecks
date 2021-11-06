@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="$(MicrosoftApplicationInsights)" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore"/>
   </ItemGroup>
 
   <ItemGroup>

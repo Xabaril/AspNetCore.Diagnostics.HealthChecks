@@ -72,23 +72,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
         }
 
         [Fact]
-        public void fail_when_invalid_uri_provided_with_service_provider_based_setup_in_configuration()
-        {
-            var services = new ServiceCollection();
-
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                services.AddHealthChecks()
-                .AddAzureKeyVault(null as Uri, new MockTokenCredentials(), (_, setup) =>
-                {
-                    setup
-                    .AddSecret("mysecret")
-                    .AddKey("mycryptokey");
-                });
-            });
-        }
-
-        [Fact]
         public void fail_when_invalid_credential_provided_in_configuration()
         {
             var services = new ServiceCollection();
@@ -103,58 +86,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureKeyVault
                             .AddKey("mycryptokey");
                     });
             });
-        }
-
-        [Fact]
-        public void add_health_check_with_keyvault_service_uri_factory_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            var factoryCalled = false;
-            var setupCalled = false;
-
-            services.AddHealthChecks()
-                .AddAzureKeyVault(
-                    _ =>
-                    {
-                        factoryCalled = true;
-                        return new Uri("http://localhost");
-                    }, 
-                    new MockTokenCredentials(), 
-                    (_, _) => { setupCalled = true; }
-                );
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
-            factoryCalled.Should().BeTrue();
-            setupCalled.Should().BeTrue();
-        }
-
-        [Fact]
-        public void add_health_check_with_service_provider_based_setup_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            var setupCalled = false;
-
-            services.AddHealthChecks()
-                .AddAzureKeyVault(
-                    new Uri("http://localhost"),
-                    new MockTokenCredentials(),
-                    (_, _) => { setupCalled = true; }
-                );
-
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
-            setupCalled.Should().BeTrue();
         }
     }
 

@@ -16,7 +16,8 @@ jobs:
           - 1414:1414
           - 9157:9157
         env:
-          MQ_QMGR_NAME: QM.TEST.01
+          LICENSE: accept
+          MQ_QMGR_NAME: QM1
           MQ_APP_PASSWORD: 12345678
           MQ_ENABLE_METRICS: true
     steps:

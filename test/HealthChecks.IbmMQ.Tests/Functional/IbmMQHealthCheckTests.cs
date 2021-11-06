@@ -16,7 +16,7 @@ namespace HealthChecks.Ibmq.Tests.Functional
     {
 
         // Define the name of the queue manager to use (applies to all connections)
-        const string qManager = "QM.TEST.01";
+        const string qManager = "QM1";
 
         // Define the name of your host connection (applies to client connections only)
         const string hostName = "localhost(1414)";
@@ -47,8 +47,9 @@ namespace HealthChecks.Ibmq.Tests.Functional
                  .UseStartup<DefaultStartup>()
                  .ConfigureServices(services =>
                  {
-                     services.AddHealthChecks().
-                  AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                     services
+                        .AddHealthChecks()
+                        .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
                  })
                  .Configure(app =>
                  {
@@ -81,9 +82,10 @@ namespace HealthChecks.Ibmq.Tests.Functional
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
-                    services.AddHealthChecks()
-                    .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
-                })
+                    services
+                        .AddHealthChecks()
+                        .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                    })
                 .Configure(app =>
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions()
@@ -108,8 +110,9 @@ namespace HealthChecks.Ibmq.Tests.Functional
                 .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
-                    services.AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: new string[] { "ibmmq" });
+                    services
+                        .AddHealthChecks()
+                        .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: new string[] { "ibmmq" });
                 })
                 .Configure(app =>
                 {
@@ -135,9 +138,10 @@ namespace HealthChecks.Ibmq.Tests.Functional
                  .UseStartup<DefaultStartup>()
                  .ConfigureServices(services =>
                  {
-                     services.AddHealthChecks().
-                  AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: new string[] { "ibmmq" });
-                 })
+                     services
+                         .AddHealthChecks()
+                         .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: new string[] { "ibmmq" });
+                     })
                  .Configure(app =>
                  {
                      app.UseHealthChecks("/health", new HealthCheckOptions()

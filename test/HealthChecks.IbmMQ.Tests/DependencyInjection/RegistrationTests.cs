@@ -24,7 +24,7 @@ namespace HealthChecks.Ibmq.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ibmq");
+            registration.Name.Should().Be("ibmmq");
             check.Should().BeOfType<IbmMQHealthCheck>();
         }
     }

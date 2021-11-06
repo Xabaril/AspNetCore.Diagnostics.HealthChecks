@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       gremlin:
-        image: gremlin/gremlin
+        image: tinkerpop/gremlin-server
         ports:
           - 8182:8182
         env: 

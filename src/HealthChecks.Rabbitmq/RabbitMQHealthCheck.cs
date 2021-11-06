@@ -55,19 +55,13 @@ namespace HealthChecks.RabbitMQ
             {
                 if (_factory == null)
                 {
-                    var connectionFactory = new ConnectionFactory()
+                    _factory = new ConnectionFactory()
                     {
                         Uri = _rabbitConnectionString,
                         AutomaticRecoveryEnabled = true,
                         UseBackgroundThreadsForIO = true,
+                        Ssl = _sslOption ?? new SslOption()
                     };
-
-                    if (_sslOption != null)
-                    {
-                        connectionFactory.Ssl = _sslOption;
-                    }
-
-                    _factory = connectionFactory;
                 }
 
                 _connection = _factory.CreateConnection();

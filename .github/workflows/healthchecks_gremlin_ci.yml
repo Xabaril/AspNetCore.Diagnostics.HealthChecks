@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Gremlin/**
       - test/HealthChecks.Gremlin.Tests/**
       - .github/workflows/healthchecks_gremlin_ci.yml
-    tags-ignore:
-      - preview-*
+    #tags-ignore:
+    #  - preview-*
   pull_request:
     #branches: [ master ]
     paths:

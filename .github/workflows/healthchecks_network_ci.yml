@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Network/**
       - test/HealthChecks.Network.Tests/**
       - .github/workflows/healthchecks_network_ci.yml
-    tags-ignore:
-      - preview-*
+    # tags-ignore:
+    #  - preview-*
   pull_request:
     #branches: [ master ]
     paths:
@@ -29,7 +29,30 @@ jobs:
           FTP_USER: bob
           FTP_PASS: 12345
           PASV_ADDRESS: 127.0.0.1
-
+      sftp:
+        image: atmoz/sftp
+        ports: 
+          - 22:22
+        volumes:
+          - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro
+        command: foo:pass:::upload
+      mail:
+        image: tvial/docker-mailserver:latest
+        hostname: mail
+        container_name: mail
+        domainname: healthchecks.com        
+        ports:
+          - 25:25               
+          - 143:143
+          - 465:465
+          - 587:587
+          - 993:993          
+          - 995:995  
+        environment:
+          - SSL_TYPE=self-signed
+          - DMS_DEBUG=1
+        volumes:
+          - ./build/docker-services/mail/:/tmp/docker-mailserver/
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

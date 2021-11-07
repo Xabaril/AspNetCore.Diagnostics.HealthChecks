@@ -35,7 +35,7 @@ jobs:
           - 22:22
         volumes:
           - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
-        options: foo:pass:::upload
+          - ./build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
       mail:
         image: tvial/docker-mailserver:latest
         options: --hostname mail --container_name mail --domainname healthchecks.com        

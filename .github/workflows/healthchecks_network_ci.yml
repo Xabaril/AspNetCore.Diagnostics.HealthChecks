@@ -34,13 +34,11 @@ jobs:
         ports: 
           - 22:22
         volumes:
-          - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro
-        command: foo:pass:::upload
+          - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
+        options: foo:pass:::upload
       mail:
         image: tvial/docker-mailserver:latest
-        hostname: mail
-        container_name: mail
-        domainname: healthchecks.com        
+        options: --hostname mail --container_name mail --domainname healthchecks.com        
         ports:
           - 25:25               
           - 143:143
@@ -48,9 +46,9 @@ jobs:
           - 587:587
           - 993:993          
           - 995:995  
-        environment:
-          - SSL_TYPE=self-signed
-          - DMS_DEBUG=1
+        env:
+          SSL_TYPE: self-signed
+          DMS_DEBUG: 1
         volumes:
           - ./build/docker-services/mail/:/tmp/docker-mailserver/
     steps:

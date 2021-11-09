@@ -9,4 +9,16 @@
 	  <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Resource Include="id_rsa" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <None Update="id_rsa">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

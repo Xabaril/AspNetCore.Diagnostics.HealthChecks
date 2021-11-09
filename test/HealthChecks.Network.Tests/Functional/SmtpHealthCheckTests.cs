@@ -14,7 +14,7 @@ namespace HealthChecks.Network.Tests.Functional
 
     public class smtp_healthcheck_should
     {
-        
+
         //Host and login account to fast switch tests against different server
         private const string _host = "localhost";
         private const string _validAccount = "admin@healthchecks.com";
@@ -243,7 +243,7 @@ namespace HealthChecks.Network.Tests.Functional
 
         }
 
-        [Fact]
+        [Fact(Skip = "The SMTP interoperability service at test.smtp.org has been shut down due to abuse.")]
         public async Task be_healthty_when_login_with_plain_smtp()
         {
             /* We use test.smtp.org service to test raw smtp connections as nowadays

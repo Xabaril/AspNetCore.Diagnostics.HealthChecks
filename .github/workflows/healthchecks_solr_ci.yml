@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Solr/**
       - test/HealthChecks.SolR.Tests/**
       - .github/workflows/healthchecks_solr_ci.yml
-    tags-ignore:
-      - preview-*
+    #tags-ignore:
+    #  - preview-*
   pull_request:
     #branches: [ master ]
     paths:
@@ -20,10 +20,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      consul:
+      solr:
         image: solr:8.4.1
         ports:
           - 8983:8983
+        volumes:
+          - ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore
+          - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

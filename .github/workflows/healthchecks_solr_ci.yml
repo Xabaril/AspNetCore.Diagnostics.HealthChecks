@@ -29,7 +29,7 @@ jobs:
           - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
     steps:
     - name: Provide permission for deleting volume files
-      run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/${{ github.event.repository.name }}
+      run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1

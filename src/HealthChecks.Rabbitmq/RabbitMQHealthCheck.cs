@@ -60,8 +60,9 @@ namespace HealthChecks.RabbitMQ
                         Uri = _rabbitConnectionString,
                         AutomaticRecoveryEnabled = true,
                         UseBackgroundThreadsForIO = true,
-                        Ssl = _sslOption ?? new SslOption()
                     };
+
+                    if (_sslOption != null) ((ConnectionFactory)_factory).Ssl = _sslOption;
                 }
 
                 _connection = _factory.CreateConnection();

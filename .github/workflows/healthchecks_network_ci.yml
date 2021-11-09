@@ -34,8 +34,8 @@ jobs:
         ports: 
           - 22:22
         volumes:
-          - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
-          - ./build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
+          - ${{ github.workspace }}/build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
+          - ${{ github.workspace }}/build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
       mail:
         image: tvial/docker-mailserver:latest
         options: --hostname mail --container_name mail --domainname healthchecks.com        
@@ -50,7 +50,7 @@ jobs:
           SSL_TYPE: self-signed
           DMS_DEBUG: 1
         volumes:
-          - ./build/docker-services/mail/:/tmp/docker-mailserver/
+          - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

@@ -4,7 +4,7 @@ on:
   push:
     #branches: [ master ]
     paths:
-      - src/HealthChecks.RabbitMQ/**
+      - src/HealthChecks.Rabbitmq/**
       - test/HealthChecks.RabbitMQ.Tests/**
       - .github/workflows/healthchecks_rabbitmq_ci.yml
     tags-ignore:
@@ -12,7 +12,7 @@ on:
   pull_request:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.RabbitMQ/**
+    - src/HealthChecks.Rabbitmq/**
     - test/HealthChecks.RabbitMQ.Tests/**
     - .github/workflows/healthchecks_rabbitmq_ci.yml
 
@@ -32,8 +32,8 @@ jobs:
         dotnet-version: 6.0.x
         include-prerelease: true
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.RabbitMQ/HealthChecks.RabbitMQ.csproj
+      run: dotnet restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.RabbitMQ/HealthChecks.RabbitMQ.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj --verbosity normal

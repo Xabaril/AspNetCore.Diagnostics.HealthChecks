@@ -4,7 +4,7 @@ on:
   push:
     #branches: [ master ]
     paths:
-      - src/HealthChecks.IdSvr/**
+      - src/HealthChecks.OpenIdConnectServer/**
       - test/HealthChecks.IdSvr.Tests/**
       - .github/workflows/healthchecks_idsvr_ci.yml
     tags-ignore:
@@ -12,7 +12,7 @@ on:
   pull_request:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.IdSvr/**
+    - src/HealthChecks.OpenIdConnectServer/**
     - test/HealthChecks.IdSvr.Tests/**
     - .github/workflows/healthchecks_idsvr_ci.yml
 
@@ -32,8 +32,8 @@ jobs:
         dotnet-version: 6.0.x
         include-prerelease: true
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.IdSvr/HealthChecks.IdSvr.csproj
+      run: dotnet restore ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.IdSvr/HealthChecks.IdSvr.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.IdSvr.Tests/HealthChecks.IdSvr.Tests.csproj --verbosity normal

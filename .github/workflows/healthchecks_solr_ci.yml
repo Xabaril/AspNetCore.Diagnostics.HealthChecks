@@ -4,7 +4,7 @@ on:
   push:
     #branches: [ master ]
     paths:
-      - src/HealthChecks.SolR/**
+      - src/HealthChecks.Solr/**
       - test/HealthChecks.SolR.Tests/**
       - .github/workflows/healthchecks_solr_ci.yml
     tags-ignore:
@@ -12,7 +12,7 @@ on:
   pull_request:
     #branches: [ master ]
     paths:
-    - src/HealthChecks.SolR/**
+    - src/HealthChecks.Solr/**
     - test/HealthChecks.SolR.Tests/**
     - .github/workflows/healthchecks_solr_ci.yml
 
@@ -32,8 +32,8 @@ jobs:
         dotnet-version: 6.0.x
         include-prerelease: true
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.SolR/HealthChecks.SolR.csproj
+      run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.SolR/HealthChecks.SolR.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal

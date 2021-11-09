@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <Description>HealthChecks.UI.Core package containing builder and model definitions</Description>
     <PackageTags>HealthCheck;HealthChecks;COre</PackageTags>
+    <Description>HealthChecks.UI.Core package containing builder and model definitions</Description>
     <Version>$(HealthCheckUICore)</Version>
-    <PackageId>AspNetCore.HealthChecks.UI.Core</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,4 +13,5 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
+
 </Project>

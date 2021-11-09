@@ -1,5 +1,6 @@
 <Project>
-  <PropertyGroup Label="SDK Versions">    
+
+  <PropertyGroup Label="SDK Versions">
     <NetFrameworkVersion>net6.0</NetFrameworkVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
     <LangVersion>latest</LangVersion>
@@ -11,7 +12,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
-    <HealthCheckIdSvr>6.0.1$(VersionSuffix)</HealthCheckIdSvr>
+    <HealthCheckOpenIdConnectServer>6.0.1$(VersionSuffix)</HealthCheckOpenIdConnectServer>
     <HealthCheckSqlServer>6.0.1$(VersionSuffix)</HealthCheckSqlServer>
     <HealthCheckSqlite>6.0.1$(VersionSuffix)</HealthCheckSqlite>
     <HealthCheckUri>6.0.1$(VersionSuffix)</HealthCheckUri>
@@ -60,4 +61,5 @@
     <HealthCheckSendGrid>6.0.1$(VersionSuffix)</HealthCheckSendGrid>
     <HealthCheckArangoDb>6.0.1$(VersionSuffix)</HealthCheckArangoDb>
   </PropertyGroup>
+
 </Project>

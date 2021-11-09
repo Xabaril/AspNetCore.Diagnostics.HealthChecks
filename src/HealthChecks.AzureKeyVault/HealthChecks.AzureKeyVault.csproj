@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Azure Key Vault;Secrets</PackageTags>
     <Description>HealthChecks.AzureKeyVault is the health check package for Azure Key Vault secrets</Description>
     <Version>$(HealthCheckKeyVault)</Version>
-    <PackageId>AspNetCore.HealthChecks.AzureKeyVault</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Azure.Security.KeyVault.Certificates"/>
     <PackageReference Include="Azure.Security.KeyVault.Keys"/>
@@ -14,4 +15,5 @@
     <PackageReference Include="Microsoft.Azure.Services.AppAuthentication"/>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory"/>
   </ItemGroup>
+
 </Project>

@@ -9,10 +9,10 @@
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Azure.Identity"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration"/>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration"/>
+  </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />

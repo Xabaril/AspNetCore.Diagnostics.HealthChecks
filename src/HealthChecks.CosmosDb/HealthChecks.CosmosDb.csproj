@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Azure;CosmosDb</PackageTags>
     <Description>HealthChecks.CosmosDb is the health check package for Azure CosmosDb.</Description>
     <Version>$(HealthCheckCosmosDb)</Version>
-    <PackageId>AspNetCore.HealthChecks.CosmosDb</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
     <PackageReference Include="Azure.Data.Tables"/>
   </ItemGroup>
+
 </Project>

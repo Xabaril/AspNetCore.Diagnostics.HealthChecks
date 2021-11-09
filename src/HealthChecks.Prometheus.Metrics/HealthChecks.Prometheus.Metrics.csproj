@@ -1,16 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Prometheus;Prometheus Exporter;Metrics</PackageTags>
-    <Description>HealthChecks.Publisher.Prometheus is a health check prometheus metrics exporter.</Description>
-    <Version>$(HealthCheckPrometheusMetrics)</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
+		<PackageTags>HealthCheck;Prometheus;Prometheus Exporter;Metrics</PackageTags>
+		<Description>HealthChecks.Publisher.Prometheus is a health check prometheus metrics exporter.</Description>
+		<Version>$(HealthCheckPrometheusMetrics)</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="prometheus-net"/>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthCheck"/>
-  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="prometheus-net"/>
+	</ItemGroup>
 
 </Project>

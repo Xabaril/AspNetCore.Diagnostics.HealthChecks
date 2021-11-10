@@ -37,7 +37,7 @@ namespace HealthChecks.AzureDigitalTwin
 
         public AzureDigitalTwinModelsHealthCheck(TokenCredential credentials, string hostName, string[] models)
         {
-            _credentials = (credentials is not null) ? credentials : throw new ArgumentNullException(nameof(credentials));
+            _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
 
             _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
             _models = models.Any() ? models : throw new ArgumentNullException(nameof(models));

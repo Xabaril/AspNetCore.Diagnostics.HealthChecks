@@ -9,7 +9,7 @@ jobs:
   build:
     env:
       BUILD_CONFIG: Release
-      VERSION_SUFFIX: -rc1.${{ github.run_number }}
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     services:
       consul:
@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true
+        include-prerelease: false
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
     - name: Build

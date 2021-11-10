@@ -4,12 +4,12 @@ name: HealthChecks Uris Preview CD
 on:
   push:
     tags:       
-      - preview-uris-*
+      - release-uris-*
 jobs:
   build:
     env:
       BUILD_CONFIG: Release
-      VERSION_SUFFIX: -rc1.${{ github.run_number }}
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true
+        include-prerelease: false
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
     - name: Build

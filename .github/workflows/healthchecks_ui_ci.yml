@@ -1,4 +1,4 @@
-name: HealthChecks SQL Server DB CI
+name: HealthChecks UI CI
 
 on:
   push:

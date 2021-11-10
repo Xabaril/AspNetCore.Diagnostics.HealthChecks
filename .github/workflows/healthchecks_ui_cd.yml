@@ -1,4 +1,4 @@
-name: HealthChecks SQL Server DB CD
+name: HealthChecks UI CD
 
 
 on:

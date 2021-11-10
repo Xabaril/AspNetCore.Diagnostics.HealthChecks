@@ -32,7 +32,7 @@ namespace HealthChecks.AzureDigitalTwin
 
         public AzureDigitalTwinHealthCheck(ServiceClientCredentials credentials)
         {
-            _credentials = (credentials is not null) ? credentials : throw new ArgumentNullException(nameof(credentials));
+            _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

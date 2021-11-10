@@ -38,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+        
         /// <summary>
         /// Add a health check for specified Azure Digital Twin liveness.
         /// </summary>

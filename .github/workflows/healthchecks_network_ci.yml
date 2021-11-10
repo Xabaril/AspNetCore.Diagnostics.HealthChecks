@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Network/**
       - test/HealthChecks.Network.Tests/**
       - .github/workflows/healthchecks_network_ci.yml
-    # tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

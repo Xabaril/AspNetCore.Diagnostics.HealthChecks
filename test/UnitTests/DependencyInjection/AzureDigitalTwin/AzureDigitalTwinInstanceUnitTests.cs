@@ -32,7 +32,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
 
             registration.Name.Should().Be("azuredigitaltwininstance");
             check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
-
         }
 
         [Fact]
@@ -92,7 +91,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
 
             registration.Name.Should().Be("azuredigitaltwininstance");
             check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
-
         }
 
         [Fact]
@@ -130,6 +128,5 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
 
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
         }
-
     }
 }

@@ -32,7 +32,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
 
             registration.Name.Should().Be("azuredigitaltwinmodels");
             check.GetType().Should().Be(typeof(AzureDigitalTwinModelsHealthCheck));
-
         }
 
         [Fact]
@@ -73,7 +72,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
         }
 
-
         [Fact]
         public void add_health_check_when_properly_configured_by_credentials()
         {
@@ -92,7 +90,6 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
 
             registration.Name.Should().Be("azuredigitaltwinmodels");
             check.GetType().Should().Be(typeof(AzureDigitalTwinModelsHealthCheck));
-
         }
 
         [Fact]

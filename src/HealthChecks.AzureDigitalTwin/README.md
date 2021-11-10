@@ -24,7 +24,7 @@ With all of the following examples, you can additionally add the following param
 
 ## _Digital Twin Liveness Health Check_
 
-This health check provide the liveness status for the Azure Digital Twin resource client connection
+This health check provides the liveness status for the Azure Digital Twin resource client connection.
 
 ### Example Usage
 

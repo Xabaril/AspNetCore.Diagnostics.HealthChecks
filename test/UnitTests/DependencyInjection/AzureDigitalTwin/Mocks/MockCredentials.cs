@@ -32,5 +32,4 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             throw new NotImplementedException();
         }
     }
-
 }

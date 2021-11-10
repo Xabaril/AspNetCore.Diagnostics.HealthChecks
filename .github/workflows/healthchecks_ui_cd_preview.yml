@@ -118,7 +118,7 @@ jobs:
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.SQLite.Storage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.SqlServer.Storage Health Check nuget
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.SqlServer.Storage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
-    - name: Publish UI.K8s.Operator Health Check nuget
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.K8s.Operator.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+    #- name: Publish UI.K8s.Operator Health Check nuget
+    #  run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.K8s.Operator.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
 
 

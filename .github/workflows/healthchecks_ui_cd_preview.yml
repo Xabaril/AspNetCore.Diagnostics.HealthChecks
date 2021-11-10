@@ -76,8 +76,8 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
     #- name: Build UI.K8s.Operator
     #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
     - name: dotnet pack UI
       run: dotnet pack ./src/HealthChecks.UI/HealthChecks.UI.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: dotnet pack UI.Client

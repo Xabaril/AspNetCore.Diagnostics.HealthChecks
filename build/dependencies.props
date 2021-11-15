@@ -65,6 +65,7 @@
     <GoogleCloudFirestore>2.2.0</GoogleCloudFirestore>
     <HangfireCore>1.7.6</HangfireCore>
     <AzureStorageBlobs>12.6.0</AzureStorageBlobs>
+    <AzureFileShares>12.8.0</AzureFileShares>
     <AzureStorageQueues>12.4.2</AzureStorageQueues>
     <AzureDataTables>12.1.0</AzureDataTables>
     <AWSSDKDynamoDBv2>3.7.0.10</AWSSDKDynamoDBv2>

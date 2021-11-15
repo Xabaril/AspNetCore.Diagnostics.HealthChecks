@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Solr/**
       - test/HealthChecks.SolR.Tests/**
       - .github/workflows/healthchecks_solr_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:
@@ -21,10 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       solr:
-        image: solr:8
+        image: solr:8.4.1
         ports:
           - 8983:8983
-        #options: -v ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
         volumes:
           - ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore
           - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown

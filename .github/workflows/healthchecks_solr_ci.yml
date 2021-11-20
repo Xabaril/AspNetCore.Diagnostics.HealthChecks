@@ -33,9 +33,9 @@ jobs:
     - name: Provide permission for deleting volume files
       run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
     - uses: actions/checkout@v2
-    - name: Test with curl
+    - name: Test with curl      
       run: |
-        curl -v http://localhost:8983/solr    
+        curl -v http://127.0.0.1:8983/solr    
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v1
     #   with:

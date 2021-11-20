@@ -30,15 +30,7 @@ jobs:
     steps:
     - name: Provide permission for deleting volume files
       run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal
+    - name: Test with curl
+      run: |
+        curl -v http://localhost:8983/solr
+    

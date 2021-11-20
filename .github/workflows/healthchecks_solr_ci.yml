@@ -25,7 +25,7 @@ jobs:
       solr:
         image: solr:8.4.1
         ports:
-          - 8983:8983
+          - 5001:8983
         volumes:
           - ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore
           - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
@@ -34,5 +34,5 @@ jobs:
       run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
     - name: Test with curl
       run: |
-        curl -v http://localhost:8983/solr
+        curl -v http://localhost:5001/solr
     

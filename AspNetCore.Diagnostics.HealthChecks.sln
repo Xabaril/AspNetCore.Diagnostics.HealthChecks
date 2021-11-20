@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
 		build.ps1 = build.ps1
+		.github\dependabot.yml = .github\dependabot.yml
 		build\dependencies.props = build\dependencies.props
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
@@ -190,6 +191,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{C10FB21C-3785-40D5-AD4B-1BCDD2365A90}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.OpenIdConnectServer.Tests", "test\HealthChecks.OpenIdConnectServer.Tests\HealthChecks.OpenIdConnectServer.Tests.csproj", "{8B853DD2-0B83-4898-906C-F34D1AD844F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solution Items", "{6D686167-7E39-44C2-B914-CC09B5CF226A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

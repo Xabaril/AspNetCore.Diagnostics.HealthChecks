@@ -2,7 +2,7 @@ name: HealthChecks SolR CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master, netcore-6.0 ]
     paths:
       - src/HealthChecks.Solr/**
       - test/HealthChecks.SolR.Tests/**
@@ -14,7 +14,9 @@ on:
     paths:
     - src/HealthChecks.Solr/**
     - test/HealthChecks.SolR.Tests/**
-    - .github/workflows/healthchecks_solr_ci.yml
+    - .github/workflows/healthchecks_solr_ci.
+  workflow_dispatch:
+    
 
 jobs:
   build:

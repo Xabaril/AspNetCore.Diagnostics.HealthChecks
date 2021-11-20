@@ -21,7 +21,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: curlimages/curl:7.80.0
     services:
       solr:
         image: solr:8.4.1

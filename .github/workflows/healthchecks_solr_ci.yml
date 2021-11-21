@@ -21,6 +21,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:6.0
     services:
       solr:
         image: solr:8.4.1
@@ -32,6 +33,7 @@ jobs:
     steps:
     - name: Provide permission for deleting volume files
       run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
+      
     - uses: actions/checkout@v2
     - name: Test with curl      
       run: |

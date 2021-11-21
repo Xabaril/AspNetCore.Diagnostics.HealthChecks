@@ -21,15 +21,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/dotnet/sdk:6.0
-    services:
-      solr:
-        image: solr:8.4.1
-        ports:
-          - 8983:8983
-        volumes:
-          - ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore
-          - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
+    # container: mcr.microsoft.com/dotnet/sdk:6.0
+    # services:
+    #   solr:
+    #     image: solr:8.4.1
+    #     ports:
+    #       - 8983:8983
+    #     volumes:
+    #       - ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore
+    #       - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
     steps:
     # - name: Provide permission for deleting volume files
     #   run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
@@ -37,6 +37,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Test with curl      
       run: |
+        docker run -p8983:8983 solr:8.4.1
         wget http://solr:8983/solr/# 
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v1

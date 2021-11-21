@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Test with curl      
       run: |
-        curl http://solr:8983/solr/# -v  
+        wget http://solr:8983/solr/# 
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v1
     #   with:

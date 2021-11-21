@@ -35,10 +35,13 @@ jobs:
     #   run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
       
     - uses: actions/checkout@v2
-    - name: Test with curl      
+    - name: Initialize Solr  
       run: |
-        docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1
+        docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1        
+    - name: Test SOLR
+      run: |        
         wget http://localhost:8983/solr/# 
+        curl http://localhost:8983/solr/# -v
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:

@@ -21,7 +21,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: busybox
+    container: mcr.microsoft.com/dotnet/sdk:6.0
     services:
       solr:
         image: solr:8.4.1
@@ -35,9 +35,9 @@ jobs:
     #   run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
       
     - uses: actions/checkout@v2
-    - name: Test with wget      
+    - name: Test with curl      
       run: |
-        wget http://solr:8983/solr/# 
+        curl http://localhost:8983/solr/# -v  
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v1
     #   with:

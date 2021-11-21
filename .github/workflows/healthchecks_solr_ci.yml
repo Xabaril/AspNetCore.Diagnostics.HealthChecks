@@ -39,14 +39,14 @@ jobs:
       run: |
         docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1
         wget http://localhost:8983/solr/# 
-    # - name: Setup .NET
-    #   uses: actions/setup-dotnet@v1
-    #   with:
-    #     dotnet-version: 6.0.x
-    #     include-prerelease: false
-    # - name: Restore dependencies
-    #   run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    # - name: Build
-    #   run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    # - name: Test
-    #   run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal

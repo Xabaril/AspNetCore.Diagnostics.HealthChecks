@@ -118,7 +118,7 @@
     <HealthCheckDocumentDb>5.0.1</HealthCheckDocumentDb>
     <HealthCheckAzureStorage>5.0.1</HealthCheckAzureStorage>
     <HealthCheckHangfire>5.0.1</HealthCheckHangfire>
-    <HealthCheckAzureServiceBus>5.1.1</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>5.1.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>5.0.1</HealthCheckConsul>
     <HealthCheckUI>5.0.1</HealthCheckUI>
     <HealthCheckUICore>5.0.1</HealthCheckUICore>

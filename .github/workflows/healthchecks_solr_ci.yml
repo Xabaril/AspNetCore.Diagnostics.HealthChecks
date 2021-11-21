@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Test with curl      
       run: |
-        docker run -d -p8983:8983 solr:8.4.1
+        docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1
         wget http://localhost:8983/solr/# 
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v1

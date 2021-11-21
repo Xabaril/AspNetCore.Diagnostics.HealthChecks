@@ -7,10 +7,11 @@ namespace HealthChecks.AzureServiceBus
 {
     using Azure.Core;
 
-    public class AzureServiceBusSubscriptionHealthCheck   : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _topicName;
         private readonly string _subscriptionName;
+        private string _connectionKey;
 
         public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName) : base(connectionString)
         {
@@ -48,17 +49,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var connectionKey = ConnectionKey;
-                if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
-                {
-                    managementClient = CreateManagementClient();
-                    if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description:
-                            "New service bus administration client connection can't be added into dictionary.");
-                    }
-                }
-
+                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, key => CreateManagementClient());
                 _ = await managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
                 return HealthCheckResult.Healthy();
             }
@@ -68,6 +59,6 @@ namespace HealthChecks.AzureServiceBus
             }
         }
 
-        protected override string ConnectionKey => $"{Prefix}_{_topicName}_{_subscriptionName}";
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_topicName}_{_subscriptionName}";
     }
 }

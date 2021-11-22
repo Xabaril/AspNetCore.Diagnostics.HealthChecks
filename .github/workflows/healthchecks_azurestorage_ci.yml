@@ -7,8 +7,8 @@ on:
     - src/HealthChecks.AzureStorage/**
     - test/HealthChecks.AzureStorage.Tests/**
     - .github/workflows/healthchecks_azurestorage_ci.yml
-   #tags-ignore:
-   # - preview-*
+   tags-ignore:
+    - preview-*
     
   pull_request:
     #branches: [ master ]

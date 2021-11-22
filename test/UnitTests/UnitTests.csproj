@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk"  />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="RichardSzalay.MockHttp" />
-    <PackageReference Include="xunit"/>
+    <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <PackageReference Include="FluentAssertions"/>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
-    <PackageReference Include="Newtonsoft.Json"/>
-    <PackageReference Include="MySqlConnector"/>
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="MySqlConnector" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +65,10 @@
     <None Update="UI\Kubernetes\SampleData\remote-cluster-discovery-sample.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DependencyInjection\AzureServiceBus\" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
+namespace HealthChecks.AzureServiceBus.Tests
 {
     public class azure_service_bus_topic_registration_should
     {

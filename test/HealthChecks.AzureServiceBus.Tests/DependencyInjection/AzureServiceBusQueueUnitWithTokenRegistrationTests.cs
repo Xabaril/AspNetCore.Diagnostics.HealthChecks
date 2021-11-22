@@ -7,18 +7,18 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
+namespace HealthChecks.AzureServiceBus.Tests
 {
     using global::Azure.Identity;
 
-    public class azure_service_bus_subscription_registration_with_token_should
+    public class azure_service_bus_queue_registration_with_token_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName", new AzureCliCredential());
+                .AddAzureServiceBusQueue("cnn", "queueName",new AzureCliCredential());
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -26,8 +26,9 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscription");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+            registration.Name.Should().Be("azurequeue");
+            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
+
         }
 
         [Fact]
@@ -35,8 +36,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName", new AzureCliCredential(),
-                name: "azuresubscriptioncheck");
+                .AddAzureServiceBusQueue("cnn", "queueName",new AzureCliCredential(),
+                name: "azureservicebusqueuecheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -44,8 +45,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscriptioncheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+            registration.Name.Should().Be("azureservicebusqueuecheck");
+            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
         }
 
         [Fact]
@@ -53,7 +54,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusSubscription(string.Empty, string.Empty, string.Empty, new AzureCliCredential());
+                .AddAzureServiceBusQueue(string.Empty, string.Empty,new AzureCliCredential());
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

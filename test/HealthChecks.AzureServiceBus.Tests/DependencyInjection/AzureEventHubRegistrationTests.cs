@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureServiceBus
+namespace HealthChecks.AzureServiceBus.Tests
 {
     public class azure_event_hub_registration_should
     {

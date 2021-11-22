@@ -27,8 +27,8 @@ jobs:
         dotnet-version: 6.0.x
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.ArangoDb/HealthChecks.AzureServiceBus.csproj
+      run: dotnet restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.AzureServiceBus.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj --verbosity normal

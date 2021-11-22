@@ -7,8 +7,8 @@ on:
     - src/HealthChecks.AzureServiceBus/**
     - test/HealthChecks.AzureServiceBus.Tests/**
     - .github/workflows/healthchecks_azureservicebus_ci.yml
-   #tags-ignore:
-   # - preview-*
+   tags-ignore:
+    - preview-*
     
   pull_request:
     #branches: [ master ]

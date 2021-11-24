@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.Azure.IoTHub
+namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection
 {
     public class azure_iothub_registration_should
     {

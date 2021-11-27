@@ -32,7 +32,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 
             check.Dispose();
             Action act = () => check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) });
-            act.ShouldThrow<ObjectDisposedException>();
+            act.ShouldThrow<ArgumentException>();
         }
 
         [Fact]

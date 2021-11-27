@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.DocumentDb/**
       - test/HealthChecks.DocumentDb.Tests/**
       - .github/workflows/healthchecks_documentdb_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

@@ -209,6 +209,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.S3.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.CosmosDb.Tests", "test\HealthChecks.CosmosDb.Tests\HealthChecks.CosmosDb.Tests.csproj", "{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.DocumentDb.Tests", "test\HealthChecks.DocumentDb.Tests\HealthChecks.DocumentDb.Tests.csproj", "{6C09D144-19C9-48B7-84C4-5AADFE0552E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -567,6 +569,10 @@ Global
 		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -660,6 +666,7 @@ Global
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{62B73D6A-076D-414B-9B4E-D6C3FF38E786} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

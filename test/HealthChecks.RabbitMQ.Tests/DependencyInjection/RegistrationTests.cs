@@ -31,7 +31,9 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
 
             ((RabbitMQHealthCheck)check).Dispose();
-            Assert.Throws<ArgumentException>(() => check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result);
+            var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
+            result.Status.Should().Be(HealthStatus.Unhealthy);
+            result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
         }
 
         [Fact]
@@ -53,7 +55,9 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
 
             ((RabbitMQHealthCheck)check).Dispose();
-            Assert.Throws<ArgumentException>(() => check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result);
+            var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
+            result.Status.Should().Be(HealthStatus.Unhealthy);
+            result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
         }
     }
 }

@@ -7,8 +7,8 @@ on:
     - src/HealthChecks.Aws.S3/**
     - test/HealthChecks.Aws.S3.Tests/**
     - .github/workflows/healthchecks_aws_s3_ci.yml
-   #tags-ignore:
-   # - preview-*
+   tags-ignore:
+    - preview-*
     
   pull_request:
     #branches: [ master ]

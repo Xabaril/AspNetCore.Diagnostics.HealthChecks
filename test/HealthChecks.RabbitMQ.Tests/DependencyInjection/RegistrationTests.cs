@@ -28,6 +28,10 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 
             registration.Name.Should().Be(_defaultCheckName);
             check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+
+            check.Dispose();
+            Action act = () => check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) });
+            act.ShouldThrow<ObjectDisposedException>();
         }
 
         [Fact]
@@ -47,6 +51,10 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 
             registration.Name.Should().Be(customCheckName);
             check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+
+            check.Dispose();
+            Action act = () => check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) });
+            act.ShouldThrow<ObjectDisposedException>();
         }
     }
 }

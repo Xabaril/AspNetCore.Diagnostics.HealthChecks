@@ -36,4 +36,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj
     - name: Test
-      run: dotnet test --no-restore ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj --verbosity normal
+      run: dotnet test --no-build ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj --verbosity normal

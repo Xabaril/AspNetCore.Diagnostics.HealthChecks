@@ -205,6 +205,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureStorage.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.IoTHub.Tests", "test\HealthChecks.Azure.IoTHub.Tests\HealthChecks.Azure.IoTHub.Tests.csproj", "{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.S3.Tests", "test\HealthChecks.Aws.S3.Tests\HealthChecks.Aws.S3.Tests.csproj", "{62B73D6A-076D-414B-9B4E-D6C3FF38E786}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -555,6 +557,10 @@ Global
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -646,6 +652,7 @@ Global
 		{CAA0DB8F-9759-436D-A4E7-2061C0125B06} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

@@ -20,6 +20,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj --verbosity normal
     - name: dotnet pack 
       run: dotnet pack ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget

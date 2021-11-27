@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.CosmosDb/**
       - test/HealthChecks.CosmosDb.Tests/**
       - .github/workflows/healthchecks_cosmosdb_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

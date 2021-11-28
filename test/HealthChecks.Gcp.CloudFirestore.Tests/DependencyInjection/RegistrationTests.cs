@@ -1,12 +1,11 @@
 ﻿using FluentAssertions;
-using HealthChecks.Gcp.CloudFirestore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace HealthChecks.Gremlin.Tests.DependencyInjection
+namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
 {
     public class cloud_firestore_registration_should
     {

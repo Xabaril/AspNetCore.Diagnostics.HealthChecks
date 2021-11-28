@@ -12,7 +12,7 @@ jobs:
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     services:
-      consul:
+      solr:
         image: solr:8.4.1
         ports:
           - 8983:8983

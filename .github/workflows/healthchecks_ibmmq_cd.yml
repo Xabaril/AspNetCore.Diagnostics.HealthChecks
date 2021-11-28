@@ -10,7 +10,7 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     services:
-      consul:
+      ibmmq:
         image: ibmcom/mq
         ports:
           - 1414:1414

@@ -2,7 +2,7 @@ name: HealthChecks RabbitMQ CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-rabbitmq-*
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     services:
-      sqlserver:
+      rabbitmq:
         image: rabbitmq
         ports:
           - 5672:5672
@@ -28,7 +28,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

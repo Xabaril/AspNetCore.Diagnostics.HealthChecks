@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.Hangfire
+namespace HealthChecks.Gremlin.Tests.DependencyInjection
 {
     public class hangfire_registration_should
     {

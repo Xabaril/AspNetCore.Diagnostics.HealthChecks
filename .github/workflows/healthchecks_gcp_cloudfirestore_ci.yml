@@ -1,0 +1,34 @@
+name: HealthChecks Gcp.CloudFirestore CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+      - src/HealthChecks.Gcp.CloudFirestore/**
+      - test/HealthChecks.Gcp.CloudFirestore.Tests/**
+      - .github/workflows/healthchecks_gcp_cloudfirestore_ci.yml
+    #tags-ignore:
+    #  - preview-*
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.Gcp.CloudFirestore/**
+    - test/HealthChecks.Gcp.CloudFirestore.Tests/**
+    - .github/workflows/healthchecks_gcp_cloudfirestore_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Gcp.CloudFirestore.Tests/HealthChecks.Gcp.CloudFirestore.Tests.csproj --verbosity normal

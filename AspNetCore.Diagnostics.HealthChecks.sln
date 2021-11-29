@@ -217,6 +217,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gcp.CloudFires
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Hangfire.Tests", "test\HealthChecks.Hangfire.Tests\HealthChecks.Hangfire.Tests.csproj", "{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.ApplicationInsights.Tests", "test\HealthChecks.Publisher.ApplicationInsights.Tests\HealthChecks.Publisher.ApplicationInsights.Tests.csproj", "{B99B84B8-9767-4E5B-953C-3C50AB0D006F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -591,6 +593,10 @@ Global
 		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -688,6 +694,7 @@ Global
 		{BCD169E1-EA86-45D5-9658-BEA330E9EBAC} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

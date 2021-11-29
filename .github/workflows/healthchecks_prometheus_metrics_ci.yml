@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Prometheus.Metrics/**
       - test/HealthChecks.Prometheus.Metrics.Tests/**
       - .github/workflows/healthchecks_prometheus_metrics_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

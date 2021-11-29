@@ -19,14 +19,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      sqlserver:
-        image: prometheus_metricsinanutshell/prometheus_metrics-xe-11g
-        ports:
-          - 1521:1521
-          - 5500:5500
-        env:
-          ORACLE_ALLOW_REMOTE: true
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HealthChecks.Publisher.Prometheus.Tests.Functional
+namespace HealthChecks.Prometheus.Metrics.Tests.Functional
 {
     public class DefaultStartup
     {

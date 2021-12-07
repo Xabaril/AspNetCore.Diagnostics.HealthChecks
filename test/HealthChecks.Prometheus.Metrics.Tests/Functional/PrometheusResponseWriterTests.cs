@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace HealthChecks.Publisher.Prometheus.Tests.Functional
+namespace HealthChecks.Prometheus.Metrics.Tests.Functional
 {
     public class prometheus_response_writer_should
     {

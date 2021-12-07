@@ -40,7 +40,6 @@ namespace HealthChecks.RabbitMQ
                 EnsureConnection();
 
                 using var model = _connection.CreateModel();
-                model.Close();
                 return Task.FromResult(HealthCheckResult.Healthy());
             }
             catch (Exception ex)

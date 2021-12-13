@@ -6,7 +6,7 @@ on:
     paths:
       - src/HealthChecks.Publisher.ApplicationInsights/**
       - test/HealthChecks.Publisher.ApplicationInsights.Tests/**
-      - .github/workflows/healthchecks_prometheus_metrics_ci.yml
+      - .github/workflows/healthchecks_publisher_applicationinsights_ci.yml
     #tags-ignore:
     #  - preview-*
   pull_request:
@@ -14,7 +14,7 @@ on:
     paths:
     - src/HealthChecks.Publisher.ApplicationInsights/**
     - test/HealthChecks.Publisher.ApplicationInsights.Tests/**
-    - .github/workflows/healthchecks_prometheus_metrics_ci.yml
+    - .github/workflows/healthchecks_publisher_applicationinsights_ci.yml
 
 jobs:
   build:

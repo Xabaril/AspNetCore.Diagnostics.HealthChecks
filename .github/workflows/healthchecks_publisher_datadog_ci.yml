@@ -1,0 +1,34 @@
+name: HealthChecks Publisher.Datadog CI
+
+on:
+  push:
+    #branches: [ master ]
+    paths:
+      - src/HealthChecks.Publisher.Datadog/**
+      - test/HealthChecks.Publisher.Datadog.Tests/**
+      - .github/workflows/healthchecks_publisher_datadog_ci.yml
+    #tags-ignore:
+    #  - preview-*
+  pull_request:
+    #branches: [ master ]
+    paths:
+    - src/HealthChecks.Publisher.Datadog/**
+    - test/HealthChecks.Publisher.Datadog.Tests/**
+    - .github/workflows/healthchecks_publisher_datadog_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj --verbosity normal

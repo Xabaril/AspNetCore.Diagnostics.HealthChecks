@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.Publisher.Prometheus/**
       - test/HealthChecks.Publisher.Prometheus.Tests/**
       - .github/workflows/healthchecks_publisher_prometheus_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

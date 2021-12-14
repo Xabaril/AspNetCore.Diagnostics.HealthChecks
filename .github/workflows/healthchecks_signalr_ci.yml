@@ -7,8 +7,8 @@ on:
       - src/HealthChecks.SignalR/**
       - test/HealthChecks.SignalR.Tests/**
       - .github/workflows/healthchecks_signalr_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - preview-*
   pull_request:
     #branches: [ master ]
     paths:

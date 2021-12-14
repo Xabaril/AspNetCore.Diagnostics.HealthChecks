@@ -12,7 +12,7 @@ namespace HealthChecks.Publisher.Datadog.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddDatadogPublisher(serviceCheckName: "serviceCheckName", datadogAgentName: "agentName");
+                .AddDatadogPublisher(serviceCheckName: "serviceCheckName", datadogAgentName: "127.0.0.1");
 
             var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();

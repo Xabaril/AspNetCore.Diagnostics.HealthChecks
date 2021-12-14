@@ -11,7 +11,7 @@ jobs:
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     services:
-      sqlserver:
+      redis:
         image: redis:alpine
         ports:
           - 6379:6379

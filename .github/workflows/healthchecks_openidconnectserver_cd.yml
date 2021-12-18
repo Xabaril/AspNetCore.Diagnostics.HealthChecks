@@ -2,6 +2,7 @@ name: HealthChecks OpenIdConnectServer CD
 
 on:
   push:
+    branches: [ master ]
     tags:       
       - release-openidconnectserver-*
 

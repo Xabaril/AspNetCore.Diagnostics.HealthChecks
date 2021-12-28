@@ -61,5 +61,4 @@
     <HealthCheckSendGrid>6.0.1$(VersionSuffix)</HealthCheckSendGrid>
     <HealthCheckArangoDb>6.0.1$(VersionSuffix)</HealthCheckArangoDb>
   </PropertyGroup>
-
 </Project>

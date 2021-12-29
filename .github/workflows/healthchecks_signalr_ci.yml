@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.SignalR.Tests/**
       - .github/workflows/healthchecks_signalr_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

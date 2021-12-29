@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.SendGrid.Tests/**
       - .github/workflows/healthchecks_sendgrid_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

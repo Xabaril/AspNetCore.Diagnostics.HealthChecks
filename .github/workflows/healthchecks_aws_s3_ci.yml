@@ -8,7 +8,7 @@ on:
     - test/HealthChecks.Aws.S3.Tests/**
     - .github/workflows/healthchecks_aws_s3_ci.yml
    tags-ignore:
-    - preview-*
+    - release-*
     
   pull_request:
     branches: [ master ]

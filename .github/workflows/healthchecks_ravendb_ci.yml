@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.RavenDb.Tests/**
       - .github/workflows/healthchecks_ravendb_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

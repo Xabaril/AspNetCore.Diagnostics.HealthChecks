@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.MongoDb.Tests/**
       - .github/workflows/healthchecks_mongodb_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

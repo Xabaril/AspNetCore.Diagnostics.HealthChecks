@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.RabbitMQ.Tests/**
       - .github/workflows/healthchecks_rabbitmq_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

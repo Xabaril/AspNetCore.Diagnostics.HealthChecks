@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.SolR.Tests/**
       - .github/workflows/healthchecks_solr_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

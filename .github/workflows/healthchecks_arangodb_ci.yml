@@ -8,7 +8,7 @@ on:
     - test/HealthChecks.ArangoDb.Tests/**
     - .github/workflows/healthchecks_arangodb_ci.yml
    tags-ignore:
-    - preview-*
+    - release-*
     
   pull_request:
     branches: [ master ]

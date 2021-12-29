@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.Hangfire.Tests/**
       - .github/workflows/healthchecks_hangfire_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

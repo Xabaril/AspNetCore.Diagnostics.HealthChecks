@@ -8,7 +8,7 @@ on:
     - test/HealthChecks.AzureKeyVault.Tests/**
     - .github/workflows/healthchecks_azurekeyvault_ci.yml
    tags-ignore:
-    - preview-*
+    - release-*
     
   pull_request:
     branches: [ master ]

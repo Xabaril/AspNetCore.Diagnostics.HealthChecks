@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.Kafka.Tests/**
       - .github/workflows/healthchecks_kafka_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

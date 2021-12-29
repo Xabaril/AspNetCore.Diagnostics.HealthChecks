@@ -8,7 +8,7 @@ on:
     - test/HealthChecks.AzureServiceBus.Tests/**
     - .github/workflows/healthchecks_azureservicebus_ci.yml
    tags-ignore:
-    - preview-*
+    - release-*
     
   pull_request:
     branches: [ master ]

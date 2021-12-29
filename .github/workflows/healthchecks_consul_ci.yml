@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.Consul.Tests/**
       - .github/workflows/healthchecks_consul_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

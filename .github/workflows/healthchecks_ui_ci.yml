@@ -8,7 +8,7 @@ on:
       - test/HealthChecks.UI.Tests/**
       - .github/workflows/healthchecks_ui_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
     branches: [ master ]
     paths:

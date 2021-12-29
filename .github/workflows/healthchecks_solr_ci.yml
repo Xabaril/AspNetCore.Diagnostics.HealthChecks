@@ -10,7 +10,7 @@ on:
     tags-ignore:
       - preview-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Solr/**
     - test/HealthChecks.SolR.Tests/**

@@ -2,7 +2,7 @@ name: HealthChecks NPGSQL DB CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.NpgSql/**
       - test/HealthChecks.Npgsql.Tests/**
@@ -10,7 +10,7 @@ on:
     tags-ignore:
       - preview-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.NpgSql/**
     - test/HealthChecks.Npgsql.Tests/**

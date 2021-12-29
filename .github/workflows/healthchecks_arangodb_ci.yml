@@ -2,7 +2,7 @@ name: HealthChecks Arango DB CI
 
 on:
   push:
-   #branches: [ master ]
+   branches: [ master ]
    paths:
     - src/HealthChecks.ArangoDb/**
     - test/HealthChecks.ArangoDb.Tests/**
@@ -11,7 +11,7 @@ on:
     - preview-*
     
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.ArangoDb/**
     - test/HealthChecks.ArangoDb.Tests/**

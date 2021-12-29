@@ -2,7 +2,7 @@ name: HealthChecks DocumentDb CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.DocumentDb/**
       - test/HealthChecks.DocumentDb.Tests/**
@@ -10,7 +10,7 @@ on:
     tags-ignore:
       - preview-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.DocumentDb/**
     - test/HealthChecks.DocumentDb.Tests/**

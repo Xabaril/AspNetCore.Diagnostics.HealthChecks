@@ -2,7 +2,7 @@ name: HealthChecks SignalR CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.SignalR/**
       - test/HealthChecks.SignalR.Tests/**
@@ -10,7 +10,7 @@ on:
     tags-ignore:
       - preview-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.SignalR/**
     - test/HealthChecks.SignalR.Tests/**

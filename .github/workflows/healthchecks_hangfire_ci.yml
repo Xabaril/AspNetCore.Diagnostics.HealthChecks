@@ -2,7 +2,7 @@ name: HealthChecks Hangfire CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Hangfire/**
       - test/HealthChecks.Hangfire.Tests/**
@@ -10,7 +10,7 @@ on:
     tags-ignore:
       - preview-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Hangfire/**
     - test/HealthChecks.Hangfire.Tests/**

@@ -25,7 +25,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.IdSvr/HealthChecks.OpenIdConnectServer.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.OpenIdConnectServer.Tests/HealthChecks.OpenIdConnectServer.Tests.csproj --verbosity normal
     - name: dotnet pack 

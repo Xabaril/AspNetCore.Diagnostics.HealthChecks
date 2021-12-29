@@ -51,5 +51,5 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj --verbosity normal

@@ -38,5 +38,5 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal

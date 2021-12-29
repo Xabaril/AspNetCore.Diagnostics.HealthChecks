@@ -10,16 +10,16 @@ jobs:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
-    services:
-      ftp:
-        image: bogem/ftp
-        ports:
-          - 21:21
-          - 47400-47470:47400-47470
-        env: 
-          FTP_USER: bob
-          FTP_PASS: 12345
-          PASV_ADDRESS: 127.0.0.1
+    #services:
+    #  ftp:
+    #    image: bogem/ftp
+    #    ports:
+    #      - 21:21
+    #      - 47400-47470:47400-47470
+    #    env: 
+    #      FTP_USER: bob
+    #      FTP_PASS: 12345
+    #      PASV_ADDRESS: 127.0.0.1
 
     steps:
     - uses: actions/checkout@v2

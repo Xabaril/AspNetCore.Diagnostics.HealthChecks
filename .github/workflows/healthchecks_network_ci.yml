@@ -19,38 +19,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      ftp:
-        image: bogem/ftp
-        ports:
-          - 21:21
-          - 47400-47470:47400-47470
-        env: 
-          FTP_USER: bob
-          FTP_PASS: 12345
-          PASV_ADDRESS: 127.0.0.1
-      sftp:
-        image: atmoz/sftp
-        ports: 
-          - 22:22
-        volumes:
-          - ${{ github.workspace }}/build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
-          - ${{ github.workspace }}/build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
-      mail:
-        image: tvial/docker-mailserver:latest
-        options: --hostname mail --container_name mail --domainname healthchecks.com        
-        ports:
-          - 25:25               
-          - 143:143
-          - 465:465
-          - 587:587
-          - 993:993          
-          - 995:995  
-        env:
-          SSL_TYPE: self-signed
-          DMS_DEBUG: 1
-        volumes:
-          - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
+    #services:
+    #  ftp:
+    #    image: bogem/ftp
+    #    ports:
+    #      - 21:21
+    #      - 47400-47470:47400-47470
+    #    env: 
+    #      FTP_USER: bob
+    #      FTP_PASS: 12345
+    #      PASV_ADDRESS: 127.0.0.1
+    #  sftp:
+    #    image: atmoz/sftp
+    #    ports: 
+    #      - 22:22
+    #    volumes:
+    #      - ${{ github.workspace }}/build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
+    #      - ${{ github.workspace }}/build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
+    #  mail:
+    #    image: tvial/docker-mailserver:latest
+    #    options: --hostname mail --container_name mail --domainname healthchecks.com        
+    #    ports:
+    #      - 25:25               
+    #      - 143:143
+    #      - 465:465
+    #      - 587:587
+    #      - 993:993          
+    #      - 995:995  
+    #    env:
+    #      SSL_TYPE: self-signed
+    #      DMS_DEBUG: 1
+    #    volumes:
+    #      - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET

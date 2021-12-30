@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using Xunit;
@@ -72,7 +73,8 @@ namespace HealthChecks.UI.Tests
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
-                    conf.AddJsonFile("HealthChecks.UI/Configuration/appsettings.json", false);
+                    var path = Path.Combine("Functional", "Configuration", "appsettings.json");
+                    conf.AddJsonFile(path, false);
                 }).ConfigureServices(services => { services.AddHealthChecksUI(); });
 
 
@@ -111,7 +113,8 @@ namespace HealthChecks.UI.Tests
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
-                    conf.AddJsonFile("HealthChecks.UI/Configuration/appsettings.json", false);
+                    var path = Path.Combine("Functional", "Configuration", "appsettings.json");
+                    conf.AddJsonFile(path, false);
                 }).ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI(setupSettings: setup =>
@@ -160,7 +163,8 @@ namespace HealthChecks.UI.Tests
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
-                    conf.AddJsonFile("HealthChecks.UI/Configuration/appsettings.json", false);
+                    var path = Path.Combine("Functional", "Configuration", "appsettings.json");
+                    conf.AddJsonFile(path, false);
                 })
                 .ConfigureServices(services =>
                 {

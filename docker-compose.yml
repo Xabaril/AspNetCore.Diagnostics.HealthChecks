@@ -161,3 +161,10 @@ services:
         environment:
         - VIRTUAL_HOST=gremlin.docker
         - VIRTUAL_PORT=8182
+    npgsql:
+        image: postgres
+        ports:
+        - "8010:5432"
+        environment: 
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=Password12!

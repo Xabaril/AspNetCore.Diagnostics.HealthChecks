@@ -43,8 +43,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
     - name: dotnet pack 
       run: dotnet pack ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget

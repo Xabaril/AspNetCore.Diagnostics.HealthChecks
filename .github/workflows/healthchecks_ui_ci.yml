@@ -51,5 +51,5 @@ jobs:
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal

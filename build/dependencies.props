@@ -49,16 +49,16 @@
     <HealthCheckSolr>6.0.1</HealthCheckSolr>
     <HealthCheckSqlite>6.0.1</HealthCheckSqlite>
     <HealthCheckSqlServer>6.0.1</HealthCheckSqlServer>
-    <HealthChecksUIK8sOperator>6.0.1</HealthChecksUIK8sOperator>
-    <HealthChecksUIPostgreSQLStorage>6.0.1</HealthChecksUIPostgreSQLStorage>
+    <HealthChecksUIK8sOperator>6.0.2</HealthChecksUIK8sOperator>
+    <HealthChecksUIPostgreSQLStorage>6.0.2</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>6.0.1</HealthCheckSystem>
-    <HealthCheckUI>6.0.1</HealthCheckUI>
-    <HealthCheckUIClient>6.0.1</HealthCheckUIClient>
-    <HealthCheckUICore>6.0.1</HealthCheckUICore>
-    <HealthCheckUIInMemoryStorage>6.0.1</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>6.0.1</HealthCheckUIMySqlStorage>
-    <HealthCheckUISQLiteStorage>6.0.1</HealthCheckUISQLiteStorage>
-    <HealthCheckUISqlServerStorage>6.0.1</HealthCheckUISqlServerStorage>
+    <HealthCheckUI>6.0.2</HealthCheckUI>
+    <HealthCheckUIClient>6.0.2</HealthCheckUIClient>
+    <HealthCheckUICore>6.0.2</HealthCheckUICore>
+    <HealthCheckUIInMemoryStorage>6.0.2</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>6.0.2</HealthCheckUIMySqlStorage>
+    <HealthCheckUISQLiteStorage>6.0.2</HealthCheckUISQLiteStorage>
+    <HealthCheckUISqlServerStorage>6.0.2</HealthCheckUISqlServerStorage>
     <HealthCheckUri>6.0.2</HealthCheckUri>
   </PropertyGroup>
 </Project>

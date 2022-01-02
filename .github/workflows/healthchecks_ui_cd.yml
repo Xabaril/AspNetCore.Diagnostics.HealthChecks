@@ -55,8 +55,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
     - name: Restore dependencies UI.SqlServer.Storage
       run: dotnet restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
-    #- name: Restore dependencies UI.K8s.Operator
-    #  run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj      
+    - name: Restore dependencies UI.K8s.Operator
+      run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj      
     - name: Build UI
       run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Build UI.Client
@@ -73,8 +73,8 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
     - name: Build UI.SqlServer.Storage
       run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
-    #- name: Build UI.K8s.Operator
-    #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
+    - name: Build UI.K8s.Operator
+      run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     #- name: Test
     #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
     - name: dotnet pack UI
@@ -93,8 +93,8 @@ jobs:
       run: dotnet pack ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: dotnet pack UI.SqlServer.Storage
       run: dotnet pack ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    #- name: dotnet pack UI.K8s.Operator
-    #  run: dotnet pack ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: dotnet pack UI.K8s.Operator
+      run: dotnet pack ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2
       env:
@@ -117,5 +117,5 @@ jobs:
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.SQLite.Storage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.SqlServer.Storage Health Check nuget
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.SqlServer.Storage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
-    #- name: Publish UI.K8s.Operator Health Check nuget
-    #  run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.K8s.Operator.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate      
+    - name: Publish UI.K8s.Operator Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.K8s.Operator.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate      

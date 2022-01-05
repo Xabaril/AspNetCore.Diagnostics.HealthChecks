@@ -40,6 +40,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Nats\HealthChecks.Nats.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />

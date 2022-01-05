@@ -60,5 +60,6 @@
     <HealthCheckUISQLiteStorage>6.0.2</HealthCheckUISQLiteStorage>
     <HealthCheckUISqlServerStorage>6.0.2</HealthCheckUISqlServerStorage>
     <HealthCheckUri>6.0.2</HealthCheckUri>
+    <HealthCheckNats>6.0.2</HealthCheckNats>
   </PropertyGroup>
 </Project>

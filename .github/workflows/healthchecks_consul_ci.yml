@@ -1,0 +1,40 @@
+name: HealthChecks Consul CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Consul/**
+      - test/HealthChecks.Consul.Tests/**
+      - .github/workflows/healthchecks_consul_ci.yml
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Consul/**
+    - test/HealthChecks.Consul.Tests/**
+    - .github/workflows/healthchecks_consul_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      consul:
+        image: consul:latest
+        ports:
+          - 8500:8500
+          - 8600:8600
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj --verbosity normal

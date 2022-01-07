@@ -1,0 +1,42 @@
+name: HealthChecks Oracle CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Oracle/**
+      - test/HealthChecks.Oracle.Tests/**
+      - .github/workflows/healthchecks_oracle_ci.yml
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Oracle/**
+    - test/HealthChecks.Oracle.Tests/**
+    - .github/workflows/healthchecks_oracle_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: oracleinanutshell/oracle-xe-11g
+        ports:
+          - 1521:1521
+          - 5500:5500
+        env:
+          ORACLE_ALLOW_REMOTE: true
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal

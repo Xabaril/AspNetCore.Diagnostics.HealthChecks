@@ -5,12 +5,11 @@
     <PackageTags>HealthCheck;Publisher;Datadog</PackageTags>
     <Description>HealthChecks.Publisher.Datadog is the health check publisher for Datadog.</Description>
     <Version>$(HealthCheckPublisherDatadog)</Version>
-    <PackageId>AspNetCore.HealthChecks.Publisher.Datadog</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DogStatsD-CSharp-Client" Version="$(DogStatsDCSharpClient)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="DogStatsD-CSharp-Client"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 
 </Project>

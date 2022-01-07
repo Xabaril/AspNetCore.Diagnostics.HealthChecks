@@ -1,0 +1,34 @@
+name: HealthChecks Publisher.ApplicationInsights CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Publisher.ApplicationInsights/**
+      - test/HealthChecks.Publisher.ApplicationInsights.Tests/**
+      - .github/workflows/healthchecks_publisher_applicationinsights_ci.yml
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Publisher.ApplicationInsights/**
+    - test/HealthChecks.Publisher.ApplicationInsights.Tests/**
+    - .github/workflows/healthchecks_publisher_applicationinsights_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Publisher.ApplicationInsights.Tests/HealthChecks.Publisher.ApplicationInsights.Tests.csproj --verbosity normal

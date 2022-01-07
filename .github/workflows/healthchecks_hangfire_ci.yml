@@ -1,0 +1,34 @@
+name: HealthChecks Hangfire CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Hangfire/**
+      - test/HealthChecks.Hangfire.Tests/**
+      - .github/workflows/healthchecks_hangfire_ci.yml
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Hangfire/**
+    - test/HealthChecks.Hangfire.Tests/**
+    - .github/workflows/healthchecks_hangfire_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Hangfire.Tests/HealthChecks.Hangfire.Tests.csproj --verbosity normal

@@ -1,0 +1,35 @@
+name: HealthChecks Aws.S3 Preview CD
+
+on:
+  push:
+    tags:       
+      - preview-aws_s3-* 
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Aws.S3 Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Aws.S3.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

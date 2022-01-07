@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
     <PackageTags>HealthChecks;HealthCheck;Health;MySQL</PackageTags>
+    <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
     <Version>$(HealthCheckMySql)</Version>
-    <PackageId>AspNetCore.HealthChecks.MySql</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="MySqlConnector"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
+
 </Project>

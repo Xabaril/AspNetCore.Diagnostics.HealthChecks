@@ -1,0 +1,43 @@
+name: HealthChecks Elastic Search Preview CD
+
+on:
+  push:
+    tags:       
+      - preview-elasticsearch-*  # Push events to release-arangodb* 
+
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    services:
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        ports:
+          - 9300:9300
+          - 9200:9200
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Elastic Search Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Elasticsearch.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

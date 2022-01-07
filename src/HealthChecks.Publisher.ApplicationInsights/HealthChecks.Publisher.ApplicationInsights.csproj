@@ -5,10 +5,11 @@
     <PackageTags>HealthCheck;Publisher;Application Insights</PackageTags>
     <Description>HealthChecks.Publisher.ApplicationInsights is the health check publisher for Application Insights.</Description>
     <Version>$(HealthCheckPublisherAppplicationInsights)</Version>
-    <PackageId>AspNetCore.HealthChecks.Publisher.ApplicationInsights</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="$(MicrosoftApplicationInsights)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.ApplicationInsights"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
+
 </Project>

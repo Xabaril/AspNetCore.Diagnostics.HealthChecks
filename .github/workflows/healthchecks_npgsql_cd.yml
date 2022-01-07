@@ -1,0 +1,42 @@
+name: HealthChecks NPGSQL DB CD
+
+on:
+  push:
+    tags:       
+      - release-npgsql-*
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      npgsql:
+        image: postgres
+        ports:
+          - 8010:5432
+        env: 
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Npgsql Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.NpgSql.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

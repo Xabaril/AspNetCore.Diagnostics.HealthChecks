@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj" />
+	</ItemGroup>
+
+</Project>

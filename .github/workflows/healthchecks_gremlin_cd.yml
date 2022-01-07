@@ -1,0 +1,43 @@
+name: HealthChecks Gremlin CD
+
+on:
+  push:
+    tags:       
+      - release-gremlin-*  # Push events to release-arangodb* 
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      gremlin:
+        image: tinkerpop/gremlin-server
+        ports:
+          - 8182:8182
+        env: 
+          VIRTUAL_HOST: gremlin.docker
+          VIRTUAL_PORT: 8182
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Gremlin Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Gremlin.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

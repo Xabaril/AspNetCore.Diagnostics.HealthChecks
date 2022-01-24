@@ -15,6 +15,15 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
+
+
+            //var awsOptions = Configuration.GetAWSOptions();
+            //services.AddDefaultAWSOptions(awsOptions);
+
+            //services.AddAWSService<IAmazonS3>();
+
+
+            services.AddSingleton<IAmazonS3,AmazonS3Client>();
             services.AddHealthChecks()
                 .AddS3(options =>
                 {
@@ -35,6 +44,9 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
         public void add_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
+
+            services.AddSingleton<IAmazonS3, AmazonS3Client>();
+
             services.AddHealthChecks()
                  .AddS3(options =>
                  {

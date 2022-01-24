@@ -9,32 +9,26 @@ namespace HealthChecks.Aws.S3
     public class S3HealthCheck : IHealthCheck
     {
         private readonly S3BucketOptions _bucketOptions;
-        public S3HealthCheck(S3BucketOptions bucketOptions)
+        private readonly IAmazonS3 _amazonS3;
+
+        public S3HealthCheck(S3BucketOptions bucketOptions, IAmazonS3 amazonS3)
         {
             if (bucketOptions == null)
             {
                 throw new ArgumentNullException(nameof(bucketOptions));
             }
-            if (bucketOptions.S3Config == null)
-            {
-                throw new ArgumentNullException(nameof(S3BucketOptions.S3Config));
-            }
+    
             _bucketOptions = bucketOptions;
+            _amazonS3 = amazonS3;
         }
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                bool keysProvided = !string.IsNullOrEmpty(_bucketOptions.AccessKey) &&
-                                    !string.IsNullOrEmpty(_bucketOptions.SecretKey);
 
-                AmazonS3Client client = keysProvided
-                    ? new AmazonS3Client(_bucketOptions.AccessKey, _bucketOptions.SecretKey, _bucketOptions.S3Config)
-                    : new AmazonS3Client(_bucketOptions.S3Config);
-
-                using (client)
+                using (_amazonS3)
                 {
-                    var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
+                    var response = await _amazonS3.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
 
                     if (_bucketOptions.CustomResponseCheck != null)
                     {

@@ -1,4 +1,5 @@
-﻿using HealthChecks.Aws.S3;
+﻿using Amazon.S3;
+using HealthChecks.Aws.S3;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,11 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new S3BucketOptions();
             setup?.Invoke(options);
 
+            builder.Services.AddSingleton<S3BucketOptions>(options);
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? Name,
-                sp => new S3HealthCheck(options),
+                sp => new S3HealthCheck(options, sp.GetRequiredService<IAmazonS3>()),
                 failureStatus,
                 tags,
                 timeout));

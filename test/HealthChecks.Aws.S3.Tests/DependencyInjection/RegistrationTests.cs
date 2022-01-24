@@ -18,10 +18,7 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddS3(options =>
                 {
-                    options.AccessKey = "access-key";
                     options.BucketName = "bucket-name";
-                    options.SecretKey = "secret-key";
-                    options.S3Config = new AmazonS3Config();
                 });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -41,10 +38,7 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                  .AddS3(options =>
                  {
-                    options.AccessKey = "access-key";
                     options.BucketName = "bucket-name";
-                    options.SecretKey = "secret-key";
-                    options.S3Config = new AmazonS3Config();
                  }, name: "aws s3 check");
 
             var serviceProvider = services.BuildServiceProvider();

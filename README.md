@@ -1,7 +1,7 @@
-[![ArangoDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_arangodb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_arangodb_ci.yml/badge.svg)
-[![Aws S3 Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_s3_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_s3_ci.yml/badge.svg)
-[![Azure IoTHub Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azure_iothub_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azure_iothub_ci.yml/badge.svg)
-[![Azure KeyVault Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurekeyvault_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurekeyvault_ci.yml/badge.svg)
+[![ArangoDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_arangodb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_arangodb_ci.yml)
+[![Aws S3 Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_s3_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_s3_ci.yml)
+[![Azure IoTHub Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azure_iothub_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azure_iothub_ci.yml)
+[![Azure KeyVault Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurekeyvault_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurekeyvault_ci.yml)
 
 
 ![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=Docker%20UI%20Version&logo=dsd&sort=date)

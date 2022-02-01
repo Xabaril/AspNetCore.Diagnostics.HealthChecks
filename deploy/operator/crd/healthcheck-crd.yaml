@@ -62,6 +62,16 @@ spec:
               type: string
             stylesheetContent:
               type: string
+            storageProvider:
+              type: string
+              enum:
+                - InMemory
+                - SqlServer
+                - Sqlite
+                - PostgreSql
+                - MySql
+            storageConnection:
+              type: string
             serviceAnnotations:
               type: array
               items:

@@ -35,18 +35,8 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (!ManagementClientConnections.TryGetValue(ConnectionKey, out var managementClient))
-                {
-                    managementClient = CreateManagementClient();
-
-                    if (!ManagementClientConnections.TryAdd(ConnectionKey, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "No service bus administration client connection can't be added into dictionary.");
-                    }
-                }
-
+                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
                 _ = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
-
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

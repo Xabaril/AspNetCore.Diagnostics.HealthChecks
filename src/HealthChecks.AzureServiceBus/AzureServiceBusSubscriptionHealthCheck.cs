@@ -49,7 +49,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, key => CreateManagementClient());
+                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
                 _ = await managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
                 return HealthCheckResult.Healthy();
             }

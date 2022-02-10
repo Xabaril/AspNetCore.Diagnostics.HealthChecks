@@ -9,6 +9,7 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _queueName;
+        private string _connectionKey;
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {
@@ -46,6 +47,6 @@ namespace HealthChecks.AzureServiceBus
         }
 
 
-        protected override string ConnectionKey => $"{Prefix}_{_queueName}";
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_queueName}";
     }
 }

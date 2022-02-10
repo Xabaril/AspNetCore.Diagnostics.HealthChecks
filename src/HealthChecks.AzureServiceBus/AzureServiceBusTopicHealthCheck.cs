@@ -10,6 +10,7 @@ namespace HealthChecks.AzureServiceBus
         : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _topicName;
+        private string _connectionKey;
 
         public AzureServiceBusTopicHealthCheck(string connectionString, string topicName) : base(connectionString)
         {
@@ -46,6 +47,6 @@ namespace HealthChecks.AzureServiceBus
             }
         }
 
-        protected override string ConnectionKey => $"{Prefix}_{_topicName}";
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_topicName}";
     }
 }

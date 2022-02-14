@@ -16,7 +16,9 @@ namespace HealthChecks.UI.Client
         private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
         private static Lazy<JsonSerializerOptions> options = new Lazy<JsonSerializerOptions>(() => CreateJsonOptions());
 
-        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
+        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) => await WriteHealthCheckUIResponse(httpContext, report, null);
+
+        public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report, Action<JsonSerializerOptions> jsonConfigurator)
         {
             if (report != null)
             {
@@ -27,7 +29,10 @@ namespace HealthChecks.UI.Client
 
                 using var responseStream = new MemoryStream();
 
-                await JsonSerializer.SerializeAsync(responseStream, uiReport, options.Value);
+                var serializerOptions = options.Value;
+                if (jsonConfigurator != null)
+                    jsonConfigurator(serializerOptions);
+                await JsonSerializer.SerializeAsync(responseStream, uiReport, serializerOptions);
                 await httpContext.Response.BodyWriter.WriteAsync(responseStream.ToArray());
             }
             else

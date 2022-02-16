@@ -46,7 +46,6 @@ namespace HealthChecks.UI.Core.HostedService
         private async Task InitializeDatabase(IServiceProvider sp)
         {
             var context = sp.GetRequiredService<HealthChecksDb>();
-            var configuration = sp.GetRequiredService<IConfiguration>();
             var settings = sp.GetRequiredService<IOptions<Settings>>();
 
             if (await ShouldMigrateDatabase(context))
@@ -76,6 +75,21 @@ namespace HealthChecks.UI.Core.HostedService
             else if (isInitialized && healthCheckConfigurations.Any())
             {
                 var dbConfigurations = await context.Configurations.ToListAsync();
+
+                if (_settings.CleanOldConfigurations)
+                {
+                    var oldConfigurations = dbConfigurations
+                        .Where(dbc => !healthCheckConfigurations.Any(hc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
+
+                    if (oldConfigurations != null)
+                    {
+                        foreach (var oldConfiguration in oldConfigurations)
+                        {
+                            _logger.LogInformation("Removing old service {service} from database", oldConfiguration.Name);
+                            context.Remove(oldConfiguration);
+                        }
+                    }
+                }
 
                 var existingConfigurations = dbConfigurations
                     .Where(hc => healthCheckConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));

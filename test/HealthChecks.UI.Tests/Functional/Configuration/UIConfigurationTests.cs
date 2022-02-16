@@ -257,6 +257,23 @@ namespace HealthChecks.UI.Tests
         }
 
         [Fact]
+        public void have_enabled_clean_old_configurations_by_default()
+        {
+            var webhost = new WebHostBuilder()
+             .UseStartup<DefaultStartup>()
+             .ConfigureServices(services =>
+             {
+                 services.AddHealthChecksUI()
+                 .AddInMemoryStorage();
+             });
+
+            var serviceProvider = webhost.Build().Services;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
+
+            UISettings.CleanOldConfigurations.Should().Be(false);
+        }
+
+        [Fact]
         public void allow_disable_running_database_migrations_in_ui_setup()
         {
             var webhost = new WebHostBuilder()
@@ -332,6 +349,24 @@ namespace HealthChecks.UI.Tests
             var html = await response.Content.ReadAsStringAsync();
 
             html.Should().Contain($"<title>{pageTitle}</title>");
+        }
+
+        [Fact]
+        public void allow_enable_cleanoldconfigurations_migrations_in_ui_setup()
+        {
+            var webhost = new WebHostBuilder()
+             .UseStartup<DefaultStartup>()
+             .ConfigureServices(services =>
+             {
+                 services
+                 .AddHealthChecksUI(setup => setup.EnableCleanOldConfigurations())
+                 .AddInMemoryStorage();
+             });
+
+            var serviceProvider = webhost.Build().Services;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
+
+            UISettings.CleanOldConfigurations.Should().Be(true);
         }
     }
 }

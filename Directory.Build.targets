@@ -14,8 +14,9 @@
     <PackageReference Update="Azure.Security.KeyVault.Keys" Version="4.2.0"/>
     <PackageReference Update="Azure.Security.KeyVault.Secrets" Version="4.2.0"/>
     <PackageReference Update="Azure.Storage.Blobs" Version="12.10.0"/>
+	<PackageReference Update="Azure.Storage.Files.Shares" Version="12.8.0"/>
     <PackageReference Update="Azure.Storage.Queues" Version="12.8.0"/>
-    <PackageReference Update="Confluent.Kafka" Version="1.8.2"/>
+	<PackageReference Update="Confluent.Kafka" Version="1.8.2"/>
     <PackageReference Update="DogStatsD-CSharp-Client" Version="7.0.0"/>
     <PackageReference Update="EventStore.Client" Version="21.2.1"/>
     <PackageReference Update="Google.Cloud.Firestore" Version="2.4.0"/>

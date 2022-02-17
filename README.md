@@ -105,7 +105,7 @@ HealthChecks packages include health checks for:
 - SendGrid
 - System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
 - Azure Service Bus: EventHub, Queue and Topics
-- Azure Storage: Blob, Queue and Table
+- Azure Storage: Blob, File, Queue and Table
 - Azure Key Vault
 - Azure DocumentDb
 - Azure IoT Hub

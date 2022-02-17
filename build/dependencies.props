@@ -15,7 +15,7 @@
     <HealthCheckArangoDb>6.0.1</HealthCheckArangoDb>
     <HealthCheckAWSS3>6.0.1</HealthCheckAWSS3>
     <HealthCheckAzureServiceBus>6.0.1</HealthCheckAzureServiceBus>
-    <HealthCheckAzureStorage>6.0.1</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>6.0.2</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>6.0.1</HealthCheckCloudFirestore>
     <HealthCheckConsul>6.0.1</HealthCheckConsul>
     <HealthCheckCosmosDb>6.0.1</HealthCheckCosmosDb>

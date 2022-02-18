@@ -9,7 +9,6 @@ on:
     - .github/workflows/healthchecks_azureservicebus_ci.yml
    tags-ignore:
     - release-*
-    
   pull_request:
     branches: [ master ]
     paths:

@@ -27,9 +27,35 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddNpgSql(this IHealthChecksBuilder builder, string npgsqlConnectionString, string healthQuery = "SELECT 1;", Action<NpgsqlConnection> connectionAction = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
+            return builder.AddNpgSql(_ => npgsqlConnectionString, healthQuery, connectionAction, name, failureStatus, tags, timeout);
+        }
+        
+        /// <summary>
+        /// Add a health check for Postgres databases.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="connectionStringFactory">A factory to build the Postgres connection string to use.</param>
+        /// <param name="connectionStringFactory">The Postgres connection string to be used.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'npgsql' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        public static IHealthChecksBuilder AddNpgSql(this IHealthChecksBuilder builder, Func<IServiceProvider, string> connectionStringFactory, string healthQuery = "SELECT 1;", Action<NpgsqlConnection> connectionAction = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        {
+            if (connectionStringFactory == null)
+            {
+                throw new ArgumentNullException(nameof(connectionStringFactory));
+            }
+
+            builder.Services.AddSingleton(sp => new NpgSqlHealthCheck(connectionStringFactory(sp), healthQuery, connectionAction));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new NpgSqlHealthCheck(npgsqlConnectionString, healthQuery, connectionAction),
+                sp => sp.GetRequiredService<NpgSqlHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));

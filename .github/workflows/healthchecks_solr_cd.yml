@@ -11,7 +11,7 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     services:
-      consul:
+      solr:
         image: solr:8.4.1
         ports:
           - 8983:8983

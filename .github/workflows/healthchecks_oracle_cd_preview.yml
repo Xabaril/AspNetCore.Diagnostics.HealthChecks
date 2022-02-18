@@ -12,7 +12,7 @@ jobs:
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     services:
-      sqlserver:
+      oracle:
         image: oracleinanutshell/oracle-xe-11g
         ports:
           - 1521:1521

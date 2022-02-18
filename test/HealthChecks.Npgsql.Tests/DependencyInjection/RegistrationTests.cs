@@ -55,7 +55,7 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
                 {
                     factoryCalled = true;
                     return "connectionstring";
-                },"my-npg-1");
+                },name:"my-npg-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

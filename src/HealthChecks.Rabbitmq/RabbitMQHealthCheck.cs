@@ -14,6 +14,7 @@ namespace HealthChecks.RabbitMQ
         private readonly Uri _rabbitConnectionString;
         private readonly SslOption _sslOption;
         private readonly bool _ownsConnection;
+        private bool _disposed;
 
         public RabbitMQHealthCheck(IConnection connection)
         {
@@ -51,11 +52,11 @@ namespace HealthChecks.RabbitMQ
 
         private void EnsureConnection()
         {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(RabbitMQHealthCheck));
+
             if (_connection == null)
             {
-                if (_ownsConnection)
-                    throw new ObjectDisposedException(nameof(RabbitMQHealthCheck));
-
                 if (_factory == null)
                 {
                     _factory = new ConnectionFactory()
@@ -77,11 +78,12 @@ namespace HealthChecks.RabbitMQ
             if (disposing)
             {
                 // dispose connection only if RabbitMQHealthCheck owns it
-                if (_connection != null && _ownsConnection)
+                if (!_disposed && _connection != null && _ownsConnection)
                 {
                     _connection.Dispose();
                     _connection = null;
                 }
+                _disposed = true;
             }
         }
 

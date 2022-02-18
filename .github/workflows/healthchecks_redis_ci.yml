@@ -2,15 +2,15 @@ name: HealthChecks Redis CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Redis/**
       - test/HealthChecks.Redis.Tests/**
       - .github/workflows/healthchecks_redis_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Redis/**
     - test/HealthChecks.Redis.Tests/**

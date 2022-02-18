@@ -2,16 +2,16 @@ name: HealthChecks AzureKeyVault DB CI
 
 on:
   push:
-   #branches: [ master ]
+   branches: [ master ]
    paths:
     - src/HealthChecks.AzureKeyVault/**
     - test/HealthChecks.AzureKeyVault.Tests/**
     - .github/workflows/healthchecks_azurekeyvault_ci.yml
    tags-ignore:
-    - preview-*
+    - release-*
     
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.AzureKeyVault/**
     - test/HealthChecks.AzureKeyVault.Tests/**

@@ -2,15 +2,15 @@ name: HealthChecks DynamoDb CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.DynamoDb/**
       - test/HealthChecks.DynamoDb.Tests/**
       - .github/workflows/healthchecks_dynamodb_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.DynamoDb/**
     - test/HealthChecks.DynamoDb.Tests/**

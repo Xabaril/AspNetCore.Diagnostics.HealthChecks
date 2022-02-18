@@ -1,0 +1,36 @@
+name: HealthChecks Publisher.Seq CD
+
+on:
+  push:
+    tags:       
+      - release-publisher_seq-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Publisher.Seq.Tests/HealthChecks.Publisher.Seq.Tests.csproj --verbosity normal
+    - name: dotnet pack 
+      run: dotnet pack ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.2
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Publisher.Seq Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Publisher.Seq.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

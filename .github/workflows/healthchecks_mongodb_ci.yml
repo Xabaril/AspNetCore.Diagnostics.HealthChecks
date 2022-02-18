@@ -2,15 +2,15 @@ name: HealthChecks MongoDb CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.MongoDb/**
       - test/HealthChecks.MongoDb.Tests/**
       - .github/workflows/healthchecks_mongodb_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.MongoDb/**
     - test/HealthChecks.MongoDb.Tests/**

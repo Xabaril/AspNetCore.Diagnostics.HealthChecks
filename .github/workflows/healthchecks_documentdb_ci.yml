@@ -2,15 +2,15 @@ name: HealthChecks DocumentDb CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.DocumentDb/**
       - test/HealthChecks.DocumentDb.Tests/**
       - .github/workflows/healthchecks_documentdb_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.DocumentDb/**
     - test/HealthChecks.DocumentDb.Tests/**

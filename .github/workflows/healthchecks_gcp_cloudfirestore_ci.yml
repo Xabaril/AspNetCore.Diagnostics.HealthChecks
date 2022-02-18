@@ -2,15 +2,15 @@ name: HealthChecks Gcp.CloudFirestore CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Gcp.CloudFirestore/**
       - test/HealthChecks.Gcp.CloudFirestore.Tests/**
       - .github/workflows/healthchecks_gcp_cloudfirestore_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Gcp.CloudFirestore/**
     - test/HealthChecks.Gcp.CloudFirestore.Tests/**

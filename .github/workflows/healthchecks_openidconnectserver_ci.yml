@@ -2,15 +2,15 @@ name: HealthChecks OpenIdConnectServer CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
       - test/HealthChecks.IdSvr.Tests/**
       - .github/workflows/healthchecks_idsvr_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.OpenIdConnectServer/**
     - test/HealthChecks.IdSvr.Tests/**
@@ -36,4 +36,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.IdSvr.Tests/HealthChecks.IdSvr.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.OpenIdConnectServer.Tests/HealthChecks.OpenIdConnectServer.Tests.csproj --verbosity normal

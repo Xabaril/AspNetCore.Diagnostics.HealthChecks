@@ -2,15 +2,15 @@ name: HealthChecks Publisher.Prometheus CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Publisher.Prometheus/**
       - test/HealthChecks.Publisher.Prometheus.Tests/**
       - .github/workflows/healthchecks_publisher_prometheus_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Publisher.Prometheus/**
     - test/HealthChecks.Publisher.Prometheus.Tests/**

@@ -2,16 +2,16 @@ name: HealthChecks Azure.IoTHub CI
 
 on:
   push:
-   #branches: [ master ]
+   branches: [ master ]
    paths:
     - src/HealthChecks.Azure.IoTHub/**
     - test/HealthChecks.Azure.IoTHub.Tests/**
     - .github/workflows/healthchecks_azure_iothub_ci.yml
    tags-ignore:
-    - preview-*
+    - release-*
     
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Azure.IoTHub/**
     - test/HealthChecks.Azure.IoTHub.Tests/**

@@ -2,15 +2,15 @@ name: HealthChecks Oracle CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Oracle/**
       - test/HealthChecks.Oracle.Tests/**
       - .github/workflows/healthchecks_oracle_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Oracle/**
     - test/HealthChecks.Oracle.Tests/**
@@ -38,5 +38,5 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal

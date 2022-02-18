@@ -2,15 +2,15 @@ name: HealthChecks Hangfire CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Hangfire/**
       - test/HealthChecks.Hangfire.Tests/**
       - .github/workflows/healthchecks_hangfire_ci.yml
-    #tags-ignore:
-    #  - preview-*
+    tags-ignore:
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Hangfire/**
     - test/HealthChecks.Hangfire.Tests/**

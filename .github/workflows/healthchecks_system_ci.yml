@@ -2,15 +2,15 @@ name: HealthChecks System CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.System/**
       - test/HealthChecks.System.Tests/**
       - .github/workflows/healthchecks_system_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.System/**
     - test/HealthChecks.System.Tests/**

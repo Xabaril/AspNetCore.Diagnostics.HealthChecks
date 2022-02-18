@@ -2,15 +2,15 @@ name: HealthChecks CosmosDb CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.CosmosDb/**
       - test/HealthChecks.CosmosDb.Tests/**
       - .github/workflows/healthchecks_cosmosdb_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.CosmosDb/**
     - test/HealthChecks.CosmosDb.Tests/**

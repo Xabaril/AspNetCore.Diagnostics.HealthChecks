@@ -2,15 +2,15 @@ name: HealthChecks Uris CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Uris/**
       - test/HealthChecks.Uris.Tests/**
       - .github/workflows/healthchecks_uris_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Uris/**
     - test/HealthChecks.Uris.Tests/**

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using HealthChecks.Redis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -42,6 +41,29 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
 
             registration.Name.Should().Be("my-redis");
             check.GetType().Should().Be(typeof(RedisHealthCheck));
+        }
+
+        [Fact]
+        public void add_health_check_with_connection_string_factory_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            var factoryCalled = false;
+            services.AddHealthChecks()
+                .AddRedis(_ =>
+                {
+                    factoryCalled = true;
+                    return "connectionstring";
+                });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("redis");
+            check.GetType().Should().Be(typeof(RedisHealthCheck));
+            factoryCalled.Should().BeTrue();
         }
     }
 }

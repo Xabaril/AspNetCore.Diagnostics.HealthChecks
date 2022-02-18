@@ -1,0 +1,34 @@
+name: HealthChecks SignalR CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.SignalR/**
+      - test/HealthChecks.SignalR.Tests/**
+      - .github/workflows/healthchecks_signalr_ci.yml
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.SignalR/**
+    - test/HealthChecks.SignalR.Tests/**
+    - .github/workflows/healthchecks_signalr_ci.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj --verbosity normal

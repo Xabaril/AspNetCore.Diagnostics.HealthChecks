@@ -2,15 +2,15 @@ name: HealthChecks Sqlite CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Sqlite/**
       - test/HealthChecks.Sqlite.Tests/**
       - .github/workflows/healthchecks_sqlite_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Sqlite/**
     - test/HealthChecks.Sqlite.Tests/**

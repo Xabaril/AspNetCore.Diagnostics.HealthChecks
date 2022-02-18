@@ -2,15 +2,15 @@ name: HealthChecks Network CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.Network/**
       - test/HealthChecks.Network.Tests/**
       - .github/workflows/healthchecks_network_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.Network/**
     - test/HealthChecks.Network.Tests/**
@@ -19,38 +19,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      ftp:
-        image: bogem/ftp
-        ports:
-          - 21:21
-          - 47400-47470:47400-47470
-        env: 
-          FTP_USER: bob
-          FTP_PASS: 12345
-          PASV_ADDRESS: 127.0.0.1
-      sftp:
-        image: atmoz/sftp
-        ports: 
-          - 22:22
-        volumes:
-          - ${{ github.workspace }}/build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
-          - ${{ github.workspace }}/build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
-      mail:
-        image: tvial/docker-mailserver:latest
-        options: --hostname mail --container_name mail --domainname healthchecks.com        
-        ports:
-          - 25:25               
-          - 143:143
-          - 465:465
-          - 587:587
-          - 993:993          
-          - 995:995  
-        env:
-          SSL_TYPE: self-signed
-          DMS_DEBUG: 1
-        volumes:
-          - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
+    #services:
+    #  ftp:
+    #    image: bogem/ftp
+    #    ports:
+    #      - 21:21
+    #      - 47400-47470:47400-47470
+    #    env: 
+    #      FTP_USER: bob
+    #      FTP_PASS: 12345
+    #      PASV_ADDRESS: 127.0.0.1
+    #  sftp:
+    #    image: atmoz/sftp
+    #    ports: 
+    #      - 22:22
+    #    volumes:
+    #      - ${{ github.workspace }}/build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
+    #      - ${{ github.workspace }}/build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
+    #  mail:
+    #    image: tvial/docker-mailserver:latest
+    #    options: --hostname mail --container_name mail --domainname healthchecks.com        
+    #    ports:
+    #      - 25:25               
+    #      - 143:143
+    #      - 465:465
+    #      - 587:587
+    #      - 993:993          
+    #      - 995:995  
+    #    env:
+    #      SSL_TYPE: self-signed
+    #      DMS_DEBUG: 1
+    #    volumes:
+    #      - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -62,5 +62,5 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal

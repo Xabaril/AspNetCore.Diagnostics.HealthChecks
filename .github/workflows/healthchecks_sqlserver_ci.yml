@@ -2,15 +2,15 @@ name: HealthChecks SQL Server DB CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.SqlServer/**
       - test/HealthChecks.SqlServer.Tests/**
       - .github/workflows/healthchecks_sqlserver_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.SqlServer/**
     - test/HealthChecks.SqlServer.Tests/**

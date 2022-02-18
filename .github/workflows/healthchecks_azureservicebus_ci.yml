@@ -2,16 +2,15 @@ name: HealthChecks AzureServiceBus DB CI
 
 on:
   push:
-   #branches: [ master ]
+   branches: [ master ]
    paths:
     - src/HealthChecks.AzureServiceBus/**
     - test/HealthChecks.AzureServiceBus.Tests/**
     - .github/workflows/healthchecks_azureservicebus_ci.yml
    tags-ignore:
-    - preview-*
-    
+    - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.AzureServiceBus/**
     - test/HealthChecks.AzureServiceBus.Tests/**

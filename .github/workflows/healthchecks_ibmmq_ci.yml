@@ -2,15 +2,15 @@ name: HealthChecks IbmMQ CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.IbmMQ/**
       - test/HealthChecks.IbmMQ.Tests/**
       - .github/workflows/healthchecks_ibmmq_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.IbmMQ/**
     - test/HealthChecks.IbmMQ.Tests/**

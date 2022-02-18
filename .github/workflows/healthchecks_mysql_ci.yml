@@ -2,15 +2,15 @@ name: HealthChecks MySql CI
 
 on:
   push:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
       - src/HealthChecks.MySql/**
       - test/HealthChecks.MySql.Tests/**
       - .github/workflows/healthchecks_mysql_ci.yml
     tags-ignore:
-      - preview-*
+      - release-*
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
     paths:
     - src/HealthChecks.MySql/**
     - test/HealthChecks.MySql.Tests/**

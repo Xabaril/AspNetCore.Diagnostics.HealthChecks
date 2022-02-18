@@ -12,7 +12,7 @@
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET Core** versions supported: 5.0, 3.1, 3.0 and 2.2
+**ASP.NET Core** versions supported: 6.0, 5.0, 3.1, 3.0
 
 # Sections
 
@@ -89,7 +89,7 @@ HealthChecks packages include health checks for:
 - ArangoDB
 - Gremlin
 
-> We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
+> We support netcoreapp 3.0, 3.1, 5.0 and 6.0. Please use package versions 3.0.X, 3.1.X, 5.0.X and 6.0.X to target different versions.
 
 ```PowerShell
 Install-Package AspNetCore.HealthChecks.System

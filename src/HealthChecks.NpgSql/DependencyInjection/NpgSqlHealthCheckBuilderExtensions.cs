@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddNpgSql(this IHealthChecksBuilder builder, string npgsqlConnectionString, string healthQuery = "SELECT 1;", Action<NpgsqlConnection> connectionAction = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            return builder.AddNpgSql(_ => npgsqlConnectionString, healthQuery, connectionAction, name, failureStatus,tags,timeout);
+            return builder.AddNpgSql(_ => npgsqlConnectionString, healthQuery, connectionAction, name, failureStatus, tags, timeout);
         }
         
         /// <summary>

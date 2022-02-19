@@ -34,7 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Postgres databases.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// /// /// <param name="connectionStringFactory">A factory to build the Redis connection string to use.</param>
+        /// <param name="connectionStringFactory">A factory to build the Postgres connection string to use.</param>
         /// <param name="connectionStringFactory">The Postgres connection string to be used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'npgsql' will be used for the name.</param>
         /// <param name="failureStatus">

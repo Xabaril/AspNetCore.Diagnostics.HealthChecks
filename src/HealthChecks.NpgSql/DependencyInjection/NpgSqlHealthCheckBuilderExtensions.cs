@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(connectionStringFactory));
             }
 
-            builder.Services.AddSingleton(sp => new NpgSqlHealthCheck(connectionStringFactory(sp),healthQuery,connectionAction));
+            builder.Services.AddSingleton(sp => new NpgSqlHealthCheck(connectionStringFactory(sp), healthQuery, connectionAction));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

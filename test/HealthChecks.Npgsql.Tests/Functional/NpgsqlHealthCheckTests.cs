@@ -109,7 +109,6 @@ namespace HealthChecks.Npgsql.Tests.Functional
         [Fact]
         public async Task be_healthy_if_npgsql_is_available_by_iServiceProvider_registered()
         {
-
             var webHostBuilder = new WebHostBuilder()
                                  .UseStartup<DefaultStartup>()
                                  .ConfigureServices(services =>

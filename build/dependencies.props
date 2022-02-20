@@ -52,13 +52,13 @@
     <HealthChecksUIK8sOperator>6.0.2</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>6.0.2</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>6.0.1</HealthCheckSystem>
-    <HealthCheckUI>6.0.2</HealthCheckUI>
-    <HealthCheckUIClient>6.0.2</HealthCheckUIClient>
-    <HealthCheckUICore>6.0.2</HealthCheckUICore>
-    <HealthCheckUIInMemoryStorage>6.0.2</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>6.0.2</HealthCheckUIMySqlStorage>
-    <HealthCheckUISQLiteStorage>6.0.2</HealthCheckUISQLiteStorage>
-    <HealthCheckUISqlServerStorage>6.0.2</HealthCheckUISqlServerStorage>
+    <HealthCheckUI>6.0.3</HealthCheckUI>
+    <HealthCheckUIClient>6.0.3</HealthCheckUIClient>
+    <HealthCheckUICore>6.0.3</HealthCheckUICore>
+    <HealthCheckUIInMemoryStorage>6.0.3</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>6.0.3</HealthCheckUIMySqlStorage>
+    <HealthCheckUISQLiteStorage>6.0.3</HealthCheckUISQLiteStorage>
+    <HealthCheckUISqlServerStorage>6.0.3</HealthCheckUISqlServerStorage>
     <HealthCheckUri>6.0.2</HealthCheckUri>
   </PropertyGroup>
 </Project>

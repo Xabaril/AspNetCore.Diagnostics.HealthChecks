@@ -1,24 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />
-	  <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="id_rsa" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="id_rsa" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <None Update="id_rsa">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+  <ItemGroup>
+    <None Update="id_rsa">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

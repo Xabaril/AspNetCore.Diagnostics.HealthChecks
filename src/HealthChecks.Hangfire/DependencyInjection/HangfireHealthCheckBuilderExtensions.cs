@@ -1,4 +1,4 @@
-﻿using HealthChecks.Hangfire;
+using HealthChecks.Hangfire;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class HangfireHealthCheckBuilderExtensions
     {
-        const string NAME = "hangfire";
+        private const string NAME = "hangfire";
+
         /// <summary>
         /// Add a health check for Hangfire.
         /// </summary>
@@ -19,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddHangfire(this IHealthChecksBuilder builder, Action<HangfireOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {

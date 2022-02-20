@@ -1,4 +1,4 @@
-﻿using HealthChecks.Aws.S3;
+using HealthChecks.Aws.S3;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class S3HealthCheckBuilderExtensions
     {
-        private const string Name = "aws s3";
+        private const string NAME = "aws s3";
 
         /// <summary>
         /// Add a health check for AWS S3.
@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddS3(this IHealthChecksBuilder builder, Action<S3BucketOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
             setup?.Invoke(options);
 
             return builder.Add(new HealthCheckRegistration(
-                name ?? Name,
+                name ?? NAME,
                 sp => new S3HealthCheck(options),
                 failureStatus,
                 tags,

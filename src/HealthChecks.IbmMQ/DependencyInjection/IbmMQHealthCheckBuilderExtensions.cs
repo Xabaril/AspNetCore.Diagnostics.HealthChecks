@@ -1,4 +1,4 @@
-﻿using HealthChecks.IbmMQ;
+using HealthChecks.IbmMQ;
 using IBM.WMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IbmMQHealthCheckBuilderExtensions
     {
-        const string NAME = "ibmmq";
+        private const string NAME = "ibmmq";
 
         /// <summary>
         /// Add a health check for IbmMQ services using connection properties.
@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddIbmMQ(this IHealthChecksBuilder builder, string queueManager, Hashtable connectionProperties, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -51,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddIbmMQManagedConnection(this IHealthChecksBuilder builder, string queueManager, string channel, string connectionInfo, string userName = null, string password = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -65,11 +65,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static Hashtable BuildProperties(string channel, string connectionInfo, string userName = null, string password = null)
         {
-            Hashtable properties = new Hashtable {
-        {MQC.CHANNEL_PROPERTY, channel},
-        {MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED},
-        {MQC.CONNECTION_NAME_PROPERTY, connectionInfo}
-      };
+            var properties = new Hashtable
+            {
+                { MQC.CHANNEL_PROPERTY, channel },
+                { MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED },
+                { MQC.CONNECTION_NAME_PROPERTY, connectionInfo }
+            };
 
             if (!string.IsNullOrEmpty(userName))
                 properties.Add(MQC.USER_ID_PROPERTY, userName);

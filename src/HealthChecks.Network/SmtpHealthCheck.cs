@@ -29,7 +29,7 @@ namespace HealthChecks.Network
 
                             if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken))
                             {
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server{_options.Host}:{_options.Port} with configured credentials");
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
                             }
                         }
 

@@ -32,7 +32,7 @@
     <HealthCheckKubernetes>6.0.1</HealthCheckKubernetes>
     <HealthCheckMongoDB>6.0.1</HealthCheckMongoDB>
     <HealthCheckMySql>6.0.1</HealthCheckMySql>
-    <HealthCheckNetwork>6.0.1</HealthCheckNetwork>
+    <HealthCheckNetwork>6.0.2</HealthCheckNetwork>
     <HealthCheckNpgSql>6.0.1</HealthCheckNpgSql>
     <HealthCheckOpenIdConnectServer>6.0.1</HealthCheckOpenIdConnectServer>
     <HealthCheckOracle>6.0.1</HealthCheckOracle>

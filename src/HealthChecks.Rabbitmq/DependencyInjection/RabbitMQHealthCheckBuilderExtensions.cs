@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="RabbitMQHealthCheck"/>.
+    /// </summary>
     public static class RabbitMQHealthCheckBuilderExtensions
     {
         const string NAME = "rabbitmq";
@@ -65,7 +68,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for RabbitMQ services using <see cref="IConnection"/> from service provider 
+        /// Add a health check for RabbitMQ services using <see cref="IConnection"/> from service provider
         /// or <see cref="IConnectionFactory"/> from service provider if none is found. At least one must be configured.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>

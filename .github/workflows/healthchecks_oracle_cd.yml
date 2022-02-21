@@ -11,7 +11,7 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     services:
-      sqlserver:
+      oracle:
         image: oracleinanutshell/oracle-xe-11g
         ports:
           - 1521:1521

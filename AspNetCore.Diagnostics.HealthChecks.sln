@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 		Directory.Build.targets = Directory.Build.targets
 		docker-compose.yml = docker-compose.yml
 		dotnet-install.ps1 = dotnet-install.ps1
+		global.json = global.json
 		install-sdk.ps1 = install-sdk.ps1
 	EndProjectSection
 EndProject

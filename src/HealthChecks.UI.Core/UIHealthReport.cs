@@ -18,7 +18,7 @@ namespace HealthChecks.UI.Core
 
         public UIHealthReport(Dictionary<string, UIHealthReportEntry> entries, TimeSpan totalDuration)
         {
-            Entries = entries;
+            Entries = entries ?? new Dictionary<string, UIHealthReportEntry>();
             TotalDuration = totalDuration;
         }
         public static UIHealthReport CreateFrom(HealthReport report)

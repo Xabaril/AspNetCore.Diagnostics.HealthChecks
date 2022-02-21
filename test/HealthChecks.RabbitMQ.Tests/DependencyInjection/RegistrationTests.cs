@@ -3,6 +3,7 @@ using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -28,6 +29,11 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 
             registration.Name.Should().Be(_defaultCheckName);
             check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+
+            ((RabbitMQHealthCheck)check).Dispose();
+            var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
+            result.Status.Should().Be(HealthStatus.Unhealthy);
+            result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
         }
 
         [Fact]
@@ -47,6 +53,11 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 
             registration.Name.Should().Be(customCheckName);
             check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+
+            ((RabbitMQHealthCheck)check).Dispose();
+            var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
+            result.Status.Should().Be(HealthStatus.Unhealthy);
+            result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
         }
     }
 }

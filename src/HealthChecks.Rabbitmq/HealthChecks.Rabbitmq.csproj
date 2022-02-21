@@ -6,6 +6,7 @@
     <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.</Description>
     <Version>$(HealthCheckRabbitMQ)</Version>
     <RootNamespace>HealthChecks.RabbitMQ</RootNamespace> <!--For backward naming compatibility-->
+	<Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

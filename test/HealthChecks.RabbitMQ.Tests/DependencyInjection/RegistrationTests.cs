@@ -58,5 +58,53 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             result.Status.Should().Be(HealthStatus.Unhealthy);
             result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
         }
+
+        [Fact]
+        public void add_named_health_check_with_connection_string_factory_by_iServiceProvider_registered()
+        {
+            var services = new ServiceCollection();
+            var customCheckName = "my-" + _defaultCheckName;
+            services.AddSingleton(new RabbitMqSetting(){
+                ConnectionString = _fakeConnectionString
+            });
+
+            services.AddHealthChecks()
+                .AddRabbitMQ((sp)=> sp.GetRequiredService<RabbitMqSetting>().ConnectionString, name: customCheckName);
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be(customCheckName);
+            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+        }
+
+        [Fact]
+        public void add_named_health_check_with_uri_string_factory_by_iServiceProvider_registered()
+        {
+            var services = new ServiceCollection();
+            var customCheckName = "my-" + _defaultCheckName;
+            services.AddSingleton(new RabbitMqSetting(){
+                ConnectionString = _fakeConnectionString
+            });
+
+            services.AddHealthChecks()
+                .AddRabbitMQ((sp)=> new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString), name: customCheckName);
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be(customCheckName);
+            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+        }
+    }
+
+    public class RabbitMqSetting{
+        public string ConnectionString { get; set; }
     }
 }

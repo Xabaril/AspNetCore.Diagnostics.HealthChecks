@@ -105,7 +105,6 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
         
-        
         [Fact]
         public async Task be_healthy_if_npgsql_is_available_by_iServiceProvider_registered()
         {

@@ -9,10 +9,10 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck
         : IHealthCheck, IDisposable
     {
-        private IConnection _connection;
-        private IConnectionFactory _factory;
-        private readonly Uri _rabbitConnectionString;
-        private readonly SslOption _sslOption;
+        private IConnection? _connection;
+        private IConnectionFactory? _factory;
+        private readonly Uri? _rabbitConnectionString;
+        private readonly SslOption? _sslOption;
         private readonly bool _ownsConnection;
         private bool _disposed;
 
@@ -27,7 +27,7 @@ namespace HealthChecks.RabbitMQ
             _ownsConnection = true;
         }
 
-        public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption ssl)
+        public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl)
         {
             _rabbitConnectionString = rabbitConnectionString;
             _sslOption = ssl;
@@ -38,9 +38,7 @@ namespace HealthChecks.RabbitMQ
         {
             try
             {
-                EnsureConnection();
-
-                using var model = _connection.CreateModel();
+                using var model = EnsureConnection().CreateModel();
                 return Task.FromResult(HealthCheckResult.Healthy());
             }
             catch (Exception ex)
@@ -50,7 +48,7 @@ namespace HealthChecks.RabbitMQ
             }
         }
 
-        private void EnsureConnection()
+        private IConnection EnsureConnection()
         {
             if (_disposed)
                 throw new ObjectDisposedException(nameof(RabbitMQHealthCheck));
@@ -72,6 +70,8 @@ namespace HealthChecks.RabbitMQ
 
                 _connection = _factory.CreateConnection();
             }
+
+            return _connection;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -26,8 +26,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddRabbitMQ(
+            this IHealthChecksBuilder builder,
+            string rabbitConnectionString,
+            SslOption? sslOption = null,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services
                 .AddSingleton(sp => new RabbitMQHealthCheck(new Uri(rabbitConnectionString), sslOption));
@@ -53,8 +60,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Uri rabbitConnectionString, SslOption sslOption = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddRabbitMQ(
+            this IHealthChecksBuilder builder,
+            Uri rabbitConnectionString,
+            SslOption? sslOption = null,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services
                 .AddSingleton(sp => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
@@ -79,9 +93,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddRabbitMQ(
+            this IHealthChecksBuilder builder,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services.AddSingleton(sp =>
             {
@@ -111,7 +129,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for RabbitMQ services using <see cref="IConnection"/> factory function
+        /// Add a health check for RabbitMQ services using <see cref="IConnection"/> factory function.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionFactory"> A factory function to provide the rabbitMQ connection </param>
@@ -122,9 +140,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnection> connectionFactory,
-            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddRabbitMQ(
+            this IHealthChecksBuilder builder,
+            Func<IServiceProvider, IConnection> connectionFactory,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services
                 .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactory(sp)));
@@ -138,7 +161,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for RabbitMQ services using <see cref="IConnectionFactory"/> factory function
+        /// Add a health check for RabbitMQ services using <see cref="IConnectionFactory"/> factory function.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionFactoryFactory"> A factory function to provide the rabbitMQ connection factory</param>
@@ -149,9 +172,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddRabbitMQ(this IHealthChecksBuilder builder, Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
-            string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddRabbitMQ(
+            this IHealthChecksBuilder builder,
+            Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services
                .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)));

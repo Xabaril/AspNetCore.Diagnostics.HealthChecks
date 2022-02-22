@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using System;
 using System.Threading;
@@ -64,7 +64,8 @@ namespace HealthChecks.RabbitMQ
                         UseBackgroundThreadsForIO = true,
                     };
 
-                    if (_sslOption != null) ((ConnectionFactory)_factory).Ssl = _sslOption;
+                    if (_sslOption != null)
+                        ((ConnectionFactory)_factory).Ssl = _sslOption;
                 }
 
                 _connection = _factory.CreateConnection();

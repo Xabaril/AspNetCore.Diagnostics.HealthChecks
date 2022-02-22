@@ -1,4 +1,4 @@
-﻿using HealthChecks.RabbitMQ;
+using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using System;
@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class RabbitMQHealthCheckBuilderExtensions
     {
-        const string NAME = "rabbitmq";
+        private const string NAME = "rabbitmq";
 
         /// <summary>
         /// Add a health check for RabbitMQ services using connection string (amqp uri).

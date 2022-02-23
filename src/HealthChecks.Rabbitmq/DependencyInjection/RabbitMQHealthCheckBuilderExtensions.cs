@@ -199,7 +199,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddRabbitMQ(
             this IHealthChecksBuilder builder,
-            Func<IServiceProvider,Uri> connectionStringFactory,
+            Func<IServiceProvider, Uri> connectionStringFactory,
             SslOption? sslOption = default,
             string? name = default,
             HealthStatus? failureStatus = default,

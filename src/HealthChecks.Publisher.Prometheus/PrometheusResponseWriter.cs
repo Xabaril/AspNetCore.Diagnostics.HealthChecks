@@ -1,6 +1,6 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.Prometheus
 {

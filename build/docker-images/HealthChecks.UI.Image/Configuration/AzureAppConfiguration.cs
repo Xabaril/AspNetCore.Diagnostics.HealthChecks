@@ -1,4 +1,3 @@
-using System;
 using HealthChecks.UI.Image.Configuration.Helpers;
 
 namespace HealthChecks.UI.Image.Configuration
@@ -11,8 +10,7 @@ namespace HealthChecks.UI.Image.Configuration
             {
                 if (EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Enabled))
                 {
-                    if (Boolean.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled)
-                        , out bool enabled))
+                    if (bool.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled), out bool enabled))
                     {
                         return enabled;
                     }

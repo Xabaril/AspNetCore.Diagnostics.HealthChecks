@@ -1,15 +1,15 @@
-﻿using HealthChecks.UI.Configuration;
-using HealthChecks.UI.Core.Data;
-using HealthChecks.UI.Core.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.Notifications
 {

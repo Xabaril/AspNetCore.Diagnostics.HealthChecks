@@ -1,11 +1,11 @@
-﻿using HealthChecks.UI.K8s.Operator.Extensions;
-using k8s;
-using k8s.Models;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Extensions;
+using k8s;
+using k8s.Models;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
@@ -29,7 +29,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         public async Task<V1ConfigMap> GetOrCreateAsync(HealthCheckResource resource)
         {
             var configMap = await Get(resource);
-            if (configMap != null) return configMap;
+            if (configMap != null)
+                return configMap;
 
             try
             {

@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Core.Data.Configuration;
+using HealthChecks.UI.Core.Data.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Core.Data

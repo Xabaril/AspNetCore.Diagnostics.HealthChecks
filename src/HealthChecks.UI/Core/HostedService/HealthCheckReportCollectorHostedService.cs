@@ -1,11 +1,11 @@
-﻿using HealthChecks.UI.Configuration;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using HealthChecks.UI.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -19,7 +19,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly Settings _settings;
 
         private Task _executingTask;
-        private CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
         public HealthCheckCollectorHostedService
             (IServiceProvider provider,

@@ -1,10 +1,10 @@
-﻿using k8s.Models;
 using System;
 using System.Linq;
+using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Operator
 {
-    class KubernetesAddressFactory
+    internal class KubernetesAddressFactory
     {
         public static string CreateAddress(V1Service service, HealthCheckResource resource)
         {

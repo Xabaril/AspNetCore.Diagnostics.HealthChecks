@@ -1,15 +1,13 @@
-﻿using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using RabbitMQ.Client;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Sample
 {
@@ -41,7 +39,7 @@ namespace HealthChecks.Sample
                 //.AddIdentityServer(new Uri("http://localhost:6060"))
                 //.AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
                 //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
-                .AddApplicationInsightsPublisher(saveDetailedReport:true);
+                .AddApplicationInsightsPublisher(saveDetailedReport: true);
 
             services.AddControllers();
         }
@@ -74,7 +72,7 @@ namespace HealthChecks.Sample
                     return Task.FromResult(HealthCheckResult.Healthy());
                 }
 
-                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed",exception:new InvalidCastException("Invalid cast from to to to")));
+                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed", exception: new InvalidCastException("Invalid cast from to to to")));
             }
 
         }

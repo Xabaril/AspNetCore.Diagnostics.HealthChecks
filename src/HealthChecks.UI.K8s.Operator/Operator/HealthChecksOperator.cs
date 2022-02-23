@@ -1,13 +1,13 @@
-﻿using HealthChecks.UI.K8s.Operator.Controller;
+using System;
+using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Controller;
 using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Operator;
 using k8s;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using static HealthChecks.UI.K8s.Operator.Constants;
 
 namespace HealthChecks.UI.K8s.Operator

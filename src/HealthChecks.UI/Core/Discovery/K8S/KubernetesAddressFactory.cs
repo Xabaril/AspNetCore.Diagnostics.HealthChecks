@@ -1,5 +1,5 @@
-﻿using k8s.Models;
 using System.Linq;
+using k8s.Models;
 
 #nullable enable
 namespace HealthChecks.UI.Core.Discovery.K8S

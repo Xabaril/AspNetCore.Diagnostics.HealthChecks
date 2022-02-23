@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static HealthChecks.UI.K8s.Operator.Constants;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
@@ -32,7 +32,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         public async Task<V1Deployment> GetOrCreateAsync(HealthCheckResource resource)
         {
             var deployment = await Get(resource);
-            if (deployment != null) return deployment;
+            if (deployment != null)
+                return deployment;
 
             try
             {
@@ -157,8 +158,10 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             {
                 var volumeName = "healthchecks-volume";
 
-                if (specification.Volumes == null) specification.Volumes = new List<V1Volume>();
-                if (container.VolumeMounts == null) container.VolumeMounts = new List<V1VolumeMount>();
+                if (specification.Volumes == null)
+                    specification.Volumes = new List<V1Volume>();
+                if (container.VolumeMounts == null)
+                    container.VolumeMounts = new List<V1VolumeMount>();
 
                 specification.Volumes.Add(new V1Volume(name: volumeName,
                     configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));

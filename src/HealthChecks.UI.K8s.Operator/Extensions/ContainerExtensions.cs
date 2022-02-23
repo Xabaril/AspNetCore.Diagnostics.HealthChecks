@@ -1,5 +1,4 @@
 using HealthChecks.UI.K8s.Operator.Diagnostics;
-using k8s;
 using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator

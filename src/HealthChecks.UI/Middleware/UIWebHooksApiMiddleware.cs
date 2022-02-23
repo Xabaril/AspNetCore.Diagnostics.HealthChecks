@@ -1,13 +1,13 @@
-﻿using HealthChecks.UI.Configuration;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core
 {

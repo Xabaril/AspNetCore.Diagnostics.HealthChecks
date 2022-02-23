@@ -1,8 +1,8 @@
-﻿using HealthChecks.UI;
+using System;
+using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
-using System;
 
 namespace Microsoft.AspNetCore.Builder
 {

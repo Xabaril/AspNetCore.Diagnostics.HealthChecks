@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
-    class KubernetesDiscoverySettings
+    internal class KubernetesDiscoverySettings
     {
         public bool Enabled { get; set; } = false;
         public string ClusterHost { get; set; }

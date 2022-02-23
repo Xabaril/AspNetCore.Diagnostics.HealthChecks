@@ -1,16 +1,16 @@
-﻿using HealthChecks.UI.Core.Data;
-using HealthChecks.UI.Core.Discovery.K8S.Extensions;
-using k8s;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Discovery.K8S.Extensions;
+using k8s;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
@@ -124,21 +124,25 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 await Task.Delay(_discoveryOptions.RefreshTimeOnSeconds * 1000);
             }
         }
-        bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
+
+        private bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
         {
             return livenessDb.Configurations
                 .Any(lc => lc.Uri == host);
         }
-        bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
+
+        private bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
-        async Task<HttpStatusCode> CallClusterService(string host)
+
+        private async Task<HttpStatusCode> CallClusterService(string host)
         {
             var response = await _clusterServiceClient.GetAsync(host);
             return response.StatusCode;
         }
-        Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
+
+        private Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
         {
             livenessDb.Configurations.Add(new HealthCheckConfiguration()
             {

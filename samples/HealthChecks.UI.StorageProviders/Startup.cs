@@ -25,10 +25,7 @@ namespace HealthChecks.UI.StorageProviders
                 .AddRouting()
                 .AddHealthChecks()
                 .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 200, tags: new[] { "memory" })
-                .AddCheck(name: "random", () =>
-                {
-                    return DateTime.UtcNow.Second % 2 == 0 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
-                })
+                .AddCheck(name: "random", () => DateTime.UtcNow.Second % 2 == 0 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy())
                 .Services
                 .AddHealthChecksUI(setup =>
                 {
@@ -42,9 +39,8 @@ namespace HealthChecks.UI.StorageProviders
                 //.AddSqlServerStorage("server=localhost;initial catalog=healthchecksui;user id=sa;password=Password12!");
                 //.AddSqliteStorage("Data Source = healthchecks.db");
                 .AddInMemoryStorage();
-                //.AddPostgreSqlStorage("Host=localhost;Username=postgres;Password=Password12!;Database=healthchecksui");
-                //.AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI");
-
+            //.AddPostgreSqlStorage("Host=localhost;Username=postgres;Password=Password12!;Database=healthchecksui");
+            //.AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
-﻿using HealthChecks.UI.Core.Data;
-using Microsoft.EntityFrameworkCore;
 using System;
+using HealthChecks.UI.Core.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

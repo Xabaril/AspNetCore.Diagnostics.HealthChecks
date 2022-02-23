@@ -1,11 +1,11 @@
-﻿using HealthChecks.UI.K8s.Operator.Extensions;
-using k8s;
-using k8s.Models;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Extensions;
+using k8s;
+using k8s.Models;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
@@ -16,14 +16,15 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public SecretHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client)); ;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<V1Secret> GetOrCreateAsync(HealthCheckResource resource)
         {
             var secret = await Get(resource);
-            if (secret != null) return secret;
+            if (secret != null)
+                return secret;
 
             try
             {

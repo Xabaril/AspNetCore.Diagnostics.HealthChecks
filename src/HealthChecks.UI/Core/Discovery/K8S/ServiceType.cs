@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.UI.Core.Discovery.K8S
+namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal static class ServiceType
     {

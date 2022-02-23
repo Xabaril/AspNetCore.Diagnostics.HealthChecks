@@ -27,7 +27,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         public async Task<V1Service> GetOrCreateAsync(HealthCheckResource resource)
         {
             var service = await Get(resource);
-            if (service != null) return service;
+            if (service != null)
+                return service;
 
             try
             {

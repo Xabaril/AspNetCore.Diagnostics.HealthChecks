@@ -253,7 +253,8 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
             {
                 services
                     .AddHealthChecks()
-                    .AddRabbitMQ(sp=> new Uri(connectionString),tags: new string[] { "rabbitmq" });
+                    .AddRabbitMQ(sp => new Uri(connectionString), tags: new string[] { "rabbitmq" });
+
             })
             .Configure(app =>
             {
@@ -271,6 +272,5 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
             response.StatusCode
                 .Should().Be(HttpStatusCode.OK);
         }
-
     }
 }

@@ -72,7 +72,6 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRabbitMQ(sp => sp.GetRequiredService<RabbitMqSetting>().ConnectionString, name: customCheckName);
 
-
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 

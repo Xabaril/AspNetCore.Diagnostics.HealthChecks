@@ -19,14 +19,14 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             switch (service.Spec.Type)
             {
-                case ServiceType.LoadBalancer:
-                case ServiceType.NodePort:
+                case ServiceType.LOAD_BALANCER:
+                case ServiceType.NODE_PORT:
                     address = GetLoadBalancerAddress(service);
                     break;
-                case ServiceType.ClusterIP:
+                case ServiceType.CLUSTER_IP:
                     address = service.Spec.ClusterIP;
                     break;
-                case ServiceType.ExternalName:
+                case ServiceType.EXTERNAL_NAME:
                     address = service.Spec.ExternalName;
                     break;
             }
@@ -69,14 +69,14 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             int? port;
             switch (service.Spec.Type)
             {
-                case ServiceType.LoadBalancer:
-                case ServiceType.ClusterIP:
+                case ServiceType.LOAD_BALANCER:
+                case ServiceType.CLUSTER_IP:
                     port = GetServicePort(service)?.Port;
                     break;
-                case ServiceType.NodePort:
+                case ServiceType.NODE_PORT:
                     port = GetServicePort(service)?.NodePort;
                     break;
-                case ServiceType.ExternalName:
+                case ServiceType.EXTERNAL_NAME:
                     if (GetServicePortAnnotation(service) is string servicePortAnnotation && int.TryParse(servicePortAnnotation, out var servicePort))
                     {
                         port = servicePort;

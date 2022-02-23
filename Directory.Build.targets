@@ -77,7 +77,7 @@
 
     <PackageReference Update="coverlet.collector" Version="3.1.0"/>
     <PackageReference Update="FluentAssertions" Version="6.2.0"/>
-    <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.0"/>
+    <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.2"/>
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.0.0"/>
     <PackageReference Update="NSubstitute" Version="4.2.2"/>
     <PackageReference Update="RichardSzalay.MockHttp" Version="6.0.0"/>

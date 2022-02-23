@@ -76,11 +76,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 {
                     ["app"] = resource.Spec.Name
                 },
-                Type = resource.Spec.ServiceType ?? Constants.DefaultServiceType,
+                Type = resource.Spec.ServiceType ?? Constants.DEFAULT_SERVICE_TYPE,
                 Ports = new List<V1ServicePort> {
                     new V1ServicePort {
                         Name = "httport",
-                        Port = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort),
+                        Port = int.Parse(resource.Spec.PortNumber ?? Constants.DEFAULT_PORT),
                         TargetPort = 80
                     }
                 }

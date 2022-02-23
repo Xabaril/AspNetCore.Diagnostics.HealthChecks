@@ -43,7 +43,7 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
-                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}",
+                var response = await client.PostAsync($"{uiAddress}{Constants.PUSH_SERVICE_PATH}?{Constants.PUSH_SERVICE_AUTH_KEY}={key}",
 
                   new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
                   {

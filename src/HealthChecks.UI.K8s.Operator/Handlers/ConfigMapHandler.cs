@@ -63,7 +63,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             {
                 BinaryData = new Dictionary<string, byte[]>
                 {
-                    [Constants.StyleSheetName] = Encoding.UTF8.GetBytes(resource.Spec.StylesheetContent)
+                    [Constants.STYLE_SHEET_NAME] = Encoding.UTF8.GetBytes(resource.Spec.StylesheetContent)
                 },
                 Metadata = new V1ObjectMeta
                 {

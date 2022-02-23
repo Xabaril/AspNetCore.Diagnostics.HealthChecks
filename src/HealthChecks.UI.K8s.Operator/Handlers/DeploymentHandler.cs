@@ -47,7 +47,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                _operatorDiagnostics.DeploymentOperationError(deployment.Metadata.Name, Deployment.Operation.Add, ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(deployment.Metadata.Name, Deployment.Operation.ADD, ex.Message);
             }
 
             return deployment;
@@ -63,7 +63,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                _operatorDiagnostics.DeploymentOperationError(resource.Spec.Name, Deployment.Operation.Delete, ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(resource.Spec.Name, Deployment.Operation.DELETE, ex.Message);
             }
         }
 
@@ -85,9 +85,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
             var uiContainer = new V1Container
             {
-                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DefaultPullPolicy,
-                Name = Constants.PodName,
-                Image = resource.Spec.Image ?? Constants.ImageName,
+                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DEFAULT_PULL_POLICY,
+                Name = Constants.POD_NAME,
+                Image = resource.Spec.Image ?? Constants.IMAGE_NAME,
                 Ports = new List<V1ContainerPort>
                                 {
                                     new V1ContainerPort(80)
@@ -166,8 +166,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 specification.Volumes.Add(new V1Volume(name: volumeName,
                     configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));
 
-                container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.StylesPath}/{Constants.StyleSheetName}"));
-                container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.StylesPath}", volumeName));
+                container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.STYLES_PATH}/{Constants.STYLE_SHEET_NAME}"));
+                container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.STYLES_PATH}", volumeName));
             }
 
             return new V1Deployment(metadata: metadata, spec: spec);

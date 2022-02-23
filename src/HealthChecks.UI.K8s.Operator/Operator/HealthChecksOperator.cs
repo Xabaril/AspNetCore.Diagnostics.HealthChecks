@@ -23,8 +23,8 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly ILogger<K8sOperator> _logger;
         private readonly CancellationTokenSource _operatorCts = new CancellationTokenSource();
         private readonly Channel<ResourceWatch> _channel;
-        private const int WaitForReplicaDelay = 5000;
-        private const int WaitForReplicaRetries = 10;
+        private const int WAIT_FOR_REPLICA_DELAY = 5000;
+        private const int WAIT_FOR_REPLICA_RETRIES = 10;
 
         public HealthChecksOperator(
             IKubernetes client,
@@ -53,8 +53,8 @@ namespace HealthChecks.UI.K8s.Operator
         {
             _diagnostics.OperatorStarting();
 
-            _ = Task.Run(OperatorListener);
-            await StartWatcher(cancellationToken);
+            _ = Task.Run(OperatorListenerAsync);
+            await StartWatcherAsync(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -74,12 +74,12 @@ namespace HealthChecks.UI.K8s.Operator
             return Task.CompletedTask;
         }
 
-        private async Task StartWatcher(CancellationToken token)
+        private async Task StartWatcherAsync(CancellationToken token)
         {
             var response = await _client.ListClusterCustomObjectWithHttpMessagesAsync(
-                group: Constants.Group,
-                version: Constants.Version,
-                plural: Constants.Plural,
+                group: Constants.GROUP,
+                version: Constants.VERSION,
+                plural: Constants.PLURAL,
                 watch: true,
                 timeoutSeconds: ((int)TimeSpan.FromMinutes(60).TotalSeconds),
                 cancellationToken: token
@@ -98,12 +98,13 @@ namespace HealthChecks.UI.K8s.Operator
                 onClosed: () =>
                 {
                     _watcher.Dispose();
-                    _ = StartWatcher(token);
+                    _ = StartWatcherAsync(token);
                 },
                 onError: e => _logger.LogError(e.Message)
                 );
         }
-        private async Task OperatorListener()
+
+        private async Task OperatorListenerAsync()
         {
             while (await _channel.Reader.WaitToReadAsync() && !_operatorCts.IsCancellationRequested)
             {
@@ -116,8 +117,8 @@ namespace HealthChecks.UI.K8s.Operator
                             _ = Task.Run(async () =>
                             {
                                 await _controller.DeployAsync(item.Resource);
-                                await WaitForAvailableReplicas(item.Resource);
-                                await StartServiceWatcher(item.Resource);
+                                await WaitForAvailableReplicasAsync(item.Resource);
+                                await StartServiceWatcherAsync(item.Resource);
                             });
                         }
                         else if (item.EventType == WatchEventType.Deleted)
@@ -134,15 +135,15 @@ namespace HealthChecks.UI.K8s.Operator
             }
         }
 
-        private async Task StartServiceWatcher(HealthCheckResource resource)
+        private async Task StartServiceWatcherAsync(HealthCheckResource resource)
         {
             Func<Task> startWatcher = async () => await _serviceWatcher.Watch(resource, _operatorCts.Token);
             Func<Task> startClusterWatcher = async () => await _clusterServiceWatcher.Watch(resource, _operatorCts.Token);
 
             var start = resource.Spec.Scope switch
             {
-                Deployment.Scope.Namespaced => startWatcher,
-                Deployment.Scope.Cluster => startClusterWatcher,
+                Deployment.Scope.NAMESPACED => startWatcher,
+                Deployment.Scope.CLUSTER => startClusterWatcher,
                 _ => throw new ArgumentOutOfRangeException(nameof(resource.Spec.Scope))
             };
 
@@ -156,20 +157,20 @@ namespace HealthChecks.UI.K8s.Operator
 
             var stop = resource.Spec.Scope switch
             {
-                Deployment.Scope.Namespaced => stopWatcher,
-                Deployment.Scope.Cluster => stopClusterWatcher,
+                Deployment.Scope.NAMESPACED => stopWatcher,
+                Deployment.Scope.CLUSTER => stopClusterWatcher,
                 _ => throw new ArgumentOutOfRangeException(nameof(resource.Spec.Scope))
             };
 
             stop();
         }
 
-        private async Task WaitForAvailableReplicas(HealthCheckResource resource)
+        private async Task WaitForAvailableReplicasAsync(HealthCheckResource resource)
         {
             int retries = 1;
             int availableReplicas = 0;
 
-            while (retries <= WaitForReplicaRetries && availableReplicas == 0)
+            while (retries <= WAIT_FOR_REPLICA_RETRIES && availableReplicas == 0)
             {
                 var deployment = await _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
 
@@ -177,8 +178,8 @@ namespace HealthChecks.UI.K8s.Operator
 
                 if (availableReplicas == 0)
                 {
-                    _logger.LogInformation("The UI replica {Name} in {Namespace} is not available yet, retrying...{Retries}/{MaxRetries}", deployment.Metadata.Name, resource.Metadata.NamespaceProperty, retries, WaitForReplicaRetries);
-                    await Task.Delay(WaitForReplicaDelay);
+                    _logger.LogInformation("The UI replica {Name} in {Namespace} is not available yet, retrying...{Retries}/{MaxRetries}", deployment.Metadata.Name, resource.Metadata.NamespaceProperty, retries, WAIT_FOR_REPLICA_RETRIES);
+                    await Task.Delay(WAIT_FOR_REPLICA_DELAY);
                     retries++;
                 }
             }

@@ -2,8 +2,8 @@ name: HealthChecks Azure.IoTHub CD
 
 on:
   push:
-    tags:       
-      - release-azure_iothub-*  # Push events to release-azure_iothub* 
+    tags:
+      - release-azure_iothub-*  # Push events to release-azure_iothub*
 jobs:
   build:
     env:
@@ -20,7 +20,7 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

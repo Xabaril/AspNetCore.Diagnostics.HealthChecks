@@ -36,7 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            return builder.AddRabbitMQ(new Uri(rabbitConnectionString),sslOption,name,failureStatus,tags,timeout);
+            return builder.AddRabbitMQ(new Uri(rabbitConnectionString), sslOption, name, failureStatus, tags, timeout);
         }
 
         /// <summary>

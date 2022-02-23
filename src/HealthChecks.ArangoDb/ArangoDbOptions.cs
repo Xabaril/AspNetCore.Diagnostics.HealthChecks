@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.ArangoDb
+namespace HealthChecks.ArangoDb
 {
     public class ArangoDbOptions
     {

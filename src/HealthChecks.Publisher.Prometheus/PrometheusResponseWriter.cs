@@ -6,7 +6,9 @@ namespace HealthChecks.Publisher.Prometheus
 {
     public sealed class PrometheusResponseWriter : LivenessPrometheusMetrics
     {
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok)
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok) //TODO: change public API
+#pragma warning restore IDE1006 // Naming Styles
         {
             var instance = new PrometheusResponseWriter();
             instance.WriteMetricsFromHealthReport(report);
@@ -20,7 +22,9 @@ namespace HealthChecks.Publisher.Prometheus
             await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
         }
 
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report)
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) //TODO: change public API
+#pragma warning restore IDE1006 // Naming Styles
         {
             await WritePrometheusResultText(context, report, false);
         }

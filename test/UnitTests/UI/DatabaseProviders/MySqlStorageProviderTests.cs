@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ namespace UnitTests.UI.DatabaseProviders
 {
     public class mysql_storage_provider_should
     {
-        private const string ProviderName = "Pomelo.EntityFrameworkCore.MySql";
+        private const string PROVIDER_NAME = "Pomelo.EntityFrameworkCore.MySql";
 
         [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
         public void register_healthchecksdb_context_with_migrations()
@@ -31,8 +31,8 @@ namespace UnitTests.UI.DatabaseProviders
 
             context.Should().NotBeNull();
             context.Database.GetMigrations().Count().Should().BeGreaterThan(0);
-            context.Database.ProviderName.Should().Be(ProviderName);
-            //customOptionsInvoked.Should().BeTrue();
+            context.Database.ProviderName.Should().Be(PROVIDER_NAME);
+            customOptionsInvoked.Should().BeTrue();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Core;
+using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
@@ -11,10 +11,10 @@ namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
-        const string DEFAULT_CONTENT_TYPE = "application/json";
+        private const string DEFAULT_CONTENT_TYPE = "application/json";
 
-        private static byte[] emptyResponse = new byte[] { (byte)'{', (byte)'}' };
-        private static Lazy<JsonSerializerOptions> options = new Lazy<JsonSerializerOptions>(() => CreateJsonOptions());
+        private static readonly byte[] _emptyResponse = new byte[] { (byte)'{', (byte)'}' };
+        private static readonly Lazy<JsonSerializerOptions> _options = new Lazy<JsonSerializerOptions>(() => CreateJsonOptions());
 
         public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
         {
@@ -27,12 +27,12 @@ namespace HealthChecks.UI.Client
 
                 using var responseStream = new MemoryStream();
 
-                await JsonSerializer.SerializeAsync(responseStream, uiReport, options.Value);
+                await JsonSerializer.SerializeAsync(responseStream, uiReport, _options.Value);
                 await httpContext.Response.BodyWriter.WriteAsync(responseStream.ToArray());
             }
             else
             {
-                await httpContext.Response.BodyWriter.WriteAsync(emptyResponse);
+                await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse);
             }
         }
 

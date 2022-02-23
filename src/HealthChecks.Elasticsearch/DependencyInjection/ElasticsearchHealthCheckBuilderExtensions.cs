@@ -1,4 +1,4 @@
-﻿using HealthChecks.Elasticsearch;
+using HealthChecks.Elasticsearch;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ElasticsearchHealthCheckBuilderExtensions
     {
-        const string NAME = "elasticsearch";
+        private const string NAME = "elasticsearch";
+
         /// <summary>
         /// Add a health check for Elasticsearch databases.
         /// </summary>
@@ -19,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddElasticsearch(this IHealthChecksBuilder builder, string elasticsearchUri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
@@ -44,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddElasticsearch(this IHealthChecksBuilder builder, Action<ElasticsearchOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {

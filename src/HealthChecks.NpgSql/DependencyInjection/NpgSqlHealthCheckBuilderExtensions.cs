@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class NpgSqlHealthCheckBuilderExtensions
     {
-        const string NAME = "npgsql";
+        private const string NAME = "npgsql";
 
         /// <summary>
         /// Add a health check for Postgres databases.
@@ -23,13 +23,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddNpgSql(this IHealthChecksBuilder builder, string npgsqlConnectionString, string healthQuery = "SELECT 1;", Action<NpgsqlConnection> connectionAction = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.AddNpgSql(_ => npgsqlConnectionString, healthQuery, connectionAction, name, failureStatus, tags, timeout);
         }
-        
+
         /// <summary>
         /// Add a health check for Postgres databases.
         /// </summary>
@@ -42,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddNpgSql(this IHealthChecksBuilder builder, Func<IServiceProvider, string> connectionStringFactory, string healthQuery = "SELECT 1;", Action<NpgsqlConnection> connectionAction = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {

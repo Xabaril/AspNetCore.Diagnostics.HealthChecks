@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.System.Tests.Seedwork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -16,7 +16,6 @@ namespace HealthChecks.System.Tests.Functional
     [Collection("execution")]
     public class windows_service__healthcheck_should
     {
-        
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_healthy_when_the_service_is_running()
         {

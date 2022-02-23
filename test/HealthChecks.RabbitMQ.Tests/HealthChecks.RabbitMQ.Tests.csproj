@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj" />
+  </ItemGroup>
 
 </Project>

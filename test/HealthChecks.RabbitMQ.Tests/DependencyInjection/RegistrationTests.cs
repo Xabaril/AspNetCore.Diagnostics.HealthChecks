@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,9 +63,9 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
         public void add_named_health_check_with_connection_string_factory_by_iServiceProvider_registered()
         {
             var services = new ServiceCollection();
-            var customCheckName = "my-" + _defaultCheckName;
+            var customCheckName = "my-" + DEFAULT_CHECK_NAME;
             services.AddSingleton(new RabbitMqSetting(){
-                ConnectionString = _fakeConnectionString
+                ConnectionString = FAKE_CONNECTION_STRING
             });
 
             services.AddHealthChecks()
@@ -85,9 +85,9 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
         public void add_named_health_check_with_uri_string_factory_by_iServiceProvider_registered()
         {
             var services = new ServiceCollection();
-            var customCheckName = "my-" + _defaultCheckName;
+            var customCheckName = "my-" + DEFAULT_CHECK_NAME;
             services.AddSingleton(new RabbitMqSetting(){
-                ConnectionString = _fakeConnectionString
+                ConnectionString = FAKE_CONNECTION_STRING
             });
 
             services.AddHealthChecks()

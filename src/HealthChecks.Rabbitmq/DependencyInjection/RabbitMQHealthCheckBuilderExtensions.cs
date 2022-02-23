@@ -56,7 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(
             this IHealthChecksBuilder builder,
             Uri rabbitConnectionString,
-            SslOption? sslOption = null,
+            SslOption? sslOption = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -183,7 +183,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
-        
+
         /// <summary>
         /// Add a health check for RabbitMQ services using connection string (amqp uri).
         /// </summary>
@@ -200,11 +200,11 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(
             this IHealthChecksBuilder builder,
             Func<IServiceProvider,Uri> connectionStringFactory,
-            SslOption sslOption = null,
-            string name = null,
-            HealthStatus? failureStatus = null,
-            IEnumerable<string> tags = null,
-            TimeSpan? timeout = null)
+            SslOption? sslOption = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services
                 .AddSingleton(sp => new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption));
@@ -233,11 +233,11 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(
             this IHealthChecksBuilder builder,
             Func<IServiceProvider,string> connectionStringFactory,
-            SslOption sslOption = null,
-            string name = null,
-            HealthStatus? failureStatus = null,
-            IEnumerable<string> tags = null,
-            TimeSpan? timeout = null)
+            SslOption? sslOption = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return  builder.AddRabbitMQ((sp)=> new Uri(connectionStringFactory(sp)),sslOption,name,failureStatus,tags,timeout);
         }

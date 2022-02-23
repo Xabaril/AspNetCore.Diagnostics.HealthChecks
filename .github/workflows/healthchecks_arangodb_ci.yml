@@ -7,6 +7,8 @@ on:
     - src/HealthChecks.ArangoDb/**
     - test/HealthChecks.ArangoDb.Tests/**
     - .github/workflows/healthchecks_arangodb_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
    tags-ignore:
     - release-*
 
@@ -16,6 +18,8 @@ on:
     - src/HealthChecks.ArangoDb/**
     - test/HealthChecks.ArangoDb.Tests/**
     - .github/workflows/healthchecks_arangodb_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
 jobs:
   build:
     runs-on: ubuntu-latest

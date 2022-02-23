@@ -21,7 +21,7 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly ClusterServiceWatcher _clusterServiceWatcher;
         private readonly OperatorDiagnostics _diagnostics;
         private readonly ILogger<K8sOperator> _logger;
-        private readonly CancellationTokenSource _operatorCts = new CancellationTokenSource();
+        private readonly CancellationTokenSource _operatorCts = new();
         private readonly Channel<ResourceWatch> _channel;
         private const int WAIT_FOR_REPLICA_DELAY = 5000;
         private const int WAIT_FOR_REPLICA_RETRIES = 10;
@@ -153,7 +153,7 @@ namespace HealthChecks.UI.K8s.Operator
         private void StopServiceWatcher(HealthCheckResource resource)
         {
             Action stopWatcher = () => _serviceWatcher.Stopwatch(resource);
-            Action stopClusterWatcher = () => _clusterServiceWatcher.Stopwatch(resource);
+            Action stopClusterWatcher = () => _clusterServiceWatcher.Stopwatch(/*resource*/);
 
             var stop = resource.Spec.Scope switch
             {

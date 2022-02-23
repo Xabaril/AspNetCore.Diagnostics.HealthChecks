@@ -10,12 +10,7 @@ namespace HealthChecks.UI.Image.Configuration
             {
                 if (EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Enabled))
                 {
-                    if (bool.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled), out bool enabled))
-                    {
-                        return enabled;
-                    }
-
-                    return false;
+                    return bool.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled), out bool enabled) && enabled;
                 }
 
                 return false;

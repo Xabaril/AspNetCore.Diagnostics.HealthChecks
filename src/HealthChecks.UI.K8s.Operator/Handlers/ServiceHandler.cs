@@ -44,7 +44,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             return service;
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
@@ -55,6 +55,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 _logger.LogError("Error deleting service for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
             }
         }
+
         public V1Service Build(HealthCheckResource resource)
         {
             var meta = new V1ObjectMeta

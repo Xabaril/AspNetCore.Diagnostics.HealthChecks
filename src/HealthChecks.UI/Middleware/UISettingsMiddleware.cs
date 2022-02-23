@@ -13,7 +13,7 @@ namespace HealthChecks.UI.Middleware
     {
         private static Settings Settings { get; set; }
         private readonly JsonSerializerSettings _jsonSerializationSettings;
-        private readonly Lazy<dynamic> _uiOutputSettings = new Lazy<dynamic>(GetUIOutputSettings);
+        private readonly Lazy<dynamic> _uiOutputSettings = new(GetUIOutputSettings);
 
         public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
         {

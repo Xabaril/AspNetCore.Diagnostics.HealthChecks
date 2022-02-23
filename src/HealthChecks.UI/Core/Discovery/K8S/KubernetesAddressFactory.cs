@@ -7,10 +7,12 @@ namespace HealthChecks.UI.Core.Discovery.K8S
     internal class KubernetesAddressFactory
     {
         private readonly KubernetesDiscoverySettings _settings;
+
         public KubernetesAddressFactory(KubernetesDiscoverySettings discoveryOptions)
         {
             _settings = discoveryOptions;
         }
+
         public string CreateAddress(V1Service service)
         {
             string address = string.Empty;
@@ -45,15 +47,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             }
 
             // Support IPv6 address hosts
-            if (address.Contains(":"))
-            {
-                return $"{healthScheme}://[{address}]{port}/{healthPath}";
-            }
-            else
-            {
-                return $"{healthScheme}://{address}{port}/{healthPath}";
-            }
+            return address.Contains(':')
+                ? $"{healthScheme}://[{address}]{port}/{healthPath}"
+                : $"{healthScheme}://{address}{port}/{healthPath}";
         }
+
         private string GetLoadBalancerAddress(V1Service service)
         {
             var firstIngress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
@@ -64,6 +62,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return service.Spec.ClusterIP;
         }
+
         private string GetServicePortValue(V1Service service)
         {
             int? port;
@@ -93,6 +92,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return port is null ? string.Empty : $":{port.Value}";
         }
+
         private V1ServicePort? GetServicePort(V1Service service)
         {
             if (GetServicePortAnnotation(service) is string portAnnotationValue)
@@ -111,6 +111,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 return service.Spec?.Ports?.FirstOrDefault();
             }
         }
+
         private string? GetServicePortAnnotation(V1Service service)
         {
             if (!string.IsNullOrEmpty(_settings.ServicesPortAnnotation) && (service.Metadata.Annotations?.ContainsKey(_settings.ServicesPortAnnotation) ?? false))

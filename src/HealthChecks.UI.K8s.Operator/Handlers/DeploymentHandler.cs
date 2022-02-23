@@ -51,10 +51,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
 
             return deployment;
-
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
@@ -156,7 +155,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
             if (resource.HasBrandingConfigured())
             {
-                var volumeName = "healthchecks-volume";
+                const string volumeName = "healthchecks-volume";
 
                 if (specification.Volumes == null)
                     specification.Volumes = new List<V1Volume>();

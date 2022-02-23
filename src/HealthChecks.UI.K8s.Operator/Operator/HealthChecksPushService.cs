@@ -13,7 +13,9 @@ namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthChecksPushService
     {
-        public static async Task PushNotification(
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task PushNotification( //TODO: rename public API
+#pragma warning restore IDE1006 // Naming Styles
             WatchEventType eventType,
             HealthCheckResource resource,
             V1Service uiService,

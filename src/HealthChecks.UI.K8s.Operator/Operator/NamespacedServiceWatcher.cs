@@ -19,7 +19,7 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly OperatorDiagnostics _diagnostics;
         private readonly NotificationHandler _notificationHandler;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
+        private readonly Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new();
 
         public NamespacedServiceWatcher(
             IKubernetes client,

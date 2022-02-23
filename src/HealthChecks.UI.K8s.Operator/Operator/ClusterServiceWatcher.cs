@@ -50,7 +50,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             return Task.CompletedTask;
         }
 
-        internal void Stopwatch(HealthCheckResource resource)
+        internal void Stopwatch(/*HealthCheckResource resource*/)
         {
             Dispose();
         }

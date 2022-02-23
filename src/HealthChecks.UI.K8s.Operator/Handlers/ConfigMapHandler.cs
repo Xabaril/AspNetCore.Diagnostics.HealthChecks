@@ -11,7 +11,6 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 {
     public class ConfigMaphandler
     {
-        private const char SPLIT_CHAR = '/';
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
 
@@ -46,7 +45,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             return configMap;
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
@@ -57,6 +56,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 _logger.LogError("Error deleting config map for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
             }
         }
+
         public V1ConfigMap Build(HealthCheckResource resource)
         {
             return new V1ConfigMap

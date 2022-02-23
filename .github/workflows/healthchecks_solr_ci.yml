@@ -7,6 +7,8 @@ on:
       - src/HealthChecks.Solr/**
       - test/HealthChecks.SolR.Tests/**
       - .github/workflows/healthchecks_solr_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
     tags-ignore:
       - release-*
   pull_request:
@@ -15,6 +17,8 @@ on:
     - src/HealthChecks.Solr/**
     - test/HealthChecks.SolR.Tests/**
     - .github/workflows/healthchecks_solr_ci.
+    - Directory.Build.props
+    - Directory.Build.targets
   workflow_dispatch:
 
 jobs:

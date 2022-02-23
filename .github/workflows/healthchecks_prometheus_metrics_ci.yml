@@ -7,6 +7,8 @@ on:
       - src/HealthChecks.Prometheus.Metrics/**
       - test/HealthChecks.Prometheus.Metrics.Tests/**
       - .github/workflows/healthchecks_prometheus_metrics_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
     tags-ignore:
       - release-*
   pull_request:
@@ -15,6 +17,8 @@ on:
     - src/HealthChecks.Prometheus.Metrics/**
     - test/HealthChecks.Prometheus.Metrics.Tests/**
     - .github/workflows/healthchecks_prometheus_metrics_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
 
 jobs:
   build:

@@ -7,6 +7,8 @@ on:
       - src/HealthChecks.IbmMQ/**
       - test/HealthChecks.IbmMQ.Tests/**
       - .github/workflows/healthchecks_ibmmq_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
     tags-ignore:
       - release-*
   pull_request:
@@ -15,6 +17,8 @@ on:
     - src/HealthChecks.IbmMQ/**
     - test/HealthChecks.IbmMQ.Tests/**
     - .github/workflows/healthchecks_ibmmq_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
 
 jobs:
   build:

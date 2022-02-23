@@ -52,7 +52,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 : $"{healthScheme}://{address}{port}/{healthPath}";
         }
 
-        private string GetLoadBalancerAddress(V1Service service)
+        private static string GetLoadBalancerAddress(V1Service service)
         {
             var firstIngress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
             if (firstIngress is V1LoadBalancerIngress ingress)
@@ -76,14 +76,9 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                     port = GetServicePort(service)?.NodePort;
                     break;
                 case ServiceType.EXTERNAL_NAME:
-                    if (GetServicePortAnnotation(service) is string servicePortAnnotation && int.TryParse(servicePortAnnotation, out var servicePort))
-                    {
-                        port = servicePort;
-                    }
-                    else
-                    {
-                        port = null;
-                    }
+                    port = GetServicePortAnnotation(service) is string servicePortAnnotation && int.TryParse(servicePortAnnotation, out var servicePort)
+                        ? servicePort
+                        : null;
                     break;
                 default:
                     port = null;

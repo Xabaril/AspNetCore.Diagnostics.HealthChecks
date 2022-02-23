@@ -40,12 +40,9 @@ namespace HealthChecks.UI.Core.HostedService
         {
             _executingTask = ExecuteAsync(_cancellationTokenSource.Token);
 
-            if (_executingTask.IsCompleted)
-            {
-                return _executingTask;
-            }
-
-            return Task.CompletedTask;
+            return _executingTask.IsCompleted
+                ? _executingTask
+                : Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

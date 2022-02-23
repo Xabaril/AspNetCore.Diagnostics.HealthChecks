@@ -81,7 +81,7 @@ namespace HealthChecks.UI.K8s.Operator
                 version: Constants.VERSION,
                 plural: Constants.PLURAL,
                 watch: true,
-                timeoutSeconds: ((int)TimeSpan.FromMinutes(60).TotalSeconds),
+                timeoutSeconds: (int)TimeSpan.FromMinutes(60).TotalSeconds,
                 cancellationToken: token
                 );
 
@@ -108,7 +108,7 @@ namespace HealthChecks.UI.K8s.Operator
         {
             while (await _channel.Reader.WaitToReadAsync() && !_operatorCts.IsCancellationRequested)
             {
-                while (_channel.Reader.TryRead(out ResourceWatch item))
+                while (_channel.Reader.TryRead(out var item))
                 {
                     try
                     {

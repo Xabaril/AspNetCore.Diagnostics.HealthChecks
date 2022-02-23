@@ -50,7 +50,7 @@ namespace HealthChecks.UI.Core.HostedService
             using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
             {
                 var healthChecks = await _db.Configurations
-                   .ToListAsync();
+                   .ToListAsync(cancellationToken);
 
                 foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
@@ -135,12 +135,7 @@ namespace HealthChecks.UI.Core.HostedService
         {
             var previous = await GetHealthCheckExecutionAsync(configuration);
 
-            if (previous != null)
-            {
-                return previous.Status != UIHealthStatus.Healthy;
-            }
-
-            return false;
+            return previous != null && previous.Status != UIHealthStatus.Healthy;
         }
 
         private async Task<HealthCheckExecution> GetHealthCheckExecutionAsync(HealthCheckConfiguration configuration)
@@ -241,7 +236,7 @@ namespace HealthChecks.UI.Core.HostedService
             await _db.SaveChangesAsync();
         }
 
-        private void UpdateUris(HealthCheckExecution execution, HealthCheckConfiguration configuration)
+        private static void UpdateUris(HealthCheckExecution execution, HealthCheckConfiguration configuration)
         {
             execution.Uri = configuration.Uri;
             _endpointAddresses.Remove(configuration.Id);

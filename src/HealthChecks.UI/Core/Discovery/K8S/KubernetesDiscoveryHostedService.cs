@@ -46,12 +46,9 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         {
             _executingTask = ExecuteAsync(cancellationToken);
 
-            if (_executingTask.IsCompleted)
-            {
-                return _executingTask;
-            }
-
-            return Task.CompletedTask;
+            return _executingTask.IsCompleted
+                ? _executingTask
+                : Task.CompletedTask;
         }
 
         private Task ExecuteAsync(CancellationToken cancellationToken)
@@ -129,13 +126,13 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             }
         }
 
-        private bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
+        private static bool IsLivenessRegistered(HealthChecksDb livenessDb, string host)
         {
             return livenessDb.Configurations
                 .Any(lc => lc.Uri == host);
         }
 
-        private bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
+        private static bool IsValidHealthChecksStatusCode(HttpStatusCode statusCode)
         {
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }

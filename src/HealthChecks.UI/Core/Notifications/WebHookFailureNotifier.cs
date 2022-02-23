@@ -152,7 +152,7 @@ namespace HealthChecks.UI.Core.Notifications
             return $"There {plural.plural} at least {failedChecks} {plural.noun} failing.";
         }
 
-        private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
+        private static string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
             var plural = PluralizeHealthcheck(failedChecks.Count());
@@ -168,7 +168,7 @@ namespace HealthChecks.UI.Core.Notifications
             }
         }
 
-        private (string plural, string noun) PluralizeHealthcheck(int count) =>
+        private static (string plural, string noun) PluralizeHealthcheck(int count) =>
             count > 1 ?
             ("are", "healthchecks") :
             ("is", "healthcheck");

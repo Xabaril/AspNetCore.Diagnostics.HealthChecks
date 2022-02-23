@@ -142,7 +142,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             var specification = spec.Template.Spec;
             var container = specification.Containers.First();
 
-            for (int i = 0; i < resource.Spec.Webhooks.Count(); i++)
+            for (int i = 0; i < resource.Spec.Webhooks.Count; i++)
             {
                 var webhook = resource.Spec.Webhooks[i];
                 _logger.LogInformation("Adding webhook configuration for webhook {Webhook}", webhook.Name);

@@ -108,9 +108,9 @@ namespace HealthChecks.UI.Core.HostedService
 
         private async Task<bool> ShouldMigrateDatabaseAsync(HealthChecksDb context)
         {
-            return (!_settings.DisableMigrations &&
+            return !_settings.DisableMigrations &&
                 !context.Database.IsInMemory() &&
-                (await context.Database.GetPendingMigrationsAsync()).Any());
+                (await context.Database.GetPendingMigrationsAsync()).Any();
         }
     }
 

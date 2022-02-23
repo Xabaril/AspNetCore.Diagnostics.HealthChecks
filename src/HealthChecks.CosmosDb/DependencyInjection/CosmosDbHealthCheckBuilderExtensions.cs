@@ -43,7 +43,6 @@ namespace Microsoft.Extensions.DependencyInjection
                timeout));
         }
 
-
         /// <summary>
         /// Add a health check for Azure CosmosDb database and specified collections.
         /// </summary>

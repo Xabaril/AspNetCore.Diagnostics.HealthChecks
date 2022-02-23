@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.Consul
+namespace HealthChecks.Consul
 {
     public class ConsulOptions
     {

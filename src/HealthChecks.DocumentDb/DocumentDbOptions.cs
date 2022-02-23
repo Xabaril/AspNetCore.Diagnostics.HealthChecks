@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.DocumentDb
+namespace HealthChecks.DocumentDb
 {
     public class DocumentDbOptions
     {

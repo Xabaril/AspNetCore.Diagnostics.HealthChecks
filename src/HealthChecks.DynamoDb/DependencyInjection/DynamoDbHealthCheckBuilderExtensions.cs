@@ -1,7 +1,7 @@
-using HealthChecks.DynamoDb;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using HealthChecks.DynamoDb;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

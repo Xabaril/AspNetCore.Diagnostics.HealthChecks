@@ -24,7 +24,7 @@
     <PackageReference Update="Hangfire.Core" Version="1.7.26"/>
     <PackageReference Update="IBMMQDotnetClient" Version="9.2.3"/>
     <PackageReference Update="KubernetesClient" Version="4.0.26"/>
-    <PackageReference Update="Microsoft.ApplicationInsights" Version="2.18.0"/>
+    <PackageReference Update="Microsoft.ApplicationInsights" Version="2.20.0"/>
     <PackageReference Update="Microsoft.ApplicationInsights.AspNetCore" Version="2.18.0"/>
     <PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0"/>
     <PackageReference Update="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.0"/>
@@ -76,7 +76,7 @@
     <PackageReference Update="System.Threading.Channels" Version="6.0.0" />
 
     <PackageReference Update="coverlet.collector" Version="3.1.0"/>
-    <PackageReference Update="FluentAssertions" Version="6.2.0"/>
+    <PackageReference Update="FluentAssertions" Version="6.5.1"/>
     <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.0"/>
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.0.0"/>
     <PackageReference Update="NSubstitute" Version="4.2.2"/>

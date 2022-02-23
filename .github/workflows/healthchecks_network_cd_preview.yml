@@ -2,7 +2,7 @@ name: HealthChecks Network Preview CD
 
 on:
   push:
-    tags:       
+    tags:
       - preview-network-*
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
         ports:
           - 21:21
           - 47400-47470:47400-47470
-        env: 
+        env:
           FTP_USER: bob
           FTP_PASS: 12345
           PASV_ADDRESS: 127.0.0.1
@@ -35,7 +35,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
     # - name: Test
     #   run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Network/HealthChecks.Network.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

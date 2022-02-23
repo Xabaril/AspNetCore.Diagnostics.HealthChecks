@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -7,10 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -49,7 +47,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 {
                     services
                         .AddHealthChecks()
-                        .AddRavenDB(_ => { _.Urls = _urls; }, tags: new string[] { "ravendb" });
+                        .AddRavenDB(_ => _.Urls = _urls, tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {
@@ -111,7 +109,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 {
                     services
                         .AddHealthChecks()
-                        .AddRavenDB(_ => { _.Urls = new string[] { connectionString }; }, tags: new string[] { "ravendb" });
+                        .AddRavenDB(_ => _.Urls = new string[] { connectionString }, tags: new string[] { "ravendb" });
                 })
                 .Configure(app =>
                 {

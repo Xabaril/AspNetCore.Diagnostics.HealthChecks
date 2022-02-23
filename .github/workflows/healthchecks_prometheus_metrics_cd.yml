@@ -2,7 +2,7 @@ name: HealthChecks Prometheus.Metrics CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-prometheus_metrics-*
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

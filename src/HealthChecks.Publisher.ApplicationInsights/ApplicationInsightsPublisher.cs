@@ -1,26 +1,26 @@
-﻿using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.Publisher.ApplicationInsights
 {
     internal class ApplicationInsightsPublisher
         : IHealthCheckPublisher
     {
-        const string EVENT_NAME = "AspNetCoreHealthCheck";
-        const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
-        const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
-        const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
+        private const string EVENT_NAME = "AspNetCoreHealthCheck";
+        private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
+        private const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
+        private const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
 
         private static TelemetryClient _client;
-        private static readonly object sync_root = new object();
+        private static readonly object _syncRoot = new object();
         private readonly TelemetryConfiguration _telemetryConfiguration;
         private readonly string _instrumentationKey;
         private readonly bool _saveDetailedReport;
@@ -37,6 +37,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
         }
+
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             if (report.Status == HealthStatus.Healthy && _excludeHealthyReports)
@@ -107,11 +108,12 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
                 });
         }
+
         private TelemetryClient GetOrCreateTelemetryClient()
         {
             if (_client == null)
             {
-                lock (sync_root)
+                lock (_syncRoot)
                 {
                     if (_client == null)
                     {

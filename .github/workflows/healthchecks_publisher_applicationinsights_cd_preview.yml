@@ -2,7 +2,7 @@ name: HealthChecks Publisher.ApplicationInsights Preview CD
 
 on:
   push:
-    tags:       
+    tags:
       - preview-publisher_applicationinsights-*
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Publisher.ApplicationInsights.Tests/HealthChecks.Publisher.ApplicationInsights.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

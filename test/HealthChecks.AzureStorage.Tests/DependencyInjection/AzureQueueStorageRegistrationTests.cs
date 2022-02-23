@@ -1,9 +1,8 @@
-﻿using FluentAssertions;
-using HealthChecks.AzureStorage;
+using System.Linq;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.AzureStorage.Tests.DependencyInjection

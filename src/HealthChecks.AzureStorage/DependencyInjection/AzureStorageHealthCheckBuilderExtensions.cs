@@ -1,9 +1,9 @@
-using Azure.Core;
-using HealthChecks.AzureStorage;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using Azure.Core;
 using Azure.Storage.Blobs;
+using HealthChecks.AzureStorage;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Collections.Generic;
 using Npgsql;
 
 namespace Microsoft.Extensions.DependencyInjection

@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Consul
 {
@@ -12,11 +12,13 @@ namespace HealthChecks.Consul
     {
         private readonly ConsulOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
+
         public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

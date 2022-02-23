@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using FluentAssertions;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
@@ -7,10 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
 using Xunit;
 
 namespace HealthChecks.UI.Tests
@@ -75,7 +75,7 @@ namespace HealthChecks.UI.Tests
                     conf.Sources.Clear();
                     var path = Path.Combine("Functional", "Configuration", "appsettings.json");
                     conf.AddJsonFile(path, false);
-                }).ConfigureServices(services => { services.AddHealthChecksUI(); });
+                }).ConfigureServices(services => services.AddHealthChecksUI());
 
 
             var serviceProvider = webhost.Build().Services;
@@ -170,10 +170,7 @@ namespace HealthChecks.UI.Tests
                 {
                     services.AddHealthChecksUI(setupSettings: setup =>
                     {
-                        setup.ConfigureApiEndpointHttpclient((sp, client) =>
-                        {
-                            apiClientConfigured = true;
-                        })
+                        setup.ConfigureApiEndpointHttpclient((sp, client) => apiClientConfigured = true)
                         .UseApiEndpointHttpMessageHandler(sp =>
                             {
                                 apiHandlerConfigured = true;
@@ -182,10 +179,7 @@ namespace HealthChecks.UI.Tests
                                     Proxy = new WebProxy("http://proxy:8080")
                                 };
                             })
-                        .ConfigureWebhooksEndpointHttpclient((sp, client) =>
-                        {
-                            webhookClientConfigured = true;
-                        })
+                        .ConfigureWebhooksEndpointHttpclient((sp, client) => webhookClientConfigured = true)
                         .UseWebhookEndpointHttpMessageHandler(sp =>
                         {
                             webhookHandlerConfigured = true;
@@ -226,10 +220,7 @@ namespace HealthChecks.UI.Tests
                 }).Configure(app =>
                 {
                     app.UseRouting();
-                    app.UseEndpoints(config =>
-                    {
-                        config.MapHealthChecksUI();
-                    });
+                    app.UseEndpoints(config => config.MapHealthChecksUI());
 
                 });
 

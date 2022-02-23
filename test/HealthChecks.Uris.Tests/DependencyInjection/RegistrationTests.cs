@@ -1,10 +1,9 @@
-﻿using FluentAssertions;
-using HealthChecks.Uris;
+using System;
+using System.Linq;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Uris.Tests.DependencyInjection

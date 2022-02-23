@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.Hangfire
+namespace HealthChecks.Hangfire
 {
     public class HangfireOptions
     {

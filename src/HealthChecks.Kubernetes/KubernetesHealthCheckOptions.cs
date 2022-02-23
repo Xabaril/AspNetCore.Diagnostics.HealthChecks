@@ -7,12 +7,14 @@ namespace HealthChecks.Kubernetes
 {
     public class KubernetesHealthCheckOptions
     {
-        private const string DefaultNamespace = "default";
+        private const string DEFAULT_NAMESPACE = "default";
 
         internal KubernetesHealthCheckOptions() { }
+
         internal List<KubernetesResourceCheck> Registrations { get; } = new List<KubernetesResourceCheck>();
+
         public KubernetesHealthCheckOptions CheckDeployment(string name, Func<V1Deployment, bool> condition,
-            string @namespace = DefaultNamespace)
+            string @namespace = DEFAULT_NAMESPACE)
         {
             Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Deployment);
 
@@ -23,8 +25,9 @@ namespace HealthChecks.Kubernetes
 
             return this;
         }
+
         public KubernetesHealthCheckOptions CheckPod(string name, Func<V1Pod, bool> condition,
-            string @namespace = DefaultNamespace)
+            string @namespace = DEFAULT_NAMESPACE)
         {
             Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Pod);
 
@@ -35,8 +38,9 @@ namespace HealthChecks.Kubernetes
 
             return this;
         }
+
         public KubernetesHealthCheckOptions CheckService(string name, Func<V1Service, bool> condition,
-            string @namespace = DefaultNamespace)
+            string @namespace = DEFAULT_NAMESPACE)
         {
             Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Service);
 

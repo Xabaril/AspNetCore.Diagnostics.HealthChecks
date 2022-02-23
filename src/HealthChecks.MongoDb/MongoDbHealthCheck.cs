@@ -1,18 +1,19 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Driver;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MongoDB.Driver;
 
 namespace HealthChecks.MongoDb
 {
     public class MongoDbHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new ConcurrentDictionary<string, MongoClient>();
+        private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new();
         private readonly MongoClientSettings _mongoClientSettings;
         private readonly string _specifiedDatabase;
+
         public MongoDbHealthCheck(string connectionString, string databaseName = default)
             : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {
@@ -21,11 +22,13 @@ namespace HealthChecks.MongoDb
                 _specifiedDatabase = MongoUrl.Create(connectionString)?.DatabaseName;
             }
         }
+
         public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)
         {
             _specifiedDatabase = databaseName;
             _mongoClientSettings = clientSettings;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

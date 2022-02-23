@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace HealthChecks.Network.Core
@@ -10,10 +10,7 @@ namespace HealthChecks.Network.Core
 
         public ImapConnectionType ConnectionType
         {
-            get
-            {
-                return _connectionType;
-            }
+            get => _connectionType;
 
             private set
             {
@@ -27,7 +24,8 @@ namespace HealthChecks.Network.Core
         internal ImapConnection(ImapConnectionOptions options) :
             base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             ConnectionType = options.ConnectionType;
             ComputeDefaultValues();
@@ -55,7 +53,7 @@ namespace HealthChecks.Network.Core
         {
             if (ConnectionType == ImapConnectionType.STARTTLS)
             {
-                await UpgradeToSecureConnection();
+                await UpgradeToSecureConnectionAsync();
             }
 
             var result = await ExecuteCommand(ImapCommands.Login(user, password));
@@ -63,7 +61,7 @@ namespace HealthChecks.Network.Core
             return IsAuthenticated;
         }
 
-        private async Task<bool> UpgradeToSecureConnection()
+        private async Task<bool> UpgradeToSecureConnectionAsync()
         {
             var commandResult = await ExecuteCommand(ImapCommands.StartTLS());
             var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
@@ -79,7 +77,9 @@ namespace HealthChecks.Network.Core
             }
         }
 
-        public async Task<bool> SelectFolder(string folder)
+#pragma warning disable IDE1006 // Naming Styles
+        public async Task<bool> SelectFolder(string folder) //TODO: public API change
+#pragma warning restore IDE1006 // Naming Styles
         {
             var result = await ExecuteCommand(ImapCommands.SelectFolder(folder));
 
@@ -87,7 +87,9 @@ namespace HealthChecks.Network.Core
             return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
         }
 
-        public async Task<string> GetFolders()
+#pragma warning disable IDE1006 // Naming Styles
+        public async Task<string> GetFolders() //TODO: public API change
+#pragma warning restore IDE1006 // Naming Styles
         {
             return await ExecuteCommand(ImapCommands.ListFolders());
         }

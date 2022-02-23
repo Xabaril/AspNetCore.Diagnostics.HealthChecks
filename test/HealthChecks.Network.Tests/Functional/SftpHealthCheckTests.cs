@@ -1,20 +1,20 @@
-﻿using FluentAssertions;
+using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
     public class sftp_healthcheck_should
     {
-        
+
         [Fact]
         public async Task be_healthy_when_connection_to_sftp_is_successful_using_password_authentication()
         {

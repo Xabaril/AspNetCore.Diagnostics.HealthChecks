@@ -1,12 +1,11 @@
-﻿using HealthChecks.Network.Extensions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
@@ -18,6 +17,7 @@ namespace HealthChecks.Network
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

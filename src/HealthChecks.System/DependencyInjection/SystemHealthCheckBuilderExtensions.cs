@@ -1,10 +1,10 @@
-using HealthChecks.System;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
+using HealthChecks.System;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -43,6 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for process private memory.
         /// </summary>
@@ -65,6 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for process working set.
         /// </summary>
@@ -87,6 +89,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check to process virtual memory.
         /// </summary>
@@ -114,7 +117,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a healthcheck that allows to check a predicate against the configured process name.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="processName">The name of the process</param>        
+        /// <param name="processName">The name of the process</param>
         /// <param name="predicate">Process[] predicate to configure checks</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'process' will be used for the name.</param>
         /// <param name="failureStatus">
@@ -170,7 +173,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
 
-
         /// <summary>
         /// Add a healthcheck that allows to check a predicate against the configured windows service.
         /// </summary>
@@ -212,5 +214,4 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
     }
-
 }

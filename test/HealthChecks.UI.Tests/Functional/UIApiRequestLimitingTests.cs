@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -8,9 +11,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.UI.Tests
@@ -88,10 +88,7 @@ namespace HealthChecks.UI.Tests
                                return HealthCheckResult.Healthy();
                            })
                            .Services
-                           .AddHealthChecksUI(setup =>
-                           {
-                               setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                           })
+                           .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health"))
                            .AddInMemoryStorage(databaseName: "LimitingTests");
 
                    })

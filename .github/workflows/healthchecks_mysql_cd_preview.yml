@@ -2,7 +2,7 @@ name: HealthChecks MySql Preview CD
 
 on:
   push:
-    tags:       
+    tags:
       - preview-mysql-*
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
         image: mysql
         ports:
           - 3306:3306
-        env: 
+        env:
           MYSQL_ROOT_PASSWORD: Password12!
     steps:
     - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.MySql/HealthChecks.MySql.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

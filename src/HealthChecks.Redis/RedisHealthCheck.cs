@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using StackExchange.Redis;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using StackExchange.Redis;
 
 namespace HealthChecks.Redis
 {

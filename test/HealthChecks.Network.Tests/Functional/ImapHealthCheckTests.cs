@@ -1,4 +1,8 @@
-﻿using FluentAssertions;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using HealthChecks.Network.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -6,17 +10,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
     public class imap_healthcheck_should
     {
-    
+
         //Host and login account to fast switch tests against different server
         private const string _host = "localhost";
         private const string _validAccount = "admin@healthchecks.com";

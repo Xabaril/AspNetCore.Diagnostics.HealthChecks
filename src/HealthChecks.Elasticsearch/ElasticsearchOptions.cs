@@ -14,6 +14,7 @@ namespace HealthChecks.Elasticsearch
         public bool AuthenticateWithCertificate { get; private set; } = false;
         public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> CertificateValidationCallback { get; private set; }
         public TimeSpan? RequestTimeout { get; set; }
+
         public ElasticsearchOptions UseBasicAuthentication(string name, string password)
         {
             UserName = name ?? throw new ArgumentNullException(nameof(name));
@@ -24,6 +25,7 @@ namespace HealthChecks.Elasticsearch
             AuthenticateWithBasicCredentials = true;
             return this;
         }
+
         public ElasticsearchOptions UseCertificate(X509Certificate certificate)
         {
             Certificate = certificate ?? throw new ArgumentNullException(nameof(certificate));
@@ -34,12 +36,14 @@ namespace HealthChecks.Elasticsearch
             AuthenticateWithCertificate = true;
             return this;
         }
+
         public ElasticsearchOptions UseServer(string uri)
         {
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));
 
             return this;
         }
+
         public ElasticsearchOptions UseCertificateValidationCallback(Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> callback)
         {
             CertificateValidationCallback = callback;

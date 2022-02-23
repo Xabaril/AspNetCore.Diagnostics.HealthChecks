@@ -1,4 +1,4 @@
-﻿using Amazon;
+using Amazon;
 
 namespace HealthChecks.DynamoDb
 {

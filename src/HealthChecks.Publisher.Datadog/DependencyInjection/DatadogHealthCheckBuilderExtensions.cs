@@ -1,4 +1,4 @@
-﻿using HealthChecks.Publisher.Datadog;
+using HealthChecks.Publisher.Datadog;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StatsdClient;
 

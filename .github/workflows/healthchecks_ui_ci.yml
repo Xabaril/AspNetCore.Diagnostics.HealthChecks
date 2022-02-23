@@ -24,21 +24,21 @@ jobs:
         image: mcr.microsoft.com/mssql/server
         ports:
           - 5433:1433
-        env: 
+        env:
           ACCEPT_EULA: Y
           SA_PASSWORD: Password12!
       npgsql:
         image: postgres
         ports:
           - 8010:5432
-        env: 
+        env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: Password12!
       mysql:
         image: mysql
         ports:
           - 3306:3306
-        env: 
+        env:
           MYSQL_ROOT_PASSWORD: Password12!
     steps:
     - uses: actions/checkout@v2
@@ -64,7 +64,7 @@ jobs:
     - name: Restore dependencies UI.SqlServer.Storage
       run: dotnet restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
     - name: Restore dependencies UI.K8s.Operator
-      run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj    
+      run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     - name: Build UI
       run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Build UI.Client

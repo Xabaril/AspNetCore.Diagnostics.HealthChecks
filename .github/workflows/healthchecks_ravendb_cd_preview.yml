@@ -2,7 +2,7 @@ name: HealthChecks RavenDb Preview CD
 
 on:
   push:
-    tags:       
+    tags:
       - preview-ravendb-*
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
         image: ravendb/ravendb
         ports:
           - 9030:8080
-        env: 
+        env:
           RAVEN_ARGS: --Setup.Mode=None
     steps:
     - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

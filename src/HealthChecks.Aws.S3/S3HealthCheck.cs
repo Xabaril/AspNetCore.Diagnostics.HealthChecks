@@ -1,14 +1,15 @@
-﻿using Amazon.S3;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.S3;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Aws.S3
 {
     public class S3HealthCheck : IHealthCheck
     {
         private readonly S3BucketOptions _bucketOptions;
+
         public S3HealthCheck(S3BucketOptions bucketOptions)
         {
             if (bucketOptions == null)
@@ -21,6 +22,7 @@ namespace HealthChecks.Aws.S3
             }
             _bucketOptions = bucketOptions;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

@@ -2,8 +2,8 @@ name: HealthChecks Gremlin CD
 
 on:
   push:
-    tags:       
-      - release-gremlin-*  # Push events to release-arangodb* 
+    tags:
+      - release-gremlin-*  # Push events to release-arangodb*
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
         image: tinkerpop/gremlin-server
         ports:
           - 8182:8182
-        env: 
+        env:
           VIRTUAL_HOST: gremlin.docker
           VIRTUAL_PORT: 8182
     steps:
@@ -31,7 +31,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

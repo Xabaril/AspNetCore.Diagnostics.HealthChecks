@@ -1,9 +1,9 @@
-using Azure.Data.Tables;
-using HealthChecks.CosmosDb;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Azure.Data.Tables;
+using HealthChecks.CosmosDb;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -42,7 +42,6 @@ namespace Microsoft.Extensions.DependencyInjection
                tags,
                timeout));
         }
-
 
         /// <summary>
         /// Add a health check for Azure CosmosDb database and specified collections.

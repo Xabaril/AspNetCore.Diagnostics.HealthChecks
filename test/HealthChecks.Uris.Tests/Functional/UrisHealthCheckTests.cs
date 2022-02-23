@@ -1,13 +1,13 @@
-﻿using FluentAssertions;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -143,10 +143,7 @@ namespace HealthChecks.Uris.Tests.Functional
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                   .AddUrlGroup(opt =>
-                   {
-                       opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(1)));
-                   }, tags: new string[] { "uris" });
+                   .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(1))), tags: new string[] { "uris" });
               })
               .Configure(app =>
               {
@@ -238,10 +235,7 @@ namespace HealthChecks.Uris.Tests.Functional
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                   .AddUrlGroup(opt =>
-                   {
-                       opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3)));
-                   }, tags: new string[] { "uris" });
+                   .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))), tags: new string[] { "uris" });
               })
               .Configure(app =>
               {

@@ -1,8 +1,8 @@
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.SqlServer
 {
@@ -19,6 +19,7 @@ namespace HealthChecks.SqlServer
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
             _beforeOpenConnectionConfigurer = beforeOpenConnectionConfigurer;
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

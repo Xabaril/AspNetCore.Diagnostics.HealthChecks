@@ -1,12 +1,12 @@
-﻿using Azure.Core;
-using Azure.Security.KeyVault.Certificates;
-using Azure.Security.KeyVault.Keys;
-using Azure.Security.KeyVault.Secrets;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Security.KeyVault.Certificates;
+using Azure.Security.KeyVault.Keys;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureKeyVault
 {
@@ -26,6 +26,7 @@ namespace HealthChecks.AzureKeyVault
             _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

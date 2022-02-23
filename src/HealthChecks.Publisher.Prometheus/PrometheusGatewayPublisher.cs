@@ -1,4 +1,3 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 
 namespace HealthChecks.Publisher.Prometheus
@@ -19,7 +19,8 @@ namespace HealthChecks.Publisher.Prometheus
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
 
-            if (endpoint == null) throw new ArgumentNullException(nameof(endpoint));
+            if (endpoint == null)
+                throw new ArgumentNullException(nameof(endpoint));
 
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
 
@@ -38,9 +39,10 @@ namespace HealthChecks.Publisher.Prometheus
         {
             WriteMetricsFromHealthReport(report);
 
-            await PushMetrics();
+            await PushMetricsAsync();
         }
-        private async Task PushMetrics()
+
+        private async Task PushMetricsAsync()
         {
             try
             {

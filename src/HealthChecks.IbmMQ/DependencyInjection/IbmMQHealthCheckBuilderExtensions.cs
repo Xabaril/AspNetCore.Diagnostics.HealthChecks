@@ -1,10 +1,9 @@
-using HealthChecks.IbmMQ;
-using IBM.WMQ;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using HealthChecks.IbmMQ;
+using IBM.WMQ;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

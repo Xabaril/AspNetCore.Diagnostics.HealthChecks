@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using Azure.Core;
 using Azure.Messaging.ServiceBus.Administration;
@@ -35,15 +35,9 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(endpoint));
             }
 
-            if (tokenCredential == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredential));
-            }
-
             Endpoint = endpoint;
-            TokenCredential = tokenCredential;
+            TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
         }
-
 
         protected ServiceBusAdministrationClient CreateManagementClient()
         {

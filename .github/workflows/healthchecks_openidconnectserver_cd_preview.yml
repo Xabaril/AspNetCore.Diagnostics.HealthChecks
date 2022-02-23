@@ -2,7 +2,7 @@ name: HealthChecks OpenIdConnectServer Preview CD
 
 on:
   push:
-    tags:       
+    tags:
       - preview-openidconnectserver-*
 
 jobs:

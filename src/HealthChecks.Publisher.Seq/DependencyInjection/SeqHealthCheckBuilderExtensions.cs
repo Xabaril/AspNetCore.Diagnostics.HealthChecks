@@ -1,13 +1,14 @@
-﻿using HealthChecks.Publisher.Seq;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Net.Http;
+using HealthChecks.Publisher.Seq;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SeqHealthCheckBuilderExtensions
     {
-        const string NAME = "seq";
+        private const string NAME = "seq";
+
         /// <summary>
         ///     Add a health check publisher for Seq.
         /// </summary>
@@ -28,10 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var registrationName = name ?? NAME;
 
-            builder.Services.AddSingleton<IHealthCheckPublisher>(sp =>
-            {
-                return new SeqPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName), options);
-            });
+            builder.Services.AddSingleton<IHealthCheckPublisher>(sp => new SeqPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName), options));
 
             return builder;
         }

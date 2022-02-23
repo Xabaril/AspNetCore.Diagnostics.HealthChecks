@@ -1,8 +1,8 @@
-using HealthChecks.Uris;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using HealthChecks.Uris;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -45,6 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for single uri.
         /// </summary>
@@ -82,6 +83,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -111,6 +113,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -148,6 +151,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for multiple uri's.
         /// </summary>
@@ -184,6 +188,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for single uri.
         /// </summary>
@@ -234,7 +239,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             return new UriHealthCheck(options, () => httpClientFactory.CreateClient(name));
         }
-
 
         private static readonly Action<IServiceProvider, HttpClient> _emptyHttpClientCallback = (_, _) => { };
         private static readonly Func<IServiceProvider, HttpMessageHandler> _defaultHttpMessageHandlerCallback = _ => new HttpClientHandler();

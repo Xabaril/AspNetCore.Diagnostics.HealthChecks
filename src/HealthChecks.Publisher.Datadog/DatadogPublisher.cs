@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using StatsdClient;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using StatsdClient;
 
 namespace HealthChecks.Publisher.Datadog
 {
-    class DatadogPublisher
+    internal class DatadogPublisher
         : IHealthCheckPublisher
     {
         private readonly IDogStatsd _dogStatsd;

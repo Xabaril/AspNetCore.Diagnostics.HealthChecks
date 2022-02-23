@@ -1,14 +1,15 @@
-﻿using HealthChecks.Consul;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using HealthChecks.Consul;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ConsulHealthCheckBuilderExtensions
     {
         private const string NAME = "consul";
+
         /// <summary>
         /// Add a health check for Consul services.
         /// </summary>
@@ -35,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, Action<ConsulOptions> setup, string name)
         {
             var options = new ConsulOptions();

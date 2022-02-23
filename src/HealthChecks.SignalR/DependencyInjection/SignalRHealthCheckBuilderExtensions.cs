@@ -1,8 +1,8 @@
+using System;
+using System.Collections.Generic;
 using HealthChecks.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -38,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     tags,
                     timeout));
         }
+
         /// <summary>
         /// Add a health check for SignalR.
         /// </summary>

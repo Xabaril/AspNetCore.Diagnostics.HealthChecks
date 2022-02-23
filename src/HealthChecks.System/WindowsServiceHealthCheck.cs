@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "TODO:")]
     public class WindowsServiceHealthCheck : IHealthCheck
     {
         private readonly string _serviceName;

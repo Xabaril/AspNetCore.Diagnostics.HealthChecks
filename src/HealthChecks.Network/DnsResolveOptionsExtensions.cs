@@ -1,5 +1,5 @@
-﻿using HealthChecks.Network;
 using System;
+using HealthChecks.Network;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,5 +1,5 @@
-using Microsoft.Azure.Devices;
 using System;
+using Microsoft.Azure.Devices;
 
 namespace HealthChecks.Azure.IoTHub
 {
@@ -18,18 +18,21 @@ namespace HealthChecks.Azure.IoTHub
             ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             return this;
         }
+
         public IoTHubOptions AddRegistryReadCheck(string query = "SELECT deviceId FROM devices")
         {
             RegistryReadCheck = true;
             RegistryReadQuery = query;
             return this;
         }
+
         public IoTHubOptions AddRegistryWriteCheck(Func<string> deviceIdFactory = null)
         {
             RegistryWriteCheck = true;
             RegistryWriteDeviceIdFactory = deviceIdFactory ?? (() => "health-check-registry-write-device-id");
             return this;
         }
+
         public IoTHubOptions AddServiceConnectionCheck(TransportType transport = TransportType.Amqp)
         {
             ServiceConnectionCheck = true;

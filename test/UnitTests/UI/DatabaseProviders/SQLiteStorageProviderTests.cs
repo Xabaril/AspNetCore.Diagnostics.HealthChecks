@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using System.Linq;
+using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using UnitTests.Base;
 using Xunit;
 

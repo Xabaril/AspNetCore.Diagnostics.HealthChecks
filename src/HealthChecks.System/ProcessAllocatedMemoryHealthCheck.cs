@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
@@ -13,6 +13,7 @@ namespace HealthChecks.System
         {
             _maximumMegabytesAllocated = maximumMegabytesAllocated;
         }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var totalMemoryBytes = GC.GetTotalMemory(false) / 1024 / 1024;
@@ -26,7 +27,6 @@ namespace HealthChecks.System
             }
 
             return Task.FromResult(HealthCheckResult.Healthy(description: $"Allocated megabytes in memory: {totalMemoryBytes} mb"));
-
         }
     }
 }

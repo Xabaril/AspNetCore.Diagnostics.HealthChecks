@@ -2,8 +2,8 @@ name: HealthChecks Hangfire CD
 
 on:
   push:
-    tags:       
-      - release-hangfire-*  # Push events to release-hangfire* 
+    tags:
+      - release-hangfire-*  # Push events to release-hangfire*
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Hangfire.Tests/HealthChecks.Hangfire.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

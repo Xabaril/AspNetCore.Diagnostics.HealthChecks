@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.IO;
 using System.Net.Security;
@@ -24,11 +24,13 @@ namespace HealthChecks.Network.Core
         public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false)
         {
             Host = host ?? throw new ArgumentNullException(nameof(host));
-            if (port == default) throw new ArgumentNullException(nameof(port));
+            if (port == default)
+                throw new ArgumentNullException(nameof(port));
             Port = port;
             UseSSL = useSSL;
             _allowInvalidCertificates = allowInvalidCertificates;
         }
+
         public async Task<bool> ConnectAsync()
         {
             _tcpClient = new TcpClient();
@@ -39,6 +41,7 @@ namespace HealthChecks.Network.Core
 
             return _tcpClient.Connected;
         }
+
         protected Stream GetStream()
         {
             var stream = _tcpClient.GetStream();
@@ -54,6 +57,7 @@ namespace HealthChecks.Network.Core
                 return stream;
             }
         }
+
         protected SslStream GetSSLStream(Stream stream)
         {
             if (_allowInvalidCertificates)
@@ -65,7 +69,10 @@ namespace HealthChecks.Network.Core
                 return new SslStream(stream);
             }
         }
-        protected async Task<string> ExecuteCommand(string command)
+
+#pragma warning disable IDE1006 // Naming Styles
+        protected async Task<string> ExecuteCommand(string command) //TODO: rename public API
+#pragma warning restore IDE1006 // Naming Styles
         {
             var buffer = Encoding.ASCII.GetBytes(command);
             await _stream.WriteAsync(buffer, 0, buffer.Length);
@@ -78,11 +85,13 @@ namespace HealthChecks.Network.Core
 
             return output;
         }
+
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)

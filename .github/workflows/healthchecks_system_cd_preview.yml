@@ -2,7 +2,7 @@ name: HealthChecks System Preview CD
 
 on:
   push:
-    tags:       
+    tags:
       - preview-system-*
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.System/HealthChecks.System.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

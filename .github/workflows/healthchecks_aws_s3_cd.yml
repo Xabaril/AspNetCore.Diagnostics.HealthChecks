@@ -2,8 +2,8 @@ name: HealthChecks Aws S3 CD
 
 on:
   push:
-    tags:       
-      - release-aws_s3-*  # Push events to release-aws_s3* 
+    tags:
+      - release-aws_s3-*  # Push events to release-aws_s3*
 jobs:
   build:
     env:
@@ -22,7 +22,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

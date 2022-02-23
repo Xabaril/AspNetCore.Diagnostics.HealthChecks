@@ -1,10 +1,10 @@
-﻿using Azure.Core;
-using Azure.Storage.Queues;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Storage.Queues;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
@@ -17,8 +17,7 @@ namespace HealthChecks.AzureStorage
         private readonly TokenCredential _azureCredential;
         private readonly Uri _queueServiceUri;
 
-        private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder
-           = new ConcurrentDictionary<string, QueueServiceClient>();
+        private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder = new();
 
         public AzureQueueStorageHealthCheck(string connectionString, string queueName = default)
         {

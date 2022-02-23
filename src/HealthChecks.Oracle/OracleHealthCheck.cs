@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Oracle.ManagedDataAccess.Client;
 
 namespace HealthChecks.Oracle
 {
@@ -11,11 +11,13 @@ namespace HealthChecks.Oracle
     {
         private readonly string _connectionString;
         private readonly string _sql;
+
         public OracleHealthCheck(string connectionString, string sql)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

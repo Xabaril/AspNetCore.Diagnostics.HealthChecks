@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using System.Linq;
+using FluentAssertions;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Npgsql.Tests.DependencyInjection
@@ -55,7 +55,7 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
                 {
                     factoryCalled = true;
                     return "connectionstring";
-                },name:"my-npg-1");
+                }, name: "my-npg-1");
 
             using var serviceProvider = services.BuildServiceProvider();
 

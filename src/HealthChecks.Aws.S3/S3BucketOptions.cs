@@ -1,6 +1,6 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
 using System;
+using Amazon.S3;
+using Amazon.S3.Model;
 
 namespace HealthChecks.Aws.S3
 {

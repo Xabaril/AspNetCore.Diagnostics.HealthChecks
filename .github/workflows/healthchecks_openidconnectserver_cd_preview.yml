@@ -32,7 +32,7 @@ jobs:
     - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:

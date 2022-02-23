@@ -29,7 +29,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder,
+        public static IHealthChecksBuilder AddSqlServer(
+            this IHealthChecksBuilder builder,
             string connectionString,
             string? healthQuery = default,
             string? name = default,
@@ -56,7 +57,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder,
+        public static IHealthChecksBuilder AddSqlServer(
+            this IHealthChecksBuilder builder,
             Func<IServiceProvider, string> connectionStringFactory,
             string? healthQuery = default,
             string? name = default,

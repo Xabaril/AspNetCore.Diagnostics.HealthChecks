@@ -41,7 +41,7 @@
     <PackageReference Update="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0"/>
     <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0"/>
     <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="2.0.0-preview1-final"/>
-    <PackageReference Update="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2"/>
     <PackageReference Update="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="4.5.1" />
     <PackageReference Update="Microsoft.Extensions.Configuration.Json" Version="6.0.0"/>
     <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="6.0.0"/>

@@ -2,7 +2,7 @@ name: HealthChecks AzureServiceBus DB CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-azureservicebus-*
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

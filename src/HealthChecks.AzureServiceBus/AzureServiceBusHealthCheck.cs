@@ -35,13 +35,8 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(endpoint));
             }
 
-            if (tokenCredential == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredential));
-            }
-
             Endpoint = endpoint;
-            TokenCredential = tokenCredential;
+            TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
         }
 
 

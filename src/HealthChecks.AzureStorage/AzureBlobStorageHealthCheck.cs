@@ -1,10 +1,10 @@
-﻿using Azure.Core;
-using Azure.Storage.Blobs;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Storage.Blobs;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
@@ -18,8 +18,7 @@ namespace HealthChecks.AzureStorage
         private readonly string _containerName;
         private readonly BlobClientOptions _clientOptions;
 
-        private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder
-            = new ConcurrentDictionary<string, BlobServiceClient>();
+        private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder = new();
 
         public AzureBlobStorageHealthCheck(string connectionString, string containerName = default, BlobClientOptions clientOptions = null)
         {

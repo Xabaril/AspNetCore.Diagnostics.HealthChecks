@@ -47,7 +47,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             return _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
@@ -81,6 +81,5 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 }
             };
         }
-
     }
 }

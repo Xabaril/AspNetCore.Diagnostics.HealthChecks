@@ -16,7 +16,9 @@ namespace HealthChecks.UI.Client
         private static readonly byte[] _emptyResponse = new byte[] { (byte)'{', (byte)'}' };
         private static readonly Lazy<JsonSerializerOptions> _options = new Lazy<JsonSerializerOptions>(() => CreateJsonOptions());
 
+#pragma warning disable IDE1006 // Naming Styles
         public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
+#pragma warning restore IDE1006 // Naming Styles
         {
             if (report != null)
             {

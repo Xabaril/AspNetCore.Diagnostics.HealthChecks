@@ -5,7 +5,6 @@ using HealthChecks.IbmMQ;
 using IBM.WMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IbmMQHealthCheckBuilderExtensions

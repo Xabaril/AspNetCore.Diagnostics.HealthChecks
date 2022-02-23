@@ -39,7 +39,6 @@ namespace HealthChecks.AzureServiceBus
             TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
         }
 
-
         protected ServiceBusAdministrationClient CreateManagementClient()
         {
             ServiceBusAdministrationClient managementClient;

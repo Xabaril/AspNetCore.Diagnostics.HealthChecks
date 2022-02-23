@@ -33,6 +33,13 @@ jobs:
         include-prerelease: false
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj
+    - name: Check formatting
+      working-directory: ./src/HealthChecks.MongoDb
+      run: |
+        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj
     - name: Test

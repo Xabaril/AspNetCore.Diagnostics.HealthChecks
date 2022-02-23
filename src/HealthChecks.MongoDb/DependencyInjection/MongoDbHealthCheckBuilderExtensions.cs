@@ -32,6 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
         /// </summary>
@@ -55,6 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
         /// </summary>
@@ -77,6 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
         /// </summary>

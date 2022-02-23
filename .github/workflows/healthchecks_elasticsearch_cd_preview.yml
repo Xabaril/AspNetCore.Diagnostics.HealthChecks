@@ -2,8 +2,8 @@ name: HealthChecks Elastic Search Preview CD
 
 on:
   push:
-    tags:       
-      - preview-elasticsearch-*  # Push events to release-arangodb* 
+    tags:
+      - preview-elasticsearch-*  # Push events to release-arangodb*
 
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

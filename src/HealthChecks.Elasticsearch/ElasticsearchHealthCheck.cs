@@ -1,16 +1,16 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Nest;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Nest;
 
 namespace HealthChecks.Elasticsearch
 {
     public class ElasticsearchHealthCheck
         : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new ConcurrentDictionary<string, ElasticClient>();
+        private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new();
 
         private readonly ElasticsearchOptions _options;
 
@@ -18,6 +18,7 @@ namespace HealthChecks.Elasticsearch
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

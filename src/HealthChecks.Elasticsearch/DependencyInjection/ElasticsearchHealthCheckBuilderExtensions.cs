@@ -34,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for Elasticsearch databases.
         /// </summary>

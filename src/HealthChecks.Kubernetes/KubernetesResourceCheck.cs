@@ -1,5 +1,5 @@
-using k8s;
 using System;
+using k8s;
 
 namespace HealthChecks.Kubernetes
 {
@@ -10,6 +10,7 @@ namespace HealthChecks.Kubernetes
         public Type ResourceType { get; }
         public string Name { get; }
         public string Namespace { get; }
+
         private KubernetesResourceCheck(Type type, string name, string @namespace, Func<IKubernetesObject, bool> condition)
         {
             _condition = condition;
@@ -22,6 +23,7 @@ namespace HealthChecks.Kubernetes
         {
             return new KubernetesResourceCheck(typeof(T), name, @namespace, condition);
         }
+
         public bool Check(IKubernetesObject kubernetesObject)
         {
             return _condition?.Invoke(kubernetesObject) ?? true;

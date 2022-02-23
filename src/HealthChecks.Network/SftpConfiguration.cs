@@ -1,9 +1,9 @@
-﻿using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Renci.SshNet;
 
 namespace HealthChecks.Network
 {
@@ -20,7 +20,8 @@ namespace HealthChecks.Network
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _userName = userName ?? throw new ArgumentNullException(userName);
 
-            if (port == default) port = 22;
+            if (port == default)
+                port = 22;
             _port = port;
         }
         public SftpConfigurationBuilder AddPasswordAuthentication(string password)
@@ -31,8 +32,10 @@ namespace HealthChecks.Network
         }
         public SftpConfigurationBuilder AddPrivateKeyAuthentication(string privateKey, string passphrase)
         {
-            if (string.IsNullOrEmpty(privateKey)) throw new ArgumentNullException(nameof(privateKey));
-            if (string.IsNullOrEmpty(passphrase)) throw new ArgumentNullException(nameof(passphrase));
+            if (string.IsNullOrEmpty(privateKey))
+                throw new ArgumentNullException(nameof(privateKey));
+            if (string.IsNullOrEmpty(passphrase))
+                throw new ArgumentNullException(nameof(passphrase));
 
             var keyBytes = Encoding.UTF8.GetBytes(privateKey);
 

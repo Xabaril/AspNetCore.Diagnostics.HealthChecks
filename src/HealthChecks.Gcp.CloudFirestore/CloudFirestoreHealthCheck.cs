@@ -49,6 +49,7 @@ namespace HealthChecks.Gcp.CloudFirestore
 
             await foreach (var item in _cloudFirestoreOptions.FirestoreDatabase.ListRootCollectionsAsync())
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 collections.Add(item.Id);
             }
 

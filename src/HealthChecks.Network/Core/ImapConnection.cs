@@ -10,10 +10,7 @@ namespace HealthChecks.Network.Core
 
         public ImapConnectionType ConnectionType
         {
-            get
-            {
-                return _connectionType;
-            }
+            get => _connectionType;
 
             private set
             {
@@ -27,7 +24,8 @@ namespace HealthChecks.Network.Core
         internal ImapConnection(ImapConnectionOptions options) :
             base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             ConnectionType = options.ConnectionType;
             ComputeDefaultValues();

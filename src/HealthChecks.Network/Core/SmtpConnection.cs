@@ -10,10 +10,7 @@ namespace HealthChecks.Network.Core
         private SmtpConnectionType _connectionType;
         public SmtpConnectionType ConnectionType
         {
-            get
-            {
-                return _connectionType;
-            }
+            get => _connectionType;
 
             private set
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.IO;
 using System.Net.Security;
@@ -24,7 +24,8 @@ namespace HealthChecks.Network.Core
         public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false)
         {
             Host = host ?? throw new ArgumentNullException(nameof(host));
-            if (port == default) throw new ArgumentNullException(nameof(port));
+            if (port == default)
+                throw new ArgumentNullException(nameof(port));
             Port = port;
             UseSSL = useSSL;
             _allowInvalidCertificates = allowInvalidCertificates;

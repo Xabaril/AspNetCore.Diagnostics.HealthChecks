@@ -2,7 +2,7 @@ name: HealthChecks NPGSQL DB CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-npgsql-*
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
         image: postgres
         ports:
           - 8010:5432
-        env: 
+        env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: Password12!
     steps:
@@ -30,7 +30,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

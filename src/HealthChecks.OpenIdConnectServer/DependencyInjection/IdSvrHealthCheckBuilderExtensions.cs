@@ -1,8 +1,8 @@
-using HealthChecks.IdSvr;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using HealthChecks.IdSvr;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

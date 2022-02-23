@@ -241,5 +241,36 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
             response1.StatusCode
                .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
+
+        [Fact]
+        public async Task be_healthy_if_rabbitmq_is_available_using_iServiceProvider()
+        {
+            var connectionString = @"amqp://localhost:5672";
+
+            var webHostBuilder = new WebHostBuilder()
+            .UseStartup<DefaultStartup>()
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddHealthChecks()
+                    .AddRabbitMQ(sp => new Uri(connectionString), tags: new string[] { "rabbitmq" });
+
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions()
+                {
+                    Predicate = r => r.Tags.Contains("rabbitmq")
+                });
+            });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest($"/health")
+                .GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
+        }
     }
 }

@@ -185,7 +185,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for RabbitMQ services using connection string (amqp uri).
+        /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionFactoryFactory"> A factory function to provide the rabbitMQ connection Uri</param>

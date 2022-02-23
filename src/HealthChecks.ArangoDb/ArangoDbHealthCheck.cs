@@ -1,10 +1,10 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ArangoDBNetStandard;
 using ArangoDBNetStandard.AuthApi;
 using ArangoDBNetStandard.Transport.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ArangoDb
 {

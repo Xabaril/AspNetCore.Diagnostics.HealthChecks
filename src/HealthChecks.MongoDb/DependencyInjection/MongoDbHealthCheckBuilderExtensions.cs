@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, string mongodbConnectionString, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, string mongodbConnectionString, string mongoDatabaseName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -69,7 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, MongoClientSettings mongoClientSettings, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -93,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddMongoDb(this IHealthChecksBuilder builder, MongoClientSettings mongoClientSettings, string mongoDatabaseName, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(

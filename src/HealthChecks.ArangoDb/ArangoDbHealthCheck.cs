@@ -8,8 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ArangoDb
 {
-    public class ArangoDbHealthCheck
-        : IHealthCheck
+    public class ArangoDbHealthCheck : IHealthCheck
     {
         private readonly ArangoDbOptions _options;
 

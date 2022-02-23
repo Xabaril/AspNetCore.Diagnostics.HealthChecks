@@ -7,6 +7,10 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="AzureBlobStorageHealthCheck"/>,
+    /// <see cref="AzureFileShareHealthCheck"/>, <see cref="AzureQueueStorageHealthCheck"/>.
+    /// </summary>
     public static class AzureStorageHealthCheckBuilderExtensions
     {
         private const string AZURESTORAGE_NAME = "azureblob";
@@ -28,7 +32,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureBlobStorage(this IHealthChecksBuilder builder, string connectionString, string containerName = default, BlobClientOptions clientOptions = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureBlobStorage(
+            this IHealthChecksBuilder builder,
+            string connectionString,
+            string? containerName = default,
+            BlobClientOptions? clientOptions = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZURESTORAGE_NAME,
@@ -54,7 +66,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureBlobStorage(this IHealthChecksBuilder builder, Uri blobServiceUri, TokenCredential credential, string containerName = default, BlobClientOptions clientOptions = null, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureBlobStorage(
+            this IHealthChecksBuilder builder,
+            Uri blobServiceUri,
+            TokenCredential credential,
+            string? containerName = default,
+            BlobClientOptions? clientOptions = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZURESTORAGE_NAME,
@@ -78,7 +99,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureFileShare(this IHealthChecksBuilder builder, string connectionString, string shareName = default, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureFileShare(
+            this IHealthChecksBuilder builder,
+            string connectionString,
+            string? shareName = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREFILESHARE_NAME,
@@ -102,7 +130,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureQueueStorage(this IHealthChecksBuilder builder, string connectionString, string queueName = default, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureQueueStorage(
+            this IHealthChecksBuilder builder,
+            string connectionString,
+            string? queueName = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREQUEUE_NAME,
@@ -127,7 +162,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureQueueStorage(this IHealthChecksBuilder builder, Uri queueServiceUri, TokenCredential credential, string queueName = default, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddAzureQueueStorage(
+            this IHealthChecksBuilder builder,
+            Uri queueServiceUri,
+            TokenCredential credential,
+            string? queueName = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREQUEUE_NAME,

@@ -10,7 +10,7 @@ namespace HealthChecks.AzureServiceBus
     {
         private readonly string _topicName;
         private readonly string _subscriptionName;
-        private string _connectionKey;
+        private string? _connectionKey;
 
         public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName) : base(connectionString)
         {

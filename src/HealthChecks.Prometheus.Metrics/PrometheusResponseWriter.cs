@@ -6,7 +6,9 @@ namespace HealthChecks.Prometheus.Metrics
 {
     public sealed class PrometheusResponseWriter : LivenessPrometheusMetrics
     {
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report)
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) //TODO: change public API
+#pragma warning restore IDE1006 // Naming Styles
         {
             var instance = new PrometheusResponseWriter();
             instance.WriteMetricsFromHealthReport(report);

@@ -13,10 +13,12 @@ namespace HealthChecks.Network
         : IHealthCheck
     {
         private readonly SslHealthCheckOptions _options;
+
         public SslHealthCheck(SslHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -32,7 +34,7 @@ namespace HealthChecks.Network
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
                         }
 
-                        var certificate = await GetSslCertificate(tcpClient, host);
+                        var certificate = await GetSslCertificateAsync(tcpClient, host);
 
                         if (certificate is null || !certificate.Verify())
                         {
@@ -56,7 +58,7 @@ namespace HealthChecks.Network
             }
         }
 
-        private async Task<X509Certificate2> GetSslCertificate(TcpClient client, string host)
+        private async Task<X509Certificate2> GetSslCertificateAsync(TcpClient client, string host)
         {
             var ssl = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback((sender, cert, ca, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None), null);
 
@@ -74,6 +76,5 @@ namespace HealthChecks.Network
                 ssl.Close();
             }
         }
-
     }
 }

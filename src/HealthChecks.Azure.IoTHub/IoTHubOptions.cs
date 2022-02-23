@@ -5,12 +5,12 @@ namespace HealthChecks.Azure.IoTHub
 {
     public class IoTHubOptions
     {
-        internal string ConnectionString { get; private set; }
+        internal string ConnectionString { get; private set; } = null!;
         internal bool RegistryReadCheck { get; private set; }
         internal bool RegistryWriteCheck { get; private set; }
         internal bool ServiceConnectionCheck { get; private set; }
-        internal string RegistryReadQuery { get; private set; }
-        internal Func<string> RegistryWriteDeviceIdFactory { get; private set; }
+        internal string RegistryReadQuery { get; private set; } = null!;
+        internal Func<string> RegistryWriteDeviceIdFactory { get; private set; } = null!;
         internal TransportType ServiceConnectionTransport { get; private set; }
 
         public IoTHubOptions AddConnectionString(string connectionString)
@@ -26,7 +26,7 @@ namespace HealthChecks.Azure.IoTHub
             return this;
         }
 
-        public IoTHubOptions AddRegistryWriteCheck(Func<string> deviceIdFactory = null)
+        public IoTHubOptions AddRegistryWriteCheck(Func<string>? deviceIdFactory = null)
         {
             RegistryWriteCheck = true;
             RegistryWriteDeviceIdFactory = deviceIdFactory ?? (() => "health-check-registry-write-device-id");

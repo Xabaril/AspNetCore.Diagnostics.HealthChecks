@@ -64,14 +64,16 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             var customCheckName = "my-" + DEFAULT_CHECK_NAME;
-            services.AddSingleton(new RabbitMqSetting(){
+            services.AddSingleton(new RabbitMqSetting
+            {
                 ConnectionString = FAKE_CONNECTION_STRING
             });
 
             services.AddHealthChecks()
-                .AddRabbitMQ((sp)=> sp.GetRequiredService<RabbitMqSetting>().ConnectionString, name: customCheckName);
+                .AddRabbitMQ(sp => sp.GetRequiredService<RabbitMqSetting>().ConnectionString, name: customCheckName);
 
-            var serviceProvider = services.BuildServiceProvider();
+
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -86,14 +88,15 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             var customCheckName = "my-" + DEFAULT_CHECK_NAME;
-            services.AddSingleton(new RabbitMqSetting(){
+            services.AddSingleton(new RabbitMqSetting
+            {
                 ConnectionString = FAKE_CONNECTION_STRING
             });
 
             services.AddHealthChecks()
-                .AddRabbitMQ((sp)=> new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString), name: customCheckName);
+                .AddRabbitMQ(sp => new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString), name: customCheckName);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -104,7 +107,8 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
         }
     }
 
-    public class RabbitMqSetting{
+    public class RabbitMqSetting
+    {
         public string ConnectionString { get; set; }
     }
 }

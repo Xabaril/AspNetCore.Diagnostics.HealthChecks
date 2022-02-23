@@ -24,7 +24,7 @@ jobs:
         image: ravendb/ravendb
         ports:
           - 9030:8080
-        env: 
+        env:
           RAVEN_ARGS: --Setup.Mode=None
     steps:
     - uses: actions/checkout@v2

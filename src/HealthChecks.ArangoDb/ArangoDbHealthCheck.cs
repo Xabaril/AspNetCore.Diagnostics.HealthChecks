@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ArangoDBNetStandard;
 using ArangoDBNetStandard.AuthApi;
 using ArangoDBNetStandard.Transport.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ArangoDb
 {
@@ -12,15 +12,17 @@ namespace HealthChecks.ArangoDb
         : IHealthCheck
     {
         private readonly ArangoDbOptions _options;
+
         public ArangoDbHealthCheck(ArangoDbOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var transport = await GetTransport(_options))
+                using (var transport = await GetTransportAsync(_options))
                 using (var adb = new ArangoDBClient(transport))
                 {
                     var databases = await adb.Database.GetCurrentDatabaseInfoAsync();
@@ -34,7 +36,8 @@ namespace HealthChecks.ArangoDb
                 return new HealthCheckResult(context.Registration.FailureStatus, ex.Message, ex);
             }
         }
-        private static async Task<HttpApiTransport> GetTransport(ArangoDbOptions options)
+
+        private static async Task<HttpApiTransport> GetTransportAsync(ArangoDbOptions options)
         {
             if (!string.IsNullOrWhiteSpace(options.JwtToken))
             {

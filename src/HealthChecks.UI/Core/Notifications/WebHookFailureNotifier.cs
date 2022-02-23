@@ -36,22 +36,25 @@ namespace HealthChecks.UI.Core.Notifications
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
 
         }
+
         public async Task NotifyDown(string name, UIHealthReport report)
         {
-            await Notify(name, report, isHealthy: false);
+            await NotifyAsync(name, report, isHealthy: false);
         }
+
         public async Task NotifyWakeUp(string name)
         {
-            await Notify(name, null, isHealthy: true);
+            await NotifyAsync(name, null, isHealthy: true);
         }
-        internal async Task Notify(string name, UIHealthReport report, bool isHealthy = false)
+
+        internal async Task NotifyAsync(string name, UIHealthReport report, bool isHealthy = false)
         {
             string failure = default;
             string description = default;
 
-            if (!await IsNotifiedOnWindowTime(name, isHealthy))
+            if (!await IsNotifiedOnWindowTimeAsync(name, isHealthy))
             {
-                await SaveNotification(new HealthCheckFailureNotification()
+                await SaveNotificationAsync(new HealthCheckFailureNotification()
                 {
                     LastNotified = DateTime.UtcNow,
                     HealthCheckName = name,
@@ -87,7 +90,7 @@ namespace HealthChecks.UI.Core.Notifications
                         Uri.TryCreate(_serverAddressesService.AbsoluteUriFromRelative(webHook.Uri), UriKind.Absolute, out absoluteUri);
                     }
 
-                    await SendRequest(absoluteUri, webHook.Name, payload);
+                    await SendRequestAsync(absoluteUri, webHook.Name, payload);
                 }
             }
             else
@@ -95,7 +98,8 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogInformation("Notification is sent on same window time.");
             }
         }
-        private async Task<bool> IsNotifiedOnWindowTime(string livenessName, bool restore)
+
+        private async Task<bool> IsNotifiedOnWindowTimeAsync(string livenessName, bool restore)
         {
             var lastNotification = await _db.Failures
                 .Where(lf => lf.HealthCheckName.ToLower() == livenessName.ToLower())
@@ -109,7 +113,8 @@ namespace HealthChecks.UI.Core.Notifications
                 &&
                 (DateTime.UtcNow - lastNotification.LastNotified).TotalSeconds < _settings.MinimumSecondsBetweenFailureNotifications;
         }
-        private async Task SaveNotification(HealthCheckFailureNotification notification)
+
+        private async Task SaveNotificationAsync(HealthCheckFailureNotification notification)
         {
             if (notification != null)
             {
@@ -119,7 +124,8 @@ namespace HealthChecks.UI.Core.Notifications
                 await _db.SaveChangesAsync();
             }
         }
-        private async Task SendRequest(Uri uri, string name, string payloadContent)
+
+        private async Task SendRequestAsync(Uri uri, string name, string payloadContent)
         {
             try
             {
@@ -136,6 +142,7 @@ namespace HealthChecks.UI.Core.Notifications
                 _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
             }
         }
+
         private string GetFailedMessageFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Values
@@ -144,6 +151,7 @@ namespace HealthChecks.UI.Core.Notifications
 
             return $"There {plural.plural} at least {failedChecks} {plural.noun} failing.";
         }
+
         private string GetFailedDescriptionsFromContent(UIHealthReport healthReport)
         {
             var failedChecks = healthReport.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
@@ -151,6 +159,7 @@ namespace HealthChecks.UI.Core.Notifications
 
             return $"{string.Join(" , ", failedChecks.Select(f => f.Key))} {plural.noun} {plural.plural} failing";
         }
+
         public void Dispose()
         {
             if (_db != null)

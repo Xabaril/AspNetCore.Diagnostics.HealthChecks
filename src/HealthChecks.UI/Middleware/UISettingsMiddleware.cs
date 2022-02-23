@@ -17,6 +17,7 @@ namespace HealthChecks.UI.Middleware
 
         public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
         {
+            _ = next;
             _ = settings ?? throw new ArgumentNullException(nameof(settings));
             Settings = settings.Value;
 
@@ -25,6 +26,7 @@ namespace HealthChecks.UI.Middleware
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             string content = JsonConvert.SerializeObject(_uiOutputSettings.Value, _jsonSerializationSettings);

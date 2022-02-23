@@ -35,6 +35,7 @@ namespace HealthChecks.UI.Core.HostedService
             _settings = settings.Value ?? new Settings();
             _cancellationTokenSource = new CancellationTokenSource();
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteAsync(_cancellationTokenSource.Token);
@@ -46,19 +47,21 @@ namespace HealthChecks.UI.Core.HostedService
 
             return Task.CompletedTask;
         }
+
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             _cancellationTokenSource.Cancel();
 
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
+
         private Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _lifetime.ApplicationStarted.Register(async () =>
             {
                 try
                 {
-                    await Collect(cancellationToken);
+                    await CollectAsync(cancellationToken);
                 }
                 catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
@@ -69,7 +72,7 @@ namespace HealthChecks.UI.Core.HostedService
             return Task.CompletedTask;
         }
 
-        private async Task Collect(CancellationToken cancellationToken)
+        private async Task CollectAsync(CancellationToken cancellationToken)
         {
             var scopeFactory = _serviceProvider.GetRequiredService<IServiceScopeFactory>();
 

@@ -5,7 +5,9 @@ namespace System.Net.Http
 {
     public static class HttpResponseMessageExtensions
     {
+#pragma warning disable IDE1006 // Naming Styles
         public static async Task<TContent> As<TContent>(this HttpResponseMessage response)
+#pragma warning restore IDE1006 // Naming Styles
         {
             if (response != null)
             {

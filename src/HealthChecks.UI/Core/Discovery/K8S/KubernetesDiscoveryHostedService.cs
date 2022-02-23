@@ -41,6 +41,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _addressFactory = new KubernetesAddressFactory(_discoveryOptions);
 
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteAsync(cancellationToken);
@@ -52,6 +53,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return Task.CompletedTask;
         }
+
         private Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _hostLifetime.ApplicationStarted.Register(async () =>
@@ -61,7 +63,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                     try
                     {
                         _discoveryClient = InitializeKubernetesClient();
-                        await StartK8sService(cancellationToken);
+                        await StartK8sServiceAsync(cancellationToken);
                     }
                     catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
                     {
@@ -73,11 +75,13 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
             return Task.CompletedTask;
         }
+
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
-        private async Task StartK8sService(CancellationToken cancellationToken)
+
+        private async Task StartK8sServiceAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -89,7 +93,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                 try
                 {
-                    var services = await _discoveryClient.GetServices(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
+                    var services = await _discoveryClient.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
 
                     if (services != null)
                     {
@@ -101,7 +105,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                                 if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                                 {
-                                    var statusCode = await CallClusterService(serviceAddress);
+                                    var statusCode = await CallClusterServiceAsync(serviceAddress);
                                     if (IsValidHealthChecksStatusCode(statusCode))
                                     {
                                         await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
@@ -136,7 +140,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             return statusCode == HttpStatusCode.OK || statusCode == HttpStatusCode.ServiceUnavailable;
         }
 
-        private async Task<HttpStatusCode> CallClusterService(string host)
+        private async Task<HttpStatusCode> CallClusterServiceAsync(string host)
         {
             var response = await _clusterServiceClient.GetAsync(host);
             return response.StatusCode;

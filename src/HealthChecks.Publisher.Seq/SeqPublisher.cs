@@ -1,6 +1,3 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +6,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
 
 namespace HealthChecks.Publisher.Seq
 {
@@ -23,6 +23,7 @@ namespace HealthChecks.Publisher.Seq
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
+
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             var level = _options.DefaultInputLevel;
@@ -58,16 +59,19 @@ namespace HealthChecks.Publisher.Seq
                 }
             };
 
-            await PushMetrics(JsonConvert.SerializeObject(events));
+            await PushMetricsAsync(JsonConvert.SerializeObject(events));
         }
-        private async Task PushMetrics(string json)
+
+        private async Task PushMetricsAsync(string json)
         {
             try
             {
                 var httpClient = _httpClientFactory();
 
-                var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}");
-                pushMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}")
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
 
                 (await httpClient.SendAsync(pushMessage))
                     .EnsureSuccessStatusCode();
@@ -77,10 +81,12 @@ namespace HealthChecks.Publisher.Seq
                 Trace.WriteLine($"Exception is throwed publishing metrics to Seq with message: {ex.Message}");
             }
         }
+
         private class RawEvents
         {
             public RawEvent[] Events { get; set; }
         }
+
         private class RawEvent
         {
             public DateTimeOffset Timestamp { get; set; }

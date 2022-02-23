@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 
 namespace HealthChecks.Publisher.Prometheus
 {
     public abstract class LivenessPrometheusMetrics
     {
-        protected const string ContentType = "text/plain; version=0.0.4";
-        private const string HealthCheckLabelName = "healthcheck";
+        protected const string CONTENT_TYPE = "text/plain; version=0.0.4";
+        private const string HEALTH_CHECK_LABEL_NAME = "healthcheck";
         private readonly Gauge _healthChecksDuration;
         private readonly Gauge _healthChecksResult;
         protected readonly CollectorRegistry Registry;
@@ -19,7 +19,7 @@ namespace HealthChecks.Publisher.Prometheus
             _healthChecksResult = factory.CreateGauge("healthcheck",
                 "Shows raw health check status (0 = Unhealthy, 1 = Degraded, 2 = Healthy)", new GaugeConfiguration
                 {
-                    LabelNames = new[] { HealthCheckLabelName },
+                    LabelNames = new[] { HEALTH_CHECK_LABEL_NAME },
                     SuppressInitialValue = false
                 });
 
@@ -27,7 +27,7 @@ namespace HealthChecks.Publisher.Prometheus
                 "Shows duration of the health check execution in seconds",
                 new GaugeConfiguration
                 {
-                    LabelNames = new[] { HealthCheckLabelName },
+                    LabelNames = new[] { HEALTH_CHECK_LABEL_NAME },
                     SuppressInitialValue = false
                 });
         }

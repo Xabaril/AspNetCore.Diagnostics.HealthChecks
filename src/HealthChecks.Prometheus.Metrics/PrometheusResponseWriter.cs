@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -11,7 +11,7 @@ namespace HealthChecks.Prometheus.Metrics
             var instance = new PrometheusResponseWriter();
             instance.WriteMetricsFromHealthReport(report);
 
-            context.Response.ContentType = ContentType;
+            context.Response.ContentType = CONTENT_TYPE;
             await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
         }
     }

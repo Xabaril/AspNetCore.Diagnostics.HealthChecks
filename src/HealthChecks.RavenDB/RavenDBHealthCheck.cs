@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
+using System.Collections.Concurrent;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Operations;
@@ -8,11 +13,6 @@ using Raven.Client.Exceptions.Routing;
 using Raven.Client.Http;
 using Raven.Client.ServerWide.Operations;
 using Sparrow.Json;
-using System;
-using System.Collections.Concurrent;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.RavenDB
 {
@@ -20,13 +20,13 @@ namespace HealthChecks.RavenDB
     {
         private readonly RavenDBOptions _options;
 
-        private static readonly GetBuildNumberOperation ServerHealthCheck = new GetBuildNumberOperation();
+        private static readonly GetBuildNumberOperation _serverHealthCheck = new();
 
-        private static readonly DatabaseHealthCheckOperation DatabaseHealthCheck = new DatabaseHealthCheckOperation();
+        private static readonly DatabaseHealthCheckOperation _databaseHealthCheck = new();
 
-        private static readonly GetStatisticsOperation LegacyDatabaseHealthCheck = new GetStatisticsOperation();
+        private static readonly GetStatisticsOperation _legacyDatabaseHealthCheck = new();
 
-        private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> Stores = new ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder>();
+        private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> _stores = new();
 
         public RavenDBHealthCheck(RavenDBOptions options)
         {
@@ -47,7 +47,7 @@ namespace HealthChecks.RavenDB
         {
             try
             {
-                var value = Stores.GetOrAdd(_options, o =>
+                var value = _stores.GetOrAdd(_options, o =>
                 {
                     var store = new DocumentStore
                     {
@@ -117,7 +117,7 @@ namespace HealthChecks.RavenDB
         {
             return store.Maintenance
                 .Server
-                .SendAsync(ServerHealthCheck, cancellationToken);
+                .SendAsync(_serverHealthCheck, cancellationToken);
         }
 
         private static async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
@@ -126,11 +126,11 @@ namespace HealthChecks.RavenDB
 
             if (legacy)
             {
-                await executor.SendAsync(LegacyDatabaseHealthCheck, cancellationToken);
+                await executor.SendAsync(_legacyDatabaseHealthCheck, cancellationToken);
                 return;
             }
 
-            await executor.SendAsync(DatabaseHealthCheck, cancellationToken);
+            await executor.SendAsync(_databaseHealthCheck, cancellationToken);
         }
 
         private class DatabaseHealthCheckOperation : IMaintenanceOperation

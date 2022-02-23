@@ -2,7 +2,7 @@ name: HealthChecks Publisher.Datadog CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-publisher_datadog-*
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

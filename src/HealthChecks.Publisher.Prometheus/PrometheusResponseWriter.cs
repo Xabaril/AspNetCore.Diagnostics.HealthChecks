@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace HealthChecks.Publisher.Prometheus
             var instance = new PrometheusResponseWriter();
             instance.WriteMetricsFromHealthReport(report);
 
-            context.Response.ContentType = ContentType;
+            context.Response.ContentType = CONTENT_TYPE;
             if (alwaysReturnHttp200Ok)
             {
                 context.Response.StatusCode = StatusCodes.Status200OK;

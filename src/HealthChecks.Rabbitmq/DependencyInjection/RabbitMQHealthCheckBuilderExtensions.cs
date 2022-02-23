@@ -1,8 +1,8 @@
-﻿using HealthChecks.RabbitMQ;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
+using HealthChecks.RabbitMQ;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -239,7 +239,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            return  builder.AddRabbitMQ(sp => new Uri(connectionStringFactory(sp)), sslOption, name, failureStatus, tags, timeout);
+            return builder.AddRabbitMQ(sp => new Uri(connectionStringFactory(sp)), sslOption, name, failureStatus, tags, timeout);
         }
     }
 }

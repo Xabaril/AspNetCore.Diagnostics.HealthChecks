@@ -1,20 +1,22 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
     public class ProcessHealthCheck : IHealthCheck
     {
-        private string _processName;
-        private Func<Process[], bool> _predicate;
+        private readonly string _processName;
+        private readonly Func<Process[], bool> _predicate;
+
         public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
         {
             _processName = processName ?? throw new ArgumentNullException(nameof(processName));
             _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
         }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

@@ -2,7 +2,7 @@ name: HealthChecks SignalR CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-signalr-*
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

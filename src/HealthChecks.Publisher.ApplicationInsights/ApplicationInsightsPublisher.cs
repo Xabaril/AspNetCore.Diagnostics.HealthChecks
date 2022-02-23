@@ -20,7 +20,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
         private const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
 
         private static TelemetryClient _client;
-        private static readonly object sync_root = new object();
+        private static readonly object _syncRoot = new object();
         private readonly TelemetryConfiguration _telemetryConfiguration;
         private readonly string _instrumentationKey;
         private readonly bool _saveDetailedReport;
@@ -113,7 +113,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
         {
             if (_client == null)
             {
-                lock (sync_root)
+                lock (_syncRoot)
                 {
                     if (_client == null)
                     {

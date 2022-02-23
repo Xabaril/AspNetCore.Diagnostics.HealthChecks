@@ -1,7 +1,7 @@
 name: HealthChecks Redis Preview CD
 on:
   push:
-    tags:       
+    tags:
       - preview-redis-*
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Redis/HealthChecks.Redis.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

@@ -1,7 +1,7 @@
-using HealthChecks.Solr;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using HealthChecks.Solr;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -34,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for solr databases.
         /// </summary>

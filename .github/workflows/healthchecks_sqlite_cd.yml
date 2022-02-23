@@ -2,7 +2,7 @@ name: HealthChecks Sqlite CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-sqlite-*
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Sqlite/HealthChecks.Sqlite.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Sqlite.Tests/HealthChecks.Sqlite.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Sqlite/HealthChecks.Sqlite.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

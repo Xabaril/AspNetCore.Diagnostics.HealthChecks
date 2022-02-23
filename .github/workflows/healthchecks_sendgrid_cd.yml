@@ -2,7 +2,7 @@ name: HealthChecks SendGrid CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-sendgrid-*
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.SendGrid.Tests/HealthChecks.SendGrid.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.2

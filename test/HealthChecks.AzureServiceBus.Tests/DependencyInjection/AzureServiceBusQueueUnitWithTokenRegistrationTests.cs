@@ -1,16 +1,14 @@
-﻿using FluentAssertions;
-using HealthChecks.AzureServiceBus;
+using System;
+using System.Linq;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
+using global::Azure.Identity;
 
 namespace HealthChecks.AzureServiceBus.Tests
 {
-    using global::Azure.Identity;
-
     public class azure_service_bus_queue_registration_with_token_should
     {
         [Fact]
@@ -18,7 +16,7 @@ namespace HealthChecks.AzureServiceBus.Tests
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusQueue("cnn", "queueName",new AzureCliCredential());
+                .AddAzureServiceBusQueue("cnn", "queueName", new AzureCliCredential());
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -36,7 +34,7 @@ namespace HealthChecks.AzureServiceBus.Tests
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusQueue("cnn", "queueName",new AzureCliCredential(),
+                .AddAzureServiceBusQueue("cnn", "queueName", new AzureCliCredential(),
                 name: "azureservicebusqueuecheck");
 
             var serviceProvider = services.BuildServiceProvider();
@@ -54,7 +52,7 @@ namespace HealthChecks.AzureServiceBus.Tests
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureServiceBusQueue(string.Empty, string.Empty,new AzureCliCredential());
+                .AddAzureServiceBusQueue(string.Empty, string.Empty, new AzureCliCredential());
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,9 +9,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.UI.Tests
@@ -28,25 +28,16 @@ namespace HealthChecks.UI.Tests
                 {
                     services
                     .AddRouting()
-                    .AddHealthChecksUI(setup =>
-                    {
-                        setup.AddHealthCheckEndpoint(endpointName, uri);
-                    })
+                    .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint(endpointName, uri))
                     .AddSqliteStorage("Data Source = sqlite-updates.db");
                 })
                 .Configure(app =>
                 {
                     app.UseRouting();
-                    app.UseEndpoints(setup =>
-                    {
-                        setup.MapHealthChecksUI();
-                    });
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
 
                     var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-                    lifetime.ApplicationStarted.Register(() =>
-                    {
-                        hostReset.Set();
-                    });
+                    lifetime.ApplicationStarted.Register(() => hostReset.Set());
                 });
 
             var hostReset = new ManualResetEventSlim(false);

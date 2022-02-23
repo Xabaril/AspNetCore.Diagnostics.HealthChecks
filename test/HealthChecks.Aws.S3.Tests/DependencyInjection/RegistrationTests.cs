@@ -1,10 +1,9 @@
-﻿using Amazon.S3;
+using System.Linq;
+using Amazon.S3;
 using FluentAssertions;
-using HealthChecks.Aws.S3;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Aws.S3.Tests.DependencyInjection
@@ -41,10 +40,10 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                  .AddS3(options =>
                  {
-                    options.AccessKey = "access-key";
-                    options.BucketName = "bucket-name";
-                    options.SecretKey = "secret-key";
-                    options.S3Config = new AmazonS3Config();
+                     options.AccessKey = "access-key";
+                     options.BucketName = "bucket-name";
+                     options.SecretKey = "secret-key";
+                     options.S3Config = new AmazonS3Config();
                  }, name: "aws s3 check");
 
             var serviceProvider = services.BuildServiceProvider();

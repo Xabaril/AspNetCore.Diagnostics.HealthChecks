@@ -1,18 +1,18 @@
-﻿using FluentAssertions;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.SolR.Tests.Functional
 {
     public class solr_healthcheck_should
     {
-     
+
         [Fact]
         public async Task be_healthy_if_solr_is_available()
         {

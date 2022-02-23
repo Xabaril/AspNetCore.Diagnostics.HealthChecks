@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
@@ -6,18 +9,14 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
     public class dns_resolve_host_count_should
     {
-        const string hostName = "google.com";
-        const string  hostName2 = "microsoft.com";
+        private const string hostName = "google.com";
+        private const string hostName2 = "microsoft.com";
 
         [Fact]
         public async Task be_healthy_when_the_configured_number_of_resolved_addresses_is_within_the_threshold()
@@ -48,7 +47,7 @@ namespace HealthChecks.Network.Tests.Functional
                        Predicate = r => true
                    });
                });
-               
+
            });
 
             var server = new TestServer(webHostBuilder);

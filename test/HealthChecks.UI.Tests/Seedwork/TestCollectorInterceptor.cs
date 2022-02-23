@@ -1,8 +1,8 @@
-﻿using HealthChecks.UI.Core;
-using HealthChecks.UI.Core.Data;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.Core;
+using HealthChecks.UI.Core.Data;
 
 namespace HealthChecks.UI.Tests
 {

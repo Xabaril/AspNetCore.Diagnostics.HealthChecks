@@ -1,8 +1,8 @@
-﻿using FluentAssertions;
+using System.Linq;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.DependencyInjection
@@ -224,7 +224,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddSslHealthCheck(options => { options.AddHost("the-host"); });
+                .AddSslHealthCheck(options => options.AddHost("the-host"));
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -241,7 +241,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddSslHealthCheck(options => { options.AddHost("the-host", port: 111, checkLeftDays: 120); }, name: "ssl-1");
+                .AddSslHealthCheck(options => options.AddHost("the-host", port: 111, checkLeftDays: 120), name: "ssl-1");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

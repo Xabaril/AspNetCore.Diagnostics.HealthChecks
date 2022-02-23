@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional

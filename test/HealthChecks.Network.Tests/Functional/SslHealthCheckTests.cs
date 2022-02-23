@@ -1,14 +1,14 @@
-﻿using FluentAssertions;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
@@ -22,21 +22,22 @@ namespace HealthChecks.Network.Tests.Functional
         private const string _httpHost = "http.badssl.com";
         private const string _revokedHost = "revoked.badssl.com";
         private const string _expiredHost = "expired.badssl.com";
-        
+
         [Fact]
         public async Task be_healthy_if_ssl_is_valid()
         {
-            
+
             var webHostBuilder = new WebHostBuilder()
                .UseStartup<DefaultStartup>()
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddSslHealthCheck(options => { 
+                    .AddSslHealthCheck(options =>
+                    {
                         options.AddHost(_validHost256);
                         options.AddHost(_validHost384);
                         options.AddHost(_validHost512);
-                    } , tags: new string[] { "ssl" });
+                    }, tags: new string[] { "ssl" });
                })
                .Configure(app =>
                {

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Xunit;
 
@@ -12,12 +12,13 @@ namespace HealthChecks.Publisher.Datadog.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddSeqPublisher(setup => 
-                    new SeqOptions() { 
+                .AddSeqPublisher(setup =>
+                    new SeqOptions()
+                    {
                         ApiKey = "apiKey",
                         DefaultInputLevel = Seq.SeqInputLevel.Information,
                         Endpoint = "endpoint"
-                });
+                    });
 
             var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();

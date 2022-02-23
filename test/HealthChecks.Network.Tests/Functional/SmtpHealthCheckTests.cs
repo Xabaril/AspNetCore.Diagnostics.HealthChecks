@@ -1,12 +1,12 @@
-﻿using FluentAssertions;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using HealthChecks.Network.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional

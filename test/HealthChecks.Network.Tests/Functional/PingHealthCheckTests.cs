@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -21,10 +21,7 @@ namespace HealthChecks.Network.Tests.Functional
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                    .AddPingHealthCheck(setup =>
-                    {
-                        setup.AddHost("127.0.0.1", 5000);
-                    }, tags: new string[] { "ping" });
+                    .AddPingHealthCheck(setup => setup.AddHost("127.0.0.1", 5000), tags: new string[] { "ping" });
                })
                .Configure(app =>
                {

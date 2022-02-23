@@ -1,12 +1,12 @@
-﻿using FluentAssertions;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
@@ -56,10 +56,7 @@ namespace HealthChecks.Network.Tests.Functional
               .ConfigureServices(services =>
               {
                   services.AddHealthChecks()
-                   .AddDnsResolveHealthCheck(setup =>
-                   {
-                       setup.ResolveHost("www.microsoft.com").To("8.8.8.8", "5.5.5.5");
-                   }, tags: new string[] { "dns" });
+                   .AddDnsResolveHealthCheck(setup => setup.ResolveHost("www.microsoft.com").To("8.8.8.8", "5.5.5.5"), tags: new string[] { "dns" });
               })
               .Configure(app =>
               {

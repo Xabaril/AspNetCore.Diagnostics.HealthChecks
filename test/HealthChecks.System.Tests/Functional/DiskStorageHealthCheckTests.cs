@@ -1,13 +1,13 @@
-﻿using FluentAssertions;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.System.Tests.Functional
@@ -15,8 +15,8 @@ namespace HealthChecks.System.Tests.Functional
     [Collection("execution")]
     public class disk_storage_healthcheck_should
     {
-        private DriveInfo[] _drives = DriveInfo.GetDrives();
-      
+        private readonly DriveInfo[] _drives = DriveInfo.GetDrives();
+
         [Fact]
         public async Task be_healthy_when_disks_have_more_free_space_than_configured()
         {
@@ -30,10 +30,7 @@ namespace HealthChecks.System.Tests.Functional
              .ConfigureServices(services =>
              {
                  services.AddHealthChecks()
-                  .AddDiskStorageHealthCheck(setup =>
-                  {
-                      setup.AddDrive(testDrive.Name, targetFreeSpace);
-                  }, tags: new string[] { "diskstorage" });
+                  .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: new string[] { "diskstorage" });
              })
              .Configure(app =>
              {
@@ -63,10 +60,7 @@ namespace HealthChecks.System.Tests.Functional
              .ConfigureServices(services =>
              {
                  services.AddHealthChecks()
-                  .AddDiskStorageHealthCheck(setup =>
-                  {
-                      setup.AddDrive(testDrive.Name, targetFreeSpace);
-                  }, tags: new string[] { "diskstorage" });
+                  .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: new string[] { "diskstorage" });
              })
              .Configure(app =>
              {
@@ -91,10 +85,7 @@ namespace HealthChecks.System.Tests.Functional
              .ConfigureServices(services =>
              {
                  services.AddHealthChecks()
-                  .AddDiskStorageHealthCheck(setup =>
-                  {
-                      setup.AddDrive("nonexistingdisk", 104857600);
-                  }, tags: new string[] { "diskstorage" });
+                  .AddDiskStorageHealthCheck(setup => setup.AddDrive("nonexistingdisk", 104857600), tags: new string[] { "diskstorage" });
              })
              .Configure(app =>
              {

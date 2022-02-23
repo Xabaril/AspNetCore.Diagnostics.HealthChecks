@@ -1,16 +1,14 @@
-﻿using FluentAssertions;
-using HealthChecks.AzureServiceBus;
+using System;
+using System.Linq;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
+using global::Azure.Identity;
 
 namespace HealthChecks.AzureServiceBus.Tests
 {
-    using global::Azure.Identity;
-
     public class azure_service_bus_subscription_registration_with_token_should
     {
         [Fact]

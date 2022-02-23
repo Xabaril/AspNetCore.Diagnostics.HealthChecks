@@ -1,9 +1,9 @@
-﻿using Confluent.Kafka;
+using System.Linq;
+using Confluent.Kafka;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Kafka.Tests.DependencyInjection

@@ -1,6 +1,5 @@
 using FluentAssertions;
 using global::Azure.Identity;
-using global::HealthChecks.AzureServiceBus;
 using global::System;
 using global::System.Linq;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+using System.Collections;
+using System.Linq;
+using FluentAssertions;
 using HealthChecks.IbmMQ;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Collections;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Ibmq.Tests.DependencyInjection

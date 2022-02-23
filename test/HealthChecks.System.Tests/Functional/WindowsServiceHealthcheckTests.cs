@@ -1,3 +1,7 @@
+using System;
+using System.Net;
+using System.ServiceProcess;
+using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.System.Tests.Seedwork;
 using Microsoft.AspNetCore.Builder;
@@ -5,10 +9,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net;
-using System.ServiceProcess;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.System.Tests.Functional

@@ -88,8 +88,7 @@ namespace HealthChecks.UIAndApi
         }
     }
 
-    public class RandomHealthCheck
-        : IHealthCheck
+    public class RandomHealthCheck : IHealthCheck
     {
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

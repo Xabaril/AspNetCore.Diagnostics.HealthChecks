@@ -6,8 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.IdSvr
 {
-    public class IdSvrHealthCheck
-        : IHealthCheck
+    public class IdSvrHealthCheck : IHealthCheck
     {
         private const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
 

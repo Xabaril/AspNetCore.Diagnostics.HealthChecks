@@ -7,8 +7,7 @@ using Nest;
 
 namespace HealthChecks.Elasticsearch
 {
-    public class ElasticsearchHealthCheck
-        : IHealthCheck
+    public class ElasticsearchHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new();
 
@@ -23,7 +22,7 @@ namespace HealthChecks.Elasticsearch
         {
             try
             {
-                if (!_connections.TryGetValue(_options.Uri, out ElasticClient lowLevelClient))
+                if (!_connections.TryGetValue(_options.Uri, out var lowLevelClient))
                 {
                     var settings = new ConnectionSettings(new Uri(_options.Uri));
 

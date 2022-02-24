@@ -4,15 +4,25 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace HealthChecks.Elasticsearch
 {
+    /// <summary>
+    /// Options for <see cref="ElasticsearchHealthCheck"/>.
+    /// </summary>
     public class ElasticsearchOptions
     {
-        public string Uri { get; private set; }
-        public string UserName { get; private set; }
-        public string Password { get; private set; }
-        public X509Certificate Certificate { get; private set; }
-        public bool AuthenticateWithBasicCredentials { get; private set; } = false;
-        public bool AuthenticateWithCertificate { get; private set; } = false;
-        public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> CertificateValidationCallback { get; private set; }
+        public string Uri { get; private set; } = null!;
+
+        public string? UserName { get; private set; }
+
+        public string? Password { get; private set; }
+
+        public X509Certificate? Certificate { get; private set; }
+
+        public bool AuthenticateWithBasicCredentials { get; private set; }
+
+        public bool AuthenticateWithCertificate { get; private set; }
+
+        public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool>? CertificateValidationCallback { get; private set; }
+
         public TimeSpan? RequestTimeout { get; set; }
 
         public ElasticsearchOptions UseBasicAuthentication(string name, string password)

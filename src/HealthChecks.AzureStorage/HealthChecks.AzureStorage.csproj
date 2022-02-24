@@ -1,16 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.AzureStorage is the health check package for Blobs, Tables and Queues.</Description>
     <Version>$(HealthCheckAzureStorage)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs"/>
     <PackageReference Include="Azure.Storage.Queues"/>
-	<PackageReference Include="Azure.Storage.Files.Shares"/>	  
+	<PackageReference Include="Azure.Storage.Files.Shares"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
   </ItemGroup>
 

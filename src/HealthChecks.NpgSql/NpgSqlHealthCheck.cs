@@ -6,8 +6,7 @@ using Npgsql;
 
 namespace HealthChecks.NpgSql
 {
-    public class NpgSqlHealthCheck
-        : IHealthCheck
+    public class NpgSqlHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
         private readonly string _sql;

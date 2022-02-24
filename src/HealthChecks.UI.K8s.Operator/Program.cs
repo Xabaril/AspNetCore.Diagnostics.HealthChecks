@@ -75,4 +75,3 @@ namespace HealthChecks.UI.K8s.Operator
 }
 
 public class K8sOperator { } //Dummy class for logging
-

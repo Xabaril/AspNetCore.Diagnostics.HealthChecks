@@ -7,6 +7,8 @@ on:
       - src/HealthChecks.SendGrid/**
       - test/HealthChecks.SendGrid.Tests/**
       - .github/workflows/healthchecks_sendgrid_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
     tags-ignore:
       - release-*
   pull_request:
@@ -15,6 +17,8 @@ on:
     - src/HealthChecks.SendGrid/**
     - test/HealthChecks.SendGrid.Tests/**
     - .github/workflows/healthchecks_sendgrid_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
 
 jobs:
   build:

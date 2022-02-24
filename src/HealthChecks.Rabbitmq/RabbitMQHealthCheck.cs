@@ -6,8 +6,7 @@ using RabbitMQ.Client;
 
 namespace HealthChecks.RabbitMQ
 {
-    public class RabbitMQHealthCheck
-        : IHealthCheck, IDisposable
+    public class RabbitMQHealthCheck : IHealthCheck, IDisposable
     {
         private IConnection? _connection;
         private IConnectionFactory? _factory;

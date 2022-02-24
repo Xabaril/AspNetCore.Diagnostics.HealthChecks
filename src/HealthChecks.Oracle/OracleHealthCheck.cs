@@ -6,8 +6,7 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace HealthChecks.Oracle
 {
-    public class OracleHealthCheck
-        : IHealthCheck
+    public class OracleHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
         private readonly string _sql;

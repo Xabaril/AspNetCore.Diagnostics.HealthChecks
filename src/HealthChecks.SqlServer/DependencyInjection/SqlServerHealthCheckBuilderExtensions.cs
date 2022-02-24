@@ -6,6 +6,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="SqlServerHealthCheck"/>.
+    /// </summary>
     public static class SqlServerHealthCheckBuilderExtensions
     {
         private const string HEALTH_QUERY = "SELECT 1;";
@@ -25,15 +28,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder,
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddSqlServer(
+            this IHealthChecksBuilder builder,
             string connectionString,
-            string healthQuery = default,
-            string name = default,
+            string? healthQuery = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default,
-            Action<SqlConnection> beforeOpenConnectionConfigurer = default)
+            Action<SqlConnection>? beforeOpenConnectionConfigurer = default)
         {
             return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags, timeout, beforeOpenConnectionConfigurer);
         }
@@ -52,15 +56,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddSqlServer(this IHealthChecksBuilder builder,
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddSqlServer(
+            this IHealthChecksBuilder builder,
             Func<IServiceProvider, string> connectionStringFactory,
-            string healthQuery = default,
-            string name = default,
+            string? healthQuery = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default,
-            Action<SqlConnection> beforeOpenConnectionConfigurer = default)
+            Action<SqlConnection>? beforeOpenConnectionConfigurer = default)
         {
             if (connectionStringFactory == null)
             {

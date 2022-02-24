@@ -7,8 +7,7 @@ using MongoDB.Driver;
 
 namespace HealthChecks.MongoDb
 {
-    public class MongoDbHealthCheck
-        : IHealthCheck
+    public class MongoDbHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new();
         private readonly MongoClientSettings _mongoClientSettings;

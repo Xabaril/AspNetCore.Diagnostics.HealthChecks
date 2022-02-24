@@ -7,6 +7,8 @@ on:
     - src/HealthChecks.Azure.IoTHub/**
     - test/HealthChecks.Azure.IoTHub.Tests/**
     - .github/workflows/healthchecks_azure_iothub_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
    tags-ignore:
     - release-*
 
@@ -16,6 +18,8 @@ on:
     - src/HealthChecks.Azure.IoTHub/**
     - test/HealthChecks.Azure.IoTHub.Tests/**
     - .github/workflows/healthchecks_azure_iothub_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
 jobs:
   build:
     runs-on: ubuntu-latest

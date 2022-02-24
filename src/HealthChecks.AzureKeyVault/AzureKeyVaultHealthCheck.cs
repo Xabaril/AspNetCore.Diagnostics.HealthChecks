@@ -69,7 +69,7 @@ namespace HealthChecks.AzureKeyVault
 
         private KeyClient CreateKeyClient()
         {
-            if (!_keyClientsHolder.TryGetValue(_keyVaultUri, out KeyClient client))
+            if (!_keyClientsHolder.TryGetValue(_keyVaultUri, out var client))
             {
                 client = new KeyClient(_keyVaultUri, _azureCredential);
                 _keyClientsHolder.TryAdd(_keyVaultUri, client);
@@ -80,7 +80,7 @@ namespace HealthChecks.AzureKeyVault
 
         private SecretClient CreateSecretClient()
         {
-            if (!_secretClientsHolder.TryGetValue(_keyVaultUri, out SecretClient client))
+            if (!_secretClientsHolder.TryGetValue(_keyVaultUri, out var client))
             {
                 client = new SecretClient(_keyVaultUri, _azureCredential);
                 _secretClientsHolder.TryAdd(_keyVaultUri, client);
@@ -91,7 +91,7 @@ namespace HealthChecks.AzureKeyVault
 
         private CertificateClient CreateCertificateClient()
         {
-            if (!_certificateClientsHolder.TryGetValue(_keyVaultUri, out CertificateClient client))
+            if (!_certificateClientsHolder.TryGetValue(_keyVaultUri, out var client))
             {
                 client = new CertificateClient(_keyVaultUri, _azureCredential);
                 _certificateClientsHolder.TryAdd(_keyVaultUri, client);

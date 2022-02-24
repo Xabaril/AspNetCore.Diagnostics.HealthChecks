@@ -9,7 +9,7 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _queueName;
-        private string _connectionKey;
+        private string? _connectionKey;
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {

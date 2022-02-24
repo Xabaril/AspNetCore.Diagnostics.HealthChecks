@@ -7,8 +7,7 @@ using SolrNet.Impl;
 
 namespace HealthChecks.Solr
 {
-    public class SolrHealthCheck
-        : IHealthCheck
+    public class SolrHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new();
 

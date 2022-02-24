@@ -6,14 +6,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.SqlServer
 {
-    public class SqlServerHealthCheck
-        : IHealthCheck
+    public class SqlServerHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
         private readonly string _sql;
-        private readonly Action<SqlConnection> _beforeOpenConnectionConfigurer;
+        private readonly Action<SqlConnection>? _beforeOpenConnectionConfigurer;
 
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection> beforeOpenConnectionConfigurer = null)
+        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection>? beforeOpenConnectionConfigurer = null)
         {
             _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
@@ -32,7 +31,7 @@ namespace HealthChecks.SqlServer
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
+                        _ = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
                     }
                     return HealthCheckResult.Healthy();
                 }

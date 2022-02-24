@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.EventStore
 {
-    public class EventStoreHealthCheck
-        : IHealthCheck
+    public class EventStoreHealthCheck : IHealthCheck
     {
         private const string CONNECTION_NAME = "AspNetCore HealthCheck Connection";
         private const int ELAPSED_DELAY_MILLISECONDS = 500;
         private const int RECONNECTION_LIMIT = 1;
 
         private readonly string _eventStoreConnection;
-        private readonly string _login;
-        private readonly string _password;
+        private readonly string? _login;
+        private readonly string? _password;
 
-        public EventStoreHealthCheck(string eventStoreConnection, string login, string password)
+        public EventStoreHealthCheck(string eventStoreConnection, string? login, string? password)
         {
             _eventStoreConnection = eventStoreConnection ?? throw new ArgumentNullException(nameof(eventStoreConnection));
             _login = login;

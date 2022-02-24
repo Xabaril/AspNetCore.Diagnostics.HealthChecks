@@ -15,8 +15,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    internal class HealthCheckReportCollector
-        : IHealthCheckReportCollector
+    internal class HealthCheckReportCollector : IHealthCheckReportCollector
     {
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;

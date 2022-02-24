@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddRabbitMQ(
             this IHealthChecksBuilder builder,
             string rabbitConnectionString,
-            SslOption? sslOption = null,
+            SslOption? sslOption = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,

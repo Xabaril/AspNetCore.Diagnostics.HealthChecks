@@ -97,7 +97,7 @@ jobs:
     #- name: dotnet pack UI.K8s.Operator
     #  run: dotnet pack ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:

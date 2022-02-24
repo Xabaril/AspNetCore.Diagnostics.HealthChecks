@@ -13,8 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.Notifications
 {
-    internal class WebHookFailureNotifier
-        : IHealthCheckFailureNotifier
+    internal class WebHookFailureNotifier : IHealthCheckFailureNotifier
     {
         private readonly ILogger<WebHookFailureNotifier> _logger;
         private readonly Settings _settings;

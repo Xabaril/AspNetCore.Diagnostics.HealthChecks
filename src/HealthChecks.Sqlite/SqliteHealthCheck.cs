@@ -6,8 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Sqlite
 {
-    public class SqliteHealthCheck
-        : IHealthCheck
+    public class SqliteHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
         private readonly string _sql;

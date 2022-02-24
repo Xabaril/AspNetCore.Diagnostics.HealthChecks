@@ -5,6 +5,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="DynamoDbHealthCheck"/>.
+    /// </summary>
     public static class DynamoDbHealthCheckBuilderExtensions
     {
         private const string NAME = "dynamodb";
@@ -21,8 +24,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddDynamoDb(this IHealthChecksBuilder builder, Action<DynamoDBOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddDynamoDb(
+            this IHealthChecksBuilder builder,
+            Action<DynamoDBOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var options = new DynamoDBOptions();
             setup?.Invoke(options);

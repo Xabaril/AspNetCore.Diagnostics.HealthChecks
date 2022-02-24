@@ -10,13 +10,13 @@ namespace HealthChecks.AzureServiceBus
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
             ManagementClientConnections = new();
 
-        private string ConnectionString { get; }
+        private string? ConnectionString { get; }
 
-        protected string Prefix => ConnectionString ?? Endpoint;
+        protected string Prefix => ConnectionString ?? Endpoint!;
 
-        private string Endpoint { get; }
+        private string? Endpoint { get; }
 
-        private TokenCredential TokenCredential { get; }
+        private TokenCredential? TokenCredential { get; }
 
         protected AzureServiceBusHealthCheck(string connectionString)
         {

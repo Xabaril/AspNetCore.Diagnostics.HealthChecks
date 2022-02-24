@@ -40,7 +40,10 @@ namespace HealthChecks.AzureStorage
             try
             {
                 var blobServiceClient = GetBlobServiceClient();
-                var serviceProperties = await blobServiceClient.GetPropertiesAsync(cancellationToken);
+                await foreach (var page in blobServiceClient.GetBlobContainersAsync(cancellationToken: cancellationToken).AsPages(pageSizeHint: 1))
+                {
+                    break;
+                }
 
                 if (!string.IsNullOrEmpty(_containerName))
                 {

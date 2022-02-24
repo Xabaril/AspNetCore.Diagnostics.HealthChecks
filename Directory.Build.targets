@@ -14,9 +14,9 @@
     <PackageReference Update="Azure.Security.KeyVault.Keys" Version="4.2.0"/>
     <PackageReference Update="Azure.Security.KeyVault.Secrets" Version="4.2.0"/>
     <PackageReference Update="Azure.Storage.Blobs" Version="12.10.0"/>
-	<PackageReference Update="Azure.Storage.Files.Shares" Version="12.8.0"/>
+    <PackageReference Update="Azure.Storage.Files.Shares" Version="12.8.0"/>
     <PackageReference Update="Azure.Storage.Queues" Version="12.8.0"/>
-	<PackageReference Update="Confluent.Kafka" Version="1.8.2"/>
+    <PackageReference Update="Confluent.Kafka" Version="1.8.2"/>
     <PackageReference Update="DogStatsD-CSharp-Client" Version="7.0.0"/>
     <PackageReference Update="EventStore.Client" Version="21.2.1"/>
     <PackageReference Update="Google.Cloud.Firestore" Version="2.4.0"/>
@@ -77,7 +77,7 @@
 
     <PackageReference Update="coverlet.collector" Version="3.1.0"/>
     <PackageReference Update="FluentAssertions" Version="6.5.1"/>
-    <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.0"/>
+    <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.2"/>
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
     <PackageReference Update="NSubstitute" Version="4.2.2"/>
     <PackageReference Update="RichardSzalay.MockHttp" Version="6.0.0"/>

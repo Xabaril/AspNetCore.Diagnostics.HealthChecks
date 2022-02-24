@@ -34,7 +34,7 @@
     <PackageReference Update="Microsoft.Azure.Devices" Version="1.36.0"/>
     <PackageReference Update="Microsoft.Azure.DocumentDB.Core" Version="2.16.2"/>
     <PackageReference Update="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2"/>
-    <PackageReference Update="Microsoft.Data.SqlClient" Version="3.0.1"/>
+    <PackageReference Update="Microsoft.Data.SqlClient" Version="4.1.0"/>
     <PackageReference Update="Microsoft.Data.Sqlite" Version="6.0.0"/>
     <PackageReference Update="Microsoft.EntityFrameworkCore" Version="6.0.2"/>
     <PackageReference Update="Microsoft.EntityFrameworkCore.Design" Version="6.0.0"/>

@@ -25,7 +25,7 @@
     <PackageReference Update="IBMMQDotnetClient" Version="9.2.3"/>
     <PackageReference Update="KubernetesClient" Version="4.0.26"/>
     <PackageReference Update="Microsoft.ApplicationInsights" Version="2.20.0"/>
-    <PackageReference Update="Microsoft.ApplicationInsights.AspNetCore" Version="2.18.0"/>
+    <PackageReference Update="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0"/>
     <PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0"/>
     <PackageReference Update="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.0"/>
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0"/>

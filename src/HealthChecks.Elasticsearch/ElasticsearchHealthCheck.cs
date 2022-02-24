@@ -22,7 +22,7 @@ namespace HealthChecks.Elasticsearch
         {
             try
             {
-                if (!_connections.TryGetValue(_options.Uri, out ElasticClient lowLevelClient))
+                if (!_connections.TryGetValue(_options.Uri, out var lowLevelClient))
                 {
                     var settings = new ConnectionSettings(new Uri(_options.Uri));
 

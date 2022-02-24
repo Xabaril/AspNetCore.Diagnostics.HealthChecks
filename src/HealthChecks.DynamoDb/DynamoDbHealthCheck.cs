@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.DynamoDb
 {
-    public class DynamoDbHealthCheck
-        : IHealthCheck
+    public class DynamoDbHealthCheck : IHealthCheck
     {
         private readonly DynamoDBOptions _options;
 
@@ -30,7 +29,7 @@ namespace HealthChecks.DynamoDb
                 var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
                 var client = new AmazonDynamoDBClient(credentials, _options.RegionEndpoint);
 
-                await client.ListTablesAsync(cancellationToken);
+                _ = await client.ListTablesAsync(cancellationToken);
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

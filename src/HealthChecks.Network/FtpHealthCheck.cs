@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class FtpHealthCheck
-        : IHealthCheck
+    public class FtpHealthCheck : IHealthCheck
     {
         private readonly FtpHealthCheckOptions _options;
         public FtpHealthCheck(FtpHealthCheckOptions options)

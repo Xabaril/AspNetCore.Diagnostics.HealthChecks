@@ -8,8 +8,7 @@ using ConnectionInfo = Renci.SshNet.ConnectionInfo;
 
 namespace HealthChecks.Network
 {
-    public class SftpHealthCheck
-        : IHealthCheck
+    public class SftpHealthCheck : IHealthCheck
     {
         private readonly SftpHealthCheckOptions _options;
         public SftpHealthCheck(SftpHealthCheckOptions options)

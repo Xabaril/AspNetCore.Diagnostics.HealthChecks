@@ -7,8 +7,7 @@ using StatsdClient;
 
 namespace HealthChecks.Publisher.Datadog
 {
-    internal class DatadogPublisher
-        : IHealthCheckPublisher
+    internal class DatadogPublisher : IHealthCheckPublisher
     {
         private readonly IDogStatsd _dogStatsd;
         private readonly string _serviceCheckName;

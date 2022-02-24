@@ -9,8 +9,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class SslHealthCheck
-        : IHealthCheck
+    public class SslHealthCheck : IHealthCheck
     {
         private readonly SslHealthCheckOptions _options;
 

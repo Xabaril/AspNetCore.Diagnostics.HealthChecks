@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
-    public class DiskStorageHealthCheck
-        : IHealthCheck
+    public class DiskStorageHealthCheck : IHealthCheck
     {
         private readonly DiskStorageOptions _options;
 

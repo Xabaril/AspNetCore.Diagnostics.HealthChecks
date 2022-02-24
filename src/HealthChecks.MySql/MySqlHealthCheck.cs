@@ -6,8 +6,7 @@ using MySqlConnector;
 
 namespace HealthChecks.MySql
 {
-    public class MySqlHealthCheck
-        : IHealthCheck
+    public class MySqlHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
 

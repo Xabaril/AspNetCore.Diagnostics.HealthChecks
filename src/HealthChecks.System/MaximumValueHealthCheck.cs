@@ -5,8 +5,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
-    public class MaximumValueHealthCheck<T>
-        : IHealthCheck
+    public class MaximumValueHealthCheck<T> : IHealthCheck
         where T : IComparable<T>
     {
         private readonly T _maximumValue;

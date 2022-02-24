@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Hangfire
 {
-    public class HangfireHealthCheck
-        : IHealthCheck
+    public class HangfireHealthCheck : IHealthCheck
     {
         private readonly HangfireOptions _hangfireOptions;
 

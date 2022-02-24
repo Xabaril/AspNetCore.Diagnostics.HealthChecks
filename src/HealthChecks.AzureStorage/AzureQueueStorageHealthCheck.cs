@@ -8,8 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureQueueStorageHealthCheck
-        : IHealthCheck
+    public class AzureQueueStorageHealthCheck : IHealthCheck
     {
         private readonly string? _connectionString;
         private readonly string? _queueName;

@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class ImapHealthCheck
-        : IHealthCheck
+    public class ImapHealthCheck : IHealthCheck
     {
         private readonly ImapHealthCheckOptions _options;
 

@@ -9,17 +9,18 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.CosmosDb
 {
-    public class CosmosDbHealthCheck
-        : IHealthCheck
+    public class CosmosDbHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new();
 
         private readonly string _connectionString;
-        private readonly string _database;
-        private readonly IEnumerable<string> _containers;
+        private readonly string? _database;
+        private readonly IEnumerable<string>? _containers;
 
         public CosmosDbHealthCheck(string connectionString)
-            : this(connectionString, default, default) { }
+            : this(connectionString, default, default)
+        {
+        }
 
         public CosmosDbHealthCheck(string connectionString, string database)
             : this(connectionString, database, default)
@@ -27,7 +28,7 @@ namespace HealthChecks.CosmosDb
             _database = database;
         }
 
-        public CosmosDbHealthCheck(string connectionString, string database, IEnumerable<string> containers)
+        public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _database = database;

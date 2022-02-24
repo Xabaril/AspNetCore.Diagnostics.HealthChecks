@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class TcpHealthCheck
-        : IHealthCheck
+    public class TcpHealthCheck : IHealthCheck
     {
         private readonly TcpHealthCheckOptions _options;
         public TcpHealthCheck(TcpHealthCheckOptions options)

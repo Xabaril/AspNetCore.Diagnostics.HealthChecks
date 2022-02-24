@@ -11,9 +11,9 @@ namespace HealthChecks.MongoDb
     {
         private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new();
         private readonly MongoClientSettings _mongoClientSettings;
-        private readonly string _specifiedDatabase;
+        private readonly string? _specifiedDatabase;
 
-        public MongoDbHealthCheck(string connectionString, string databaseName = default)
+        public MongoDbHealthCheck(string connectionString, string? databaseName = default)
             : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
         {
             if (databaseName == default)
@@ -22,7 +22,7 @@ namespace HealthChecks.MongoDb
             }
         }
 
-        public MongoDbHealthCheck(MongoClientSettings clientSettings, string databaseName = default)
+        public MongoDbHealthCheck(MongoClientSettings clientSettings, string? databaseName = default)
         {
             _specifiedDatabase = databaseName;
             _mongoClientSettings = clientSettings;

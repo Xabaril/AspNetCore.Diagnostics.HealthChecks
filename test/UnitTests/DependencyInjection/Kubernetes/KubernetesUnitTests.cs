@@ -18,7 +18,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             services.AddHealthChecks()
                 .AddKubernetes(setup =>
                 {
-                    setup.WithConfiguration(new KubernetesClientConfiguration()
+                    setup.WithConfiguration(new KubernetesClientConfiguration
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
@@ -42,7 +42,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             services.AddHealthChecks()
                 .AddKubernetes(setup =>
                 {
-                    setup.WithConfiguration(new KubernetesClientConfiguration()
+                    setup.WithConfiguration(new KubernetesClientConfiguration
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true

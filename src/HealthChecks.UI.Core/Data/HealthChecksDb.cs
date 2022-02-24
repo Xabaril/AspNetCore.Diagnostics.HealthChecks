@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Core.Data.Configuration;
+using HealthChecks.UI.Core.Data.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Core.Data
@@ -16,7 +16,9 @@ namespace HealthChecks.UI.Core.Data
 
         public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
 
-        public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options) { }
+        public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

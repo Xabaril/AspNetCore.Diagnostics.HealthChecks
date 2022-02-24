@@ -6,8 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.SignalR
 {
-    public class SignalRHealthCheck
-        : IHealthCheck
+    public class SignalRHealthCheck : IHealthCheck
     {
         private readonly Func<HubConnection> _hubConnectionBuilder;
 

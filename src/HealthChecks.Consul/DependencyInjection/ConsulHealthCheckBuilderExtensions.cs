@@ -6,6 +6,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="ConsulHealthCheck"/>.
+    /// </summary>
     public static class ConsulHealthCheckBuilderExtensions
     {
         private const string NAME = "consul";
@@ -24,7 +27,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddConsul(this IHealthChecksBuilder builder, Action<ConsulOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddConsul(
+            this IHealthChecksBuilder builder,
+            Action<ConsulOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             builder.Services.AddHttpClient();
 
@@ -37,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
 
-        private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, Action<ConsulOptions> setup, string name)
+        private static ConsulHealthCheck CreateHealthCheck(IServiceProvider sp, Action<ConsulOptions>? setup, string name)
         {
             var options = new ConsulOptions();
             setup?.Invoke(options);

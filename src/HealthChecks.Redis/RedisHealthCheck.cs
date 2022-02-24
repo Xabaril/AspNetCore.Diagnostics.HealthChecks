@@ -7,8 +7,7 @@ using StackExchange.Redis;
 
 namespace HealthChecks.Redis
 {
-    public class RedisHealthCheck
-        : IHealthCheck
+    public class RedisHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new ConcurrentDictionary<string, ConnectionMultiplexer>();
         private readonly string _redisConnectionString;

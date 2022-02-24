@@ -1,4 +1,4 @@
-﻿using k8s;
+using k8s;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using HealthChecks.UI.K8s.Operator.Controller;
@@ -75,4 +75,3 @@ namespace HealthChecks.UI.K8s.Operator
 }
 
 public class K8sOperator { } //Dummy class for logging
-

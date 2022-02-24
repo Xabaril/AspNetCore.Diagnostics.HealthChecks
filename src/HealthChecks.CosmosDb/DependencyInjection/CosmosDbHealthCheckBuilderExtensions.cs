@@ -7,6 +7,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="CosmosDbHealthCheck"/> and <see cref="TableServiceHealthCheck"/>.
+    /// </summary>
     public static class CosmosDbHealthCheckBuilderExtensions
     {
         private const string COSMOS_NAME = "cosmosdb";
@@ -29,10 +32,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddCosmosDb(
             this IHealthChecksBuilder builder,
             string connectionString,
-            string database = default,
-            string name = default,
+            string? database = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -61,11 +64,11 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddCosmosDbCollection(
             this IHealthChecksBuilder builder,
             string connectionString,
-            string database = default,
-            IEnumerable<string> collections = default,
-            string name = default,
+            string? database = default,
+            IEnumerable<string>? collections = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -94,9 +97,9 @@ namespace Microsoft.Extensions.DependencyInjection
             this IHealthChecksBuilder builder,
             string connectionString,
             string tableName,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -127,9 +130,9 @@ namespace Microsoft.Extensions.DependencyInjection
             Uri endpoint,
             TableSharedKeyCredential credentials,
             string tableName,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(

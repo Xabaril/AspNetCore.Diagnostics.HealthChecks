@@ -6,8 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.SqlServer
 {
-    public class SqlServerHealthCheck
-        : IHealthCheck
+    public class SqlServerHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
         private readonly string _sql;

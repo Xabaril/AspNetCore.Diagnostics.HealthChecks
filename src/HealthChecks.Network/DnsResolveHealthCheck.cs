@@ -8,8 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class DnsResolveHealthCheck
-        : IHealthCheck
+    public class DnsResolveHealthCheck : IHealthCheck
     {
         private readonly DnsResolveOptions _options;
         public DnsResolveHealthCheck(DnsResolveOptions options)

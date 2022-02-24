@@ -8,8 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureBlobStorageHealthCheck
-        : IHealthCheck
+    public class AzureBlobStorageHealthCheck : IHealthCheck
     {
         private readonly TokenCredential? _azureCredential;
         private readonly Uri? _blobServiceUri;

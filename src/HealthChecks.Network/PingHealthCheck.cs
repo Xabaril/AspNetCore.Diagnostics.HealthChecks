@@ -6,8 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class PingHealthCheck
-        : IHealthCheck
+    public class PingHealthCheck : IHealthCheck
     {
         private readonly PingHealthCheckOptions _options;
 

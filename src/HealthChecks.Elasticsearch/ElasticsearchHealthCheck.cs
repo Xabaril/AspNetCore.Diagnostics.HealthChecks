@@ -7,8 +7,7 @@ using Nest;
 
 namespace HealthChecks.Elasticsearch
 {
-    public class ElasticsearchHealthCheck
-        : IHealthCheck
+    public class ElasticsearchHealthCheck : IHealthCheck
     {
         private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new();
 

@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -88,8 +88,7 @@ namespace HealthChecks.UIAndApi
         }
     }
 
-    public class RandomHealthCheck
-        : IHealthCheck
+    public class RandomHealthCheck : IHealthCheck
     {
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

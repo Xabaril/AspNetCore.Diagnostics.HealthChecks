@@ -8,8 +8,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureEventHubHealthCheck
-        : IHealthCheck
+    public class AzureEventHubHealthCheck : IHealthCheck
     {
         private const string ENTITY_PATH_SEGMENT = "EntityPath=";
 

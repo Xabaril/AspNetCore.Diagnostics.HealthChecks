@@ -7,8 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class SmtpHealthCheck
-        : IHealthCheck
+    public class SmtpHealthCheck : IHealthCheck
     {
         private readonly SmtpHealthCheckOptions _options;
         public SmtpHealthCheck(SmtpHealthCheckOptions options)

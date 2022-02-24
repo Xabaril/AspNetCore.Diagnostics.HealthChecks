@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.EventStore
 {
-    public class EventStoreHealthCheck
-        : IHealthCheck
+    public class EventStoreHealthCheck : IHealthCheck
     {
         private const string CONNECTION_NAME = "AspNetCore HealthCheck Connection";
         private const int ELAPSED_DELAY_MILLISECONDS = 500;

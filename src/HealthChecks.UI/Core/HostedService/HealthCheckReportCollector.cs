@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
@@ -15,8 +15,7 @@ using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    internal class HealthCheckReportCollector
-        : IHealthCheckReportCollector
+    internal class HealthCheckReportCollector : IHealthCheckReportCollector
     {
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;

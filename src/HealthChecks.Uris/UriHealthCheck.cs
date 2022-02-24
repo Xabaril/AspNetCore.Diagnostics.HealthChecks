@@ -6,8 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Uris
 {
-    public class UriHealthCheck
-        : IHealthCheck
+    public class UriHealthCheck : IHealthCheck
     {
         private readonly UriHealthCheckOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;

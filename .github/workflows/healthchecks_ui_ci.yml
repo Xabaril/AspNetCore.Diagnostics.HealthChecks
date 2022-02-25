@@ -5,6 +5,7 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.UI/**
+      - src/HealthChecks.UI.*/**
       - test/HealthChecks.UI.Tests/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props

@@ -13,6 +13,11 @@ namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthChecksPushService
     {
+        private static readonly JsonSerializerOptions _options = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
         public static async Task PushNotification(
             WatchEventType eventType,
             HealthCheckResource resource,
@@ -43,13 +48,12 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
-                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}",
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}")
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(healthCheck, _options), Encoding.UTF8, "application/json")
+                };
 
-                  new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
-                  {
-                      PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                  }), Encoding.UTF8, "application/json"));
-
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 logger.LogInformation("[PushService] Notification result for {name} - status code: {statuscode}", notificationService.Metadata.Name, response.StatusCode);
 

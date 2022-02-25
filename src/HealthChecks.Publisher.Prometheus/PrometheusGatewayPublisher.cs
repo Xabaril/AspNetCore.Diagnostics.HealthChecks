@@ -51,8 +51,13 @@ namespace HealthChecks.Publisher.Prometheus
                     await Registry.CollectAndExportAsTextAsync(outStream);
                     outStream.Position = 0;
 
-                    var response = await _httpClientFactory()
-                        .PostAsync(_targetUrl, new StreamContent(outStream));
+                    using var request = new HttpRequestMessage(HttpMethod.Post, _targetUrl)
+                    {
+                        Content = new StreamContent(outStream)
+                    };
+
+                    using var response = await _httpClientFactory()
+                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                     response.EnsureSuccessStatusCode();
                 }

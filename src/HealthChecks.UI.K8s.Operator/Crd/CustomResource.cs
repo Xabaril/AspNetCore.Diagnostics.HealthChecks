@@ -1,4 +1,4 @@
-﻿using k8s;
+using k8s;
 using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Crd

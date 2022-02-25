@@ -1,13 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using HealthChecks.UI;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
 using Microsoft.AspNetCore.Routing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using HealthChecks.UI.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Options = HealthChecks.UI.Configuration.Options;
 
 namespace Microsoft.AspNetCore.Builder

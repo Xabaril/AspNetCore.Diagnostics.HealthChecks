@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Microsoft.EntityFrameworkCore
 {
     public static class DatabaseFacadeExtensions
     {
-        private static string InMemoryDatabaseProvider = "Microsoft.EntityFrameworkCore.InMemory";
+        private const string IN_MEMORY_DATABASE_PROVIDER = "Microsoft.EntityFrameworkCore.InMemory";
+
         public static bool IsInMemory(this DatabaseFacade database)
         {
-            return string.Equals(database.ProviderName, InMemoryDatabaseProvider, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(database.ProviderName, IN_MEMORY_DATABASE_PROVIDER, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

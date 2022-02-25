@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -34,11 +33,7 @@ namespace HealthChecks.UI.Oidc
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
-                .AddCookie(options =>
-                {
-                    options.SlidingExpiration = true;
-
-                })
+                .AddCookie(options => options.SlidingExpiration = true)
                 .AddOpenIdConnect(options =>
                 {
                     options.Authority = "https://demo.identityserver.io";

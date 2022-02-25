@@ -25,7 +25,7 @@ namespace HealthChecks.Uris
 
         public Uri Uri { get; }
 
-        private readonly List<(string Name, string Value)> _headers = new List<(string Name, string Value)>();
+        private readonly List<(string Name, string Value)> _headers = new();
 
         internal IEnumerable<(string Name, string Value)> Headers => _headers;
 
@@ -79,7 +79,7 @@ namespace HealthChecks.Uris
 
     public class UriHealthCheckOptions
     {
-        private readonly List<UriOptions> _urisOptions = new List<UriOptions>();
+        private readonly List<UriOptions> _urisOptions = new();
         internal IEnumerable<UriOptions> UrisOptions => _urisOptions;
         internal HttpMethod HttpMethod { get; private set; }
         internal TimeSpan Timeout { get; private set; }

@@ -1,11 +1,11 @@
-﻿using HealthChecks.UI.Configuration;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using HealthChecks.UI.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -19,7 +19,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly Settings _settings;
 
         private Task _executingTask;
-        private CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
         public HealthCheckCollectorHostedService
             (IServiceProvider provider,
@@ -35,30 +35,30 @@ namespace HealthChecks.UI.Core.HostedService
             _settings = settings.Value ?? new Settings();
             _cancellationTokenSource = new CancellationTokenSource();
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _executingTask = ExecuteAsync(_cancellationTokenSource.Token);
 
-            if (_executingTask.IsCompleted)
-            {
-                return _executingTask;
-            }
-
-            return Task.CompletedTask;
+            return _executingTask.IsCompleted
+                ? _executingTask
+                : Task.CompletedTask;
         }
+
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             _cancellationTokenSource.Cancel();
 
             await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
+
         private Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _lifetime.ApplicationStarted.Register(async () =>
             {
                 try
                 {
-                    await Collect(cancellationToken);
+                    await CollectAsync(cancellationToken);
                 }
                 catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
@@ -69,7 +69,7 @@ namespace HealthChecks.UI.Core.HostedService
             return Task.CompletedTask;
         }
 
-        private async Task Collect(CancellationToken cancellationToken)
+        private async Task CollectAsync(CancellationToken cancellationToken)
         {
             var scopeFactory = _serviceProvider.GetRequiredService<IServiceScopeFactory>();
 

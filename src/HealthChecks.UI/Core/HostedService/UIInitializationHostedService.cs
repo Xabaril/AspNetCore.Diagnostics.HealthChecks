@@ -1,4 +1,8 @@
-﻿using HealthChecks.UI.Configuration;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,10 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -35,7 +35,7 @@ namespace HealthChecks.UI.Core.HostedService
             var scopeFactory = _provider.GetRequiredService<IServiceScopeFactory>();
             using var scope = scopeFactory.CreateScope();
 
-            await InitializeDatabase(scope.ServiceProvider);
+            await InitializeDatabaseAsync(scope.ServiceProvider);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -43,13 +43,13 @@ namespace HealthChecks.UI.Core.HostedService
             return Task.CompletedTask;
         }
 
-        private async Task InitializeDatabase(IServiceProvider sp)
+        private async Task InitializeDatabaseAsync(IServiceProvider sp)
         {
             var context = sp.GetRequiredService<HealthChecksDb>();
             var configuration = sp.GetRequiredService<IConfiguration>();
             var settings = sp.GetRequiredService<IOptions<Settings>>();
 
-            if (await ShouldMigrateDatabase(context))
+            if (await ShouldMigrateDatabaseAsync(context))
             {
                 _logger.LogInformation("Executing database migrations");
                 await context.Database.MigrateAsync();
@@ -106,11 +106,11 @@ namespace HealthChecks.UI.Core.HostedService
             await context.SaveChangesAsync();
         }
 
-        private async Task<bool> ShouldMigrateDatabase(HealthChecksDb context)
+        private async Task<bool> ShouldMigrateDatabaseAsync(HealthChecksDb context)
         {
-            return (!_settings.DisableMigrations &&
+            return !_settings.DisableMigrations &&
                 !context.Database.IsInMemory() &&
-                (await context.Database.GetPendingMigrationsAsync()).Any());
+                (await context.Database.GetPendingMigrationsAsync()).Any();
         }
     }
 

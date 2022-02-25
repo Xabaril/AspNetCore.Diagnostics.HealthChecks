@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Image.Configuration;
 using Microsoft.Extensions.Configuration;
 
@@ -30,10 +30,14 @@ namespace HealthChecks.UI.Image.Extensions
                 bool.TryParse(relativePaths, out disableRelativePaths);
             }
 
-            if (!string.IsNullOrEmpty(uiPath)) options.UIPath = uiPath;
-            if (!string.IsNullOrEmpty(apiPath)) options.ApiPath = apiPath;
-            if (!string.IsNullOrEmpty(resourcesPath)) options.ResourcesPath = resourcesPath;
-            if (!string.IsNullOrEmpty(webhooksPath)) options.WebhookPath = webhooksPath;
+            if (!string.IsNullOrEmpty(uiPath))
+                options.UIPath = uiPath;
+            if (!string.IsNullOrEmpty(apiPath))
+                options.ApiPath = apiPath;
+            if (!string.IsNullOrEmpty(resourcesPath))
+                options.ResourcesPath = resourcesPath;
+            if (!string.IsNullOrEmpty(webhooksPath))
+                options.WebhookPath = webhooksPath;
 
             if (disableRelativePaths)
             {

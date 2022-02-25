@@ -13,7 +13,9 @@ namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthChecksPushService
     {
-        public static async Task PushNotification(
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task PushNotification( //TODO: rename public API
+#pragma warning restore IDE1006 // Naming Styles
             WatchEventType eventType,
             HealthCheckResource resource,
             V1Service uiService,
@@ -43,7 +45,7 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
-                var response = await client.PostAsync($"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}",
+                var response = await client.PostAsync($"{uiAddress}{Constants.PUSH_SERVICE_PATH}?{Constants.PUSH_SERVICE_AUTH_KEY}={key}",
 
                   new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
                   {
@@ -62,19 +64,14 @@ namespace HealthChecks.UI.K8s.Operator
 
         private static (string address, V1ServicePort port) GetServiceAddress(V1Service service)
         {
-            string IpAddress = default;
+            string IpAddress;
 
             if (service.Spec.Type == ServiceType.LoadBalancer)
             {
                 var ingress = service.Status?.LoadBalancer?.Ingress?.FirstOrDefault();
-                if (ingress != null)
-                {
-                    IpAddress = ingress.Ip ?? ingress.Hostname;
-                }
-                else
-                {
-                    IpAddress = service.Spec.ClusterIP;
-                }
+                IpAddress = ingress == null
+                    ? service.Spec.ClusterIP
+                    : ingress.Ip ?? ingress.Hostname;
             }
             else
             {

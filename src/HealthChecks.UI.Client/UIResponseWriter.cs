@@ -1,11 +1,11 @@
-using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using HealthChecks.UI.Core;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Client
 {
@@ -14,9 +14,11 @@ namespace HealthChecks.UI.Client
         private const string DEFAULT_CONTENT_TYPE = "application/json";
 
         private static readonly byte[] _emptyResponse = new byte[] { (byte)'{', (byte)'}' };
-        private static readonly Lazy<JsonSerializerOptions> _options = new Lazy<JsonSerializerOptions>(() => CreateJsonOptions());
+        private static readonly Lazy<JsonSerializerOptions> _options = new(() => CreateJsonOptions());
 
+#pragma warning disable IDE1006 // Naming Styles
         public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report)
+#pragma warning restore IDE1006 // Naming Styles
         {
             if (report != null)
             {

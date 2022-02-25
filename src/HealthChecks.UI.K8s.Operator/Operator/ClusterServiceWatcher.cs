@@ -1,14 +1,11 @@
-﻿using HealthChecks.UI.K8s.Operator.Diagnostics;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Operator
 {
@@ -53,7 +50,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             return Task.CompletedTask;
         }
 
-        internal void Stopwatch(HealthCheckResource resource)
+        internal void Stopwatch(/*HealthCheckResource resource*/)
         {
             Dispose();
         }

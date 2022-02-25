@@ -3,12 +3,6 @@
   <PropertyGroup Label="SDK Versions">
     <NetFrameworkVersion>net6.0</NetFrameworkVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Label="CLI Tools Versions">
-    <DotnetXUnitPackageVersion>2.4.0</DotnetXUnitPackageVersion>
-    <DotnetWatcherToolPackageVersion>2.0.0</DotnetWatcherToolPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">

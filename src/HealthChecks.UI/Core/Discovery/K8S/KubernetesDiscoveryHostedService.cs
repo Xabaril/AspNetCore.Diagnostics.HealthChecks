@@ -139,7 +139,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         private async Task<HttpStatusCode> CallClusterServiceAsync(string host)
         {
-            var response = await _clusterServiceClient.GetAsync(host);
+            using var response = await _clusterServiceClient.GetAsync(host, HttpCompletionOption.ResponseHeadersRead);
             return response.StatusCode;
         }
 

@@ -13,6 +13,11 @@ namespace HealthChecks.UI.K8s.Operator
 {
     public class HealthChecksPushService
     {
+        private static readonly JsonSerializerOptions _options = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
 #pragma warning disable IDE1006 // Naming Styles
         public static async Task PushNotification( //TODO: rename public API
 #pragma warning restore IDE1006 // Naming Styles
@@ -45,16 +50,14 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
-                var response = await client.PostAsync($"{uiAddress}{Constants.PUSH_SERVICE_PATH}?{Constants.PUSH_SERVICE_AUTH_KEY}={key}",
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{uiAddress}{Constants.PUSH_SERVICE_PATH}?{Constants.PUSH_SERVICE_AUTH_KEY}={key}")
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(healthCheck, _options), Encoding.UTF8, "application/json")
+                };
 
-                  new StringContent(JsonSerializer.Serialize(healthCheck, new JsonSerializerOptions
-                  {
-                      PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                  }), Encoding.UTF8, "application/json"));
-
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 logger.LogInformation("[PushService] Notification result for {name} - status code: {statuscode}", notificationService.Metadata.Name, response.StatusCode);
-
             }
             catch (Exception ex)
             {

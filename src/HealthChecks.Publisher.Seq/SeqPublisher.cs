@@ -68,13 +68,13 @@ namespace HealthChecks.Publisher.Seq
             {
                 var httpClient = _httpClientFactory();
 
-                var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}")
+                using var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}")
                 {
                     Content = new StringContent(json, Encoding.UTF8, "application/json")
                 };
 
-                (await httpClient.SendAsync(pushMessage))
-                    .EnsureSuccessStatusCode();
+                using var response = await httpClient.SendAsync(pushMessage, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
             }
             catch (Exception ex)
             {

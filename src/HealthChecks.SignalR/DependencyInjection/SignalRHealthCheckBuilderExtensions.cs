@@ -6,6 +6,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="SignalRHealthCheck"/>.
+    /// </summary>
     public static class SignalRHealthCheckBuilderExtensions
     {
         private const string NAME = "signalr";
@@ -23,7 +26,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, string url, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddSignalRHub(
+            this IHealthChecksBuilder builder,
+            string url,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             Func<HubConnection> hubConnectionBuilder = () =>
                 new HubConnectionBuilder()
@@ -52,7 +61,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddSignalRHub(this IHealthChecksBuilder builder, Func<HubConnection> hubConnectionBuilder, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddSignalRHub(
+            this IHealthChecksBuilder builder,
+            Func<HubConnection> hubConnectionBuilder,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(
                 new HealthCheckRegistration(

@@ -10,17 +10,17 @@ namespace Microsoft.Extensions.DependencyInjection
         private const string NAME = "seq";
 
         /// <summary>
-        ///     Add a health check publisher for Seq.
+        /// Add a health check publisher for Seq.
         /// </summary>
         /// <remarks>
-        ///     For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
-        ///     Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
+        /// For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
+        /// Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
         /// <param name="setup">The Sql configuration options.</param>
         /// <param name="name"> The registration name. This is also the associated http client name if you use AddHttpClient </param>
         /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
-        public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions> setup, string name = default)
+        public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions>? setup, string? name = default)
         {
             builder.Services.AddHttpClient();
 

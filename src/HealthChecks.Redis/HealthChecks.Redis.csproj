@@ -5,6 +5,7 @@
     <PackageTags>HealthCheck;Health;Redis</PackageTags>
     <Description>HealthChecks.Redis is the health check package for Redis.</Description>
     <Version>$(HealthCheckRedis)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

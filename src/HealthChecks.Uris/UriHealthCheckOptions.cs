@@ -17,7 +17,7 @@ namespace HealthChecks.Uris
 
     public class UriOptions : IUriOptions
     {
-        public HttpMethod HttpMethod { get; private set; }
+        public HttpMethod? HttpMethod { get; private set; }
 
         public TimeSpan Timeout { get; private set; }
 
@@ -116,7 +116,7 @@ namespace HealthChecks.Uris
             return this;
         }
 
-        public UriHealthCheckOptions AddUri(Uri uriToAdd, Action<IUriOptions> setup = null)
+        public UriHealthCheckOptions AddUri(Uri uriToAdd, Action<IUriOptions>? setup = null)
         {
             var uri = new UriOptions(uriToAdd);
             setup?.Invoke(uri);

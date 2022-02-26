@@ -24,7 +24,7 @@ namespace HealthChecks.Solr
             {
                 var url = $"{_options.Uri}/{_options.Core}";
 
-                if (!_connections.TryGetValue(url, out SolrConnection solrConnection))
+                if (!_connections.TryGetValue(url, out var solrConnection))
                 {
                     solrConnection = new SolrConnection(url)
                     {

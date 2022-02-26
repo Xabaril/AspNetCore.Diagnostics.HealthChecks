@@ -74,7 +74,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
+        /// Add a health check for MongoDb that list all databases from specified <paramref name="mongoClientSettings"/>.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="mongoClientSettings">The MongoClientSettings to be used.</param>

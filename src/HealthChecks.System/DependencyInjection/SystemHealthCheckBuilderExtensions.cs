@@ -178,8 +178,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="serviceName">The name of the service</param>
-        /// <param name="predicate">Process[] predicate to configure checks</param>
-        /// <<param name="machineName">Machine where the service resides in. Optional</param>
+        /// <param name="predicate">Process[] predicate to configure checks.</param>
+        /// <param name="machineName">Machine where the service resides in. Optional</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'windowsservice' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

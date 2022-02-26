@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="solrUri">The Solr connection string to be used.</param>
+        /// <param name="solrCore"></param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'solr' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

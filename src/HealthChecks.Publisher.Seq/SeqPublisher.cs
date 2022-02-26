@@ -45,12 +45,12 @@ namespace HealthChecks.Publisher.Seq
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = $"[{Assembly.GetEntryAssembly().GetName().Name} - HealthCheck Result]",
+                        MessageTemplate = $"[{Assembly.GetEntryAssembly()?.GetName().Name} - HealthCheck Result]",
                         Level = level.ToString(),
-                        Properties = new Dictionary<string, object>
+                        Properties = new Dictionary<string, object?>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },
-                            { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                            { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
                             { "Status", report.Status.ToString() },
                             { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
                             { "RawReport" , JsonConvert.SerializeObject(report)}
@@ -84,16 +84,20 @@ namespace HealthChecks.Publisher.Seq
 
         private class RawEvents
         {
-            public RawEvent[] Events { get; set; }
+            public RawEvent[] Events { get; set; } = null!;
         }
 
         private class RawEvent
         {
             public DateTimeOffset Timestamp { get; set; }
-            public string Level { get; set; }
-            public string MessageTemplate { get; set; }
-            public string RawReport { get; set; }
-            public Dictionary<string, object> Properties { get; set; }
+
+            public string Level { get; set; } = null!;
+
+            public string MessageTemplate { get; set; } = null!;
+
+            public string RawReport { get; set; } = null!; //TODO: remove?
+
+            public Dictionary<string, object?> Properties { get; set; } = null!;
         }
     }
 }

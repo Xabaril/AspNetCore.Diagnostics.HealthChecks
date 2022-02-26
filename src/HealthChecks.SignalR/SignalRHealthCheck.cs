@@ -17,7 +17,7 @@ namespace HealthChecks.SignalR
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            HubConnection connection = null;
+            HubConnection? connection = null;
 
             try
             {
@@ -33,7 +33,8 @@ namespace HealthChecks.SignalR
             }
             finally
             {
-                await connection?.DisposeAsync().AsTask();
+                if (connection != null)
+                    await connection.DisposeAsync();
             }
         }
     }

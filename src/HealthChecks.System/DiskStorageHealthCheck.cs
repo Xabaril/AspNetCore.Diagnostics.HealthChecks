@@ -55,12 +55,9 @@ namespace HealthChecks.System
             var driveInfo = DriveInfo.GetDrives()
                 .FirstOrDefault(drive => string.Equals(drive.Name, driveName, StringComparison.InvariantCultureIgnoreCase));
 
-            if (driveInfo != null)
-            {
-                return (true, driveInfo.AvailableFreeSpace / 1024 / 1024);
-            }
-
-            return (false, 0);
+            return driveInfo == null
+                ? (false, 0)
+                : (true, driveInfo.AvailableFreeSpace / 1024 / 1024);
         }
     }
 }

@@ -31,7 +31,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddDiskStorageHealthCheck(this IHealthChecksBuilder builder, Action<DiskStorageOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddDiskStorageHealthCheck(
+            this IHealthChecksBuilder builder,
+            Action<DiskStorageOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var options = new DiskStorageOptions();
             setup?.Invoke(options);
@@ -57,7 +63,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddPrivateMemoryHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddPrivateMemoryHealthCheck(
+            this IHealthChecksBuilder builder,
+            long maximumMemoryBytes,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? MEMORY_NAME,
@@ -80,7 +92,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddWorkingSetHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddWorkingSetHealthCheck(
+            this IHealthChecksBuilder builder,
+            long maximumMemoryBytes,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? WORKINGSET_NAME,
@@ -103,7 +121,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddVirtualMemorySizeHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddVirtualMemorySizeHealthCheck(
+            this IHealthChecksBuilder builder,
+            long maximumMemoryBytes,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? VIRTUALMEMORYSIZE_NAME,
@@ -128,8 +152,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddProcessHealthCheck(
-            this IHealthChecksBuilder builder, string processName, Func<Process[], bool> predicate, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder,
+            string processName,
+            Func<Process[], bool> predicate,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             if (string.IsNullOrEmpty(processName))
                 throw new ArgumentNullException(nameof(processName));
@@ -159,8 +188,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddProcessAllocatedMemoryHealthCheck(
-            this IHealthChecksBuilder builder, int maximumMegabytesAllocated, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder,
+            int maximumMegabytesAllocated,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             if (maximumMegabytesAllocated <= 0)
                 throw new ArgumentException($"{nameof(maximumMegabytesAllocated)} should be greater than zero");
@@ -189,12 +222,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddWindowsServiceHealthCheck(
-            this IHealthChecksBuilder builder, string serviceName, Func<ServiceController, bool> predicate,
-            string machineName = default,
-            string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder, string serviceName,
+            Func<ServiceController, bool> predicate,
+            string? machineName = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
-
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new PlatformNotSupportedException($"{nameof(WindowsServiceHealthCheck)} can only be registered in Windows Systems");

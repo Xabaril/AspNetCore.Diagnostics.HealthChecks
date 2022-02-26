@@ -92,12 +92,12 @@ namespace HealthChecks.RavenDB
                 {
                     try
                     {
-                        await CheckDatabaseHealthAsync(store, _options.Database, value.Legacy, cancellationToken);
+                        await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken);
                     }
                     catch (ClientVersionMismatchException e) when (e.Message.Contains(nameof(RouteNotFoundException)))
                     {
                         value.Legacy = true;
-                        await CheckDatabaseHealthAsync(store, _options.Database, value.Legacy, cancellationToken);
+                        await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken);
                     }
 
                     return HealthCheckResult.Healthy();
@@ -161,7 +161,7 @@ namespace HealthChecks.RavenDB
 
         private class DocumentStoreHolder
         {
-            public IDocumentStore Store { get; set; }
+            public IDocumentStore Store { get; set; } = null!;
 
             public bool Legacy { get; set; }
         }

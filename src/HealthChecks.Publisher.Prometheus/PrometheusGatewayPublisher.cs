@@ -15,7 +15,7 @@ namespace HealthChecks.Publisher.Prometheus
         private readonly Func<HttpClient> _httpClientFactory;
         private readonly Uri _targetUrl;
 
-        public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string instance = null)
+        public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string? instance = null)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
 
@@ -29,10 +29,9 @@ namespace HealthChecks.Publisher.Prometheus
                 sb.AppendFormat("/instance/{0}", instance);
             }
 
-            if (!Uri.TryCreate(sb.ToString(), UriKind.Absolute, out _targetUrl))
-            {
-                throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
-            }
+            _targetUrl = Uri.TryCreate(sb.ToString(), UriKind.Absolute, out var temp)
+                ? temp
+                : throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
         }
 
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -66,7 +65,7 @@ namespace HealthChecks.Publisher.Prometheus
             {
                 Trace.WriteLine($"Skipping metrics push due to failed scrape: {ex.Message}");
             }
-            catch (Exception ex) when (!(ex is OperationCanceledException))
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 Trace.WriteLine($"Error in PushMetrics: {ex.Message}");
             }

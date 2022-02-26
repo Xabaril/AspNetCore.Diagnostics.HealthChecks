@@ -24,7 +24,7 @@ namespace HealthChecks.Network.Extensions
         {
             var tcs = new TaskCompletionSource<T>();
 
-            cancellationToken.Register(() => tcs.SetResult(default(T)));
+            cancellationToken.Register(() => tcs.SetResult(default!));
 
             if (task != await Task.WhenAny(task, tcs.Task))
             {

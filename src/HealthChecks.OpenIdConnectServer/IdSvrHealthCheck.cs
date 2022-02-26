@@ -24,12 +24,9 @@ namespace HealthChecks.IdSvr
                 var httpClient = _httpClientFactory();
                 using var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
-                }
-
-                return HealthCheckResult.Healthy();
+                return response.IsSuccessStatusCode
+                    ? HealthCheckResult.Healthy()
+                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
             }
             catch (Exception ex)
             {

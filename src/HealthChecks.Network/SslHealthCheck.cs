@@ -57,14 +57,15 @@ namespace HealthChecks.Network
             }
         }
 
-        private async Task<X509Certificate2> GetSslCertificateAsync(TcpClient client, string host)
+        private async Task<X509Certificate2?> GetSslCertificateAsync(TcpClient client, string host)
         {
             var ssl = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback((sender, cert, ca, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None), null);
 
             try
             {
                 await ssl.AuthenticateAsClientAsync(host);
-                return new X509Certificate2(ssl.RemoteCertificate);
+                var cert = ssl.RemoteCertificate;
+                return cert == null ? null : new X509Certificate2(cert);
             }
             catch (Exception)
             {

@@ -20,8 +20,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="instance">If there are multiple instances.</param>
         /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
         [Obsolete("This package is deprecated! We recommend using the pull model instead of Gateway. Try to use the package AspNetCore.HealthChecks.Prometheus.Metrics instead of.")]
-        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(this IHealthChecksBuilder builder,
-            string endpoint, string job, string instance = null)
+        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(
+            this IHealthChecksBuilder builder,
+            string endpoint,
+            string job,
+            string? instance = null)
         {
             builder.Services
                 .AddHttpClient();

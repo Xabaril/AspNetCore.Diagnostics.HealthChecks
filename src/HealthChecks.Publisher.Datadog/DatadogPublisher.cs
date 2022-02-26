@@ -13,11 +13,11 @@ namespace HealthChecks.Publisher.Datadog
         private readonly string _serviceCheckName;
         private readonly string[] _defaultTags;
 
-        public DatadogPublisher(IDogStatsd dogStatsd, string serviceCheckName, string[] defaultTags)
+        public DatadogPublisher(IDogStatsd dogStatsd, string serviceCheckName, string[]? defaultTags)
         {
             _dogStatsd = dogStatsd ?? throw new ArgumentNullException(nameof(dogStatsd));
             _serviceCheckName = serviceCheckName ?? throw new ArgumentNullException(nameof(serviceCheckName));
-            _defaultTags = defaultTags ?? new string[0];
+            _defaultTags = defaultTags ?? Array.Empty<string>();
         }
 
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)

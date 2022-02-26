@@ -5,6 +5,7 @@
     <PackageTags>HealthCheck;Beat;Health;Postgress</PackageTags>
     <Description>HealthChecks.NpgSql is a health check for Postgress Sql.</Description>
     <Version>$(HealthCheckNpgSql)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

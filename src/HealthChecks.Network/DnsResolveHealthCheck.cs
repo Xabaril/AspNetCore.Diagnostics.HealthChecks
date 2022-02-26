@@ -25,7 +25,7 @@ namespace HealthChecks.Network
 
                     foreach (var ipAddress in ipAddresses)
                     {
-                        if (!item.Resolutions.Contains(ipAddress.ToString()))
+                        if (item.Resolutions == null || !item.Resolutions.Contains(ipAddress.ToString()))
                         {
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ip Address {ipAddress} was not resolved from host {item.Host}");
                         }

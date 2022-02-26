@@ -21,7 +21,6 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_healthy_when_the_service_is_running()
         {
             var webhostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -44,7 +43,6 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_unhealthy_when_the_service_does_not_exist()
         {
             var webhostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -67,19 +65,18 @@ namespace HealthChecks.System.Tests.Functional
         public void throw_exception_when_registering_it_in_a_no_windows_system()
         {
             var webhostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                       .AddWindowsServiceHealthCheck("dotnet", s => s.Status == ServiceControllerStatus.Running);
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => true
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddWindowsServiceHealthCheck("dotnet", s => s.Status == ServiceControllerStatus.Running);
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => true
+                    });
+                });
 
             var exception = Assert.Throws<PlatformNotSupportedException>(() =>
             {

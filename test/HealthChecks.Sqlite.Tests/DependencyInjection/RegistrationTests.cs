@@ -16,7 +16,7 @@ namespace HealthChecks.Sqlite.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSqlite("connectionstring");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -33,7 +33,7 @@ namespace HealthChecks.Sqlite.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSqlite("connectionstring", name: "my-sqlite");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

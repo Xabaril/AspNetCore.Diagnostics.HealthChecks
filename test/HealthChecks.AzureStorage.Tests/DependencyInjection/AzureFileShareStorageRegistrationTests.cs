@@ -16,7 +16,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureFileShare("the-connection-string");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -32,7 +32,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureFileShare("the-connection-string", name: "my-azurefileshare-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

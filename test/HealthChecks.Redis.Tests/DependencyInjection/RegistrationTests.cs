@@ -16,7 +16,7 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRedis("connectionstring");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -33,7 +33,7 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRedis("connectionstring", name: "my-redis");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -55,7 +55,7 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
                     return "connectionstring";
                 });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

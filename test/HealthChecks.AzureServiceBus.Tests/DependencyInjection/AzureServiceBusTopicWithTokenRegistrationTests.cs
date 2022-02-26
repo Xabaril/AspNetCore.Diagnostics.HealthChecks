@@ -18,7 +18,7 @@ namespace HealthChecks.AzureServiceBus.Tests
             services.AddHealthChecks()
                 .AddAzureServiceBusTopic("cnn", "topicName", new AzureCliCredential());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -36,7 +36,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureServiceBusTopic("cnn", "topic", new AzureCliCredential(),
                     "azuretopiccheck");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -53,7 +53,7 @@ namespace HealthChecks.AzureServiceBus.Tests
             services.AddHealthChecks()
                 .AddAzureServiceBusTopic(string.Empty, string.Empty, new AzureCliCredential());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

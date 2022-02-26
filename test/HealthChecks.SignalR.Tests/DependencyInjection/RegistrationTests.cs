@@ -16,7 +16,7 @@ namespace HealthChecks.SignalR.Tests.DependencyInjection
             services
                 .AddHealthChecks()
                 .AddSignalRHub("https://signalr.com/echo");
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

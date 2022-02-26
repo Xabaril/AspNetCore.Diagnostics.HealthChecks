@@ -16,7 +16,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureBlobStorage("the-connection-string");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -32,7 +32,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureBlobStorage("the-connection-string", name: "my-azureblob-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -48,7 +48,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureBlobStorage("the-connection-string", containerName: "container");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

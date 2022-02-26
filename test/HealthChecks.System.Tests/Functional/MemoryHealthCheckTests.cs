@@ -23,7 +23,6 @@ namespace HealthChecks.System.Tests.Functional
             var maximumMemory = currentMemory + 104857600;
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -37,7 +36,7 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
@@ -49,7 +48,6 @@ namespace HealthChecks.System.Tests.Functional
             var maximumMemory = currentMemory - 104857600;
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -64,7 +62,7 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
@@ -76,7 +74,6 @@ namespace HealthChecks.System.Tests.Functional
             var maximumMemory = currentMemory + 104857600;
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -90,7 +87,7 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
@@ -102,7 +99,6 @@ namespace HealthChecks.System.Tests.Functional
             var maximumMemory = currentMemory - 104857600;
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -116,7 +112,7 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
@@ -128,7 +124,6 @@ namespace HealthChecks.System.Tests.Functional
             var maximumMemory = currentMemory + 104857600;
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -142,7 +137,7 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
@@ -154,7 +149,6 @@ namespace HealthChecks.System.Tests.Functional
             var maximumMemory = currentMemory - 104857600;
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -168,7 +162,7 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
             response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }

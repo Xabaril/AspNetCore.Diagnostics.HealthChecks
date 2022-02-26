@@ -18,7 +18,7 @@ namespace HealthChecks.AzureServiceBus.Tests
             services.AddHealthChecks()
                 .AddAzureServiceBusQueue("cnn", "queueName", new AzureCliCredential());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -37,7 +37,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureServiceBusQueue("cnn", "queueName", new AzureCliCredential(),
                 name: "azureservicebusqueuecheck");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -54,7 +54,7 @@ namespace HealthChecks.AzureServiceBus.Tests
             services.AddHealthChecks()
                 .AddAzureServiceBusQueue(string.Empty, string.Empty, new AzureCliCredential());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

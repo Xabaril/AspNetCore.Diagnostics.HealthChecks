@@ -19,21 +19,20 @@ namespace HealthChecks.MySql.Tests.Functional
             var connectionString = "server=localhost;port=3306;database=information_schema;uid=root;password=Password12!";
 
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                   .AddMySql(connectionString, tags: new string[] { "mysql" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("mysql")
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddMySql(connectionString, tags: new string[] { "mysql" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("mysql")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -48,7 +47,6 @@ namespace HealthChecks.MySql.Tests.Functional
             var connectionString = "server=255.255.255.255;port=3306;database=information_schema;uid=root;password=Password12!";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -62,7 +60,7 @@ namespace HealthChecks.MySql.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();

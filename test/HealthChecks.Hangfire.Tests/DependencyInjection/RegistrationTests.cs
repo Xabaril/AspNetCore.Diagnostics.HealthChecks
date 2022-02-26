@@ -17,7 +17,7 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddHangfire(setup => setup.MaximumJobsFailed = 3);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -33,7 +33,7 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddHangfire(setup => setup.MaximumJobsFailed = 3, name: "my-hangfire-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

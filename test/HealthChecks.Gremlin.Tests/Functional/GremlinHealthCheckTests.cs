@@ -17,7 +17,6 @@ namespace HealthChecks.Gremlin.Tests.Functional
         public async Task be_healthy_if_gremlin_is_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -36,7 +35,7 @@ namespace HealthChecks.Gremlin.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -47,7 +46,6 @@ namespace HealthChecks.Gremlin.Tests.Functional
         public async Task be_healthy_if_multiple_gremlin_are_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -72,7 +70,7 @@ namespace HealthChecks.Gremlin.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -83,7 +81,6 @@ namespace HealthChecks.Gremlin.Tests.Functional
         public async Task be_unhealthy_if_gremlin_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -102,7 +99,7 @@ namespace HealthChecks.Gremlin.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 

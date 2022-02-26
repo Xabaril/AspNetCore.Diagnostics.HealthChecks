@@ -17,7 +17,7 @@ namespace HealthChecks.SendGrid.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSendGrid("wellformed_but_invalid_token");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -37,7 +37,7 @@ namespace HealthChecks.SendGrid.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSendGrid("wellformed_but_invalid_token", "my-sendgrid-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

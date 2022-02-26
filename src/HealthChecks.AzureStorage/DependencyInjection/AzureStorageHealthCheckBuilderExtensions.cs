@@ -54,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure Blob Storage.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="blobServiceUri">The Azure Storage Blob service Uri like <see cref="https://myaccount.blob.core.windows.net"/>. </param>
+        /// <param name="blobServiceUri">The Azure Storage Blob service Uri like <see href="https://myaccount.blob.core.windows.net"/>. </param>
         /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
         /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <c>null</c> then container name check is not executed. </param>
         /// <param name="clientOptions">Provide the client configuration options to connect with Azure Storage.</param>

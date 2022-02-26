@@ -31,8 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Redis services.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// /// <param name="connectionStringFactory">A factory to build the Redis connection string to use.</param>
-        /// <param name="redisConnectionString">The Redis connection string to be used.</param>
+        /// <param name="connectionStringFactory">A factory to build the Redis connection string to use.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'redis' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

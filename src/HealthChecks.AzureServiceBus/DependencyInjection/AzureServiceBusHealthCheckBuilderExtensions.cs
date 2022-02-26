@@ -32,7 +32,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureEventHub(
             this IHealthChecksBuilder builder,
@@ -63,7 +62,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureEventHub(
             this IHealthChecksBuilder builder,
@@ -93,9 +91,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configuringMessage">Message configuration Action, usually used when queue is partitioned or with duplication detection feature enabled Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureServiceBusQueue(
             this IHealthChecksBuilder builder,
@@ -120,16 +116,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
         /// <param name="queueName">The name of the queue to check.</param>
-        /// <param name="tokenCredential">The token credential for auth
+        /// <param name="tokenCredential">The token credential for auth.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configuringMessage">Message configuration Action, usually used when queue is partitioned or with duplication detection feature enabled Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="requiresSession">An optional boolean flag that indicates whether session is enabled on the queue or not. Defaults to false.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureServiceBusQueue(
             this IHealthChecksBuilder builder,
@@ -161,7 +155,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureServiceBusTopic(
@@ -187,14 +180,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
         /// <param name="topicName">The topic name of the topic to check.</param>
-        /// <param name="tokenCredential">The token credential for auth
+        /// <param name="tokenCredential">The token credential for auth.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureServiceBusTopic(
@@ -228,7 +220,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureServiceBusSubscription(
@@ -255,16 +246,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
         /// <param name="topicName">The topic name of the topic to check.</param>
-        /// <param name="topicName">The topic name of the topic to check.</param>
         /// <param name="subscriptionName">The subscription name of the topic to check.</param>
-        /// <param name="tokenCredential">The token credential for auth
+        /// <param name="tokenCredential">The token credential for auth.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="configuringMessage">Message configuration Action, usually used when topic is partitioned or with duplication detection feature enabled. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureServiceBusSubscription(

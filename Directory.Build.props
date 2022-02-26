@@ -3,6 +3,7 @@
 
   <PropertyGroup Label="Package information">
     <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
@@ -10,8 +11,13 @@
     <Company>Xabaril</Company>
     <LangVersion>latest</LangVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>true</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
+    <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!--TODO: temporary solution-->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">

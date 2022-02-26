@@ -50,7 +50,7 @@ namespace HealthChecks.UI.K8s.Operator
 
                 var key = Encoding.UTF8.GetString(endpointSecret.Data["key"]);
 
-                using var request = new HttpRequestMessage(HttpMethod.Post, $"{uiAddress}{Constants.PushServicePath}?{Constants.PushServiceAuthKey}={key}")
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{uiAddress}{Constants.PUSH_SERVICE_PATH}?{Constants.PUSH_SERVICE_AUTH_KEY}={key}")
                 {
                     Content = new StringContent(JsonSerializer.Serialize(healthCheck, _options), Encoding.UTF8, "application/json")
                 };

@@ -30,7 +30,6 @@ namespace HealthChecks.UI.Tests
             var minimumSeconds = 30;
 
             var webhost = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI(setupSettings: settings =>
@@ -69,7 +68,6 @@ namespace HealthChecks.UI.Tests
         public void load_ui_settings_from_configuration_key()
         {
             var webhost = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -77,10 +75,8 @@ namespace HealthChecks.UI.Tests
                     conf.AddJsonFile(path, false);
                 }).ConfigureServices(services => services.AddHealthChecksUI());
 
-
             var serviceProvider = webhost.Build().Services;
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
-
 
             UISettings.EvaluationTimeInSeconds.Should().Be(20);
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(120);
@@ -90,7 +86,6 @@ namespace HealthChecks.UI.Tests
             var healthcheck = UISettings.HealthChecks[0];
             healthcheck.Name.Should().Be("api1");
             healthcheck.Uri.Should().Be("http://api1/healthz");
-
 
             var webhook = UISettings.Webhooks[0];
             webhook.Name.Should().Be("webhook1");
@@ -109,7 +104,6 @@ namespace HealthChecks.UI.Tests
             var webhookPayload = "payload1";
 
             var webhost = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -159,7 +153,6 @@ namespace HealthChecks.UI.Tests
             var webhookClientConfigured = false;
 
             var webhost = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -209,7 +202,6 @@ namespace HealthChecks.UI.Tests
         {
             var webHostBuilder = new WebHostBuilder()
                 .UseKestrel()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -236,7 +228,6 @@ namespace HealthChecks.UI.Tests
         {
             var webHostBuilder = new WebHostBuilder()
                 .UseKestrel()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.
@@ -255,12 +246,11 @@ namespace HealthChecks.UI.Tests
         public void have_enabled_database_migrations_by_default()
         {
             var webhost = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services.AddHealthChecksUI()
-                 .AddInMemoryStorage();
-             });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecksUI()
+                    .AddInMemoryStorage();
+                });
 
             var serviceProvider = webhost.Build().Services;
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
@@ -272,13 +262,12 @@ namespace HealthChecks.UI.Tests
         public void allow_disable_running_database_migrations_in_ui_setup()
         {
             var webhost = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services
-                 .AddHealthChecksUI(setup => setup.DisableDatabaseMigrations())
-                 .AddInMemoryStorage();
-             });
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddHealthChecksUI(setup => setup.DisableDatabaseMigrations())
+                    .AddInMemoryStorage();
+                });
 
             var serviceProvider = webhost.Build().Services;
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
@@ -290,22 +279,21 @@ namespace HealthChecks.UI.Tests
         public void allow_disable_running_database_migrations_using_configuration_providers()
         {
             var webhost = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureAppConfiguration(config =>
-             {
-                 config.Sources.Clear();
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.Sources.Clear();
 
-                 config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
                     {
                         new KeyValuePair<string,string>("HealthChecksUI:DisableMigrations", "true")
                     });
-             })
-             .ConfigureServices(services =>
-             {
-                 services
-                 .AddHealthChecksUI()
-                 .AddInMemoryStorage();
-             });
+                })
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddHealthChecksUI()
+                    .AddInMemoryStorage();
+                });
 
             var serviceProvider = webhost.Build().Services;
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;

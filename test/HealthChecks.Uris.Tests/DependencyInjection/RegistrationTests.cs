@@ -17,7 +17,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -34,7 +34,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "my-uri-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -51,7 +51,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddUrlGroup(sp => new Uri("http://httpbin.org/status/200"));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

@@ -17,7 +17,6 @@ namespace HealthChecks.ArangoDb.Tests.Functional
         public async Task be_healthy_if_arangodb_is_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -37,7 +36,7 @@ namespace HealthChecks.ArangoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -48,25 +47,24 @@ namespace HealthChecks.ArangoDb.Tests.Functional
         public async Task be_healthy_if_multiple_arango_are_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                     .AddArangoDb(_ => new ArangoDbOptions
-                     {
-                         HostUri = "http://localhost:8529/",
-                         Database = "_system",
-                         UserName = "root",
-                         Password = "strongArangoDbPassword"
-                     }, tags: new string[] { "arango" }, name: "1")
-                     .AddArangoDb(_ => new ArangoDbOptions
-                     {
-                         HostUri = "http://localhost:8529/",
-                         Database = "_system",
-                         UserName = "root",
-                         Password = "strongArangoDbPassword",
-                         IsGenerateJwtTokenBasedOnUserNameAndPassword = true
-                     }, tags: new string[] { "arango" }, name: "2");
+                        .AddArangoDb(_ => new ArangoDbOptions
+                        {
+                            HostUri = "http://localhost:8529/",
+                            Database = "_system",
+                            UserName = "root",
+                            Password = "strongArangoDbPassword"
+                        }, tags: new string[] { "arango" }, name: "1")
+                        .AddArangoDb(_ => new ArangoDbOptions
+                        {
+                            HostUri = "http://localhost:8529/",
+                            Database = "_system",
+                            UserName = "root",
+                            Password = "strongArangoDbPassword",
+                            IsGenerateJwtTokenBasedOnUserNameAndPassword = true
+                        }, tags: new string[] { "arango" }, name: "2");
                 })
                 .Configure(app =>
                 {
@@ -76,7 +74,7 @@ namespace HealthChecks.ArangoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -87,7 +85,6 @@ namespace HealthChecks.ArangoDb.Tests.Functional
         public async Task be_unhealthy_if_arango_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -107,7 +104,7 @@ namespace HealthChecks.ArangoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 

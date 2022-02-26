@@ -20,7 +20,7 @@ namespace HealthChecks.Publisher.Datadog.Tests.DependencyInjection
                         Endpoint = "endpoint"
                     });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
             Assert.NotNull(publisher);

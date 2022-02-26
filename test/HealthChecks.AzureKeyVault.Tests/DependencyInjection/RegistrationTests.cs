@@ -25,7 +25,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                      .AddKey("mycryptokey");
                  });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -43,7 +43,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), options => { }, name: "keyvaultcheck");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -121,7 +121,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                     new MockTokenCredentials(),
                     (_, _) => setupCalled = true);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -144,7 +144,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                     new MockTokenCredentials(),
                     (_, _) => setupCalled = true);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

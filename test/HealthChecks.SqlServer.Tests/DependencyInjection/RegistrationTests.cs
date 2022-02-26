@@ -18,7 +18,7 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSqlServer("connectionstring");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -42,7 +42,7 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSqlServer(connectionstring, beforeOpenConnectionConfigurer: beforeOpen);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -59,7 +59,7 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddSqlServer("connectionstring", name: "my-sql-server-1");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -81,7 +81,7 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
                     return "connectionstring";
                 });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

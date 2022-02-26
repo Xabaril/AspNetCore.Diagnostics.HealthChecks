@@ -16,7 +16,7 @@ namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddCloudFirestore(setup => setup.RequiredCollections = new string[] { });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -32,7 +32,7 @@ namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddCloudFirestore(setup => setup.RequiredCollections = new string[] { }, name: "my-cloud-firestore-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

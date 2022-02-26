@@ -20,10 +20,9 @@ namespace HealthChecks.SignalR.Tests.Functional
         {
             TestServer server = null;
             var webHostBuilder = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services
+                .ConfigureServices(services =>
+                {
+                    services
                     .AddSignalR()
                     .Services
                     .AddHealthChecks()
@@ -32,18 +31,18 @@ namespace HealthChecks.SignalR.Tests.Functional
                                 .WithUrl("http://localhost/test", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                                 .Build(),
                         tags: new string[] { "signalr" });
-             })
-             .Configure(app =>
-             {
+                })
+                .Configure(app =>
+                {
 
-                 app
-                     .UseHealthChecks("/health", new HealthCheckOptions()
-                     {
-                         Predicate = r => r.Tags.Contains("signalr")
-                     })
-                     .UseRouting()
-                     .UseEndpoints(config => config.MapHub<TestHub>("/test"));
-             });
+                    app
+                        .UseHealthChecks("/health", new HealthCheckOptions()
+                        {
+                            Predicate = r => r.Tags.Contains("signalr")
+                        })
+                        .UseRouting()
+                        .UseEndpoints(config => config.MapHub<TestHub>("/test"));
+                });
 
             server = new TestServer(webHostBuilder);
 
@@ -59,10 +58,9 @@ namespace HealthChecks.SignalR.Tests.Functional
         {
             TestServer server = null;
             var webHostBuilder = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services
+                .ConfigureServices(services =>
+                {
+                    services
                     .AddSignalR()
                     .Services
                     .AddHealthChecks()
@@ -71,17 +69,17 @@ namespace HealthChecks.SignalR.Tests.Functional
                                 .WithUrl("http://localhost/badhub", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                                 .Build(),
                         tags: new string[] { "signalr" });
-             })
-             .Configure(app =>
-             {
-                 app
-                     .UseHealthChecks("/health", new HealthCheckOptions()
-                     {
-                         Predicate = r => r.Tags.Contains("signalr")
-                     })
-                     .UseRouting()
-                     .UseEndpoints(config => config.MapHub<TestHub>("/test"));
-             });
+                })
+                .Configure(app =>
+                {
+                    app
+                        .UseHealthChecks("/health", new HealthCheckOptions()
+                        {
+                            Predicate = r => r.Tags.Contains("signalr")
+                        })
+                        .UseRouting()
+                        .UseEndpoints(config => config.MapHub<TestHub>("/test"));
+                });
 
             server = new TestServer(webHostBuilder);
 

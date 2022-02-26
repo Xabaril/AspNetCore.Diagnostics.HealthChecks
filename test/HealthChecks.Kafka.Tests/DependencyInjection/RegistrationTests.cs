@@ -17,7 +17,7 @@ namespace HealthChecks.Kafka.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddKafka(new ProducerConfig());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -33,7 +33,7 @@ namespace HealthChecks.Kafka.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddKafka(new ProducerConfig(), name: "my-kafka-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

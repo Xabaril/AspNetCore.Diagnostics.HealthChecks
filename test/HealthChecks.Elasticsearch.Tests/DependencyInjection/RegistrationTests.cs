@@ -17,7 +17,7 @@ namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddElasticsearch("uri");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -34,7 +34,7 @@ namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddElasticsearch("uri", name: "my-elasticsearch");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

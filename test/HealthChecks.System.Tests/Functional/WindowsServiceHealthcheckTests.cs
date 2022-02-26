@@ -14,6 +14,7 @@ using Xunit;
 namespace HealthChecks.System.Tests.Functional
 {
     [Collection("execution")]
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Windows only")]
     public class windows_service__healthcheck_should
     {
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]

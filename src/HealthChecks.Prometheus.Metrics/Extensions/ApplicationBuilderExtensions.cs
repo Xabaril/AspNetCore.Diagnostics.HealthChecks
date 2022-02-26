@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Builder
             return applicationBuilder.UseHealthChecksPrometheusExporter(endpoint, configure: null);
         }
 
-        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, PathString endpoint, Action<HealthCheckOptions> configure)
+        public static IApplicationBuilder UseHealthChecksPrometheusExporter(this IApplicationBuilder applicationBuilder, PathString endpoint, Action<HealthCheckOptions>? configure)
         {
             var options = new HealthCheckOptions
             {

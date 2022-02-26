@@ -18,7 +18,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="datadogAgentName">Specified Datadog agent server name. Defaults to localhost address 127.0.0.1.</param>
         /// <param name="defaultTags">Specifies a collection of tags to send with the custom check and metric.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddDatadogPublisher(this IHealthChecksBuilder builder, string serviceCheckName, string datadogAgentName = "127.0.0.1", string[] defaultTags = default)
+        public static IHealthChecksBuilder AddDatadogPublisher(
+            this IHealthChecksBuilder builder,
+            string serviceCheckName,
+            string datadogAgentName = "127.0.0.1",
+            string[]? defaultTags = default)
         {
             builder.Services
                 .AddSingleton<IHealthCheckPublisher>(sp =>

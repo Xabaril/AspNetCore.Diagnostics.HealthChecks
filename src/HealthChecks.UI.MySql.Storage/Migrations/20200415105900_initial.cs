@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -18,10 +18,7 @@ namespace HealthChecks.UI.MySql.Storage.Migrations
                     Name = table.Column<string>(maxLength: 500, nullable: false),
                     DiscoveryService = table.Column<string>(maxLength: 100, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Configurations", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Configurations", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "Executions",
@@ -36,10 +33,7 @@ namespace HealthChecks.UI.MySql.Storage.Migrations
                     Name = table.Column<string>(maxLength: 500, nullable: false),
                     DiscoveryService = table.Column<string>(maxLength: 50, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Executions", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Executions", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "Failures",
@@ -51,10 +45,7 @@ namespace HealthChecks.UI.MySql.Storage.Migrations
                     LastNotified = table.Column<DateTime>(nullable: false),
                     IsUpAndRunning = table.Column<bool>(nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Failures", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Failures", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "HealthCheckExecutionEntries",

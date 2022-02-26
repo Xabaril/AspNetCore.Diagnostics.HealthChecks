@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Core
 {

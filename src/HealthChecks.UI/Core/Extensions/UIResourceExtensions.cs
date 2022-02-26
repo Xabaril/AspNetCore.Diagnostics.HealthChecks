@@ -1,7 +1,7 @@
-﻿using HealthChecks.UI.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HealthChecks.UI.Configuration;
 
 namespace HealthChecks.UI.Core
 {
@@ -40,7 +40,7 @@ namespace HealthChecks.UI.Core
 
         public static ICollection<UIStylesheet> GetCustomStylesheets(this UIResource resource, Options options)
         {
-            List<UIStylesheet> styleSheets = new List<UIStylesheet>();
+            var styleSheets = new List<UIStylesheet>();
 
             if (!options.CustomStylesheets.Any())
             {

@@ -1,20 +1,20 @@
-using k8s;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using HealthChecks.UI.K8s.Operator.Controller;
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Handlers;
-using Microsoft.Extensions.Logging;
+using HealthChecks.UI.K8s.Operator.Operator;
+using k8s;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using HealthChecks.UI.K8s.Operator.Diagnostics;
-using HealthChecks.UI.K8s.Operator.Operator;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 

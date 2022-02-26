@@ -1,12 +1,12 @@
-﻿using HealthChecks.UIAndApi.Options;
+using System;
 using HealthChecks.UI.Client;
+using HealthChecks.UIAndApi.Options;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
 
 namespace HealthChecks.UIAndApi
 {

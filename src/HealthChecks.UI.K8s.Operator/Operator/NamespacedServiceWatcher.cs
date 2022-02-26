@@ -1,14 +1,14 @@
-using HealthChecks.UI.K8s.Operator.Diagnostics;
-using HealthChecks.UI.K8s.Operator.Handlers;
-using k8s;
-using k8s.Models;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using HealthChecks.UI.K8s.Operator.Diagnostics;
+using HealthChecks.UI.K8s.Operator.Handlers;
+using k8s;
+using k8s.Models;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -19,7 +19,7 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly OperatorDiagnostics _diagnostics;
         private readonly NotificationHandler _notificationHandler;
         private readonly IHttpClientFactory _httpClientFactory;
-        private Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
+        private readonly Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new();
 
         public NamespacedServiceWatcher(
             IKubernetes client,
@@ -103,7 +103,8 @@ namespace HealthChecks.UI.K8s.Operator
         {
             _watchers.Values.ToList().ForEach(w =>
             {
-                if (w != null && w.Watching) w.Dispose();
+                if (w != null && w.Watching)
+                    w.Dispose();
             });
         }
     }

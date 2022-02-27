@@ -3,6 +3,7 @@
 
   <PropertyGroup Label="Package information">
     <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
+    <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
@@ -25,6 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 

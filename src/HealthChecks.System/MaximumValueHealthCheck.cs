@@ -20,7 +20,7 @@ namespace HealthChecks.System
 
             if (currentValue.CompareTo(_maximumValue) <= 0)
             {
-                return Task.FromResult(HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
 
             return Task.FromResult(

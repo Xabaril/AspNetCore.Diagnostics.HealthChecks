@@ -49,8 +49,7 @@ namespace HealthChecks.Network
                     }
                 }
 
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {

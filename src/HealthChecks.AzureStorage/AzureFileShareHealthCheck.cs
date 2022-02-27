@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 using Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
     internal class KubernetesDiscoverySettings

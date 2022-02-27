@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Operator

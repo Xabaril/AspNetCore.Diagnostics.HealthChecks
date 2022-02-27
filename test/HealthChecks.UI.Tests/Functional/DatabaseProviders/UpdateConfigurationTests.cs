@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Builder;

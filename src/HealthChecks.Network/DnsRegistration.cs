@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.Network
 {
     public class DnsRegistration

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace HealthChecks.UI.Core
 {
     internal class ContentType

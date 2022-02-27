@@ -1,18 +1,13 @@
-using System;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.UI.Oidc
 {
     public class Startup
     {
-        private const string HealthChecksUIPolicy = nameof(HealthChecksUIPolicy);
+        private const string HEALTH_CHECKS_UI_POLICY = nameof(HEALTH_CHECKS_UI_POLICY);
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -22,7 +17,7 @@ namespace HealthChecks.UI.Oidc
                 .Services
                 .AddAuthorization(cfg =>
                 {
-                    cfg.AddPolicy(name: HealthChecksUIPolicy, cfgPolicy =>
+                    cfg.AddPolicy(name: HEALTH_CHECKS_UI_POLICY, cfgPolicy =>
                     {
                         cfgPolicy.AddRequirements().RequireAuthenticatedUser();
                         cfgPolicy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme);
@@ -66,7 +61,7 @@ namespace HealthChecks.UI.Oidc
                      Predicate = _ => true,
                      ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                  });
-                 endpoints.MapHealthChecksUI().RequireAuthorization(HealthChecksUIPolicy);
+                 endpoints.MapHealthChecksUI().RequireAuthorization(HEALTH_CHECKS_UI_POLICY);
                  endpoints.MapDefaultControllerRoute();
              });
         }

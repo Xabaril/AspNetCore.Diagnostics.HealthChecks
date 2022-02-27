@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using HealthChecks.IdSvr;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

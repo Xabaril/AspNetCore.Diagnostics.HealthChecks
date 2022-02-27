@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Azure.Messaging.EventHubs;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

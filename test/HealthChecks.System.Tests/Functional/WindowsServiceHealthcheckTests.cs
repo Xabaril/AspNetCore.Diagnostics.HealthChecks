@@ -1,7 +1,5 @@
-using System;
 using System.Net;
 using System.ServiceProcess;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.System.Tests.Seedwork;
 using Microsoft.AspNetCore.Builder;

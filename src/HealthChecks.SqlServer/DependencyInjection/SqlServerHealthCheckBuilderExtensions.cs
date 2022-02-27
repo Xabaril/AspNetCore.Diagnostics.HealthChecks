@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.SqlServer;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using HealthChecks.SendGrid;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

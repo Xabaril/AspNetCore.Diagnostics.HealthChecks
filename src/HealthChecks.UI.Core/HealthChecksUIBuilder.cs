@@ -1,5 +1,3 @@
-using System;
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     public class HealthChecksUIBuilder

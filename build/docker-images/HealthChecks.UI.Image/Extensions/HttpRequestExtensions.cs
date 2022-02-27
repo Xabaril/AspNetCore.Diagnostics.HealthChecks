@@ -1,6 +1,4 @@
-using System;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.AspNetCore.Http;
 
 namespace HealthChecks.UI.Image.Extensions
 {

@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.DependencyInjection;

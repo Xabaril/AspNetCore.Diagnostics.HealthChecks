@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.EventStore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

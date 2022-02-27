@@ -1,9 +1,5 @@
-using System;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Operator;
 using k8s;
 using k8s.Models;

@@ -1,6 +1,5 @@
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.Extensions.Configuration;
 
 namespace HealthChecks.UI.Image.Extensions
 {

@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
 using IBM.WMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

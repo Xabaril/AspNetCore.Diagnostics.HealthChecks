@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using HealthChecks.IbmMQ;
 using IBM.WMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

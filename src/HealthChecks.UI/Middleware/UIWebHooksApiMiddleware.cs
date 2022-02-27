@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

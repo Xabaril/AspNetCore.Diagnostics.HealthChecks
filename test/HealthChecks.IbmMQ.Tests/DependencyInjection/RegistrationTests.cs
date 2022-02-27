@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.IbmMQ;
 using Microsoft.Extensions.DependencyInjection;

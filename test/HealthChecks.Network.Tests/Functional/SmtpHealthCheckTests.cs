@@ -1,5 +1,4 @@
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.Network.Core;
 using Microsoft.AspNetCore.Builder;

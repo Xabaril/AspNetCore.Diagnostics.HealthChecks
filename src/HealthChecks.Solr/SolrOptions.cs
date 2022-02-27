@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.Solr
 {
     public class SolrOptions

@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Hosting;

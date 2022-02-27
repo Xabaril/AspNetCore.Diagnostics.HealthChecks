@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.UI.Core.Extensions
 {
     public static class UriExtensions

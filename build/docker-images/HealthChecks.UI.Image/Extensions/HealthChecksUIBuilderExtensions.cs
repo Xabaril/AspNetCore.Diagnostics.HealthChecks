@@ -1,6 +1,4 @@
-using System;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

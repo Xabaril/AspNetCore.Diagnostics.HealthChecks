@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;

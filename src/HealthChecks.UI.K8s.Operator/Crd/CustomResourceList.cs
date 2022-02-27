@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using k8s;
 using k8s.Models;
 

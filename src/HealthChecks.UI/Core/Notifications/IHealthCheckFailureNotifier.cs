@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace HealthChecks.UI.Core.Notifications
 {
     internal interface IHealthCheckFailureNotifier

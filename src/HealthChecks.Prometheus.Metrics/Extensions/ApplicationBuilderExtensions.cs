@@ -1,4 +1,3 @@
-using System;
 using HealthChecks.Prometheus.Metrics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;

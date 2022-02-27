@@ -1,8 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.Image.PushService
 {

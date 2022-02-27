@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.UI.Core.Data
 {
     public class HealthCheckExecutionHistory

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using IBM.WMQ;
 using Microsoft.AspNetCore.Builder;

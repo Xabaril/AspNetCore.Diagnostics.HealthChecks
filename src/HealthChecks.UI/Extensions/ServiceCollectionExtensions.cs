@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;

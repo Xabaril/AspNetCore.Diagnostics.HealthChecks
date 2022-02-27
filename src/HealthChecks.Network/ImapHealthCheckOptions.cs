@@ -1,4 +1,3 @@
-using System;
 using HealthChecks.Network.Core;
 
 namespace HealthChecks.Network

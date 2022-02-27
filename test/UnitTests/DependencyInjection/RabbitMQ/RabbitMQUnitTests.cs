@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;

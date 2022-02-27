@@ -1,4 +1,3 @@
-using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HealthChecks.UI.SqlServer.Storage.Migrations

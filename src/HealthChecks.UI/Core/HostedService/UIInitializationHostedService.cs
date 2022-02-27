@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;

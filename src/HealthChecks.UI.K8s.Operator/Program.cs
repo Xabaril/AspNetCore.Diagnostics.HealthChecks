@@ -1,4 +1,3 @@
-using System;
 using HealthChecks.UI.K8s.Operator.Controller;
 using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Handlers;

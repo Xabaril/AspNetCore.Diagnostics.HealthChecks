@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using HealthChecks.UI.Core.Data;
 
 namespace HealthChecks.UI.Core

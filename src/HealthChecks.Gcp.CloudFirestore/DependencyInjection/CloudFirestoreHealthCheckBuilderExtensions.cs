@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.Gcp.CloudFirestore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

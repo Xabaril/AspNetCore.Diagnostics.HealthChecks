@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;

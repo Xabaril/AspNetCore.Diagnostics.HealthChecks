@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.TestHost;

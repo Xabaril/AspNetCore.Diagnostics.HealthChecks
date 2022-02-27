@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Diagnostics

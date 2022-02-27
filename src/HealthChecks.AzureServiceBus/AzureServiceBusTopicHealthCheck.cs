@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Azure.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

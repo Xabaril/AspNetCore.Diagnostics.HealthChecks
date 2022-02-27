@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.Kubernetes;
 using k8s;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

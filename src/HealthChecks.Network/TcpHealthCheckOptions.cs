@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace HealthChecks.Network

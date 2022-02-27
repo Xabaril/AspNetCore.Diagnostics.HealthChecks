@@ -1,8 +1,5 @@
 using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Image.Extensions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.Image
 {

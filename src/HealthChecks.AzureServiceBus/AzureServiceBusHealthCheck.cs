@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using Azure.Core;
 using Azure.Messaging.ServiceBus.Administration;

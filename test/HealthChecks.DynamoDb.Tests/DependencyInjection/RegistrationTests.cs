@@ -1,4 +1,3 @@
-using System.Linq;
 using Amazon;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

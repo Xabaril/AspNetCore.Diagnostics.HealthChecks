@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;

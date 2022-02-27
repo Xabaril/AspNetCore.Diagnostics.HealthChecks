@@ -1,7 +1,5 @@
-using System;
 using Azure.Identity;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 namespace HealthChecks.UI.Image.Extensions

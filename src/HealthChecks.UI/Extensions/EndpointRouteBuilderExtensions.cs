@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using HealthChecks.UI;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;

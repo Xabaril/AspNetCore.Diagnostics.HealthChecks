@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Azure.Core;
 using Azure.Messaging.EventHubs;
 using HealthChecks.AzureServiceBus;

@@ -1,4 +1,3 @@
-using System.IO;
 using HealthChecks.UI.Configuration;
 
 namespace HealthChecks.UI.Core

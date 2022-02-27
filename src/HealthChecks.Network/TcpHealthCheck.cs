@@ -1,7 +1,4 @@
-using System;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

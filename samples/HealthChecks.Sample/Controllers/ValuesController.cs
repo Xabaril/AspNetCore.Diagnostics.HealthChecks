@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthChecks.Sample.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Sample")]
     public class ValuesController : ControllerBase
     {
         // GET api/values

@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Azure.Devices;
 
 namespace HealthChecks.Azure.IoTHub

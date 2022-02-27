@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.DependencyInjection;

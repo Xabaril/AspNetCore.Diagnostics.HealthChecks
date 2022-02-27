@@ -12,6 +12,7 @@
     <Company>Xabaril</Company>
     <LangVersion>latest</LangVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <ImplicitUsings>enable</ImplicitUsings>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Deterministic>true</Deterministic>

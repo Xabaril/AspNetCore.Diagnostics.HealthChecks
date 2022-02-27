@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace HealthChecks.UI.Image.Configuration
 {
     public class Storage

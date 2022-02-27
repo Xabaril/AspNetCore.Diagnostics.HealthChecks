@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.UI;
 using HealthChecks.UI.Core.Discovery.K8S;

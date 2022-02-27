@@ -1,4 +1,3 @@
-using System;
 using k8s;
 
 namespace HealthChecks.Kubernetes

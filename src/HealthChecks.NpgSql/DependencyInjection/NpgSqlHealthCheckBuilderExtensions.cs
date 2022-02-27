@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;

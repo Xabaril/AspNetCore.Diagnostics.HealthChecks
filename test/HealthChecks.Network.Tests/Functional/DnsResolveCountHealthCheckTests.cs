@@ -1,7 +1,4 @@
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;

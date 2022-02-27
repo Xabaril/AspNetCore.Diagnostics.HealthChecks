@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.EventStore;
 using Microsoft.Extensions.DependencyInjection;

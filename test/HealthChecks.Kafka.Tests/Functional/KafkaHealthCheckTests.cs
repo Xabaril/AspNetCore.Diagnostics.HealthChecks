@@ -1,5 +1,4 @@
 using System.Net;
-using System.Threading.Tasks;
 using Confluent.Kafka;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-
 
 namespace HealthChecks.Kafka.Tests.Functional
 {

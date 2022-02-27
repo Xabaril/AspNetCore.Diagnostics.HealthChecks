@@ -1,4 +1,3 @@
-using System.Linq;
 using Confluent.Kafka;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

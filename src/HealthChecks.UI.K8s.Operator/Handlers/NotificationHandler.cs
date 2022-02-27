@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

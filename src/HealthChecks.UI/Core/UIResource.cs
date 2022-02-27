@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.UI.Core
 {
     internal class UIResource

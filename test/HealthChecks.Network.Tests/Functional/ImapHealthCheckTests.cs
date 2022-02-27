@@ -1,7 +1,4 @@
-using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.Network.Core;
 using Microsoft.AspNetCore.Builder;

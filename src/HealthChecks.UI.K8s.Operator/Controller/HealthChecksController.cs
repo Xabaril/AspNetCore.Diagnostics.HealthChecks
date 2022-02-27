@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;

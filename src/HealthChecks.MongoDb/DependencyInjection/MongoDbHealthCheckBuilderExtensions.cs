@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.MongoDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Driver;

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

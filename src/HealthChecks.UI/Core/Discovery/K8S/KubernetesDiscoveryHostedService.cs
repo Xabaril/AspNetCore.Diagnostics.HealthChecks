@@ -1,9 +1,4 @@
-using System;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using k8s;

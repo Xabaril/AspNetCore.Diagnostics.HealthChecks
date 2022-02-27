@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using HealthChecks.Publisher.Seq;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

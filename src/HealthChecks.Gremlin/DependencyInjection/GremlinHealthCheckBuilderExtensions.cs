@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.Gremlin;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

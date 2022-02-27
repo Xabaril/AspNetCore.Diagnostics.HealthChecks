@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

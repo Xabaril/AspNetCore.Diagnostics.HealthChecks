@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.Solr;
 using Microsoft.Extensions.DependencyInjection;

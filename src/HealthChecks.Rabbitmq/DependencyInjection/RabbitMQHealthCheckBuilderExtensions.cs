@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;

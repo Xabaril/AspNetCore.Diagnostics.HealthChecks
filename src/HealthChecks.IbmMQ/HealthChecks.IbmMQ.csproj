@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="IBMMQDotnetClient" Version="9.2.3" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.0" />
+    <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 
 </Project>

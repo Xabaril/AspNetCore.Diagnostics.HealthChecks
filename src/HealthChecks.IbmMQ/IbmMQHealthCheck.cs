@@ -22,16 +22,12 @@ namespace HealthChecks.IbmMQ
         {
             try
             {
-                using (var connection = new MQQueueManager(_queueManager, _connectionProperties))
-                {
-                    return Task.FromResult(
-                        HealthCheckResult.Healthy());
-                }
+                using var connection = new MQQueueManager(_queueManager, _connectionProperties);
+                return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {
-                return Task.FromResult(
-                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
     }

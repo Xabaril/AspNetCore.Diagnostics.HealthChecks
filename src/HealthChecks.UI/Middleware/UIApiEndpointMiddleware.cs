@@ -41,7 +41,6 @@ namespace HealthChecks.UI.Middleware
 
                 foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
-
                     var execution = await db.Executions
                                 .Include(le => le.Entries)
                                 .Where(le => le.Name == item.Name)

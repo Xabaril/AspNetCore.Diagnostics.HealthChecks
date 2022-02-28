@@ -35,8 +35,7 @@ namespace HealthChecks.System
                             new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {DriveName} is not present on system"));
                     }
                 }
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {

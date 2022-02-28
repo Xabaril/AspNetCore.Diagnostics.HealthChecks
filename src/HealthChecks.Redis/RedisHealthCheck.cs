@@ -45,8 +45,7 @@ namespace HealthChecks.Redis
 
                         if (clusterInfo is object && !clusterInfo.IsNull)
                         {
-                            if (!clusterInfo.ToString()!
-                                .Contains("cluster_state:ok"))
+                            if (!clusterInfo.ToString()!.Contains("cluster_state:ok"))
                             {
                                 //cluster info is not ok!
                                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is not on OK state for endpoint {endPoint}");

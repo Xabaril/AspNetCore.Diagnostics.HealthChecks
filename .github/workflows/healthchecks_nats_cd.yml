@@ -3,7 +3,7 @@ name: HealthChecks Nats CD
 on:
   push:
     tags:
-      - release-ravendb-*
+      - release-nats-*
 
 jobs:
   build:

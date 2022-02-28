@@ -1,17 +1,13 @@
-﻿using Azure.Messaging.EventHubs;
+using System.Collections.Concurrent;
+using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureEventHubHealthCheck
-        : IHealthCheck
+    public class AzureEventHubHealthCheck : IHealthCheck
     {
-        const string EntityPathSegment = "EntityPath=";
+        private const string ENTITY_PATH_SEGMENT = "EntityPath=";
 
         private static readonly ConcurrentDictionary<string, EventHubProducerClient> _eventHubConnections = new ConcurrentDictionary<string, EventHubProducerClient>();
         private readonly string _eventHubConnectionString;
@@ -28,7 +24,7 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(eventHubName));
             }
 
-            _eventHubConnectionString = connectionString.Contains(EntityPathSegment) ? connectionString : $"{connectionString};{EntityPathSegment}{eventHubName}";
+            _eventHubConnectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
             _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(_eventHubConnectionString));
         }
 
@@ -39,7 +35,7 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(connection));
             }
 
-            _eventHubConnectionString = $"{connection.FullyQualifiedNamespace};{EntityPathSegment}{connection.EventHubName}";
+            _eventHubConnectionString = $"{connection.FullyQualifiedNamespace};{ENTITY_PATH_SEGMENT}{connection.EventHubName}";
             _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(connection));
         }
 

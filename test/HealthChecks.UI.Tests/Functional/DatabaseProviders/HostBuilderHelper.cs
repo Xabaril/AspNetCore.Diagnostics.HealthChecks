@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
 
 namespace HealthChecks.UI.Tests
 {
@@ -23,10 +21,7 @@ namespace HealthChecks.UI.Tests
                    .AddHealthChecks()
                    .AddCheck("check1", () => HealthCheckResult.Healthy())
                    .Services
-                   .AddHealthChecksUI(setup =>
-                   {
-                       setup.AddHealthCheckEndpoint(ProviderTestHelper.Endpoints[0].Name, ProviderTestHelper.Endpoints[0].Uri);
-                   });
+                   .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint(ProviderTestHelper.Endpoints[0].Name, ProviderTestHelper.Endpoints[0].Uri));
 
                    configureUI?.Invoke(builder);
 
@@ -50,10 +45,7 @@ namespace HealthChecks.UI.Tests
                    });
 
                    var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-                   lifetime.ApplicationStarted.Register(() =>
-                   {
-                       hostReset.Set();
-                   });
+                   lifetime.ApplicationStarted.Register(() => hostReset.Set());
                });
         }
     }

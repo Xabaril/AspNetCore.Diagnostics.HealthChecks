@@ -1,14 +1,9 @@
-﻿using HealthChecks.UI.Core;
+using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.UI.Tests
@@ -41,10 +36,7 @@ namespace HealthChecks.UI.Tests
                 .Configure(app =>
                 {
                     app.UseRouting();
-                    app.UseEndpoints(setup =>
-                    {
-                        setup.MapHealthChecksUI();
-                    });
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
                 });
 
             var server = new TestServer(builder);
@@ -80,10 +72,7 @@ namespace HealthChecks.UI.Tests
                 .Configure(app =>
                 {
                     app.UseRouting();
-                    app.UseEndpoints(setup =>
-                    {
-                        setup.MapHealthChecksUI();
-                    });
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
                 });
 
             var server = new TestServer(builder);

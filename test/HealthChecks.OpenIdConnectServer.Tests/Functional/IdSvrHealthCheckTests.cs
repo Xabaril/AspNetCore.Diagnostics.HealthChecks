@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -18,7 +16,6 @@ namespace HealthChecks.IdSvr.Tests.Functional
         public async Task be_unhealthy_if_idsvr_is_unavailable()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -32,7 +29,7 @@ namespace HealthChecks.IdSvr.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -45,7 +42,6 @@ namespace HealthChecks.IdSvr.Tests.Functional
         public async Task be_healthy_if_idsvr_is_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -59,7 +55,7 @@ namespace HealthChecks.IdSvr.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();

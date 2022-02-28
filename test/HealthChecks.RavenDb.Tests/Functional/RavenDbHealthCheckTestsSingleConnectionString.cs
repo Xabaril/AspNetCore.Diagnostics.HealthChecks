@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -7,10 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -44,7 +41,6 @@ namespace HealthChecks.RavenDb.Tests.Functional
         public async Task be_healthy_if_ravendb_is_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -59,7 +55,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -72,7 +68,6 @@ namespace HealthChecks.RavenDb.Tests.Functional
         public async Task be_healthy_if_ravendb_is_available_and_contains_specific_database()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -87,7 +82,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -102,7 +97,6 @@ namespace HealthChecks.RavenDb.Tests.Functional
             var connectionString = "http://localhost:9999";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -117,7 +111,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -130,7 +124,6 @@ namespace HealthChecks.RavenDb.Tests.Functional
         public async Task be_unhealthy_if_ravendb_is_available_but_database_doesnot_exist()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -149,7 +142,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();

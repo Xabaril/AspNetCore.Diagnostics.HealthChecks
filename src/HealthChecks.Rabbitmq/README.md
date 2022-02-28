@@ -17,13 +17,13 @@ This will create a new `IConnection` and reuse on every request to get the healt
 the extension method where you provide the `Uri` to connect with. You can optionally set the `SslOption` if needed.
 IConnection created with this option use UseBackgroundThreadsForIO by default in order to gracefully shutdown on non reference IConnection by ServiceCollection.
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddRabbitMQ(rabbitConnectionString:"amqps://user:pass@host1/vhost")
-        .AddRabbitMQ(rabbitConnectionString:"amqps://user:pass@host2/vhost");
+        .AddRabbitMQ(rabbitConnectionString: "amqps://user:pass@host1/vhost")
+        .AddRabbitMQ(rabbitConnectionString: "amqps://user:pass@host2/vhost");
 }
 ```
 
@@ -36,20 +36,17 @@ Ideally, this should be configured as a singleton.
 If you are sharing a single connection for every time a health check is requested,
 you must ensure automatic recovery is enable so that the connection can be re-established if lost.
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-   
-
     services
-        .AddSingleton<IConnection>(sp=>
+        .AddSingleton<IConnection>(sp =>
         {
-            var factory = new ConnectionFactory()
+            var factory = new ConnectionFactory
             {
                 Uri = new Uri("amqps://user:pass@host/vhost"),
                 AutomaticRecoveryEnabled = true
             };
-
             return  factory.CreateConnection();
         })
         .AddHealthChecks()
@@ -59,21 +56,18 @@ public void ConfigureServices(IServiceCollection services)
 
 Alternatively, you can specify the connection to use with a factory function given the `IServiceProvider`.
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-   
-
     services
         .AddHealthChecks()
         .AddRabbitMQ(sp =>
         {
-            var factory = new ConnectionFactory()
+            var factory = new ConnectionFactory
             {
                 Uri = new Uri("amqps://user:pass@host/vhost"),
                 AutomaticRecoveryEnabled = true
             };
-
             return factory.CreateConnection();
         });
 }
@@ -81,12 +75,12 @@ public void ConfigureServices(IServiceCollection services)
 
 Or you register IConnectionFactory and then the healthcheck will create a single connection for that one.
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
    services
-        .AddSingleton<IConnectionFactory>(sp=>
-            new ConnectionFactory()
+        .AddSingleton<IConnectionFactory>(sp =>
+            new ConnectionFactory
             {
                 Uri = new Uri("amqps://user:pass@host/vhost"),
                 AutomaticRecoveryEnabled = true

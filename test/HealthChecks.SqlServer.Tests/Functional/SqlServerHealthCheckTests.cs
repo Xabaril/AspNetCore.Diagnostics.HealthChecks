@@ -1,11 +1,10 @@
-﻿using FluentAssertions;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -22,21 +21,20 @@ namespace HealthChecks.SqlServer.Tests.Functional
             var connectionString = "Server=tcp:localhost,5433;Initial Catalog=master;User Id=sa;Password=Password12!";
 
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSqlServer(connectionString, tags: new string[] { "sqlserver" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("sqlserver")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sqlserver")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -49,21 +47,20 @@ namespace HealthChecks.SqlServer.Tests.Functional
         public async Task be_unhealthy_if_sqlServer_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddSqlServer("Server=tcp:200.0.0.100,1833;Initial Catalog=master;User Id=sa;Password=Password12!", tags: new string[] { "sqlserver" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("sqlserver")
-                  });
-              });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddSqlServer("Server=tcp:200.0.0.100,1833;Initial Catalog=master;User Id=sa;Password=Password12!", tags: new string[] { "sqlserver" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sqlserver")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -81,21 +78,20 @@ namespace HealthChecks.SqlServer.Tests.Functional
             var connectionString = "Server=tcp:localhost,5433;Initial Catalog=master;User Id=sa;Password=Password12!";
 
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddSqlServer(connectionString, healthQuery: "SELECT 1 FROM [NOT_VALID_DB]", tags: new string[] { "sqlserver" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("sqlserver")
-                  });
-              });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddSqlServer(connectionString, healthQuery: "SELECT 1 FROM [NOT_VALID_DB]", tags: new string[] { "sqlserver" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sqlserver")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();

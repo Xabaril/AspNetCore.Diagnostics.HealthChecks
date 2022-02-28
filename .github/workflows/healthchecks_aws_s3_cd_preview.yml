@@ -2,8 +2,8 @@ name: HealthChecks Aws.S3 Preview CD
 
 on:
   push:
-    tags:       
-      - preview-aws_s3-* 
+    tags:
+      - preview-aws_s3-*
 jobs:
   build:
     env:
@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
@@ -23,10 +23,10 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:

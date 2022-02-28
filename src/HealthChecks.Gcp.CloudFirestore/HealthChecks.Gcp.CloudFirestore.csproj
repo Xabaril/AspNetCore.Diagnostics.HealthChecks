@@ -5,11 +5,12 @@
     <PackageTags>HealthCheck;CloudFirestore</PackageTags>
     <Description>HealthChecks.Gcp.CloudFirestore is the health check package for the Firebase Cloud Firebase realtime database.</Description>
     <Version>$(HealthCheckCloudFirestore)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Firestore"/>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
+    <PackageReference Include="Google.Cloud.Firestore" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
   </ItemGroup>
 
 </Project>

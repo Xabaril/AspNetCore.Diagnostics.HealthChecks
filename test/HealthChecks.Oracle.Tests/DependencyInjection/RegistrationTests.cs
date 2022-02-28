@@ -1,8 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Oracle.Tests.DependencyInjection
@@ -16,7 +15,7 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddOracle("connectionstring");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -34,7 +33,7 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddOracle("connectionstring", name: "my-oracle-1");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

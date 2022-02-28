@@ -1,8 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Gremlin.Tests.DependencyInjection
@@ -21,7 +20,7 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
                     EnableSsl = false
                 });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -43,7 +42,7 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
                 },
                 name: "my-gremlin");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

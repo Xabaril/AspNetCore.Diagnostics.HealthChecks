@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using HealthChecks.Azure.IoTHub;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection
@@ -15,12 +13,9 @@ namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureIoTHub(options =>
-                {
-                    options.AddConnectionString("the-iot-connection-string");
-                });
+                .AddAzureIoTHub(options => options.AddConnectionString("the-iot-connection-string"));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -35,12 +30,9 @@ namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                 .AddAzureIoTHub(options =>
-                 {
-                     options.AddConnectionString("the-iot-connection-string");
-                 }, name: "iothubcheck");
+                 .AddAzureIoTHub(options => options.AddConnectionString("the-iot-connection-string"), name: "iothubcheck");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

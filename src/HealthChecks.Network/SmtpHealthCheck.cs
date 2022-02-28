@@ -1,20 +1,18 @@
-﻿using HealthChecks.Network.Core;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using HealthChecks.Network.Core;
 using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class SmtpHealthCheck
-        : IHealthCheck
+    public class SmtpHealthCheck : IHealthCheck
     {
         private readonly SmtpHealthCheckOptions _options;
+
         public SmtpHealthCheck(SmtpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

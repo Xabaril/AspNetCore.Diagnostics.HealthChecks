@@ -1,13 +1,11 @@
-﻿using HealthChecks.UI.Configuration;
+using System.Text.RegularExpressions;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core
 {
@@ -18,12 +16,14 @@ namespace HealthChecks.UI.Core
 
         public UIWebHooksApiMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {
+            _ = next;
             _jsonSerializationSettings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             _serviceScopeFactory = serviceScopeFactory;
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())

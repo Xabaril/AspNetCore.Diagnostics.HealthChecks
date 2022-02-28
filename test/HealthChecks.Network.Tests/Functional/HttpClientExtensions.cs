@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace System.Net.Http
 {

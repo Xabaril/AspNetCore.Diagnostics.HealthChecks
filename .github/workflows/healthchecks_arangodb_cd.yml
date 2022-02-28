@@ -2,8 +2,8 @@ name: HealthChecks Arango DB CD
 
 on:
   push:
-    tags:       
-      - release-arangodb-*  # Push events to release-arangodb* 
+    tags:
+      - release-arangodb-*  # Push events to release-arangodb*
 jobs:
   build:
     env:
@@ -14,12 +14,12 @@ jobs:
         image: arangodb/arangodb:latest
         ports:
           - 8529:8529
-        env: 
+        env:
           ARANGO_ROOT_PASSWORD: strongArangoDbPassword
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
@@ -29,10 +29,10 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:

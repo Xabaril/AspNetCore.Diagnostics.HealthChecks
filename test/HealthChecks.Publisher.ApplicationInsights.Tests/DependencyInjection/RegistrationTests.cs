@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Xunit;
@@ -15,7 +15,7 @@ namespace HealthChecks.Publisher.ApplicationInsights.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddApplicationInsightsPublisher("telemetrykey");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
             Assert.NotNull(publisher);
@@ -31,7 +31,7 @@ namespace HealthChecks.Publisher.ApplicationInsights.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddApplicationInsightsPublisher();
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
             Assert.NotNull(publisher);

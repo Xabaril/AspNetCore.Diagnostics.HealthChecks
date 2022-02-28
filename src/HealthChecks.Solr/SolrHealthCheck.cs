@@ -1,16 +1,12 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SolrNet.Impl;
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SolrNet.Impl;
 
 namespace HealthChecks.Solr
 {
-    public class SolrHealthCheck
-        : IHealthCheck
+    public class SolrHealthCheck : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new ConcurrentDictionary<string, SolrConnection>();
+        private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new();
 
         private readonly SolrOptions _options;
 
@@ -18,16 +14,19 @@ namespace HealthChecks.Solr
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 var url = $"{_options.Uri}/{_options.Core}";
 
-                if (!_connections.TryGetValue(url, out SolrConnection solrConnection))
+                if (!_connections.TryGetValue(url, out var solrConnection))
                 {
-                    solrConnection = new SolrConnection(url);
-                    solrConnection.Timeout = (int)_options.Timeout.TotalMilliseconds;
+                    solrConnection = new SolrConnection(url)
+                    {
+                        Timeout = (int)_options.Timeout.TotalMilliseconds
+                    };
 
                     if (!_connections.TryAdd(url, solrConnection))
                     {

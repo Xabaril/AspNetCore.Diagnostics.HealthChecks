@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace HealthChecks.Network
 {
     public class TcpHealthCheckOptions
     {
-        internal List<(string host, int port)> ConfiguredHosts = new List<(string host, int port)>();
+        internal List<(string host, int port)> ConfiguredHosts = new();
 
         /// <summary>
         /// Add a new host to check using <see cref="TcpHealthCheck"/>

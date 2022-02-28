@@ -1,20 +1,17 @@
-﻿using Azure.Storage.Files.Shares;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
+using Azure.Storage.Files.Shares;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage
 {
     public class AzureFileShareHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
-        private readonly string _shareName;
+        private readonly string? _shareName;
 
-        private static readonly ConcurrentDictionary<string, ShareClient> _shareClientsHolder = new ConcurrentDictionary<string, ShareClient>();
+        private static readonly ConcurrentDictionary<string, ShareClient> _shareClientsHolder = new();
 
-        public AzureFileShareHealthCheck(string connectionString, string shareName = default)
+        public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _shareName = shareName;
@@ -24,7 +21,7 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                var shareClient =_shareClientsHolder.GetOrAdd($"{_connectionString}{_shareName}", _ => new ShareClient(_connectionString, _shareName));
+                var shareClient = _shareClientsHolder.GetOrAdd($"{_connectionString}{_shareName}", _ => new ShareClient(_connectionString, _shareName));
 
                 if (!await shareClient.ExistsAsync(cancellationToken))
                 {

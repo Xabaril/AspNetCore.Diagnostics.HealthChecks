@@ -1,9 +1,6 @@
-﻿using IBM.WMQ;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
+using IBM.WMQ;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.IbmMQ
 {
@@ -14,7 +11,8 @@ namespace HealthChecks.IbmMQ
 
         public IbmMQHealthCheck(string queueManager, Hashtable connectionProperties)
         {
-            if (string.IsNullOrEmpty(queueManager)) throw new ArgumentNullException(nameof(queueManager));
+            if (string.IsNullOrEmpty(queueManager))
+                throw new ArgumentNullException(nameof(queueManager));
 
             _queueManager = queueManager;
             _connectionProperties = connectionProperties ?? throw new ArgumentNullException(nameof(connectionProperties));

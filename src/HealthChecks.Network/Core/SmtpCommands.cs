@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.Network.Core
+namespace HealthChecks.Network.Core
 {
     public class SmtpCommands
     {

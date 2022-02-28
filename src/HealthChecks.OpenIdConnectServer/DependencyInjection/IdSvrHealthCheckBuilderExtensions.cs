@@ -1,14 +1,15 @@
-﻿using HealthChecks.IdSvr;
+using HealthChecks.IdSvr;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="IdSvrHealthCheck"/>.
+    /// </summary>
     public static class IdSvrHealthCheckBuilderExtensions
     {
-        const string NAME = "idsvr";
+        private const string NAME = "idsvr";
+
         /// <summary>
         /// Add a health check for Identity Server.
         /// </summary>
@@ -20,9 +21,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddIdentityServer(this IHealthChecksBuilder builder, Uri idSvrUri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddIdentityServer(
+            this IHealthChecksBuilder builder,
+            Uri idSvrUri,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var registrationName = name ?? NAME;
 

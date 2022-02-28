@@ -1,16 +1,16 @@
-﻿using Azure.Data.Tables;
+using Azure.Data.Tables;
 using HealthChecks.CosmosDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="CosmosDbHealthCheck"/> and <see cref="TableServiceHealthCheck"/>.
+    /// </summary>
     public static class CosmosDbHealthCheckBuilderExtensions
     {
-        const string COSMOS_NAME = "cosmosdb";
-        const string TABLE_NAME = "azuretable";
+        private const string COSMOS_NAME = "cosmosdb";
+        private const string TABLE_NAME = "azuretable";
 
         /// <summary>
         /// Add a health check for Azure CosmosDb database.
@@ -24,15 +24,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddCosmosDb(
             this IHealthChecksBuilder builder,
             string connectionString,
-            string database = default,
-            string name = default,
+            string? database = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -42,7 +42,6 @@ namespace Microsoft.Extensions.DependencyInjection
                tags,
                timeout));
         }
-
 
         /// <summary>
         /// Add a health check for Azure CosmosDb database and specified collections.
@@ -57,16 +56,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddCosmosDbCollection(
             this IHealthChecksBuilder builder,
             string connectionString,
-            string database = default,
-            IEnumerable<string> collections = default,
-            string name = default,
+            string? database = default,
+            IEnumerable<string>? collections = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -89,15 +88,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureTable(
             this IHealthChecksBuilder builder,
             string connectionString,
             string tableName,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -121,16 +120,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureTable(
             this IHealthChecksBuilder builder,
             Uri endpoint,
             TableSharedKeyCredential credentials,
             string tableName,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(

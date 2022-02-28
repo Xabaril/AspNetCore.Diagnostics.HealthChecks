@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.Publisher.Seq
+namespace HealthChecks.Publisher.Seq
 {
     public enum SeqInputLevel
     {

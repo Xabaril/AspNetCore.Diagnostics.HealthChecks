@@ -1,8 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using UnitTests.Base;
 using Xunit;
 
 namespace UnitTests.UI.DatabaseProviders
@@ -20,8 +19,7 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     services.AddHealthChecksUI()
                     .AddInMemoryStorage(opt => customOptionsInvoked = true);
-                })
-                .UseStartup<DefaultStartup>();
+                });
 
             var services = hostBuilder.Build().Services;
             var context = services.GetService<HealthChecksDb>();

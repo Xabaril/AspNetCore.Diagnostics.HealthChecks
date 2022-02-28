@@ -3,7 +3,7 @@ name: HealthChecks UI CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-ui-*
 
 jobs:
@@ -16,26 +16,26 @@ jobs:
         image: mcr.microsoft.com/mssql/server
         ports:
           - 5433:1433
-        env: 
+        env:
           ACCEPT_EULA: Y
           SA_PASSWORD: Password12!
       npgsql:
         image: postgres
         ports:
           - 8010:5432
-        env: 
+        env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: Password12!
       mysql:
         image: mysql
         ports:
           - 3306:3306
-        env: 
+        env:
           MYSQL_ROOT_PASSWORD: Password12!
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
@@ -56,7 +56,7 @@ jobs:
     - name: Restore dependencies UI.SqlServer.Storage
       run: dotnet restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
     - name: Restore dependencies UI.K8s.Operator
-      run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj      
+      run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     - name: Build UI
       run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Build UI.Client
@@ -96,7 +96,7 @@ jobs:
     - name: dotnet pack UI.K8s.Operator
       run: dotnet pack ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:
@@ -118,4 +118,4 @@ jobs:
     - name: Publish UI.SqlServer.Storage Health Check nuget
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.SqlServer.Storage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.K8s.Operator Health Check nuget
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.K8s.Operator.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate      
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.K8s.Operator.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

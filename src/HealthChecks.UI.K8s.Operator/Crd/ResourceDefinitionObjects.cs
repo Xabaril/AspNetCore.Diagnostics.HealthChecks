@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.UI.K8s.Operator.Crd
+namespace HealthChecks.UI.K8s.Operator.Crd
 {
     public class NameValueObject
     {

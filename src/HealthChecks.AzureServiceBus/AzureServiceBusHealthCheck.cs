@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Concurrent;
 using Azure.Core;
 using Azure.Messaging.ServiceBus.Administration;
@@ -10,13 +9,13 @@ namespace HealthChecks.AzureServiceBus
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
             ManagementClientConnections = new();
 
-        private string ConnectionString { get; }
+        private string? ConnectionString { get; }
 
-        protected string Prefix => ConnectionString ?? Endpoint;
+        protected string Prefix => ConnectionString ?? Endpoint!;
 
-        private string Endpoint { get; }
+        private string? Endpoint { get; }
 
-        private TokenCredential TokenCredential { get; }
+        private TokenCredential? TokenCredential { get; }
 
         protected AzureServiceBusHealthCheck(string connectionString)
         {
@@ -35,29 +34,15 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(endpoint));
             }
 
-            if (tokenCredential == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredential));
-            }
-
             Endpoint = endpoint;
-            TokenCredential = tokenCredential;
+            TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
         }
-
 
         protected ServiceBusAdministrationClient CreateManagementClient()
         {
-            ServiceBusAdministrationClient managementClient;
-            if (TokenCredential != null)
-            {
-                managementClient = new ServiceBusAdministrationClient(Endpoint, TokenCredential);
-            }
-            else
-            {
-                managementClient = new ServiceBusAdministrationClient(ConnectionString);
-            }
-
-            return managementClient;
+            return TokenCredential == null
+                ? new ServiceBusAdministrationClient(ConnectionString)
+                : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
         }
 
         protected abstract string ConnectionKey { get; }

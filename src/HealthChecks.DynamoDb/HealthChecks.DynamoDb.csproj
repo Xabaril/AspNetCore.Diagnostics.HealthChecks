@@ -5,11 +5,12 @@
     <PackageTags>HealthCheck;DynamoDb;AWS</PackageTags>
     <Description>HealthChecks.DynamoDb is the health check package for AWS DynamoDb.</Description>
     <Version>$(HealthCheckDynamoDb)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2"/>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.89" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.MongoDb.Tests.DependencyInjection
@@ -17,7 +16,7 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddMongoDb("mongodb://connectionstring");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -33,7 +32,7 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddMongoDb(MongoClientSettings.FromUrl(MongoUrl.Create("mongodb://connectionstring")));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -49,7 +48,7 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddMongoDb("mongodb://connectionstring", name: "my-mongodb-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -65,7 +64,7 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddMongoDb(MongoClientSettings.FromUrl(MongoUrl.Create("mongodb://connectionstring")), name: "my-mongodb-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

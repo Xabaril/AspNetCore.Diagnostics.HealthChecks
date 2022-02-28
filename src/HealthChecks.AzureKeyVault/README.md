@@ -13,15 +13,15 @@ With all of the following examples, you can additionally add the following param
 
 ### Basic
 
-
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddAzureKeyVault(new Uri("azure-key-vault-uri"),new DefaultAzureCredential(),options=>
+        .AddAzureKeyVault(new Uri("azure-key-vault-uri"), new DefaultAzureCredential(), options =>
         {
-            options.AddSecret("secretname")
+            options
+                .AddSecret("secretname")
                 .AddKey("keyname")
                 .AddCertificate("certificatename");
         });

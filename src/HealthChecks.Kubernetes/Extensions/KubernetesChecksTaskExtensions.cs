@@ -1,4 +1,4 @@
-﻿namespace System.Threading.Tasks
+namespace System.Threading.Tasks
 {
     public static class KubernetesChecksTaskExtensions
     {
@@ -16,7 +16,7 @@
                         tcs.SetResult(t.Result);
                         break;
                     case TaskStatus.Faulted:
-                        tcs.SetException(t.Exception);
+                        tcs.SetException(t.Exception!);
                         break;
                 }
             }, TaskContinuationOptions.ExecuteSynchronously);

@@ -1,11 +1,10 @@
-﻿using FluentAssertions;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -19,7 +18,6 @@ namespace HealthChecks.Oracle.Tests.Functional
             var connectionString = "Data Source=localhost:1521/xe;User Id=system;Password=oracle";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -33,7 +31,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -47,7 +45,6 @@ namespace HealthChecks.Oracle.Tests.Functional
             var connectionString = "Data Source=255.255.255.255:1521/xe;User Id=system;Password=oracle";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -61,7 +58,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -75,7 +72,6 @@ namespace HealthChecks.Oracle.Tests.Functional
         {
             var connectionString = "Data Source=localhost:1521/xe;User Id=system;Password=oracle";
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -89,7 +85,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();

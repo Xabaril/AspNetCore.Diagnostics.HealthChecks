@@ -1,6 +1,3 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Azure.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -10,7 +7,7 @@ namespace HealthChecks.AzureServiceBus
         : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _topicName;
-        private string _connectionKey;
+        private string? _connectionKey;
 
         public AzureServiceBusTopicHealthCheck(string connectionString, string topicName) : base(connectionString)
         {

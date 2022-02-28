@@ -1,13 +1,10 @@
-﻿using FluentAssertions;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.System.Tests.Functional
@@ -15,8 +12,8 @@ namespace HealthChecks.System.Tests.Functional
     [Collection("execution")]
     public class disk_storage_healthcheck_should
     {
-        private DriveInfo[] _drives = DriveInfo.GetDrives();
-      
+        private readonly DriveInfo[] _drives = DriveInfo.GetDrives();
+
         [Fact]
         public async Task be_healthy_when_disks_have_more_free_space_than_configured()
         {
@@ -26,24 +23,20 @@ namespace HealthChecks.System.Tests.Functional
             var targetFreeSpace = testDriveActualFreeMegabytes - 50;
 
             var webHostBuilder = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services.AddHealthChecks()
-                  .AddDiskStorageHealthCheck(setup =>
-                  {
-                      setup.AddDrive(testDrive.Name, targetFreeSpace);
-                  }, tags: new string[] { "diskstorage" });
-             })
-             .Configure(app =>
-             {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
-                 {
-                     Predicate = r => r.Tags.Contains("diskstorage")
-                 });
-             });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: new string[] { "diskstorage" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("diskstorage")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
               .GetAsync();
 
@@ -59,24 +52,20 @@ namespace HealthChecks.System.Tests.Functional
             var targetFreeSpace = testDriveActualFreeMegabytes + 50;
 
             var webHostBuilder = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services.AddHealthChecks()
-                  .AddDiskStorageHealthCheck(setup =>
-                  {
-                      setup.AddDrive(testDrive.Name, targetFreeSpace);
-                  }, tags: new string[] { "diskstorage" });
-             })
-             .Configure(app =>
-             {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
-                 {
-                     Predicate = r => r.Tags.Contains("diskstorage")
-                 });
-             });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: new string[] { "diskstorage" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("diskstorage")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
               .GetAsync();
 
@@ -87,24 +76,20 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_unhealthy_when_a_configured_disk_does_not_exist()
         {
             var webHostBuilder = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services.AddHealthChecks()
-                  .AddDiskStorageHealthCheck(setup =>
-                  {
-                      setup.AddDrive("nonexistingdisk", 104857600);
-                  }, tags: new string[] { "diskstorage" });
-             })
-             .Configure(app =>
-             {
-                 app.UseHealthChecks("/health", new HealthCheckOptions()
-                 {
-                     Predicate = r => r.Tags.Contains("diskstorage")
-                 });
-             });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddDiskStorageHealthCheck(setup => setup.AddDrive("nonexistingdisk", 104857600), tags: new string[] { "diskstorage" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("diskstorage")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
               .GetAsync();
 

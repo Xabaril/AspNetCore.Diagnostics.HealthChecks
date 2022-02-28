@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace HealthChecks.Network
 {
     public class SslHealthCheckOptions
     {
-        internal List<(string host, int port, int checkLeftDays)> ConfiguredHosts = new List<(string host, int port, int checkLeftDays)>();
+        internal List<(string host, int port, int checkLeftDays)> ConfiguredHosts = new();
 
         /// <summary>
         /// Add a new host to check using <see cref="TcpHealthCheck"/>

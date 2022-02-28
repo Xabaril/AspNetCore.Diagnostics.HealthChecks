@@ -1,10 +1,7 @@
-﻿using FluentAssertions;
-using HealthChecks.Uris;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Uris.Tests.DependencyInjection
@@ -18,7 +15,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -35,7 +32,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "my-uri-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -52,7 +49,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddUrlGroup(sp => new Uri("http://httpbin.org/status/200"));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

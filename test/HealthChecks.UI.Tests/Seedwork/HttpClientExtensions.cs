@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Tests
 {

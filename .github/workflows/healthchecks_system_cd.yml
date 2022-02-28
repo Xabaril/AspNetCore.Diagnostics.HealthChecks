@@ -2,7 +2,7 @@ name: HealthChecks System CD
 
 on:
   push:
-    tags:       
+    tags:
       - release-system-*
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
@@ -23,10 +23,10 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.System/HealthChecks.System.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:

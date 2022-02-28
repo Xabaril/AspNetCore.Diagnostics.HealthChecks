@@ -1,15 +1,12 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Azure.Core;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly string _queueName;
-        private string _connectionKey;
+        private string? _connectionKey;
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {
@@ -45,7 +42,6 @@ namespace HealthChecks.AzureServiceBus
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-
 
         protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_queueName}";
     }

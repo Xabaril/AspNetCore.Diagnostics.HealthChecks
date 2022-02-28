@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.Nats
+namespace HealthChecks.Nats
 {
     public class NatsOptions
     {
@@ -15,13 +15,14 @@
         /// <summary>
         /// The path to a user's public JWT credentials.
         /// </summary>
-        /// <remarks>
-        /// </remarks>
         public string Jwt { get; set; }
 
         /// <summary>
-        /// The path to a file for user user's private Nkey seed.
+        /// The path to a file for user's private Nkey seed.
         /// </summary>
+        /// <remarks>
+        /// <see href="https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/nkey_auth"/>
+        /// </remarks>
         public string PrivateNKey { get; set; }
     }
 }

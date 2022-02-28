@@ -27,7 +27,7 @@ There is a demo instance `nats://demo.nats.io:4222` managed by nats.io and the d
 
 The setup action used by the extension method caters for all three overloads supplied by the Nats client to create a connection off of a connection factory.
 
-```cs
+```csharp
 namespace NATS.Client
 {
     public sealed class ConnectionFactory

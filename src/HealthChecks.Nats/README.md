@@ -11,11 +11,12 @@ public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddNats((NatsOptions setup) => {
-            setup.Url = "A string containing the URL (or URLs) to the NATS Server.";
-            setup.CredentialsPath = "The full path to a chained credentials file.";
-            setup.Jwt = "The path to a user's public JWT credentials.";
-            setup.PrivateNKey = "The path to a file for user user's private Nkey seed.";
+        .AddNats(options =>
+        {
+            options.Url = "A string containing the URL (or URLs) to the NATS Server.";
+            options.CredentialsPath = "The full path to a chained credentials file.";
+            options.Jwt = "The path to a user's public JWT credentials.";
+            options.PrivateNKey = "The path to a file for user user's private Nkey seed.";
         });
 }
 ```

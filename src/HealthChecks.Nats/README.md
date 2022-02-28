@@ -13,7 +13,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddNats(options =>
         {
-            options.Url = "A string containing the URL (or URLs) to the NATS Server.";
+            options.Url = "nats://demo.nats.io:4222";
             options.CredentialsPath = "The full path to a chained credentials file.";
             options.Jwt = "The path to a user's public JWT credentials.";
             options.PrivateNKey = "The path to a file for user user's private Nkey seed.";
@@ -21,9 +21,15 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-`Url` property is mandatory. \
+`Url` property is NATS server url and is **mandatory**. \
+There is a demo instance `nats://demo.nats.io:4222` managed by nats.io and this is the default value for the url property. \
 The rest of the properties in `NatsOptions` are optional. \
-There is a demo instance `nats://demo.nats.io:4222` managed by nats.io and the docker image produces `nats://localhost:4222`.
+Docker image produces `nats://localhost:4222`. \
+Url might also be a string containing multiple URLs to the NATS Server, e.g. `nats://localhost:4222, nats://localhost:8222`.
+
+See [NKeys](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/nkey_auth) for reference to the `PrivateNKey` and `Jwt` properties.
+
+See [Authenticating with a Credentials File](https://docs.nats.io/using-nats/developer/connecting/creds) for details related to the `CredentialsPath` property.
 
 The setup action used by the extension method caters for all three overloads supplied by the Nats client to create a connection off of a connection factory.
 

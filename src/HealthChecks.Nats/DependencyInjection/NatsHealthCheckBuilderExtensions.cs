@@ -31,9 +31,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddNats(
             this IHealthChecksBuilder builder,
             Action<NatsOptions> setup,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             var options = new NatsOptions();

@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.Nats.Tests
+namespace HealthChecks.Nats.Tests
 {
     internal class Defines
     {
@@ -12,7 +12,7 @@
         public const string NatsName = "nats";
         public const string CustomRegistrationName = nameof(CustomRegistrationName);
         public static readonly string[] Tags = new string[] { NatsName };
-        
+
         public const string HealthRequestRelativePath = "/health";
     }
 }

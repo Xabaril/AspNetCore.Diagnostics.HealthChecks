@@ -19,7 +19,7 @@ namespace HealthChecks.Nats
         /// <summary>
         /// An NATS.Client.IConnection object connected to the NATS server.
         /// </summary>
-        private IConnection _connection = null;
+        private IConnection? _connection = null;
 
         public NatsHealthCheck(NatsOptions natsOptions)
         {

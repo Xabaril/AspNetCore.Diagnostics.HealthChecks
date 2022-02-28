@@ -38,7 +38,6 @@
 [![Uris Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_uris_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_uris_ci.yml)
 [![ClickHouse Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml)
 
-
 ![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=Docker%20UI%20Version&logo=dsd&sort=date)
 ![ui pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui.svg?label=Docker%20UI%20Pulls)
 

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Beat;Health;ClickHouse</PackageTags>
-    <Description>HealthChecks.CLickhouse is a health check for ClickHouse DataBase.</Description>
-    <Version>$(HealthCheckCliCKhouse)</Version>
+    <Description>HealthChecks.ClickHouse is a health check for ClickHouse DataBase.</Description>
+    <Version>$(HealthCheckClickHouse)</Version>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

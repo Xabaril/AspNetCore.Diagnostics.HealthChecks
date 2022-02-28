@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using IBM.WMQ;
 using Microsoft.AspNetCore.Builder;
@@ -45,22 +44,21 @@ namespace HealthChecks.Ibmq.Tests.Functional
             };
 
             var webHostBuilder = new WebHostBuilder()
-                 .UseStartup<DefaultStartup>()
-                 .ConfigureServices(services =>
-                 {
-                     services
-                        .AddHealthChecks()
-                        .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
-                 })
-                 .Configure(app =>
-                 {
-                     app.UseHealthChecks("/health", new HealthCheckOptions()
-                     {
-                         Predicate = r => r.Tags.Contains("ibmmq")
-                     });
-                 });
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddHealthChecks()
+                    .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ibmmq")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -82,7 +80,6 @@ namespace HealthChecks.Ibmq.Tests.Functional
             };
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -97,7 +94,7 @@ namespace HealthChecks.Ibmq.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -110,7 +107,6 @@ namespace HealthChecks.Ibmq.Tests.Functional
         public async Task be_unhealthy_if_ibmmq_managed_is_unavailable()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -125,7 +121,7 @@ namespace HealthChecks.Ibmq.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -138,22 +134,21 @@ namespace HealthChecks.Ibmq.Tests.Functional
         public async Task be_healthy_if_ibmmq_managed_is_available()
         {
             var webHostBuilder = new WebHostBuilder()
-                 .UseStartup<DefaultStartup>()
-                 .ConfigureServices(services =>
-                 {
-                     services
-                         .AddHealthChecks()
-                         .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: new string[] { "ibmmq" });
-                 })
-                 .Configure(app =>
-                 {
-                     app.UseHealthChecks("/health", new HealthCheckOptions()
-                     {
-                         Predicate = r => r.Tags.Contains("ibmmq")
-                     });
-                 });
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddHealthChecks()
+                        .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: new string[] { "ibmmq" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ibmmq")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();

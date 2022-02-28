@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using HealthChecks.SendGrid;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="SendGridHealthCheck"/>.
+    /// </summary>
     public static class SendGridHealthCheckExtensions
     {
         internal const string NAME = "sendgrid";
@@ -23,14 +23,20 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddSendGrid(this IHealthChecksBuilder builder, string apiKey, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddSendGrid(
+            this IHealthChecksBuilder builder,
+            string apiKey,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var registrationName = name ?? NAME;
 
             builder.Services.AddHttpClient(registrationName);
 
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
+                registrationName,
                 sp => new SendGridHealthCheck(apiKey, sp.GetRequiredService<IHttpClientFactory>()),
                 failureStatus,
                 tags,

@@ -1,7 +1,4 @@
-using System;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -10,10 +7,12 @@ namespace HealthChecks.Network
     public class TcpHealthCheck : IHealthCheck
     {
         private readonly TcpHealthCheckOptions _options;
+
         public TcpHealthCheck(TcpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

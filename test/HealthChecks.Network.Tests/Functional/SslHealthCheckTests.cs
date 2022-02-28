@@ -1,7 +1,4 @@
-using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -15,7 +12,7 @@ namespace HealthChecks.Network.Tests.Functional
 {
     public class ssl_healthcheck_should
     {
-        //Use https://badssl.com web site, witch provide samples certificates with varius states and types 
+        //Use https://badssl.com web site, witch provide samples certificates with varius states and types
         private const string _validHost256 = "sha256.badssl.com";
         private const string _validHost384 = "sha384.badssl.com";
         private const string _validHost512 = "sha512.badssl.com";
@@ -26,28 +23,26 @@ namespace HealthChecks.Network.Tests.Functional
         [Fact]
         public async Task be_healthy_if_ssl_is_valid()
         {
-
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSslHealthCheck(options =>
                     {
                         options.AddHost(_validHost256);
                         options.AddHost(_validHost384);
                         options.AddHost(_validHost512);
                     }, tags: new string[] { "ssl" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("ssl")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ssl")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -58,21 +53,20 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_unhealthy_if_ssl_is_not_present()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSslHealthCheck(options => options.AddHost(_httpHost, 80), tags: new string[] { "ssl" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("ssl")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ssl")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -83,21 +77,20 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_unhealthy_if_ssl_is_not_valid()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSslHealthCheck(options => options.AddHost(_revokedHost), tags: new string[] { "ssl" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("ssl")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ssl")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -107,23 +100,21 @@ namespace HealthChecks.Network.Tests.Functional
         [Fact]
         public async Task be_unhealthy_if_ssl_is_expired()
         {
-
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSslHealthCheck(options => options.AddHost(_expiredHost), tags: new string[] { "ssl" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("ssl")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ssl")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
@@ -134,21 +125,20 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_degraded_if_ssl_daysbefore()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSslHealthCheck(options => options.AddHost(_validHost256, checkLeftDays: 1095), tags: new string[] { "ssl" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("ssl")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ssl")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health").GetAsync();
 

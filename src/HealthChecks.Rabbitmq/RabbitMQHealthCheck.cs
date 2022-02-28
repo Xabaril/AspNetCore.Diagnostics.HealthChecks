@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 
@@ -38,12 +35,11 @@ namespace HealthChecks.RabbitMQ
             try
             {
                 using var model = EnsureConnection().CreateModel();
-                return Task.FromResult(HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {
-                return Task.FromResult(
-                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
 

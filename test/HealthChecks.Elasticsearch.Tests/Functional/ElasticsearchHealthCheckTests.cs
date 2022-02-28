@@ -1,5 +1,4 @@
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -19,7 +18,6 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
             var connectionString = @"http://localhost:9200";
 
             var webHostBuilder = new WebHostBuilder()
-            .UseStartup<DefaultStartup>()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
@@ -33,7 +31,7 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
                 });
             });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
@@ -46,21 +44,20 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
         public async Task be_unhealthy_if_elasticsearch_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-           .UseStartup<DefaultStartup>()
-           .ConfigureServices(services =>
-           {
-               services.AddHealthChecks()
-                .AddElasticsearch("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
-           })
-           .Configure(app =>
-           {
-               app.UseHealthChecks("/health", new HealthCheckOptions()
-               {
-                   Predicate = r => r.Tags.Contains("elasticsearch")
-               });
-           });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddElasticsearch("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("elasticsearch")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();

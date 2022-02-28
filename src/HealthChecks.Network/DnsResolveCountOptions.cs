@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace HealthChecks.Network
 {
     public class DnsResolveCountOptions

@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySqlConnector;
 
@@ -23,12 +20,9 @@ namespace HealthChecks.MySql
                 {
                     await connection.OpenAsync(cancellationToken);
 
-                    if (!await connection.PingAsync(cancellationToken))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    return await connection.PingAsync(cancellationToken)
+                        ? HealthCheckResult.Healthy()
+                        : new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
                 }
             }
             catch (Exception ex)

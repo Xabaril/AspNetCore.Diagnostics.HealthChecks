@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
@@ -23,7 +20,7 @@ namespace HealthChecks.System
 
             if (currentValue.CompareTo(_maximumValue) <= 0)
             {
-                return Task.FromResult(HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
 
             return Task.FromResult(

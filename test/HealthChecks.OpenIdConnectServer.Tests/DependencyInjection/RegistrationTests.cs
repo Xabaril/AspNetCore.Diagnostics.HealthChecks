@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -17,7 +15,7 @@ namespace HealthChecks.IdSvr.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddIdentityServer(new Uri("http://myidsvr"));
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -33,7 +31,7 @@ namespace HealthChecks.IdSvr.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddIdentityServer(new Uri("http://myidsvr"), name: "my-idsvr-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

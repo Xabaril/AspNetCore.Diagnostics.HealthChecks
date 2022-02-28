@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace HealthChecks.UI.Configuration
 {
     public class Options

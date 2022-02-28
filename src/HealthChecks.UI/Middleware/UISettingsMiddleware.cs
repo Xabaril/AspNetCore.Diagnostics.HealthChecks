@@ -1,10 +1,8 @@
-﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Threading.Tasks;
 
 
 namespace HealthChecks.UI.Middleware
@@ -13,10 +11,11 @@ namespace HealthChecks.UI.Middleware
     {
         private static Settings Settings { get; set; }
         private readonly JsonSerializerSettings _jsonSerializationSettings;
-        private Lazy<dynamic> _uiOutputSettings = new Lazy<dynamic>(GetUIOutputSettings);
+        private readonly Lazy<dynamic> _uiOutputSettings = new(GetUIOutputSettings);
 
         public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
         {
+            _ = next;
             _ = settings ?? throw new ArgumentNullException(nameof(settings));
             Settings = settings.Value;
 
@@ -25,6 +24,7 @@ namespace HealthChecks.UI.Middleware
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             string content = JsonConvert.SerializeObject(_uiOutputSettings.Value, _jsonSerializationSettings);

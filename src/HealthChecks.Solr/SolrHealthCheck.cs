@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SolrNet.Impl;
 
@@ -24,7 +21,7 @@ namespace HealthChecks.Solr
             {
                 var url = $"{_options.Uri}/{_options.Core}";
 
-                if (!_connections.TryGetValue(url, out SolrConnection solrConnection))
+                if (!_connections.TryGetValue(url, out var solrConnection))
                 {
                     solrConnection = new SolrConnection(url)
                     {

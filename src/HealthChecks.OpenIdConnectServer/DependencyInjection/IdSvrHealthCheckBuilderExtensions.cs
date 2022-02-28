@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using HealthChecks.IdSvr;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="IdSvrHealthCheck"/>.
+    /// </summary>
     public static class IdSvrHealthCheckBuilderExtensions
     {
         private const string NAME = "idsvr";
@@ -23,7 +23,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddIdentityServer(this IHealthChecksBuilder builder, Uri idSvrUri, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddIdentityServer(
+            this IHealthChecksBuilder builder,
+            Uri idSvrUri,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var registrationName = name ?? NAME;
 

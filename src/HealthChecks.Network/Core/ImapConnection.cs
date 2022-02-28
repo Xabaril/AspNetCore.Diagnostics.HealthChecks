@@ -1,12 +1,10 @@
-using System;
-using System.Threading.Tasks;
-
 namespace HealthChecks.Network.Core
 {
     internal class ImapConnection : MailConnection
     {
         public bool IsAuthenticated { get; private set; }
-        public bool Connected => _tcpClient.Connected;
+
+        public bool Connected => _tcpClient?.Connected == true;
 
         public ImapConnectionType ConnectionType
         {
@@ -21,8 +19,8 @@ namespace HealthChecks.Network.Core
 
         private ImapConnectionType _connectionType;
 
-        internal ImapConnection(ImapConnectionOptions options) :
-            base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
+        internal ImapConnection(ImapConnectionOptions options)
+            : base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));

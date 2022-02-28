@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StackExchange.Redis;
 
@@ -9,7 +6,7 @@ namespace HealthChecks.Redis
 {
     public class RedisHealthCheck : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new ConcurrentDictionary<string, ConnectionMultiplexer>();
+        private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new();
         private readonly string _redisConnectionString;
 
         public RedisHealthCheck(string redisConnectionString)
@@ -21,7 +18,7 @@ namespace HealthChecks.Redis
         {
             try
             {
-                if (!_connections.TryGetValue(_redisConnectionString, out ConnectionMultiplexer connection))
+                if (!_connections.TryGetValue(_redisConnectionString, out var connection))
                 {
                     connection = await ConnectionMultiplexer.ConnectAsync(_redisConnectionString);
 
@@ -48,8 +45,7 @@ namespace HealthChecks.Redis
 
                         if (clusterInfo is object && !clusterInfo.IsNull)
                         {
-                            if (!clusterInfo.ToString()
-                                .Contains("cluster_state:ok"))
+                            if (!clusterInfo.ToString()!.Contains("cluster_state:ok"))
                             {
                                 //cluster info is not ok!
                                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is not on OK state for endpoint {endPoint}");
@@ -57,7 +53,7 @@ namespace HealthChecks.Redis
                         }
                         else
                         {
-                            //cluster info cannot be read for this cluster node 
+                            //cluster info cannot be read for this cluster node
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is null or can't be read for endpoint {endPoint}");
                         }
                     }

@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.EventStore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddEventStore("connection-string");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -34,7 +33,7 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddEventStore("connection-string", name: "my-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

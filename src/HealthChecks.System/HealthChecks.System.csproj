@@ -1,15 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Beat;Health;System;Ping;Disk Storage</PackageTags>
     <Description>HealthChecks.System is the system health check package.</Description>
     <Version>$(HealthCheckSystem)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <PackageReference Include="System.ServiceProcess.ServiceController"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
+    <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetsWindows)' == 'true'">

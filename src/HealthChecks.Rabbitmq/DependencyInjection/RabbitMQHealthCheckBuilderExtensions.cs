@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
@@ -43,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for RabbitMQ services using connection string (amqp uri).
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="rabbitMQConnectionString">The RabbitMQ connection string to be used.</param>
+        /// <param name="rabbitConnectionString">The RabbitMQ connection string to be used.</param>
         /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
         /// <param name="failureStatus">
@@ -188,7 +186,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="connectionFactoryFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
+        /// <param name="connectionStringFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
+        /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -221,7 +220,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="connectionFactoryFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
+        /// <param name="connectionStringFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
+        /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

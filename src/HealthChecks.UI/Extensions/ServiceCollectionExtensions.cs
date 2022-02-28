@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI;
+using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Discovery.K8S;
@@ -7,9 +7,6 @@ using HealthChecks.UI.Core.Notifications;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using System;
-using System.Net.Http;
-using System.Reflection.Metadata;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -27,10 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             services.AddOptions<KubernetesDiscoverySettings>()
-                .Configure<IConfiguration>((settings, configuration) =>
-                {
-                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
-                });
+                .Configure<IConfiguration>((settings, configuration) => configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings));
 
             services.TryAddSingleton<ServerAddressesService>();
             services.TryAddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
@@ -85,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
             .Services;
         }
 
-        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services)
+        private static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services)
         {
             services
                 .AddHostedService<KubernetesDiscoveryHostedService>()

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.IbmMQ;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,7 @@ namespace HealthChecks.Ibmq.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddIbmMQ("queue", new Hashtable());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

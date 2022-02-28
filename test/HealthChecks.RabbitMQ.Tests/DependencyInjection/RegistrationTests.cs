@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -20,7 +18,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRabbitMQ(rabbitConnectionString: FAKE_CONNECTION_STRING);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -44,7 +42,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRabbitMQ(FAKE_CONNECTION_STRING, name: customCheckName);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

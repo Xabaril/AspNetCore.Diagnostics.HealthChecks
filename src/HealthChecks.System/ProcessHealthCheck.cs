@@ -1,7 +1,4 @@
-using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
@@ -25,7 +22,7 @@ namespace HealthChecks.System
 
                 if (_predicate(processes))
                 {
-                    return Task.FromResult(HealthCheckResult.Healthy());
+                    return HealthCheckResultTask.Healthy;
                 }
             }
             catch (Exception ex)

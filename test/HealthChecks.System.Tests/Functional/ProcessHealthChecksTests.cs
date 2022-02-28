@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -17,7 +15,6 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_healthy_when_the_process_exists_and_is_running()
         {
             var webhostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -44,19 +41,18 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_unhealthy_when_the_process_is_not_running()
         {
             var webhostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                       .AddProcessHealthCheck("notexist", p => p?.Any() ?? false);
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => true
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddProcessHealthCheck("notexist", p => p?.Any() ?? false);
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => true
+                    });
+                });
 
             var server = new TestServer(webhostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
@@ -67,19 +63,18 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_unhealthy_when_the_predicate_throws_exception()
         {
             var webhostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                       .AddProcessHealthCheck("someproc", p => !p.First().HasExited);
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => true
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddProcessHealthCheck("someproc", p => !p.First().HasExited);
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => true
+                    });
+                });
 
             var server = new TestServer(webhostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -22,7 +17,7 @@ namespace HealthChecks.Network
         {
             try
             {
-                var resolutionsAboveThreshold = new List<(string host, int total)>();
+                List<(string host, int total)>? resolutionsAboveThreshold = null;
 
                 foreach (var entry in _options.HostRegistrations)
                 {
@@ -33,11 +28,11 @@ namespace HealthChecks.Network
 
                     if (totalAddresses < minHosts || totalAddresses > maxHosts)
                     {
-                        resolutionsAboveThreshold.Add((entry.Key, totalAddresses));
+                        (resolutionsAboveThreshold ??= new()).Add((entry.Key, totalAddresses));
                     }
                 }
 
-                if (resolutionsAboveThreshold.Any())
+                if (resolutionsAboveThreshold?.Count > 0)
                 {
                     var description = string.Join(",", resolutionsAboveThreshold.Select(f => $"Host: {f.host} resolves to {f.total} addresses"));
                     return new HealthCheckResult(context.Registration.FailureStatus, description);

@@ -1,4 +1,3 @@
-using System.Linq;
 using Amazon.S3;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +22,7 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
                     options.S3Config = new AmazonS3Config();
                 });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -46,7 +45,7 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
                      options.S3Config = new AmazonS3Config();
                  }, name: "aws s3 check");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

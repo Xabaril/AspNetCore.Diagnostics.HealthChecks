@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.RavenDB;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -35,7 +34,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
                 .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" },
                     name: "my-ravendb");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -52,7 +51,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -69,7 +68,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" }, name: "my-ravendb");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

@@ -1,7 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Uris
@@ -39,7 +35,7 @@ namespace HealthChecks.Uris
 
                     var httpClient = _httpClientFactory();
 
-                    var requestMessage = new HttpRequestMessage(method, item.Uri);
+                    using var requestMessage = new HttpRequestMessage(method, item.Uri);
 
                     foreach (var (Name, Value) in item.Headers)
                     {
@@ -49,7 +45,7 @@ namespace HealthChecks.Uris
                     using (var timeoutSource = new CancellationTokenSource(timeout))
                     using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
                     {
-                        var response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
+                        using var response = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, linkedSource.Token);
 
                         if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {

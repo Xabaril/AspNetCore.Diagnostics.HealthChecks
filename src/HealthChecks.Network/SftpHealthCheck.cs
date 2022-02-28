@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Renci.SshNet;
 using ConnectionInfo = Renci.SshNet.ConnectionInfo;
@@ -11,10 +7,12 @@ namespace HealthChecks.Network
     public class SftpHealthCheck : IHealthCheck
     {
         private readonly SftpHealthCheckOptions _options;
+
         public SftpHealthCheck(SftpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -51,8 +49,7 @@ namespace HealthChecks.Network
                     }
                 }
 
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {

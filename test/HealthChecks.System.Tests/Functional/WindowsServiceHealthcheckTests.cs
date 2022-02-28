@@ -1,7 +1,5 @@
-using System;
 using System.Net;
 using System.ServiceProcess;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.System.Tests.Seedwork;
 using Microsoft.AspNetCore.Builder;
@@ -14,13 +12,13 @@ using Xunit;
 namespace HealthChecks.System.Tests.Functional
 {
     [Collection("execution")]
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Windows only")]
     public class windows_service__healthcheck_should
     {
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
         public async Task be_healthy_when_the_service_is_running()
         {
             var webhostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -43,7 +41,6 @@ namespace HealthChecks.System.Tests.Functional
         public async Task be_unhealthy_when_the_service_does_not_exist()
         {
             var webhostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -66,19 +63,18 @@ namespace HealthChecks.System.Tests.Functional
         public void throw_exception_when_registering_it_in_a_no_windows_system()
         {
             var webhostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                       .AddWindowsServiceHealthCheck("dotnet", s => s.Status == ServiceControllerStatus.Running);
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => true
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddWindowsServiceHealthCheck("dotnet", s => s.Status == ServiceControllerStatus.Running);
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => true
+                    });
+                });
 
             var exception = Assert.Throws<PlatformNotSupportedException>(() =>
             {

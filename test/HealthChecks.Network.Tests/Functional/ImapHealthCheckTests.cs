@@ -1,7 +1,4 @@
-using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using HealthChecks.Network.Core;
 using Microsoft.AspNetCore.Builder;
@@ -26,26 +23,25 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_connecting_to_imap_ssl_port_without_login()
         {
             var webHostBuilder = new WebHostBuilder()
-            .UseStartup<DefaultStartup>()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                 .AddImapHealthCheck(setup =>
-                 {
-                     setup.Host = _host;
-                     setup.Port = 993;
-                     setup.AllowInvalidRemoteCertificates = true;
-                 }, tags: new string[] { "imap" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                .ConfigureServices(services =>
                 {
-                    Predicate = r => r.Tags.Contains("imap")
+                    services.AddHealthChecks()
+                     .AddImapHealthCheck(setup =>
+                     {
+                         setup.Host = _host;
+                         setup.Port = 993;
+                         setup.AllowInvalidRemoteCertificates = true;
+                     }, tags: new string[] { "imap" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
                 });
-            });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -56,10 +52,9 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_connecting_to_imap_ssl_and_login_with_correct_account()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddImapHealthCheck(setup =>
                     {
                         setup.Host = _host;
@@ -67,17 +62,17 @@ namespace HealthChecks.Network.Tests.Functional
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith(_validAccount, _validPassword);
                     }, tags: new string[] { "imap" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("imap")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -88,10 +83,9 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_unhealthy_when_connecting_to_imap_ssl_and_login_with_an_incorrect_account()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddImapHealthCheck(setup =>
                     {
                         setup.Host = _host;
@@ -100,16 +94,16 @@ namespace HealthChecks.Network.Tests.Functional
                         setup.AllowInvalidRemoteCertificates = true;
                         setup.LoginWith("invalid@healthchecks.com", "invalidpassword");
                     }, tags: new string[] { "imap" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("imap")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -120,10 +114,9 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_connecting_to_imap_ssl_with_a_correct_account_checking_an_existing_folder()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddImapHealthCheck(setup =>
                     {
                         setup.Host = _host;
@@ -132,31 +125,29 @@ namespace HealthChecks.Network.Tests.Functional
                         setup.LoginWith(_validAccount, _validPassword);
                         setup.CheckFolderExists("INBOX");
                     }, tags: new string[] { "imap" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("imap")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
             response.EnsureSuccessStatusCode();
         }
 
-
         [Fact]
         public async Task be_unhealthy_when_connecting_to_imap_ssl_with_a_correct_account_checking_an_non_existing_folder()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddImapHealthCheck(setup =>
                     {
                         setup.Host = _host;
@@ -165,17 +156,16 @@ namespace HealthChecks.Network.Tests.Functional
                         setup.LoginWith(_validAccount, _validPassword);
                         setup.CheckFolderExists("INVALIDFOLDER");
                     }, tags: new string[] { "imap" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("imap")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
-
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -186,26 +176,25 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_imap_connects_to_starttls_port()
         {
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddImapHealthCheck(setup =>
-                   {
-                       setup.Host = _host;
-                       setup.Port = 143;
-                       setup.AllowInvalidRemoteCertificates = true;
-                   }, tags: new string[] { "imap" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("imap")
-                  });
-              });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddImapHealthCheck(setup =>
+                    {
+                        setup.Host = _host;
+                        setup.Port = 143;
+                        setup.AllowInvalidRemoteCertificates = true;
+                    }, tags: new string[] { "imap" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -216,28 +205,26 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_imap_performs_login_using_starttls_handshake()
         {
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddImapHealthCheck(setup =>
-                   {
-                       setup.Host = _host;
-                       setup.Port = 143;
-                       setup.AllowInvalidRemoteCertificates = true;
-                       setup.LoginWith(_validAccount, _validPassword);
-                   }, tags: new string[] { "imap" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("imap")
-                  });
-              });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddImapHealthCheck(setup =>
+                    {
+                        setup.Host = _host;
+                        setup.Port = 143;
+                        setup.AllowInvalidRemoteCertificates = true;
+                        setup.LoginWith(_validAccount, _validPassword);
+                    }, tags: new string[] { "imap" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
-
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -248,29 +235,28 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_imap_performs_login_and_folder_check_using_starttls_handshake()
         {
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddImapHealthCheck(setup =>
-                   {
-                       setup.Host = _host;
-                       setup.Port = 143;
-                       setup.ConnectionType = ImapConnectionType.STARTTLS;
-                       setup.AllowInvalidRemoteCertificates = true;
-                       setup.LoginWith(_validAccount, _validPassword);
-                       setup.CheckFolderExists("INBOX");
-                   }, tags: new string[] { "imap" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("imap")
-                  });
-              });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddImapHealthCheck(setup =>
+                    {
+                        setup.Host = _host;
+                        setup.Port = 143;
+                        setup.ConnectionType = ImapConnectionType.STARTTLS;
+                        setup.AllowInvalidRemoteCertificates = true;
+                        setup.LoginWith(_validAccount, _validPassword);
+                        setup.CheckFolderExists("INBOX");
+                    }, tags: new string[] { "imap" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -281,28 +267,27 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_unhealthy_when_using_configuration_auto_with_an_invalid_imap_port()
         {
             var webHostBuilder = new WebHostBuilder()
-             .UseStartup<DefaultStartup>()
-             .ConfigureServices(services =>
-             {
-                 services.AddHealthChecks()
-                  .AddImapHealthCheck(setup =>
-                  {
-                      setup.Host = _host;
-                      setup.Port = 135;
-                  }, tags: new string[] { "imap" });
-             })
-             .Configure(app =>
-             {
-                 var options = new HealthCheckOptions()
-                 {
-                     Predicate = r => r.Tags.Contains("imap")
-                 };
-                 options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.ServiceUnavailable;
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddImapHealthCheck(setup =>
+                    {
+                        setup.Host = _host;
+                        setup.Port = 135;
+                    }, tags: new string[] { "imap" });
+                })
+                .Configure(app =>
+                {
+                    var options = new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("imap")
+                    };
+                    options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.ServiceUnavailable;
 
-                 app.UseHealthChecks("/health", options);
-             });
+                    app.UseHealthChecks("/health", options);
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 

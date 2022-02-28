@@ -15,7 +15,7 @@ namespace HealthChecks.Publisher.ApplicationInsights.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddPrometheusGatewayPublisher("http://endpoint.com", "job_name");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
             Assert.NotNull(publisher);

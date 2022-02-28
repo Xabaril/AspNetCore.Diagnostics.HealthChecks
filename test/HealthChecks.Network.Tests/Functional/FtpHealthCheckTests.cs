@@ -1,7 +1,4 @@
-using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -21,7 +18,6 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_connection_is_successful()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -40,7 +36,7 @@ namespace HealthChecks.Network.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
@@ -51,7 +47,6 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_connection_is_successful_and_file_is_created()
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -70,7 +65,7 @@ namespace HealthChecks.Network.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 

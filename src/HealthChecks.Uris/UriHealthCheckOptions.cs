@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-
 namespace HealthChecks.Uris
 {
     public interface IUriOptions
@@ -17,7 +13,7 @@ namespace HealthChecks.Uris
 
     public class UriOptions : IUriOptions
     {
-        public HttpMethod HttpMethod { get; private set; }
+        public HttpMethod? HttpMethod { get; private set; }
 
         public TimeSpan Timeout { get; private set; }
 
@@ -25,7 +21,7 @@ namespace HealthChecks.Uris
 
         public Uri Uri { get; }
 
-        private readonly List<(string Name, string Value)> _headers = new List<(string Name, string Value)>();
+        private readonly List<(string Name, string Value)> _headers = new();
 
         internal IEnumerable<(string Name, string Value)> Headers => _headers;
 
@@ -79,7 +75,7 @@ namespace HealthChecks.Uris
 
     public class UriHealthCheckOptions
     {
-        private readonly List<UriOptions> _urisOptions = new List<UriOptions>();
+        private readonly List<UriOptions> _urisOptions = new();
         internal IEnumerable<UriOptions> UrisOptions => _urisOptions;
         internal HttpMethod HttpMethod { get; private set; }
         internal TimeSpan Timeout { get; private set; }
@@ -116,7 +112,7 @@ namespace HealthChecks.Uris
             return this;
         }
 
-        public UriHealthCheckOptions AddUri(Uri uriToAdd, Action<IUriOptions> setup = null)
+        public UriHealthCheckOptions AddUri(Uri uriToAdd, Action<IUriOptions>? setup = null)
         {
             var uri = new UriOptions(uriToAdd);
             setup?.Invoke(uri);

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Confluent.Kafka;
 using HealthChecks.Kafka;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

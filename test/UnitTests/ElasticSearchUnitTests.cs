@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using HealthChecks.Elasticsearch;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,8 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
@@ -40,8 +35,7 @@ namespace HealthChecks.System
                             new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {DriveName} is not present on system"));
                     }
                 }
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
+                return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {
@@ -55,12 +49,9 @@ namespace HealthChecks.System
             var driveInfo = DriveInfo.GetDrives()
                 .FirstOrDefault(drive => string.Equals(drive.Name, driveName, StringComparison.InvariantCultureIgnoreCase));
 
-            if (driveInfo != null)
-            {
-                return (true, driveInfo.AvailableFreeSpace / 1024 / 1024);
-            }
-
-            return (false, 0);
+            return driveInfo == null
+                ? (false, 0)
+                : (true, driveInfo.AvailableFreeSpace / 1024 / 1024);
         }
     }
 }

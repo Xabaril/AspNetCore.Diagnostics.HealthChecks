@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
 
 namespace HealthChecks.UI
 {
-    class HealthCheckUIConventionBuilder : IEndpointConventionBuilder
+    internal class HealthCheckUIConventionBuilder : IEndpointConventionBuilder
     {
         private readonly IEnumerable<IEndpointConventionBuilder> _endpoints;
 

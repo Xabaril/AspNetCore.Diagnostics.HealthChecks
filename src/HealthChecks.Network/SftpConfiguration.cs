@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using Renci.SshNet;
 
@@ -14,7 +10,7 @@ namespace HealthChecks.Network
         private readonly string _userName;
         private (bool createFile, string remotePath) _fileCreationOptions = (false, string.Empty);
 
-        internal List<AuthenticationMethod> AuthenticationMethods { get; } = new List<AuthenticationMethod>();
+        internal List<AuthenticationMethod> AuthenticationMethods { get; } = new();
         public SftpConfigurationBuilder(string host, int port, string userName)
         {
             _host = host ?? throw new ArgumentNullException(nameof(host));

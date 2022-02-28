@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Azure.Core;
 using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using Azure.Core;
 using Azure.Messaging.ServiceBus.Administration;
@@ -41,17 +40,9 @@ namespace HealthChecks.AzureServiceBus
 
         protected ServiceBusAdministrationClient CreateManagementClient()
         {
-            ServiceBusAdministrationClient managementClient;
-            if (TokenCredential != null)
-            {
-                managementClient = new ServiceBusAdministrationClient(Endpoint, TokenCredential);
-            }
-            else
-            {
-                managementClient = new ServiceBusAdministrationClient(ConnectionString);
-            }
-
-            return managementClient;
+            return TokenCredential == null
+                ? new ServiceBusAdministrationClient(ConnectionString)
+                : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
         }
 
         protected abstract string ConnectionKey { get; }

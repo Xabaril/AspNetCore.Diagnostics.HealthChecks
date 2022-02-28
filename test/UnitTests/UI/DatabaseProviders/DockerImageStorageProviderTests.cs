@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;

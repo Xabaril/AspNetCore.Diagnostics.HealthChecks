@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.Kubernetes;
 using k8s;
@@ -25,7 +24,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
                     }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer");
                 });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -49,7 +48,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
                     }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer");
                 }, name: "second-k8s-cluster");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

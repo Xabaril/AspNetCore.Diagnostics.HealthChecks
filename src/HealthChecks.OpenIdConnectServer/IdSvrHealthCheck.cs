@@ -1,7 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.IdSvr
@@ -22,14 +18,11 @@ namespace HealthChecks.IdSvr
             try
             {
                 var httpClient = _httpClientFactory();
-                var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, cancellationToken);
+                using var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
-                }
-
-                return HealthCheckResult.Healthy();
+                return response.IsSuccessStatusCode
+                    ? HealthCheckResult.Healthy()
+                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
             }
             catch (Exception ex)
             {

@@ -1,11 +1,8 @@
-using System;
 using System.Buffers;
-using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Network.Core
 {
@@ -15,9 +12,9 @@ namespace HealthChecks.Network.Core
         public string Host { get; protected set; }
         protected bool UseSSL { get; set; } = true;
 
-        protected TcpClient _tcpClient;
-        protected Stream _stream;
-        protected Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
+        protected TcpClient? _tcpClient;
+        protected Stream? _stream;
+        protected Func<object, X509Certificate?, X509Chain?, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
         private bool _disposed;
         private readonly bool _allowInvalidCertificates;
 
@@ -44,6 +41,9 @@ namespace HealthChecks.Network.Core
 
         protected Stream GetStream()
         {
+            if (_tcpClient == null)
+                throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
+
             var stream = _tcpClient.GetStream();
 
             if (UseSSL)
@@ -74,6 +74,9 @@ namespace HealthChecks.Network.Core
         protected async Task<string> ExecuteCommand(string command) //TODO: rename public API
 #pragma warning restore IDE1006 // Naming Styles
         {
+            if (_stream == null)
+                throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
+
             var buffer = Encoding.ASCII.GetBytes(command);
             await _stream.WriteAsync(buffer, 0, buffer.Length);
 

@@ -1,8 +1,4 @@
-using System;
-using System.Linq;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -25,7 +21,7 @@ namespace HealthChecks.Network
 
                     foreach (var ipAddress in ipAddresses)
                     {
-                        if (!item.Resolutions.Contains(ipAddress.ToString()))
+                        if (item.Resolutions == null || !item.Resolutions.Contains(ipAddress.ToString()))
                         {
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ip Address {ipAddress} was not resolved from host {item.Host}");
                         }

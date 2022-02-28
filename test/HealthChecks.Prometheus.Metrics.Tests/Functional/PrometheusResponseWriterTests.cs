@@ -1,5 +1,4 @@
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +15,6 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
         public async Task be_healthy_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -36,7 +34,6 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
         public async Task be_unhealthy_and_return_503_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -56,7 +53,6 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
         public async Task be_unhealthy_and_return_configured_status_code_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()

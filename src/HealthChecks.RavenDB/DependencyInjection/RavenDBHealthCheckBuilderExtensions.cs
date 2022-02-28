@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.RavenDB;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="RavenDBHealthCheck"/>.
+    /// </summary>
     public static class RavenDBHealthCheckBuilderExtensions
     {
         private const string NAME = "ravendb";
@@ -26,10 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddRavenDB(
             this IHealthChecksBuilder builder,
-            Action<RavenDBOptions> setup,
-            string name = default,
+            Action<RavenDBOptions>? setup,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             var options = new RavenDBOptions();

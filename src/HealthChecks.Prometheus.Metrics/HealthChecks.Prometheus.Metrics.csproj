@@ -5,11 +5,12 @@
     <PackageTags>HealthCheck;Prometheus;Prometheus Exporter;Metrics</PackageTags>
     <Description>HealthChecks.Publisher.Prometheus is a health check prometheus metrics exporter.</Description>
     <Version>$(HealthCheckPrometheusMetrics)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="prometheus-net"/>
+    <PackageReference Include="prometheus-net" Version="5.0.2" />
   </ItemGroup>
 
 </Project>

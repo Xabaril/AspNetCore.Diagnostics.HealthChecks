@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -17,7 +14,7 @@ namespace HealthChecks.SignalR
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            HubConnection connection = null;
+            HubConnection? connection = null;
 
             try
             {
@@ -33,7 +30,8 @@ namespace HealthChecks.SignalR
             }
             finally
             {
-                await connection?.DisposeAsync().AsTask();
+                if (connection != null)
+                    await connection.DisposeAsync();
             }
         }
     }

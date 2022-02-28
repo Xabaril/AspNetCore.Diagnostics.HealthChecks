@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using HealthChecks.DocumentDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

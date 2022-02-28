@@ -1,15 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 
 namespace HealthChecks.UI.Core.Data.Configuration
 {
-    class HealthCheckExecutionEntryMap
+    internal class HealthCheckExecutionEntryMap
         : IEntityTypeConfiguration<HealthCheckExecutionEntry>
     {
         public void Configure(EntityTypeBuilder<HealthCheckExecutionEntry> builder)

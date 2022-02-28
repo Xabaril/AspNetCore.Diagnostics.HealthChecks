@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace HealthChecks.UI.Tests
 {
     public class ProviderTestHelper

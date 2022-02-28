@@ -1,7 +1,4 @@
-using System;
-using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -19,10 +16,9 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_healthy_when_connection_to_sftp_is_successful_using_password_authentication()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSftpHealthCheck(setup =>
                     {
                         var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
@@ -31,16 +27,16 @@ namespace HealthChecks.Network.Tests.Functional
 
                         setup.AddHost(cfg);
                     }, tags: new string[] { "sftp" }, timeout: TimeSpan.FromSeconds(5));
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("sftp")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -52,29 +48,27 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_unhealthy_when_connection_to_sftp_is_using_wrong_password()
         {
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddSftpHealthCheck(setup =>
-                   {
-                       var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
                                         .AddPasswordAuthentication("wrongpass")
                                         .Build();
 
-                       setup.AddHost(cfg);
-                   }, tags: new string[] { "sftp" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("sftp")
-                  });
-              });
+                        setup.AddHost(cfg);
+                    }, tags: new string[] { "sftp" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+                });
 
-
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -88,29 +82,27 @@ namespace HealthChecks.Network.Tests.Functional
             string privateKey = File.ReadAllText("id_rsa");
 
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddSftpHealthCheck(setup =>
-                   {
-                       var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
                                         .AddPrivateKeyAuthentication(privateKey, "beatpulse")
                                         .Build();
 
-                       setup.AddHost(cfg);
-                   }, tags: new string[] { "sftp" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("sftp")
-                  });
-              });
+                        setup.AddHost(cfg);
+                    }, tags: new string[] { "sftp" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+                });
 
-
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -124,30 +116,28 @@ namespace HealthChecks.Network.Tests.Functional
             string privateKey = File.ReadAllText("id_rsa");
 
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddSftpHealthCheck(setup =>
-                   {
-                       var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
                                         .AddPrivateKeyAuthentication(privateKey, "beatpulse")
                                         .CreateFileOnConnect("upload/beatpulse")
                                         .Build();
 
-                       setup.AddHost(cfg);
-                   }, tags: new string[] { "sftp" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("sftp")
-                  });
-              });
+                        setup.AddHost(cfg);
+                    }, tags: new string[] { "sftp" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+                });
 
-
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -161,30 +151,28 @@ namespace HealthChecks.Network.Tests.Functional
             string privateKey = File.ReadAllText("id_rsa");
 
             var webHostBuilder = new WebHostBuilder()
-              .UseStartup<DefaultStartup>()
-              .ConfigureServices(services =>
-              {
-                  services.AddHealthChecks()
-                   .AddSftpHealthCheck(setup =>
-                   {
-                       var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
                                         .AddPasswordAuthentication("wrongpass")
                                         .AddPrivateKeyAuthentication(privateKey, "beatpulse")
                                         .Build();
 
-                       setup.AddHost(cfg);
-                   }, tags: new string[] { "sftp" });
-              })
-              .Configure(app =>
-              {
-                  app.UseHealthChecks("/health", new HealthCheckOptions()
-                  {
-                      Predicate = r => r.Tags.Contains("sftp")
-                  });
-              });
+                        setup.AddHost(cfg);
+                    }, tags: new string[] { "sftp" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+                });
 
-
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -196,10 +184,9 @@ namespace HealthChecks.Network.Tests.Functional
         public async Task be_unhealthy_when_using_wrong_port()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
                     .AddSftpHealthCheck(setup =>
                     {
                         var cfg = new SftpConfigurationBuilder("localhost", 5551, "foo")
@@ -208,16 +195,16 @@ namespace HealthChecks.Network.Tests.Functional
 
                         setup.AddHost(cfg);
                     }, tags: new string[] { "sftp" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("sftp")
-                   });
-               });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();

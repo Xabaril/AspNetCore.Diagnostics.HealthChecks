@@ -31,10 +31,6 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName.Contains('.UI')) == false">
-    <Compile Include="../HealthCheckResultTask.cs" />
-  </ItemGroup>
-
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />

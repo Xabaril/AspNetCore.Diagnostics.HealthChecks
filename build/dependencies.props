@@ -8,7 +8,7 @@
   <PropertyGroup Label="Health Checks Package Versions">
     <HealthCheckArangoDb>6.0.2</HealthCheckArangoDb>
     <HealthCheckAWSS3>6.0.2</HealthCheckAWSS3>
-    <HealthCheckAzureServiceBus>6.0.2</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>6.0.3</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorage>6.0.4</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>6.0.2</HealthCheckCloudFirestore>
     <HealthCheckConsul>6.0.2</HealthCheckConsul>

@@ -1,23 +1,19 @@
-﻿namespace HealthChecks.Nats
-{
-    using Microsoft.Extensions.Diagnostics.HealthChecks;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using NATS.Client;
-    using System.Collections.Generic;
-    using System;
+using System.Text;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NATS.Client;
 
+namespace HealthChecks.Nats
+{
     /// <summary>
     /// Health check for Nats Server
     /// </summary>
-    public class NatsHealthCheck : IHealthCheck
+    public sealed class NatsHealthCheck : IHealthCheck, IDisposable
     {
         /// <summary>
         ///  Provides factory methods to create connections to NATS Servers.
         /// </summary>
-        private readonly ConnectionFactory _connectionFactory = new ConnectionFactory();
-        
+        private static readonly ConnectionFactory _connectionFactory = new ConnectionFactory();
+
         private readonly NatsOptions _options;
 
         /// <summary>
@@ -25,7 +21,10 @@
         /// </summary>
         private IConnection _connection = null;
 
-        public NatsHealthCheck(NatsOptions natsOptions) => _options = natsOptions;
+        public NatsHealthCheck(NatsOptions natsOptions)
+        {
+            _options = natsOptions;
+        }
 
         public Task<HealthCheckResult> CheckHealthAsync(
             HealthCheckContext context,
@@ -34,21 +33,21 @@
             try
             {
                 _connection = CreateConnection(_options);
+                if (_connection is null)
+                    throw new ArgumentNullException(nameof(_connection));
+                var healthCheckResult = GetHealthCheckResultFromState(_connection);
+                return Task.FromResult(healthCheckResult);
             }
             catch (Exception ex)
             {
-                var unhealthy = HealthCheckResult.Unhealthy(ex.Message, ex, new Dictionary<string, object> { ["type"] = ex.GetType().Name });
+                var unhealthy = new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
                 return Task.FromResult(unhealthy);
             }
 
-            if (_connection is null) return Task.FromResult(HealthCheckResult.Unhealthy("null connection"));
-
-            var healthCheckResult = GetHealthCheckResultFromState(_connection);
-            return Task.FromResult(healthCheckResult);
-
             IConnection CreateConnection(NatsOptions options)
             {
-                if (options == null) throw new ArgumentNullException(nameof(options));
+                if (options == null)
+                    throw new ArgumentNullException(nameof(options));
                 if (!string.IsNullOrWhiteSpace(options.CredentialsPath))
                     return _connectionFactory.CreateConnection(options.Url, options.CredentialsPath);
                 if (!string.IsNullOrWhiteSpace(options.Jwt) && !string.IsNullOrWhiteSpace(options.PrivateNKey))
@@ -88,13 +87,15 @@
 
             static IReadOnlyDictionary<string, object> GetStatsData(IConnection connection) =>
                 new Dictionary<string, object>
-            {
-                [nameof(connection.Stats.InMsgs)] = connection.Stats.InMsgs,
-                [nameof(connection.Stats.OutMsgs)] = connection.Stats.OutMsgs,
-                [nameof(connection.Stats.InBytes)] = connection.Stats.InBytes,
-                [nameof(connection.Stats.OutBytes)] = connection.Stats.OutBytes,
-                [nameof(connection.Stats.Reconnects)] = connection.Stats.Reconnects
-            };
+                {
+                    [nameof(connection.Stats.InMsgs)] = connection.Stats.InMsgs,
+                    [nameof(connection.Stats.OutMsgs)] = connection.Stats.OutMsgs,
+                    [nameof(connection.Stats.InBytes)] = connection.Stats.InBytes,
+                    [nameof(connection.Stats.OutBytes)] = connection.Stats.OutBytes,
+                    [nameof(connection.Stats.Reconnects)] = connection.Stats.Reconnects
+                };
         }
+
+        public void Dispose() => _connection?.Dispose();
     }
 }

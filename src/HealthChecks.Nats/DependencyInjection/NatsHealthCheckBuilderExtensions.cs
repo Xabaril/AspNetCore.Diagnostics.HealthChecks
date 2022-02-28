@@ -1,13 +1,11 @@
-﻿using HealthChecks.Nats;
+using HealthChecks.Nats;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class NatsHealthCheckBuilderExtensions
     {
-        const string NAME = "nats";
+        internal const string NAME = "nats";
 
         /// <summary>
         /// Add a health check for Nats.
@@ -42,7 +40,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 name ?? NAME,
                 sp => new NatsHealthCheck(options),
                 failureStatus,
-                tags));
+                tags,
+                timeout));
         }
     }
 }

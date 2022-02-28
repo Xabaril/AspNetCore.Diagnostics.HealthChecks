@@ -1,13 +1,8 @@
-﻿using Azure.Core;
+using Azure.Core;
 using FluentAssertions;
-using HealthChecks.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
@@ -26,7 +21,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                      .AddKey("mycryptokey");
                  });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -42,9 +37,9 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(),options=> { }, name: "keyvaultcheck");
+                .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), options => { }, name: "keyvaultcheck");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -118,12 +113,11 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                     {
                         factoryCalled = true;
                         return new Uri("http://localhost");
-                    }, 
-                    new MockTokenCredentials(), 
-                    (_, _) => { setupCalled = true; }
-                );
+                    },
+                    new MockTokenCredentials(),
+                    (_, _) => setupCalled = true);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -144,10 +138,9 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                 .AddAzureKeyVault(
                     new Uri("http://localhost"),
                     new MockTokenCredentials(),
-                    (_, _) => { setupCalled = true; }
-                );
+                    (_, _) => setupCalled = true);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

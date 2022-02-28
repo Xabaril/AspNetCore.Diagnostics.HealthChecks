@@ -1,9 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.RavenDB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.RavenDb.Tests.DependencyInjection
@@ -15,9 +14,9 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRavenDB(_ => { _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" }; });
+                .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -32,10 +31,10 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddRavenDB(_ => { _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" }; },
+                .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" },
                     name: "my-ravendb");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -52,7 +51,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -69,7 +68,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" }, name: "my-ravendb");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

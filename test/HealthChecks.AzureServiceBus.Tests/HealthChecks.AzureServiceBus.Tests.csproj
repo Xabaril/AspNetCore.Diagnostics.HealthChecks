@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Azure.Identity"/>
-	</ItemGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
+  </ItemGroup>
 
 </Project>

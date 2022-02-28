@@ -74,7 +74,6 @@
     <PackageReference Update="System.Text.Json" Version="6.0.0"/>
     <PackageReference Update="System.Threading.Channels" Version="6.0.0" />
     <PackageReference Include="NATS.Client" Version="0.14.4" />
-
     <PackageReference Update="coverlet.collector" Version="3.1.0"/>
     <PackageReference Update="FluentAssertions" Version="6.2.0"/>
     <PackageReference Update="Microsoft.AspNetCore.TestHost" Version="6.0.0"/>

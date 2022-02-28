@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-	</PropertyGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />
+  </ItemGroup>
 
 </Project>

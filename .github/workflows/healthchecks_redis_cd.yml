@@ -1,7 +1,7 @@
 name: HealthChecks Redis CD
 on:
   push:
-    tags:       
+    tags:
       - release-redis-*
 
 jobs:
@@ -10,14 +10,14 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     services:
-      sqlserver:
+      redis:
         image: redis:alpine
         ports:
           - 6379:6379
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
@@ -27,10 +27,10 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj --verbosity normal
-    - name: dotnet pack 
+    - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.0.5
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       with:

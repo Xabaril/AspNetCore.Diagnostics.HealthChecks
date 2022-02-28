@@ -1,8 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.DocumentDb.Tests.DependencyInjection
@@ -16,7 +15,7 @@ namespace HealthChecks.DocumentDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddDocumentDb(_ => { _.PrimaryKey = "key"; _.UriEndpoint = "endpoint"; });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -32,7 +31,7 @@ namespace HealthChecks.DocumentDb.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddDocumentDb(_ => { _.PrimaryKey = "key"; _.UriEndpoint = "endpoint"; }, name: "my-documentdb-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

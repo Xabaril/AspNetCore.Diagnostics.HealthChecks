@@ -1,12 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.UI.Tests
@@ -15,7 +11,7 @@ namespace HealthChecks.UI.Tests
     public class inmemory_storage_should
     {
 
-        [Fact(Skip ="conflicts with other tests that use inmemory storage too")]
+        [Fact(Skip = "conflicts with other tests that use inmemory storage too")]
         public async Task seed_database_and_serve_stored_executions()
         {
             var hostReset = new ManualResetEventSlim(false);

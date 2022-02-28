@@ -1,4 +1,3 @@
-using System;
 using HealthChecks.UI.Image.Configuration.Helpers;
 
 namespace HealthChecks.UI.Image.Configuration
@@ -9,26 +8,17 @@ namespace HealthChecks.UI.Image.Configuration
         {
             get
             {
-                if (EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Enabled))
-                {
-                    if (Boolean.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled)
-                        , out bool enabled))
-                    {
-                        return enabled;
-                    }
-
-                    return false;
-                }
-
-                return false;
+                return EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Enabled) &&
+                    bool.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Enabled), out bool enabled) &&
+                    enabled;
             }
         }
 
         public static bool UseConnectionString =>
-            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.ConnectionString) ? true : false;
+            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.ConnectionString);
 
         public static bool UseLabel =>
-            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Label) ? true : false;
+            EnvironmentVariable.HasValue(AzureAppConfigurationKeys.Label);
 
         public static bool UseCacheExpiration =>
             EnvironmentVariable.HasValue(AzureAppConfigurationKeys.CacheExpiration)

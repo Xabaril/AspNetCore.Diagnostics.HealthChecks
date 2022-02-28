@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using HealthChecks.AzureStorage;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.AzureStorage.Tests.DependencyInjection
@@ -17,7 +15,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureQueueStorage("the-connection-string");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -34,7 +32,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -51,7 +49,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group", tags: new[] { "custom-tag" });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -69,7 +67,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group", failureStatus: HealthStatus.Degraded);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -87,7 +85,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddAzureQueueStorage("the-connection-string", queueName: "queue");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

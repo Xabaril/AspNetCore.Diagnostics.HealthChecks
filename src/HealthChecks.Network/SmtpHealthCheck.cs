@@ -1,20 +1,18 @@
-﻿using HealthChecks.Network.Core;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using HealthChecks.Network.Core;
 using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class SmtpHealthCheck
-        : IHealthCheck
+    public class SmtpHealthCheck : IHealthCheck
     {
         private readonly SmtpHealthCheckOptions _options;
+
         public SmtpHealthCheck(SmtpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -29,7 +27,7 @@ namespace HealthChecks.Network
 
                             if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken))
                             {
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server{_options.Host}:{_options.Port} with configured credentials");
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
                             }
                         }
 

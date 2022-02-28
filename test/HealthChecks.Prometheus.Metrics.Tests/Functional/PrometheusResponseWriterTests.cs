@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
-using HealthChecks.Prometheus.Metrics.Tests.Functional;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.Prometheus.Metrics.Tests.Functional
@@ -17,16 +15,12 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
         public async Task be_healthy_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
                         .AddCheck("fake", check => HealthCheckResult.Healthy());
                 })
-                .Configure(app =>
-                {
-                    app.UseHealthChecksPrometheusExporter("/health");
-                }));
+                .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
             var response = await sut.CreateRequest("/health")
                 .GetAsync();
@@ -40,16 +34,12 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
         public async Task be_unhealthy_and_return_503_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
                         .AddCheck("fake", check => HealthCheckResult.Unhealthy());
                 })
-                .Configure(app =>
-                {
-                    app.UseHealthChecksPrometheusExporter("/health");
-                }));
+                .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
             var response = await sut.CreateRequest("/health")
                 .GetAsync();
@@ -63,16 +53,12 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
         public async Task be_unhealthy_and_return_configured_status_code_when_health_checks_are()
         {
             var sut = new TestServer(new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
                         .AddCheck("fake", check => HealthCheckResult.Unhealthy());
                 })
-                .Configure(app =>
-                {
-                    app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
-                }));
+                .Configure(app => app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)));
 
             var response = await sut.CreateRequest("/health")
                 .GetAsync();

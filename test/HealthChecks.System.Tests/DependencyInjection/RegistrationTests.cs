@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.System.Tests.DependencyInjection
@@ -46,7 +44,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddProcessHealthCheck("dotnet", p => p?.Any() ?? false);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

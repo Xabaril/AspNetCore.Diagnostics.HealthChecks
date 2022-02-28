@@ -1,12 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HealthChecks.UI.Tests
@@ -14,7 +10,7 @@ namespace HealthChecks.UI.Tests
     [Collection("execution")]
     public class postgre_storage_should
     {
-       
+
         [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {

@@ -1,13 +1,11 @@
-﻿using FluentAssertions;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
-
 
 namespace HealthChecks.MongoDb.Tests.Functional
 {
@@ -19,7 +17,6 @@ namespace HealthChecks.MongoDb.Tests.Functional
             var connectionString = @"mongodb://localhost:27017";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -33,7 +30,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -48,7 +45,6 @@ namespace HealthChecks.MongoDb.Tests.Functional
             var connectionString = @"mongodb://localhost:27017";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -62,7 +58,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -76,7 +72,6 @@ namespace HealthChecks.MongoDb.Tests.Functional
             var connectionString = @"mongodb://localhost:27017/local";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -90,7 +85,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -104,7 +99,6 @@ namespace HealthChecks.MongoDb.Tests.Functional
             var connectionString = @"mongodb://localhost:27017/nonexisting";
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -118,7 +112,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -131,21 +125,20 @@ namespace HealthChecks.MongoDb.Tests.Functional
         public async Task be_unhealthy_listing_all_databases_if_mongodb_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                   .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("mongodb")
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -158,21 +151,20 @@ namespace HealthChecks.MongoDb.Tests.Functional
         public async Task be_unhealthy_on_specified_database_if_mongodb_is_not_available()
         {
             var webHostBuilder = new WebHostBuilder()
-               .UseStartup<DefaultStartup>()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                   .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
-                   {
-                       Predicate = r => r.Tags.Contains("mongodb")
-                   });
-               });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();

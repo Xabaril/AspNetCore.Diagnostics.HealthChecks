@@ -1,16 +1,12 @@
-﻿using FluentAssertions;
-using HealthChecks.AzureServiceBus;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
+using global::Azure.Identity;
 
 namespace HealthChecks.AzureServiceBus.Tests
 {
-    using global::Azure.Identity;
-
     public class azure_service_bus_subscription_registration_with_token_should
     {
         [Fact]
@@ -20,7 +16,7 @@ namespace HealthChecks.AzureServiceBus.Tests
             services.AddHealthChecks()
                 .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName", new AzureCliCredential());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -38,7 +34,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName", new AzureCliCredential(),
                 name: "azuresubscriptioncheck");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -55,7 +51,7 @@ namespace HealthChecks.AzureServiceBus.Tests
             services.AddHealthChecks()
                 .AddAzureServiceBusSubscription(string.Empty, string.Empty, string.Empty, new AzureCliCredential());
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using HealthChecks.Redis;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace HealthChecks.Redis.Tests.DependencyInjection
@@ -17,7 +15,7 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRedis("connectionstring");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -34,7 +32,7 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddRedis("connectionstring", name: "my-redis");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
@@ -42,6 +40,29 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
 
             registration.Name.Should().Be("my-redis");
             check.GetType().Should().Be(typeof(RedisHealthCheck));
+        }
+
+        [Fact]
+        public void add_health_check_with_connection_string_factory_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            var factoryCalled = false;
+            services.AddHealthChecks()
+                .AddRedis(_ =>
+                {
+                    factoryCalled = true;
+                    return "connectionstring";
+                });
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("redis");
+            check.GetType().Should().Be(typeof(RedisHealthCheck));
+            factoryCalled.Should().BeTrue();
         }
     }
 }

@@ -1,19 +1,17 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySqlConnector;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.MySql
 {
-    public class MySqlHealthCheck
-        : IHealthCheck
+    public class MySqlHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
+
         public MySqlHealthCheck(string connectionString)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

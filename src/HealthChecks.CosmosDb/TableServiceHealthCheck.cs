@@ -1,24 +1,19 @@
-﻿using Azure;
+using System.Collections.Concurrent;
+using Azure;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.CosmosDb
 {
-    public class TableServiceHealthCheck
-        : IHealthCheck
+    public class TableServiceHealthCheck : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, TableServiceClient> _connections = new ConcurrentDictionary<string, TableServiceClient>();
+        private static readonly ConcurrentDictionary<string, TableServiceClient> _connections = new();
 
-        private readonly string _connectionString;
+        private readonly string? _connectionString;
         private readonly string _tableName;
 
-        private readonly Uri _endpoint;
-        private readonly TableSharedKeyCredential _credentials;
-
+        private readonly Uri? _endpoint;
+        private readonly TableSharedKeyCredential? _credentials;
 
         public TableServiceHealthCheck(string connectionString, string tableName)
         {
@@ -37,16 +32,14 @@ namespace HealthChecks.CosmosDb
         {
             try
             {
-                TableServiceClient tableServiceClient;
-
-                var tableServiceKey = _connectionString ?? _endpoint.ToString();
-                if (!_connections.TryGetValue(tableServiceKey, out tableServiceClient))
+                var tableServiceKey = _connectionString ?? _endpoint!.ToString();
+                if (!_connections.TryGetValue(tableServiceKey, out var tableServiceClient))
                 {
                     tableServiceClient = CreateTableServiceClient();
 
                     if (!_connections.TryAdd(tableServiceKey, tableServiceClient))
                     {
-                        tableServiceClient = _connections[_connectionString];
+                        tableServiceClient = _connections[tableServiceKey];
                     }
                 }
                 var tableClient = tableServiceClient.GetTableClient(_tableName);
@@ -64,14 +57,11 @@ namespace HealthChecks.CosmosDb
             }
         }
 
-        TableServiceClient CreateTableServiceClient()
+        private TableServiceClient CreateTableServiceClient()
         {
-            if (!String.IsNullOrEmpty(_connectionString))
-            {
-                return new TableServiceClient(_connectionString);
-            }
-
-            return new TableServiceClient(_endpoint, _credentials);
+            return !string.IsNullOrEmpty(_connectionString)
+                ? new TableServiceClient(_connectionString)
+                : new TableServiceClient(_endpoint, _credentials);
         }
     }
 }

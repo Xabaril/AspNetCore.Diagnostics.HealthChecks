@@ -1,14 +1,12 @@
-﻿using Confluent.Kafka;
+using System.Net;
+using Confluent.Kafka;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
-
 
 namespace HealthChecks.Kafka.Tests.Functional
 {
@@ -27,7 +25,6 @@ namespace HealthChecks.Kafka.Tests.Functional
             };
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -41,7 +38,7 @@ namespace HealthChecks.Kafka.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();
@@ -60,21 +57,20 @@ namespace HealthChecks.Kafka.Tests.Functional
             };
 
             var webHostBuilder = new WebHostBuilder()
-                 .UseStartup<DefaultStartup>()
-                 .ConfigureServices(services =>
-                 {
-                     services.AddHealthChecks()
-                     .AddKafka(configuration, tags: new string[] { "kafka" });
-                 })
-                 .Configure(app =>
-                 {
-                     app.UseHealthChecks("/health", new HealthCheckOptions()
-                     {
-                         Predicate = r => r.Tags.Contains("kafka")
-                     });
-                 });
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                    .AddKafka(configuration, tags: new string[] { "kafka" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("kafka")
+                    });
+                });
 
-            var server = new TestServer(webHostBuilder);
+            using var server = new TestServer(webHostBuilder);
 
             var response = await server.CreateRequest("/health")
                 .GetAsync();

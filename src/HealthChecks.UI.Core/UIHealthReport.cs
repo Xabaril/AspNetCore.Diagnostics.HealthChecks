@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Core
 {
@@ -18,7 +15,7 @@ namespace HealthChecks.UI.Core
 
         public UIHealthReport(Dictionary<string, UIHealthReportEntry> entries, TimeSpan totalDuration)
         {
-            Entries = entries;
+            Entries = entries ?? new Dictionary<string, UIHealthReportEntry>();
             TotalDuration = totalDuration;
         }
         public static UIHealthReport CreateFrom(HealthReport report)

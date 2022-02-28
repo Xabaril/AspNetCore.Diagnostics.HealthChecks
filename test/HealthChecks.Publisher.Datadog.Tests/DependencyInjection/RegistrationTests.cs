@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Xunit;
 
@@ -14,7 +14,7 @@ namespace HealthChecks.Publisher.Datadog.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddDatadogPublisher(serviceCheckName: "serviceCheckName", datadogAgentName: "127.0.0.1");
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
             Assert.NotNull(publisher);

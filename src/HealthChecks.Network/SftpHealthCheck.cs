@@ -1,22 +1,18 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Renci.SshNet;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-
 using ConnectionInfo = Renci.SshNet.ConnectionInfo;
 
 namespace HealthChecks.Network
 {
-    public class SftpHealthCheck
-        : IHealthCheck
+    public class SftpHealthCheck : IHealthCheck
     {
         private readonly SftpHealthCheckOptions _options;
+
         public SftpHealthCheck(SftpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

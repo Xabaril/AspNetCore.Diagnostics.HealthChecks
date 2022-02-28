@@ -1,7 +1,7 @@
 # NATS Health Check
 
 This health check verifies the ability to communicate with a [NATS server](https://nats.io/about/). \
-It relies on `NATS.Client` package version `0.14.3` at the time this was developed. \
+It relies on `NATS.Client` package. \
 Latest tag for the [official dockerhub image](https://hub.docker.com/_/nats/) is `2.6.6`.
 
 ## Builder Extension

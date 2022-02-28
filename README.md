@@ -36,6 +36,8 @@
 [![System Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_system_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_system_ci.yml)
 [![UI Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ui_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ui_ci.yml)
 [![Uris Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_uris_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_uris_ci.yml)
+[![ClickHouse Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml)
+
 
 ![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=Docker%20UI%20Version&logo=dsd&sort=date)
 ![ui pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui.svg?label=Docker%20UI%20Pulls)
@@ -125,6 +127,7 @@ HealthChecks packages include health checks for:
 | Sql Server | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.SqlServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SqlServer) |
 | System | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.System)](https://www.nuget.org/packages/AspNetCore.HealthChecks.System) | Disk Storage, Private Memory, Virtual Memory, Process, Windows Service |
 | Uri | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Uris)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Uris) | single uri and uri groups |
+| ClickHouse | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ClickHouse)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ClickHouse) | 
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
@@ -163,6 +166,7 @@ Install-Package AspNetCore.HealthChecks.SqLite
 Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.System
 Install-Package AspNetCore.HealthChecks.Uris
+Install-Package AspNetCore.HealthChecks.ClickHouse
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** `IServiceCollection` extension methods.

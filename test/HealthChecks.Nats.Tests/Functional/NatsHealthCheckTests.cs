@@ -80,7 +80,6 @@ namespace HealthChecks.Nats.Tests.Functional
         private async Task FactAsync(Action<NatsOptions> setupAction, Action<HttpResponseMessage> assertAction, string name = null)
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services => services
                         .AddHealthChecks()
                         .AddNats(
@@ -99,7 +98,6 @@ namespace HealthChecks.Nats.Tests.Functional
         private async Task FactAsync(Action<NatsOptions> setupAction, Func<HttpResponseMessage, Task> asyncAssertAction, string name = null)
         {
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services => services
                         .AddHealthChecks()
                         .AddNats(

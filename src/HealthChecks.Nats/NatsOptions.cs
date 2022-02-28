@@ -3,7 +3,7 @@ namespace HealthChecks.Nats
     public class NatsOptions
     {
         /// <summary>
-        ///  A string containing the URL (or URLs) to the NATS Server.
+        /// A string containing the URL (or URLs) to the NATS Server.
         /// </summary>
         public string Url { get; set; }
 

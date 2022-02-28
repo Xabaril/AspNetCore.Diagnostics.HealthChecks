@@ -3,6 +3,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="NatsHealthCheck"/>.
+    /// </summary>
     public static class NatsHealthCheckBuilderExtensions
     {
         internal const string NAME = "nats";

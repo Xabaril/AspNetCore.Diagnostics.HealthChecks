@@ -6,7 +6,7 @@ Latest tag for the [official dockerhub image](https://hub.docker.com/_/nats/) is
 
 ## Builder Extension
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services

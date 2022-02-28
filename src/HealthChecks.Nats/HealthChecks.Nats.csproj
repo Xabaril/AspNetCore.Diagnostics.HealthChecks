@@ -5,6 +5,7 @@
     <PackageTags>HealthCheck;Health;Nats</PackageTags>
     <Description>HealthChecks.Nats is the health check package for Nats.</Description>
     <Version>$(HealthCheckNats)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

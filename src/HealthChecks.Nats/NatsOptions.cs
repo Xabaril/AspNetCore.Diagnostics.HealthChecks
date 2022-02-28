@@ -1,5 +1,8 @@
 namespace HealthChecks.Nats
 {
+    /// <summary>
+    /// Options for <see cref="NatsHealthCheck"/>.
+    /// </summary>
     public class NatsOptions
     {
         /// <summary>

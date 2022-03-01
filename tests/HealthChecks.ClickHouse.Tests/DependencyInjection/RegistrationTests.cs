@@ -23,7 +23,6 @@ public class clickHouse_registration_should
 
         registration.Name.Should().Be("clickHouse");
         check.GetType().Should().Be(typeof(ClickHouseHealthCheck));
-
     }
 
     [Fact]

@@ -7,20 +7,19 @@ public class ClickHouseHealthCheck : IHealthCheck
 {
     private readonly string _connectionString;
     private readonly string _sql;
-    private readonly Action<ClickHouseConnection>? _connection;
+    private readonly Action<ClickHouseConnection>? _setup;
 
     /// <summary>
     /// Check the ability to connect to the ClickHouse DataBase
     /// </summary>
     /// <param name="clickHouseConnectionString">ClickHouse DataBase connection string</param>
     /// <param name="sql">Custom sql-query</param>
-    /// <param name="connection">ClickHouse.Client.ADO.ClickHouseConnection</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public ClickHouseHealthCheck(string clickHouseConnectionString, string sql, Action<ClickHouseConnection>? connection = null)
+    /// <param name="setup">ClickHouse.Client.ADO.ClickHouseConnection</param>
+    public ClickHouseHealthCheck(string clickHouseConnectionString, string sql, Action<ClickHouseConnection>? setup = null)
     {
         _connectionString = clickHouseConnectionString ?? throw new ArgumentNullException(nameof(clickHouseConnectionString));
         _sql = sql ?? throw new ArgumentNullException(nameof(sql));
-        _connection = connection;
+        _setup = setup;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -29,7 +28,7 @@ public class ClickHouseHealthCheck : IHealthCheck
         {
             using (var connection = new ClickHouseConnection(_connectionString))
             {
-                _connection?.Invoke(connection);
+                _setup?.Invoke(connection);
 
                 await connection.OpenAsync(cancellationToken);
 

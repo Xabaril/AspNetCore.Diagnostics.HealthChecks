@@ -4,7 +4,7 @@
 [![Azure KeyVault Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurekeyvault_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurekeyvault_ci.yml)
 [![Azure ServiceBus Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azureservicebus_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azureservicebus_ci.yml)
 [![Azure Storage Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurestorage_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_azurestorage_ci.yml)
-[![Consul Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_consul_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_consul_ci.yml)
+[![ClickHouse Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml)[![Consul Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_consul_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_consul_ci.yml)
 [![CosmosDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_cosmosdb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_cosmosdb_ci.yml)
 [![DocumentDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_documentdb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_documentdb_ci.yml)
 [![DynamoDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_dynamodb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_dynamodb_ci.yml)
@@ -36,7 +36,6 @@
 [![System Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_system_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_system_ci.yml)
 [![UI Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ui_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ui_ci.yml)
 [![Uris Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_uris_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_uris_ci.yml)
-[![ClickHouse Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_clickhouse_ci.yml)
 
 ![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=Docker%20UI%20Version&logo=dsd&sort=date)
 ![ui pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui.svg?label=Docker%20UI%20Pulls)
@@ -102,6 +101,7 @@ HealthChecks packages include health checks for:
 | CosmosDb | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.CosmosDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.CosmosDb) | 
 | Azure DocumentDb | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.DocumentDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DocumentDb) | 
 | Amazon DynamoDb | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.DynamoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DynamoDb) | 
+| ClickHouse | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ClickHouse)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ClickHouse) | 
 | Elasticsearch | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Elasticsearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Elasticsearch) | 
 | EventStore | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore) | 
 | Google Cloud Firestore | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Gcp.CloudFirestore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gcp.CloudFirestore) | 
@@ -126,7 +126,6 @@ HealthChecks packages include health checks for:
 | Sql Server | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.SqlServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SqlServer) |
 | System | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.System)](https://www.nuget.org/packages/AspNetCore.HealthChecks.System) | Disk Storage, Private Memory, Virtual Memory, Process, Windows Service |
 | Uri | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Uris)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Uris) | single uri and uri groups |
-| ClickHouse | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ClickHouse)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ClickHouse) | 
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 

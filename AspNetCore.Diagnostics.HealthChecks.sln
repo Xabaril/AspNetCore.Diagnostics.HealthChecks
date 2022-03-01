@@ -247,6 +247,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_azurestorage_cd.yml = .github\workflows\healthchecks_azurestorage_cd.yml
 		.github\workflows\healthchecks_azurestorage_cd_preview.yml = .github\workflows\healthchecks_azurestorage_cd_preview.yml
 		.github\workflows\healthchecks_azurestorage_ci.yml = .github\workflows\healthchecks_azurestorage_ci.yml
+		healthchecks_clickhouse_cd.yml = healthchecks_clickhouse_cd.yml
+		healthchecks_clickhouse_cd_preview.yml = healthchecks_clickhouse_cd_preview.yml
+		healthchecks_clickhouse_ci.yml = healthchecks_clickhouse_ci.yml
 		.github\workflows\healthchecks_consul_cd.yml = .github\workflows\healthchecks_consul_cd.yml
 		.github\workflows\healthchecks_consul_cd_preview.yml = .github\workflows\healthchecks_consul_cd_preview.yml
 		.github\workflows\healthchecks_consul_ci.yml = .github\workflows\healthchecks_consul_ci.yml
@@ -347,7 +350,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse", "src\HealthChecks.ClickHouse\HealthChecks.ClickHouse.csproj", "{4240090C-6EF2-46B5-B32A-D96F4215C820}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ClickHouse.Tests", "tests\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{77598A82-891B-4E69-BF54-FFD1F95753E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse.Tests", "tests\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{77598A82-891B-4E69-BF54-FFD1F95753E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

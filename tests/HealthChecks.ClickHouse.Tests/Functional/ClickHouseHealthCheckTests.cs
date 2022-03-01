@@ -163,5 +163,4 @@ public class clickHouse_healthcheck_should
         response.StatusCode
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
     }
-
 }

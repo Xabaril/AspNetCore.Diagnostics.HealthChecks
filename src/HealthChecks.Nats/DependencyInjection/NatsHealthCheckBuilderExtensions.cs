@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddNats(
             this IHealthChecksBuilder builder,
-            Action<NatsOptions> setup,
+            Action<NatsOptions>? setup,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,

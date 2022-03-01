@@ -7,30 +7,28 @@ namespace HealthChecks.Nats
     /// <summary>
     /// Health check for Nats Server
     /// </summary>
+    /// <remarks>
+    /// Relies on a static <see cref="ConnectionFactory"/> which provides factory methods to create connections to NATS Servers,
+    /// and a <see cref="NATS.Client.IConnection"/> object connected to the NATS server.
+    /// </remarks>
     public sealed class NatsHealthCheck : IHealthCheck, IDisposable
     {
-        /// <summary>
-        /// Provides factory methods to create connections to NATS Servers.
-        /// </summary>
         private static readonly ConnectionFactory _connectionFactory = new ConnectionFactory();
 
         private readonly NatsOptions _options;
 
-        /// <summary>
-        /// An NATS.Client.IConnection object connected to the NATS server.
-        /// </summary>
         private IConnection? _connection;
 
         public NatsHealthCheck(NatsOptions natsOptions)
         {
-            _options = natsOptions;
+            _options = natsOptions ?? throw new ArgumentNullException(nameof(natsOptions));
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                _connection = CreateConnection(_options);
+                _connection ??= CreateConnection(_options);
                 if (_connection is null)
                     throw new ArgumentNullException(nameof(_connection));
                 var healthCheckResult = GetHealthCheckResultFromState(_connection);
@@ -44,8 +42,6 @@ namespace HealthChecks.Nats
 
             IConnection CreateConnection(NatsOptions options)
             {
-                if (options == null)
-                    throw new ArgumentNullException(nameof(options));
                 if (!string.IsNullOrWhiteSpace(options.CredentialsPath))
                     return _connectionFactory.CreateConnection(options.Url, options.CredentialsPath);
                 if (!string.IsNullOrWhiteSpace(options.Jwt) && !string.IsNullOrWhiteSpace(options.PrivateNKey))
@@ -79,8 +75,7 @@ namespace HealthChecks.Nats
                 sb.AppendFormat("{0}: {1}; ", nameof(connection.State), connection.State);
                 if (connection.SubscriptionCount != default)
                     sb.AppendFormat("{0}: {1}", nameof(connection.SubscriptionCount), connection.SubscriptionCount);
-                var description = sb.ToString();
-                return description;
+                return sb.ToString();
             }
 
             static IReadOnlyDictionary<string, object> GetStatsData(IConnection connection) =>

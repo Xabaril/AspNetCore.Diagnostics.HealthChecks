@@ -19,7 +19,7 @@ jobs:
         - "8222:8222"
         - "6222:6222"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:

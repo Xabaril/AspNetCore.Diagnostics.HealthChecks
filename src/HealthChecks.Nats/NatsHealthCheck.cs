@@ -5,7 +5,7 @@ using NATS.Client;
 namespace HealthChecks.Nats
 {
     /// <summary>
-    /// Health check for Nats Server
+    /// Health check for Nats Server.
     /// </summary>
     /// <remarks>
     /// Relies on a static <see cref="ConnectionFactory"/> which provides factory methods to create connections to NATS Servers,

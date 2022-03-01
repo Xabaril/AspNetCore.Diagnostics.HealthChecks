@@ -10,7 +10,7 @@ namespace HealthChecks.Nats
     public sealed class NatsHealthCheck : IHealthCheck, IDisposable
     {
         /// <summary>
-        ///  Provides factory methods to create connections to NATS Servers.
+        /// Provides factory methods to create connections to NATS Servers.
         /// </summary>
         private static readonly ConnectionFactory _connectionFactory = new ConnectionFactory();
 

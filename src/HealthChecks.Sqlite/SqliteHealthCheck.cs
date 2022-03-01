@@ -1,21 +1,19 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Sqlite
 {
-    public class SqliteHealthCheck
-        : IHealthCheck
+    public class SqliteHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
         private readonly string _sql;
+
         public SqliteHealthCheck(string connectionString, string sql)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _sql = sql ?? throw new ArgumentException(nameof(sql));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

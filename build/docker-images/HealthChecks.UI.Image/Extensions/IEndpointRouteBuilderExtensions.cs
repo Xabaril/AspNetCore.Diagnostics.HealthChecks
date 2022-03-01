@@ -1,13 +1,8 @@
-﻿using HealthChecks.UI.Image;
+using System.Text.Json;
+using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Image.Extensions;
 using HealthChecks.UI.Image.PushService;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Text.Json;
 
 namespace Microsoft.AspNetCore.Builder
 {

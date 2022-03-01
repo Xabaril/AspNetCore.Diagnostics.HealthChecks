@@ -1,0 +1,45 @@
+name: HealthChecks Publisher.ApplicationInsights CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Publisher.ApplicationInsights/**
+      - test/HealthChecks.Publisher.ApplicationInsights.Tests/**
+      - .github/workflows/healthchecks_publisher_applicationinsights_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Publisher.ApplicationInsights/**
+    - test/HealthChecks.Publisher.ApplicationInsights.Tests/**
+    - .github/workflows/healthchecks_publisher_applicationinsights_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj
+    - name: Check formatting
+      working-directory: ./src/HealthChecks.Publisher.ApplicationInsights
+      run: |
+        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Publisher.ApplicationInsights.Tests/HealthChecks.Publisher.ApplicationInsights.Tests.csproj --verbosity normal

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29009.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A3FD988-2BB8-43CF-B3A2-B70E648259D4}"
 EndProject
@@ -9,17 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
 		build.ps1 = build.ps1
+		.github\dependabot.yml = .github\dependabot.yml
 		build\dependencies.props = build\dependencies.props
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 		docker-compose.yml = docker-compose.yml
 		dotnet-install.ps1 = dotnet-install.ps1
+		global.json = global.json
 		install-sdk.ps1 = install-sdk.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalTests", "test\FunctionalTests\FunctionalTests.csproj", "{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.IdSvr", "src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj", "{332F4E33-7D1E-42F6-B509-2950D2B40188}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Uris", "src\HealthChecks.Uris\HealthChecks.Uris.csproj", "{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}"
 EndProject
@@ -28,8 +28,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Sqlite", "src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj", "{65E0BF0F-B3B6-4DFD-A3E3-F91FE02DA7D3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Redis", "src\HealthChecks.Redis\HealthChecks.Redis.csproj", "{44C9850D-B260-412F-AD74-0C930562C396}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RabbitMQ", "src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj", "{4E8CC4CC-49AA-4A64-92BF-008DB1944649}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Oracle", "src\HealthChecks.Oracle\HealthChecks.Oracle.csproj", "{CADA1206-3769-4AFD-B20A-E98270592648}"
 EndProject
@@ -78,8 +76,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Seq", "src\HealthChecks.Publisher.Seq\HealthChecks.Publisher.Seq.csproj", "{60C84400-DF56-49BE-B26F-D1F70003A1B4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureKeyVault", "src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj", "{A6414860-EBAE-43E4-8109-DE745DA15C43}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{300A1B42-EA00-480A-AC43-007EBC7CE472}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UIAndApi", "samples\HealthChecks.UIAndApi\HealthChecks.UIAndApi.csproj", "{91DF8A73-8174-4EA2-ABFA-2557B71EE090}"
 EndProject
@@ -139,7 +135,215 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ArangoDb", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gremlin", "src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj", "{46B0FE68-1739-49A1-AF1B-6817D54465A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.UI.Oidc", "samples\HealthChecks.UI.Oidc\HealthChecks.UI.Oidc.csproj", "{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Oidc", "samples\HealthChecks.UI.Oidc\HealthChecks.UI.Oidc.csproj", "{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ArangoDb.Tests", "test\HealthChecks.ArangoDb.Tests\HealthChecks.ArangoDb.Tests.csproj", "{321E691F-2D82-476D-9922-F0174E60D5B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SqlServer.Tests", "test\HealthChecks.SqlServer.Tests\HealthChecks.SqlServer.Tests.csproj", "{BDDE6866-7D25-4338-A310-B7D311971577}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Uris.Tests", "test\HealthChecks.Uris.Tests\HealthChecks.Uris.Tests.csproj", "{32CB9E4A-94AC-47BC-B1C9-586CBC0F9BF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.System.Tests", "test\HealthChecks.System.Tests\HealthChecks.System.Tests.csproj", "{7F33531E-4A32-45CC-A4DE-C9506E8739D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Sqlite.Tests", "test\HealthChecks.Sqlite.Tests\HealthChecks.Sqlite.Tests.csproj", "{21E62049-3BDD-4FD1-8DBF-997399A565D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Redis.Tests", "test\HealthChecks.Redis.Tests\HealthChecks.Redis.Tests.csproj", "{75CC7014-0F72-44DF-A357-E03AF243EE95}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RabbitMQ.Tests", "test\HealthChecks.RabbitMQ.Tests\HealthChecks.RabbitMQ.Tests.csproj", "{2024BEDB-B31B-46B4-A978-22D1683B5DDF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Oracle.Tests", "test\HealthChecks.Oracle.Tests\HealthChecks.Oracle.Tests.csproj", "{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Npgsql.Tests", "test\HealthChecks.Npgsql.Tests\HealthChecks.Npgsql.Tests.csproj", "{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.MySql.Tests", "test\HealthChecks.MySql.Tests\HealthChecks.MySql.Tests.csproj", "{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.MongoDb.Tests", "test\HealthChecks.MongoDb.Tests\HealthChecks.MongoDb.Tests.csproj", "{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.RavenDb.Tests", "test\HealthChecks.RavenDb.Tests\HealthChecks.RavenDb.Tests.csproj", "{0BB35C7F-B16C-48EF-8335-C2200D41E2BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Kafka.Tests", "test\HealthChecks.Kafka.Tests\HealthChecks.Kafka.Tests.csproj", "{06F1DAA7-4260-4C48-83E8-7D2A6D45EB5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Elasticsearch.Tests", "test\HealthChecks.Elasticsearch.Tests\HealthChecks.Elasticsearch.Tests.csproj", "{FEBB4BC3-48C4-4EEB-AB86-CC2DF658836A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Network.Tests", "test\HealthChecks.Network.Tests\HealthChecks.Network.Tests.csproj", "{7AADABB9-FD8D-4420-AA9B-237287F50DCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gremlin.Tests", "test\HealthChecks.Gremlin.Tests\HealthChecks.Gremlin.Tests.csproj", "{F170805C-1A21-4CC9-BE77-8EF4C1DE17EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Consul.Tests", "test\HealthChecks.Consul.Tests\HealthChecks.Consul.Tests.csproj", "{59E179B2-F77F-4A5C-9E8E-0BAD7236116D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.EventStore.Tests", "test\HealthChecks.EventStore.Tests\HealthChecks.EventStore.Tests.csproj", "{2551D36D-74D4-482A-B87A-8496E4B998F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SignalR.Tests", "test\HealthChecks.SignalR.Tests\HealthChecks.SignalR.Tests.csproj", "{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SolR.Tests", "test\HealthChecks.SolR.Tests\HealthChecks.SolR.Tests.csproj", "{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.IbmMQ.Tests", "test\HealthChecks.IbmMQ.Tests\HealthChecks.IbmMQ.Tests.csproj", "{7883B1F9-9A81-4481-A2EC-FD101DAF6811}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Prometheus.Metrics.Tests", "test\HealthChecks.Prometheus.Metrics.Tests\HealthChecks.Prometheus.Metrics.Tests.csproj", "{F12C630F-AB61-4065-920D-2642A522ECA5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Tests", "test\HealthChecks.UI.Tests\HealthChecks.UI.Tests.csproj", "{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Prometheus.Tests", "test\HealthChecks.Publisher.Prometheus.Tests\HealthChecks.Publisher.Prometheus.Tests.csproj", "{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Rabbitmq", "src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj", "{F76845F9-7225-4FA0-A4B2-7D353EC4E5EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.OpenIdConnectServer", "src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj", "{74921A32-8C36-4E74-B593-887FFEC1AF19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{C10FB21C-3785-40D5-AD4B-1BCDD2365A90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.OpenIdConnectServer.Tests", "test\HealthChecks.OpenIdConnectServer.Tests\HealthChecks.OpenIdConnectServer.Tests.csproj", "{8B853DD2-0B83-4898-906C-F34D1AD844F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solution Items", "{6D686167-7E39-44C2-B914-CC09B5CF226A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus.Tests", "test\HealthChecks.AzureServiceBus.Tests\HealthChecks.AzureServiceBus.Tests.csproj", "{80835FF3-C984-4BCE-B047-7985B42F6B0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureKeyVault.Tests", "test\HealthChecks.AzureKeyVault.Tests\HealthChecks.AzureKeyVault.Tests.csproj", "{CAA0DB8F-9759-436D-A4E7-2061C0125B06}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureStorage.Tests", "test\HealthChecks.AzureStorage.Tests\HealthChecks.AzureStorage.Tests.csproj", "{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.IoTHub.Tests", "test\HealthChecks.Azure.IoTHub.Tests\HealthChecks.Azure.IoTHub.Tests.csproj", "{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.S3.Tests", "test\HealthChecks.Aws.S3.Tests\HealthChecks.Aws.S3.Tests.csproj", "{62B73D6A-076D-414B-9B4E-D6C3FF38E786}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.CosmosDb.Tests", "test\HealthChecks.CosmosDb.Tests\HealthChecks.CosmosDb.Tests.csproj", "{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.DocumentDb.Tests", "test\HealthChecks.DocumentDb.Tests\HealthChecks.DocumentDb.Tests.csproj", "{6C09D144-19C9-48B7-84C4-5AADFE0552E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.DynamoDb.Tests", "test\HealthChecks.DynamoDb.Tests\HealthChecks.DynamoDb.Tests.csproj", "{BCD169E1-EA86-45D5-9658-BEA330E9EBAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Gcp.CloudFirestore.Tests", "test\HealthChecks.Gcp.CloudFirestore.Tests\HealthChecks.Gcp.CloudFirestore.Tests.csproj", "{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Hangfire.Tests", "test\HealthChecks.Hangfire.Tests\HealthChecks.Hangfire.Tests.csproj", "{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.ApplicationInsights.Tests", "test\HealthChecks.Publisher.ApplicationInsights.Tests\HealthChecks.Publisher.ApplicationInsights.Tests.csproj", "{B99B84B8-9767-4E5B-953C-3C50AB0D006F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Datadog.Tests", "test\HealthChecks.Publisher.Datadog.Tests\HealthChecks.Publisher.Datadog.Tests.csproj", "{FA119E76-F6D5-4D68-9E92-40EC877B9536}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.Seq.Tests", "test\HealthChecks.Publisher.Seq.Tests\HealthChecks.Publisher.Seq.Tests.csproj", "{B04CCCF7-DB45-4D69-8D5E-84E0EF5E6E4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SendGrid.Tests", "test\HealthChecks.SendGrid.Tests\HealthChecks.SendGrid.Tests.csproj", "{9E0AFD9E-F565-4196-85C1-545633580971}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{531ABAB1-F4B5-4EAE-B310-6CB55D8FA4FD}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\healthchecks_arangodb_cd.yml = .github\workflows\healthchecks_arangodb_cd.yml
+		.github\workflows\healthchecks_arangodb_cd_preview.yml = .github\workflows\healthchecks_arangodb_cd_preview.yml
+		.github\workflows\healthchecks_arangodb_ci.yml = .github\workflows\healthchecks_arangodb_ci.yml
+		.github\workflows\healthchecks_aws_s3_cd.yml = .github\workflows\healthchecks_aws_s3_cd.yml
+		.github\workflows\healthchecks_aws_s3_cd_preview.yml = .github\workflows\healthchecks_aws_s3_cd_preview.yml
+		.github\workflows\healthchecks_aws_s3_ci.yml = .github\workflows\healthchecks_aws_s3_ci.yml
+		.github\workflows\healthchecks_azure_iothub_cd .yml = .github\workflows\healthchecks_azure_iothub_cd .yml
+		.github\workflows\healthchecks_azure_iothub_cd_preview.yml = .github\workflows\healthchecks_azure_iothub_cd_preview.yml
+		.github\workflows\healthchecks_azure_iothub_ci.yml = .github\workflows\healthchecks_azure_iothub_ci.yml
+		.github\workflows\healthchecks_azurekeyvault_cd.yml = .github\workflows\healthchecks_azurekeyvault_cd.yml
+		.github\workflows\healthchecks_azurekeyvault_cd_preview.yml = .github\workflows\healthchecks_azurekeyvault_cd_preview.yml
+		.github\workflows\healthchecks_azurekeyvault_ci.yml = .github\workflows\healthchecks_azurekeyvault_ci.yml
+		.github\workflows\healthchecks_azureservicebus_cd.yml = .github\workflows\healthchecks_azureservicebus_cd.yml
+		.github\workflows\healthchecks_azureservicebus_cd_preview.yml = .github\workflows\healthchecks_azureservicebus_cd_preview.yml
+		.github\workflows\healthchecks_azureservicebus_ci.yml = .github\workflows\healthchecks_azureservicebus_ci.yml
+		.github\workflows\healthchecks_azurestorage_cd.yml = .github\workflows\healthchecks_azurestorage_cd.yml
+		.github\workflows\healthchecks_azurestorage_cd_preview.yml = .github\workflows\healthchecks_azurestorage_cd_preview.yml
+		.github\workflows\healthchecks_azurestorage_ci.yml = .github\workflows\healthchecks_azurestorage_ci.yml
+		.github\workflows\healthchecks_consul_cd.yml = .github\workflows\healthchecks_consul_cd.yml
+		.github\workflows\healthchecks_consul_cd_preview.yml = .github\workflows\healthchecks_consul_cd_preview.yml
+		.github\workflows\healthchecks_consul_ci.yml = .github\workflows\healthchecks_consul_ci.yml
+		.github\workflows\healthchecks_cosmosdb_cd.yml = .github\workflows\healthchecks_cosmosdb_cd.yml
+		.github\workflows\healthchecks_cosmosdb_cd_preview.yml = .github\workflows\healthchecks_cosmosdb_cd_preview.yml
+		.github\workflows\healthchecks_cosmosdb_ci.yml = .github\workflows\healthchecks_cosmosdb_ci.yml
+		.github\workflows\healthchecks_documentdb_cd.yml = .github\workflows\healthchecks_documentdb_cd.yml
+		.github\workflows\healthchecks_documentdb_cd_preview.yml = .github\workflows\healthchecks_documentdb_cd_preview.yml
+		.github\workflows\healthchecks_documentdb_ci.yml = .github\workflows\healthchecks_documentdb_ci.yml
+		.github\workflows\healthchecks_dynamodb_cd.yml = .github\workflows\healthchecks_dynamodb_cd.yml
+		.github\workflows\healthchecks_dynamodb_cd_preview.yml = .github\workflows\healthchecks_dynamodb_cd_preview.yml
+		.github\workflows\healthchecks_dynamodb_ci.yml = .github\workflows\healthchecks_dynamodb_ci.yml
+		.github\workflows\healthchecks_elasticsearch_cd.yml = .github\workflows\healthchecks_elasticsearch_cd.yml
+		.github\workflows\healthchecks_elasticsearch_cd_preview.yml = .github\workflows\healthchecks_elasticsearch_cd_preview.yml
+		.github\workflows\healthchecks_elasticsearch_ci.yml = .github\workflows\healthchecks_elasticsearch_ci.yml
+		.github\workflows\healthchecks_gcp_cloudfirestore_cd.yml = .github\workflows\healthchecks_gcp_cloudfirestore_cd.yml
+		.github\workflows\healthchecks_gcp_cloudfirestore_cd_preview.yml = .github\workflows\healthchecks_gcp_cloudfirestore_cd_preview.yml
+		.github\workflows\healthchecks_gcp_cloudfirestore_ci.yml = .github\workflows\healthchecks_gcp_cloudfirestore_ci.yml
+		.github\workflows\healthchecks_gremlin_cd.yml = .github\workflows\healthchecks_gremlin_cd.yml
+		.github\workflows\healthchecks_gremlin_cd_preview.yml = .github\workflows\healthchecks_gremlin_cd_preview.yml
+		.github\workflows\healthchecks_gremlin_ci.yml = .github\workflows\healthchecks_gremlin_ci.yml
+		.github\workflows\healthchecks_hangfire_cd.yml = .github\workflows\healthchecks_hangfire_cd.yml
+		.github\workflows\healthchecks_hangfire_cd_preview.yml = .github\workflows\healthchecks_hangfire_cd_preview.yml
+		.github\workflows\healthchecks_hangfire_ci.yml = .github\workflows\healthchecks_hangfire_ci.yml
+		.github\workflows\healthchecks_ibmmq_cd.yml = .github\workflows\healthchecks_ibmmq_cd.yml
+		.github\workflows\healthchecks_ibmmq_cd_preview.yml = .github\workflows\healthchecks_ibmmq_cd_preview.yml
+		.github\workflows\healthchecks_ibmmq_ci.yml = .github\workflows\healthchecks_ibmmq_ci.yml
+		.github\workflows\healthchecks_kafka_cd.yml = .github\workflows\healthchecks_kafka_cd.yml
+		.github\workflows\healthchecks_kafka_cd_preview.yml = .github\workflows\healthchecks_kafka_cd_preview.yml
+		.github\workflows\healthchecks_kafka_ci.yml = .github\workflows\healthchecks_kafka_ci.yml
+		.github\workflows\healthchecks_mongodb_cd.yml = .github\workflows\healthchecks_mongodb_cd.yml
+		.github\workflows\healthchecks_mongodb_cd_preview.yml = .github\workflows\healthchecks_mongodb_cd_preview.yml
+		.github\workflows\healthchecks_mongodb_ci.yml = .github\workflows\healthchecks_mongodb_ci.yml
+		.github\workflows\healthchecks_mysql_cd.yml = .github\workflows\healthchecks_mysql_cd.yml
+		.github\workflows\healthchecks_mysql_cd_preview.yml = .github\workflows\healthchecks_mysql_cd_preview.yml
+		.github\workflows\healthchecks_mysql_ci.yml = .github\workflows\healthchecks_mysql_ci.yml
+		.github\workflows\healthchecks_network_cd.yml = .github\workflows\healthchecks_network_cd.yml
+		.github\workflows\healthchecks_network_cd_preview.yml = .github\workflows\healthchecks_network_cd_preview.yml
+		.github\workflows\healthchecks_network_ci.yml = .github\workflows\healthchecks_network_ci.yml
+		.github\workflows\healthchecks_npgsql_cd.yml = .github\workflows\healthchecks_npgsql_cd.yml
+		.github\workflows\healthchecks_npgsql_cd_preview.yml = .github\workflows\healthchecks_npgsql_cd_preview.yml
+		.github\workflows\healthchecks_npgsql_ci.yml = .github\workflows\healthchecks_npgsql_ci.yml
+		.github\workflows\healthchecks_openidconnectserver_cd.yml = .github\workflows\healthchecks_openidconnectserver_cd.yml
+		.github\workflows\healthchecks_openidconnectserver_cd_preview.yml = .github\workflows\healthchecks_openidconnectserver_cd_preview.yml
+		.github\workflows\healthchecks_openidconnectserver_ci.yml = .github\workflows\healthchecks_openidconnectserver_ci.yml
+		.github\workflows\healthchecks_oracle_cd.yml = .github\workflows\healthchecks_oracle_cd.yml
+		.github\workflows\healthchecks_oracle_cd_preview.yml = .github\workflows\healthchecks_oracle_cd_preview.yml
+		.github\workflows\healthchecks_oracle_ci.yml = .github\workflows\healthchecks_oracle_ci.yml
+		.github\workflows\healthchecks_prometheus_metrics_cd.yml = .github\workflows\healthchecks_prometheus_metrics_cd.yml
+		.github\workflows\healthchecks_prometheus_metrics_cd_preview.yml = .github\workflows\healthchecks_prometheus_metrics_cd_preview.yml
+		.github\workflows\healthchecks_prometheus_metrics_ci.yml = .github\workflows\healthchecks_prometheus_metrics_ci.yml
+		.github\workflows\healthchecks_publisher_applicationinsights_cd.yml = .github\workflows\healthchecks_publisher_applicationinsights_cd.yml
+		.github\workflows\healthchecks_publisher_applicationinsights_cd_preview.yml = .github\workflows\healthchecks_publisher_applicationinsights_cd_preview.yml
+		.github\workflows\healthchecks_publisher_applicationinsights_ci.yml = .github\workflows\healthchecks_publisher_applicationinsights_ci.yml
+		.github\workflows\healthchecks_publisher_datadog_cd.yml = .github\workflows\healthchecks_publisher_datadog_cd.yml
+		.github\workflows\healthchecks_publisher_datadog_cd_preview.yml = .github\workflows\healthchecks_publisher_datadog_cd_preview.yml
+		.github\workflows\healthchecks_publisher_datadog_ci.yml = .github\workflows\healthchecks_publisher_datadog_ci.yml
+		.github\workflows\healthchecks_publisher_prometheus_cd.yml = .github\workflows\healthchecks_publisher_prometheus_cd.yml
+		.github\workflows\healthchecks_publisher_prometheus_cd_preview.yml = .github\workflows\healthchecks_publisher_prometheus_cd_preview.yml
+		.github\workflows\healthchecks_publisher_prometheus_ci.yml = .github\workflows\healthchecks_publisher_prometheus_ci.yml
+		.github\workflows\healthchecks_publisher_seq_cd.yml = .github\workflows\healthchecks_publisher_seq_cd.yml
+		.github\workflows\healthchecks_publisher_seq_cd_preview.yml = .github\workflows\healthchecks_publisher_seq_cd_preview.yml
+		.github\workflows\healthchecks_publisher_seq_ci.yml = .github\workflows\healthchecks_publisher_seq_ci.yml
+		.github\workflows\healthchecks_rabbitmq_cd.yml = .github\workflows\healthchecks_rabbitmq_cd.yml
+		.github\workflows\healthchecks_rabbitmq_cd_preview.yml = .github\workflows\healthchecks_rabbitmq_cd_preview.yml
+		.github\workflows\healthchecks_rabbitmq_ci.yml = .github\workflows\healthchecks_rabbitmq_ci.yml
+		.github\workflows\healthchecks_ravendb_cd.yml = .github\workflows\healthchecks_ravendb_cd.yml
+		.github\workflows\healthchecks_ravendb_cd_preview.yml = .github\workflows\healthchecks_ravendb_cd_preview.yml
+		.github\workflows\healthchecks_ravendb_ci.yml = .github\workflows\healthchecks_ravendb_ci.yml
+		.github\workflows\healthchecks_redis_cd.yml = .github\workflows\healthchecks_redis_cd.yml
+		.github\workflows\healthchecks_redis_cd_preview.yml = .github\workflows\healthchecks_redis_cd_preview.yml
+		.github\workflows\healthchecks_redis_ci.yml = .github\workflows\healthchecks_redis_ci.yml
+		.github\workflows\healthchecks_sendgrid_cd.yml = .github\workflows\healthchecks_sendgrid_cd.yml
+		.github\workflows\healthchecks_sendgrid_cd_preview.yml = .github\workflows\healthchecks_sendgrid_cd_preview.yml
+		.github\workflows\healthchecks_sendgrid_ci.yml = .github\workflows\healthchecks_sendgrid_ci.yml
+		.github\workflows\healthchecks_signalr_cd.yml = .github\workflows\healthchecks_signalr_cd.yml
+		.github\workflows\healthchecks_signalr_cd_preview.yml = .github\workflows\healthchecks_signalr_cd_preview.yml
+		.github\workflows\healthchecks_signalr_ci.yml = .github\workflows\healthchecks_signalr_ci.yml
+		.github\workflows\healthchecks_solr_cd.yml = .github\workflows\healthchecks_solr_cd.yml
+		.github\workflows\healthchecks_solr_cd_preview.yml = .github\workflows\healthchecks_solr_cd_preview.yml
+		.github\workflows\healthchecks_solr_ci.yml = .github\workflows\healthchecks_solr_ci.yml
+		.github\workflows\healthchecks_sqlite_cd.yml = .github\workflows\healthchecks_sqlite_cd.yml
+		.github\workflows\healthchecks_sqlite_cd_preview.yml = .github\workflows\healthchecks_sqlite_cd_preview.yml
+		.github\workflows\healthchecks_sqlite_ci.yml = .github\workflows\healthchecks_sqlite_ci.yml
+		.github\workflows\healthchecks_sqlserver_cd.yml = .github\workflows\healthchecks_sqlserver_cd.yml
+		.github\workflows\healthchecks_sqlserver_cd_preview.yml = .github\workflows\healthchecks_sqlserver_cd_preview.yml
+		.github\workflows\healthchecks_sqlserver_ci.yml = .github\workflows\healthchecks_sqlserver_ci.yml
+		.github\workflows\healthchecks_system_cd.yml = .github\workflows\healthchecks_system_cd.yml
+		.github\workflows\healthchecks_system_cd_preview.yml = .github\workflows\healthchecks_system_cd_preview.yml
+		.github\workflows\healthchecks_system_ci.yml = .github\workflows\healthchecks_system_ci.yml
+		.github\workflows\healthchecks_ui_cd.yml = .github\workflows\healthchecks_ui_cd.yml
+		.github\workflows\healthchecks_ui_cd_preview.yml = .github\workflows\healthchecks_ui_cd_preview.yml
+		.github\workflows\healthchecks_ui_ci.yml = .github\workflows\healthchecks_ui_ci.yml
+		.github\workflows\healthchecks_uris_cd.yml = .github\workflows\healthchecks_uris_cd.yml
+		.github\workflows\healthchecks_uris_cd_preview.yml = .github\workflows\healthchecks_uris_cd_preview.yml
+		.github\workflows\healthchecks_uris_ci.yml = .github\workflows\healthchecks_uris_ci.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,14 +351,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579}.Release|Any CPU.Build.0 = Release|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{332F4E33-7D1E-42F6-B509-2950D2B40188}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -171,10 +367,6 @@ Global
 		{44C9850D-B260-412F-AD74-0C930562C396}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44C9850D-B260-412F-AD74-0C930562C396}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44C9850D-B260-412F-AD74-0C930562C396}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CADA1206-3769-4AFD-B20A-E98270592648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CADA1206-3769-4AFD-B20A-E98270592648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CADA1206-3769-4AFD-B20A-E98270592648}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -259,10 +451,6 @@ Global
 		{A6414860-EBAE-43E4-8109-DE745DA15C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6414860-EBAE-43E4-8109-DE745DA15C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6414860-EBAE-43E4-8109-DE745DA15C43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{300A1B42-EA00-480A-AC43-007EBC7CE472}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91DF8A73-8174-4EA2-ABFA-2557B71EE090}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -379,18 +567,183 @@ Global
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{321E691F-2D82-476D-9922-F0174E60D5B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{321E691F-2D82-476D-9922-F0174E60D5B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{321E691F-2D82-476D-9922-F0174E60D5B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{321E691F-2D82-476D-9922-F0174E60D5B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDE6866-7D25-4338-A310-B7D311971577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDE6866-7D25-4338-A310-B7D311971577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDE6866-7D25-4338-A310-B7D311971577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDE6866-7D25-4338-A310-B7D311971577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32CB9E4A-94AC-47BC-B1C9-586CBC0F9BF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CB9E4A-94AC-47BC-B1C9-586CBC0F9BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CB9E4A-94AC-47BC-B1C9-586CBC0F9BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CB9E4A-94AC-47BC-B1C9-586CBC0F9BF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F33531E-4A32-45CC-A4DE-C9506E8739D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F33531E-4A32-45CC-A4DE-C9506E8739D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F33531E-4A32-45CC-A4DE-C9506E8739D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F33531E-4A32-45CC-A4DE-C9506E8739D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E62049-3BDD-4FD1-8DBF-997399A565D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E62049-3BDD-4FD1-8DBF-997399A565D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E62049-3BDD-4FD1-8DBF-997399A565D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E62049-3BDD-4FD1-8DBF-997399A565D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75CC7014-0F72-44DF-A357-E03AF243EE95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75CC7014-0F72-44DF-A357-E03AF243EE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75CC7014-0F72-44DF-A357-E03AF243EE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75CC7014-0F72-44DF-A357-E03AF243EE95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2024BEDB-B31B-46B4-A978-22D1683B5DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2024BEDB-B31B-46B4-A978-22D1683B5DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2024BEDB-B31B-46B4-A978-22D1683B5DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2024BEDB-B31B-46B4-A978-22D1683B5DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BB35C7F-B16C-48EF-8335-C2200D41E2BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BB35C7F-B16C-48EF-8335-C2200D41E2BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BB35C7F-B16C-48EF-8335-C2200D41E2BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BB35C7F-B16C-48EF-8335-C2200D41E2BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06F1DAA7-4260-4C48-83E8-7D2A6D45EB5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06F1DAA7-4260-4C48-83E8-7D2A6D45EB5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06F1DAA7-4260-4C48-83E8-7D2A6D45EB5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06F1DAA7-4260-4C48-83E8-7D2A6D45EB5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEBB4BC3-48C4-4EEB-AB86-CC2DF658836A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEBB4BC3-48C4-4EEB-AB86-CC2DF658836A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEBB4BC3-48C4-4EEB-AB86-CC2DF658836A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEBB4BC3-48C4-4EEB-AB86-CC2DF658836A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AADABB9-FD8D-4420-AA9B-237287F50DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AADABB9-FD8D-4420-AA9B-237287F50DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AADABB9-FD8D-4420-AA9B-237287F50DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AADABB9-FD8D-4420-AA9B-237287F50DCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F170805C-1A21-4CC9-BE77-8EF4C1DE17EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F170805C-1A21-4CC9-BE77-8EF4C1DE17EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F170805C-1A21-4CC9-BE77-8EF4C1DE17EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F170805C-1A21-4CC9-BE77-8EF4C1DE17EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59E179B2-F77F-4A5C-9E8E-0BAD7236116D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59E179B2-F77F-4A5C-9E8E-0BAD7236116D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59E179B2-F77F-4A5C-9E8E-0BAD7236116D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59E179B2-F77F-4A5C-9E8E-0BAD7236116D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2551D36D-74D4-482A-B87A-8496E4B998F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2551D36D-74D4-482A-B87A-8496E4B998F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2551D36D-74D4-482A-B87A-8496E4B998F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2551D36D-74D4-482A-B87A-8496E4B998F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7883B1F9-9A81-4481-A2EC-FD101DAF6811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7883B1F9-9A81-4481-A2EC-FD101DAF6811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7883B1F9-9A81-4481-A2EC-FD101DAF6811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7883B1F9-9A81-4481-A2EC-FD101DAF6811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F12C630F-AB61-4065-920D-2642A522ECA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12C630F-AB61-4065-920D-2642A522ECA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12C630F-AB61-4065-920D-2642A522ECA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12C630F-AB61-4065-920D-2642A522ECA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F76845F9-7225-4FA0-A4B2-7D353EC4E5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F76845F9-7225-4FA0-A4B2-7D353EC4E5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F76845F9-7225-4FA0-A4B2-7D353EC4E5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F76845F9-7225-4FA0-A4B2-7D353EC4E5EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74921A32-8C36-4E74-B593-887FFEC1AF19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74921A32-8C36-4E74-B593-887FFEC1AF19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74921A32-8C36-4E74-B593-887FFEC1AF19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74921A32-8C36-4E74-B593-887FFEC1AF19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10FB21C-3785-40D5-AD4B-1BCDD2365A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10FB21C-3785-40D5-AD4B-1BCDD2365A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10FB21C-3785-40D5-AD4B-1BCDD2365A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10FB21C-3785-40D5-AD4B-1BCDD2365A90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B853DD2-0B83-4898-906C-F34D1AD844F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B853DD2-0B83-4898-906C-F34D1AD844F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B853DD2-0B83-4898-906C-F34D1AD844F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B853DD2-0B83-4898-906C-F34D1AD844F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80835FF3-C984-4BCE-B047-7985B42F6B0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80835FF3-C984-4BCE-B047-7985B42F6B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80835FF3-C984-4BCE-B047-7985B42F6B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80835FF3-C984-4BCE-B047-7985B42F6B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD169E1-EA86-45D5-9658-BEA330E9EBAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD169E1-EA86-45D5-9658-BEA330E9EBAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD169E1-EA86-45D5-9658-BEA330E9EBAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD169E1-EA86-45D5-9658-BEA330E9EBAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA119E76-F6D5-4D68-9E92-40EC877B9536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA119E76-F6D5-4D68-9E92-40EC877B9536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA119E76-F6D5-4D68-9E92-40EC877B9536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA119E76-F6D5-4D68-9E92-40EC877B9536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04CCCF7-DB45-4D69-8D5E-84E0EF5E6E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04CCCF7-DB45-4D69-8D5E-84E0EF5E6E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04CCCF7-DB45-4D69-8D5E-84E0EF5E6E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04CCCF7-DB45-4D69-8D5E-84E0EF5E6E4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E0AFD9E-F565-4196-85C1-545633580971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E0AFD9E-F565-4196-85C1-545633580971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E0AFD9E-F565-4196-85C1-545633580971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E0AFD9E-F565-4196-85C1-545633580971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{81A29AE5-5ABC-4D00-AE02-5CFF38E15579} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
-		{332F4E33-7D1E-42F6-B509-2950D2B40188} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{ED6D5756-ABEB-4EC6-9A09-F1B1EA398F97} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{6C9B61AA-BCFC-4230-9407-12B23E522580} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{65E0BF0F-B3B6-4DFD-A3E3-F91FE02DA7D3} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{44C9850D-B260-412F-AD74-0C930562C396} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
-		{4E8CC4CC-49AA-4A64-92BF-008DB1944649} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{CADA1206-3769-4AFD-B20A-E98270592648} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E6DCAE74-A1B1-4B23-879D-3D71BC13CFC6} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{28C46480-9F1D-4FCC-B65C-2B554C4342AB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
@@ -412,7 +765,6 @@ Global
 		{39667845-526D-46ED-90F0-05ED6B8814F1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{60C84400-DF56-49BE-B26F-D1F70003A1B4} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{A6414860-EBAE-43E4-8109-DE745DA15C43} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
-		{300A1B42-EA00-480A-AC43-007EBC7CE472} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{91DF8A73-8174-4EA2-ABFA-2557B71EE090} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 		{B7C5C213-677D-4B03-ADA9-101299BCA047} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 		{6F2F1445-01C9-4CFD-9F41-BD95E4F96BA6} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
@@ -442,6 +794,49 @@ Global
 		{E58B606C-EDC4-4238-AE66-C547904946FE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{46B0FE68-1739-49A1-AF1B-6817D54465A9} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{1F4EBCF4-5D1E-4079-8512-B501A6E0DAF0} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
+		{321E691F-2D82-476D-9922-F0174E60D5B5} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{BDDE6866-7D25-4338-A310-B7D311971577} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{32CB9E4A-94AC-47BC-B1C9-586CBC0F9BF7} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{7F33531E-4A32-45CC-A4DE-C9506E8739D6} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{21E62049-3BDD-4FD1-8DBF-997399A565D0} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{75CC7014-0F72-44DF-A357-E03AF243EE95} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{2024BEDB-B31B-46B4-A978-22D1683B5DDF} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{788FC1A1-D9BB-479D-8B8B-7F792CFA5C5C} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{9C8B6E20-CA2E-4CB9-A4E6-3C7349CBEB5A} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{DEE6C863-7EC3-4D63-872B-7FA65C9478F7} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{D73EBE5E-D324-484F-84CA-2DFFA1B4F23E} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{0BB35C7F-B16C-48EF-8335-C2200D41E2BE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{06F1DAA7-4260-4C48-83E8-7D2A6D45EB5B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{FEBB4BC3-48C4-4EEB-AB86-CC2DF658836A} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{7AADABB9-FD8D-4420-AA9B-237287F50DCF} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{F170805C-1A21-4CC9-BE77-8EF4C1DE17EB} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{59E179B2-F77F-4A5C-9E8E-0BAD7236116D} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{2551D36D-74D4-482A-B87A-8496E4B998F4} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{7883B1F9-9A81-4481-A2EC-FD101DAF6811} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{F12C630F-AB61-4065-920D-2642A522ECA5} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{F6C8B233-73BB-4DF4-B3D9-213CE5FEEA29} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{58E63AEA-52A5-47F5-BD10-6AFFEBFDCCF2} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{F76845F9-7225-4FA0-A4B2-7D353EC4E5EE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{74921A32-8C36-4E74-B593-887FFEC1AF19} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{C10FB21C-3785-40D5-AD4B-1BCDD2365A90} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{8B853DD2-0B83-4898-906C-F34D1AD844F9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{80835FF3-C984-4BCE-B047-7985B42F6B0E} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{CAA0DB8F-9759-436D-A4E7-2061C0125B06} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{62B73D6A-076D-414B-9B4E-D6C3FF38E786} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{6C09D144-19C9-48B7-84C4-5AADFE0552E9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{BCD169E1-EA86-45D5-9658-BEA330E9EBAC} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{6DE9B1D7-0A38-4D11-8C1B-164CC6310E63} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{4D28BC42-D6DB-47BA-92D2-219E41EBABE6} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{B99B84B8-9767-4E5B-953C-3C50AB0D006F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{FA119E76-F6D5-4D68-9E92-40EC877B9536} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{B04CCCF7-DB45-4D69-8D5E-84E0EF5E6E4E} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{9E0AFD9E-F565-4196-85C1-545633580971} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{531ABAB1-F4B5-4EAE-B310-6CB55D8FA4FD} = {A5A8CE48-FF38-4A49-9E59-0EC1FC4474C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

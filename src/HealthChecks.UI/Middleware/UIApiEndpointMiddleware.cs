@@ -1,4 +1,9 @@
-﻿using HealthChecks.UI.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +12,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HealthChecks.UI.Core;
 
 namespace HealthChecks.UI.Middleware
 {
@@ -51,12 +51,12 @@ namespace HealthChecks.UI.Middleware
                     var lastExecution = new DateTime?();
                     var status = UIHealthStatus.Healthy;
                     foreach (var item in group.OrderBy(item => item.Name))
-                    {
                         var execution = await db.Executions
-                            .Include(le => le.Entries)
-                            .Where(le => le.Name == item.Name && le.Group == item.Group)
-                            .AsNoTracking()
-                            .SingleOrDefaultAsync();
+                                    .Include(le => le.Entries)
+                                    .Where(le => le.Name == item.Name && le.Group == item.Group)
+                                    .AsNoTracking()
+                                    .SingleOrDefaultAsync();
+
                         if (execution != null)
                         {
                             execution.History = await db.HealthCheckExecutionHistories

@@ -1,0 +1,38 @@
+name: HealthChecks SignalR CD
+
+on:
+  push:
+    tags:
+      - release-signalr-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish SignalR Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.SignalR.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+
+

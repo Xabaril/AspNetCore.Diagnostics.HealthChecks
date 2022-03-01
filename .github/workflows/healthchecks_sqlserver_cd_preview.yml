@@ -1,0 +1,47 @@
+name: HealthChecks SQL Server DB Preview CD
+
+on:
+  push:
+    tags:
+      - preview-sqlserver-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server
+        ports:
+          - 5433:1433
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish SqlServer Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.SqlServer.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+
+

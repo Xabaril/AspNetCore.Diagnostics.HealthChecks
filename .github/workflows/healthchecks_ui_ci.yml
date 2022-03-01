@@ -1,0 +1,149 @@
+name: HealthChecks UI CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.UI/**
+      - src/HealthChecks.UI.*/**
+      - test/HealthChecks.UI.Tests/**
+      - .github/workflows/healthchecks_ui_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.UI/**
+    - test/HealthChecks.UI.Tests/**
+    - .github/workflows/healthchecks_ui_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server
+        ports:
+          - 5433:1433
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password12!
+      npgsql:
+        image: postgres
+        ports:
+          - 8010:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Password12!
+      mysql:
+        image: mysql
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: Password12!
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies UI
+      run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+    - name: Restore dependencies UI.Client
+      run: dotnet restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
+    - name: Restore dependencies UI.Core
+      run: dotnet restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+    - name: Restore dependencies UI.InMemory.Storage
+      run: dotnet restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
+    - name: Restore dependencies UI.MySql.Storage
+      run: dotnet restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj
+    - name: Restore dependencies UI.PostgreSQL.Storage
+      run: dotnet restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj
+    - name: Restore dependencies UI.SQLite.Storage
+      run: dotnet restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
+    - name: Restore dependencies UI.SqlServer.Storage
+      run: dotnet restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
+    - name: Restore dependencies UI.K8s.Operator
+      run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
+
+    - name: Check formatting UI
+      working-directory: ./src/HealthChecks.UI
+      run: |
+        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.Client
+      working-directory: ./src/HealthChecks.UI.Client
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.Core
+      working-directory: ./src/HealthChecks.UI.Core
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.InMemory.Storage
+      working-directory: ./src/HealthChecks.UI.InMemory.Storage
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.MySql.Storage
+      working-directory: ./src/HealthChecks.UI.MySql.Storage
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.PostgreSQL.Storage
+      working-directory: ./src/HealthChecks.UI.PostgreSQL.Storage
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.SQLite.Storage
+      working-directory: ./src/HealthChecks.UI.SQLite.Storage
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.SqlServer.Storage
+      working-directory: ./src/HealthChecks.UI.SqlServer.Storage
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Check formatting UI.K8s.Operator
+      working-directory: ./src/HealthChecks.UI.K8s.Operator
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+
+    - name: Build UI
+      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+    - name: Build UI.Client
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
+    - name: Build UI.Core
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+    - name: Build UI.InMemory.Storage
+      run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
+    - name: Build UI.MySql.Storage
+      run: dotnet build --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj
+    - name: Build UI.PostgreSQL.Storage
+      run: dotnet build --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj
+    - name: Build UI.SQLite.Storage
+      run: dotnet build --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
+    - name: Build UI.SqlServer.Storage
+      run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
+    - name: Build UI.K8s.Operator
+      run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal

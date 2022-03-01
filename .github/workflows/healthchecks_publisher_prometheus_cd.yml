@@ -1,0 +1,36 @@
+name: HealthChecks Publisher.Prometheus CD
+
+on:
+  push:
+    tags:
+      - release-publisher_prometheus-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Publisher.Prometheus.Tests/HealthChecks.Publisher.Prometheus.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Publisher.Prometheus Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Publisher.Prometheus.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

@@ -1,0 +1,51 @@
+name: HealthChecks Elastic Search CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Elasticsearch/**
+      - test/HealthChecks.Elasticsearch.Tests/**
+      - .github/workflows/healthchecks_elasticsearch_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Elasticsearch/**
+    - test/HealthChecks.Elasticsearch.Tests/**
+    - .github/workflows/healthchecks_elasticsearch_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        ports:
+          - 9300:9300
+          - 9200:9200
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
+    - name: Check formatting
+      working-directory: ./src/HealthChecks.Elasticsearch
+      run: |
+        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj --verbosity normal

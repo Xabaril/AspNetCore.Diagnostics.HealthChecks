@@ -1,0 +1,36 @@
+name: HealthChecks Hangfire Preview CD
+
+on:
+  push:
+    tags:
+      - preview-hangfire-*  # Push events to release-hangfire*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Hangfire.Tests/HealthChecks.Hangfire.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Hangfire Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Hangfire.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

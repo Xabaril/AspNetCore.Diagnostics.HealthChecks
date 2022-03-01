@@ -1,5 +1,4 @@
-﻿using HealthChecks.Network.Core;
-using System;
+using HealthChecks.Network.Core;
 
 namespace HealthChecks.Network
 {
@@ -10,8 +9,10 @@ namespace HealthChecks.Network
 
         public void LoginWith(string userName, string password)
         {
-            if (string.IsNullOrEmpty(userName)) throw new ArgumentNullException(nameof(userName));
-            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException(nameof(userName));
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
 
             AccountOptions = (Login: true, Account: (userName, password));
         }

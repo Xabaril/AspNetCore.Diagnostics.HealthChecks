@@ -1,62 +1,70 @@
-﻿using Microsoft.Azure.Management.DigitalTwins;
+using System.Collections.Concurrent;
+using Azure.Core;
+using Azure.DigitalTwins.Core;
+using Azure.Identity;
+using Microsoft.Azure.Management.DigitalTwins;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Rest;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.AzureDigitalTwin
 {
-    public class AzureDigitalTwinHealthCheck
-           : IHealthCheck
+    public abstract class AzureDigitalTwinHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, AzureDigitalTwinsManagementClient> _managementClientConnections
-            = new ConcurrentDictionary<string, AzureDigitalTwinsManagementClient>();
+        protected const string MANAGEMENT_AZURE_URL = "https://management.azure.com";
+        internal string ClientConnectionKey
+        {
+            get
+            {
+                string? hash = ClientId
+                    ?? ServiceClientCredentials?.GetHashCode().ToString()
+                    ?? TokenCredential?.GetHashCode().ToString();
 
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string _tenantId;
-        private readonly ServiceClientCredentials _credentials;
+                return hash
+                    ?? throw new ArgumentNullException(nameof(ClientConnectionKey));
+            }
+        }
+
+        protected static readonly ConcurrentDictionary<string, AzureDigitalTwinsManagementClient> ManagementClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, DigitalTwinsClient> DigitalTwinClientConnections = new();
+
+        protected readonly string? ClientId;
+        protected readonly string? ClientSecret;
+        protected readonly string? TenantId;
+
+        protected readonly ServiceClientCredentials? ServiceClientCredentials;
+        protected readonly TokenCredential? TokenCredential;
 
         public AzureDigitalTwinHealthCheck(string clientId, string clientSecret, string tenantId)
         {
-            _clientId = (!string.IsNullOrEmpty(clientId)) ? clientId : throw new ArgumentNullException(nameof(clientId));
-            _clientSecret = (!string.IsNullOrEmpty(clientSecret)) ? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
-            _tenantId = (!string.IsNullOrEmpty(tenantId)) ? tenantId : throw new ArgumentNullException(nameof(tenantId));
-
-            _credentials = new AzureCredentialsFactory().FromServicePrincipal(_clientId, _clientSecret, _tenantId, AzureEnvironment.AzureGlobalCloud);
+            ClientId = (!string.IsNullOrEmpty(clientId)) ? clientId : throw new ArgumentNullException(nameof(clientId));
+            ClientSecret = (!string.IsNullOrEmpty(clientSecret)) ? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
+            TenantId = (!string.IsNullOrEmpty(tenantId)) ? tenantId : throw new ArgumentNullException(nameof(tenantId));
         }
 
-        public AzureDigitalTwinHealthCheck(ServiceClientCredentials credentials)
+        public AzureDigitalTwinHealthCheck(ServiceClientCredentials serviceClientCredentials)
         {
-            _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+            ServiceClientCredentials = serviceClientCredentials ?? throw new ArgumentNullException(nameof(serviceClientCredentials));
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public AzureDigitalTwinHealthCheck(TokenCredential tokenCredential)
         {
-            try
-            {
-                if (!_managementClientConnections.TryGetValue(_clientId, out var managementClient))
-                {
-                    managementClient = new AzureDigitalTwinsManagementClient(new Uri("https://management.azure.com"), _credentials);
+            TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
+        }
 
-                    if (!_managementClientConnections.TryAdd(_clientId, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "No digital twin administration client connection can't be added into dictionary.");
-                    }
-                }
 
-                await managementClient.Operations.ListWithHttpMessagesAsync(cancellationToken: cancellationToken);
+        protected AzureDigitalTwinsManagementClient CreateManagementClient()
+        {
+            var credential = ServiceClientCredentials
+                ?? new AzureCredentialsFactory().FromServicePrincipal(ClientId, ClientSecret, TenantId, AzureEnvironment.AzureGlobalCloud);
+            return new AzureDigitalTwinsManagementClient(new Uri(MANAGEMENT_AZURE_URL), credential);
+        }
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+        protected DigitalTwinsClient CreateDigitalTwinClient(string hostName)
+        {
+            var credential = TokenCredential
+                ?? new ClientSecretCredential(TenantId, ClientId, ClientSecret);
+            return new DigitalTwinsClient(new Uri(hostName), credential);
         }
     }
 }

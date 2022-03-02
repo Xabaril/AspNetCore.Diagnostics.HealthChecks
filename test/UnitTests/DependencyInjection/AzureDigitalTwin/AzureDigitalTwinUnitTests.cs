@@ -1,11 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.AzureDigitalTwin;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.Rest;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
@@ -26,7 +24,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azuredigitaltwin");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinHealthCheck));
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -43,7 +41,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azuredigitaltwincheck");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinHealthCheck));
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -75,7 +73,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azuredigitaltwin");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinHealthCheck));
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -92,7 +90,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("azuredigitaltwincheck");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinHealthCheck));
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]

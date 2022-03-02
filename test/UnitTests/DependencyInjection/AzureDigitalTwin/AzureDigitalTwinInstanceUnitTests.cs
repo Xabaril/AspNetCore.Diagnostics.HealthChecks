@@ -4,8 +4,6 @@ using HealthChecks.AzureDigitalTwin;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin

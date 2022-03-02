@@ -1,9 +1,5 @@
 ﻿using Azure.Core;
 using Microsoft.Rest;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
 {

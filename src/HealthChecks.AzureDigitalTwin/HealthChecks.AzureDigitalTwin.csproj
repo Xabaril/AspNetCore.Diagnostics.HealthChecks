@@ -1,28 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <Description>HealthChecks.AzureDigitalTwin is the health check package for Azure DigitalTwin.</Description>
     <PackageTags>HealthCheck;Health;Azure;DigitalTwin</PackageTags>
+    <Description>HealthChecks.AzureDigitalTwin is the health check package for Azure DigitalTwin.</Description>
     <Version>$(HealthCheckAzureDigitalTwin)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-    <Company>$(Company)</Company>
-    <Authors>$(Authors)</Authors>
-    <LangVersion>latest</LangVersion>
-    <PackageId>AspNetCore.HealthChecks.AzureDigitalTwin</PackageId>
-    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Azure.DigitalTwins.Core" Version="$(AzureDigitalTwinsCore)" />
-    <PackageReference Include="Azure.Identity" Version="$(AzureIdentity)" />
-    <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" Version="$(MicrosoftAzureManagementDigitalTwins)" />
-    <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="$(MicrosoftAzureManagementResourceManagerFluent)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Azure.DigitalTwins.Core" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.5.0" />
+    <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
   </ItemGroup>
 </Project>

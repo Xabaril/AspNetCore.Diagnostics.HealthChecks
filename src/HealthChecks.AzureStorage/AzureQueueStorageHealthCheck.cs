@@ -1,32 +1,27 @@
-﻿using Azure.Core;
+using System.Collections.Concurrent;
+using Azure.Core;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureQueueStorageHealthCheck
-        : IHealthCheck
+    public class AzureQueueStorageHealthCheck : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string _queueName;
+        private readonly string? _connectionString;
+        private readonly string? _queueName;
 
-        private readonly TokenCredential _azureCredential;
-        private readonly Uri _queueServiceUri;
+        private readonly TokenCredential? _azureCredential;
+        private readonly Uri? _queueServiceUri;
 
-        private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder
-           = new ConcurrentDictionary<string, QueueServiceClient>();
+        private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder = new();
 
-        public AzureQueueStorageHealthCheck(string connectionString, string queueName = default)
+        public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _queueName = queueName;
         }
 
-        public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string queueName = default)
+        public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
         {
             _queueServiceUri = queueServiceUri ?? throw new ArgumentNullException(nameof(queueServiceUri));
             _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
@@ -62,9 +57,9 @@ namespace HealthChecks.AzureStorage
 
         private QueueServiceClient GetQueueServiceClient()
         {
-            var serviceUri = _connectionString ?? _queueServiceUri.ToString();
+            var serviceUri = _connectionString ?? _queueServiceUri!.ToString();
 
-            if (!_queueClientsHolder.TryGetValue(serviceUri, out QueueServiceClient client))
+            if (!_queueClientsHolder.TryGetValue(serviceUri, out var client))
             {
                 if (_connectionString != null)
                 {

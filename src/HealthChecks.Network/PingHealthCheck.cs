@@ -1,20 +1,17 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Net.NetworkInformation;
-using System.Threading;
-using System.Threading.Tasks;
-using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class PingHealthCheck
-        : IHealthCheck
+    public class PingHealthCheck : IHealthCheck
     {
         private readonly PingHealthCheckOptions _options;
+
         public PingHealthCheck(PingHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var configuredHosts = _options.ConfiguredHosts.Values;

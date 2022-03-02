@@ -1,34 +1,29 @@
-﻿using Azure.Core;
+using System.Collections.Concurrent;
+using Azure.Core;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.AzureStorage
 {
-    public class AzureBlobStorageHealthCheck
-        : IHealthCheck
+    public class AzureBlobStorageHealthCheck : IHealthCheck
     {
-        private readonly TokenCredential _azureCredential;
-        private readonly Uri _blobServiceUri;
+        private readonly TokenCredential? _azureCredential;
+        private readonly Uri? _blobServiceUri;
 
-        private readonly string _connectionString;
-        private readonly string _containerName;
-        private readonly BlobClientOptions _clientOptions;
+        private readonly string? _connectionString;
+        private readonly string? _containerName;
+        private readonly BlobClientOptions? _clientOptions;
 
-        private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder
-            = new ConcurrentDictionary<string, BlobServiceClient>();
+        private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder = new();
 
-        public AzureBlobStorageHealthCheck(string connectionString, string containerName = default, BlobClientOptions clientOptions = null)
+        public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = null)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _containerName = containerName;
             _clientOptions = clientOptions;
         }
 
-        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string containerName = default, BlobClientOptions clientOptions = null)
+        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = null)
         {
             _blobServiceUri = blobServiceUri ?? throw new ArgumentNullException(nameof(blobServiceUri));
             _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
@@ -41,7 +36,10 @@ namespace HealthChecks.AzureStorage
             try
             {
                 var blobServiceClient = GetBlobServiceClient();
-                var serviceProperties = await blobServiceClient.GetPropertiesAsync(cancellationToken);
+                await foreach (var page in blobServiceClient.GetBlobContainersAsync(cancellationToken: cancellationToken).AsPages(pageSizeHint: 1))
+                {
+                    break;
+                }
 
                 if (!string.IsNullOrEmpty(_containerName))
                 {
@@ -65,9 +63,9 @@ namespace HealthChecks.AzureStorage
 
         private BlobServiceClient GetBlobServiceClient()
         {
-            var serviceUri = _connectionString ?? _blobServiceUri.ToString();
+            var serviceUri = _connectionString ?? _blobServiceUri!.ToString();
 
-            if (!_blobClientsHolder.TryGetValue(serviceUri, out BlobServiceClient client))
+            if (!_blobClientsHolder.TryGetValue(serviceUri, out var client))
             {
                 if (_connectionString != null)
                 {

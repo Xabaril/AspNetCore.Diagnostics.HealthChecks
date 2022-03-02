@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace HealthChecks.UI.Core
 {

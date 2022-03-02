@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.UI.Image.Configuration.Helpers
 {
     public class EnvironmentVariable

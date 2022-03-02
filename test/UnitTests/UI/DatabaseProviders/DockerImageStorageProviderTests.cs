@@ -1,11 +1,9 @@
-﻿using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace UnitTests.UI.DatabaseProviders
@@ -180,11 +178,7 @@ namespace UnitTests.UI.DatabaseProviders
         public void register_inmemory_as_default_provider_when_no_option_is_configured()
         {
             var hostBuilder = new WebHostBuilder()
-                .ConfigureAppConfiguration(config =>
-                {
-                    config.Sources.Clear();
-
-                })
+                .ConfigureAppConfiguration(config => config.Sources.Clear())
                 .UseStartup<Startup>();
 
             var host = hostBuilder.Build();

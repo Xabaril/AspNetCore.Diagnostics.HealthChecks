@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -13,10 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.Audience = "api";
 
                 }).Services
-                  .AddAuthorization(configure =>
-                  {
-                      configure.AddPolicy("AuthUserPolicy", config => config.RequireAuthenticatedUser());
-                  });
+                  .AddAuthorization(configure => configure.AddPolicy("AuthUserPolicy", config => config.RequireAuthenticatedUser()));
         }
     }
 }

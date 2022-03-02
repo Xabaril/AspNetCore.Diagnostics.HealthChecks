@@ -1,8 +1,5 @@
-﻿using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Azure.IoTHub
 {
@@ -14,6 +11,7 @@ namespace HealthChecks.Azure.IoTHub
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

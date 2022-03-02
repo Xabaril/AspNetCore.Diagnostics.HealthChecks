@@ -1,4 +1,4 @@
-﻿using HealthChecks.Publisher.Datadog;
+using HealthChecks.Publisher.Datadog;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StatsdClient;
 
@@ -17,8 +17,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="serviceCheckName">Specifies the name of the custom check and metric that will be published to datadog. Example: "myservice.healthchecks".</param>
         /// <param name="datadogAgentName">Specified Datadog agent server name. Defaults to localhost address 127.0.0.1.</param>
         /// <param name="defaultTags">Specifies a collection of tags to send with the custom check and metric.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddDatadogPublisher(this IHealthChecksBuilder builder, string serviceCheckName, string datadogAgentName = "127.0.0.1", string[] defaultTags = default)
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddDatadogPublisher(
+            this IHealthChecksBuilder builder,
+            string serviceCheckName,
+            string datadogAgentName = "127.0.0.1",
+            string[]? defaultTags = default)
         {
             builder.Services
                 .AddSingleton<IHealthCheckPublisher>(sp =>

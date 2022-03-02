@@ -1,0 +1,58 @@
+name: HealthChecks KAFKA CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Kafka/**
+      - test/HealthChecks.Kafka.Tests/**
+      - .github/workflows/healthchecks_kafka_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Kafka/**
+    - test/HealthChecks.Kafka.Tests/**
+    - .github/workflows/healthchecks_kafka_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      zookeeper:
+        image: confluent/zookeeper
+        ports:
+          - 2181:2181
+      kafka:
+        image: confluent/kafka
+        ports:
+          - 9092:9092
+        env:
+          KAFKA_ADVERTISED_HOST_NAME: localhost
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_PORT: 9092
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
+    - name: Check formatting
+      working-directory: ./src/HealthChecks.Kafka
+      run: |
+        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj --verbosity normal

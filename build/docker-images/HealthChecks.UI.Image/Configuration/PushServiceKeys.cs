@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.UI.Image.Configuration
+namespace HealthChecks.UI.Image.Configuration
 {
     public class PushServiceKeys
     {

@@ -1,0 +1,32 @@
+name: HealthChecks Azure.IoTHub CD
+
+on:
+  push:
+    tags:
+      - release-azure_iothub-*  # Push events to release-azure_iothub*
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Azure.IoTHub Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Azure.IoTHub.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

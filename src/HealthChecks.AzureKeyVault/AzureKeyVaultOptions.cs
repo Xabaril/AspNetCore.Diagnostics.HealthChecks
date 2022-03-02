@@ -1,6 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-
 namespace HealthChecks.AzureKeyVault
 {
     /// <summary>
@@ -10,24 +7,15 @@ namespace HealthChecks.AzureKeyVault
     {
         internal HashSet<string> _secrets = new HashSet<string>();
 
-        internal IEnumerable<string> Secrets
-        {
-            get { return _secrets; }
-        }
+        internal IEnumerable<string> Secrets => _secrets;
 
         internal HashSet<string> _keys = new HashSet<string>();
 
-        internal IEnumerable<string> Keys
-        {
-            get { return _keys; }
-        }
+        internal IEnumerable<string> Keys => _keys;
 
         internal List<(string, bool)> _certificates = new List<(string key, bool checkExpired)>();
 
-        internal List<(string, bool)> Certificates
-        {
-            get { return _certificates; }
-        }
+        internal List<(string, bool)> Certificates => _certificates;
 
         /// <summary>
         /// Add a Azure Key Vault secret to be checked

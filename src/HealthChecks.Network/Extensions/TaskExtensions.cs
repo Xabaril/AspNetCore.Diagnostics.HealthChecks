@@ -1,7 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace HealthChecks.Network.Extensions
 {
     public static class TaskExtensions
@@ -10,10 +6,7 @@ namespace HealthChecks.Network.Extensions
         {
             var tcs = new TaskCompletionSource<bool>();
 
-            cancellationToken.Register(() =>
-            {
-                tcs.SetResult(true);
-            });
+            cancellationToken.Register(() => tcs.SetResult(true));
 
             if (task != await Task.WhenAny(task, tcs.Task))
             {
@@ -27,10 +20,7 @@ namespace HealthChecks.Network.Extensions
         {
             var tcs = new TaskCompletionSource<T>();
 
-            cancellationToken.Register(() =>
-            {
-                tcs.SetResult(default(T));
-            });
+            cancellationToken.Register(() => tcs.SetResult(default!));
 
             if (task != await Task.WhenAny(task, tcs.Task))
             {

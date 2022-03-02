@@ -81,9 +81,9 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Solr\HealthChecks.Solr.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o .\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o .\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj -c Release -o .\artifacts --include-symbols --no-build }
@@ -112,9 +112,10 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }	
+    exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.SendGrid\HealthChecks.SendGrid.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build }
 }
 
 else {
@@ -128,13 +129,13 @@ else {
     exec { & dotnet pack .\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Solr\HealthChecks.Solr.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }    
+    exec { & dotnet pack .\src\HealthChecks.Solr\HealthChecks.Solr.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Uris\HealthChecks.Uris.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
@@ -162,7 +163,8 @@ else {
     exec { & dotnet pack .\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }	
+    exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.SendGrid\HealthChecks.SendGrid.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }

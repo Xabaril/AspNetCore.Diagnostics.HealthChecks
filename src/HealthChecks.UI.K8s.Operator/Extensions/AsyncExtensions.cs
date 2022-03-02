@@ -1,6 +1,3 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
 namespace HealthChecks.UI.K8s.Operator
 {
     public static class AsyncExtensions

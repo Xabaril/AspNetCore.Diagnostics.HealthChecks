@@ -1,22 +1,20 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.SignalR
 {
-    public class SignalRHealthCheck
-        : IHealthCheck
+    public class SignalRHealthCheck : IHealthCheck
     {
         private readonly Func<HubConnection> _hubConnectionBuilder;
+
         public SignalRHealthCheck(Func<HubConnection> hubConnectionBuilder)
         {
             _hubConnectionBuilder = hubConnectionBuilder ?? throw new ArgumentNullException(nameof(hubConnectionBuilder));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            HubConnection connection = null;
+            HubConnection? connection = null;
 
             try
             {
@@ -32,7 +30,8 @@ namespace HealthChecks.SignalR
             }
             finally
             {
-                await connection?.DisposeAsync().AsTask();
+                if (connection != null)
+                    await connection.DisposeAsync();
             }
         }
     }

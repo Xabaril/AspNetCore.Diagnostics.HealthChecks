@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.K8s.Operator.Crd;
-using System.Collections.Generic;
+using HealthChecks.UI.K8s.Operator.Crd;
 
 namespace HealthChecks.UI.K8s.Operator
 {

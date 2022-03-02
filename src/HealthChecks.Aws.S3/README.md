@@ -13,12 +13,12 @@ With all of the following examples, you can additionally add the following param
 
 ### Basic
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddS3(options=>
+        .AddS3(options =>
         {
             BucketName = "bucket-name",
             AccessKey = "access-key"

@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace HealthChecks.UIAndApi.Options
 {
     public class RemoteOptions

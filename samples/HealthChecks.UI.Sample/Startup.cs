@@ -1,7 +1,3 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace HealthChecks.UI.Sample
 {
     public class Startup
@@ -20,10 +16,7 @@ namespace HealthChecks.UI.Sample
         {
             app
                 .UseRouting()
-                .UseEndpoints(config =>
-                {
-                    config.MapHealthChecksUI();
-                });
+                .UseEndpoints(config => config.MapHealthChecksUI());
         }
     }
 }

@@ -22,6 +22,24 @@ With all of the following examples, you can additionally add the following param
 
 ---
 
+### How to install
+
+You can download the latest version from nuget packages:
+
+Through Visual Studio:
+
+```
+Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
+```
+
+Or through CLI:
+
+```
+dotnet add package AspNetCore.HealthChecks.AzureDigitalTwin
+```
+
+---
+
 ## _Digital Twin Liveness Health Check_
 
 This health check provides the liveness status for the Azure Digital Twin resource client connection.

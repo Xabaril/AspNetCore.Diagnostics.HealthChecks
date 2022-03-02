@@ -15,14 +15,14 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddOracle("connectionstring");
 
-            using var serviceProvider = services.BuildServiceProvider();
+            var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("oracle");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            _ = registration.Name.Should().Be("oracle");
+            _ = check.GetType().Should().Be(typeof(OracleHealthCheck));
 
         }
 
@@ -33,14 +33,31 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddOracle("connectionstring", name: "my-oracle-1");
 
-            using var serviceProvider = services.BuildServiceProvider();
+            var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-oracle-1");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            _ = registration.Name.Should().Be("my-oracle-1");
+            _ = check.GetType().Should().Be(typeof(OracleHealthCheck));
+        }
+
+        [Fact]
+        public void add_health_check_with_connection_string_factory_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            _ = services.AddHealthChecks()
+                .AddOracle(_ => "connectionstring");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            _ = registration.Name.Should().Be("oracle");
+            _ = check.GetType().Should().Be(typeof(OracleHealthCheck));
         }
     }
 }

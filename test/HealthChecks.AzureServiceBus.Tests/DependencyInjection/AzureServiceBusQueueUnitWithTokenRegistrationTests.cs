@@ -59,34 +59,5 @@ namespace HealthChecks.AzureServiceBus.Tests
 
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
         }
-
-        [Fact]
-        public void add_health_check_using_factories_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            bool connectionStringFactoryCalled = false, eventHubNameFactoryCalled = false;
-            services.AddHealthChecks()
-                .AddAzureEventHub(_ =>
-                    {
-                        connectionStringFactoryCalled = true;
-                        return "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=";
-                    },
-                    _ =>
-                    {
-                        eventHubNameFactoryCalled = true;
-                        return "hubName";
-                    });
-
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("azureeventhub");
-            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
-            connectionStringFactoryCalled.Should().BeTrue();
-            eventHubNameFactoryCalled.Should().BeTrue();
-        }
     }
 }

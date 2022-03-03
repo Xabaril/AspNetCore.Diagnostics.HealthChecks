@@ -77,7 +77,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                         return "hubName";
                     });
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

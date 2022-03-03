@@ -225,7 +225,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpointFactory">A factory to build the azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
         /// <param name="queueNameFactory">A factory to build the name of the queue to check.</param>
-        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth</param>
+        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -377,7 +377,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpointFactory">A factory to build the azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
         /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
-        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth</param>
+        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -545,7 +545,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="endpointFactory">A factory to build the azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
         /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
         /// <param name="subscriptionNameFactory">A factory to build the subscription name of the topic to check.</param>
-        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth</param>
+        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

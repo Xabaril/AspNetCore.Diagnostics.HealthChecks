@@ -25,7 +25,7 @@ namespace HealthChecks.System
                 {
                     if (_predicate(sc))
                     {
-                        return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, exception: null));
+                        return HealthCheckResultTask.Healthy;
                     }
                 }
             }

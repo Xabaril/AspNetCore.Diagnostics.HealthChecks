@@ -1,4 +1,4 @@
-name: HealthChecks Uris Preview CD
+name: HealthChecks Uris CD
 
 
 on:
@@ -12,7 +12,7 @@ jobs:
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:

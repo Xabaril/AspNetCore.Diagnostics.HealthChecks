@@ -22,7 +22,7 @@ namespace HealthChecks.System
 
                 if (_predicate(processes))
                 {
-                    return Task.FromResult(HealthCheckResult.Healthy());
+                    return HealthCheckResultTask.Healthy;
                 }
             }
             catch (Exception ex)

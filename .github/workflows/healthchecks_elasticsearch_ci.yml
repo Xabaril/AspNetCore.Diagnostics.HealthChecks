@@ -30,7 +30,7 @@ jobs:
           - 9300:9300
           - 9200:9200
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:

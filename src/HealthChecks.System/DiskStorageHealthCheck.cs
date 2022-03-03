@@ -46,9 +46,9 @@ namespace HealthChecks.System
                     }
                 }
 
-                return Task.FromResult(errors?.Count > 0
-                    ? new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errors))
-                    : HealthCheckResult.Healthy());
+                return errors?.Count > 0
+                    ? Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errors)))
+                    : HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {

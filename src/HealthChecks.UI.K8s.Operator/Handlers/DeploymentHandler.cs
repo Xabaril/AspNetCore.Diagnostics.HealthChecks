@@ -100,6 +100,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
             uiContainer.MapCustomUIPaths(resource, _operatorDiagnostics);
 
+            var tolerations = resource.Spec.Tolerations?.Select(toleration => new V1Toleration(toleration.Effect,
+                toleration.Key, toleration.Operator, toleration.Seconds, toleration.Value)).ToList() ?? new List<V1Toleration>();
+
             var spec = new V1DeploymentSpec
             {
                 Selector = new V1LabelSelector
@@ -124,7 +127,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         Containers = new List<V1Container>
                         {
                            uiContainer
-                        }
+                        },
+                        Tolerations = tolerations
                     }
                 }
             };

@@ -45,8 +45,8 @@
     <HealthCheckSolr>6.0.2</HealthCheckSolr>
     <HealthCheckSqlite>6.0.2</HealthCheckSqlite>
     <HealthCheckSqlServer>6.0.2</HealthCheckSqlServer>
-    <HealthChecksUIK8sOperator>6.0.3</HealthChecksUIK8sOperator>
-    <HealthChecksUIPostgreSQLStorage>6.0.3</HealthChecksUIPostgreSQLStorage>
+    <HealthChecksUIK8sOperator>6.0.4</HealthChecksUIK8sOperator>
+    <HealthChecksUIPostgreSQLStorage>6.0.4</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>6.0.2</HealthCheckSystem>
     <HealthCheckUI>6.0.4</HealthCheckUI>
     <HealthCheckUIClient>6.0.4</HealthCheckUIClient>

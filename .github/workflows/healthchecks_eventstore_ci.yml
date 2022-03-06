@@ -1,4 +1,4 @@
-name: HealthChecks Gremlin CI
+name: HealthChecks EventStore CI
 
 on:
   push:

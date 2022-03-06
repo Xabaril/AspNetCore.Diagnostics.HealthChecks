@@ -28,9 +28,9 @@ jobs:
         image: eventstore/eventstore
         ports:
           - "2113:2113"
+          - "1113:1113"
         env:
           EVENTSTORE_INSECURE: true
-          EVENTSTORE_PORT: 1113
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

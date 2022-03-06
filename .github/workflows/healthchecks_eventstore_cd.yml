@@ -1,0 +1,43 @@
+name: HealthChecks EventStore CD
+
+on:
+  push:
+    tags:
+      - release-eventstore-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      eventstore:
+        image: eventstore/eventstore
+        ports:
+          - "2113:2113"
+        env:
+          EVENTSTORE_INSECURE: true
+          EVENTSTORE_PORT: 1113
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish EventStore Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.EventStore.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

@@ -47,7 +47,7 @@
     <HealthCheckSqlServer>6.0.2</HealthCheckSqlServer>
     <HealthChecksUIK8sOperator>6.0.4</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>6.0.4</HealthChecksUIPostgreSQLStorage>
-    <HealthCheckSystem>6.0.2</HealthCheckSystem>
+    <HealthCheckSystem>6.0.3</HealthCheckSystem>
     <HealthCheckUI>6.0.4</HealthCheckUI>
     <HealthCheckUIClient>6.0.4</HealthCheckUIClient>
     <HealthCheckUICore>6.0.4</HealthCheckUICore>

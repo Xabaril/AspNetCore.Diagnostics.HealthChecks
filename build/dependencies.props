@@ -54,7 +54,6 @@
     <HealthCheckUISQLiteStorage>6.0.4</HealthCheckUISQLiteStorage>
     <HealthCheckUISqlServerStorage>6.0.4</HealthCheckUISqlServerStorage>
     <HealthCheckUri>6.0.3</HealthCheckUri>
-    <HealthCheckNats>6.0.2</HealthCheckNats>
     <HealthCheckClickHouse>6.0.2</HealthCheckClickHouse>
   </PropertyGroup>
 

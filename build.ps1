@@ -166,7 +166,5 @@ else {
     exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.SendGrid\HealthChecks.SendGrid.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
-    exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build }
-    exec { & dotnet pack .\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.ClickHouse\HealthChecks.ClickHouse.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }

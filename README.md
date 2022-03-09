@@ -113,7 +113,6 @@ HealthChecks packages include health checks for:
 | Kubernetes | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Kubernetes)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kubernetes) | 
 | MongoDB | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.MongoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MongoDb) | 
 | MySql | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.MySql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MySql) | 
-| Nats | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Nats)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Nats) 
 | Network | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Network)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Network) | Ftp, SFtp, Dns, Tcp port, Smtp, Imap, Ssl |
 | Postgres | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.NpgSql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.NpgSql) | 
 | Identity Server | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.OpenIdConnectServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.OpenIdConnectServer) | 

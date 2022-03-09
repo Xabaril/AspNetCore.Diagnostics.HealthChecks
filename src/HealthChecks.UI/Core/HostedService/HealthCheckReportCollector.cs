@@ -19,6 +19,13 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly ServerAddressesService _serverAddressService;
         private readonly IEnumerable<IHealthCheckCollectorInterceptor> _interceptors;
         private static readonly Dictionary<int, Uri> _endpointAddresses = new();
+        private static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web)
+        {
+            Converters =
+            {
+                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
+            }
+        };
 
         public HealthCheckReportCollector(
             HealthChecksDb db,
@@ -93,12 +100,7 @@ namespace HealthChecks.UI.Core.HostedService
 
                 using var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
 
-                return await response.Content.ReadFromJsonAsync<UIHealthReport>(new JsonSerializerOptions(JsonSerializerDefaults.Web)
-                {
-                    Converters = {
-                        new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
-                    }
-                });
+                return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
             }
             catch (Exception exception)
             {
@@ -206,13 +208,12 @@ namespace HealthChecks.UI.Core.HostedService
                             .Remove(oldEntry);
                     }
                 }
-
             }
             else
             {
                 _logger.LogDebug("Creating a new HealthReport history.");
 
-                execution = new HealthCheckExecution()
+                execution = new HealthCheckExecution
                 {
                     LastExecuted = lastExecutionTime,
                     OnStateFrom = lastExecutionTime,
@@ -247,7 +248,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     if (item.Status != reportEntry.Status)
                     {
-                        execution.History.Add(new HealthCheckExecutionHistory()
+                        execution.History.Add(new HealthCheckExecutionHistory
                         {
                             On = lastExecutionTime,
                             Status = reportEntry.Status,

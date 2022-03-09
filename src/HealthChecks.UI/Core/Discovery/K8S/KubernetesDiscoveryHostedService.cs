@@ -140,7 +140,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         private Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
         {
-            livenessDb.Configurations.Add(new HealthCheckConfiguration()
+            livenessDb.Configurations.Add(new HealthCheckConfiguration
             {
                 Name = name,
                 Uri = host,

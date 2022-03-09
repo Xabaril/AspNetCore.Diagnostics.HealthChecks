@@ -5,6 +5,7 @@
     <PackageTags>HealthCheck;HealthChecks;COre</PackageTags>
     <Description>HealthChecks.UI.Core package containing builder and model definitions</Description>
     <Version>$(HealthCheckUICore)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

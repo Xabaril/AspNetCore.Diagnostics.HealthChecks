@@ -12,19 +12,19 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "healthz",
+      "launchUrl": "healthchecks-ui",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "HealthChecks.Sample": {
+    "HealthChecks.UI.Sample": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "healthz",
+      "launchUrl": "healthchecks-ui",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:2123/"
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }

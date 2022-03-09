@@ -22,7 +22,7 @@ namespace HealthChecks.SqlServer
         {
             try
             {
-                using (var connection = new SqlConnection() { ConnectionString = _connectionString, AccessToken = _accessTokenProvider?.Invoke() })
+                using (var connection = new SqlConnection(_connectionString) { AccessToken = _accessTokenProvider?.Invoke() })
                 {
                     _beforeOpenConnectionConfigurer?.Invoke(connection);
 

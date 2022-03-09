@@ -37,9 +37,9 @@ public class ClickHouseHealthCheck : IHealthCheck
                     command.CommandText = _sql;
                     await command.ExecuteScalarAsync(cancellationToken);
                 }
-
-                return HealthCheckResult.Healthy();
             }
+
+            return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

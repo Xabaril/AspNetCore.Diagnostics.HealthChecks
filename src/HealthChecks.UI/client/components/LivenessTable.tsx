@@ -79,7 +79,7 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
                 </td>
                 <td>
                   {getDiscoveryServiceImage(item.discoveryService)}
-                  {item.name}
+                  {item.baseUrl ? <a href={item.baseUrl} target="_blank">{item.name}</a> : item.name}
                 </td>
                 <td className="align-center">
                   <i

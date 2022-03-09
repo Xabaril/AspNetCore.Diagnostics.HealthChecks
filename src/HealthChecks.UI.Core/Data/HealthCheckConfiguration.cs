@@ -8,6 +8,8 @@ namespace HealthChecks.UI.Core.Data
 
         public string Name { get; set; }
 
+        public string BaseUrl { get; set; }
+
         public string DiscoveryService { get; set; }
 
         public void Deconstruct(out string uri, out string name)

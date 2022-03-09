@@ -119,6 +119,7 @@ namespace HealthChecks.UI.Configuration
     public class HealthCheckSetting
     {
         public string Name { get; set; }
+        public string BaseUrl { get; set; }
         public string Uri { get; set; }
     }
 

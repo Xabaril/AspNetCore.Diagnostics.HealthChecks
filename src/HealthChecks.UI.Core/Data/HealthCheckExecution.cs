@@ -14,6 +14,8 @@ namespace HealthChecks.UI.Core.Data
 
         public string Name { get; set; }
 
+        public string BaseUrl { get; set; }
+
         public string DiscoveryService { get; set; }
 
         public List<HealthCheckExecutionEntry> Entries { get; set; }

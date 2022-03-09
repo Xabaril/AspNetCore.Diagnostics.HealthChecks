@@ -24,6 +24,9 @@ namespace HealthChecks.UI.Core.Data.Configuration
                .HasMaxLength(500)
                .IsRequired(true);
 
+            builder.Property(le => le.BaseUrl)
+               .HasMaxLength(500);
+
             builder.Property(le => le.DiscoveryService)
                 .HasMaxLength(50);
 

@@ -89,5 +89,30 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             check.GetType().Should().Be(typeof(SqlServerHealthCheck));
             factoryCalled.Should().BeTrue();
         }
+
+        [Fact]
+        public void invoke_accessTokenProvider_when_defined()
+        {
+            var services = new ServiceCollection();
+            bool invoked = false;
+            const string connectionstring = "Server=(local);Database=foo;Connection Timeout=1";
+            Func<string> accessTokenProvider = () =>
+            {
+                invoked = true;
+                return "myaccesstoken";
+            };
+
+            services.AddHealthChecks()
+                .AddSqlServer(connectionstring, accessTokenProvider: accessTokenProvider);
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            Record.ExceptionAsync(() => check.CheckHealthAsync(new HealthCheckContext())).GetAwaiter().GetResult();
+            Assert.True(invoked);
+        }
     }
 }

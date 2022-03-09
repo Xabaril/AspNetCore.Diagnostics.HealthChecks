@@ -8,19 +8,21 @@ namespace HealthChecks.SqlServer
         private readonly string _connectionString;
         private readonly string _sql;
         private readonly Action<SqlConnection>? _beforeOpenConnectionConfigurer;
+        private readonly Func<string>? _accessTokenProvider;
 
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection>? beforeOpenConnectionConfigurer = null)
+        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection>? beforeOpenConnectionConfigurer = null, Func<string>? accessTokenProvider = null)
         {
             _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
             _beforeOpenConnectionConfigurer = beforeOpenConnectionConfigurer;
+            _accessTokenProvider = accessTokenProvider;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
+                using (var connection = new SqlConnection() { ConnectionString = _connectionString, AccessToken = _accessTokenProvider?.Invoke() })
                 {
                     _beforeOpenConnectionConfigurer?.Invoke(connection);
 

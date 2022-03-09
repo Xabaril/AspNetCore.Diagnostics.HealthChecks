@@ -26,6 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
+        /// <param name="accessTokenProvider">An optional function to retrieve and Access Token before the connection is instantiated on the healthcheck.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddSqlServer(
             this IHealthChecksBuilder builder,
@@ -35,9 +36,10 @@ namespace Microsoft.Extensions.DependencyInjection
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default,
-            Action<SqlConnection>? beforeOpenConnectionConfigurer = default)
+            Action<SqlConnection>? beforeOpenConnectionConfigurer = default,
+            Func<string>? accessTokenProvider = default)
         {
-            return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags, timeout, beforeOpenConnectionConfigurer);
+            return builder.AddSqlServer(_ => connectionString, healthQuery, name, failureStatus, tags, timeout, beforeOpenConnectionConfigurer, accessTokenProvider);
         }
 
         /// <summary>
@@ -54,6 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <param name="beforeOpenConnectionConfigurer">An optional action executed before the connection is Open on the healthcheck.</param>
+        /// <param name="accessTokenProvider">An optional function to retrieve and Access Token before the connection is instantiated on the healthcheck.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddSqlServer(
             this IHealthChecksBuilder builder,
@@ -63,7 +66,8 @@ namespace Microsoft.Extensions.DependencyInjection
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default,
-            Action<SqlConnection>? beforeOpenConnectionConfigurer = default)
+            Action<SqlConnection>? beforeOpenConnectionConfigurer = default,
+            Func<string>? accessTokenProvider = default)
         {
             if (connectionStringFactory == null)
             {
@@ -72,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new SqlServerHealthCheck(connectionStringFactory(sp), healthQuery ?? HEALTH_QUERY, beforeOpenConnectionConfigurer),
+                sp => new SqlServerHealthCheck(connectionStringFactory(sp), healthQuery ?? HEALTH_QUERY, beforeOpenConnectionConfigurer, accessTokenProvider),
                 failureStatus,
                 tags,
                 timeout));

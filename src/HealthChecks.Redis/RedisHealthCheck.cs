@@ -63,6 +63,8 @@ namespace HealthChecks.Redis
             }
             catch (Exception ex)
             {
+                _connections.TryRemove(_redisConnectionString, out var connection);
+                connection?.Dispose();
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }

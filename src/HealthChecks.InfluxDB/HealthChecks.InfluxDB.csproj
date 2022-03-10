@@ -5,6 +5,7 @@
     <Description>HealthChecks.InfluxDB is the health check package for InfluxDB.</Description>
     <Version>$(HealthCheckInfluxDB)</Version>
     <PackageId>AspNetCore.HealthChecks.InfluxDB</PackageId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="InfluxDB.Client" Version="$(InfluxDBClient)" />

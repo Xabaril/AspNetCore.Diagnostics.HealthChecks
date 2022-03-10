@@ -9,7 +9,7 @@ namespace HealthChecks.UI.Tests
 {
     public class sqlite_storage_should
     {
-        [Fact]
+        [Fact(Skip = "111")]
         public async Task seed_database_and_serve_stored_executions()
         {
             var hostReset = new ManualResetEventSlim(false);

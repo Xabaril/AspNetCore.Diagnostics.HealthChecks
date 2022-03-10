@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
@@ -27,7 +24,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         public async Task<V1Service> GetOrCreateAsync(HealthCheckResource resource)
         {
             var service = await Get(resource);
-            if (service != null) return service;
+            if (service != null)
+                return service;
 
             try
             {
@@ -43,7 +41,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             return service;
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
@@ -54,6 +52,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 _logger.LogError("Error deleting service for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
             }
         }
+
         public V1Service Build(HealthCheckResource resource)
         {
             var meta = new V1ObjectMeta
@@ -75,11 +74,11 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 {
                     ["app"] = resource.Spec.Name
                 },
-                Type = resource.Spec.ServiceType ?? Constants.DefaultServiceType,
+                Type = resource.Spec.ServiceType ?? Constants.DEFAULT_SERVICE_TYPE,
                 Ports = new List<V1ServicePort> {
                     new V1ServicePort {
                         Name = "httport",
-                        Port = int.Parse(resource.Spec.PortNumber ?? Constants.DefaultPort),
+                        Port = int.Parse(resource.Spec.PortNumber ?? Constants.DEFAULT_PORT),
                         TargetPort = 80
                     }
                 }

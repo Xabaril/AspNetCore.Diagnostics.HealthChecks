@@ -1,0 +1,50 @@
+name: HealthChecks KAFKA Preview CD
+
+on:
+  push:
+    tags:
+      - preview-kafka-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    services:
+      zookeeper:
+        image: confluent/zookeeper
+        ports:
+          - 2181:2181
+      kafka:
+        image: confluent/kafka
+        ports:
+          - 9092:9092
+        env:
+          KAFKA_ADVERTISED_HOST_NAME: localhost
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_PORT: 9092
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
+    # - name: Test
+    #   run: dotnet test ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Kafka Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Kafka.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

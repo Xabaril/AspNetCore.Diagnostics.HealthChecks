@@ -1,13 +1,10 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.UI.Core
 {
     /*
-     * Models for UI Client. This models represent a indirection between HealthChecks API and 
-     * UI Client in order to implement some features not present on HealthChecks of substitute 
+     * Models for UI Client. This models represent a indirection between HealthChecks API and
+     * UI Client in order to implement some features not present on HealthChecks of substitute
      * some properties etc.
      */
     public class UIHealthReport
@@ -18,9 +15,10 @@ namespace HealthChecks.UI.Core
 
         public UIHealthReport(Dictionary<string, UIHealthReportEntry> entries, TimeSpan totalDuration)
         {
-            Entries = entries;
+            Entries = entries ?? new Dictionary<string, UIHealthReportEntry>();
             TotalDuration = totalDuration;
         }
+
         public static UIHealthReport CreateFrom(HealthReport report)
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), report.TotalDuration)
@@ -40,9 +38,7 @@ namespace HealthChecks.UI.Core
 
                 if (item.Value.Exception != null)
                 {
-                    var message = item.Value.Exception?
-                        .Message
-                        .ToString();
+                    var message = item.Value.Exception?.Message;
 
                     entry.Exception = message;
                     entry.Description = item.Value.Description ?? message;
@@ -55,6 +51,7 @@ namespace HealthChecks.UI.Core
 
             return uiReport;
         }
+
         public static UIHealthReport CreateFrom(Exception exception, string entryName = "Endpoint")
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), TimeSpan.FromSeconds(0))
@@ -73,12 +70,14 @@ namespace HealthChecks.UI.Core
             return uiReport;
         }
     }
+
     public enum UIHealthStatus
     {
         Unhealthy = 0,
         Degraded = 1,
         Healthy = 2
     }
+
     public class UIHealthReportEntry
     {
         public IReadOnlyDictionary<string, object> Data { get; set; }

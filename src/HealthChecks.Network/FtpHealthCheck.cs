@@ -1,20 +1,18 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class FtpHealthCheck
-        : IHealthCheck
+    public class FtpHealthCheck : IHealthCheck
     {
         private readonly FtpHealthCheckOptions _options;
+
         public FtpHealthCheck(FtpHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentException(nameof(options));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -40,7 +38,8 @@ namespace HealthChecks.Network
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-        private WebRequest CreateFtpWebRequest(string host, bool createFile = false, NetworkCredential credentials = null)
+
+        private WebRequest CreateFtpWebRequest(string host, bool createFile = false, NetworkCredential? credentials = null)
         {
             FtpWebRequest ftpRequest;
 

@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
     <PackageTags>HealthCheck;Publisher;Datadog</PackageTags>
     <Description>HealthChecks.Publisher.Datadog is the health check publisher for Datadog.</Description>
     <Version>$(HealthCheckPublisherDatadog)</Version>
-    <PackageId>AspNetCore.HealthChecks.Publisher.Datadog</PackageId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DogStatsD-CSharp-Client" Version="$(DogStatsDCSharpClient)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="DogStatsD-CSharp-Client" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
   </ItemGroup>
 
 </Project>

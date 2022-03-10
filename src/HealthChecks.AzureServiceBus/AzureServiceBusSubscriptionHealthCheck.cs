@@ -1,28 +1,16 @@
-﻿using Azure.Messaging.ServiceBus.Administration;
+using Azure.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusSubscriptionHealthCheck : IHealthCheck
+    public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> _managementClientConnections =
-            new ConcurrentDictionary<string, ServiceBusAdministrationClient>();
-
-        private readonly string _connectionString;
         private readonly string _topicName;
         private readonly string _subscriptionName;
+        private string? _connectionKey;
 
-        public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName)
+        public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName) : base(connectionString)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
             if (string.IsNullOrEmpty(topicName))
             {
                 throw new ArgumentNullException(nameof(topicName));
@@ -33,7 +21,22 @@ namespace HealthChecks.AzureServiceBus
                 throw new ArgumentNullException(nameof(subscriptionName));
             }
 
-            _connectionString = connectionString;
+            _topicName = topicName;
+            _subscriptionName = subscriptionName;
+        }
+
+        public AzureServiceBusSubscriptionHealthCheck(string endPoint, string topicName, string subscriptionName, TokenCredential tokenCredential) : base(endPoint, tokenCredential)
+        {
+            if (string.IsNullOrEmpty(topicName))
+            {
+                throw new ArgumentNullException(nameof(topicName));
+            }
+
+            if (string.IsNullOrEmpty(subscriptionName))
+            {
+                throw new ArgumentNullException(nameof(subscriptionName));
+            }
+
             _topicName = topicName;
             _subscriptionName = subscriptionName;
         }
@@ -42,17 +45,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var connectionKey = $"{_connectionString}_{_topicName}_{_subscriptionName}";
-                if (!_managementClientConnections.TryGetValue(connectionKey, out var managementClient))
-                {
-                    managementClient = new ServiceBusAdministrationClient(_connectionString);
-                    if (!_managementClientConnections.TryAdd(connectionKey, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description:
-                            "New service bus administration client connection can't be added into dictionary.");
-                    }
-                }
-
+                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
                 _ = await managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
                 return HealthCheckResult.Healthy();
             }
@@ -61,5 +54,7 @@ namespace HealthChecks.AzureServiceBus
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
+
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_topicName}_{_subscriptionName}";
     }
 }

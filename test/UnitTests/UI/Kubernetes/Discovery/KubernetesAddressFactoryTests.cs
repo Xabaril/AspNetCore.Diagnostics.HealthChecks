@@ -1,11 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.UI;
 using HealthChecks.UI.Core.Discovery.K8S;
 using k8s.Models;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.UI.Kubernetes

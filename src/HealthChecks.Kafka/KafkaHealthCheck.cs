@@ -1,8 +1,5 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Kafka
 {
@@ -10,10 +7,9 @@ namespace HealthChecks.Kafka
     {
         private readonly ProducerConfig _configuration;
         private readonly string _topic;
+        private IProducer<string, string>? _producer;
 
-        private IProducer<string, string> _producer;
-
-        public KafkaHealthCheck(ProducerConfig configuration, string topic)
+        public KafkaHealthCheck(ProducerConfig configuration, string? topic)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _topic = topic ?? "healthchecks-topic";
@@ -28,7 +24,7 @@ namespace HealthChecks.Kafka
                     _producer = new ProducerBuilder<string, string>(_configuration).Build();
                 }
 
-                var message = new Message<string, string>()
+                var message = new Message<string, string>
                 {
                     Key = "healthcheck-key",
                     Value = $"Check Kafka healthy on {DateTime.UtcNow}"

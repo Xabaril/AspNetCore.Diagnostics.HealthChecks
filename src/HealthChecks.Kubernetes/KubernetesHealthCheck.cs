@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Kubernetes
@@ -11,6 +6,7 @@ namespace HealthChecks.Kubernetes
     {
         private readonly KubernetesHealthCheckBuilder _builder;
         private readonly KubernetesChecksExecutor _kubernetesChecksExecutor;
+
         public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder,
             KubernetesChecksExecutor kubernetesChecksExecutor)
         {
@@ -18,10 +14,10 @@ namespace HealthChecks.Kubernetes
             _kubernetesChecksExecutor = kubernetesChecksExecutor ??
                                         throw new ArgumentNullException(nameof(kubernetesChecksExecutor));
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-            CancellationToken cancellationToken = new CancellationToken())
+
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            List<Task<(bool result, string name)>> checks = new List<Task<(bool, string)>>();
+            List<Task<(bool result, string name)>> checks = new();
 
             try
             {

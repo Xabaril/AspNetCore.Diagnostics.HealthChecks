@@ -1,5 +1,3 @@
-﻿using System;
-using System.Threading.Tasks;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;
@@ -7,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Controller
 {
-    class HealthChecksController : IHealthChecksController
+    internal class HealthChecksController : IHealthChecksController
     {
         private readonly IKubernetes _client;
         private readonly DeploymentHandler _deploymentHandler;

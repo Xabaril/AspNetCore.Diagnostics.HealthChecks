@@ -1,34 +1,28 @@
-﻿using Microsoft.ApplicationInsights;
+using System.Reflection;
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Publisher.ApplicationInsights
 {
-    internal class ApplicationInsightsPublisher
-        : IHealthCheckPublisher
+    internal class ApplicationInsightsPublisher : IHealthCheckPublisher
     {
-        const string EVENT_NAME = "AspNetCoreHealthCheck";
-        const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
-        const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
-        const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
+        private const string EVENT_NAME = "AspNetCoreHealthCheck";
+        private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
+        private const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
+        private const string HEALTHCHECK_NAME = "AspNetCoreHealthCheckName";
 
-        private static TelemetryClient _client;
-        private static readonly object sync_root = new object();
-        private readonly TelemetryConfiguration _telemetryConfiguration;
-        private readonly string _instrumentationKey;
+        private static TelemetryClient? _client;
+        private static readonly object _syncRoot = new object();
+        private readonly TelemetryConfiguration? _telemetryConfiguration;
+        private readonly string? _instrumentationKey;
         private readonly bool _saveDetailedReport;
         private readonly bool _excludeHealthyReports;
 
         public ApplicationInsightsPublisher(
-            IOptions<TelemetryConfiguration> telemetryConfiguration,
-            string instrumentationKey = default,
+            IOptions<TelemetryConfiguration>? telemetryConfiguration,
+            string? instrumentationKey = default,
             bool saveDetailedReport = false,
             bool excludeHealthyReports = false)
         {
@@ -37,6 +31,7 @@ namespace HealthChecks.Publisher.ApplicationInsights
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
         }
+
         public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             if (report.Status == HealthStatus.Healthy && _excludeHealthyReports)
@@ -64,10 +59,10 @@ namespace HealthChecks.Publisher.ApplicationInsights
             foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
             {
                 client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
-                    properties: new Dictionary<string, string>()
+                    properties: new Dictionary<string, string?>()
                     {
                         { nameof(Environment.MachineName), Environment.MachineName },
-                        { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                        { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
                         { HEALTHCHECK_NAME, reportEntry.Key }
                     },
                     metrics: new Dictionary<string, double>()
@@ -80,10 +75,10 @@ namespace HealthChecks.Publisher.ApplicationInsights
             foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
             {
                 client.TrackException(reportEntry.Value.Exception,
-                    properties: new Dictionary<string, string>()
+                    properties: new Dictionary<string, string?>()
                     {
                         { nameof(Environment.MachineName), Environment.MachineName },
-                        { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
+                        { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
                         { HEALTHCHECK_NAME, reportEntry.Key }
                     },
                     metrics: new Dictionary<string, double>()
@@ -96,10 +91,10 @@ namespace HealthChecks.Publisher.ApplicationInsights
         private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
         {
             client.TrackEvent(EVENT_NAME,
-                properties: new Dictionary<string, string>
+                properties: new Dictionary<string, string?>
                 {
                     { nameof(Environment.MachineName), Environment.MachineName },
-                    { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name }
+                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name }
                 },
                 metrics: new Dictionary<string, double>
                 {
@@ -107,11 +102,12 @@ namespace HealthChecks.Publisher.ApplicationInsights
                     { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
                 });
         }
+
         private TelemetryClient GetOrCreateTelemetryClient()
         {
             if (_client == null)
             {
-                lock (sync_root)
+                lock (_syncRoot)
                 {
                     if (_client == null)
                     {

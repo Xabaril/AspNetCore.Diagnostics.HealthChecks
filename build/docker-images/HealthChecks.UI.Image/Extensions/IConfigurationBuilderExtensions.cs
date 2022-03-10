@@ -1,8 +1,6 @@
-﻿using Azure.Identity;
+using Azure.Identity;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using System;
 
 namespace HealthChecks.UI.Image.Extensions
 {
@@ -22,10 +20,7 @@ namespace HealthChecks.UI.Image.Extensions
 
                 if (AzureAppConfiguration.UseCacheExpiration)
                 {
-                    options.ConfigureRefresh(config =>
-                    {
-                        config.SetCacheExpiration(TimeSpan.FromSeconds(AzureAppConfiguration.CacheExpiration));
-                    });
+                    options.ConfigureRefresh(config => config.SetCacheExpiration(TimeSpan.FromSeconds(AzureAppConfiguration.CacheExpiration)));
                 }
 
                 if (AzureAppConfiguration.UseLabel)

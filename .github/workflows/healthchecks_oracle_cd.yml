@@ -1,0 +1,44 @@
+name: HealthChecks Oracle CD
+
+on:
+  push:
+    tags:
+      - release-oracle-*
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    services:
+      oracle:
+        image: oracleinanutshell/oracle-xe-11g
+        ports:
+          - 1521:1521
+          - 5500:5500
+        env:
+          ORACLE_ALLOW_REMOTE: true
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal
+    - name: dotnet pack
+      run: dotnet pack ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: setup nuget
+      uses: NuGet/setup-nuget@v1.0.5
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      with:
+        nuget-version: latest
+    - name: Publish Oracle Health Check nuget
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Oracle.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+

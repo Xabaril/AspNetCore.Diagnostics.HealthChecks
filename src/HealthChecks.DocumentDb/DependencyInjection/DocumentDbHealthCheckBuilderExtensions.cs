@@ -1,13 +1,15 @@
-﻿using HealthChecks.DocumentDb;
+using HealthChecks.DocumentDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="DocumentDbHealthCheck"/>.
+    /// </summary>
     public static class DocumentDbHealthCheckBuilderExtensions
     {
-        const string NAME = "documentdb";
+        private const string NAME = "documentdb";
+
         /// <summary>
         /// Add a health check for Azure DocumentDb database.
         /// </summary>
@@ -19,9 +21,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddDocumentDb(this IHealthChecksBuilder builder, Action<DocumentDbOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddDocumentDb(
+            this IHealthChecksBuilder builder,
+            Action<DocumentDbOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var documentDbOptions = new DocumentDbOptions();
             setup?.Invoke(documentDbOptions);

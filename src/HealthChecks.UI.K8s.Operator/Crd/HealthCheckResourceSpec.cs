@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.K8s.Operator.Crd;
-using System.Collections.Generic;
+using HealthChecks.UI.K8s.Operator.Crd;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -23,5 +22,6 @@ namespace HealthChecks.UI.K8s.Operator
         public List<NameValueObject> ServiceAnnotations { get; set; } = new List<NameValueObject>();
         public List<NameValueObject> DeploymentAnnotations { get; set; } = new List<NameValueObject>();
         public List<WebHookObject> Webhooks { get; set; } = new List<WebHookObject>();
+        public List<TolerationObject> Tolerations { get; set; } = new List<TolerationObject>();
     }
 }

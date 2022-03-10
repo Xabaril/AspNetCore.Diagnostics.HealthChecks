@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.InfluxDB\HealthChecks.InfluxDB.csproj" />
+  </ItemGroup>
+
+</Project>

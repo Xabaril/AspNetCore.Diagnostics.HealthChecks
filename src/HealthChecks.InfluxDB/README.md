@@ -17,24 +17,24 @@ This will create a new `InfluxDBClient` and reuse it on every request to get the
 the extension method where you provide the `Uri` to connect with. 
 
 ```csharp
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddHealthChecks()
-                    .AddInfluxDB("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
-        }
+  public void ConfigureServices(IServiceCollection services)
+   {
+    services.AddHealthChecks()
+      .AddInfluxDB("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
+    }
 ```
 
 If you are sharing a single `InfluxDBClient` for every time a health check is requested,
 you must ensure automatic recovery is enabled so that the `InfluxDBClient` can be re-established if lost.
 
 ```csharp
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<InfluxDBClient>(sp =>
-            {
-                return InfluxDBClientFactory.Create("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
-            })
-            .AddHealthChecks()
-            .AddInfluxDB();
-        }
+    public void ConfigureServices(IServiceCollection services)
+    {
+      services.AddSingleton<InfluxDBClient>(sp =>
+      {
+        return InfluxDBClientFactory.Create("http://localhost:8086/?org=iotsharp&bucket=iotsharp-bucket&token=iotsharp-token");
+      })
+      .AddHealthChecks()
+      .AddInfluxDB();
+    }
 ```

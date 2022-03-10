@@ -13,7 +13,6 @@ using Xunit;
 
 namespace HealthChecks.UI.Tests
 {
-
     public class ui_api_request_limiting
     {
         [Fact]
@@ -39,7 +38,6 @@ namespace HealthChecks.UI.Tests
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
-
                 })
                 .Configure(app =>
                 {
@@ -54,7 +52,6 @@ namespace HealthChecks.UI.Tests
 
                         setup.MapHealthChecksUI();
                     });
-
                 });
 
             using var server = new TestServer(webHostBuilder);
@@ -66,7 +63,6 @@ namespace HealthChecks.UI.Tests
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().Should().Be(requests.Count() - maxActiveRequests);
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().Should().Be(maxActiveRequests);
-
         }
 
         [Fact]
@@ -86,7 +82,6 @@ namespace HealthChecks.UI.Tests
                         .Services
                         .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health"))
                         .AddInMemoryStorage(databaseName: "LimitingTests");
-
                 })
                 .Configure(app =>
                 {
@@ -119,7 +114,6 @@ namespace HealthChecks.UI.Tests
 
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count()
                 .Should().Be(serverSettings.ApiMaxActiveRequests);
-
         }
     }
 }

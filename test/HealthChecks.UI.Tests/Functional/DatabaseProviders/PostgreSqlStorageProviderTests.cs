@@ -10,7 +10,6 @@ namespace HealthChecks.UI.Tests
     [Collection("execution")]
     public class postgre_storage_should
     {
-
         [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {

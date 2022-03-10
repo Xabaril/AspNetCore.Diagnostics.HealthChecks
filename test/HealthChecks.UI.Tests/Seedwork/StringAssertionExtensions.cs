@@ -9,7 +9,6 @@ namespace HealthChecks.UI.Tests
         public static AndConstraint<StringAssertions> ContainCheckAndResult(this StringAssertions assertions, string checkName,
             HealthStatus expectedResult)
         {
-
             assertions.Contain($"healthcheck{{healthcheck=\"{checkName}\"}} {expectedResult:D}",
                 "health check  must be included");
             assertions.Contain($"healthcheck_duration_seconds{{healthcheck=\"{checkName}\"}}",

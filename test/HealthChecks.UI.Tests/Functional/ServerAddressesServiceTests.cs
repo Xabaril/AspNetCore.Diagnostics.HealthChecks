@@ -37,7 +37,6 @@ namespace HealthChecks.UI.Tests
 
                     serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
                      .Should().Be($"{serverAddress}/segment1/segment2/segment3");
-
                 });
 
             var featureCollection = new FeatureCollection();
@@ -45,7 +44,5 @@ namespace HealthChecks.UI.Tests
 
             var testServer = new TestServer(host, featureCollection);
         }
-
     }
-
 }

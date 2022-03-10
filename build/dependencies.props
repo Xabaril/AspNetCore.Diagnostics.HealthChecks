@@ -87,7 +87,7 @@
     <ArangoDBNetStandard>1.0.0-alpha03</ArangoDBNetStandard>
     <SystemServiceProcessServiceController>5.0.0</SystemServiceProcessServiceController>
     <RichardSzalayMockHttp>6.0.0</RichardSzalayMockHttp>
-    <InfluxDBClient>1.14.0</InfluxDBClient>
+    <InfluxDBClient>3.3.0</InfluxDBClient>
     <AzureMessagingEventHubs>5.3.1</AzureMessagingEventHubs>
     <AzureMessagingServiceBus>7.1.1</AzureMessagingServiceBus>
   </PropertyGroup>
@@ -122,6 +122,7 @@
     <HealthCheckHangfire>5.0.1</HealthCheckHangfire>
     <HealthCheckAzureServiceBus>5.0.2</HealthCheckAzureServiceBus>
     <HealthCheckConsul>5.0.1</HealthCheckConsul>
+    <HealthCheckInfluxDB>5.0.1</HealthCheckInfluxDB>
     <HealthCheckUI>5.0.1</HealthCheckUI>
     <HealthCheckUICore>5.0.1</HealthCheckUICore>
     <HealthCheckUIClient>5.0.1</HealthCheckUIClient>

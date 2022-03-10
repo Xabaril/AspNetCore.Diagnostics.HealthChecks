@@ -1,4 +1,4 @@
-﻿using InfluxDB.Client;
+using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
@@ -33,9 +33,9 @@ namespace HealthChecks.InfluxDB
         {
             try
             {
-                var h = await _influxdb_client.HealthAsync();
-                var hcr = new HealthCheckResult(h.Status == HealthCheck.StatusEnum.Pass ? HealthStatus.Healthy : context.Registration.FailureStatus, $"{h.Name} {h.Version} {h.Message}");
-
+                var ready = await _influxdb_client.ReadyAsync();
+                var ping = await _influxdb_client.PingAsync();
+                var hcr = new HealthCheckResult(ping && ready.Status == Ready.StatusEnum.Ready ? HealthStatus.Healthy : context.Registration.FailureStatus, $"Status:{ready.Status} Started:{ready.Started} Up:{ready.Up}");
                 return hcr;
             }
             catch (Exception ex)

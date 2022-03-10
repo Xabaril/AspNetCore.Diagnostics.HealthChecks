@@ -35,8 +35,7 @@ namespace HealthChecks.InfluxDB
             {
                 var ready = await _influxdb_client.ReadyAsync();
                 var ping = await _influxdb_client.PingAsync();
-                var hcr = new HealthCheckResult(ping && ready.Status == Ready.StatusEnum.Ready ? HealthStatus.Healthy : context.Registration.FailureStatus, $"Status:{ready.Status} Started:{ready.Started} Up:{ready.Up}");
-                return hcr;
+                return new HealthCheckResult(ping && ready.Status == Ready.StatusEnum.Ready ? HealthStatus.Healthy : context.Registration.FailureStatus, $"Status:{ready.Status} Started:{ready.Started} Up:{ready.Up}");
             }
             catch (Exception ex)
             {

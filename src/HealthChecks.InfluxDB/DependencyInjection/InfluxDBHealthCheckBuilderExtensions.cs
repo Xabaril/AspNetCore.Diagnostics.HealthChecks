@@ -176,19 +176,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddInfluxDB(this IHealthChecksBuilder builder, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
         {
-            builder.Services.AddSingleton(sp =>
-            {
-                var influxdb_client = sp.GetService<InfluxDBClient>();
-                if (influxdb_client != null)
-                {
-                    return new InfluxDBHealthCheck(influxdb_client);
-                }
-                else
-                {
-                    throw new ArgumentException($"An InfluxDBClient must be registered within the service provider");
-
-                }
-            });
+            builder.Services.AddSingleton(sp => new InfluxDBHealthCheck(sp.GetRequiredService<InfluxDBClient>()));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

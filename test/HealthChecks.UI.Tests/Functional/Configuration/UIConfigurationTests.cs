@@ -262,7 +262,7 @@ namespace HealthChecks.UI.Tests
             UISettings.DisableMigrations.Should().Be(false);
         }
 
-        [Fact(Skip = "111")]
+        [Fact]
         public void allow_disable_running_database_migrations_in_ui_setup()
         {
             var webhost = new WebHostBuilder()

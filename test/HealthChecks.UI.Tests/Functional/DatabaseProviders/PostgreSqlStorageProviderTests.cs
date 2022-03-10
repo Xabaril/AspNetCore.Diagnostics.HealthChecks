@@ -10,7 +10,7 @@ namespace HealthChecks.UI.Tests
     [Collection("execution")]
     public class postgre_storage_should
     {
-        [Fact(Skip = "111")]
+        [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {
             var hostReset = new ManualResetEventSlim(false);

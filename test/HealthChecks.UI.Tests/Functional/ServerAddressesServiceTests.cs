@@ -12,7 +12,7 @@ namespace HealthChecks.UI.Tests
     public class server_addresses_service_should
     {
         // Based in AspNetCore TestServer test - https://github.com/aspnet/Hosting/pull/969
-        [Fact(Skip = "111")]
+        [Fact]
         public void parse_correctly_relative_endpoint_uris()
         {
             var serverAddress = "http://localhost:5000";

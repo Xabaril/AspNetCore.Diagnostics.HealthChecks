@@ -15,7 +15,7 @@ namespace HealthChecks.UI.Tests
 {
     public class ui_api_request_limiting
     {
-        [Fact(Skip = "111")]
+        [Fact]
         public async Task should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
         {
             int maxActiveRequests = 2;
@@ -65,7 +65,7 @@ namespace HealthChecks.UI.Tests
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().Should().Be(maxActiveRequests);
         }
 
-        [Fact(Skip = "111")]
+        [Fact]
         public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
         {
             var webHostBuilder = new WebHostBuilder()

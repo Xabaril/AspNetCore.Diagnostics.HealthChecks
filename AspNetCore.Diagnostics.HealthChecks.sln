@@ -193,6 +193,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.OpenIdConnectServer.Tests", "test\HealthChecks.OpenIdConnectServer.Tests\HealthChecks.OpenIdConnectServer.Tests.csproj", "{8B853DD2-0B83-4898-906C-F34D1AD844F9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.InfluxDB", "src\HealthChecks.InfluxDB\HealthChecks.InfluxDB.csproj", "{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solution Items", "{6D686167-7E39-44C2-B914-CC09B5CF226A}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -765,6 +767,10 @@ Global
 		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -870,6 +876,7 @@ Global
 		{BCEF8EE5-D93E-4F75-AAE0-52C9C87A0B6F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{531ABAB1-F4B5-4EAE-B310-6CB55D8FA4FD} = {A5A8CE48-FF38-4A49-9E59-0EC1FC4474C0}
 		{256B649E-9631-44AB-B577-96B3627C889E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

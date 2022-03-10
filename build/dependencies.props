@@ -57,7 +57,7 @@
     <HealthCheckUISqlServerStorage>6.0.4</HealthCheckUISqlServerStorage>
     <HealthCheckUri>6.0.3</HealthCheckUri>
     <HealthCheckNats>6.0.2</HealthCheckNats>
-    <HealthCheckInfluxDB>5.0.1</HealthCheckInfluxDB>
+    <HealthCheckInfluxDB>6.0.0</HealthCheckInfluxDB>
   </PropertyGroup>
   
 </Project>

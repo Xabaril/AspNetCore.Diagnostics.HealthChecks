@@ -1,4 +1,4 @@
-﻿using HealthChecks.InfluxDB;
+using HealthChecks.InfluxDB;
 using InfluxDB.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
@@ -136,8 +136,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
-        /// <summary>
 
+        /// <summary>
         /// Add a health check for InfluxDB services using connection string.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>

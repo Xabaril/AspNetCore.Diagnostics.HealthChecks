@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class InfluxDBHealthCheckBuilderExtensions
     {
-        const string NAME = "InfluxDB";
+        private const string NAME = "InfluxDB";
 
         /// <summary>
         /// Add a health check for InfluxDB services using connection string.

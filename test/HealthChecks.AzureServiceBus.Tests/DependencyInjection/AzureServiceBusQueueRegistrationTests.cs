@@ -23,7 +23,6 @@ namespace HealthChecks.AzureServiceBus.Tests
 
             registration.Name.Should().Be("azurequeue");
             check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-
         }
 
         [Fact]
@@ -57,6 +56,35 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
 
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        }
+
+        [Fact]
+        public void add_health_check_using_factories_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            bool connectionStringFactoryCalled = false, queueNameFactoryCalled = false;
+            services.AddHealthChecks()
+                .AddAzureServiceBusQueue(_ =>
+                    {
+                        connectionStringFactoryCalled = true;
+                        return "cnn";
+                    },
+                    _ =>
+                    {
+                        queueNameFactoryCalled = true;
+                        return "queueName";
+                    });
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azurequeue");
+            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
+            connectionStringFactoryCalled.Should().BeTrue();
+            queueNameFactoryCalled.Should().BeTrue();
         }
     }
 }

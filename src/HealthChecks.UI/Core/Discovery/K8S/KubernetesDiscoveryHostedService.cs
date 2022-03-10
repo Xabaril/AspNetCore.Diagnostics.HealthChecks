@@ -34,7 +34,6 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             _hostLifetime = hostLifetime ?? throw new ArgumentNullException(nameof(hostLifetime));
             _clusterServiceClient = httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME) ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _addressFactory = new KubernetesAddressFactory(_discoveryOptions);
-
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

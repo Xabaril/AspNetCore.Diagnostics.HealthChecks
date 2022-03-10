@@ -10,7 +10,7 @@ namespace HealthChecks.UI.Tests
     [Collection("execution")]
     public class postgre_storage_should
     {
-        [Fact(Skip = "111")]
+        [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {
             var hostReset = new ManualResetEventSlim(false);
@@ -26,9 +26,8 @@ namespace HealthChecks.UI.Tests
             hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            var configurations = await context.Configurations.ToListAsync();
+            var configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
             var host1 = ProviderTestHelper.Endpoints[0];
-
 
             configurations[0].Name.Should().Be(host1.Name);
             configurations[0].Uri.Should().Be(host1.Uri);
@@ -37,7 +36,7 @@ namespace HealthChecks.UI.Tests
 
             collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
 
-            var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api");
+            var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api").ConfigureAwait(false);
             report.First().Name.Should().Be(host1.Name);
         }
     }

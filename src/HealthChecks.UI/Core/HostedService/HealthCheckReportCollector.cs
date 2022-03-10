@@ -86,7 +86,6 @@ namespace HealthChecks.UI.Core.HostedService
                 }
 
                 _logger.LogDebug("HealthReportCollector has completed.");
-
             }
         }
 

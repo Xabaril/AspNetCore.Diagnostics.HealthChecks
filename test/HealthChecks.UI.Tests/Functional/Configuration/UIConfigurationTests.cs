@@ -4,6 +4,7 @@ using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -296,6 +297,39 @@ namespace HealthChecks.UI.Tests
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
 
             UISettings.DisableMigrations.Should().Be(true);
+        }
+
+        [Fact]
+        public async Task support_configuring_page_title()
+        {
+            const string pageTitle = "My Health Checks UI";
+
+            var builder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddRouting()
+                        .AddHealthChecksUI();
+                })
+                .Configure(app =>
+                {
+                    app
+                        .UseRouting()
+                        .UseEndpoints(setup =>
+                        {
+                            setup.MapHealthChecksUI(options =>
+                            {
+                                options.PageTitle = pageTitle;
+                            });
+                        });
+                });
+
+            var server = new TestServer(builder);
+            var options = server.Services.GetRequiredService<IOptions<Configuration.Options>>().Value;
+            var response = await server.CreateRequest(options.UIPath).GetAsync();
+            var html = await response.Content.ReadAsStringAsync();
+
+            html.Should().Contain($"<title>{pageTitle}</title>");
         }
     }
 }

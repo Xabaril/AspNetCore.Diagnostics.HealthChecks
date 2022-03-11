@@ -1,0 +1,52 @@
+name: HealthChecks Nats CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Nats/**
+      - test/HealthChecks.Nats.Tests/**
+      - .github/workflows/healthchecks_nats_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Nats/**
+    - test/HealthChecks.Nats.Tests/**
+    - .github/workflows/healthchecks_nats_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      nats:
+        image: nats:latest
+        ports:
+        - "4222:4222"
+        - "8222:8222"
+        - "6222:6222"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore dependencies
+      run: dotnet restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj
+    - name: Check formatting
+      working-directory: ./src/HealthChecks.Nats
+      run: |
+        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj --verbosity normal

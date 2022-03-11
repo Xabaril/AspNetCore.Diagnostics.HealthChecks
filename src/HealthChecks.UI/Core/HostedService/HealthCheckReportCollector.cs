@@ -1,11 +1,12 @@
-using HealthChecks.UI.Configuration;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -13,7 +14,6 @@ namespace HealthChecks.UI.Core.HostedService
     {
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
-        private readonly Settings _settings;
         private readonly HttpClient _httpClient;
         private readonly ILogger<HealthCheckReportCollector> _logger;
         private readonly ServerAddressesService _serverAddressService;
@@ -23,7 +23,6 @@ namespace HealthChecks.UI.Core.HostedService
         public HealthCheckReportCollector(
             HealthChecksDb db,
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
-            IOptions<Settings> settings,
             IHttpClientFactory httpClientFactory,
             ILogger<HealthCheckReportCollector> logger,
             ServerAddressesService serverAddressService,
@@ -31,7 +30,6 @@ namespace HealthChecks.UI.Core.HostedService
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
-            _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _serverAddressService = serverAddressService ?? throw new ArgumentNullException(nameof(serverAddressService));
             _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
@@ -94,9 +92,13 @@ namespace HealthChecks.UI.Core.HostedService
                 var absoluteUri = GetEndpointUri(configuration);
 
                 using var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
-                //response.EnsureSuccessStatusCode(); TODO: add or not ?
 
-                return await response.As<UIHealthReport>();
+                return await response.Content.ReadFromJsonAsync<UIHealthReport>(new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                {
+                    Converters = {
+                        new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
+                    }
+                });
             }
             catch (Exception exception)
             {
@@ -173,8 +175,7 @@ namespace HealthChecks.UI.Core.HostedService
                 foreach (var item in healthReport.ToExecutionEntries())
                 {
                     var existing = execution.Entries
-                        .Where(e => e.Name == item.Name)
-                        .SingleOrDefault();
+                        .SingleOrDefault(e => e.Name == item.Name);
 
                     if (existing != null)
                     {
@@ -199,8 +200,7 @@ namespace HealthChecks.UI.Core.HostedService
                     if (!existing)
                     {
                         var oldEntry = execution.Entries
-                            .Where(t => t.Name == item.Name)
-                            .SingleOrDefault();
+                            .SingleOrDefault(t => t.Name == item.Name);
 
                         _db.HealthCheckExecutionEntries
                             .Remove(oldEntry);
@@ -238,7 +238,6 @@ namespace HealthChecks.UI.Core.HostedService
 
         private void SaveExecutionHistoryEntries(UIHealthReport healthReport, HealthCheckExecution execution, DateTime lastExecutionTime)
         {
-
             _logger.LogDebug("HealthCheckReportCollector already exists but on different state, updating the values.");
 
             foreach (var item in execution.Entries)

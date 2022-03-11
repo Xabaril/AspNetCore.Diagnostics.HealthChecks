@@ -145,5 +145,5 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
     - name: Build UI.K8s.Operator
       run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
+    #- name: Test
+    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal

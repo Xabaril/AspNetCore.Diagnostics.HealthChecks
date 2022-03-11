@@ -101,7 +101,21 @@ spec:
                   - uri
                   - payload
                   - restoredPayload
-
+            tolerations:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  operator:
+                    type: string
+                  value:
+                    type: string
+                  effect:
+                    type: string
+                  seconds:
+                    type: number
           required:
             - name
             - scope

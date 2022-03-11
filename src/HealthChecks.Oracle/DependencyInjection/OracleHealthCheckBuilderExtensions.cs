@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The Oracle connection string to be used.</param>
-        /// /// <param name="healthQuery">The query to be used in check. Optional. If <c>null</c> select * from v$version is used.</param>
+        /// <param name="healthQuery">The query to be used in check. Optional. If <c>null</c> select * from v$version is used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'oracle' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -38,15 +38,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Oracle databases.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="connectionStringFactory">A factory to build the SQL Server connection string to use.</param>
-        /// /// <param name="healthQuery">The query to be used in check. Optional. If <c>null</c> select * from v$version is used.</param>
+        /// <param name="connectionStringFactory">A factory to build the Oracle connection string to be used.</param>
+        /// <param name="healthQuery">The query to be used in check. Optional. If <c>null</c> select * from v$version is used.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'oracle' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddOracle(
             this IHealthChecksBuilder builder,

@@ -42,5 +42,22 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             registration.Name.Should().Be("my-oracle-1");
             check.GetType().Should().Be(typeof(OracleHealthCheck));
         }
+
+        [Fact]
+        public void add_health_check_with_connection_string_factory_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddOracle(_ => "connectionstring");
+
+            var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("oracle");
+            check.GetType().Should().Be(typeof(OracleHealthCheck));
+        }
     }
 }

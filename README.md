@@ -142,6 +142,7 @@ Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
 Install-Package AspNetCore.HealthChecks.AzureStorage
+Install-Package AspNetCore.HealthChecks.ClickHouse
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.CosmosDb
 Install-Package AspNetCore.HealthChecks.DocumentDb
@@ -170,7 +171,6 @@ Install-Package AspNetCore.HealthChecks.SqLite
 Install-Package AspNetCore.HealthChecks.SqlServer
 Install-Package AspNetCore.HealthChecks.System
 Install-Package AspNetCore.HealthChecks.Uris
-Install-Package AspNetCore.HealthChecks.ClickHouse
 ```
 
 Once the package is installed you can add the HealthCheck using the **AddXXX** `IServiceCollection` extension methods.

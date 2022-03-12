@@ -31,7 +31,7 @@
     <HealthCheckNats>6.0.0</HealthCheckNats>
     <HealthCheckNpgSql>6.0.2</HealthCheckNpgSql>
     <HealthCheckOpenIdConnectServer>6.0.2</HealthCheckOpenIdConnectServer>
-    <HealthCheckOracle>6.0.2</HealthCheckOracle>
+    <HealthCheckOracle>6.0.3</HealthCheckOracle>
     <HealthCheckPrometheusMetrics>6.0.2</HealthCheckPrometheusMetrics>
     <HealthCheckPublisherAppplicationInsights>6.0.2</HealthCheckPublisherAppplicationInsights>
     <HealthCheckPublisherDatadog>6.0.2</HealthCheckPublisherDatadog>

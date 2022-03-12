@@ -43,7 +43,7 @@ jobs:
         dotnet restore ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj
     - name: Check formatting
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
         dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
       run: |

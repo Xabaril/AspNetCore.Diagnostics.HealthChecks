@@ -6,7 +6,7 @@ using Xunit;
 
 namespace HealthChecks.ArangoDb.Tests.DependencyInjection
 {
-    public class arangodb_registration_should
+      public class arangodb_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()

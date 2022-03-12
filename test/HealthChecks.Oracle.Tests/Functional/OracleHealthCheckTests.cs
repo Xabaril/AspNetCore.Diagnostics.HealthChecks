@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,8 @@ namespace HealthChecks.Oracle.Tests.Functional
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle"),
-                        ResponseWriter = async (context, report) => await JsonSerializer.SerializeAsync(context.Response.Body, report)
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        //ResponseWriter = async (context, report) => await JsonSerializer.SerializeAsync(context.Response.Body, report)
                     });
                 });
 

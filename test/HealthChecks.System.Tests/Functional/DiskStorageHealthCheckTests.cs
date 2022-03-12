@@ -17,7 +17,7 @@ namespace HealthChecks.System.Tests.Functional
         [Fact]
         public async Task be_healthy_when_disks_have_more_free_space_than_configured()
         {
-            var testDrive = _drives.FirstOrDefault(d => d.DriveType == DriveType.Fixed);
+            var testDrive = _drives.First(d => d.DriveType == DriveType.Fixed);
 
             var testDriveActualFreeMegabytes = testDrive.AvailableFreeSpace / 1024 / 1024;
             var targetFreeSpace = testDriveActualFreeMegabytes - 50;
@@ -45,7 +45,7 @@ namespace HealthChecks.System.Tests.Functional
         [Fact]
         public async Task be_unhealthy_when_a_disk_has_less_free_space_than_configured()
         {
-            var testDrive = _drives.FirstOrDefault(d => d.DriveType == DriveType.Fixed);
+            var testDrive = _drives.First(d => d.DriveType == DriveType.Fixed);
 
             var testDriveActualFreeMegabytes = testDrive.AvailableFreeSpace / 1024 / 1024;
             var targetFreeSpace = testDriveActualFreeMegabytes + 50;

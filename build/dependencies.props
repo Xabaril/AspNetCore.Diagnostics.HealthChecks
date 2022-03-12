@@ -1,7 +1,6 @@
 <Project>
 
   <PropertyGroup Label="SDK Versions">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NetFrameworkVersion>net6.0</NetFrameworkVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
   </PropertyGroup>

@@ -103,7 +103,7 @@ namespace HealthChecks.UI.Tests
             {
                 foreach (var prop in Properties)
                 {
-                    _tracer.Log(prop.Key, prop.Value.ToString());
+                    _tracer.Log(prop.Key, prop.Value?.ToString());
                 }
 
                 return base.SendAsync(request, cancellationToken);
@@ -142,7 +142,7 @@ namespace HealthChecks.UI.Tests
 
         public abstract class MessageHandlerTracer
         {
-            public abstract void Log(string key, string value);
+            public abstract void Log(string key, string? value);
         }
     }
 }

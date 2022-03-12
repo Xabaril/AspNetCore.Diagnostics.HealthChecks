@@ -43,7 +43,7 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
             UISettings.EvaluationTimeInSeconds.Should().Be(evaluationTimeInSeconds);
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(minimumSeconds);
@@ -74,7 +74,7 @@ namespace HealthChecks.UI.Tests
                 }).ConfigureServices(services => services.AddHealthChecksUI());
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
             UISettings.EvaluationTimeInSeconds.Should().Be(20);
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(120);
@@ -119,7 +119,7 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
             UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(200);
             UISettings.EvaluationTimeInSeconds.Should().Be(20);
@@ -185,7 +185,7 @@ namespace HealthChecks.UI.Tests
                     });
                 }).Build();
 
-            var clientFactory = webhost.Services.GetService<IHttpClientFactory>();
+            var clientFactory = webhost.Services.GetRequiredService<IHttpClientFactory>();
             var apiClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
             var webhookClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
 
@@ -251,7 +251,7 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
             UISettings.DisableMigrations.Should().Be(false);
         }
@@ -268,7 +268,7 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
             UISettings.DisableMigrations.Should().Be(true);
         }
@@ -294,7 +294,7 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
             UISettings.DisableMigrations.Should().Be(true);
         }

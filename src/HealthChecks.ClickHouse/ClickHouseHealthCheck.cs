@@ -14,7 +14,7 @@ public class ClickHouseHealthCheck : IHealthCheck
     /// </summary>
     /// <param name="clickHouseConnectionString">ClickHouse DataBase connection string</param>
     /// <param name="sql">Custom sql-query</param>
-    /// <param name="setup">ClickHouse.Client.ADO.ClickHouseConnection</param>
+    /// <param name="setup">The action to configure the connection</param>
     public ClickHouseHealthCheck(string clickHouseConnectionString, string sql, Action<ClickHouseConnection>? setup = null)
     {
         _connectionString = clickHouseConnectionString ?? throw new ArgumentNullException(nameof(clickHouseConnectionString));

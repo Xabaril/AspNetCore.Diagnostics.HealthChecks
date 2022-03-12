@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-
 namespace HealthChecks.Oracle.Tests.Functional
 {
     public class oracle_healthcheck_should
@@ -25,7 +24,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
@@ -33,10 +32,9 @@ namespace HealthChecks.Oracle.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync();
 
-            response.EnsureSuccessStatusCode();
+            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -52,7 +50,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
@@ -60,11 +58,9 @@ namespace HealthChecks.Oracle.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync();
 
-            response.StatusCode.Should()
-                .Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -79,7 +75,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
@@ -87,11 +83,9 @@ namespace HealthChecks.Oracle.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync();
 
-            response.StatusCode.Should()
-                .Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -103,7 +97,7 @@ namespace HealthChecks.Oracle.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    _ = services
+                    services
                     .AddHealthChecks()
                     .AddOracle(_ =>
                     {
@@ -114,7 +108,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    _ = app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
@@ -122,11 +116,10 @@ namespace HealthChecks.Oracle.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync();
 
-            _ = response.EnsureSuccessStatusCode();
-            _ = factoryCalled.Should().BeTrue();
+            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            factoryCalled.Should().BeTrue();
         }
     }
 }

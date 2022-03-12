@@ -359,7 +359,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse", "src\HealthChecks.ClickHouse\HealthChecks.ClickHouse.csproj", "{4240090C-6EF2-46B5-B32A-D96F4215C820}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse.Tests", "tests\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{77598A82-891B-4E69-BF54-FFD1F95753E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse.Tests", "test\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{77598A82-891B-4E69-BF54-FFD1F95753E3}"
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin", "src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj", "{256B649E-9631-44AB-B577-96B3627C889E}"
 EndProject
 Global

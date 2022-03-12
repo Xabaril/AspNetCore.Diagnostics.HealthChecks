@@ -33,7 +33,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
       run: dotnet restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj

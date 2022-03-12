@@ -28,7 +28,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
       run: |
@@ -36,7 +36,7 @@ jobs:
         dotnet restore ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj
     - name: Check formatting
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
         dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
       run: |

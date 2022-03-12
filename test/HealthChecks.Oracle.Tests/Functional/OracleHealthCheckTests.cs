@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.Json;
 using FluentAssertions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;

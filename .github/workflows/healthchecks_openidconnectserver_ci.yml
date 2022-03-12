@@ -44,4 +44,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.OpenIdConnectServer.Tests/HealthChecks.OpenIdConnectServer.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.OpenIdConnectServer.Tests/HealthChecks.OpenIdConnectServer.Tests.csproj

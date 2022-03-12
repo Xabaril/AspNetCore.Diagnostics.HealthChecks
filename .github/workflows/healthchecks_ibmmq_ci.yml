@@ -50,4 +50,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj

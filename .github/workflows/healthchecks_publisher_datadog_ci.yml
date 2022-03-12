@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj

@@ -38,4 +38,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj

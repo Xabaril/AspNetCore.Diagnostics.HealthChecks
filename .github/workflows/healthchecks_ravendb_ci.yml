@@ -46,4 +46,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj

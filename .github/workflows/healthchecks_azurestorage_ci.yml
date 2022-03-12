@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj 

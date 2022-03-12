@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Gcp.CloudFirestore.Tests/HealthChecks.Gcp.CloudFirestore.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Gcp.CloudFirestore.Tests/HealthChecks.Gcp.CloudFirestore.Tests.csproj

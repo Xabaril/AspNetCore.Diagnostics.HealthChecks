@@ -71,4 +71,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
     #- name: Test
-    #  run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal
+    #  run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj

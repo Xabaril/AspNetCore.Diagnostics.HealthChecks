@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj

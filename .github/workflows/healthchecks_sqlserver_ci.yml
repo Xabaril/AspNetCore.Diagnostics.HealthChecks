@@ -47,4 +47,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj

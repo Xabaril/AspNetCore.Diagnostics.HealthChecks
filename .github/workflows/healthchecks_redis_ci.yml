@@ -44,4 +44,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj

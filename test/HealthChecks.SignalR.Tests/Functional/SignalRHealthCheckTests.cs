@@ -17,7 +17,7 @@ namespace HealthChecks.SignalR.Tests.Functional
         [Fact]
         public async Task be_healthy_if_signalr_hub_is_available()
         {
-            TestServer server = null;
+            TestServer server = null!;
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
@@ -55,7 +55,7 @@ namespace HealthChecks.SignalR.Tests.Functional
         [Fact]
         public async Task be_unhealthy_if_signalr_hub_is_unavailable()
         {
-            TestServer server = null;
+            TestServer server = null!;
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {

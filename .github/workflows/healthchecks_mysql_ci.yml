@@ -46,4 +46,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj

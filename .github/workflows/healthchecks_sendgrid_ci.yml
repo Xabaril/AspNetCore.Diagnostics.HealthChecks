@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.SendGrid.Tests/HealthChecks.SendGrid.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.SendGrid.Tests/HealthChecks.SendGrid.Tests.csproj

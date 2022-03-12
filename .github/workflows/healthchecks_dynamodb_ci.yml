@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj

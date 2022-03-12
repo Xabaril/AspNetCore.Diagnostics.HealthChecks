@@ -127,4 +127,4 @@ jobs:
     - name: Build UI.K8s.Operator
       run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     #- name: Test
-    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj --verbosity normal
+    #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj

@@ -47,4 +47,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj

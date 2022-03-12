@@ -52,4 +52,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj

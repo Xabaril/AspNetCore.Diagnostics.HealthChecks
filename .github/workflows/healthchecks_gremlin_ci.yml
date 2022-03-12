@@ -47,4 +47,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj

@@ -45,4 +45,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj

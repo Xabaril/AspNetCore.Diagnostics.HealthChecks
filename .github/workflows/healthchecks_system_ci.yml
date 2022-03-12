@@ -39,4 +39,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj

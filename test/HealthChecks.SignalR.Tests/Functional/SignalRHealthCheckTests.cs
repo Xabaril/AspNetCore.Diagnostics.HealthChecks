@@ -35,7 +35,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 {
 
                     app
-                        .UseHealthChecks("/health", new HealthCheckOptions()
+                        .UseHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => r.Tags.Contains("signalr")
                         })
@@ -72,7 +72,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 .Configure(app =>
                 {
                     app
-                        .UseHealthChecks("/health", new HealthCheckOptions()
+                        .UseHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => r.Tags.Contains("signalr")
                         })

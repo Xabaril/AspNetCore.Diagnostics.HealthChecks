@@ -69,7 +69,7 @@ namespace HealthChecks.UIAndApi
                 .UseRouting()
                 .UseEndpoints(config =>
                 {
-                    config.MapHealthChecks("healthz", new HealthCheckOptions()
+                    config.MapHealthChecks("healthz", new HealthCheckOptions
                     {
                         Predicate = _ => true,
                         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

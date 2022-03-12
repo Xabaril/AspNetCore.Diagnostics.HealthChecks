@@ -33,7 +33,7 @@ jobs:
     - name: Restore dependencies
       run: |
         dotnet restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj &&
-        dotnet restore ./test/HealthChecks.AzureStorage/HealthChecks.AzureStorage.Tests.csproj
+        dotnet restore ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj
     - name: Check formatting
       run: |
         dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&

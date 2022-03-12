@@ -18,7 +18,7 @@ namespace HealthChecks.SolR.Tests.DependencyInjection
                 .AddSolr(options => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 

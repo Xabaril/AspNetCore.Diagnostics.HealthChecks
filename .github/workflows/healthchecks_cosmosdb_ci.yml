@@ -31,12 +31,16 @@ jobs:
         dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.CosmosDb/HealthChecks.CosmosDb.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.CosmosDb
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet restore ./src/HealthChecks.CosmosDb/HealthChecks.CosmosDb.csproj &&
+        dotnet restore ./test/HealthChecks.CosmosDb.Tests/HealthChecks.CosmosDb.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CosmosDb/HealthChecks.CosmosDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CosmosDb.Tests/HealthChecks.CosmosDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.CosmosDb/HealthChecks.CosmosDb.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.CosmosDb/HealthChecks.CosmosDb.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.CosmosDb.Tests/HealthChecks.CosmosDb.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.CosmosDb.Tests/HealthChecks.CosmosDb.Tests.csproj
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.CosmosDb.Tests/HealthChecks.CosmosDb.Tests.csproj

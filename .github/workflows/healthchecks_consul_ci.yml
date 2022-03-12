@@ -37,12 +37,16 @@ jobs:
         dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Consul
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj &&
+        dotnet restore ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Consul/HealthChecks.Consul.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj

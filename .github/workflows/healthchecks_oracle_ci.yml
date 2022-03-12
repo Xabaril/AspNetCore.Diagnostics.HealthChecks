@@ -31,7 +31,7 @@ jobs:
           - 5500:5500
         env:
           ORACLE_ALLOW_REMOTE: true
-          JAVA_OPTS: -Doracle.jdbc.timezoneAsRegion=false
+          JAVA_OPTS: "-Doracle.jdbc.timezoneAsRegion=false -Duser.timezone=GMT"
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

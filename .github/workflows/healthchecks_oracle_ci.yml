@@ -39,12 +39,16 @@ jobs:
         dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Oracle
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
+        dotnet restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    #- name: Test
-    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj

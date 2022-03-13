@@ -1,6 +1,5 @@
 name: HealthChecks Uris Preview CD
 
-
 on:
   push:
     tags:

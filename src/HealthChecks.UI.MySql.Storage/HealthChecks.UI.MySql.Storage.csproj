@@ -5,6 +5,7 @@
     <PackageTags>HealthCheck;HealthChecks;MySql</PackageTags>
     <Description>HealthChecks.UI.MySql.Storage package contains the required classes to use the MySql database provider in the UI</Description>
     <Version>$(HealthCheckUIMySqlStorage)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

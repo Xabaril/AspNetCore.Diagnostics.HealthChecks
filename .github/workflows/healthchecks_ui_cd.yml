@@ -1,6 +1,5 @@
 name: HealthChecks UI CD
 
-
 on:
   push:
     tags:

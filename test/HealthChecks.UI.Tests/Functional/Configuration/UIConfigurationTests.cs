@@ -28,6 +28,7 @@ namespace HealthChecks.UI.Tests
             var minimumSeconds = 30;
 
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI(setupSettings: settings =>
@@ -66,6 +67,7 @@ namespace HealthChecks.UI.Tests
         public void load_ui_settings_from_configuration_key()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -102,6 +104,7 @@ namespace HealthChecks.UI.Tests
             var webhookPayload = "payload1";
 
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -151,6 +154,7 @@ namespace HealthChecks.UI.Tests
             var webhookClientConfigured = false;
 
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -199,6 +203,7 @@ namespace HealthChecks.UI.Tests
         public void register_server_addresses_service_to_resolve_relative_uris_using_endpoints()
         {
             var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .UseKestrel()
                 .ConfigureServices(services =>
                 {
@@ -225,6 +230,7 @@ namespace HealthChecks.UI.Tests
         public void register_server_addresses_service_to_resolve_relative_uris_using_application_builder()
         {
             var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .UseKestrel()
                 .ConfigureServices(services =>
                 {
@@ -244,6 +250,7 @@ namespace HealthChecks.UI.Tests
         public void have_enabled_database_migrations_by_default()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI()
@@ -260,6 +267,7 @@ namespace HealthChecks.UI.Tests
         public void allow_disable_running_database_migrations_in_ui_setup()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -277,6 +285,7 @@ namespace HealthChecks.UI.Tests
         public void allow_disable_running_database_migrations_using_configuration_providers()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(config =>
                 {
                     config.Sources.Clear();

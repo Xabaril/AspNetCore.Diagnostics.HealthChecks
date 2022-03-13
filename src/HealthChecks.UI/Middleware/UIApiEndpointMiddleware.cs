@@ -53,7 +53,7 @@ namespace HealthChecks.UI.Middleware
                             .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
                             .OrderByDescending(eh => eh.On)
                             .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                             .ToListAsync();
+                            .ToListAsync();
 
                         healthChecksExecutions.Add(execution);
                     }

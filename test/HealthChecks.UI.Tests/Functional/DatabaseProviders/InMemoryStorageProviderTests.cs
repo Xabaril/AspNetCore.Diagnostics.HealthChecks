@@ -10,7 +10,6 @@ namespace HealthChecks.UI.Tests
     [Collection("execution")]
     public class inmemory_storage_should
     {
-
         [Fact(Skip = "conflicts with other tests that use inmemory storage too")]
         public async Task seed_database_and_serve_stored_executions()
         {

@@ -29,7 +29,6 @@ namespace HealthChecks.UI.Tests
                    {
                        services.AddTransient<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(collectorReset));
                    }
-
                }).Configure(app =>
                {
                    app

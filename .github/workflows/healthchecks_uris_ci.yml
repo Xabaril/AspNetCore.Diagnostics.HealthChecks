@@ -31,12 +31,16 @@ jobs:
         dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Uris
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj &&
+        dotnet restore ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Uris/HealthChecks.Uris.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj

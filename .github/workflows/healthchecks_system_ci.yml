@@ -31,12 +31,16 @@ jobs:
         dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.System/HealthChecks.System.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.System
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet restore ./src/HealthChecks.System/HealthChecks.System.csproj &&
+        dotnet restore ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.System/HealthChecks.System.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj

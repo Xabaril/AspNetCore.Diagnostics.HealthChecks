@@ -51,12 +51,16 @@ jobs:
         dotnet-version: 6.0.102
         include-prerelease: false
     - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Solr
       run: |
-        dotnet format --no-restore --verify-no-changes --severity warn || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
+        dotnet restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Solr/HealthChecks.Solr.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    #- name: Test
-    #  run: dotnet test ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj

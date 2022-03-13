@@ -29,7 +29,6 @@ namespace HealthChecks.Oracle.Tests.Functional
                     {
                         Predicate = r => r.Tags.Contains("oracle"),
                         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                        //ResponseWriter = async (context, report) => await JsonSerializer.SerializeAsync(context.Response.Body, report)
                     });
                 });
 

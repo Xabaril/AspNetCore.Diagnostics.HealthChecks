@@ -5,7 +5,7 @@ namespace HealthChecks.UI.Tests
 {
     public static class HttpClientExtensions
     {
-        public static async Task<T?> GetAsJson<T>(this HttpClient client, string url)
+        public static async Task<T> GetAsJson<T>(this HttpClient client, string url)
         {
             var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
@@ -13,7 +13,7 @@ namespace HealthChecks.UI.Tests
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateTimeZoneHandling = DateTimeZoneHandling.Local
-            });
+            })!;
         }
     }
 }

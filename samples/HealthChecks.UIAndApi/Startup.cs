@@ -63,6 +63,7 @@ namespace HealthChecks.UIAndApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Sample")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app

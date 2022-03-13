@@ -1,5 +1,6 @@
 using System.Net;
 using FluentAssertions;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,8 @@ namespace HealthChecks.SolR.Tests.Functional
                {
                    app.UseHealthChecks("/health", new HealthCheckOptions
                    {
-                       Predicate = r => r.Tags.Contains("solr")
+                       Predicate = r => r.Tags.Contains("solr"),
+                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                    });
                });
 
@@ -51,7 +53,8 @@ namespace HealthChecks.SolR.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("solr")
+                        Predicate = r => r.Tags.Contains("solr"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 });
 
@@ -77,7 +80,8 @@ namespace HealthChecks.SolR.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("solr")
+                        Predicate = r => r.Tags.Contains("solr"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 });
 

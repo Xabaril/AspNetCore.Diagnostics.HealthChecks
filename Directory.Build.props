@@ -20,6 +20,8 @@
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
+    <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
     <NoWarn>$(NoWarn);1591</NoWarn> <!--TODO: temporary solution-->
   </PropertyGroup>
 

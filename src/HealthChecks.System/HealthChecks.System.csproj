@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Beat;Health;System;Ping;Disk Storage</PackageTags>
+    <PackageTags>$(PackageTags);Beat;System;Ping;Disk Storage</PackageTags>
     <Description>HealthChecks.System is the system health check package.</Description>
     <Version>$(HealthCheckSystem)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

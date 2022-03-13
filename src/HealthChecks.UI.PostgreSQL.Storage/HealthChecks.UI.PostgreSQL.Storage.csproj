@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <PackageTags>HealthCheck;HealthChecks;PostgreSQL</PackageTags>
+    <PackageTags>$(PackageTags);PostgreSQL</PackageTags>
     <Description>HealthChecks.UI.PostgreSQL.Storage package contains the required classes to use Postgres NpgSql provider in the UI</Description>
     <Version>$(HealthChecksUIPostgreSQLStorage)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

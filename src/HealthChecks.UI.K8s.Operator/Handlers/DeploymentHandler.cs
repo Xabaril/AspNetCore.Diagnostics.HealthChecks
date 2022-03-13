@@ -20,7 +20,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _operatorDiagnostics = operatorDiagnostics ?? throw new ArgumentNullException(nameof(operatorDiagnostics));
         }
 
-        public Task<V1Deployment> Get(HealthCheckResource resource)
+        public Task<V1Deployment?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
@@ -34,9 +34,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             try
             {
                 var deploymentResource = Build(resource);
-                var response =
-                    await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource,
-                        resource.Metadata.NamespaceProperty);
+                var response = await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
 
                 _operatorDiagnostics.DeploymentCreated(deployment.Metadata.Name);

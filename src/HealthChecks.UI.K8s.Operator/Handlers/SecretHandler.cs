@@ -34,12 +34,13 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             catch (Exception ex)
             {
                 _logger.LogError("Error creating Secret: {message}", ex.Message);
+                throw;
             }
 
             return secret;
         }
 
-        public Task<V1Secret> Get(HealthCheckResource resource)
+        public Task<V1Secret?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }

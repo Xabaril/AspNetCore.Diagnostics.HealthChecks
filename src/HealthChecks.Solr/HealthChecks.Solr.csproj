@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;solr</PackageTags>
+    <PackageTags>$(PackageTags);solr</PackageTags>
     <Description>HealthChecks.solr is the health check package for solr.</Description>
     <Version>$(HealthCheckSolr)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

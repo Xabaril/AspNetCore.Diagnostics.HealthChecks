@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Sql Server</PackageTags>
+    <PackageTags>$(PackageTags);Sql Server</PackageTags>
     <Description>HealthChecks.SqlServer is the health check package for SqlServer.</Description>
     <Version>$(HealthCheckSqlServer)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

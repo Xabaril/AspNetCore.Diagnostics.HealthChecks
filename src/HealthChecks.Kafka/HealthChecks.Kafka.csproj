@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Kafka;Confluent</PackageTags>
+    <PackageTags>$(PackageTags);Kafka;Confluent</PackageTags>
     <Description>HealthChecks.Kafka is the health check package for Kafka.</Description>
     <Version>$(HealthCheckKafka)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Uri;Url;Uris;Urls</PackageTags>
+    <PackageTags>$(PackageTags);Uri;Url;Uris;Urls</PackageTags>
     <Description>HealthChecks.Uris is a simple health check package for Uri groups.</Description>
     <Version>$(HealthCheckUri)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

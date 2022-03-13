@@ -31,7 +31,7 @@ namespace HealthChecks.UI.K8s.Operator
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)
         {
-            Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
+            Func<HealthCheckResource, bool> filter = k => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
 
             if (!_watchers.Keys.Any(filter))
             {

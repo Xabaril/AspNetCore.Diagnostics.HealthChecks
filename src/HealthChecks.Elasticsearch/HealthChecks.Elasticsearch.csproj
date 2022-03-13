@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Elasticsearch</PackageTags>
+    <PackageTags>$(PackageTags);Elasticsearch</PackageTags>
     <Description>HealthChecks.Elasticsearch is the health check package for Elasticsearch.</Description>
     <Version>$(HealthCheckElasticsearch)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

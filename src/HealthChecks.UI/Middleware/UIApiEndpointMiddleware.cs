@@ -32,10 +32,9 @@ namespace HealthChecks.UI.Middleware
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
-            using (var db = scope.ServiceProvider.GetService<HealthChecksDb>())
+            using (var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>())
             {
-                var healthChecks = await db.Configurations
-                      .ToListAsync();
+                var healthChecks = await db.Configurations.ToListAsync();
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 

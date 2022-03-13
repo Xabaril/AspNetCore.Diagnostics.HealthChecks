@@ -29,7 +29,6 @@ namespace HealthChecks.UI.Core.Notifications
             _settings = settings.Value ?? new Settings();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
-
         }
 
         public async Task NotifyDown(string name, UIHealthReport report)
@@ -44,8 +43,8 @@ namespace HealthChecks.UI.Core.Notifications
 
         internal async Task NotifyAsync(string name, UIHealthReport report, bool isHealthy = false)
         {
-            string failure = default;
-            string description = default;
+            string? failure = default;
+            string? description = default;
 
             if (!await IsNotifiedOnWindowTimeAsync(name, isHealthy))
             {
@@ -76,7 +75,6 @@ namespace HealthChecks.UI.Core.Notifications
                     payload = payload.Replace(Keys.LIVENESS_BOOKMARK, HttpUtility.JavaScriptStringEncode(name))
                         .Replace(Keys.FAILURE_BOOKMARK, HttpUtility.JavaScriptStringEncode(failure))
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, HttpUtility.JavaScriptStringEncode(description));
-
 
                     Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);
 

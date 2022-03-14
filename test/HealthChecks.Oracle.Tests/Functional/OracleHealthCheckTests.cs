@@ -1,6 +1,5 @@
 using System.Net;
 using FluentAssertions;
-using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -28,8 +27,7 @@ namespace HealthChecks.Oracle.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions()
                     {
-                        Predicate = r => r.Tags.Contains("oracle"),
-                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        Predicate = r => r.Tags.Contains("oracle")
                     });
                 });
 

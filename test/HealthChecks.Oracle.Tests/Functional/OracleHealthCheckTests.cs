@@ -1,5 +1,6 @@
 using System.Net;
 using FluentAssertions;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -15,7 +16,7 @@ namespace HealthChecks.Oracle.Tests.Functional
         [Fact]
         public async Task be_healthy_when_oracle_is_available()
         {
-            var connectionString = "Data Source=localhost:1521/oracle;User Id=oracle_user;Password=oracle_password";
+            var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=oracle_user;Password=oracle_password";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -27,7 +28,8 @@ namespace HealthChecks.Oracle.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions()
                     {
-                        Predicate = r => r.Tags.Contains("oracle")
+                        Predicate = r => r.Tags.Contains("oracle"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 });
 
@@ -36,7 +38,7 @@ namespace HealthChecks.Oracle.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.EnsureSuccessStatusCode();
+            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact(Skip = "aaa")]

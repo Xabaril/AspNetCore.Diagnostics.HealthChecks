@@ -25,21 +25,16 @@ jobs:
     runs-on: ubuntu-latest
     services:
       oracle:
-        #image: oracleinanutshell/oracle-xe-11g
         image: gvenzl/oracle-xe:latest
         ports:
           - 1521:1521
-          #- 5500:5500
         options: >-
           --health-cmd healthcheck.sh
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
         env:
-          #ORACLE_ALLOW_REMOTE: true
-          ORACLE_PASSWORD: oracle_password
-          APP_USER: oracle_user
-          APP_USER_PASSWORD: oracle_password
+          ORACLE_PASSWORD: oracle
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

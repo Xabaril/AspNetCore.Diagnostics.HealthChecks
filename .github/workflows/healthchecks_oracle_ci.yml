@@ -25,12 +25,15 @@ jobs:
     runs-on: ubuntu-latest
     services:
       oracle:
-        image: oracleinanutshell/oracle-xe-11g
+        #image: oracleinanutshell/oracle-xe-11g
+        image: gvenzl/oracle-xe:latest
         ports:
           - 1521:1521
-          - 5500:5500
+          #- 5500:5500
         env:
-          ORACLE_ALLOW_REMOTE: true
+          #ORACLE_ALLOW_REMOTE: true
+          APP_USER: oracle_user
+          APP_USER_PASSWORD: oracle_password
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

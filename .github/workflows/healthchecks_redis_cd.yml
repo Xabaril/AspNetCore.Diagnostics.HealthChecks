@@ -1,4 +1,5 @@
 name: HealthChecks Redis CD
+
 on:
   push:
     tags:

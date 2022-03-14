@@ -27,6 +27,50 @@ namespace HealthChecks.AzureServiceBus.Tests
         }
 
         [Fact]
+        public void add_health_check_using_factories_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            bool endpointFactoryCalled = false,
+                topicNameFactoryCalled = false,
+                subscriptionNameFactoryCalled = false,
+                tokenCredentialsFactoryCalled = false;
+            services.AddHealthChecks()
+                .AddAzureServiceBusSubscription(_ =>
+                    {
+                        endpointFactoryCalled = true;
+                        return "cnn";
+                    },
+                    _ =>
+                    {
+                        topicNameFactoryCalled = true;
+                        return "topicName";
+                    },
+                    _ =>
+                    {
+                        subscriptionNameFactoryCalled = true;
+                        return "subscriptionName";
+                    },
+                    _ =>
+                    {
+                        tokenCredentialsFactoryCalled = true;
+                        return new AzureCliCredential();
+                    });
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azuresubscription");
+            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+            endpointFactoryCalled.Should().BeTrue();
+            topicNameFactoryCalled.Should().BeTrue();
+            subscriptionNameFactoryCalled.Should().BeTrue();
+            tokenCredentialsFactoryCalled.Should().BeTrue();
+        }
+
+        [Fact]
         public void add_named_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
@@ -42,6 +86,51 @@ namespace HealthChecks.AzureServiceBus.Tests
 
             registration.Name.Should().Be("azuresubscriptioncheck");
             check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+        }
+
+        [Fact]
+        public void add_named_health_check_using_factories_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            bool endpointFactoryCalled = false,
+                topicNameFactoryCalled = false,
+                subscriptionNameFactoryCalled = false,
+                tokenCredentialsFactoryCalled = false;
+            services.AddHealthChecks()
+                .AddAzureServiceBusSubscription(_ =>
+                    {
+                        endpointFactoryCalled = true;
+                        return "cnn";
+                    },
+                    _ =>
+                    {
+                        topicNameFactoryCalled = true;
+                        return "topicName";
+                    },
+                    _ =>
+                    {
+                        subscriptionNameFactoryCalled = true;
+                        return "subscriptionName";
+                    },
+                    _ =>
+                    {
+                        tokenCredentialsFactoryCalled = true;
+                        return new AzureCliCredential();
+                    },
+                    "azuresubscriptioncheck");
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azuresubscriptioncheck");
+            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+            endpointFactoryCalled.Should().BeTrue();
+            topicNameFactoryCalled.Should().BeTrue();
+            subscriptionNameFactoryCalled.Should().BeTrue();
+            tokenCredentialsFactoryCalled.Should().BeTrue();
         }
 
         [Fact]

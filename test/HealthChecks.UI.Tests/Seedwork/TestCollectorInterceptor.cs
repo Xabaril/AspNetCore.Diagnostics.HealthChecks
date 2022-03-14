@@ -15,12 +15,9 @@ namespace HealthChecks.UI.Tests
         public ValueTask OnCollectExecuted(UIHealthReport report)
         {
             _resetEvent.Set();
-            return new ValueTask();
+            return default;
         }
 
-        public ValueTask OnCollectExecuting(HealthCheckConfiguration healthCheck)
-        {
-            return new ValueTask();
-        }
+        public ValueTask OnCollectExecuting(HealthCheckConfiguration healthCheck) => default;
     }
 }

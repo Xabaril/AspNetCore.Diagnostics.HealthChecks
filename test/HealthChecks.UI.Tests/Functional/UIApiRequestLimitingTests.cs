@@ -13,7 +13,6 @@ using Xunit;
 
 namespace HealthChecks.UI.Tests
 {
-
     public class ui_api_request_limiting
     {
         [Fact]
@@ -29,7 +28,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecks()
                         .AddAsyncCheck("Delayed", async () =>
                         {
-                            await Task.Delay(200);
+                            await Task.Delay(200).ConfigureAwait(false);
                             return HealthCheckResult.Healthy();
                         })
                         .Services
@@ -39,7 +38,6 @@ namespace HealthChecks.UI.Tests
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
-
                 })
                 .Configure(app =>
                 {
@@ -54,7 +52,6 @@ namespace HealthChecks.UI.Tests
 
                         setup.MapHealthChecksUI();
                     });
-
                 });
 
             using var server = new TestServer(webHostBuilder);
@@ -62,11 +59,10 @@ namespace HealthChecks.UI.Tests
             var requests = Enumerable.Range(1, maxActiveRequests)
                 .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
 
-            var results = await Task.WhenAll(requests);
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().Should().Be(requests.Count() - maxActiveRequests);
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().Should().Be(maxActiveRequests);
-
         }
 
         [Fact]
@@ -86,7 +82,6 @@ namespace HealthChecks.UI.Tests
                         .Services
                         .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health"))
                         .AddInMemoryStorage(databaseName: "LimitingTests");
-
                 })
                 .Configure(app =>
                 {
@@ -119,7 +114,6 @@ namespace HealthChecks.UI.Tests
 
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count()
                 .Should().Be(serverSettings.ApiMaxActiveRequests);
-
         }
     }
 }

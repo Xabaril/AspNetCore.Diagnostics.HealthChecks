@@ -5,6 +5,7 @@
     <PackageTags>HealthCheck;HealthChecks;SqlServer</PackageTags>
     <Description>HealthChecks.UI.SqlServer.Storage package contains the required classes to use SqlServer provider in the UI</Description>
     <Version>$(HealthCheckUISqlServerStorage)</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

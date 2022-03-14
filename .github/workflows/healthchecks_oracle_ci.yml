@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       oracle:
-        image: gvenzl/oracle-xe:latest
+        image: gvenzl/oracle-xe:latest-slim
         ports:
           - 1521:1521
         options: >-

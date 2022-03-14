@@ -30,8 +30,14 @@ jobs:
         ports:
           - 1521:1521
           #- 5500:5500
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
         env:
           #ORACLE_ALLOW_REMOTE: true
+          ORACLE_PASSWORD: oracle_password
           APP_USER: oracle_user
           APP_USER_PASSWORD: oracle_password
     steps:
@@ -53,4 +59,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal
+      run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj

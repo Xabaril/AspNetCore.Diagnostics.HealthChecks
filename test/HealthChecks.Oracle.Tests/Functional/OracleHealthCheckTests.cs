@@ -16,7 +16,7 @@ namespace HealthChecks.Oracle.Tests.Functional
         [Fact]
         public async Task be_healthy_when_oracle_is_available()
         {
-            var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=oracle_user;Password=oracle_password";
+            var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle_password";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>

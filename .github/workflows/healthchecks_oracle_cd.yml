@@ -12,12 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     services:
       oracle:
-        image: oracleinanutshell/oracle-xe-11g
+        image: gvenzl/oracle-xe:18-slim
         ports:
           - 1521:1521
-          - 5500:5500
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
         env:
-          ORACLE_ALLOW_REMOTE: true
+          ORACLE_PASSWORD: oracle
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -41,4 +45,3 @@ jobs:
         nuget-version: latest
     - name: Publish Oracle Health Check nuget
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Oracle.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
-

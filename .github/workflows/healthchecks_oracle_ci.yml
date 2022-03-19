@@ -25,12 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     services:
       oracle:
-        image: oracleinanutshell/oracle-xe-11g
+        image: gvenzl/oracle-xe:18-slim
         ports:
           - 1521:1521
-          - 5500:5500
         env:
-          ORACLE_ALLOW_REMOTE: true
+          ORACLE_PASSWORD: oracle
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -49,5 +48,5 @@ jobs:
         dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    #- name: Test
-    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal
+    - name: Test
+      run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj

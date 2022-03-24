@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="SendGrid" Version="9.26.0" />
+    <PackageReference Include="SendGrid" Version="9.27.0" />
   </ItemGroup>
 
 </Project>

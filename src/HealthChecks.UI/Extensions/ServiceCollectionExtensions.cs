@@ -78,7 +78,7 @@ namespace Microsoft.Extensions.DependencyInjection
              })
             .ConfigureHttpMessageHandlerBuilder(builder =>
             {
-                var settings = builder.Services.GetService<IOptions<Settings>>();
+                var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
 
                 foreach (var handlerType in settings.Value.WebHooksEndpointDelegatingHandlerTypes.Values)
                 {

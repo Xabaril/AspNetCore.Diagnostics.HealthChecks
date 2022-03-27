@@ -41,10 +41,10 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             }
             catch (Exception ex)
             {
-                _operatorDiagnostics.DeploymentOperationError(deployment.Metadata.Name, Deployment.Operation.ADD, ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(deployment?.Metadata.Name!, Deployment.Operation.ADD, ex.Message);
             }
 
-            return deployment;
+            return deployment!;
         }
 
         public async Task DeleteAsync(HealthCheckResource resource)

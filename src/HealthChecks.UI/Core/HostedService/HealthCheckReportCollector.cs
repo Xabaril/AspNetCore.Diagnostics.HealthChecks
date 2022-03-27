@@ -176,7 +176,7 @@ namespace HealthChecks.UI.Core.HostedService
                     SaveExecutionHistoryEntries(healthReport, execution, lastExecutionTime);
                 }
 
-                //update existing entries from new health report
+                // update existing entries with values from new health report
 
                 foreach (var item in healthReport.ToExecutionEntries())
                 {
@@ -196,21 +196,12 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                 }
 
-                //remove old entries if existing execution not present in new health report
+                // remove old entries if existing execution not present in new health report
 
                 foreach (var item in execution.Entries)
                 {
-                    var existing = healthReport.Entries
-                        .ContainsKey(item.Name);
-
-                    if (!existing)
-                    {
-                        var oldEntry = execution.Entries
-                            .SingleOrDefault(t => t.Name == item.Name);
-
-                        _db.HealthCheckExecutionEntries
-                            .Remove(oldEntry);
-                    }
+                    if (!healthReport.Entries.ContainsKey(item.Name))
+                        _db.HealthCheckExecutionEntries.Remove(item);
                 }
             }
             else

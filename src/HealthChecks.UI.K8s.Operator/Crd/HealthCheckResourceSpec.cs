@@ -13,12 +13,12 @@ namespace HealthChecks.UI.K8s.Operator
         public string? UiResourcesPath { get; set; }
         public string? UiWebhooksPath { get; set; }
         public bool? UiNoRelativePaths { get; set; }
-        public string ServicesLabel { get; set; }
-        public string HealthChecksPath { get; set; }
-        public string HealthChecksScheme { get; set; }
-        public string Image { get; set; }
-        public string ImagePullPolicy { get; set; }
-        public string StylesheetContent { get; set; }
+        public string? ServicesLabel { get; set; }
+        public string HealthChecksPath { get; set; } = null!;
+        public string HealthChecksScheme { get; set; } = null!;
+        public string? Image { get; set; }
+        public string? ImagePullPolicy { get; set; }
+        public string StylesheetContent { get; set; } = null!;
         public List<NameValueObject> ServiceAnnotations { get; set; } = new List<NameValueObject>();
         public List<NameValueObject> DeploymentAnnotations { get; set; } = new List<NameValueObject>();
         public List<WebHookObject> Webhooks { get; set; } = new List<WebHookObject>();

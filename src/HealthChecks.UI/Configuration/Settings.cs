@@ -131,10 +131,10 @@ namespace HealthChecks.UI.Configuration
 
     public class WebHookNotification
     {
-        public string Name { get; set; }
-        public string Uri { get; set; }
-        public string Payload { get; set; }
-        public string RestoredPayload { get; set; }
+        public string Name { get; set; } = null!;
+        public string Uri { get; set; } = null!;
+        public string Payload { get; set; } = null!;
+        public string RestoredPayload { get; set; } = null!;
         internal Func<UIHealthReport, bool>? ShouldNotifyFunc { get; set; }
         internal Func<UIHealthReport, string>? CustomMessageFunc { get; set; }
         internal Func<UIHealthReport, string>? CustomDescriptionFunc { get; set; }

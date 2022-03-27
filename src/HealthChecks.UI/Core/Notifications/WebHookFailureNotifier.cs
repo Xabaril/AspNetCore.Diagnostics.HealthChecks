@@ -38,7 +38,7 @@ namespace HealthChecks.UI.Core.Notifications
 
         public async Task NotifyWakeUp(string name)
         {
-            await NotifyAsync(name, null, isHealthy: true);
+            await NotifyAsync(name, null!, isHealthy: true); // TODO: why null! ?
         }
 
         internal async Task NotifyAsync(string name, UIHealthReport report, bool isHealthy = false)
@@ -82,6 +82,9 @@ namespace HealthChecks.UI.Core.Notifications
                     {
                         Uri.TryCreate(_serverAddressesService.AbsoluteUriFromRelative(webHook.Uri), UriKind.Absolute, out absoluteUri);
                     }
+
+                    if (absoluteUri == null)
+                        throw new InvalidOperationException("Could not get absolute uri");
 
                     await SendRequestAsync(absoluteUri, webHook.Name, payload);
                 }

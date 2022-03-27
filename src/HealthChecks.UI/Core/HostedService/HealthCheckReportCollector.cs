@@ -126,6 +126,9 @@ namespace HealthChecks.UI.Core.HostedService
                 Uri.TryCreate(_serverAddressService.AbsoluteUriFromRelative(configuration.Uri), UriKind.Absolute, out absoluteUri);
             }
 
+            if (absoluteUri == null)
+                throw new InvalidOperationException("Could not get endpoint uri from configuration");
+
             _endpointAddresses[configuration.Id] = absoluteUri;
 
             return absoluteUri;

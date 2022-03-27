@@ -574,7 +574,7 @@ You can visit the section [custom styles and branding](./doc/styles-branding.md)
 
 ## UI Configure HttpClient and HttpMessageHandler for Api and Webhooks endpoints
 
-If you need to configure a proxy, or set an authentication header, the UI allows you to configure the `HttpMessageHandler` and the `HttpClient` for the webhooks and healtheck api endpoints.
+If you need to configure a proxy, or set an authentication header, the UI allows you to configure the `HttpMessageHandler` and the `HttpClient` for the webhooks and healtheck api endpoints. You can also register custom delegating handlers for the API and WebHooks HTTP clients.
 
 ```csharp
 services.AddHealthChecksUI(setupSettings: setup =>
@@ -590,6 +590,7 @@ services.AddHealthChecksUI(setupSettings: setup =>
             Proxy = new WebProxy("http://proxy:8080")
         };
     })
+    .UseApiEndpointDelegatingHandler<CustomDelegatingHandler>()
     .ConfigureWebhooksEndpointHttpclient((sp, client) =>
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "sampletoken");
@@ -603,7 +604,8 @@ services.AddHealthChecksUI(setupSettings: setup =>
                 ["prop"] = "value"
             }
         };
-    });
+    })
+    .UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
 })
 .AddInMemoryStorage();
 ```

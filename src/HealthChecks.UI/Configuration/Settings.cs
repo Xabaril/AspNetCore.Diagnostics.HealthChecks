@@ -13,9 +13,10 @@ namespace HealthChecks.UI.Configuration
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
         internal Func<IServiceProvider, HttpMessageHandler>? ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient>? ApiEndpointHttpClientConfig { get; private set; }
+        internal Dictionary<string, Type> ApiEndpointDelegatingHandlerTypes { get; set; } = new();
         internal Func<IServiceProvider, HttpMessageHandler>? WebHooksEndpointHttpHandler { get; private set; }
-        internal Dictionary<string, Type> DelegatingHandlerTypes { get; set; } = new();
         internal Action<IServiceProvider, HttpClient>? WebHooksEndpointHttpClientConfig { get; private set; }
+        internal Dictionary<string, Type> WebHooksEndpointDelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
@@ -83,7 +84,7 @@ namespace HealthChecks.UI.Configuration
         {
             Type delegatingHandlerType = typeof(T);
 
-            DelegatingHandlerTypes.TryAdd(delegatingHandlerType.FullName!, delegatingHandlerType);
+            ApiEndpointDelegatingHandlerTypes.TryAdd(delegatingHandlerType.FullName!, delegatingHandlerType);
 
             return this;
         }
@@ -91,6 +92,15 @@ namespace HealthChecks.UI.Configuration
         public Settings UseWebhookEndpointHttpMessageHandler(Func<IServiceProvider, HttpClientHandler> webhookEndpointHttpHandler)
         {
             WebHooksEndpointHttpHandler = webhookEndpointHttpHandler;
+            return this;
+        }
+
+        public Settings UseWebHooksEndpointDelegatingHandler<T>() where T : DelegatingHandler
+        {
+            var delegatingHandlerType = typeof(T);
+
+            WebHooksEndpointDelegatingHandlerTypes.TryAdd(delegatingHandlerType.FullName!, delegatingHandlerType);
+
             return this;
         }
 

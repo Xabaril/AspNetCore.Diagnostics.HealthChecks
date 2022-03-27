@@ -56,7 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
 
-                    foreach (var handlerType in settings.Value.DelegatingHandlerTypes.Values)
+                    foreach (var handlerType in settings.Value.ApiEndpointDelegatingHandlerTypes.Values)
                     {
                         builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
                     }
@@ -76,6 +76,15 @@ namespace Microsoft.Extensions.DependencyInjection
                  var settings = sp.GetRequiredService<IOptions<Settings>>();
                  return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
              })
+            .ConfigureHttpMessageHandlerBuilder(builder =>
+            {
+                var settings = builder.Services.GetService<IOptions<Settings>>();
+
+                foreach (var handlerType in settings.Value.WebHooksEndpointDelegatingHandlerTypes.Values)
+                {
+                    builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
+                }
+            })
             .Services;
         }
 

@@ -25,13 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     services:
       oracle:
-        image: oracleinanutshell/oracle-xe-11g
+        image: gvenzl/oracle-xe:18-slim
         ports:
           - 1521:1521
-          - 5500:5500
         env:
-          ORACLE_ALLOW_REMOTE: true
-          #JAVA_OPTS: "-Doracle.jdbc.timezoneAsRegion=false -Duser.timezone=GMT"
+          ORACLE_PASSWORD: oracle
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -51,5 +49,5 @@ jobs:
       run: |
         dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
         dotnet build --no-restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
-    #- name: Test
-    #  run: dotnet test --no-restore --no-build ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj

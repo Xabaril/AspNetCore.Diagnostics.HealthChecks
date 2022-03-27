@@ -49,6 +49,7 @@ namespace HealthChecks.UIAndApi
                 .AddControllers();
         }
 
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Sample")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting()

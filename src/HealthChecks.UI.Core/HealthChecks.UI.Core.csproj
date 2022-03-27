@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <PackageTags>HealthCheck;HealthChecks;COre</PackageTags>
+    <PackageTags>$(PackageTags);Core</PackageTags>
     <Description>HealthChecks.UI.Core package containing builder and model definitions</Description>
     <Version>$(HealthCheckUICore)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

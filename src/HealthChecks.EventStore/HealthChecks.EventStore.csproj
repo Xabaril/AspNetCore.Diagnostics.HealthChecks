@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;EventStore</PackageTags>
+    <PackageTags>$(PackageTags);EventStore</PackageTags>
     <Description>HealthChecks.EventStore is the health check package for EventStore.</Description>
     <Version>$(HealthCheckEventStore)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddCosmosDb("myconnectionstring");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -32,7 +32,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddCosmosDb("myconnectionstring", "dabasename");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -48,7 +48,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddCosmosDbCollection("myconnectionstring", "dabasename", collections: new[] { "first-collection", "second_collections" });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -64,7 +64,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddCosmosDb("myconnectionstring", name: "my-cosmosdb-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -81,7 +81,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddAzureTable("myconnectionstring", "tableName");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -97,7 +97,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddAzureTable("myconnectionstring", "tableName");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -113,7 +113,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
                 .AddAzureTable("myconnectionstring", "tableName", name: "my-azuretable-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

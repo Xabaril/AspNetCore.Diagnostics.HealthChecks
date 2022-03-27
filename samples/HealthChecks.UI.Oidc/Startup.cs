@@ -56,7 +56,7 @@ namespace HealthChecks.UI.Oidc
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
              {
-                 endpoints.MapHealthChecks("healthz", new HealthCheckOptions()
+                 endpoints.MapHealthChecks("healthz", new HealthCheckOptions
                  {
                      Predicate = _ => true,
                      ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

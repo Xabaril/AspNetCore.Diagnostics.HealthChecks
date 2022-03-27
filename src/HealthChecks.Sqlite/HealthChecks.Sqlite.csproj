@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Sqlite</PackageTags>
+    <PackageTags>$(PackageTags);Sqlite</PackageTags>
     <Description>HealthChecks.Sqlite is the health check package for Sqlite.</Description>
     <Version>$(HealthCheckSqlite)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

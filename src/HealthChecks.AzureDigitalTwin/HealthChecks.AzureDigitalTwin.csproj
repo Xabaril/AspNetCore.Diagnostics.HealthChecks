@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Azure;DigitalTwin</PackageTags>
+    <PackageTags>$(PackageTags);Azure;DigitalTwin</PackageTags>
     <Description>HealthChecks.AzureDigitalTwin is the health check package for Azure DigitalTwin.</Description>
     <Version>$(HealthCheckAzureDigitalTwin)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

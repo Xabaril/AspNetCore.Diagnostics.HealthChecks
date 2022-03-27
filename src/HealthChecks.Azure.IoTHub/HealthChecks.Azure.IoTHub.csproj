@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Azure;IoT Hub</PackageTags>
+    <PackageTags>$(PackageTags);Azure;IoT Hub</PackageTags>
     <Description>HealthChecks.Azure.IoTHub is the health check package for Azure IoT Hub.</Description>
     <Version>$(HealthCheckIoTHub)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

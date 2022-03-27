@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Consul</PackageTags>
+    <PackageTags>$(PackageTags);Consul</PackageTags>
     <Description>HealthChecks.Consul is the health check package for Consul Server.</Description>
     <Version>$(HealthCheckConsul)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

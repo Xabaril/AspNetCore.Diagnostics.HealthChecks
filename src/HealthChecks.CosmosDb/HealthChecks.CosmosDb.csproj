@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Azure;CosmosDb</PackageTags>
+    <PackageTags>$(PackageTags);Azure;CosmosDb</PackageTags>
     <Description>HealthChecks.CosmosDb is the health check package for Azure CosmosDb.</Description>
     <Version>$(HealthCheckCosmosDb)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

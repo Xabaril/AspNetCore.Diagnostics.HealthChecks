@@ -19,11 +19,15 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
+    <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
     <NoWarn>$(NoWarn);1591</NoWarn> <!--TODO: temporary solution-->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
     <NoWarn>$(NoWarn);IDE1006</NoWarn>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
@@ -44,6 +48,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
   </ItemGroup>
 
 </Project>

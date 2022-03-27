@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;IdentityServer;IdSvr;OpenId;OpenIdConnect</PackageTags>
+    <PackageTags>$(PackageTags);IdentityServer;IdSvr;OpenId;OpenIdConnect</PackageTags>
     <Description>HealthChecks.OpenIdConnectServer is the health check package for OpenIdConnect servers</Description>
     <Version>$(HealthCheckOpenIdConnectServer)</Version>
     <RootNamespace>HealthChecks.IdSvr</RootNamespace> <!--For backward naming compatibility-->
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion);netstandard2.1</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Oracle</PackageTags>
+    <PackageTags>$(PackageTags);Oracle</PackageTags>
     <Description>HealthChecks.Oracle is the health check package for Oracle Database.</Description>
     <Version>$(HealthCheckOracle)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -15,11 +15,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IHostApplicationLifetime _hostLifetime;
         private readonly IServiceProvider _serviceProvider;
-        private IKubernetes _discoveryClient;
+        private IKubernetes? _discoveryClient;
         private readonly HttpClient _clusterServiceClient;
         private readonly KubernetesAddressFactory _addressFactory;
 
-        private Task _executingTask;
+        private Task? _executingTask;
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
@@ -69,7 +69,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
+            if (_executingTask != null)
+                await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
 
         private async Task StartK8sServiceAsync(CancellationToken cancellationToken)
@@ -84,7 +85,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                 try
                 {
-                    var services = await _discoveryClient.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
+                    var services = await _discoveryClient!.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
 
                     if (services != null)
                     {

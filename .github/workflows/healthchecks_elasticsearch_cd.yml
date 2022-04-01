@@ -11,12 +11,6 @@ jobs:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
-    services:
-      elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
-        ports:
-          - 9300:9300
-          - 9200:9200
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -28,10 +22,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

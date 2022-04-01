@@ -9,17 +9,6 @@ jobs:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
-    services:
-      ibmmq:
-        image: ibmcom/mq
-        ports:
-          - 1414:1414
-          - 9157:9157
-        env:
-          LICENSE: accept
-          MQ_QMGR_NAME: QM1
-          MQ_APP_PASSWORD: 12345678
-          MQ_ENABLE_METRICS: true
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -31,10 +20,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

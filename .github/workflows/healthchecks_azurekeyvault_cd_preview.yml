@@ -21,10 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.AzureKeyVault.Tests/HealthChecks.AzureKeyVault.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

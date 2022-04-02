@@ -52,23 +52,23 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies UI
+    - name: Restore UI
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
-    - name: Restore dependencies UI.Client
+    - name: Restore UI.Client
       run: dotnet restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
-    - name: Restore dependencies UI.Core
+    - name: Restore UI.Core
       run: dotnet restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
-    - name: Restore dependencies UI.InMemory.Storage
+    - name: Restore UI.InMemory.Storage
       run: dotnet restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
-    - name: Restore dependencies UI.MySql.Storage
+    - name: Restore UI.MySql.Storage
       run: dotnet restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj
-    - name: Restore dependencies UI.PostgreSQL.Storage
+    - name: Restore UI.PostgreSQL.Storage
       run: dotnet restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj
-    - name: Restore dependencies UI.SQLite.Storage
+    - name: Restore UI.SQLite.Storage
       run: dotnet restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
-    - name: Restore dependencies UI.SqlServer.Storage
+    - name: Restore UI.SqlServer.Storage
       run: dotnet restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
-    - name: Restore dependencies UI.K8s.Operator
+    - name: Restore UI.K8s.Operator
       run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
 
     - name: Check formatting UI

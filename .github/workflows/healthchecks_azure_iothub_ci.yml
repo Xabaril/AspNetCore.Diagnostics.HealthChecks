@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj &&
         dotnet restore ./test/HealthChecks.Azure.IoTHub.Tests/HealthChecks.Azure.IoTHub.Tests.csproj

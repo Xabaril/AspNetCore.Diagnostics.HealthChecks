@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj &&
         dotnet restore ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj

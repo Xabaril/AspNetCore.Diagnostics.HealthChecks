@@ -41,7 +41,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj &&
         dotnet restore ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj

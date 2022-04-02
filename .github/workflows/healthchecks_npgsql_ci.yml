@@ -38,7 +38,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj &&
         dotnet restore ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj

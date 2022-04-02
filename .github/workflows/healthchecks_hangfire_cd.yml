@@ -17,17 +17,11 @@ jobs:
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
     - name: Pack
-      run: dotnet pack --no-restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish Hangfire Health Check nuget
+      run: dotnet pack --no-restore ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Hangfire.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

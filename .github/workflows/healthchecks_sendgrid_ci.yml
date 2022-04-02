@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj &&
         dotnet restore ./test/HealthChecks.SendGrid.Tests/HealthChecks.SendGrid.Tests.csproj

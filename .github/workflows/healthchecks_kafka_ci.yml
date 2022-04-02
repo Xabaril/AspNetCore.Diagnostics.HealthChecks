@@ -43,7 +43,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj &&
         dotnet restore ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj

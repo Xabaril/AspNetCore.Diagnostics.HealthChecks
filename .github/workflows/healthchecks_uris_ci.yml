@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj &&
         dotnet restore ./test/HealthChecks.Uris.Tests/HealthChecks.Uris.Tests.csproj

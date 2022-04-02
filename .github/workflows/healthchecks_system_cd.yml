@@ -21,10 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.System/HealthChecks.System.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.System.Tests/HealthChecks.System.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.System/HealthChecks.System.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.System/HealthChecks.System.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

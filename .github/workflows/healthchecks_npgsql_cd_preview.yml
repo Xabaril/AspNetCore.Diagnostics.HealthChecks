@@ -10,14 +10,6 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
-    services:
-      npgsql:
-        image: postgres
-        ports:
-          - 8010:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: Password12!
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -29,10 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

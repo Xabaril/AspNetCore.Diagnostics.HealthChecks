@@ -11,17 +11,6 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
-    services:
-      ftp:
-        image: bogem/ftp
-        ports:
-          - 21:21
-          - 47400-47470:47400-47470
-        env:
-          FTP_USER: bob
-          FTP_PASS: 12345
-          PASV_ADDRESS: 127.0.0.1
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -33,10 +22,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
-    # - name: Test
-    #   run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Network/HealthChecks.Network.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

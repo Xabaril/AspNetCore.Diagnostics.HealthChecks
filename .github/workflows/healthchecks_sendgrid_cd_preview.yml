@@ -22,10 +22,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.SendGrid.Tests/HealthChecks.SendGrid.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

@@ -10,13 +10,6 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
-    services:
-      arangodb:
-        image: arangodb/arangodb:latest
-        ports:
-          - 8529:8529
-        env:
-          ARANGO_ROOT_PASSWORD: strongArangoDbPassword
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -28,10 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

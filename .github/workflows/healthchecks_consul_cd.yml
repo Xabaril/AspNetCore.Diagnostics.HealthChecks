@@ -10,12 +10,6 @@ jobs:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
-    services:
-      consul:
-        image: consul:latest
-        ports:
-          - 8500:8500
-          - 8600:8600
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -27,10 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Consul/HealthChecks.Consul.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

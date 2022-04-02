@@ -10,11 +10,6 @@ jobs:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis:alpine
-        ports:
-          - 6379:6379
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -26,10 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

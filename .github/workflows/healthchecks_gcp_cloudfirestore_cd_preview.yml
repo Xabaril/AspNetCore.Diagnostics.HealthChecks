@@ -22,10 +22,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Gcp.CloudFirestore.Tests/HealthChecks.Gcp.CloudFirestore.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

@@ -21,8 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
+    - name: Pack
+      run: dotnet pack --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget
       uses: NuGet/setup-nuget@v1.0.5
       env:

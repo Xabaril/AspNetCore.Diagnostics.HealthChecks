@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj &&
         dotnet restore ./test/HealthChecks.Gcp.CloudFirestore.Tests/HealthChecks.Gcp.CloudFirestore.Tests.csproj

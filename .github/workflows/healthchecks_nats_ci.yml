@@ -37,7 +37,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj &&
         dotnet restore ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj

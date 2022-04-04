@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj &&
         dotnet restore ./test/HealthChecks.Publisher.Seq.Tests/HealthChecks.Publisher.Seq.Tests.csproj

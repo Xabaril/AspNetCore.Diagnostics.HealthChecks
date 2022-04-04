@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj &&
         dotnet restore ./test/HealthChecks.Publisher.Prometheus.Tests/HealthChecks.Publisher.Prometheus.Tests.csproj

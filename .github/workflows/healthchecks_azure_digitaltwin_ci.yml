@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj &&
         dotnet restore ./test/HealthChecks.AzureDigitalTwin.Tests/HealthChecks.AzureDigitalTwin.Tests.csproj

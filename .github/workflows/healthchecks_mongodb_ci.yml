@@ -35,7 +35,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj &&
         dotnet restore ./test/HealthChecks.MongoDb.Tests/HealthChecks.MongoDb.Tests.csproj

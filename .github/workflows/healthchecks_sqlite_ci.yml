@@ -30,7 +30,7 @@ jobs:
       with:
         dotnet-version: 6.0.102
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Sqlite/HealthChecks.Sqlite.csproj &&
         dotnet restore ./test/HealthChecks.Sqlite.Tests/HealthChecks.Sqlite.Tests.csproj

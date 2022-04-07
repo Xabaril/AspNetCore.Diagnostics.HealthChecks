@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private const string PROCESS_NAME = "process";
         private const string PROCESS_ALLOCATED_MEMORY = "process_allocated_memory";
         private const string WINDOWS_SERVICE_NAME = "windowsservice";
+        private const string NAME = "folder";
 
         /// <summary>
         /// Add a health check for disk storage.
@@ -242,6 +243,38 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder.Add(new HealthCheckRegistration(
                 name ?? WINDOWS_SERVICE_NAME,
                 sp => new WindowsServiceHealthCheck(serviceName, predicate, machineName),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        /// <summary>
+        /// Add a healthcheck that allows to check a predicate against the configured windows service.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">Process[] predicate to configure checks.</param>
+        /// <param name="name">The name of the folder</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddFolder(
+        this IHealthChecksBuilder builder,
+        Action<FolderHealthCheckOptions>? setup,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+        {
+            var FolderOptions = new FolderHealthCheckOptions();
+            setup?.Invoke(FolderOptions);
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? NAME,
+                sp => new FolderHealthCheck(FolderOptions),
                 failureStatus,
                 tags,
                 timeout));

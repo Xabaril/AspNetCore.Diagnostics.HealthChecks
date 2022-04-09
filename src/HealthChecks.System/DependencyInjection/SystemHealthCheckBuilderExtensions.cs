@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private const string PROCESS_NAME = "process";
         private const string PROCESS_ALLOCATED_MEMORY = "process_allocated_memory";
         private const string WINDOWS_SERVICE_NAME = "windowsservice";
-        private const string NAME = "folder";
+        private const string FOLDER_NAME = "folder";
 
         /// <summary>
         /// Add a health check for disk storage.
@@ -249,11 +249,11 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a healthcheck that allows to check a predicate against the configured windows service.
+        /// Add a healthcheck that allows to checking for the existence of one or more folders
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="setup">Process[] predicate to configure checks.</param>
-        /// <param name="name">The name of the folder</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'folder' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -269,12 +269,12 @@ namespace Microsoft.Extensions.DependencyInjection
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
         {
-            var FolderOptions = new FolderHealthCheckOptions();
-            setup?.Invoke(FolderOptions);
+            var options = new FolderHealthCheckOptions();
+            setup?.Invoke(options);
 
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => new FolderHealthCheck(FolderOptions),
+                name ?? FOLDER_NAME,
+                sp => new FolderHealthCheck(options),
                 failureStatus,
                 tags,
                 timeout));

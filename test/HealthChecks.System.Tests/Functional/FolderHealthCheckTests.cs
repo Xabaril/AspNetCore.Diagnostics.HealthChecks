@@ -19,7 +19,7 @@ namespace HealthChecks.System.Tests.Functional
                {
                    services.AddHealthChecks()
                        .AddFolder(setup =>
-                        setup.Folder = Directory.GetCurrentDirectory(), tags: new string[] { "folder" });
+                        setup.Folders = new List<string> { Directory.GetCurrentDirectory() }, tags: new string[] { "folder" });
                })
                .Configure(app =>
                {
@@ -74,7 +74,7 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     services.AddHealthChecks()
                         .AddFolder(setup =>
-                            setup.Folder = $"{Directory.GetCurrentDirectory()}/non-existing-folder", tags: new string[] { "folder" });
+                            setup.Folders = new List<string> { $"{Directory.GetCurrentDirectory()}/non-existing-folder" }, tags: new string[] { "folder" });
                 })
                 .Configure(app =>
                 {

@@ -16,11 +16,14 @@ namespace HealthChecks.System
             try
             {
                 List<string>? errorList = null;
-                if (!string.IsNullOrEmpty(_folderOptions.Folder))
+                foreach (var folder in _folderOptions.Folders)
                 {
-                    if (!Directory.Exists(_folderOptions.Folder))
+                    if (!string.IsNullOrEmpty(folder))
                     {
-                        (errorList ??= new()).Add($"Folder {_folderOptions.Folder} does not exist.");
+                        if (!Directory.Exists(folder))
+                        {
+                            (errorList ??= new()).Add($"Folder {folder} does not exist.");
+                        }
                     }
                 }
 
@@ -37,5 +40,4 @@ namespace HealthChecks.System
             }
         }
     }
-
 }

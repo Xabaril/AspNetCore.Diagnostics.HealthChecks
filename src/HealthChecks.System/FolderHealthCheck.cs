@@ -29,7 +29,7 @@ namespace HealthChecks.System
 
                 if (errorList?.Count > 0)
                 {
-                    return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join(" + ", errorList)));
+                    return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errorList)));
                 }
 
                 return HealthCheckResultTask.Healthy;

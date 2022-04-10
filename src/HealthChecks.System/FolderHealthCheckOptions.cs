@@ -6,7 +6,7 @@ namespace HealthChecks.System
     public class FolderHealthCheckOptions
     {
         public IList<string> Folders { get; set; } = new List<string>();
-        
+
         public FolderHealthCheckOptions AddFolder(string folder)
         {
             Folders.Add(folder);

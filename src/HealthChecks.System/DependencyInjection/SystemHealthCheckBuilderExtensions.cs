@@ -252,7 +252,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a healthcheck that allows to checking for the existence of one or more folders.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="setup">Process[] predicate to configure checks.</param>
+        /// <param name="setup">The action method to configure the health check parameters.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'folder' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

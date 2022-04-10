@@ -5,11 +5,7 @@ namespace HealthChecks.System
     /// </summary>
     public class FolderHealthCheckOptions
     {
-        public FolderHealthCheckOptions()
-        {
-            Folders = new List<string>();
-        }
-        public IList<string> Folders { get; set; } = new();
+        public IList<string> Folders { get; set; } = new List<string>();
         
         public FolderHealthCheckOptions AddFolder(string folder)
         {

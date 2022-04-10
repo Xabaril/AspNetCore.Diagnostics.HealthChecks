@@ -9,7 +9,6 @@ namespace HealthChecks.System
         {
             Folders = new List<string>();
         }
-
         public IList<string> Folders { get; set; } = new();
         
         public FolderHealthCheckOptions AddFolder(string folder)

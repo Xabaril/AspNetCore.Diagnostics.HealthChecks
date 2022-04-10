@@ -262,12 +262,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddFolder(
-        this IHealthChecksBuilder builder,
-        Action<FolderHealthCheckOptions>? setup,
-        string? name = default,
-        HealthStatus? failureStatus = default,
-        IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder,
+            Action<FolderHealthCheckOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var options = new FolderHealthCheckOptions();
             setup?.Invoke(options);

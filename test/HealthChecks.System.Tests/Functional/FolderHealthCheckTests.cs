@@ -74,7 +74,7 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     services.AddHealthChecks()
                         .AddFolder(setup =>
-                            setup.Folders = new List<string> { $"{Directory.GetCurrentDirectory()}/non-existing-folder" }, tags: new string[] { "folder" });
+                            setup.AddFolder($"{Directory.GetCurrentDirectory()}/non-existing-folder"), tags: new string[] { "folder" });
                 })
                 .Configure(app =>
                 {

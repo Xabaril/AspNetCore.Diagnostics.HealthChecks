@@ -18,8 +18,7 @@ namespace HealthChecks.System.Tests.Functional
                .ConfigureServices(services =>
                {
                    services.AddHealthChecks()
-                       .AddFolder(setup =>
-                        setup.AddFolder(Directory.GetCurrentDirectory()), tags: new string[] { "folder" });
+                       .AddFolder(setup => setup.AddFolder(Directory.GetCurrentDirectory()), tags: new string[] { "folder" });
                })
                .Configure(app =>
                {

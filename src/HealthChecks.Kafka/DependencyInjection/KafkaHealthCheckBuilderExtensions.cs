@@ -92,8 +92,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, ProducerConfig config,
-            Action<LogMessage> kafkaLogHandler, string topic = default, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            Action<LogMessage> kafkaLogHandler, string? topic = default, string? name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
@@ -119,8 +119,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddKafka(this IHealthChecksBuilder builder, Action<ProducerConfig> setup,
-            Action<LogMessage> kafkaLogHandler, string topic = default, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            Action<LogMessage> kafkaLogHandler, string? topic = default, string? name = default,
+            HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
         {
             var config = new ProducerConfig();
             setup?.Invoke(config);

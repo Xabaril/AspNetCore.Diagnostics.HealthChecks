@@ -47,10 +47,10 @@ namespace HealthChecks.Kafka.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddKafka(new ProducerConfig(), message => {});
+                .AddKafka(new ProducerConfig(), message => { });
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

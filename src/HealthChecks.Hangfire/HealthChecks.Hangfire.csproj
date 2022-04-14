@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hangfire.Core" Version="1.7.28" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

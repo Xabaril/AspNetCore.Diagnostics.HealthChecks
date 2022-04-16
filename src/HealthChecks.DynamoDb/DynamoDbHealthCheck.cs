@@ -22,12 +22,14 @@ namespace HealthChecks.DynamoDb
                 AWSCredentials credentials = _options.Credentials;
                 if (credentials == null)
                 {
+#pragma warning disable CS0618 // Type or member is obsolete
                     if (!string.IsNullOrEmpty(_options.AccessKey) && !string.IsNullOrEmpty(_options.SecretKey))
                     {
                         // for backwards compatibility we create the basic credentials if the old fields are used
                         // but if they are not specified we fallback to using the default profile
                         credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
                     }
+#pragma warning restore CS0618 // Type or member is obsolete
                 }
 
                 var client = new AmazonDynamoDBClient(credentials, _options.RegionEndpoint);

@@ -1,3 +1,4 @@
+using Amazon.Runtime;
 using Amazon.S3;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +17,8 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddS3(options =>
                 {
-                    options.AccessKey = "access-key";
+                    options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
                     options.BucketName = "bucket-name";
-                    options.SecretKey = "secret-key";
                     options.S3Config = new AmazonS3Config();
                 });
 
@@ -39,9 +39,8 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                  .AddS3(options =>
                  {
-                     options.AccessKey = "access-key";
+                     options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
                      options.BucketName = "bucket-name";
-                     options.SecretKey = "secret-key";
                      options.S3Config = new AmazonS3Config();
                  }, name: "aws s3 check");
 

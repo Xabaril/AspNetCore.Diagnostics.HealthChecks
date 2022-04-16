@@ -1,4 +1,5 @@
 using Amazon;
+using Amazon.Runtime;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -14,7 +15,7 @@ namespace HealthChecks.DynamoDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddDynamoDb(_ => { _.AccessKey = "key"; _.SecretKey = "key"; _.RegionEndpoint = RegionEndpoint.CNNorth1; });
+                .AddDynamoDb(_ => { _.Credentials = new BasicAWSCredentials("key", "key"); _.RegionEndpoint = RegionEndpoint.CNNorth1; });
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -30,7 +31,7 @@ namespace HealthChecks.DynamoDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddDynamoDb(_ => { _.AccessKey = "key"; _.SecretKey = "key"; _.RegionEndpoint = RegionEndpoint.CNNorth1; }, name: "my-dynamodb-group");
+                .AddDynamoDb(_ => { _.Credentials = new BasicAWSCredentials("key", "key"); _.RegionEndpoint = RegionEndpoint.CNNorth1; }, name: "my-dynamodb-group");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

@@ -44,7 +44,7 @@ namespace HealthChecks.Aws.S3
 #pragma warning disable CS0618 // Type or member is obsolete
                 var client = keysProvided
                     ? new AmazonS3Client(_bucketOptions.AccessKey, _bucketOptions.SecretKey, _bucketOptions.S3Config)
-                    : new AmazonS3Client(_bucketOptions.S3Config);
+                    : new AmazonS3Client(credentials, _bucketOptions.S3Config);
 #pragma warning restore CS0618 // Type or member is obsolete
 
                 using (client)

@@ -41,31 +41,19 @@ namespace HealthChecks.Aws.S3
 
                 bool keysProvided = credentials != null;
 
-
 #pragma warning disable CS0618 // Type or member is obsolete
                 var client = keysProvided
                     ? new AmazonS3Client(_bucketOptions.AccessKey, _bucketOptions.SecretKey, _bucketOptions.S3Config)
                     : new AmazonS3Client(_bucketOptions.S3Config);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-
-
                 using (client)
-
                 {
-
                     var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
-
-
-
                     if (_bucketOptions.CustomResponseCheck != null)
-
                     {
-
                         return _bucketOptions.CustomResponseCheck.Invoke(response)
-
                             ? HealthCheckResult.Healthy()
-
                             : new HealthCheckResult(context.Registration.FailureStatus, description: "Custom response check is not satisfied.");
 
                     }

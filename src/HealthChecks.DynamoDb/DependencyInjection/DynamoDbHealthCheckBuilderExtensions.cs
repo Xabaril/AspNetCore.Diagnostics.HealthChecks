@@ -57,7 +57,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddDynamoDb(
             this IHealthChecksBuilder builder,
-            Func<IServiceProvider, DynamoDBOptions>? connectionOptionsFactory,
+            Func<IServiceProvider, DynamoDBOptions> connectionOptionsFactory,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,

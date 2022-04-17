@@ -42,5 +42,22 @@ namespace HealthChecks.DynamoDb.Tests.DependencyInjection
             registration.Name.Should().Be("my-dynamodb-group");
             check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
         }
+        [Fact]
+        public void add_health_check_with_assumecredentials_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddDynamoDb(_ => { _.Credentials = new AssumeRoleAWSCredentials(null, "role-arn", "role-session-name"); _.RegionEndpoint = RegionEndpoint.CNNorth1; });
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("dynamodb");
+            check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
+
+        }
     }
 }

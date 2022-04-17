@@ -25,7 +25,8 @@ namespace HealthChecks.DynamoDb
 #pragma warning disable CS0618 // Type or member is obsolete
                     if (!string.IsNullOrEmpty(_options.AccessKey) && !string.IsNullOrEmpty(_options.SecretKey))
                     {
-                        // for backwards compatibility we create the basic credentials if the old properties is used
+                        // for backwards compatibility we create the basic credentials if the old properties are specified
+
                         // but if they are not specified we fallback to using the default profile
                         credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
                     }

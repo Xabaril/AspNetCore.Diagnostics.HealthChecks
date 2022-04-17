@@ -1,13 +1,12 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.Runtime;
-using System;
 
 namespace HealthChecks.Aws.S3
 {
     public class S3BucketOptions
     {
-        public AWSCredentials Credentials { get; set; } = null!;
+        public AWSCredentials? Credentials { get; set; } = null;
 
         [Obsolete("Specify access key and secret as a BasicCredential to AWSCredentials instead")]
         public string? AccessKey { get; set; }

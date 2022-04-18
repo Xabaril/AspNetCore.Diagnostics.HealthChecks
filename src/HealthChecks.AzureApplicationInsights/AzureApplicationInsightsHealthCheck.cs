@@ -10,11 +10,11 @@ namespace HealthChecks.AzureApplicationInsights
     {
         //from https://docs.microsoft.com/en-us/azure/azure-monitor/app/ip-addresses#outgoing-ports
         private readonly string[] m_appInsightsUrls =
-            {
+        {
             "https://dc.applicationinsights.azure.com",
             "https://dc.applicationinsights.microsoft.com",
             "https://dc.services.visualstudio.com"
-            };
+        };
         private readonly string _instrumentationKey;
 
         public AzureApplicationInsightsHealthCheck(string instrumentationKey)

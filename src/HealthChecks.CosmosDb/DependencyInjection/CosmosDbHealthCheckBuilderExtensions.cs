@@ -1,7 +1,6 @@
 ﻿using Azure.Data.Tables;
 using HealthChecks.CosmosDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>

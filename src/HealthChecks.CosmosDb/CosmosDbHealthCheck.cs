@@ -1,8 +1,6 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.CosmosDb
 {
@@ -11,18 +9,20 @@ namespace HealthChecks.CosmosDb
         private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new();
 
         private readonly string _connectionString;
-        private readonly string _database;
-        private readonly IEnumerable<string> _containers;
+        private readonly string? _database;
+        private readonly IEnumerable<string>? _containers;
 
-        public CosmosDbHealthCheck(string connectionString) 
-            : this(connectionString, default, default) { }
+        public CosmosDbHealthCheck(string connectionString)
+            : this(connectionString, default, default)
+        {
+        }
 
-        public CosmosDbHealthCheck(string connectionString, string database) 
+        public CosmosDbHealthCheck(string connectionString, string database)
             : this(connectionString, database, default)
         {
             _database = database;
         }
-        public CosmosDbHealthCheck(string connectionString, string database, IEnumerable<string> containers)
+        public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
             _database = database;

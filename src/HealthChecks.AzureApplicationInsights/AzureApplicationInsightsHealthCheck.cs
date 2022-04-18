@@ -55,7 +55,7 @@ namespace HealthChecks.AzureApplicationInsights
                     }
                     catch (Exception e)
                     {
-                        ex = e;
+                        ex = ExceptionDispatchInfo.Capture(e);
                     }
                 }
             }

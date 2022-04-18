@@ -54,7 +54,7 @@ namespace UnitTests.DependencyInjection.AzureApplicationInsights
                 .AddAzureApplicationInsights(string.Empty);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
 

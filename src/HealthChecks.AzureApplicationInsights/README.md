@@ -13,7 +13,7 @@ With all of the following examples, you can additionally add the following param
 
 ### Basic
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services

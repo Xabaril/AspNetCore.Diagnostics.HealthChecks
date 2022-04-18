@@ -22,6 +22,7 @@ namespace HealthChecks.CosmosDb
         {
             _database = database;
         }
+        
         public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
         {
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));

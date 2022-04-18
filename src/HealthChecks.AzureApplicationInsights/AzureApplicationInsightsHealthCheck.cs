@@ -65,7 +65,7 @@ namespace HealthChecks.AzureApplicationInsights
                 return new HealthCheckResult(context.Registration.FailureStatus, description: "Could not find application insights resource");
             }
 
-            throw ex;
+            ex.Throw();
         }
     }
 }

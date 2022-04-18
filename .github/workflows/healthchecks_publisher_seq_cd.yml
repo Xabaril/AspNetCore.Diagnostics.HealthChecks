@@ -22,6 +22,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj
     - name: Pack
-      run: dotnet pack --no-restore ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Publisher.Seq.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

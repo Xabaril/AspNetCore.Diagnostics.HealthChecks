@@ -21,6 +21,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
     - name: Pack
-      run: dotnet pack --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Azure.IoTHub.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

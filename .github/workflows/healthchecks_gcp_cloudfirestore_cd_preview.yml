@@ -23,6 +23,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
     - name: Pack
-      run: dotnet pack --no-restore ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Gcp.CloudFirestore.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

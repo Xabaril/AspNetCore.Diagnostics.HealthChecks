@@ -19,12 +19,7 @@ namespace HealthChecks.AzureApplicationInsights
 
         public AzureApplicationInsightsHealthCheck(string instrumentationKey)
         {
-            if (string.IsNullOrWhiteSpace(instrumentationKey))
-            {
-                throw new ArgumentNullException(nameof(instrumentationKey));
-            }
-
-            _instrumentationKey = instrumentationKey;         
+            _instrumentationKey = instrumentationKey ?? throw new ArgumentNullException(nameof(instrumentationKey));        
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

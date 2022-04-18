@@ -37,7 +37,7 @@ namespace HealthChecks.AzureApplicationInsights
             async Task<HealthCheckResult> CheckHealthAsyncInternal(HealthCheckContext context, CancellationToken cancellationToken = default)
             {
                 string path = $"/api/profiles/{_instrumentationKey}/appId";
-                ExceptionDispatchInfo?ex = null;
+                ExceptionDispatchInfo? ex = null;
                 int index = 0;
 
                 while (index < m_appInsightsUrls.Length)

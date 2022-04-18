@@ -53,7 +53,7 @@ namespace UnitTests.DependencyInjection.AzureApplicationInsights
             services.AddHealthChecks()
                 .AddAzureApplicationInsights(string.Empty);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();

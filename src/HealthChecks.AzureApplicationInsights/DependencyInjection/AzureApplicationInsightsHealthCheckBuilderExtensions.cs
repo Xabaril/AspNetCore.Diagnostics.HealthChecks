@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AzureApplicationInsightsHealthCheckBuilderExtensions
     {
-        private const string AZUREAPPLICATIONINSIGHTS_NAME = "azureappinsights";
+        internal const string AZUREAPPLICATIONINSIGHTS_NAME = "azureappinsights";
 
         /// <summary>
         /// Add a health check for specified Azure Application Insights.

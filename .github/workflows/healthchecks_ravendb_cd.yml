@@ -22,6 +22,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Pack
-      run: dotnet pack --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.RavenDB.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

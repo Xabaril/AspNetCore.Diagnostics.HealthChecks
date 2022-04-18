@@ -5,7 +5,6 @@
     <PackageTags>HealthCheck;Azure;ApplicationInsights</PackageTags>
     <Description>HealthChecks.AzureApplicationInsights is the health check package for Azure Application Insights.</Description>
     <Version>$(HealthCheckAzureApplicationInsights)</Version>
-    <PackageId>AspNetCore.HealthChecks.AzureApplicationInsights</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace HealthChecks.DynamoDb
         {
             try
             {
-                AWSCredentials credentials = _options.Credentials;
+                AWSCredentials? credentials = _options.Credentials;
                 if (credentials == null)
                 {
 #pragma warning disable CS0618 // Type or member is obsolete

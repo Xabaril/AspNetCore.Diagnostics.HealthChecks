@@ -27,48 +27,48 @@ namespace HealthChecks.AzureApplicationInsights
         {
             try
             {
-                return await CheckHealthAsyncInternal(context, cancellationToken);
+                bool resourceExists = await ApplicationInsightsResourceExists(cancellationToken);
+                if(resourceExists)
+                {
+                    return HealthCheckResult.Healthy();
+                }
+                else
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not find application insights resource. Searched resources: {string.Join(", ", m_appInsightsUrls)}");
+                }
             }
             catch (Exception ex)
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
+        }
 
-            async Task<HealthCheckResult> CheckHealthAsyncInternal(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public async Task<bool> ApplicationInsightsResourceExists(CancellationToken cancellationToken)
+        {
+            string path = $"/api/profiles/{_instrumentationKey}/appId";
+            int index = 0;
+
+            using (var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME))
             {
-                string path = $"/api/profiles/{_instrumentationKey}/appId";
-                ExceptionDispatchInfo?ex = null;
-                int index = 0;
-
                 while (index < m_appInsightsUrls.Length)
                 {
-                    using (var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME))
+                    try
                     {
-                        try
+                        var uri = new Uri(m_appInsightsUrls[index++] + path);
+                        HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                        if (response.IsSuccessStatusCode)
                         {
-                            var uri = new Uri(m_appInsightsUrls[index++] + path);
-                            HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-                            if (response.IsSuccessStatusCode)
-                            {
-                                return HealthCheckResult.Healthy();
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            ex = ExceptionDispatchInfo.Capture(e);
+                            return true;
                         }
                     }
+                    catch (Exception e)
+                    {
+                        ExceptionDispatchInfo.Capture(e).Throw();
+                    }
                 }
-
-                if (ex == null)
-                {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: "Could not find application insights resource");
-                }
-
-                ex.Throw();
-                // Unreachable code. It just to remove the vsCode error 'CheckHealthAsyncInternal(HealthCheckContext, CancellationToken)': not all code paths return a value
-                return HealthCheckResult.Unhealthy();
             }
+
+            return false;
         }
     }
 }

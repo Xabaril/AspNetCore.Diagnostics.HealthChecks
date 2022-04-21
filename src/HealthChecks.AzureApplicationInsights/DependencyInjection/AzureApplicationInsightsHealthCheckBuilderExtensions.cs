@@ -24,12 +24,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddAzureApplicationInsights(this IHealthChecksBuilder builder, string instrumentationKey, string? name = default, HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
         {
-              return builder.Add(new HealthCheckRegistration(
-                  name ?? AZUREAPPLICATIONINSIGHTS_NAME,
-                  sp => new AzureApplicationInsightsHealthCheck(instrumentationKey, sp.GetRequiredService<IHttpClientFactory>()),
-                  failureStatus,
-                  tags,
-                  timeout));
+            var registrationName = name ?? AZUREAPPLICATIONINSIGHTS_NAME;
+            builder.Services.AddHttpClient(registrationName);
+            
+            return builder.Add(new HealthCheckRegistration(
+                name ?? AZUREAPPLICATIONINSIGHTS_NAME,
+                sp => new AzureApplicationInsightsHealthCheck(instrumentationKey, sp.GetRequiredService<IHttpClientFactory>()),
+                failureStatus,
+                tags,
+                timeout));
         }
     }
 }

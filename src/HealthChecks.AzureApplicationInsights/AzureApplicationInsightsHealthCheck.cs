@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Runtime.ExceptionServices;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.ExceptionServices;
 
 namespace HealthChecks.AzureApplicationInsights
 {
     public class AzureApplicationInsightsHealthCheck : IHealthCheck
     {
         //from https://docs.microsoft.com/en-us/azure/azure-monitor/app/ip-addresses#outgoing-ports
-        private readonly string[] m_appInsightsUrls =
+        private readonly string[] _appInsightsUrls =
         {
             "https://dc.applicationinsights.azure.com",
             "https://dc.applicationinsights.microsoft.com",
@@ -27,14 +27,14 @@ namespace HealthChecks.AzureApplicationInsights
         {
             try
             {
-                bool resourceExists = await ApplicationInsightsResourceExists(cancellationToken);
-                if(resourceExists)
+                bool resourceExists = await ApplicationInsightsResourceExistsAsync(cancellationToken);
+                if (resourceExists)
                 {
                     return HealthCheckResult.Healthy();
                 }
                 else
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not find application insights resource. Searched resources: {string.Join(", ", m_appInsightsUrls)}");
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not find application insights resource. Searched resources: {string.Join(", ", _appInsightsUrls)}");
                 }
             }
             catch (Exception ex)
@@ -43,18 +43,18 @@ namespace HealthChecks.AzureApplicationInsights
             }
         }
 
-        public async Task<bool> ApplicationInsightsResourceExists(CancellationToken cancellationToken)
+        public async Task<bool> ApplicationInsightsResourceExistsAsync(CancellationToken cancellationToken)
         {
             string path = $"/api/profiles/{_instrumentationKey}/appId";
             int index = 0;
 
             using (var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME))
             {
-                while (index < m_appInsightsUrls.Length)
+                while (index < _appInsightsUrls.Length)
                 {
                     try
                     {
-                        var uri = new Uri(m_appInsightsUrls[index++] + path);
+                        var uri = new Uri(_appInsightsUrls[index++] + path);
                         HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
                         if (response.IsSuccessStatusCode)
                         {

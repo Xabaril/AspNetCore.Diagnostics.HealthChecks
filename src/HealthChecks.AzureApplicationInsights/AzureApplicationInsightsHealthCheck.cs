@@ -45,11 +45,11 @@ namespace HealthChecks.AzureApplicationInsights
 
         public async Task<bool> ApplicationInsightsResourceExists(CancellationToken cancellationToken)
         {
-            string path = $"/api/profiles/{_instrumentationKey}/appId";
-            int index = 0;
-
             using (var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME))
             {
+                string path = $"/api/profiles/{_instrumentationKey}/appId";
+                int index = 0;
+
                 while (index < m_appInsightsUrls.Length)
                 {
                     try

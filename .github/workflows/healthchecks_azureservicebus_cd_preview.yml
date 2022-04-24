@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
     - name: Restore
       run: dotnet restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj

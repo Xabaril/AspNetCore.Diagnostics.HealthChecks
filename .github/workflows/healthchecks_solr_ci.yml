@@ -20,7 +20,6 @@ on:
     - .github/workflows/healthchecks_solr_ci.
     - Directory.Build.props
     - Directory.Build.targets
-  workflow_dispatch:
 
 jobs:
   build:

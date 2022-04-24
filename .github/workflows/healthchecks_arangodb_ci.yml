@@ -1,6 +1,7 @@
 name: HealthChecks Arango DB CI
 
 on:
+  workflow_dispatch:
   push:
    branches: [ master ]
    paths:

@@ -1,6 +1,7 @@
 name: HealthChecks Publisher.Seq CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:

@@ -1,6 +1,7 @@
 name: HealthChecks Prometheus.Metrics CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:

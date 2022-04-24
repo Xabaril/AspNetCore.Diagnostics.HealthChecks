@@ -1,6 +1,7 @@
 name: HealthChecks Gcp.CloudFirestore CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:

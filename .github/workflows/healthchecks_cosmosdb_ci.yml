@@ -1,6 +1,7 @@
 name: HealthChecks CosmosDb CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:

@@ -1,6 +1,7 @@
 name: HealthChecks Publisher.Prometheus CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:

@@ -1,6 +1,7 @@
 name: HealthChecks DocumentDb CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:

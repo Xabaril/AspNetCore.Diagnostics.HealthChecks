@@ -1,6 +1,7 @@
 name: HealthChecks Aws.S3 CI
 
 on:
+  workflow_dispatch:
   push:
    branches: [ master ]
    paths:

@@ -1,6 +1,7 @@
 name: HealthChecks SolR CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master, netcore-6.0 ]
     paths:

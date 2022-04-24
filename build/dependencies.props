@@ -39,7 +39,7 @@
     <HealthCheckPublisherSeq>6.0.2</HealthCheckPublisherSeq>
     <HealthCheckRabbitMQ>6.0.2</HealthCheckRabbitMQ>
     <HealthCheckRavenDB>6.0.2</HealthCheckRavenDB>
-    <HealthCheckRedis>6.0.3</HealthCheckRedis>
+    <HealthCheckRedis>6.0.4</HealthCheckRedis>
     <HealthCheckSendGrid>6.0.2</HealthCheckSendGrid>
     <HealthCheckSignalR>6.0.2</HealthCheckSignalR>
     <HealthCheckSolr>6.0.2</HealthCheckSolr>

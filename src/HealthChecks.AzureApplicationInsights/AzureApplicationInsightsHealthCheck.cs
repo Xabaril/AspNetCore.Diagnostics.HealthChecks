@@ -28,7 +28,7 @@ namespace HealthChecks.AzureApplicationInsights
             try
             {
                 bool resourceExists = await ApplicationInsightsResourceExistsAsync(cancellationToken);
-                if(resourceExists)
+                if (resourceExists)
                 {
                     return HealthCheckResult.Healthy();
                 }

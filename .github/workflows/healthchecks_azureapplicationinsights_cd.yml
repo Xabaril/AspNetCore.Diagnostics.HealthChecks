@@ -19,7 +19,7 @@ jobs:
     - name: Restore
       run: dotnet restore ./HealthChecks.AzureApplicationInsights/HealthChecks.AzureApplicationInsights.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.AzureApplicationInsights/HealthChecks.AzureApplicationInsights.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.AzureApplicationInsights/HealthChecks.AzureApplicationInsights.csproj -c $BUILD_CONFIG
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.AzureApplicationInsights/HealthChecks.AzureApplicationInsights.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Publish

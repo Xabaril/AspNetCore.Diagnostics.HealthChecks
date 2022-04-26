@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
   </ItemGroup>
 
 </Project>

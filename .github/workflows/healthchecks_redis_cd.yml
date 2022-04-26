@@ -15,13 +15,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG
     - name: Pack
-      run: dotnet pack --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.Redis/HealthChecks.Redis.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Redis.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

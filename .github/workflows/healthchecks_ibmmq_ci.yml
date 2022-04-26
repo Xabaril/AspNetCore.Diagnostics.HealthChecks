@@ -1,6 +1,7 @@
 name: HealthChecks IbmMQ CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
@@ -39,7 +40,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.102
+        dotnet-version: 6.0.202
         include-prerelease: false
     - name: Restore
       run: |

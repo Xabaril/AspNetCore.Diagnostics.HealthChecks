@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
     - name: Restore UI
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
@@ -36,41 +36,41 @@ jobs:
     - name: Restore UI.K8s.Operator
       run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     - name: Build UI
-      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG
     - name: Build UI.Client
-      run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj -c $BUILD_CONFIG
     - name: Build UI.Core
-      run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj -c $BUILD_CONFIG
     - name: Build UI.InMemory.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.MySql.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.PostgreSQL.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.SQLite.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.SqlServer.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.K8s.Operator
-      run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG
     - name: Pack UI
-      run: dotnet pack --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.Client
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.Core
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.InMemory.Storage
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.MySql.Storage
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.PostgreSQL.Storage
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.SQLite.Storage
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.SqlServer.Storage
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.K8s.Operator
-      run: dotnet pack --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG -o ./artifacts
+      run: dotnet pack --no-build ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG -o ./artifacts
     - name: Publish UI Health Check
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.Client Health Check

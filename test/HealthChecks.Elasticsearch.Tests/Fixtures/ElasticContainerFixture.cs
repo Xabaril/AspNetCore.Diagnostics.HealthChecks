@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Ductus.FluentDocker.Builders;
 using Ductus.FluentDocker.Services;
@@ -10,14 +11,14 @@ namespace HealthChecks.Elasticsearch.Tests.Fixtures;
 
 public class ElasticContainerFixture : IAsyncLifetime
 {
-    private readonly ICompositeService _compositeService;
-    private readonly string _composeFilePath = $"{Directory.GetCurrentDirectory()}\\Resources\\docker-compose.yml";
     private const string SETUP_DONE_MESSAGE = "All done!";
     private const long TIME_OUT_IN_MILLIS = 180000;
     private const string ELASTIC_CONTAINER_NAME = "es01";
     private const string CONTAINER_CERTIFICATE_PATH = "/usr/share/elasticsearch/config/certs/ca/ca.crt";
 
     public const string ELASTIC_PASSWORD = "abcDEF123!";
+    private readonly string _composeFilePath = $"{Directory.GetCurrentDirectory()}\\Resources\\docker-compose.yml";
+    private readonly ICompositeService _compositeService;
     public string? ApiKey;
 
     public ElasticContainerFixture()
@@ -30,7 +31,8 @@ public class ElasticContainerFixture : IAsyncLifetime
             .Build()
             .Start();
 
-        var elasticContainer = _compositeService.Containers.First(container => container.Name == ELASTIC_CONTAINER_NAME);
+        var elasticContainer =
+            _compositeService.Containers.First(container => container.Name == ELASTIC_CONTAINER_NAME);
         var setupContainer = _compositeService.Containers.First(container => container != elasticContainer);
         setupContainer.WaitForMessageInLogs(SETUP_DONE_MESSAGE, TIME_OUT_IN_MILLIS);
         elasticContainer.CopyFrom(CONTAINER_CERTIFICATE_PATH, ".", true);
@@ -61,19 +63,18 @@ public class ElasticContainerFixture : IAsyncLifetime
 
     private async Task<string> SetApiKeyInElasticSearchAsync()
     {
-        var handler = new HttpClientHandler();
-        handler.ServerCertificateCustomValidationCallback = delegate
+        var handler = new HttpClientHandler
         {
-            return true;
+            ServerCertificateCustomValidationCallback = delegate
+            {
+                return true;
+            }
         };
         using var httpClient = new HttpClient(handler);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
-            System.Text.Encoding.ASCII.GetBytes($"elastic:{ELASTIC_PASSWORD}")));
-        using var response = await httpClient.PostAsJsonAsync("https://localhost:9200/_security/api_key?pretty", new
-        {
-            name = "new-api-key",
-            role_descriptors = new {}
-        });
+            Encoding.ASCII.GetBytes($"elastic:{ELASTIC_PASSWORD}")));
+        using var response = await httpClient.PostAsJsonAsync("https://localhost:9200/_security/api_key?pretty",
+            new {name = "new-api-key", role_descriptors = new { }});
         var apiKeyResponse = await response.Content.ReadFromJsonAsync<ApiKeyResponse>() ?? throw new JsonException();
 
         return apiKeyResponse.Encoded;

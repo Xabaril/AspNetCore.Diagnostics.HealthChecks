@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Elasticsearch.Net;
 using FluentAssertions;
 using HealthChecks.Elasticsearch.Tests.Fixtures;
@@ -38,12 +38,12 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                             return true;
                         });
                         options.RequestTimeout = TimeSpan.FromSeconds(30);
-                    }, tags: new[] {"elasticsearch"});
+                    }, tags: new[] { "elasticsearch" });
             })
             .Configure(app =>
             {
                 app.UseHealthChecks("/health",
-                    new HealthCheckOptions {Predicate = r => r.Tags.Contains("elasticsearch")});
+                    new HealthCheckOptions { Predicate = r => r.Tags.Contains("elasticsearch") });
             });
 
         using var server = new TestServer(webHostBuilder);
@@ -73,12 +73,12 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                             return true;
                         });
                         options.RequestTimeout = TimeSpan.FromSeconds(30);
-                    }, tags: new[] {"elasticsearch"});
+                    }, tags: new[] { "elasticsearch" });
             })
             .Configure(app =>
             {
                 app.UseHealthChecks("/health",
-                    new HealthCheckOptions {Predicate = r => r.Tags.Contains("elasticsearch")});
+                    new HealthCheckOptions { Predicate = r => r.Tags.Contains("elasticsearch") });
             });
 
         using var server = new TestServer(webHostBuilder);

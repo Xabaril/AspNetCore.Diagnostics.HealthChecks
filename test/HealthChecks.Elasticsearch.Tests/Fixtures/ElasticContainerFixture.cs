@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -74,7 +74,7 @@ public class ElasticContainerFixture : IAsyncLifetime
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
             Encoding.ASCII.GetBytes($"elastic:{ELASTIC_PASSWORD}")));
         using var response = await httpClient.PostAsJsonAsync("https://localhost:9200/_security/api_key?pretty",
-            new {name = "new-api-key", role_descriptors = new { }});
+            new { name = "new-api-key", role_descriptors = new { } });
         var apiKeyResponse = await response.Content.ReadFromJsonAsync<ApiKeyResponse>() ?? throw new JsonException();
 
         return apiKeyResponse.Encoded;

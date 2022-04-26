@@ -20,7 +20,7 @@ jobs:
     - name: Restore
       run: dotnet restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj -c $BUILD_CONFIG
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Publish

@@ -20,7 +20,7 @@ jobs:
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj -c $BUILD_CONFIG
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Publish

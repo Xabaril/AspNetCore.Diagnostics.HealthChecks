@@ -20,7 +20,7 @@ jobs:
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj -c $BUILD_CONFIG
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Publish

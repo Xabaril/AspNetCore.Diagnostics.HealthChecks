@@ -21,7 +21,7 @@ jobs:
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj -c $BUILD_CONFIG
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Publish

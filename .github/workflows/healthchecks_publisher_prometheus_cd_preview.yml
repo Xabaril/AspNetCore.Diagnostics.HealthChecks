@@ -21,7 +21,7 @@ jobs:
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj -c $BUILD_CONFIG
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Publish

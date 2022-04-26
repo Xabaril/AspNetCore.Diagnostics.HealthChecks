@@ -59,6 +59,7 @@ namespace HealthChecks.Elasticsearch
 
             UserName = string.Empty;
             Password = string.Empty;
+            Certificate = null;
             AuthenticateWithBasicCredentials = false;
             AuthenticateWithCertificate = false;
             AuthenticateWithApiKey = true;

@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddHttpClient(registrationName);
             
             return builder.Add(new HealthCheckRegistration(
-                name ?? AZUREAPPLICATIONINSIGHTS_NAME,
+                registrationName,
                 sp => new AzureApplicationInsightsHealthCheck(instrumentationKey, sp.GetRequiredService<IHttpClientFactory>()),
                 failureStatus,
                 tags,

@@ -1,26 +1,20 @@
-﻿using Azure.Core;
 using FluentAssertions;
-using HealthChecks.AzureDigitalTwin;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Microsoft.Rest;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
+namespace HealthChecks.AzureDigitalTwin.Tests
 {
-    public class azure_digital_twin_instance_registration_should
+    public class azure_digital_twin_registration_should
     {
         [Fact]
         public void add_health_check_when_properly_configured()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(
-                    "MyDigitalTwinClientId",
-                    "MyDigitalTwinClientSecret",
-                    "TenantId",
-                    "https://my-awesome-dt-host",
-                    "my_dt_instance_name");
+                .AddAzureDigitalTwin("MyDigitalTwinClientId", "MyDigitalTwinClientSecret", "TenantId");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -28,8 +22,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.Should().Be("azuredigitaltwin");
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -37,13 +31,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(
-                    "MyDigitalTwinClientId",
-                    "MyDigitalTwinClientSecret",
-                    "TenantId",
-                    "https://my-awesome-dt-host",
-                    "my_dt_instance_name",
-                    name: "azuredigitaltwininstance_check");
+                .AddAzureDigitalTwin("MyDigitalTwinClientId", "MyDigitalTwinClientSecret", "TenantId", name: "azuredigitaltwincheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -51,8 +39,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance_check");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.Should().Be("azuredigitaltwincheck");
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -60,7 +48,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                .AddAzureDigitalTwin(string.Empty, string.Empty, string.Empty);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -70,16 +58,12 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
         }
 
-
         [Fact]
         public void add_health_check_when_properly_configured_by_credentials()
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(
-                    new MockTokenCredentials(),
-                    "https://my-awesome-dt-host",
-                    "my_dt_instance_name");
+                .AddAzureDigitalTwin(credentials: new MockServiceClientCredentials());
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -87,8 +71,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.Should().Be("azuredigitaltwin");
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -96,11 +80,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(
-                    new MockTokenCredentials(),
-                    "https://my-awesome-dt-host",
-                    "my_dt_instance_name",
-                    name: "azuredigitaltwininstance_check");
+                .AddAzureDigitalTwin(new MockServiceClientCredentials(), name: "azuredigitaltwincheck");
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
@@ -108,8 +88,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance_check");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.Should().Be("azuredigitaltwincheck");
+            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
         }
 
         [Fact]
@@ -117,7 +97,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(default(TokenCredential), string.Empty, string.Empty);
+                .AddAzureDigitalTwin(default(ServiceClientCredentials));
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();

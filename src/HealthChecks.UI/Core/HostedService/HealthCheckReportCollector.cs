@@ -97,6 +97,18 @@ namespace HealthChecks.UI.Core.HostedService
             {
                 var absoluteUri = GetEndpointUri(configuration);
 
+                if (!string.IsNullOrEmpty(absoluteUri.UserInfo))
+                {
+                    var userInfoArr = absoluteUri.UserInfo.Split(':');
+                    if (userInfoArr.Length == 2 && !string.IsNullOrEmpty(userInfoArr[0]) && !string.IsNullOrEmpty(userInfoArr[1]))
+                    {
+                        _httpClient.DefaultRequestHeaders.Clear();
+                        _httpClient.DefaultRequestHeaders.Authorization =
+                            new System.Net.Http.Headers.AuthenticationHeaderValue("Basic",
+                            Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes($"{userInfoArr[0]}:{userInfoArr[1]}")));
+                    }
+                }
+
                 using var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
 
                 var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);

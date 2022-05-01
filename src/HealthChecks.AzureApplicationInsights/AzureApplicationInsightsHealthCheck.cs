@@ -65,7 +65,7 @@ namespace HealthChecks.AzureApplicationInsights
                     {
                         // We reached the end of the url list and there's no more url to check
                         // otherwise we try the other urls
-                        if(index == _appInsightsUrls.Length)
+                        if (index == _appInsightsUrls.Length)
                         {
                             throw;
                         }

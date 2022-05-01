@@ -63,7 +63,11 @@ namespace HealthChecks.AzureApplicationInsights
                     }
                     catch (Exception e)
                     {
-                        ExceptionDispatchInfo.Capture(e).Throw();
+                        // We reached the end of the url list and there's no more url to check
+                        if(index == _appInsightsUrls.Length)
+                        {
+                            ExceptionDispatchInfo.Capture(e).Throw();
+                        }
                     }
                 }
             }

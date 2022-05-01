@@ -43,7 +43,7 @@ namespace HealthChecks.AzureApplicationInsights
             }
         }
 
-        public async Task<bool> ApplicationInsightsResourceExistsAsync(CancellationToken cancellationToken)
+        private async Task<bool> ApplicationInsightsResourceExistsAsync(CancellationToken cancellationToken)
         {
             using (var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME))
             {

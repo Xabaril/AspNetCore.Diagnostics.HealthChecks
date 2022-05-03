@@ -68,9 +68,9 @@ namespace HealthChecks.AzureApplicationInsights
                 }
 
                 // All endpoints threw exceptions 
-                if(exceptions.Count == _appInsightsUrls.Length)
+                if (exceptions.Count == _appInsightsUrls.Length)
                 {
-                    ExceptionDispatchInfo.Capture(new AggregateException(exceptions.ToArray())).Throw();
+                    throw new AggregateException(exceptions.ToArray());
                 }
             }
 

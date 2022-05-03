@@ -49,7 +49,7 @@ namespace HealthChecks.AzureApplicationInsights
             {
                 string path = $"/api/profiles/{_instrumentationKey}/appId";
                 int index = 0;
-
+                var exceptions = new List<Exception>();
                 while (index < _appInsightsUrls.Length)
                 {
                     try
@@ -61,18 +61,20 @@ namespace HealthChecks.AzureApplicationInsights
                             return true;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        // We reached the end of the url list and there's no more url to check
-                        // otherwise we try the other urls
-                        if (index == _appInsightsUrls.Length)
-                        {
-                            throw;
-                        }
+                        exceptions.Add(e);
                     }
+                }
+
+                // All endpoints threw exceptions 
+                if(exceptions.Count == _appInsightsUrls.Length)
+                {
+                    ExceptionDispatchInfo.Capture(new AggregateException(exceptions.ToArray())).Throw();
                 }
             }
 
+            // No success responses were returned and at least one endpoint returned an unsuccesful response
             return false;
         }
     }

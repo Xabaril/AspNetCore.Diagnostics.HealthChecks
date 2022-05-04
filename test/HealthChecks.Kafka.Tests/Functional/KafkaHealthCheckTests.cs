@@ -32,7 +32,7 @@ namespace HealthChecks.Kafka.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("kafka")
                     });
@@ -64,7 +64,7 @@ namespace HealthChecks.Kafka.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("kafka")
                     });

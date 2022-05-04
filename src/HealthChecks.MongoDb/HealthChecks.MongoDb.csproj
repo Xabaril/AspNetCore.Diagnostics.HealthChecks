@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;MongoDb</PackageTags>
+    <PackageTags>$(PackageTags);MongoDb</PackageTags>
     <Description>HealthChecks.MongoDb is the health check package for MongoDb.</Description>
     <Version>$(HealthCheckMongoDB)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
   </ItemGroup>
 
 </Project>

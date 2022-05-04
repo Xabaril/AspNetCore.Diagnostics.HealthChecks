@@ -10,32 +10,18 @@ jobs:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
-    services:
-      solr:
-        image: solr:8.4.1
-        ports:
-          - 8983:8983
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-    #- name: Test
-    #  run: dotnet test ./test/HealthChecks.Solr.Tests/HealthChecks.Solr.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Solr/HealthChecks.Solr.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish Solr Health Check nuget
+      run: dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj -c $BUILD_CONFIG
+    - name: Pack
+      run: dotnet pack --no-build ./src/HealthChecks.Solr/HealthChecks.Solr.csproj -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Solr.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
-

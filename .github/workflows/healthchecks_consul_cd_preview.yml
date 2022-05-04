@@ -3,39 +3,25 @@ name: HealthChecks Consul Preview CD
 on:
   push:
     tags:
-      - preview-consul-*  # Push events to release-arangodb*
+      - preview-consul-*  # Push events to release-consul*
 jobs:
   build:
     env:
       BUILD_CONFIG: Release
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
-    services:
-      consul:
-        image: consul:latest
-        ports:
-          - 8500:8500
-          - 8600:8600
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Consul/HealthChecks.Consul.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish Consul Health Check nuget
+      run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj -c $BUILD_CONFIG
+    - name: Pack
+      run: dotnet pack --no-build ./src/HealthChecks.Consul/HealthChecks.Consul.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Consul.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

@@ -12,14 +12,14 @@ namespace HealthChecks.UI.Core
             _server = server;
         }
 
-        internal ICollection<string> Addresses => AddressesFeature.Addresses;
+        internal ICollection<string>? Addresses => AddressesFeature?.Addresses;
 
-        private IServerAddressesFeature AddressesFeature =>
+        private IServerAddressesFeature? AddressesFeature =>
             _server.Features.Get<IServerAddressesFeature>();
 
         internal string AbsoluteUriFromRelative(string relativeUrl)
         {
-            var targetAddress = AddressesFeature.Addresses.First();
+            var targetAddress = Addresses!.First();
 
             if (targetAddress.EndsWith("/"))
             {

@@ -16,7 +16,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<V1Service> Get(HealthCheckResource resource)
+        public Task<V1Service?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
@@ -36,6 +36,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             catch (Exception ex)
             {
                 _logger.LogError("Error creating service for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
+                throw;
             }
 
             return service;

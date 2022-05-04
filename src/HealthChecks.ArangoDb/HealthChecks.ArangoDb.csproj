@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;ArangoDb</PackageTags>
+    <PackageTags>$(PackageTags);ArangoDb</PackageTags>
     <Description>HealthChecks.ArangoDb is the health check package for ArangoDb.</Description>
     <Version>$(HealthCheckArangoDb)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ArangoDBNetStandard" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
   </ItemGroup>
 
 </Project>

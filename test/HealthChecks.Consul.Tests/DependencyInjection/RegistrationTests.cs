@@ -21,7 +21,7 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
                 });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -43,7 +43,7 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
                 }, name: "my-consul-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

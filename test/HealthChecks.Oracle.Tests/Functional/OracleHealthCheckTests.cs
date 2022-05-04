@@ -1,12 +1,12 @@
 using System.Net;
 using FluentAssertions;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-
 
 namespace HealthChecks.Oracle.Tests.Functional
 {
@@ -15,7 +15,7 @@ namespace HealthChecks.Oracle.Tests.Functional
         [Fact]
         public async Task be_healthy_when_oracle_is_available()
         {
-            var connectionString = "Data Source=localhost:1521/xe;User Id=system;Password=oracle";
+            var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -25,24 +25,22 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("oracle")
+                        Predicate = r => r.Tags.Contains("oracle"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
-
-            response.EnsureSuccessStatusCode();
+            using var response = await server.CreateRequest("/health").GetAsync();
+            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
         public async Task be_unhealthy_when_oracle_is_not_available()
         {
-            var connectionString = "Data Source=255.255.255.255:1521/xe;User Id=system;Password=oracle";
+            var connectionString = "Data Source=255.255.255.255:1521/XEPDB1;User Id=system;Password=oracle";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -52,25 +50,21 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
-
-            response.StatusCode.Should()
-                .Be(HttpStatusCode.ServiceUnavailable);
+            using var response = await server.CreateRequest("/health").GetAsync();
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
         public async Task be_unhealthy_when_sql_query_is_not_valid()
         {
-            var connectionString = "Data Source=localhost:1521/xe;User Id=system;Password=oracle";
+            var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle";
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
@@ -79,31 +73,27 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
-
-            response.StatusCode.Should()
-                .Be(HttpStatusCode.ServiceUnavailable);
+            using var response = await server.CreateRequest("/health").GetAsync();
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
         public async Task be_healthy_with_connection_string_factory_when_oracle_is_available()
         {
             bool factoryCalled = false;
-            string connectionString = "Data Source=localhost:1521/xe;User Id=system;Password=oracle";
+            string connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    _ = services
+                    services
                     .AddHealthChecks()
                     .AddOracle(_ =>
                     {
@@ -114,19 +104,16 @@ namespace HealthChecks.Oracle.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    _ = app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("oracle")
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
-
-            _ = response.EnsureSuccessStatusCode();
-            _ = factoryCalled.Should().BeTrue();
+            using var response = await server.CreateRequest("/health").GetAsync();
+            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            factoryCalled.Should().BeTrue();
         }
     }
 }

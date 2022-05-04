@@ -12,30 +12,29 @@ namespace HealthChecks.UI.Middleware
 {
     internal class UIApiEndpointMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly JsonSerializerSettings _jsonSerializationSettings;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly Settings _settings;
 
         public UIApiEndpointMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory, IOptions<Settings> settings)
         {
-            _next = next;
+            _ = next;
             _serviceScopeFactory = serviceScopeFactory;
             _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
-            _jsonSerializationSettings = new JsonSerializerSettings()
+            _jsonSerializationSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 Converters = new[] { new StringEnumConverter() },
                 DateTimeZoneHandling = DateTimeZoneHandling.Local
             };
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
-            using (var db = scope.ServiceProvider.GetService<HealthChecksDb>())
+            using (var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>())
             {
-                var healthChecks = await db.Configurations
-                      .ToListAsync();
+                var healthChecks = await db.Configurations.ToListAsync();
 
                 var healthChecksExecutions = new List<HealthCheckExecution>();
 

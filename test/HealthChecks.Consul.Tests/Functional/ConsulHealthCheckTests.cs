@@ -28,7 +28,7 @@ namespace HealthChecks.Consul.Tests.Functional
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("consul")
                    });
@@ -59,7 +59,7 @@ namespace HealthChecks.Consul.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("consul")
                     });

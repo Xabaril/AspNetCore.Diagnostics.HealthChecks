@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Prometheus;Prometheus Exporter;Metrics</PackageTags>
+    <PackageTags>$(PackageTags);Prometheus;Prometheus Exporter;Metrics</PackageTags>
     <Description>HealthChecks.Publisher.Prometheus is a health check prometheus metrics exporter.</Description>
     <Version>$(HealthCheckPrometheusMetrics)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

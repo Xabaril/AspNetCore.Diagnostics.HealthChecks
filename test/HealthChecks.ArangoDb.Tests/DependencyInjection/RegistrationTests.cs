@@ -16,7 +16,7 @@ namespace HealthChecks.ArangoDb.Tests.DependencyInjection
                 .AddArangoDb(_ => new ArangoDbOptions());
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -33,7 +33,7 @@ namespace HealthChecks.ArangoDb.Tests.DependencyInjection
                 .AddArangoDb(_ => new ArangoDbOptions(), name: "my-arango");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

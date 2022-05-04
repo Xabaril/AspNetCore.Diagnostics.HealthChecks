@@ -61,7 +61,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             bool isInitialized = await context.Configurations.AnyAsync();
 
-            if (!isInitialized && healthCheckConfigurations.Any())
+            if (!isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
             {
                 _logger.LogInformation("Saving healthchecks configuration to database");
 
@@ -69,7 +69,7 @@ namespace HealthChecks.UI.Core.HostedService
                      .AddRangeAsync(healthCheckConfigurations);
 
             }
-            else if (isInitialized && healthCheckConfigurations.Any())
+            else if (isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
             {
                 var dbConfigurations = await context.Configurations.ToListAsync();
 
@@ -109,5 +109,4 @@ namespace HealthChecks.UI.Core.HostedService
                 (await context.Database.GetPendingMigrationsAsync()).Any();
         }
     }
-
 }

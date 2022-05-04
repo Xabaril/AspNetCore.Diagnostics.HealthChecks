@@ -13,7 +13,7 @@ namespace HealthChecks.UI.Tests
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateTimeZoneHandling = DateTimeZoneHandling.Local
-            });
+            })!;
         }
     }
 }

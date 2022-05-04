@@ -18,7 +18,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                     "hubName");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -37,7 +37,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureEventHub(factory);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -56,7 +56,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                     "hubName", name: "azureeventhubcheck");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -75,7 +75,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureEventHub(factory, name: "azureeventhubcheck");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -92,7 +92,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureEventHub(string.Empty, string.Empty);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
 
@@ -117,7 +117,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                     });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

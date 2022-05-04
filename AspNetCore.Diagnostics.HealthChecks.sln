@@ -360,6 +360,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager", "src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj", "{FF492215-60BC-40C6-B118-D22DF9063547}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager.Tests", "test\HealthChecks.Aws.SystemsManager.Tests\HealthChecks.Aws.SystemsManager.Tests.csproj", "{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin.Tests", "test\HealthChecks.AzureDigitalTwin.Tests\HealthChecks.AzureDigitalTwin.Tests.csproj", "{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -771,6 +772,10 @@ Global
 		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -878,6 +883,7 @@ Global
 		{256B649E-9631-44AB-B577-96B3627C889E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{FF492215-60BC-40C6-B118-D22DF9063547} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

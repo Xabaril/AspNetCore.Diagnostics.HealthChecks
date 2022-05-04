@@ -1,4 +1,3 @@
-﻿using Azure.Core;
 using FluentAssertions;
 using HealthChecks.AzureDigitalTwin;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +22,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
                     new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" });
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -46,7 +45,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
                     name: "azuredigitaltwinmodels_check");
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -63,7 +62,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
                 .AddAzureDigitalTwinModels(string.Empty, string.Empty, string.Empty, string.Empty, new string[] { });
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
 
@@ -81,7 +80,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
                     new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" });
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -102,7 +101,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
                     name: "azuredigitaltwinmodels_check");
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -116,10 +115,10 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinModels(default(TokenCredential), string.Empty, new string[] { });
+                .AddAzureDigitalTwinModels(null!, string.Empty, new string[] { });
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
 

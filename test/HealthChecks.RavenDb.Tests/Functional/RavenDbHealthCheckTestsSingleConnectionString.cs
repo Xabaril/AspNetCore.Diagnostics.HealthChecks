@@ -49,7 +49,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });
@@ -76,7 +76,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });
@@ -105,7 +105,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });
@@ -136,7 +136,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("ravendb")
                     });

@@ -48,7 +48,7 @@ namespace HealthChecks.UI.Tests
         }
 
         [Fact]
-        public Task configure_custom_delegating_handlers()
+        public Task configure_api_endpoint_custom_delegating_handlers()
         {
             var hostReset = new ManualResetEventSlim(false);
             var tracer = Substitute.For<MessageHandlerTracer>();
@@ -66,6 +66,45 @@ namespace HealthChecks.UI.Tests
                         setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
                         setup.UseApiEndpointDelegatingHandler<CustomDelegatingHandler>();
                         setup.UseApiEndpointDelegatingHandler<CustomDelegatingHandler2>();
+
+                    }).AddInMemoryStorage();
+                })
+                .Configure(app =>
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
+                });
+
+            var server = new TestServer(builder);
+
+            hostReset.Wait(3000);
+
+            tracer.Received().Log(nameof(CustomDelegatingHandler), "SendAsync");
+            tracer.Received().Log(nameof(CustomDelegatingHandler2), "SendAsync");
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
+        public Task configure_webhooks_endpoint_custom_delegating_handlers()
+        {
+            var hostReset = new ManualResetEventSlim(false);
+            var tracer = Substitute.For<MessageHandlerTracer>();
+
+            var builder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddRouting()
+                    .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
+                    .AddTransient(sp => new CustomDelegatingHandler(tracer))
+                    .AddTransient(sp => new CustomDelegatingHandler2(tracer))
+                    .AddHealthChecksUI(setup =>
+                    {
+                        setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
+                        setup.AddWebhookNotification("webhook1", "https://httpstat.us/200", "test payload");
+                        setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler>();
+                        setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
 
                     }).AddInMemoryStorage();
                 })
@@ -103,7 +142,7 @@ namespace HealthChecks.UI.Tests
             {
                 foreach (var prop in Properties)
                 {
-                    _tracer.Log(prop.Key, prop.Value.ToString());
+                    _tracer.Log(prop.Key, prop.Value?.ToString());
                 }
 
                 return base.SendAsync(request, cancellationToken);
@@ -142,7 +181,7 @@ namespace HealthChecks.UI.Tests
 
         public abstract class MessageHandlerTracer
         {
-            public abstract void Log(string key, string value);
+            public abstract void Log(string key, string? value);
         }
     }
 }

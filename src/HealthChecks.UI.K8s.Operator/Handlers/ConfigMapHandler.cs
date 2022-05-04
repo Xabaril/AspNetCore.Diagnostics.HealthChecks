@@ -17,12 +17,12 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<V1ConfigMap> Get(HealthCheckResource resource)
+        public Task<V1ConfigMap?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedConfigMapAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
-        public async Task<V1ConfigMap> GetOrCreateAsync(HealthCheckResource resource)
+        public async Task<V1ConfigMap?> GetOrCreateAsync(HealthCheckResource resource)
         {
             var configMap = await Get(resource);
             if (configMap != null)

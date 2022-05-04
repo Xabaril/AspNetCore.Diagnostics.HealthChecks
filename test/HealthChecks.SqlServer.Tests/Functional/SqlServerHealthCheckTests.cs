@@ -28,7 +28,7 @@ namespace HealthChecks.SqlServer.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("sqlserver")
                     });
@@ -54,7 +54,7 @@ namespace HealthChecks.SqlServer.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("sqlserver")
                     });
@@ -85,7 +85,7 @@ namespace HealthChecks.SqlServer.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("sqlserver")
                     });

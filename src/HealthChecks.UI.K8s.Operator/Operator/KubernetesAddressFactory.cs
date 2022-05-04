@@ -63,7 +63,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             return service.Spec.ClusterIP;
         }
 
-        private static V1ServicePort GetServicePort(V1Service service)
+        private static V1ServicePort? GetServicePort(V1Service service)
         {
             return service.Spec.Ports.FirstOrDefault();
         }

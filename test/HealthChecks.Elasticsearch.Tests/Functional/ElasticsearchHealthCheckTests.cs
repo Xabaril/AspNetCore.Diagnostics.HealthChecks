@@ -25,7 +25,7 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("elasticsearch")
                 });
@@ -51,7 +51,7 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("elasticsearch")
                     });

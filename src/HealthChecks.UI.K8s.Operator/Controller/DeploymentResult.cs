@@ -14,6 +14,7 @@ namespace HealthChecks.UI.K8s.Operator.Controller
             Service = service ?? throw new ArgumentNullException(nameof(service));
             Secret = secret ?? throw new ArgumentNullException(nameof(secret));
         }
+
         public static DeploymentResult Create(V1Deployment deployment, V1Service service, V1Secret secret)
         {
             return new DeploymentResult(deployment, service, secret);

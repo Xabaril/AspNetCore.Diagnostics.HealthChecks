@@ -25,7 +25,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
                 });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -49,7 +49,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
                 }, name: "second-k8s-cluster");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

@@ -19,11 +19,15 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
+    <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
     <NoWarn>$(NoWarn);1591</NoWarn> <!--TODO: temporary solution-->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
     <NoWarn>$(NoWarn);IDE1006</NoWarn>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
@@ -32,10 +36,10 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
-    <PackageReference Include="FluentAssertions" Version="6.5.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
+    <PackageReference Include="FluentAssertions" Version="6.6.0" />
     <PackageReference Include="NSubstitute" Version="4.3.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -44,6 +48,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
 {
     public class DBConfigSetting
     {
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get; set; } = null!;
     }
 
     public class npgsql_healthcheck_should
@@ -29,7 +29,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
@@ -58,7 +58,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
@@ -84,7 +84,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
@@ -105,7 +105,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddSingleton(new DBConfigSetting()
+                    services.AddSingleton(new DBConfigSetting
                     {
                         ConnectionString = "Server=127.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres"
                     });
@@ -115,7 +115,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
@@ -137,7 +137,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddSingleton(new DBConfigSetting()
+                    services.AddSingleton(new DBConfigSetting
                     {
                         ConnectionString = "Server=200.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres"
                     });
@@ -147,7 +147,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("npgsql")
                     });

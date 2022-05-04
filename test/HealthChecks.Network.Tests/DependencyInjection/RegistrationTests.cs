@@ -16,7 +16,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddPingHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -32,7 +32,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddPingHealthCheck(_ => { }, name: "my-ping-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -48,7 +48,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSftpHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -64,7 +64,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSftpHealthCheck(_ => { }, name: "my-sftp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -80,7 +80,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddFtpHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -96,7 +96,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddFtpHealthCheck(_ => { }, name: "my-ftp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -112,7 +112,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddDnsResolveHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -128,7 +128,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddDnsResolveHealthCheck(_ => { }, name: "my-dns-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -144,7 +144,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddImapHealthCheck(opt => { opt.Host = "the-host"; opt.Port = 111; });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -160,7 +160,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddImapHealthCheck(opt => { opt.Host = "the-host"; opt.Port = 111; }, name: "my-imap-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -176,7 +176,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSmtpHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -192,7 +192,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSmtpHealthCheck(_ => { }, name: "my-smtp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -209,7 +209,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddTcpHealthCheck(_ => { }, name: "tcp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -226,7 +226,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSslHealthCheck(options => options.AddHost("the-host"));
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -243,7 +243,7 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSslHealthCheck(options => options.AddHost("the-host", port: 111, checkLeftDays: 120), name: "ssl-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

@@ -99,7 +99,10 @@ namespace HealthChecks.UI.Core.HostedService
 
                 using var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
 
-                return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
+                var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
+                if (report == null)
+                    throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
+                return report;
             }
             catch (Exception exception)
             {
@@ -123,6 +126,9 @@ namespace HealthChecks.UI.Core.HostedService
                 Uri.TryCreate(_serverAddressService.AbsoluteUriFromRelative(configuration.Uri), UriKind.Absolute, out absoluteUri);
             }
 
+            if (absoluteUri == null)
+                throw new InvalidOperationException("Could not get endpoint uri from configuration");
+
             _endpointAddresses[configuration.Id] = absoluteUri;
 
             return absoluteUri;
@@ -135,7 +141,7 @@ namespace HealthChecks.UI.Core.HostedService
             return previous != null && previous.Status != UIHealthStatus.Healthy;
         }
 
-        private async Task<HealthCheckExecution> GetHealthCheckExecutionAsync(HealthCheckConfiguration configuration)
+        private async Task<HealthCheckExecution?> GetHealthCheckExecutionAsync(HealthCheckConfiguration configuration)
         {
             return await _db.Executions
                 .Include(le => le.History)
@@ -154,7 +160,6 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
-
                 if (execution.Uri != configuration.Uri)
                 {
                     UpdateUris(execution, configuration);
@@ -171,7 +176,7 @@ namespace HealthChecks.UI.Core.HostedService
                     SaveExecutionHistoryEntries(healthReport, execution, lastExecutionTime);
                 }
 
-                //update existing entries from new health report
+                // update existing entries with values from new health report
 
                 foreach (var item in healthReport.ToExecutionEntries())
                 {
@@ -191,21 +196,12 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                 }
 
-                //remove old entries in existing execution not present in new health report
+                // remove old entries if existing execution not present in new health report
 
                 foreach (var item in execution.Entries)
                 {
-                    var existing = healthReport.Entries
-                        .ContainsKey(item.Name);
-
-                    if (!existing)
-                    {
-                        var oldEntry = execution.Entries
-                            .SingleOrDefault(t => t.Name == item.Name);
-
-                        _db.HealthCheckExecutionEntries
-                            .Remove(oldEntry);
-                    }
+                    if (!healthReport.Entries.ContainsKey(item.Name))
+                        _db.HealthCheckExecutionEntries.Remove(item);
                 }
             }
             else

@@ -1,6 +1,7 @@
 name: HealthChecks AzureServiceBus DB CI
 
 on:
+  workflow_dispatch:
   push:
    branches: [ master ]
    paths:
@@ -27,18 +28,19 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.AzureServiceBus
+    - name: Restore
       run: |
-        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
-        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+        dotnet restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj &&
+        dotnet restore ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj --verbosity normal
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.AzureServiceBus.Tests/HealthChecks.AzureServiceBus.Tests.csproj

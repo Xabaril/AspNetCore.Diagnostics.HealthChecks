@@ -29,7 +29,6 @@ namespace HealthChecks.UI.Core.Notifications
             _settings = settings.Value ?? new Settings();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
-
         }
 
         public async Task NotifyDown(string name, UIHealthReport report)
@@ -39,13 +38,13 @@ namespace HealthChecks.UI.Core.Notifications
 
         public async Task NotifyWakeUp(string name)
         {
-            await NotifyAsync(name, null, isHealthy: true);
+            await NotifyAsync(name, null!, isHealthy: true); // TODO: why null! ?
         }
 
         internal async Task NotifyAsync(string name, UIHealthReport report, bool isHealthy = false)
         {
-            string failure = default;
-            string description = default;
+            string? failure = default;
+            string? description = default;
 
             if (!await IsNotifiedOnWindowTimeAsync(name, isHealthy))
             {
@@ -77,13 +76,15 @@ namespace HealthChecks.UI.Core.Notifications
                         .Replace(Keys.FAILURE_BOOKMARK, HttpUtility.JavaScriptStringEncode(failure))
                         .Replace(Keys.DESCRIPTIONS_BOOKMARK, HttpUtility.JavaScriptStringEncode(description));
 
-
                     Uri.TryCreate(webHook.Uri, UriKind.Absolute, out var absoluteUri);
 
                     if (absoluteUri == null || !absoluteUri.IsValidHealthCheckEndpoint())
                     {
                         Uri.TryCreate(_serverAddressesService.AbsoluteUriFromRelative(webHook.Uri), UriKind.Absolute, out absoluteUri);
                     }
+
+                    if (absoluteUri == null)
+                        throw new InvalidOperationException("Could not get absolute uri");
 
                     await SendRequestAsync(absoluteUri, webHook.Name, payload);
                 }

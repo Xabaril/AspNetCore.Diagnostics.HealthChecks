@@ -1,11 +1,11 @@
+using Azure.Identity;
 using FluentAssertions;
-using HealthChecks.AzureDigitalTwin;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
+namespace HealthChecks.AzureDigitalTwin.Tests
 {
     public class azure_digital_twin_instance_registration_should
     {
@@ -116,7 +116,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureDigitalTwinInstance(null!, string.Empty, string.Empty);
+                .AddAzureDigitalTwinInstance(new AzureCliCredential(), string.Empty, string.Empty);
 
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

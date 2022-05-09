@@ -38,7 +38,7 @@ namespace HealthChecks.Network.Tests.Functional
                     app.UseRouting();
                     app.UseEndpoints(config =>
                     {
-                        config.MapHealthChecks("/health", new HealthCheckOptions()
+                        config.MapHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => true
                         });
@@ -76,7 +76,7 @@ namespace HealthChecks.Network.Tests.Functional
                     app.UseRouting();
                     app.UseEndpoints(config =>
                     {
-                        config.MapHealthChecks("/health", new HealthCheckOptions()
+                        config.MapHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => true,
                             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

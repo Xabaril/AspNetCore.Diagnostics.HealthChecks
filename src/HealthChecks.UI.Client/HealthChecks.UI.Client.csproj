@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <PackageTags>HealthCheck;UI;Client</PackageTags>
+    <PackageTags>$(PackageTags);UI;Client</PackageTags>
     <Description>HealthChecks.UI.Client contains some mandatory abstractions to work with HealthChecks.UI.</Description>
     <Version>$(HealthCheckUIClient)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>

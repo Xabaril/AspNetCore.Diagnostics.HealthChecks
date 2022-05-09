@@ -17,7 +17,7 @@ namespace HealthChecks.UI.Core
         public UIWebHooksApiMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
         {
             _ = next;
-            _jsonSerializationSettings = new JsonSerializerSettings()
+            _jsonSerializationSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
@@ -28,7 +28,7 @@ namespace HealthChecks.UI.Core
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var settings = scope.ServiceProvider.GetService<IOptions<Settings>>();
+                var settings = scope.ServiceProvider.GetRequiredService<IOptions<Settings>>();
                 var sanitizedWebhooksResponse = settings.Value.Webhooks.Select(item => new
                 {
                     item.Name,

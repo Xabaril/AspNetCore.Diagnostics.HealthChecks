@@ -36,6 +36,10 @@ namespace HealthChecks.Elasticsearch
                     {
                         settings = settings.ClientCertificate(_options.Certificate);
                     }
+                    else if (_options.AuthenticateWithApiKey)
+                    {
+                        settings = settings.ApiKeyAuthentication(_options.ApiKeyAuthenticationCredentials);
+                    }
 
                     if (_options.CertificateValidationCallback != null)
                     {

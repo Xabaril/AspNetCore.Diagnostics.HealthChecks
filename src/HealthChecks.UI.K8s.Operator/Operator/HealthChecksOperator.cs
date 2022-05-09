@@ -11,7 +11,7 @@ namespace HealthChecks.UI.K8s.Operator
 {
     internal class HealthChecksOperator : IHostedService
     {
-        private Watcher<HealthCheckResource> _watcher;
+        private Watcher<HealthCheckResource>? _watcher;
         private readonly IKubernetes _client;
         private readonly IHealthChecksController _controller;
         private readonly NamespacedServiceWatcher _serviceWatcher;
@@ -31,7 +31,6 @@ namespace HealthChecks.UI.K8s.Operator
             OperatorDiagnostics diagnostics,
             ILogger<K8sOperator> logger)
         {
-
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
             _serviceWatcher = serviceWatcher ?? throw new ArgumentNullException(nameof(serviceWatcher));
@@ -94,7 +93,7 @@ namespace HealthChecks.UI.K8s.Operator
                 ,
                 onClosed: () =>
                 {
-                    _watcher.Dispose();
+                    _watcher?.Dispose();
                     _ = StartWatcherAsync(token);
                 },
                 onError: e => _logger.LogError(e.Message)
@@ -171,11 +170,11 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 var deployment = await _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
 
-                availableReplicas = deployment.Status.AvailableReplicas ?? 0;
+                availableReplicas = deployment?.Status.AvailableReplicas ?? 0;
 
                 if (availableReplicas == 0)
                 {
-                    _logger.LogInformation("The UI replica {Name} in {Namespace} is not available yet, retrying...{Retries}/{MaxRetries}", deployment.Metadata.Name, resource.Metadata.NamespaceProperty, retries, WAIT_FOR_REPLICA_RETRIES);
+                    _logger.LogInformation("The UI replica {Name} in {Namespace} is not available yet, retrying...{Retries}/{MaxRetries}", deployment?.Metadata.Name, resource.Metadata.NamespaceProperty, retries, WAIT_FOR_REPLICA_RETRIES);
                     await Task.Delay(WAIT_FOR_REPLICA_DELAY);
                     retries++;
                 }
@@ -184,8 +183,9 @@ namespace HealthChecks.UI.K8s.Operator
 
         private class ResourceWatch
         {
-            public WatchEventType EventType { get; set; }
-            public HealthCheckResource Resource { get; set; }
+            public WatchEventType EventType { get; init; }
+
+            public HealthCheckResource Resource { get; init; } = null!;
         }
     }
 }

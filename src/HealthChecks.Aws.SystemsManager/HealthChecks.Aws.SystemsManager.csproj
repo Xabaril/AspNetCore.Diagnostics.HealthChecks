@@ -5,7 +5,6 @@
     <PackageTags>HealthCheck;AWS;Systems Manager;Parameter Store</PackageTags>
     <Description>HealthChecks.Aws.SystemsManager is the health check package for Systems Manager for Parameter Store.</Description>
     <Version>$(HealthCheckAWSSystemsManager)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

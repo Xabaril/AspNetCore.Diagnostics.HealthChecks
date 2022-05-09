@@ -15,7 +15,7 @@ With all of the following examples, you can additionally add the following param
 
 ### Check existence of a parameter and load credentials from the application's default configuration
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -29,7 +29,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Check existence of a parameter and directly pass credentials
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -44,7 +44,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Check existence of a parameter and specify region endpoint
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -59,7 +59,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Check existence of a parameter and specify credentials with region endpoint
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services

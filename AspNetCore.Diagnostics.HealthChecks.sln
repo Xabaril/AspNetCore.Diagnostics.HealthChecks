@@ -239,6 +239,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_aws_s3_cd.yml = .github\workflows\healthchecks_aws_s3_cd.yml
 		.github\workflows\healthchecks_aws_s3_cd_preview.yml = .github\workflows\healthchecks_aws_s3_cd_preview.yml
 		.github\workflows\healthchecks_aws_s3_ci.yml = .github\workflows\healthchecks_aws_s3_ci.yml
+		.github\workflows\healthchecks_aws_systemsmanager_cd.yml = .github\workflows\healthchecks_aws_systemsmanager_cd.yml
+		.github\workflows\healthchecks_aws_systemsmanager_cd_preview.yml = .github\workflows\healthchecks_aws_systemsmanager_cd_preview.yml
+		.github\workflows\healthchecks_aws_systemsmanager_ci.yml = .github\workflows\healthchecks_aws_systemsmanager_ci.yml
 		.github\workflows\healthchecks_azure_digitaltwin_cd.yml = .github\workflows\healthchecks_azure_digitaltwin_cd.yml
 		.github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml = .github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml
 		.github\workflows\healthchecks_azure_digitaltwin_ci.yml = .github\workflows\healthchecks_azure_digitaltwin_ci.yml
@@ -360,6 +363,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager", "src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj", "{FF492215-60BC-40C6-B118-D22DF9063547}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager.Tests", "test\HealthChecks.Aws.SystemsManager.Tests\HealthChecks.Aws.SystemsManager.Tests.csproj", "{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin.Tests", "test\HealthChecks.AzureDigitalTwin.Tests\HealthChecks.AzureDigitalTwin.Tests.csproj", "{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}"
 EndProject
 Global

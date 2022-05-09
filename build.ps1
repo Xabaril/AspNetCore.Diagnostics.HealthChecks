@@ -117,6 +117,7 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj -c Release -o .\artifacts --include-symbols --no-build }
 }
 
 else {
@@ -169,4 +170,5 @@ else {
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }

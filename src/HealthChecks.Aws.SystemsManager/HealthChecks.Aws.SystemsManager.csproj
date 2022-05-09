@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;AWS;Systems Manager;Parameter Store</PackageTags>
+    <PackageTags>$(PackageTags);AWS;Systems Manager;Parameter Store</PackageTags>
     <Description>HealthChecks.Aws.SystemsManager is the health check package for Systems Manager for Parameter Store.</Description>
     <Version>$(HealthCheckAWSSystemsManager)</Version>
   </PropertyGroup>

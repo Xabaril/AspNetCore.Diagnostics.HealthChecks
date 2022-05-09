@@ -89,6 +89,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
 
             registration.Name.Should().Be("awssystemsmanager");
             check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
+            setupCalled.Should().BeTrue();
         }
 
         [Fact]

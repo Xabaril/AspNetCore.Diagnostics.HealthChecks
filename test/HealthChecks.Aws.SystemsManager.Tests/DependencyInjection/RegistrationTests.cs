@@ -24,7 +24,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
+            var registration = options!.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("aws systems manager");
@@ -45,7 +45,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
+            var registration = options!.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("aws systems manager");
@@ -65,7 +65,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
+            var registration = options!.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("awssystemsmanager");
@@ -84,7 +84,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
+            var registration = options!.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("awssystemsmanager");
@@ -105,7 +105,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
+            var registration = options!.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("aws systems manager");
@@ -126,7 +126,7 @@ namespace HealthChecks.Aws.SystemsManager.Tests.DependencyInjection
             var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
+            var registration = options!.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
             registration.Name.Should().Be("aws systems manager");

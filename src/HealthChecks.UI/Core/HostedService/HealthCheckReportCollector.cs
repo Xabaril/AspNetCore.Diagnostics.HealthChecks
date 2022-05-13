@@ -103,6 +103,14 @@ namespace HealthChecks.UI.Core.HostedService
                     if (userInfoArr.Length == 2 && !string.IsNullOrEmpty(userInfoArr[0]) && !string.IsNullOrEmpty(userInfoArr[1]))
                     {
                         _httpClient.DefaultRequestHeaders.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
+                        //if (_httpClient.DefaultRequestHeaders.Authorization is null)
+                        //{
+                        //    _httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {Convert.ToBase64String(System.Text.ASCIIEncoding.UTF8.GetBytes($"{userInfoArr[0]}:{userInfoArr[1]}"))}");
+                        //}
+                    }
+                    else if (_httpClient.DefaultRequestHeaders.Authorization is not null)
+                    {
+                        _httpClient.DefaultRequestHeaders.Authorization = null;
                     }
                 }
 

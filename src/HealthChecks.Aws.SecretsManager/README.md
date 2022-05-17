@@ -1,6 +1,6 @@
 # AWS Secrets Manager Health Check
 
-This health check verifies the ability to communicate with Amazon Secrets Manager and the existence of some secrets. For more information about AWS Secrets Mananger check the [AWS Secrets Manager Site](https://aws.amazon.com/secrets-manager/)
+This health check verifies the ability to communicate with Amazon Secrets Manager and the existence of some secrets. For more information about AWS Secrets Manager check the [AWS Secrets Manager Site](https://aws.amazon.com/secrets-manager/)
 
 ## Example Usage
 
@@ -15,7 +15,7 @@ With all of the following examples, you can additionally add the following param
 
 ### Check existence of a secret and load credentials from the application's default configuration
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -29,7 +29,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Check existence of a secret and directly pass credentials
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -44,7 +44,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Check existence of a secret and specify region endpoint
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -59,7 +59,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Check existence of a secret and specify credentials with region endpoint
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services

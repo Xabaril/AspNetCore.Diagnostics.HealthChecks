@@ -1,16 +1,13 @@
-﻿using HealthChecks.Network.Core;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using HealthChecks.Network.Core;
 using HealthChecks.Network.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class ImapHealthCheck
-        : IHealthCheck
+    public class ImapHealthCheck : IHealthCheck
     {
         private readonly ImapHealthCheckOptions _options;
+
         public ImapHealthCheck(ImapHealthCheckOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -25,6 +22,7 @@ namespace HealthChecks.Network
                 throw new ArgumentNullException(nameof(_options.Port));
             }
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -35,7 +33,7 @@ namespace HealthChecks.Network
                     {
                         if (_options.AccountOptions.Login)
                         {
-                            return await ExecuteAuthenticatedUserActions(context, imapConnection);
+                            return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection);
                         }
                     }
                     else
@@ -51,7 +49,8 @@ namespace HealthChecks.Network
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-        private async Task<HealthCheckResult> ExecuteAuthenticatedUserActions(HealthCheckContext context, ImapConnection imapConnection)
+
+        private async Task<HealthCheckResult> ExecuteAuthenticatedUserActionsAsync(HealthCheckContext context, ImapConnection imapConnection)
         {
             var (User, Password) = _options.AccountOptions.Account;
 

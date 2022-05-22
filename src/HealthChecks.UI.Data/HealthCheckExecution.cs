@@ -1,6 +1,4 @@
-﻿using HealthChecks.UI.Core;
-using System;
-using System.Collections.Generic;
+using HealthChecks.UI.Core;
 
 namespace HealthChecks.UI.Data
 {
@@ -14,14 +12,14 @@ namespace HealthChecks.UI.Data
 
         public DateTime LastExecuted { get; set; }
 
-        public string Uri { get; set; }
+        public string Uri { get; set; } = null!;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string DiscoveryService { get; set; }
+        public string? DiscoveryService { get; set; }
 
-        public List<HealthCheckExecutionEntry> Entries { get; set; }
+        public List<HealthCheckExecutionEntry> Entries { get; set; } = null!;
 
-        public List<HealthCheckExecutionHistory> History { get; set; }
+        public List<HealthCheckExecutionHistory> History { get; set; } = null!;
     }
 }

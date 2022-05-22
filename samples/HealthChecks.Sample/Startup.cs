@@ -1,15 +1,6 @@
-﻿using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Builder;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using RabbitMQ.Client;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Sample
 {
@@ -41,12 +32,13 @@ namespace HealthChecks.Sample
                 //.AddIdentityServer(new Uri("http://localhost:6060"))
                 //.AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
                 //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
-                .AddApplicationInsightsPublisher(saveDetailedReport:true);
+                .AddApplicationInsightsPublisher(saveDetailedReport: true);
 
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Sample")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app
@@ -64,8 +56,7 @@ namespace HealthChecks.Sample
                 .UseEndpoints(config => config.MapDefaultControllerRoute());
         }
 
-        public class RandomHealthCheck
-            : IHealthCheck
+        public class RandomHealthCheck : IHealthCheck
         {
             public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
             {
@@ -74,7 +65,7 @@ namespace HealthChecks.Sample
                     return Task.FromResult(HealthCheckResult.Healthy());
                 }
 
-                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed",exception:new InvalidCastException("Invalid cast from to to to")));
+                return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed", exception: new InvalidCastException("Invalid cast from to to to")));
             }
 
         }

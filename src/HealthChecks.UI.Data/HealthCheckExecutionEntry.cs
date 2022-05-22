@@ -1,6 +1,4 @@
-﻿using HealthChecks.UI.Core;
-using System;
-using System.Collections.Generic;
+using HealthChecks.UI.Core;
 
 namespace HealthChecks.UI.Data
 {
@@ -8,14 +6,14 @@ namespace HealthChecks.UI.Data
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public UIHealthStatus Status { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public TimeSpan Duration { get; set; }
 
-        public List<string> Tags { get; set; }
+        public List<string>? Tags { get; set; }
     }
 }

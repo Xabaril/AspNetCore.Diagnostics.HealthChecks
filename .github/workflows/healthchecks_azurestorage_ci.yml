@@ -1,0 +1,47 @@
+name: HealthChecks AzureStorage DB CI
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths:
+    - src/HealthChecks.AzureStorage/**
+    - test/HealthChecks.AzureStorage.Tests/**
+    - .github/workflows/healthchecks_azurestorage_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+   tags-ignore:
+    - release-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.AzureStorage/**
+    - test/HealthChecks.AzureStorage.Tests/**
+    - .github/workflows/healthchecks_azurestorage_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.202
+        include-prerelease: false
+    - name: Restore
+      run: |
+        dotnet restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj &&
+        dotnet restore ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+    - name: Build
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj
+        dotnet build --no-restore ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.AzureStorage.Tests/HealthChecks.AzureStorage.Tests.csproj

@@ -15,5 +15,4 @@
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
   </ItemGroup>
 
-
 </Project>

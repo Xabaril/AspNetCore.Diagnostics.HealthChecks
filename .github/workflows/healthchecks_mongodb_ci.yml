@@ -1,0 +1,52 @@
+name: HealthChecks MongoDb CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.MongoDb/**
+      - test/HealthChecks.MongoDb.Tests/**
+      - .github/workflows/healthchecks_mongodb_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.MongoDb/**
+    - test/HealthChecks.MongoDb.Tests/**
+    - .github/workflows/healthchecks_mongodb_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.202
+        include-prerelease: false
+    - name: Restore
+      run: |
+        dotnet restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj &&
+        dotnet restore ./test/HealthChecks.MongoDb.Tests/HealthChecks.MongoDb.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.MongoDb.Tests/HealthChecks.MongoDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+    - name: Build
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.MongoDb.Tests/HealthChecks.MongoDb.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.MongoDb.Tests/HealthChecks.MongoDb.Tests.csproj

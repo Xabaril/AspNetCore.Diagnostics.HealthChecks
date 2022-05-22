@@ -1,22 +1,21 @@
-﻿using HealthChecks.System;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
+using HealthChecks.System;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SystemHealthCheckBuilderExtensions
     {
-        const string DISK_NAME = "diskstorage";
-        const string MEMORY_NAME = "privatememory";
-        const string WORKINGSET_NAME = "workingset";
-        const string VIRTUALMEMORYSIZE_NAME = "virtualmemory";
-        const string PROCESS_NAME = "process";
-        const string PROCESS_ALLOCATED_MEMORY = "process_allocated_memory";
-        const string WINDOWS_SERVICE_NAME = "windowsservice";
+        private const string DISK_NAME = "diskstorage";
+        private const string MEMORY_NAME = "privatememory";
+        private const string WORKINGSET_NAME = "workingset";
+        private const string VIRTUALMEMORYSIZE_NAME = "virtualmemory";
+        private const string PROCESS_NAME = "process";
+        private const string PROCESS_ALLOCATED_MEMORY = "process_allocated_memory";
+        private const string WINDOWS_SERVICE_NAME = "windowsservice";
+        private const string FOLDER_NAME = "folder";
 
         /// <summary>
         /// Add a health check for disk storage.
@@ -29,9 +28,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddDiskStorageHealthCheck(this IHealthChecksBuilder builder, Action<DiskStorageOptions> setup, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddDiskStorageHealthCheck(
+            this IHealthChecksBuilder builder,
+            Action<DiskStorageOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             var options = new DiskStorageOptions();
             setup?.Invoke(options);
@@ -43,6 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for process private memory.
         /// </summary>
@@ -54,9 +60,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddPrivateMemoryHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddPrivateMemoryHealthCheck(
+            this IHealthChecksBuilder builder,
+            long maximumMemoryBytes,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? MEMORY_NAME,
@@ -65,6 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check for process working set.
         /// </summary>
@@ -76,9 +89,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddWorkingSetHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddWorkingSetHealthCheck(
+            this IHealthChecksBuilder builder,
+            long maximumMemoryBytes,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? WORKINGSET_NAME,
@@ -87,6 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
+
         /// <summary>
         /// Add a health check to process virtual memory.
         /// </summary>
@@ -98,9 +118,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddVirtualMemorySizeHealthCheck(this IHealthChecksBuilder builder, long maximumMemoryBytes, string name = default, HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddVirtualMemorySizeHealthCheck(
+            this IHealthChecksBuilder builder,
+            long maximumMemoryBytes,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? VIRTUALMEMORYSIZE_NAME,
@@ -114,7 +140,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a healthcheck that allows to check a predicate against the configured process name.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="processName">The name of the process</param>        
+        /// <param name="processName">The name of the process</param>
         /// <param name="predicate">Process[] predicate to configure checks</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'process' will be used for the name.</param>
         /// <param name="failureStatus">
@@ -122,14 +148,22 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddProcessHealthCheck(
-            this IHealthChecksBuilder builder, string processName, Func<Process[], bool> predicate, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder,
+            string processName,
+            Func<Process[], bool> predicate,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
-            if (string.IsNullOrEmpty(processName)) throw new ArgumentNullException(nameof(processName));
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
+            if (string.IsNullOrEmpty(processName))
+                throw new ArgumentNullException(nameof(processName));
+
+            if (predicate is null)
+                throw new ArgumentNullException(nameof(predicate));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? PROCESS_NAME,
@@ -150,13 +184,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddProcessAllocatedMemoryHealthCheck(
-            this IHealthChecksBuilder builder, int maximumMegabytesAllocated, string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder,
+            int maximumMegabytesAllocated,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
-            if (maximumMegabytesAllocated <= 0) throw new ArgumentException($"{nameof(maximumMegabytesAllocated)} should be greater than zero");
+            if (maximumMegabytesAllocated <= 0)
+                throw new ArgumentException($"{nameof(maximumMegabytesAllocated)} should be greater than zero");
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? PROCESS_ALLOCATED_MEMORY,
@@ -166,36 +205,40 @@ namespace Microsoft.Extensions.DependencyInjection
                 timeout));
         }
 
-
         /// <summary>
         /// Add a healthcheck that allows to check a predicate against the configured windows service.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="serviceName">The name of the service</param>
-        /// <param name="predicate">Process[] predicate to configure checks</param>
-        /// <<param name="machineName">Machine where the service resides in. Optional</param>
+        /// <param name="predicate">Process[] predicate to configure checks.</param>
+        /// <param name="machineName">Machine where the service resides in. Optional</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'windowsservice' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddWindowsServiceHealthCheck(
-            this IHealthChecksBuilder builder, string serviceName, Func<ServiceController, bool> predicate,
-            string machineName = default,
-            string name = default,
-            HealthStatus? failureStatus = default, IEnumerable<string> tags = default, TimeSpan? timeout = default)
+            this IHealthChecksBuilder builder, string serviceName,
+            Func<ServiceController, bool> predicate,
+            string? machineName = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
         {
-
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new PlatformNotSupportedException($"{nameof(WindowsServiceHealthCheck)} can only be registered in Windows Systems");
             }
 
-            if (string.IsNullOrEmpty(serviceName)) throw new ArgumentNullException(nameof(serviceName));
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
+            if (string.IsNullOrEmpty(serviceName))
+                throw new ArgumentNullException(nameof(serviceName));
+
+            if (predicate is null)
+                throw new ArgumentNullException(nameof(predicate));
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? WINDOWS_SERVICE_NAME,
@@ -204,6 +247,37 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
-    }
 
+        /// <summary>
+        /// Add a healthcheck that allows to check for the existence of one or more folders.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">The action method to configure the health check parameters.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'folder' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddFolder(
+            this IHealthChecksBuilder builder,
+            Action<FolderHealthCheckOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
+        {
+            var options = new FolderHealthCheckOptions();
+            setup?.Invoke(options);
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? FOLDER_NAME,
+                sp => new FolderHealthCheck(options),
+                failureStatus,
+                tags,
+                timeout));
+        }
+    }
 }

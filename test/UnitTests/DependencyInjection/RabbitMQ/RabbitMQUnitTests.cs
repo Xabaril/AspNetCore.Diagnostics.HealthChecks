@@ -1,17 +1,16 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using HealthChecks.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using System.Linq;
 using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
 {
     public class rabbitmq_registration_should
     {
-        private string _fakeConnectionString = "amqp://server";
-        private string _defaultCheckName = "rabbitmq";
+        private readonly string _fakeConnectionString = "amqp://server";
+        private readonly string _defaultCheckName = "rabbitmq";
 
         [Fact]
         public void add_health_check_when_properly_configured()
@@ -20,8 +19,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
             services.AddHealthChecks()
                 .AddRabbitMQ(rabbitConnectionString: _fakeConnectionString);
 
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -39,8 +38,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
             services.AddHealthChecks()
                 .AddRabbitMQ(_fakeConnectionString, name: customCheckName);
 
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

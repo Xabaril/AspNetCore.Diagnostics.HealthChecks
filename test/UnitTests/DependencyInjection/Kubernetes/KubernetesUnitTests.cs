@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using HealthChecks.Kubernetes;
 using k8s;
@@ -18,15 +17,15 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             services.AddHealthChecks()
                 .AddKubernetes(setup =>
                 {
-                    setup.WithConfiguration(new KubernetesClientConfiguration()
+                    setup.WithConfiguration(new KubernetesClientConfiguration
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
                     }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer");
                 });
 
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -42,15 +41,15 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             services.AddHealthChecks()
                 .AddKubernetes(setup =>
                 {
-                    setup.WithConfiguration(new KubernetesClientConfiguration()
+                    setup.WithConfiguration(new KubernetesClientConfiguration
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
                     }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer");
                 }, name: "second-k8s-cluster");
 
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

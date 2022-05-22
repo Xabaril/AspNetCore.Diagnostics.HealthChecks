@@ -1,16 +1,7 @@
-﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 
 namespace HealthChecks.UI.Branding
 {
@@ -29,12 +20,12 @@ namespace HealthChecks.UI.Branding
                 .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process", "memory" })
                 .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
                 .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
-                .Services                                
+                .Services
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.SetHeaderText("Branding Demo - Health Checks Status");
                     setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
-                    setup.AddHealthCheckEndpoint("endpoint2", "health-process");                    
+                    setup.AddHealthCheckEndpoint("endpoint2", "health-process");
                     //Webhook endpoint with custom notification hours, and custom failure and description messages
 
                     setup.AddWebhookNotification("webhook1", uri: "https://healthchecks2.requestcatcher.com/",
@@ -63,6 +54,7 @@ namespace HealthChecks.UI.Branding
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Sample")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting()
@@ -80,10 +72,7 @@ namespace HealthChecks.UI.Branding
                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                    });
 
-                   config.MapHealthChecksUI(setup =>
-                   {
-                       setup.AddCustomStylesheet("dotnet.css");
-                   });                  
+                   config.MapHealthChecksUI(setup => setup.AddCustomStylesheet("dotnet.css"));
 
                    config.MapDefaultControllerRoute();
                });

@@ -1,11 +1,6 @@
-﻿using k8s;
+using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
@@ -34,9 +29,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             await HealthChecksPushService.PushNotification(
                 type,
                 resource,
-                uiService,
+                uiService!, // TODO: check
                 service,
-                secret,
+                secret!, // TODO: check
                 _logger,
                 _httpClientFactory);
         }

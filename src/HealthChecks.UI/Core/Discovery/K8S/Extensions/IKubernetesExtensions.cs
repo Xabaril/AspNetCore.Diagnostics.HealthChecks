@@ -1,16 +1,12 @@
-﻿using k8s;
+using k8s;
 using k8s.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 #nullable enable
 namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
 {
     internal static class KubernetesHttpClientExtensions
     {
-        internal static async Task<V1ServiceList> GetServices(this IKubernetes client, string label, List<string> k8sNamespaces, CancellationToken cancellationToken)
+        internal static async Task<V1ServiceList> GetServicesAsync(this IKubernetes client, string label, List<string> k8sNamespaces, CancellationToken cancellationToken)
         {
             if (k8sNamespaces is null || !k8sNamespaces.Any())
             {

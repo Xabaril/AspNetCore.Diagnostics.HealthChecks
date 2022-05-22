@@ -1,0 +1,119 @@
+using System.Net;
+using FluentAssertions;
+using HealthChecks.UI.Client;
+using HealthChecks.UI.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Xunit;
+
+namespace HealthChecks.UI.Tests
+{
+    public class ui_api_request_limiting
+    {
+        [Fact]
+        public async Task should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
+        {
+            int maxActiveRequests = 2;
+
+            var webHostBuilder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddRouting()
+                        .AddHealthChecks()
+                        .AddAsyncCheck("Delayed", async () =>
+                        {
+                            await Task.Delay(200).ConfigureAwait(false);
+                            return HealthCheckResult.Healthy();
+                        })
+                        .Services
+                        .AddHealthChecksUI(setup =>
+                        {
+                            setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
+                            setup.SetApiMaxActiveRequests(maxActiveRequests);
+                        })
+                        .AddInMemoryStorage(databaseName: "LimitingTests");
+                })
+                .Configure(app =>
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(setup =>
+                    {
+                        setup.MapHealthChecks("/health", new HealthCheckOptions
+                        {
+                            Predicate = r => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+
+                        setup.MapHealthChecksUI();
+                    });
+                });
+
+            using var server = new TestServer(webHostBuilder);
+
+            var requests = Enumerable.Range(1, maxActiveRequests)
+                .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
+
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
+
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().Should().Be(requests.Count() - maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().Should().Be(maxActiveRequests);
+        }
+
+        [Fact]
+        public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
+        {
+            var webHostBuilder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddRouting()
+                        .AddHealthChecks()
+                        .AddAsyncCheck("Delayed", async () =>
+                        {
+                            await Task.Delay(200);
+                            return HealthCheckResult.Healthy();
+                        })
+                        .Services
+                        .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health"))
+                        .AddInMemoryStorage(databaseName: "LimitingTests");
+                })
+                .Configure(app =>
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(setup =>
+                    {
+                        setup.MapHealthChecks("/health", new HealthCheckOptions
+                        {
+                            Predicate = r => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+
+                        setup.MapHealthChecksUI();
+                    });
+
+                });
+
+            using var server = new TestServer(webHostBuilder);
+
+            var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
+
+            var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests)
+                .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
+
+            var results = await Task.WhenAll(requests);
+
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests)
+                .Count()
+                .Should().Be(requests.Count() - serverSettings.ApiMaxActiveRequests);
+
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count()
+                .Should().Be(serverSettings.ApiMaxActiveRequests);
+        }
+    }
+}

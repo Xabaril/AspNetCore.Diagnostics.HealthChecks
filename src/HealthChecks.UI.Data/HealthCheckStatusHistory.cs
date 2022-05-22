@@ -1,5 +1,4 @@
-﻿using HealthChecks.UI.Core;
-using System;
+using HealthChecks.UI.Core;
 
 namespace HealthChecks.UI.Data
 {
@@ -7,9 +6,9 @@ namespace HealthChecks.UI.Data
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public UIHealthStatus Status { get; set; }
 

@@ -1,21 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.SendGrid
 {
     public class SendGridHealthCheck : IHealthCheck
     {
-        private const string MailAddressName = "Health Check User";
-        private const string MailAddress = "healthcheck@example.com";
-        private const string Subject = "Checking health is Fun";
+        private const string MAIL_ADDRESS_NAME = "Health Check User";
+        private const string MAIL_ADDRESS = "healthcheck@example.com";
+        private const string SUBJECT = "Checking health is Fun";
 
         private readonly string _apiKey;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -33,9 +28,9 @@ namespace HealthChecks.SendGrid
                 var httpClient = _httpClientFactory.CreateClient(SendGridHealthCheckExtensions.NAME);
 
                 var client = new SendGridClient(httpClient, _apiKey);
-                var from = new EmailAddress(MailAddress, MailAddressName);
-                var to = new EmailAddress(MailAddress, MailAddressName);
-                var msg = MailHelper.CreateSingleEmail(from, to, Subject, Subject, null);
+                var from = new EmailAddress(MAIL_ADDRESS, MAIL_ADDRESS_NAME);
+                var to = new EmailAddress(MAIL_ADDRESS, MAIL_ADDRESS_NAME);
+                var msg = MailHelper.CreateSingleEmail(from, to, SUBJECT, SUBJECT, null);
                 msg.SetSandBoxMode(true);
 
                 var response = await client.SendEmailAsync(msg, cancellationToken);

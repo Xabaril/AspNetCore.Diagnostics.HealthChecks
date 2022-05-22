@@ -1,14 +1,8 @@
-﻿using HealthChecks.UI.K8s.Operator.Diagnostics;
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Operator
 {
@@ -18,7 +12,8 @@ namespace HealthChecks.UI.K8s.Operator.Operator
         private readonly ILogger<K8sOperator> _logger;
         private readonly OperatorDiagnostics _diagnostics;
         private readonly NotificationHandler _notificationHandler;
-        private Watcher<V1Service> _watcher;
+        private Watcher<V1Service>? _watcher;
+
         public ClusterServiceWatcher(
           IKubernetes client,
           ILogger<K8sOperator> logger,
@@ -53,7 +48,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             return Task.CompletedTask;
         }
 
-        internal void Stopwatch(HealthCheckResource resource)
+        internal void Stopwatch(/*HealthCheckResource resource*/)
         {
             Dispose();
         }

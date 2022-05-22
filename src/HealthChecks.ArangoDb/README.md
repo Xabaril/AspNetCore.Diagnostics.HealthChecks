@@ -14,17 +14,17 @@ With all of the following examples, you can additionally add the following param
 
 ### Basic
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
         .AddArangoDb(_ => new ArangoDbOptions
-                      {
-                          HostUri = "http://localhost:8529/",
-                          Database = "_system",
-                          UserName = "root",
-                          Password = "strongArangoDbPassword"
-                      });
+        {
+            HostUri = "http://localhost:8529/",
+            Database = "_system",
+            UserName = "root",
+            Password = "strongArangoDbPassword"
+        });
 }
 ```

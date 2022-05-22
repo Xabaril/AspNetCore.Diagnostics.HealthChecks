@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace HealthChecks.UI.Data
 {
@@ -6,7 +6,7 @@ namespace HealthChecks.UI.Data
     {
         public int Id { get; set; }
 
-        public string HealthCheckName { get; set; }
+        public string HealthCheckName { get; set; } = null!;
 
         public DateTime LastNotified { get; set; }
 

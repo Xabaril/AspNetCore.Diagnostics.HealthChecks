@@ -1,13 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion);netstandard2.1</TargetFrameworks>
+    <PackageTags>$(PackageTags);Oracle</PackageTags>
     <Description>HealthChecks.Oracle is the health check package for Oracle Database.</Description>
-    <PackageTags>HealthCheck;Health;Oracle</PackageTags>
     <Version>$(HealthCheckOracle)</Version>
-    <PackageId>AspNetCore.HealthChecks.Oracle</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="$(OracleManagedDataAccessCore)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.140" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.50" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
   </ItemGroup>
+
 </Project>

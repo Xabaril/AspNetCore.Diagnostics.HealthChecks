@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HealthChecks.UI.Data.Configuration
 {
-    class HealthCheckConfigurationMap
+    internal class HealthCheckConfigurationMap
         : IEntityTypeConfiguration<HealthCheckConfiguration>
     {
         public void Configure(EntityTypeBuilder<HealthCheckConfiguration> builder)

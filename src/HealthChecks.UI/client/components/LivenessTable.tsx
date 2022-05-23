@@ -1,8 +1,7 @@
-﻿import React, { FunctionComponent } from 'react';
-import { Liveness } from '../typings/models';
-import { discoveryServices, getStatusConfig } from '../healthChecksResources';
-import { CheckTable } from './CheckTable';
-
+﻿import React, { FunctionComponent } from "react";
+import { Liveness } from "../typings/models";
+import { discoveryServices, getStatusConfig } from "../healthChecksResources";
+import { CheckTable } from "./CheckTable";
 
 interface LivenessTableProps {
   livenessData: Array<Liveness>;
@@ -10,10 +9,13 @@ interface LivenessTableProps {
   expandAll: (event: any) => void;
 }
 
-const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, expandAll, collapseAll }) => {
-
+const LivenessTable: FunctionComponent<LivenessTableProps> = ({
+  livenessData,
+  expandAll,
+  collapseAll,
+}) => {
   const mapTable = (livenessData: Array<Liveness>): Array<Liveness> => {
-    return livenessData.map(liveness => {
+    return livenessData.map((liveness) => {
       if (liveness.livenessResult) {
         let checks;
         try {
@@ -28,32 +30,39 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
     });
   };
 
-
   const toggleAll = (event: any) => {
     let { currentTarget } = event;
-    let iconToggle = currentTarget.getElementsByClassName('js-toggle-all')[0];
+    let iconToggle = currentTarget.getElementsByClassName("js-toggle-all")[0];
     const innerValue = iconToggle.innerHTML;
 
-    if (innerValue == 'add_circle_outline') {
-      iconToggle.innerHTML = 'remove_circle_outline';
-      currentTarget.setAttribute('title', 'close all');
+    if (innerValue == "add_circle_outline") {
+      iconToggle.innerHTML = "remove_circle_outline";
+      currentTarget.setAttribute("title", "close all");
       return expandAll(event);
     } else {
-      iconToggle.innerHTML = 'add_circle_outline';
-      currentTarget.setAttribute('title', 'expand all');
+      iconToggle.innerHTML = "add_circle_outline";
+      currentTarget.setAttribute("title", "expand all");
       return collapseAll(event);
     }
-  }
+  };
+
+  const localeOptions: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
 
   return (
     <table className="hc-table">
       <thead className="hc-table__head">
         <tr>
           <th>
-            <button title="expand all" onClick={e => toggleAll(e)}>
-              <i className="material-icons js-toggle-all">
-                add_circle_outline
-              </i>
+            <button title="expand all" onClick={(e) => toggleAll(e)}>
+              <i className="material-icons js-toggle-all">add_circle_outline</i>
             </button>
           </th>
           <th>Name</th>
@@ -67,13 +76,12 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
           const statusConfig = getStatusConfig(item.status);
           return (
             <React.Fragment key={index}>
-              <tr
-                className="hc-table__row"
-                onClick={toggleVisibility}>
+              <tr className="hc-table__row" onClick={toggleVisibility}>
                 <td className="align-center">
                   <i
                     className="material-icons js-toggle-event"
-                    title="expand info">
+                    title="expand info"
+                  >
                     add
                   </i>
                 </td>
@@ -85,15 +93,19 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
                   <i
                     className="material-icons"
                     style={{
-                      paddingRight: '0.5rem',
-                      color: `var(${statusConfig!.color})`
-                    }}>
+                      paddingRight: "0.5rem",
+                      color: `var(${statusConfig!.color})`,
+                    }}
+                  >
                     {statusConfig!.image}
                   </i>
                 </td>
                 <td>{item.onStateFrom}</td>
                 <td className="align-center">
-                  {new Date(item.lastExecuted).toLocaleString()}
+                  {new Date(item.lastExecuted).toLocaleString(
+                    "en-US",
+                    localeOptions
+                  )}
                 </td>
               </tr>
               <tr className="hc-checks-table-container is-hidden">
@@ -109,11 +121,10 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
   );
 };
 
-
 const getDiscoveryServiceImage = (discoveryService: string) => {
   if (discoveryService != null) {
     let discoveryServiceImage = discoveryServices.find(
-      ds => ds.name === discoveryService
+      (ds) => ds.name === discoveryService
     )!.image;
     return (
       <img
@@ -125,19 +136,19 @@ const getDiscoveryServiceImage = (discoveryService: string) => {
   }
 
   return null;
-}
+};
 
 const toggleVisibility = (event: any) => {
   let { currentTarget } = event;
   let checksTable = currentTarget.nextSibling;
-  let isHidden = checksTable.classList.contains('is-hidden');
+  let isHidden = checksTable.classList.contains("is-hidden");
   isHidden
-    ? checksTable.classList.remove('is-hidden')
-    : checksTable.classList.add('is-hidden');
+    ? checksTable.classList.remove("is-hidden")
+    : checksTable.classList.add("is-hidden");
 
-  let iconImage = currentTarget.getElementsByClassName('js-toggle-event')[0];
-  iconImage.innerHTML = isHidden ? 'remove' : 'add';
-  iconImage.setAttribute('title', isHidden ? 'hide info' : 'expand info');
+  let iconImage = currentTarget.getElementsByClassName("js-toggle-event")[0];
+  iconImage.innerHTML = isHidden ? "remove" : "add";
+  iconImage.setAttribute("title", isHidden ? "hide info" : "expand info");
 };
 
 export { LivenessTable };

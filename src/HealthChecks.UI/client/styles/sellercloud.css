@@ -1,0 +1,18 @@
+@media only screen and (max-width: 720px) {
+  .hc-table-container {
+    overflow: auto;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .hc-liveness {
+    flex-direction: column;
+    align-items: start;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .hc-section-router {
+    padding: 1rem;
+  }
+}

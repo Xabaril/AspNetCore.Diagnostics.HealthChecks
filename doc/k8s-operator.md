@@ -77,7 +77,7 @@ Note: The UI resources created by the operator (deployment, service, configmap, 
 
 Let's start by creating a demo namespace:
 
-`kubectl create ns lande`
+`kubectl create ns demo`
 
 And then, create a healthchecks-ui.yaml file with the following contents:
 

@@ -33,6 +33,7 @@
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
@@ -40,15 +41,31 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.4" />
     <PackageReference Include="FluentAssertions" Version="6.6.0" />
+    <PackageReference Include="Shouldly" Version="4.0.3" />
     <PackageReference Include="NSubstitute" Version="4.3.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
+    <PackageReference Include="PublicApiGenerator" Version="10.3.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
+
+    <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" />
+
+    <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
+    <Using Include="Microsoft.AspNetCore.Hosting" />
+    <Using Include="Microsoft.AspNetCore.Builder" />
+    <Using Include="Microsoft.AspNetCore.TestHost" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+    <Using Include="Microsoft.Extensions.Options" />
+    <Using Include="FluentAssertions" />
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>

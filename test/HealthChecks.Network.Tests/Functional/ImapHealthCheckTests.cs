@@ -1,13 +1,5 @@
 using System.Net;
-using FluentAssertions;
 using HealthChecks.Network.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
@@ -70,7 +62,6 @@ namespace HealthChecks.Network.Tests.Functional
                         Predicate = r => r.Tags.Contains("imap")
                     });
                 });
-
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")

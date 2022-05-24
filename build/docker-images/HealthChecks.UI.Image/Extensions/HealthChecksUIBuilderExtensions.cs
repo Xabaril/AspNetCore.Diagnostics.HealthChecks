@@ -4,7 +4,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class HealthChecksUIBuilderExtensions
     {
-
         public static IServiceCollection AddStorageProvider(this HealthChecksUIBuilder builder, IConfiguration configuration)
         {
             string configuredStorage = configuration[UIKeys.STORAGE_PROVIDER];

@@ -1,0 +1,18 @@
+namespace HealthChecks.Prometheus.Metrics
+{
+    public abstract class LivenessPrometheusMetrics
+    {
+        protected const string CONTENT_TYPE = "text/plain; version=0.0.4";
+        protected readonly Prometheus.CollectorRegistry Registry;
+        protected void WriteMetricsFromHealthReport(Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
+    }
+    public sealed class PrometheusResponseWriter : HealthChecks.Prometheus.Metrics.LivenessPrometheusMetrics
+    {
+        public PrometheusResponseWriter() { }
+        public static System.Threading.Tasks.Task WritePrometheusResultText(Microsoft.AspNetCore.Http.HttpContext context, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
+    }
+}
+namespace Microsoft.AspNetCore.Builder
+{
+    public static class PrometheusHealthCheckMiddleware { }
+}

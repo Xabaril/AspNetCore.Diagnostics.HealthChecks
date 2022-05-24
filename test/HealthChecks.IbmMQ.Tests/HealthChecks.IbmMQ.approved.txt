@@ -1,0 +1,16 @@
+namespace HealthChecks.IbmMQ
+{
+    public class IbmMQHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public IbmMQHealthCheck(string queueManager, System.Collections.Hashtable connectionProperties) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class IbmMQHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddIbmMQ(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string queueManager, System.Collections.Hashtable connectionProperties, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddIbmMQManagedConnection(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string queueManager, string channel, string connectionInfo, string? userName = null, string? password = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

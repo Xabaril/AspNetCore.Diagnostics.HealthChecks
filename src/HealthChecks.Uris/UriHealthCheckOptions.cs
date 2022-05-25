@@ -149,6 +149,7 @@ namespace HealthChecks.Uris
             ExpectedContent = expectedContent;
             return this;
         }
+
         internal static UriHealthCheckOptions CreateFromUris(IEnumerable<Uri> uris)
         {
             var options = new UriHealthCheckOptions();

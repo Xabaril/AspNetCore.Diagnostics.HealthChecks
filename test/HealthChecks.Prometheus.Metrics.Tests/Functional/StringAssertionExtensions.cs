@@ -1,6 +1,4 @@
-using FluentAssertions;
 using FluentAssertions.Primitives;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Prometheus.Metrics.Tests.Functional
 {

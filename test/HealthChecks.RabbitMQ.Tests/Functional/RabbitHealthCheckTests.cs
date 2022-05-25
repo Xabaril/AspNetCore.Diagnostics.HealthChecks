@@ -1,13 +1,5 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
-using Xunit;
-
 
 namespace HealthChecks.RabbitMQ.Tests.Functional
 {

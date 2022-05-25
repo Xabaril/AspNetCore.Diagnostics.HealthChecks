@@ -1,0 +1,24 @@
+namespace HealthChecks.Aws.S3
+{
+    public class S3BucketOptions
+    {
+        public S3BucketOptions() { }
+        public string? AccessKey { get; set; }
+        public string BucketName { get; set; }
+        public System.Func<Amazon.S3.Model.ListObjectsResponse, bool>? CustomResponseCheck { get; set; }
+        public Amazon.S3.AmazonS3Config S3Config { get; set; }
+        public string? SecretKey { get; set; }
+    }
+    public class S3HealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public S3HealthCheck(HealthChecks.Aws.S3.S3BucketOptions bucketOptions) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class S3HealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddS3(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Aws.S3.S3BucketOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

@@ -9,18 +9,16 @@ public class SecretsManagerOptions
 
     public RegionEndpoint? RegionEndpoint { get; set; }
 
-    internal HashSet<string> _secrets = new HashSet<string>();
-
-    internal IEnumerable<string> Secrets => _secrets;
+    internal HashSet<string> Secrets { get; } = new HashSet<string>();
 
     /// <summary>
     /// Add an AWS Secrets Manager secret to be checked
     /// </summary>
     /// <param name="secretName">The secret to be checked</param>
-    /// <returns><see cref="SecretsManagerOptions"/></returns>
+    /// <returns>Reference to the same <see cref="SecretsManagerOptions"/> to allow further configuration.</returns>
     public SecretsManagerOptions AddSecret(string secretName)
     {
-        _secrets.Add(secretName);
+        Secrets.Add(secretName);
 
         return this;
     }

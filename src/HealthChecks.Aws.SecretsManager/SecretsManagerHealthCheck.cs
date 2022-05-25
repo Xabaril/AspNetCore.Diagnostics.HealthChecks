@@ -33,31 +33,15 @@ public class SecretsManagerHealthCheck : IHealthCheck
 
     private IAmazonSecretsManager CreateSecretsManagerClient()
     {
-        IAmazonSecretsManager client;
-
         var credentialsProvided = _secretsManagerOptions.Credentials is not null;
-
         var regionProvided = _secretsManagerOptions.RegionEndpoint is not null;
-
-        if (!credentialsProvided && !regionProvided)
+        return (credentialsProvided, regionProvided) switch
         {
-            client = new AmazonSecretsManagerClient();
-        }
-        else if (!credentialsProvided && regionProvided)
-        {
-            client = new AmazonSecretsManagerClient(_secretsManagerOptions.RegionEndpoint);
-        }
-        else if (credentialsProvided && regionProvided)
-        {
-            client = new AmazonSecretsManagerClient(_secretsManagerOptions.Credentials,
-                _secretsManagerOptions.RegionEndpoint);
-        }
-        else
-        {
-            client = new AmazonSecretsManagerClient(_secretsManagerOptions.Credentials);
-        }
-
-        return client;
+            (false, false) => new AmazonSecretsManagerClient(),
+            (false, true) => new AmazonSecretsManagerClient(_secretsManagerOptions.RegionEndpoint),
+            (true, false) => new AmazonSecretsManagerClient(_secretsManagerOptions.Credentials),
+            (true, true) => new AmazonSecretsManagerClient(_secretsManagerOptions.Credentials, _secretsManagerOptions.RegionEndpoint)
+        };
     }
 
     private async Task CheckSecretAsync(IAmazonSecretsManager client, string secretName, CancellationToken cancellationToken)

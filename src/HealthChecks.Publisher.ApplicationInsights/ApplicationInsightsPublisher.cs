@@ -50,7 +50,6 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 SaveGeneralizedReport(report, client);
             }
 
-
             return Task.CompletedTask;
         }
 

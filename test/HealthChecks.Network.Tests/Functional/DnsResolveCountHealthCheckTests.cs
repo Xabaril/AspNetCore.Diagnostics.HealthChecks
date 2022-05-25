@@ -1,12 +1,6 @@
 using System.Net;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {

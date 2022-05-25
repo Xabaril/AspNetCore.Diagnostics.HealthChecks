@@ -1,7 +1,7 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Microsoft.Rest;
 
-namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
+namespace HealthChecks.AzureDigitalTwin.Tests
 {
     internal class MockTokenCredentials : TokenCredential
     {

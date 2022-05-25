@@ -1,11 +1,7 @@
-using FluentAssertions;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace UnitTests.UI.DatabaseProviders
 {

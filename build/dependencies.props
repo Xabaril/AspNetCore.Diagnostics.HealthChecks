@@ -39,7 +39,7 @@
     <HealthCheckPublisherSeq>6.0.2</HealthCheckPublisherSeq>
     <HealthCheckRabbitMQ>6.0.2</HealthCheckRabbitMQ>
     <HealthCheckRavenDB>6.0.2</HealthCheckRavenDB>
-    <HealthCheckRedis>6.0.3</HealthCheckRedis>
+    <HealthCheckRedis>6.0.4</HealthCheckRedis>
     <HealthCheckSendGrid>6.0.2</HealthCheckSendGrid>
     <HealthCheckSignalR>6.0.2</HealthCheckSignalR>
     <HealthCheckSolr>6.0.2</HealthCheckSolr>
@@ -47,7 +47,7 @@
     <HealthCheckSqlServer>6.0.2</HealthCheckSqlServer>
     <HealthChecksUIK8sOperator>6.0.4</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>6.0.4</HealthChecksUIPostgreSQLStorage>
-    <HealthCheckSystem>6.0.4</HealthCheckSystem>
+    <HealthCheckSystem>6.0.5</HealthCheckSystem>
     <HealthCheckUI>6.0.4</HealthCheckUI>
     <HealthCheckUIClient>6.0.4</HealthCheckUIClient>
     <HealthCheckUICore>6.0.4</HealthCheckUICore>

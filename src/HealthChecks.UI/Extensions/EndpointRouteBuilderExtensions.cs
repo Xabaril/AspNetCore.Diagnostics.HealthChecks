@@ -31,7 +31,6 @@ namespace Microsoft.AspNetCore.Builder
                     .UseMiddleware<UIWebHooksApiMiddleware>()
                     .Build();
 
-
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 
             var resourcesEndpoints =

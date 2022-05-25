@@ -11,7 +11,7 @@ namespace HealthChecks.UI.Image.Extensions
             Action<AzureAppConfigurationOptions> setupConfig = AzureAppConfiguration.UseConnectionString switch
             {
                 true => options => options.Connect(AzureAppConfiguration.ConnectionString),
-                false => options => options.Connect(new Uri(AzureAppConfiguration.ManagedIdentityEndpoint), new ManagedIdentityCredential())
+                false => options => options.Connect(new Uri(AzureAppConfiguration.ManagedIdentityEndpoint!), new ManagedIdentityCredential())
             };
 
             builder.AddAzureAppConfiguration(options =>

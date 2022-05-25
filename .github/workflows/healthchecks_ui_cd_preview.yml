@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 6.0.202
         include-prerelease: false
     - name: Restore UI
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
@@ -37,21 +37,21 @@ jobs:
     #- name: Restore UI.K8s.Operator
     #  run: dotnet restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     - name: Build UI
-      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG
     - name: Build UI.Client
-      run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj -c $BUILD_CONFIG
     - name: Build UI.Core
-      run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj -c $BUILD_CONFIG
     - name: Build UI.InMemory.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.MySql.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.PostgreSQL.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.SQLite.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.SQLite.Storage/HealthChecks.UI.SQLite.Storage.csproj -c $BUILD_CONFIG
     - name: Build UI.SqlServer.Storage
-      run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj
+      run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG
     #- name: Build UI.K8s.Operator
     #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
     - name: Pack UI

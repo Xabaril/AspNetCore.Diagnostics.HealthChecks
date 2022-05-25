@@ -53,7 +53,6 @@ namespace HealthChecks.UI.Core
                 });
             });
 
-
             foreach (var item in styleSheets)
             {
                 app.Map(item.ResourcePath, appBuilder =>

@@ -20,7 +20,7 @@ namespace HealthChecks.Uris
 
         public (int Min, int Max)? ExpectedHttpCodes { get; private set; }
         
-        public string ExpectedContent { get; private set; }
+        public string? ExpectedContent { get; private set; }
 
         public Uri Uri { get; }
 
@@ -89,7 +89,7 @@ namespace HealthChecks.Uris
         internal HttpMethod HttpMethod { get; private set; }
         internal TimeSpan Timeout { get; private set; }
         internal (int Min, int Max) ExpectedHttpCodes { get; private set; }
-        internal string ExpectedContent { get; private set; }
+        internal string? ExpectedContent { get; private set; }
 
         public UriHealthCheckOptions()
         {

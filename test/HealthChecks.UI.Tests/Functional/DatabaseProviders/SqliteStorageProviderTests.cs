@@ -1,9 +1,5 @@
-using FluentAssertions;
 using HealthChecks.UI.Data;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.UI.Tests
 {

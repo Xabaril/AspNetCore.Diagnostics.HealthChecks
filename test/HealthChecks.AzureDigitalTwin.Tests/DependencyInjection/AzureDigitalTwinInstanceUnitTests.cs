@@ -1,9 +1,4 @@
 using Azure.Identity;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.AzureDigitalTwin.Tests
 {
@@ -68,7 +63,6 @@ namespace HealthChecks.AzureDigitalTwin.Tests
 
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
         }
-
 
         [Fact]
         public void add_health_check_when_properly_configured_by_credentials()

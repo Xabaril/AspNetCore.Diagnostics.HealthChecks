@@ -1,0 +1,22 @@
+namespace HealthChecks.DynamoDb
+{
+    public class DynamoDBOptions
+    {
+        public DynamoDBOptions() { }
+        public string AccessKey { get; set; }
+        public Amazon.RegionEndpoint RegionEndpoint { get; set; }
+        public string SecretKey { get; set; }
+    }
+    public class DynamoDbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public DynamoDbHealthCheck(HealthChecks.DynamoDb.DynamoDBOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class DynamoDbHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDynamoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.DynamoDb.DynamoDBOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

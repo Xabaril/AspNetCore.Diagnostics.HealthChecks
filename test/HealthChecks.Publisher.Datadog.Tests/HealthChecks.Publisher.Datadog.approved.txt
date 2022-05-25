@@ -1,0 +1,7 @@
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class DatadogHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDatadogPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceCheckName, string datadogAgentName = "127.0.0.1", string[]? defaultTags = null) { }
+    }
+}

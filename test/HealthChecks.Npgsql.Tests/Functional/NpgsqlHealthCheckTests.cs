@@ -1,11 +1,4 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.Npgsql.Tests.Functional
 {
@@ -34,7 +27,6 @@ namespace HealthChecks.Npgsql.Tests.Functional
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
                 });
-
 
             using var server = new TestServer(webHostBuilder);
 
@@ -120,7 +112,6 @@ namespace HealthChecks.Npgsql.Tests.Functional
                         Predicate = r => r.Tags.Contains("npgsql")
                     });
                 });
-
 
             using var server = new TestServer(webHostBuilder);
 

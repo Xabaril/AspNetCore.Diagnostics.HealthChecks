@@ -1,6 +1,5 @@
-using HealthChecks.UI.Core.Discovery.K8S.Extensions;
-using HealthChecks.UI.Data;
 using System.Net;
+using HealthChecks.UI.Data;
 using HealthChecks.UI.Core.Discovery.K8S.Extensions;
 using k8s;
 using Microsoft.Extensions.DependencyInjection;

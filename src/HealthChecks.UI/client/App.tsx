@@ -9,7 +9,6 @@ import fetchers from './api/fetchers';
 import { AlertPanel } from './components/AlertPanel';
 import { useQuery } from 'react-query';
 
-
 interface AppProps {
     uiSettings: UISettings;
 }

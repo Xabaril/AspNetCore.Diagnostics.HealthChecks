@@ -1,0 +1,53 @@
+namespace HealthChecks.Uris
+{
+    public interface IUriOptions
+    {
+        HealthChecks.Uris.IUriOptions AddCustomHeader(string name, string value);
+        HealthChecks.Uris.IUriOptions ExpectHttpCode(int codeToExpect);
+        HealthChecks.Uris.IUriOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect);
+        HealthChecks.Uris.IUriOptions UseGet();
+        HealthChecks.Uris.IUriOptions UseHttpMethod(System.Net.Http.HttpMethod methodToUse);
+        HealthChecks.Uris.IUriOptions UsePost();
+        HealthChecks.Uris.IUriOptions UseTimeout(System.TimeSpan timeout);
+    }
+    public class UriHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public UriHealthCheck(HealthChecks.Uris.UriHealthCheckOptions options, System.Func<System.Net.Http.HttpClient> httpClientFactory) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class UriHealthCheckOptions
+    {
+        public UriHealthCheckOptions() { }
+        public HealthChecks.Uris.UriHealthCheckOptions AddUri(System.Uri uriToAdd, System.Action<HealthChecks.Uris.IUriOptions>? setup = null) { }
+        public HealthChecks.Uris.UriHealthCheckOptions ExpectHttpCode(int codeToExpect) { }
+        public HealthChecks.Uris.UriHealthCheckOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect) { }
+        public HealthChecks.Uris.UriHealthCheckOptions UseGet() { }
+        public HealthChecks.Uris.UriHealthCheckOptions UseHttpMethod(System.Net.Http.HttpMethod methodToUse) { }
+        public HealthChecks.Uris.UriHealthCheckOptions UsePost() { }
+        public HealthChecks.Uris.UriHealthCheckOptions UseTimeout(System.TimeSpan timeout) { }
+    }
+    public class UriOptions : HealthChecks.Uris.IUriOptions
+    {
+        public UriOptions(System.Uri uri) { }
+        [System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Min",
+                "Max"})]
+        public System.ValueTuple<int, int>? ExpectedHttpCodes { get; }
+        public System.Net.Http.HttpMethod? HttpMethod { get; }
+        public System.TimeSpan Timeout { get; }
+        public System.Uri Uri { get; }
+        public HealthChecks.Uris.IUriOptions AddCustomHeader(string name, string value) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class UrisHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddUrlGroup(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Uris.UriHealthCheckOptions>? uriOptions, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<System.IServiceProvider, System.Net.Http.HttpClient>? configureClient = null, System.Func<System.IServiceProvider, System.Net.Http.HttpMessageHandler>? configureHttpMessageHandler = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddUrlGroup(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Collections.Generic.IEnumerable<System.Uri> uris, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<System.IServiceProvider, System.Net.Http.HttpClient>? configureClient = null, System.Func<System.IServiceProvider, System.Net.Http.HttpMessageHandler>? configureHttpMessageHandler = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddUrlGroup(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, System.Uri> uriProvider, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<System.IServiceProvider, System.Net.Http.HttpClient>? configureClient = null, System.Func<System.IServiceProvider, System.Net.Http.HttpMessageHandler>? configureHttpMessageHandler = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddUrlGroup(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri uri, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<System.IServiceProvider, System.Net.Http.HttpClient>? configureClient = null, System.Func<System.IServiceProvider, System.Net.Http.HttpMessageHandler>? configureHttpMessageHandler = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddUrlGroup(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Collections.Generic.IEnumerable<System.Uri> uris, System.Net.Http.HttpMethod httpMethod, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<System.IServiceProvider, System.Net.Http.HttpClient>? configureClient = null, System.Func<System.IServiceProvider, System.Net.Http.HttpMessageHandler>? configureHttpMessageHandler = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddUrlGroup(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri uri, System.Net.Http.HttpMethod httpMethod, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<System.IServiceProvider, System.Net.Http.HttpClient>? configureClient = null, System.Func<System.IServiceProvider, System.Net.Http.HttpMessageHandler>? configureHttpMessageHandler = null) { }
+    }
+}

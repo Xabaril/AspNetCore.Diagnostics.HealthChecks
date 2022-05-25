@@ -1,9 +1,4 @@
-using FluentAssertions;
 using HealthChecks.RabbitMQ;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
 {

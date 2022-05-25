@@ -1,5 +1,4 @@
 using HealthChecks.UI.Data;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core
 {

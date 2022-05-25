@@ -1,7 +1,4 @@
-using FluentAssertions;
 using HealthChecks.Elasticsearch;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace UnitTests
 {

@@ -1,9 +1,4 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using Xunit;
 
 namespace HealthChecks.MongoDb.Tests.DependencyInjection
 {

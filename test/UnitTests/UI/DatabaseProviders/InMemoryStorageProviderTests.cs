@@ -1,8 +1,4 @@
-using FluentAssertions;
 using HealthChecks.UI.Data;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace UnitTests.UI.DatabaseProviders
 {

@@ -1,13 +1,6 @@
 using System.Collections;
 using System.Net;
-using FluentAssertions;
 using IBM.WMQ;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.Ibmq.Tests.Functional
 {
@@ -29,7 +22,6 @@ namespace HealthChecks.Ibmq.Tests.Functional
 
         // Define the password.
         private const string password = "12345678";
-
 
         [Fact]
         public async Task be_healthy_if_ibmmq_is_available()

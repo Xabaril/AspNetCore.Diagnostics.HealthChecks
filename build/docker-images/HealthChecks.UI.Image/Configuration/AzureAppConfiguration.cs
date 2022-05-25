@@ -24,15 +24,15 @@ namespace HealthChecks.UI.Image.Configuration
             EnvironmentVariable.HasValue(AzureAppConfigurationKeys.CacheExpiration)
             && double.TryParse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.CacheExpiration), out var _);
 
-        public static double CacheExpiration => double.Parse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.CacheExpiration));
+        public static double CacheExpiration => double.Parse(EnvironmentVariable.GetValue(AzureAppConfigurationKeys.CacheExpiration)!);
 
-        public static string ConnectionString =>
+        public static string? ConnectionString =>
             EnvironmentVariable.GetValue(AzureAppConfigurationKeys.ConnectionString);
 
-        public static string ManagedIdentityEndpoint =>
+        public static string? ManagedIdentityEndpoint =>
             EnvironmentVariable.GetValue(AzureAppConfigurationKeys.ManagedIdentityEndpoint);
 
-        public static string Label =>
+        public static string? Label =>
             EnvironmentVariable.GetValue(AzureAppConfigurationKeys.Label);
     }
 }

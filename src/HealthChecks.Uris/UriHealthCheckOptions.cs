@@ -143,6 +143,7 @@ namespace HealthChecks.Uris
             ExpectedHttpCodes = (minCodeToExpect, maxCodeToExpect);
             return this;
         }
+
         public UriHealthCheckOptions ExpectContent(string expectedContent)
         {
             ExpectedContent = expectedContent;

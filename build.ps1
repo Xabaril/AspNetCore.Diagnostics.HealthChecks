@@ -48,7 +48,6 @@ finally {
     Pop-Location
 }
 
-
 if (-Not (Test-Path 'env:APPVEYOR')) {
     exec { & docker-compose up -d }
 }
@@ -65,7 +64,6 @@ try {
 finally {
     Pop-Location
 }
-
 
 if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o .\artifacts --include-symbols --no-build }

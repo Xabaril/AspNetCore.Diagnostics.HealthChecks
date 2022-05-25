@@ -1,0 +1,31 @@
+namespace HealthChecks.AzureStorage
+{
+    public class AzureBlobStorageHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureBlobStorageHealthCheck(string connectionString, string? containerName = null, Azure.Storage.Blobs.BlobClientOptions? clientOptions = null) { }
+        public AzureBlobStorageHealthCheck(System.Uri blobServiceUri, Azure.Core.TokenCredential credential, string? containerName = null, Azure.Storage.Blobs.BlobClientOptions? clientOptions = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class AzureFileShareHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureFileShareHealthCheck(string connectionString, string? shareName = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class AzureQueueStorageHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureQueueStorageHealthCheck(string connectionString, string? queueName = null) { }
+        public AzureQueueStorageHealthCheck(System.Uri queueServiceUri, Azure.Core.TokenCredential credential, string? queueName = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class AzureStorageHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureBlobStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? containerName = null, Azure.Storage.Blobs.BlobClientOptions? clientOptions = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureBlobStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri blobServiceUri, Azure.Core.TokenCredential credential, string? containerName = null, Azure.Storage.Blobs.BlobClientOptions? clientOptions = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureFileShare(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? shareName = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureQueueStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? queueName = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureQueueStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri queueServiceUri, Azure.Core.TokenCredential credential, string? queueName = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

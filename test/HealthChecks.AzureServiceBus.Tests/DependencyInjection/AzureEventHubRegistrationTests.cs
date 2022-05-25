@@ -1,9 +1,4 @@
 using Azure.Messaging.EventHubs;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.AzureServiceBus.Tests
 {
@@ -45,7 +40,6 @@ namespace HealthChecks.AzureServiceBus.Tests
             registration.Name.Should().Be("azureeventhub");
             check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
         }
-
 
         [Fact]
         public void add_named_health_check_when_properly_configured_using_connectionstring_and_eventhubname()

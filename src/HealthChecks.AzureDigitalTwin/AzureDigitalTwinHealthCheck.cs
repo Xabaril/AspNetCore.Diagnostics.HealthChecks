@@ -52,7 +52,6 @@ namespace HealthChecks.AzureDigitalTwin
             TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
         }
 
-
         protected AzureDigitalTwinsManagementClient CreateManagementClient()
         {
             var credential = ServiceClientCredentials

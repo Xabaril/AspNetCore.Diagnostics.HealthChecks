@@ -1,5 +1,5 @@
-using HealthChecks.UI.Data;
 using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

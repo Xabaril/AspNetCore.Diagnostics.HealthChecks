@@ -1,5 +1,3 @@
-using System;
-
 namespace HealthChecks.UI.Data
 {
     public class HealthCheckFailureNotification

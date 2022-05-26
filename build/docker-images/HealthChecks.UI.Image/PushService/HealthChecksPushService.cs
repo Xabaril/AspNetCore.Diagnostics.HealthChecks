@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Data;
+using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Image.PushService

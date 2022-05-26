@@ -1,4 +1,4 @@
-﻿namespace HealthChecks.UI.Data
+namespace HealthChecks.UI.Data
 {
     public class HealthCheckConfiguration
     {

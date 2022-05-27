@@ -52,7 +52,7 @@ public class SecretsManagerHealthCheck : IHealthCheck
             VersionStage = "AWSCURRENT" // VersionStage defaults to AWSCURRENT if unspecified.
         };
 
-        //Check the existence of the secret. If it does not throw it is a valid one (binary or not)
+        // Check the existence of the secret. If it does not throw it is a valid one (binary or not)
         _ = await client.GetSecretValueAsync(request, cancellationToken);
     }
 }

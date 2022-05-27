@@ -1,11 +1,4 @@
-using FluentAssertions;
-using HealthChecks.AzureDigitalTwin;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
-namespace UnitTests.HealthChecks.DependencyInjection.AzureDigitalTwin
+namespace HealthChecks.AzureDigitalTwin.Tests
 {
     public class azure_digital_twin_registration_should
     {

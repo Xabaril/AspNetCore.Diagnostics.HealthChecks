@@ -1,7 +1,4 @@
 using System.Net.Sockets;
-using FluentAssertions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {

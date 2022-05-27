@@ -1,9 +1,7 @@
-using FluentAssertions;
 using HealthChecks.UI;
 using HealthChecks.UI.Core.Discovery.K8S;
 using k8s.Models;
 using Newtonsoft.Json;
-using Xunit;
 
 namespace UnitTests.UI.Kubernetes
 {

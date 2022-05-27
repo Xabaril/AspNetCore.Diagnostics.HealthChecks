@@ -1,15 +1,7 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
-using Xunit;
-
 
 namespace HealthChecks.RavenDb.Tests.Functional
 {
@@ -27,7 +19,6 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 })
                 {
                     store.Initialize();
-
 
                     store.Maintenance.Server.Send(
                         new CreateDatabaseOperation(new DatabaseRecord("Demo")));

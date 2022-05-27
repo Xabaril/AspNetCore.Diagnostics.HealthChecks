@@ -2,6 +2,7 @@ using Amazon;
 using Amazon.Runtime;
 
 namespace HealthChecks.Aws.SecretsManager.Tests.DependencyInjection;
+
 public class aws_secrets_manager_registration_should
 {
     [Fact]

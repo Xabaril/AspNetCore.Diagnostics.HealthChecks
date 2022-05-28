@@ -96,13 +96,41 @@ namespace HealthChecks.UI.Core.HostedService
             try
             {
                 var absoluteUri = GetEndpointUri(configuration);
+                HttpResponseMessage? response = null;
 
-                using var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
+                if (!string.IsNullOrEmpty(absoluteUri.UserInfo))
+                {
+                    var userInfoArr = absoluteUri.UserInfo.Split(':');
+                    if (userInfoArr.Length == 2 && !string.IsNullOrEmpty(userInfoArr[0]) && !string.IsNullOrEmpty(userInfoArr[1]))
+                    {
+                        //_httpClient.DefaultRequestHeaders.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
 
-                var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
-                if (report == null)
-                    throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
-                return report;
+                        // To support basic auth; we can add an auth header to _httpClient, in the DefaultRequestHeaders (as above commented line).
+                        // This would then be in place for the duration of the _httpClient lifetime, with the auth header present in every
+                        // request. This also means every call to GetHealthReportAsync should check if _httpClient's DefaultRequestHeaders
+                        // has already had auth added.
+                        // Otherwise, if you don't want to effect _httpClient's DefaultRequestHeaders, then you have to explicitly create
+                        // a request message (for each request) and add/set the auth header in each request message. Doing the latter
+                        // means you can't use _httpClient.GetAsync and have to use _httpClient.SendAsync
+
+                        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, absoluteUri);
+                        requestMessage.Headers.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
+                        response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                    }
+                }
+
+                if (response is null)
+                {
+                    response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
+                }
+
+                using (response)
+                {
+                    var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
+                    if (report == null)
+                        throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
+                    return report;
+                }
             }
             catch (Exception exception)
             {

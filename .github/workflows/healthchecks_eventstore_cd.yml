@@ -31,5 +31,5 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
     - name: Pack
       run: dotnet pack --no-build ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj -c $BUILD_CONFIG -o ./artifacts
-    - name: Publish EventStore Health Check nuget
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.EventStore.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

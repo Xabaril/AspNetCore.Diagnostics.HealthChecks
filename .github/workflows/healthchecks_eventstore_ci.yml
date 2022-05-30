@@ -11,6 +11,7 @@ on:
       - Directory.Build.targets
     tags-ignore:
       - release-*
+
   pull_request:
     branches: [ master ]
     paths:

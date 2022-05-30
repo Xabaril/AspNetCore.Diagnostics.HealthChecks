@@ -29,8 +29,6 @@ jobs:
       run: dotnet restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj --verbosity normal
     - name: dotnet pack
       run: dotnet pack ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
     - name: setup nuget

@@ -11,14 +11,6 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX: -rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
-    services:
-      eventstore:
-        image: eventstore/eventstore
-        ports:
-          - "2113:2113"
-          - "1113:1113"
-        env:
-          EVENTSTORE_INSECURE: true
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

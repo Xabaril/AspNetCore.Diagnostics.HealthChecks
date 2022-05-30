@@ -52,4 +52,4 @@ jobs:
         dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
         dotnet build --no-restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj --verbosity normal
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj

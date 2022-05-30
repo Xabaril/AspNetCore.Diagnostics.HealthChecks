@@ -278,7 +278,7 @@ namespace HealthChecks.UI.Tests
         }
 
         [Fact]
-        public void have_enabled_clean_old_configurations_by_default()
+        public void have_disabled_clean_old_configurations_by_default()
         {
             var webhost = new WebHostBuilder()
              .UseStartup<DefaultStartup>()

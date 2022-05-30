@@ -48,6 +48,8 @@ jobs:
         dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
         dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
     - name: Test
       run: dotnet test ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj --verbosity normal

@@ -38,8 +38,10 @@ jobs:
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj
+    - name: Restore
+      run: |
+        dotnet restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
+        dotnet restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
     - name: Check formatting
       working-directory: ./src/HealthChecks.EventStore
       run: |

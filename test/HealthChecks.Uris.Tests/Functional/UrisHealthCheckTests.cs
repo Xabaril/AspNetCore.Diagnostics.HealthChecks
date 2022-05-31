@@ -260,7 +260,8 @@ namespace HealthChecks.Uris.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
+            var response = await server.CreateRequest("/health")
+
                 .GetAsync();
 
             response.StatusCode

@@ -57,7 +57,7 @@ namespace HealthChecks.UI.Core.Notifications
 
                 foreach (var webHook in _settings.Webhooks)
                 {
-                    bool shouldNotify = webHook.ShouldNotifyFunc?.Invoke(report) ?? true;
+                    bool shouldNotify = webHook.ShouldNotifyFunc?.Invoke(name, report) ?? true;
 
                     if (!shouldNotify)
                     {
@@ -67,8 +67,8 @@ namespace HealthChecks.UI.Core.Notifications
 
                     if (!isHealthy)
                     {
-                        failure = webHook.CustomMessageFunc?.Invoke(report) ?? GetFailedMessageFromContent(report);
-                        description = webHook.CustomDescriptionFunc?.Invoke(report) ?? GetFailedDescriptionsFromContent(report);
+                        failure = webHook.CustomMessageFunc?.Invoke(name, report) ?? GetFailedMessageFromContent(report);
+                        description = webHook.CustomDescriptionFunc?.Invoke(name, report) ?? GetFailedDescriptionsFromContent(report);
                     }
 
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;

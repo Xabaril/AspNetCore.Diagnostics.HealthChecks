@@ -1,12 +1,7 @@
 using System.Net;
-using FluentAssertions;
 using HealthChecks.Uris;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using RichardSzalay.MockHttp;
-using Xunit;
 
 namespace UnitTests.Uris
 {

@@ -7,14 +7,13 @@ import { useQuery } from 'react-query';
 import fetchers from '../api/fetchers';
 import { AlertPanel } from '../components/AlertPanel';
 
-
 interface WebHooksPageState {
   webhooks: Array<WebHook>;
 }
 
 const WebhooksPage = () => {
 
-  const { data: webhooks, isError } = useQuery("webhooks", fetchers.getWebhooks, {retry: 1});  
+  const { data: webhooks, isError } = useQuery("webhooks", fetchers.getWebhooks, {retry: 1});
 
   const renderWebhooks = (webhooks: Array<WebHook>) => {
     let webHooksChunk = chunkArray(webhooks, 2);

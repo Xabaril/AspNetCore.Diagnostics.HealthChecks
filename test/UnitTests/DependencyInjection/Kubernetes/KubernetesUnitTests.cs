@@ -1,10 +1,5 @@
-using FluentAssertions;
 using HealthChecks.Kubernetes;
 using k8s;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
 {

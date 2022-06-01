@@ -270,7 +270,7 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_unhealthy_if_request_succeeds_and_expected_response_fails()
         {
-            var uri = new Uri($"https://httpbin.org/robots.txt");
+            var uri = new Uri("https://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
                 .UseStartup<DefaultStartup>()

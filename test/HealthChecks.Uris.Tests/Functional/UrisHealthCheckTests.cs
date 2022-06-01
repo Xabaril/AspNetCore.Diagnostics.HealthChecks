@@ -241,7 +241,6 @@ namespace HealthChecks.Uris.Tests.Functional
             var uri = new Uri("https://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -273,7 +272,6 @@ namespace HealthChecks.Uris.Tests.Functional
             var uri = new Uri("https://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()

@@ -14,7 +14,7 @@ public static class SystemsManagerHealthCheckBuilderExtensions
     /// Add a health check for AWS Systems Manager.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="setup">The action to configure the Systems Manager Configuration e.g. access key, secret key, region etc. </param>
+    /// <param name="setup">The action to configure the Systems Manager Configuration e.g. access key, secret key, region etc.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'aws systems manager' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

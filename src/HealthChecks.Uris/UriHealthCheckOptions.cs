@@ -19,7 +19,7 @@ namespace HealthChecks.Uris
         public TimeSpan Timeout { get; private set; }
 
         public (int Min, int Max)? ExpectedHttpCodes { get; private set; }
-        
+
         public string? ExpectedContent { get; private set; }
 
         public Uri Uri { get; }

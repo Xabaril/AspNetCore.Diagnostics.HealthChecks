@@ -15,7 +15,7 @@ public class SystemsManagerOptions
     /// Add a Parameter to be checked
     /// </summary>
     /// <param name="parameter">The parameter to be checked</param>
-    /// <returns><see cref="SystemsManagerOptions"/></returns>
+    /// <returns>Reference to the same <see cref="SystemsManagerOptions"/> to allow further configuration.</returns>
     public SystemsManagerOptions AddParameter(string parameter)
     {
         Parameters.Add(parameter);

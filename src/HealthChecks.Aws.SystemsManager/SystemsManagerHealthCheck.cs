@@ -47,7 +47,7 @@ public class SystemsManagerHealthCheck : IHealthCheck
     private async Task CheckParameterAsync(IAmazonSimpleSystemsManagement client, string parameterName,
                                                  CancellationToken cancellationToken)
     {
-        var request = new GetParameterRequest()
+        var request = new GetParameterRequest
         {
             Name = parameterName,
             WithDecryption = true

@@ -9,9 +9,7 @@ public class SystemsManagerOptions
 
     public RegionEndpoint? RegionEndpoint { get; set; }
 
-    internal HashSet<string> _parameters = new HashSet<string>();
-
-    internal IEnumerable<string> Parameters => _parameters;
+    internal HashSet<string> Parameters { get; } = new HashSet<string>();
 
     /// <summary>
     /// Add a Parameter to be checked
@@ -20,7 +18,7 @@ public class SystemsManagerOptions
     /// <returns><see cref="SystemsManagerOptions"/></returns>
     public SystemsManagerOptions AddParameter(string parameter)
     {
-        _parameters.Add(parameter);
+        Parameters.Add(parameter);
 
         return this;
     }

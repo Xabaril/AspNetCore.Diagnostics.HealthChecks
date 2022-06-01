@@ -20,7 +20,7 @@ public class SystemsManagerHealthCheck : IHealthCheck
             using var client = CreateParametersManagerClient();
             foreach (var parameter in _systemsManagerOptions.Parameters)
             {
-                _ = await GetParameterAsync(client, parameter, cancellationToken);
+                await CheckParameterAsync(client, parameter, cancellationToken);
             }
 
             return HealthCheckResult.Healthy();
@@ -33,34 +33,18 @@ public class SystemsManagerHealthCheck : IHealthCheck
 
     private IAmazonSimpleSystemsManagement CreateParametersManagerClient()
     {
-        IAmazonSimpleSystemsManagement client;
-
         var credentialsProvided = _systemsManagerOptions.Credentials is not null;
-
         var regionProvided = _systemsManagerOptions.RegionEndpoint is not null;
-
-        if (!credentialsProvided && !regionProvided)
+        return (credentialsProvided, regionProvided) switch
         {
-            client = new AmazonSimpleSystemsManagementClient();
-        }
-        else if (!credentialsProvided && regionProvided)
-        {
-            client = new AmazonSimpleSystemsManagementClient(_systemsManagerOptions.RegionEndpoint);
-        }
-        else if (credentialsProvided && regionProvided)
-        {
-            client = new AmazonSimpleSystemsManagementClient(_systemsManagerOptions.Credentials,
-                _systemsManagerOptions.RegionEndpoint);
-        }
-        else
-        {
-            client = new AmazonSimpleSystemsManagementClient(_systemsManagerOptions.Credentials);
-        }
-
-        return client;
+            (false, false) => new AmazonSimpleSystemsManagementClient(),
+            (false, true) => new AmazonSimpleSystemsManagementClient(_systemsManagerOptions.RegionEndpoint),
+            (true, false) => new AmazonSimpleSystemsManagementClient(_systemsManagerOptions.Credentials),
+            (true, true) => new AmazonSimpleSystemsManagementClient(_systemsManagerOptions.Credentials, _systemsManagerOptions.RegionEndpoint)
+        };
     }
 
-    private async Task<string> GetParameterAsync(IAmazonSimpleSystemsManagement client, string parameterName,
+    private async Task CheckParameterAsync(IAmazonSimpleSystemsManagement client, string parameterName,
                                                  CancellationToken cancellationToken)
     {
         var request = new GetParameterRequest()
@@ -69,8 +53,6 @@ public class SystemsManagerHealthCheck : IHealthCheck
             WithDecryption = true
         };
 
-        var response = await client.GetParameterAsync(request, cancellationToken);
-
-        return response.Parameter.Value;
+        _ = await client.GetParameterAsync(request, cancellationToken);
     }
 }

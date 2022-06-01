@@ -32,12 +32,13 @@ jobs:
         dotnet-version: 6.0.202
         include-prerelease: false
     - name: Restore
-      run: dotnet restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
-           dotnet restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
+      run: |
+        dotnet restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
+        dotnet restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
     - name: Check formatting
       run: |
-       dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-       dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
       run: |
         dotnet build --no-restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&

@@ -1,0 +1,1 @@
+D:\git_personal\AspNetCore.Diagnostics.HealthChecks\.github\workflows\healthchecks_aws_secretsmanager_cd_preview.yml

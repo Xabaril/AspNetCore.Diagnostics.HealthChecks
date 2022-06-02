@@ -13,7 +13,7 @@ namespace HealthChecks.Nats
     /// </remarks>
     public sealed class NatsHealthCheck : IHealthCheck, IDisposable
     {
-        private static readonly ConnectionFactory _connectionFactory = new ConnectionFactory();
+        private static readonly ConnectionFactory _connectionFactory = new();
 
         private readonly NatsOptions _options;
 

@@ -242,6 +242,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_aws_secretsmanager_cd.yml = .github\workflows\healthchecks_aws_secretsmanager_cd.yml
 		.github\workflows\healthchecks_aws_secretsmanager_cd_preview.yml = .github\workflows\healthchecks_aws_secretsmanager_cd_preview.yml
 		.github\workflows\healthchecks_aws_secretsmanager_ci.yml = .github\workflows\healthchecks_aws_secretsmanager_ci.yml
+		.github\workflows\healthchecks_aws_systemsmanager_cd.yml = .github\workflows\healthchecks_aws_systemsmanager_cd.yml
+		.github\workflows\healthchecks_aws_systemsmanager_cd_preview.yml = .github\workflows\healthchecks_aws_systemsmanager_cd_preview.yml
+		.github\workflows\healthchecks_aws_systemsmanager_ci.yml = .github\workflows\healthchecks_aws_systemsmanager_ci.yml
 		.github\workflows\healthchecks_azure_digitaltwin_cd.yml = .github\workflows\healthchecks_azure_digitaltwin_cd.yml
 		.github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml = .github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml
 		.github\workflows\healthchecks_azure_digitaltwin_ci.yml = .github\workflows\healthchecks_azure_digitaltwin_ci.yml
@@ -363,6 +366,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SecretsManager", "src\HealthChecks.Aws.SecretsManager\HealthChecks.Aws.SecretsManager.csproj", "{7873D709-1467-4EDC-B54A-39A40EEFF1BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SecretsManager.Tests", "test\HealthChecks.Aws.SecretsManager.Tests\HealthChecks.Aws.SecretsManager.Tests.csproj", "{E10BC7F5-EE0C-444B-88F0-1FEAF214AD72}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager", "src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj", "{FF492215-60BC-40C6-B118-D22DF9063547}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager.Tests", "test\HealthChecks.Aws.SystemsManager.Tests\HealthChecks.Aws.SystemsManager.Tests.csproj", "{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin.Tests", "test\HealthChecks.AzureDigitalTwin.Tests\HealthChecks.AzureDigitalTwin.Tests.csproj", "{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}"
 EndProject
 Global
@@ -775,6 +783,14 @@ Global
 		{E10BC7F5-EE0C-444B-88F0-1FEAF214AD72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E10BC7F5-EE0C-444B-88F0-1FEAF214AD72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E10BC7F5-EE0C-444B-88F0-1FEAF214AD72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF492215-60BC-40C6-B118-D22DF9063547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF492215-60BC-40C6-B118-D22DF9063547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF492215-60BC-40C6-B118-D22DF9063547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF492215-60BC-40C6-B118-D22DF9063547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -886,6 +902,8 @@ Global
 		{256B649E-9631-44AB-B577-96B3627C889E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{7873D709-1467-4EDC-B54A-39A40EEFF1BF} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{E10BC7F5-EE0C-444B-88F0-1FEAF214AD72} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{FF492215-60BC-40C6-B118-D22DF9063547} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

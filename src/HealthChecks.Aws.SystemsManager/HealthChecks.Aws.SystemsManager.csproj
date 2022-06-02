@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>$(PackageTags);AWS;Systems Manager;Parameter Store</PackageTags>
+    <Description>HealthChecks.Aws.SystemsManager is the health check package for Systems Manager for Parameter Store.</Description>
+    <Version>$(HealthCheckAWSSystemsManager)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.7.15.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+  </ItemGroup>
+
+</Project>

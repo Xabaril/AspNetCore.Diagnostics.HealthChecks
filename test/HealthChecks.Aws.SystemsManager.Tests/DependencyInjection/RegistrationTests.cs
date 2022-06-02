@@ -17,9 +17,9 @@ public class aws_systems_manager_registration_should
             });
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws systems manager");
@@ -38,9 +38,9 @@ public class aws_systems_manager_registration_should
             });
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws systems manager");
@@ -58,9 +58,9 @@ public class aws_systems_manager_registration_should
             }, name: "awssystemsmanager");
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("awssystemsmanager");
@@ -77,9 +77,9 @@ public class aws_systems_manager_registration_should
             .AddSystemsManager(_ => setupCalled = true, name: "awssystemsmanager");
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("awssystemsmanager");
@@ -98,9 +98,9 @@ public class aws_systems_manager_registration_should
             });
 
         var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws systems manager");
@@ -119,9 +119,9 @@ public class aws_systems_manager_registration_should
             });
 
         var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws systems manager");

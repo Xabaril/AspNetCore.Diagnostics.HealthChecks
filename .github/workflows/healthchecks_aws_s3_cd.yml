@@ -1,4 +1,4 @@
-name: HealthChecks Aws S3 CD
+name: HealthChecks Aws.S3 CD
 
 on:
   push:

@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
-    <PackageReference Include="SolrNet.Core" Version="1.1.0" />
+    <PackageReference Include="SolrNet.Core" Version="1.1.1" />
   </ItemGroup>
 
 </Project>

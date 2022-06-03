@@ -160,6 +160,7 @@ Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.MongoDb
 Install-Package AspNetCore.HealthChecks.MySql
+Install-Package AspNetCore.HealthChecks.Nats
 Install-Package AspNetCore.HealthChecks.Network
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.OpenIdConnectServer

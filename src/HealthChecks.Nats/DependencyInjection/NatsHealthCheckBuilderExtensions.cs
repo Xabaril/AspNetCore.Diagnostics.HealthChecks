@@ -39,9 +39,12 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new NatsOptions();
             setup?.Invoke(options);
 
+            builder.Services
+               .AddSingleton(sp => new NatsHealthCheck(options));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new NatsHealthCheck(options),
+                sp => sp.GetRequiredService<NatsHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));

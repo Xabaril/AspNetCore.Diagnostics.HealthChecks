@@ -245,12 +245,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_aws_systemsmanager_cd.yml = .github\workflows\healthchecks_aws_systemsmanager_cd.yml
 		.github\workflows\healthchecks_aws_systemsmanager_cd_preview.yml = .github\workflows\healthchecks_aws_systemsmanager_cd_preview.yml
 		.github\workflows\healthchecks_aws_systemsmanager_ci.yml = .github\workflows\healthchecks_aws_systemsmanager_ci.yml
-		.github\workflows\healthchecks_azure_digitaltwin_cd.yml = .github\workflows\healthchecks_azure_digitaltwin_cd.yml
-		.github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml = .github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml
-		.github\workflows\healthchecks_azure_digitaltwin_ci.yml = .github\workflows\healthchecks_azure_digitaltwin_ci.yml
-		.github\workflows\healthchecks_azure_iothub_cd .yml = .github\workflows\healthchecks_azure_iothub_cd .yml
-		.github\workflows\healthchecks_azure_iothub_cd_preview.yml = .github\workflows\healthchecks_azure_iothub_cd_preview.yml
-		.github\workflows\healthchecks_azure_iothub_ci.yml = .github\workflows\healthchecks_azure_iothub_ci.yml
 		.github\workflows\healthchecks_azurekeyvault_cd.yml = .github\workflows\healthchecks_azurekeyvault_cd.yml
 		.github\workflows\healthchecks_azurekeyvault_cd_preview.yml = .github\workflows\healthchecks_azurekeyvault_cd_preview.yml
 		.github\workflows\healthchecks_azurekeyvault_ci.yml = .github\workflows\healthchecks_azurekeyvault_ci.yml
@@ -260,6 +254,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_azurestorage_cd.yml = .github\workflows\healthchecks_azurestorage_cd.yml
 		.github\workflows\healthchecks_azurestorage_cd_preview.yml = .github\workflows\healthchecks_azurestorage_cd_preview.yml
 		.github\workflows\healthchecks_azurestorage_ci.yml = .github\workflows\healthchecks_azurestorage_ci.yml
+		.github\workflows\healthchecks_azure_digitaltwin_cd.yml = .github\workflows\healthchecks_azure_digitaltwin_cd.yml
+		.github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml = .github\workflows\healthchecks_azure_digitaltwin_cd_preview.yml
+		.github\workflows\healthchecks_azure_digitaltwin_ci.yml = .github\workflows\healthchecks_azure_digitaltwin_ci.yml
+		.github\workflows\healthchecks_azure_iothub_cd .yml = .github\workflows\healthchecks_azure_iothub_cd .yml
+		.github\workflows\healthchecks_azure_iothub_cd_preview.yml = .github\workflows\healthchecks_azure_iothub_cd_preview.yml
+		.github\workflows\healthchecks_azure_iothub_ci.yml = .github\workflows\healthchecks_azure_iothub_ci.yml
 		.github\workflows\healthchecks_consul_cd.yml = .github\workflows\healthchecks_consul_cd.yml
 		.github\workflows\healthchecks_consul_cd_preview.yml = .github\workflows\healthchecks_consul_cd_preview.yml
 		.github\workflows\healthchecks_consul_ci.yml = .github\workflows\healthchecks_consul_ci.yml
@@ -372,6 +372,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsManager.Tests", "test\HealthChecks.Aws.SystemsManager.Tests\HealthChecks.Aws.SystemsManager.Tests.csproj", "{247EF2E5-F4B9-47D4-BB89-27860DF53D5F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin.Tests", "test\HealthChecks.AzureDigitalTwin.Tests\HealthChecks.AzureDigitalTwin.Tests.csproj", "{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sns", "src\HealthChecks.Aws.Sns\HealthChecks.Aws.Sns.csproj", "{38EB0FC4-C1D2-47D9-AE35-607DE14984CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sns.Tests", "test\HealthChecks.Aws.Sns.Tests\HealthChecks.Aws.Sns.Tests.csproj", "{52539C76-F5C6-48D7-A03F-57DD1850BDEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -795,6 +799,14 @@ Global
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38EB0FC4-C1D2-47D9-AE35-607DE14984CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38EB0FC4-C1D2-47D9-AE35-607DE14984CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38EB0FC4-C1D2-47D9-AE35-607DE14984CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38EB0FC4-C1D2-47D9-AE35-607DE14984CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52539C76-F5C6-48D7-A03F-57DD1850BDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52539C76-F5C6-48D7-A03F-57DD1850BDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52539C76-F5C6-48D7-A03F-57DD1850BDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52539C76-F5C6-48D7-A03F-57DD1850BDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -905,6 +917,8 @@ Global
 		{FF492215-60BC-40C6-B118-D22DF9063547} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{38EB0FC4-C1D2-47D9-AE35-607DE14984CB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{52539C76-F5C6-48D7-A03F-57DD1850BDEF} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

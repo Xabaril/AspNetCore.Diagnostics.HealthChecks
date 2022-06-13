@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>HealthCheck;AWS;S3;Simple Storage Service</PackageTags>
+    <Description>HealthChecks.Aws.S3 is the health check package for S3 Buckets and files.</Description>
+    <Version>$(HealthCheckAWSS3)</Version>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.3.50" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+  </ItemGroup>
+
+</Project>

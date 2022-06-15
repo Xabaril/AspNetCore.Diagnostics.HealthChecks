@@ -17,7 +17,11 @@ namespace HealthChecks.Network
             {
                 foreach (var item in _options.ConfigureHosts.Values)
                 {
+#if NET5_0_OR_GREATER
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host, cancellationToken);
+#else
                     var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken);
+#endif
 
                     foreach (var ipAddress in ipAddresses)
                     {

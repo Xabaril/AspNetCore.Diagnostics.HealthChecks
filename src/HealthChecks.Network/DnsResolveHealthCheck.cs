@@ -1,5 +1,7 @@
 using System.Net;
+#if !NET5_0_OR_GREATER
 using HealthChecks.Network.Extensions;
+#endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network

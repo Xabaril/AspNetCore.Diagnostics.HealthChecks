@@ -1,5 +1,4 @@
 using Amazon.SQS;
-using Amazon.SQS.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Aws.Sqs;
@@ -8,9 +7,9 @@ public class SqsHealthCheck : IHealthCheck
 {
     private readonly SqsOptions _sqsOptions;
 
-    public SqsHealthCheck(SqsOptions options)
+    public SqsHealthCheck(SqsOptions sqsOptions)
     {
-        _sqsOptions = _sqsOptions ?? throw new ArgumentNullException(nameof(SqsOptions));
+        _sqsOptions = sqsOptions ?? throw new ArgumentNullException(nameof(SqsOptions));
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -20,10 +19,7 @@ public class SqsHealthCheck : IHealthCheck
             using var client = CreateSqsClient();
             foreach (var queueName in _sqsOptions.Queues)
             {
-                var url = await client.GetQueueUrlAsync(queueName);
-                var request = new GetQueueAttributesRequest { QueueUrl = url.QueueUrl };
-                request.AttributeNames.Add("ApproximateNumberOfMessages");
-                _ = await client.GetQueueAttributesAsync(request, cancellationToken);
+                _ = await client.GetQueueUrlAsync(queueName);
             }
 
             return HealthCheckResult.Healthy();

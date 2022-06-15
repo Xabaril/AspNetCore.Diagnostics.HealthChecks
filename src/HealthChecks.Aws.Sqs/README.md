@@ -6,7 +6,7 @@ This health check verifies the ability to communicate with Amazon SQS and the ex
 
 With all of the following examples, you can additionally add the following parameters:
 
-- `name`: The health check name. Default if not specified is `aws secrets manager`.
+- `name`: The health check name. Default if not specified is `aws sqs`.
 - `failureStatus`: The `HealthStatus` that should be reported when the health check fails. Default is `HealthStatus.Unhealthy`.
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.

@@ -17,9 +17,9 @@ public class aws_sqs_registration_should
             });
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws sqs");
@@ -38,9 +38,9 @@ public class aws_sqs_registration_should
             });
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws sqs");
@@ -55,9 +55,9 @@ public class aws_sqs_registration_should
             .AddSqs(setup => setup.Credentials = new BasicAWSCredentials("access-key", "secret-key"), name: "awssqs");
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("awssqs");
@@ -74,9 +74,9 @@ public class aws_sqs_registration_should
             .AddSqs(_ => setupCalled = true, name: "awssqs");
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("awssqs");
@@ -92,9 +92,9 @@ public class aws_sqs_registration_should
             .AddSqs(setup => setup.RegionEndpoint = RegionEndpoint.EUCentral1);
 
         var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws sqs");
@@ -113,9 +113,9 @@ public class aws_sqs_registration_should
             });
 
         var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        var registration = options!.Value.Registrations.First();
+        var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
         registration.Name.Should().Be("aws sqs");

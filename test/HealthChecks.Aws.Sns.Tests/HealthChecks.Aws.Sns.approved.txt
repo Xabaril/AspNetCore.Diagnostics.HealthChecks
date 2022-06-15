@@ -23,6 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SnsHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSns(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Aws.Sns.SnsOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSnsSubscriptions(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Aws.Sns.SnsOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSnsTopics(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Aws.Sns.SnsOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

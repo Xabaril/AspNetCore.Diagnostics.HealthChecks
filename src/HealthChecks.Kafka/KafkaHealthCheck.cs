@@ -24,14 +24,7 @@ namespace HealthChecks.Kafka
             {
                 if (_producer == null)
                 {
-                    var producerBuilder = new ProducerBuilder<string, string>(_configuration);
-                    if (_logger != null)
-                    {
-                        _logger.LogInformation("Setting up KafkaLogger for the producer");
-                        var kafkaLogger = new KafkaLogger(_logger);
-                        producerBuilder.SetLogHandler(kafkaLogger.Handler);
-                    }
-                    _producer = producerBuilder.Build();
+                    _producer = ProducerBuilderFactory().Build();
                 }
 
                 var message = new Message<string, string>
@@ -57,6 +50,18 @@ namespace HealthChecks.Kafka
                 _logger?.LogError("Exception occurred message: {message}", ex.Message);
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
+        }
+
+        private ProducerBuilder<string, string> ProducerBuilderFactory()
+        {
+            var producerBuilder = new ProducerBuilder<string, string>(_configuration);
+            if (_logger != null)
+            {
+                _logger.LogInformation("Setting up KafkaLogger for the producer");
+                var kafkaLogger = new KafkaLogger(_logger);
+                producerBuilder.SetLogHandler(kafkaLogger.Handler);
+            }
+            return producerBuilder;
         }
     }
 }

@@ -123,9 +123,6 @@ public class aws_sns_registration_should
         check.GetType().Should().Be(typeof(SnsTopicHealthCheck));
     }
 
-
-    //Subscriptions
- 
     [Fact]
     public void add_health_check_with_topics_and_subscriptions_when_properly_configured1()
     {

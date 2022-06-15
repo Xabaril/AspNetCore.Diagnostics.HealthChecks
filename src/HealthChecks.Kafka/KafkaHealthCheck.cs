@@ -8,7 +8,7 @@ namespace HealthChecks.Kafka
     {
         private readonly ProducerConfig _configuration;
         private readonly string _topic;
-        private IProducer<string, string>? _producer;
+        private readonly IProducer<string, string> _producer;
         private readonly ILogger? _logger;
 
         public KafkaHealthCheck(ProducerConfig configuration, string? topic, ILogger? logger = null)
@@ -16,16 +16,13 @@ namespace HealthChecks.Kafka
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _topic = topic ?? "healthchecks-topic";
             _logger = logger;
+            _producer = ProducerBuilderFactory().Build();
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (_producer == null)
-                {
-                    _producer = ProducerBuilderFactory().Build();
-                }
 
                 var message = new Message<string, string>
                 {

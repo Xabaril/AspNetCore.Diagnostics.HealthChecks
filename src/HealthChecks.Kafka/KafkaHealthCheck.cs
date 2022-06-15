@@ -24,7 +24,14 @@ namespace HealthChecks.Kafka
             {
                 if (_producer == null)
                 {
-                    _producer = new ProducerBuilder<string, string>(_configuration).Build();
+                    var producerBuilder = new ProducerBuilder<string, string>(_configuration);
+                    if (_logger != null)
+                    {
+                        _logger.LogInformation("Setting up KafkaLogger for the producer");
+                        var kafkaLogger = new KafkaLogger(_logger);
+                        producerBuilder.SetLogHandler(kafkaLogger.Handler);
+                    }
+                    _producer = producerBuilder.Build();
                 }
 
                 var message = new Message<string, string>

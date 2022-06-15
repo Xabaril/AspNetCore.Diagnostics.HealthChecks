@@ -21,18 +21,11 @@ namespace HealthChecks.Aws.Sns
 
                 foreach (var topicName in _snsOptions.Topics)
                 {
-                    var topic = await client.FindTopicAsync(topicName); // <--- want to pass CancellationToken here
+                    var topic = await client.FindTopicAsync(topicName);
 
                     if (topic == null)
                     {
-                        throw new NotFoundException($"Topic {topicName} does not exist");
-                    }
-
-                    var attrs = await client.GetTopicAttributesAsync(topic.TopicArn, cancellationToken);
-
-                    if (!attrs.Attributes.TryGetValue("DisplayName", out var displayName))
-                    {
-                        displayName = "";
+                        throw new NotFoundException($"Topic {topicName} does not exist.");
                     }
                 }
 

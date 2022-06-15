@@ -14,11 +14,10 @@ public class SnsOptions
 
     internal HashSet<string> Topics { get; } = new HashSet<string>();
 
-
     internal Dictionary<string, string[]> TopicsAndSubscriptions { get; } = new Dictionary<string, string[]>();
 
     /// <summary>
-    /// Add an AWS SQS queue to be checked
+    /// Add an AWS SNS topic to be checked
     /// </summary>
     /// <param name="topicName">The topic to be checked</param>
     /// <returns>Reference to the same <see cref="SnsOptions"/> to allow further configuration.</returns>
@@ -29,12 +28,16 @@ public class SnsOptions
         return this;
     }
 
+    /// <summary>
+    /// Add an AWS SNS topic and its subscriptions to be checked
+    /// </summary>
+    /// <param name="topicName">The topic to be checked</param>
+    /// <param name="subscriptions">the subscription ARNs from the  <paramref name="topicName"/> to be checked</param>
+    /// <returns>Reference to the same <see cref="SnsOptions"/> to allow further configuration.</returns>
     public SnsOptions AddTopicAndSubscriptions(string topicName, string[] subscriptions)
     {
         TopicsAndSubscriptions.Add(topicName, subscriptions);
 
         return this;
     }
-
-    //public Dictionary<string, string[]> TopicsAndSubscriptions { get; set; } = null!;
 }

@@ -21,27 +21,20 @@ namespace HealthChecks.Aws.Sns
 
                 foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
                 {
-                    var topic = await client.FindTopicAsync(topicName); // <--- want to pass CancellationToken here
+                    var topic = await client.FindTopicAsync(topicName);
 
                     if (topic == null)
                     {
-                        throw new NotFoundException($"Topic {topicName} does not exist");
-                    }
-
-                    var attrs = await client.GetTopicAttributesAsync(topic.TopicArn, cancellationToken);
-
-                    if (!attrs.Attributes.TryGetValue("DisplayName", out var displayName))
-                    {
-                        displayName = "";
+                        throw new NotFoundException($"Topic {topicName} does not exist.");
                     }
 
                     var subscriptionsFromAws = await client.ListSubscriptionsByTopicAsync(topicName, cancellationToken);
 
-                    foreach (var subs in subscriptionsFromAws.Subscriptions)
+                    foreach (var subscription in subscriptionsFromAws.Subscriptions)
                     {
-                        if (!subscriptions.Contains(subs.SubscriptionArn))
+                        if (!subscriptions.Contains(subscription.SubscriptionArn))
                         {
-
+                            throw new NotFoundException($"Subscription {subscription.SubscriptionArn} in Topic {topicName} does not exist.");
                         }
                     }
                 }

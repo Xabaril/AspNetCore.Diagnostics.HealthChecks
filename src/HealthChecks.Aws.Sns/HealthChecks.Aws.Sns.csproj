@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>HealthCheck;AWS;SNS;Amazon Simple Notification Service</PackageTags>
+    <Description>HealthChecks.Aws.Sns is the health check package for Amazon Simple Notification Service.</Description>
+    <Version>$(HealthCheckAWSSns)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.3.50" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.3" />
+  </ItemGroup>
+
+</Project>

@@ -28,7 +28,7 @@ namespace HealthChecks.Aws.Sns
                         throw new NotFoundException($"Topic {topicName} does not exist.");
                     }
 
-                    var subscriptionsFromAws = await client.ListSubscriptionsByTopicAsync(topicName, cancellationToken);
+                    var subscriptionsFromAws = await client.ListSubscriptionsByTopicAsync(topic.TopicArn, cancellationToken);
 
                     foreach (var subscription in subscriptionsFromAws.Subscriptions)
                     {

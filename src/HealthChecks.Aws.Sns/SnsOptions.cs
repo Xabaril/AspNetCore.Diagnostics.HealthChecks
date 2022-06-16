@@ -32,7 +32,7 @@ public class SnsOptions
     /// Add an AWS SNS topic and its subscriptions to be checked
     /// </summary>
     /// <param name="topicName">The topic to be checked</param>
-    /// <param name="subscriptions">the subscription ARNs from the  <paramref name="topicName"/> to be checked</param>
+    /// <param name="subscriptions">The subscription ARNs from the  <paramref name="topicName"/> to be checked</param>
     /// <returns>Reference to the same <see cref="SnsOptions"/> to allow further configuration.</returns>
     public SnsOptions AddTopicAndSubscriptions(string topicName, string[] subscriptions)
     {

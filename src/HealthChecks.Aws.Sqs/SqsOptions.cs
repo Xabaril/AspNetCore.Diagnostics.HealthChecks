@@ -17,7 +17,7 @@ public class SqsOptions
     /// <summary>
     /// Add an AWS SQS queue to be checked
     /// </summary>
-    /// <param name="queueName">The queue to be checked</param>
+    /// <param name="queueName">The queue to be checked.</param>
     /// <returns>Reference to the same <see cref="SqsOptions"/> to allow further configuration.</returns>
     public SqsOptions AddQueue(string queueName)
     {

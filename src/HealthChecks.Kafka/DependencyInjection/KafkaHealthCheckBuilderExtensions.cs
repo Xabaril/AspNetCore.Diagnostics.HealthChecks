@@ -25,7 +25,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="logger">An optional <see cref="ILogger"/> used to set the LogHandler for the producer .</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddKafka(
             this IHealthChecksBuilder builder,
@@ -34,12 +33,11 @@ namespace Microsoft.Extensions.DependencyInjection
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            ILogger? logger = default)
+            TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new KafkaHealthCheck(config, topic, logger),
+                KafkaHealthCheckFactory(config, topic),
                 failureStatus,
                 tags,
                 timeout));
@@ -58,7 +56,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="logger">An optional <see cref="ILogger"/> used to set the LogHandler for the producer .</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddKafka(
             this IHealthChecksBuilder builder,
@@ -67,18 +64,27 @@ namespace Microsoft.Extensions.DependencyInjection
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            ILogger? logger = default)
+            TimeSpan? timeout = default)
         {
             var config = new ProducerConfig();
             setup?.Invoke(config);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new KafkaHealthCheck(config, topic, logger),
+                KafkaHealthCheckFactory(config, topic),
                 failureStatus,
                 tags,
                 timeout));
         }
+
+        private static Func<IServiceProvider, IHealthCheck> KafkaHealthCheckFactory(ProducerConfig config, string? topic)
+        {
+            return sp =>
+            {
+                var logger = (ILogger<KafkaHealthCheck>?)sp.GetService(typeof(ILogger<KafkaHealthCheck>));
+                return new KafkaHealthCheck(config, topic, logger);
+            };
+        }
+
     }
 }

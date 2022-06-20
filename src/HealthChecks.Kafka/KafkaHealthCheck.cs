@@ -9,9 +9,9 @@ namespace HealthChecks.Kafka
         private readonly ProducerConfig _configuration;
         private readonly string _topic;
         private readonly IProducer<string, string> _producer;
-        private readonly ILogger? _logger;
+        private readonly ILogger<KafkaHealthCheck>? _logger;
 
-        public KafkaHealthCheck(ProducerConfig configuration, string? topic, ILogger? logger = null)
+        public KafkaHealthCheck(ProducerConfig configuration, string? topic, ILogger<KafkaHealthCheck>? logger = null)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _topic = topic ?? "healthchecks-topic";

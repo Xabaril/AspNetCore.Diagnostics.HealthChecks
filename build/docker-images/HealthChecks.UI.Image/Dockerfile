@@ -13,7 +13,7 @@ RUN curl -SL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-lin
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 FROM sdk-with-node AS updated-npm
-RUN npm i -g npm
+RUN npm i -g npm@5
 
 FROM updated-npm AS build
 WORKDIR /src

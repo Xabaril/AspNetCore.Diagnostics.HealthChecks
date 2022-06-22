@@ -1,0 +1,22 @@
+namespace HealthChecks.Aws.Sqs
+{
+    public class SqsHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public SqsHealthCheck(HealthChecks.Aws.Sqs.SqsOptions sqsOptions) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class SqsOptions
+    {
+        public SqsOptions() { }
+        public Amazon.Runtime.AWSCredentials? Credentials { get; set; }
+        public Amazon.RegionEndpoint? RegionEndpoint { get; set; }
+        public HealthChecks.Aws.Sqs.SqsOptions AddQueue(string queueName) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class SqsHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqs(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Aws.Sqs.SqsOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

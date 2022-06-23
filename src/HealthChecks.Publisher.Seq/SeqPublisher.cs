@@ -55,10 +55,10 @@ namespace HealthChecks.Publisher.Seq
                 }
             };
 
-            await PushMetricsAsync(JsonConvert.SerializeObject(events));
+            await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken);
         }
 
-        private async Task PushMetricsAsync(string json)
+        private async Task PushMetricsAsync(string json, CancellationToken token)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace HealthChecks.Publisher.Seq
                     Content = new StringContent(json, Encoding.UTF8, "application/json")
                 };
 
-                using var response = await httpClient.SendAsync(pushMessage, HttpCompletionOption.ResponseHeadersRead);
+                using var response = await httpClient.SendAsync(pushMessage, HttpCompletionOption.ResponseHeadersRead, token);
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex)

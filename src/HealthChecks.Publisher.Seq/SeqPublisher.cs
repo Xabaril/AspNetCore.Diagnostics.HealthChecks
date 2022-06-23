@@ -11,11 +11,13 @@ namespace HealthChecks.Publisher.Seq
     {
         private readonly SeqOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
+        private readonly Uri _checkUri;
 
         public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _checkUri = BuildCheckUri(options);
         }
 
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -64,7 +66,7 @@ namespace HealthChecks.Publisher.Seq
             {
                 using var httpClient = _httpClientFactory();
 
-                using var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}")
+                using var pushMessage = new HttpRequestMessage(HttpMethod.Post, _checkUri)
                 {
                     Content = new StringContent(json, Encoding.UTF8, "application/json")
                 };
@@ -76,6 +78,17 @@ namespace HealthChecks.Publisher.Seq
             {
                 Trace.WriteLine($"Exception thrown publishing metrics to Seq with message: {ex.Message}");
             }
+        }
+
+        private static Uri BuildCheckUri(SeqOptions options)
+        {
+            var uriBuilder = new UriBuilder(options.Endpoint)
+            {
+                Path = "/api/events/raw",
+                Query = "?apiKey=" + options.ApiKey
+            };
+
+            return uriBuilder.Uri;
         }
 
         private class RawEvents

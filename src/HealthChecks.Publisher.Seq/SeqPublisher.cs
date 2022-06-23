@@ -9,7 +9,6 @@ namespace HealthChecks.Publisher.Seq
 {
     public class SeqPublisher : IHealthCheckPublisher
     {
-
         private readonly SeqOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
 
@@ -33,6 +32,8 @@ namespace HealthChecks.Publisher.Seq
                     break;
             }
 
+            string? assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+
             var events = new RawEvents
             {
                 Events = new RawEvent[]
@@ -40,12 +41,12 @@ namespace HealthChecks.Publisher.Seq
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = $"[{Assembly.GetEntryAssembly()?.GetName().Name} - HealthCheck Result]",
+                        MessageTemplate = $"[{assemblyName} - HealthCheck Result]",
                         Level = level.ToString(),
                         Properties = new Dictionary<string, object?>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },
-                            { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
+                            { nameof(Assembly), assemblyName },
                             { "Status", report.Status.ToString() },
                             { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
                             { "RawReport" , JsonConvert.SerializeObject(report)}
@@ -73,7 +74,7 @@ namespace HealthChecks.Publisher.Seq
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"Exception is throwed publishing metrics to Seq with message: {ex.Message}");
+                Trace.WriteLine($"Exception thrown publishing metrics to Seq with message: {ex.Message}");
             }
         }
 

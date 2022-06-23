@@ -62,7 +62,7 @@ namespace HealthChecks.Publisher.Seq
         {
             try
             {
-                var httpClient = _httpClientFactory();
+                using var httpClient = _httpClientFactory();
 
                 using var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}")
                 {

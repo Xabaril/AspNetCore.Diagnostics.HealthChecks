@@ -235,13 +235,13 @@ namespace HealthChecks.Uris.Tests.Functional
             response.StatusCode
                     .Should().Be(HttpStatusCode.OK);
         }
+
         [Fact]
         public async Task be_healthy_if_request_succeeds_and_expected_response_matches()
         {
-            var uri = new Uri($"https://httpbin.org/robots.txt");
+            var uri = new Uri("https://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -253,7 +253,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("uris")
                     });
@@ -261,19 +261,18 @@ namespace HealthChecks.Uris.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync();
 
             response.StatusCode
                 .Should().Be(HttpStatusCode.OK);
         }
+
         [Fact]
         public async Task be_unhealthy_if_request_succeeds_and_expected_response_fails()
         {
-            var uri = new Uri($"https://httpbin.org/robots.txt");
+            var uri = new Uri("https://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
@@ -287,7 +286,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("uris")
                     });
@@ -295,9 +294,10 @@ namespace HealthChecks.Uris.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync();
+
+            response.StatusCode
+                .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

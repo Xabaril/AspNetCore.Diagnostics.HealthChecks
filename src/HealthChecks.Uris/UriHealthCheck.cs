@@ -57,13 +57,11 @@ namespace HealthChecks.Uris
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
                         }
 
-                        if (!string.IsNullOrWhiteSpace(item.ExpectedContent))
+                        if (item.ExpectedContent != null)
                         {
-                            var responseBody = await response.Content.ReadAsStringAsync();
+                            var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                             if (responseBody != item.ExpectedContent)
-                            {
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the responsebody!");
-                            }
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the response body.");
                         }
 
                         ++idx;

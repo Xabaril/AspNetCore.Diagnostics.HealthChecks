@@ -19,7 +19,7 @@ namespace HealthChecks.Uris
         public TimeSpan Timeout { get; private set; }
 
         public (int Min, int Max)? ExpectedHttpCodes { get; private set; }
-        
+
         public string? ExpectedContent { get; private set; }
 
         public Uri Uri { get; }
@@ -143,11 +143,13 @@ namespace HealthChecks.Uris
             ExpectedHttpCodes = (minCodeToExpect, maxCodeToExpect);
             return this;
         }
+
         public UriHealthCheckOptions ExpectContent(string expectedContent)
         {
             ExpectedContent = expectedContent;
             return this;
         }
+
         internal static UriHealthCheckOptions CreateFromUris(IEnumerable<Uri> uris)
         {
             var options = new UriHealthCheckOptions();

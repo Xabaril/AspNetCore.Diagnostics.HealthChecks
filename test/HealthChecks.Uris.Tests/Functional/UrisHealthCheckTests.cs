@@ -1,4 +1,5 @@
 using System.Net;
+using HealthChecks.UI.Tests;
 
 namespace HealthChecks.Uris.Tests.Functional
 {
@@ -278,8 +279,10 @@ namespace HealthChecks.Uris.Tests.Functional
                     services.AddHealthChecks()
                         .AddUrlGroup(opt =>
                         {
-                            opt.AddUri(uri);
-                            opt.ExpectContent("non-existent");
+                            opt.AddUri(uri, options =>
+                            {
+                                options.ExpectContent("non-existent");
+                            });
                         }, tags: new string[] { "uris" });
                 })
                 .Configure(app =>
@@ -294,9 +297,7 @@ namespace HealthChecks.Uris.Tests.Functional
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
-
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

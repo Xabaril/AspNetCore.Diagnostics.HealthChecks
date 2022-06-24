@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
+    <ProjectReference Include="..\HealthChecks.UI.Tests\HealthChecks.UI.Tests.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ namespace HealthChecks.Uris
     public interface IUriOptions
     {
         HealthChecks.Uris.IUriOptions AddCustomHeader(string name, string value);
+        HealthChecks.Uris.IUriOptions ExpectContent(string expectedContent);
         HealthChecks.Uris.IUriOptions ExpectHttpCode(int codeToExpect);
         HealthChecks.Uris.IUriOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect);
         HealthChecks.Uris.IUriOptions UseGet();
@@ -19,6 +20,7 @@ namespace HealthChecks.Uris
     {
         public UriHealthCheckOptions() { }
         public HealthChecks.Uris.UriHealthCheckOptions AddUri(System.Uri uriToAdd, System.Action<HealthChecks.Uris.IUriOptions>? setup = null) { }
+        public HealthChecks.Uris.UriHealthCheckOptions ExpectContent(string expectedContent) { }
         public HealthChecks.Uris.UriHealthCheckOptions ExpectHttpCode(int codeToExpect) { }
         public HealthChecks.Uris.UriHealthCheckOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect) { }
         public HealthChecks.Uris.UriHealthCheckOptions UseGet() { }
@@ -29,6 +31,7 @@ namespace HealthChecks.Uris
     public class UriOptions : HealthChecks.Uris.IUriOptions
     {
         public UriOptions(System.Uri uri) { }
+        public string? ExpectedContent { get; }
         [System.Runtime.CompilerServices.TupleElementNames(new string[] {
                 "Min",
                 "Max"})]

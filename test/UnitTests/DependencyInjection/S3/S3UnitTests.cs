@@ -1,4 +1,4 @@
-﻿using Amazon.S3;
+using Amazon.S3;
 using FluentAssertions;
 using HealthChecks.Aws.S3;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +18,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.S3
             services.AddHealthChecks()
                 .AddS3(_ => { _.S3Config = new AmazonS3Config(); });
 
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -27,6 +27,7 @@ namespace UnitTests.HealthChecks.DependencyInjection.S3
             registration.Name.Should().Be("aws s3");
             check.GetType().Should().Be(typeof(S3HealthCheck));
         }
+
         [Fact]
         public void add_named_health_check_when_properly_configured()
         {
@@ -34,8 +35,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.S3
             services.AddHealthChecks()
                 .AddS3(_ => { _.S3Config = new AmazonS3Config(); }, name: "my-s3-group");
 
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

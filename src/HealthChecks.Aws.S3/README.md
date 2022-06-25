@@ -27,7 +27,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Directly pass credentials
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
@@ -42,7 +42,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Specify region endpoint
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services

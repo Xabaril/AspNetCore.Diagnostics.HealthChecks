@@ -86,6 +86,9 @@ namespace HealthChecks.Publisher.Seq
 
         private static Uri BuildCheckUri(SeqOptions options)
         {
+            if (string.IsNullOrEmpty(options.Endpoint))
+                throw new ArgumentNullException(nameof(options.Endpoint));
+
             var uriBuilder = new UriBuilder(options.Endpoint)
             {
                 Path = "/api/events/raw",

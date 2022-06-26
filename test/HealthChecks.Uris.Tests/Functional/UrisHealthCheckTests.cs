@@ -1,5 +1,4 @@
 using System.Net;
-using HealthChecks.UI.Tests;
 
 namespace HealthChecks.Uris.Tests.Functional
 {

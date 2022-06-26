@@ -60,7 +60,7 @@ namespace HealthChecks.Publisher.Seq
             await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken);
         }
 
-        private async Task PushMetricsAsync(string json, CancellationToken token)
+        private async Task PushMetricsAsync(string json, CancellationToken cancellationToken)
         {
             try
             {
@@ -71,7 +71,11 @@ namespace HealthChecks.Publisher.Seq
                     Content = new StringContent(json, Encoding.UTF8, "application/json")
                 };
 
-                using var response = await httpClient.SendAsync(pushMessage, HttpCompletionOption.ResponseHeadersRead, token);
+                using var response = await httpClient.SendAsync(
+                    pushMessage,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken);
+
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex)

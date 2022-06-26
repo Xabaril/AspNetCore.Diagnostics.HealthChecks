@@ -25,8 +25,8 @@ public class seq_publisher_should
         var publisher = new SeqPublisher(HttpClientFactory, options);
         await publisher.PublishAsync(testReport, CancellationToken.None);
 
-        Assert.NotNull(handler.Request);
-        Assert.Equal(expectedUri, handler.Request!.RequestUri);
+        handler.Request.ShouldNotBeNull();
+        handler.Request.RequestUri.ShouldBeEquivalentTo(expectedUri);
     }
 
     private class MockClientHandler : HttpClientHandler

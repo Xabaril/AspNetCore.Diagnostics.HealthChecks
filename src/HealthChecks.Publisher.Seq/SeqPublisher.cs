@@ -92,8 +92,11 @@ namespace HealthChecks.Publisher.Seq
             var uriBuilder = new UriBuilder(options.Endpoint)
             {
                 Path = "/api/events/raw",
-                Query = "?apiKey=" + options.ApiKey
             };
+
+            // Add api key if supplied
+            if (!string.IsNullOrWhiteSpace(options.ApiKey))
+                uriBuilder.Query = "?apiKey=" + options.ApiKey;
 
             return uriBuilder.Uri;
         }

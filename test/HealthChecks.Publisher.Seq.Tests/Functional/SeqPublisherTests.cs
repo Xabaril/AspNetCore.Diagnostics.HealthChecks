@@ -26,7 +26,22 @@ public class seq_publisher_should
         await publisher.PublishAsync(testReport, CancellationToken.None);
 
         handler.Request.ShouldNotBeNull();
-        handler.Request.RequestUri.ShouldBeEquivalentTo(expectedUri);
+        handler.Request.RequestUri.ShouldBe(expectedUri);
+    }
+
+    [Fact]
+    public void throw_exception_when_endpoint_is_null()
+    {
+        var options = new SeqOptions
+        {
+            ApiKey = "test-key",
+            Endpoint = null!
+        };
+
+        HttpClient HttpClientFactory() => new();
+
+        var ex = Should.Throw<ArgumentNullException>(() => new SeqPublisher(HttpClientFactory, options));
+        ex.ParamName.ShouldBe(nameof(SeqOptions.Endpoint));
     }
 
     private class MockClientHandler : HttpClientHandler

@@ -95,7 +95,7 @@ namespace HealthChecks.Publisher.Seq
             };
 
             // Add api key if supplied
-            if (!string.IsNullOrWhiteSpace(options.ApiKey))
+            if (!string.IsNullOrEmpty(options.ApiKey))
                 uriBuilder.Query = "?apiKey=" + options.ApiKey;
 
             return uriBuilder.Uri;

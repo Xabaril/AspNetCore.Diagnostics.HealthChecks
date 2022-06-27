@@ -9,12 +9,11 @@ namespace HealthChecks.Publisher.Datadog.Tests.DependencyInjection
             services
                 .AddHealthChecks()
                 .AddSeqPublisher(setup =>
-                    new SeqOptions()
-                    {
-                        ApiKey = "apiKey",
-                        DefaultInputLevel = Seq.SeqInputLevel.Information,
-                        Endpoint = "endpoint"
-                    });
+                {
+                    setup.Endpoint = "endpoint";
+                    setup.DefaultInputLevel = Seq.SeqInputLevel.Information;
+                    setup.ApiKey = "apiKey";
+                });
 
             using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();

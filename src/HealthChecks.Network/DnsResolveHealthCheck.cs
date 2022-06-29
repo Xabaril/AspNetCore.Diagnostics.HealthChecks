@@ -1,15 +1,12 @@
-﻿using HealthChecks.Network.Extensions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Linq;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+#if !NET5_0_OR_GREATER
+using HealthChecks.Network.Extensions;
+#endif
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
 {
-    public class DnsResolveHealthCheck
-        : IHealthCheck
+    public class DnsResolveHealthCheck : IHealthCheck
     {
         private readonly DnsResolveOptions _options;
         public DnsResolveHealthCheck(DnsResolveOptions options)
@@ -22,11 +19,15 @@ namespace HealthChecks.Network
             {
                 foreach (var item in _options.ConfigureHosts.Values)
                 {
+#if NET5_0_OR_GREATER
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host, cancellationToken);
+#else
                     var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken);
+#endif
 
                     foreach (var ipAddress in ipAddresses)
                     {
-                        if (!item.Resolutions.Contains(ipAddress.ToString()))
+                        if (item.Resolutions == null || !item.Resolutions.Contains(ipAddress.ToString()))
                         {
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ip Address {ipAddress} was not resolved from host {item.Host}");
                         }

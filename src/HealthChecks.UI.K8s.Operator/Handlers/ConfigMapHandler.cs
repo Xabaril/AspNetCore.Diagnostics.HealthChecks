@@ -1,17 +1,13 @@
-﻿using HealthChecks.UI.K8s.Operator.Extensions;
+using System.Text;
+using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
     public class ConfigMaphandler
     {
-        private const char SPLIT_CHAR = '/';
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
 
@@ -21,15 +17,16 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<V1ConfigMap> Get(HealthCheckResource resource)
+        public Task<V1ConfigMap?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedConfigMapAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
-        public async Task<V1ConfigMap> GetOrCreateAsync(HealthCheckResource resource)
+        public async Task<V1ConfigMap?> GetOrCreateAsync(HealthCheckResource resource)
         {
             var configMap = await Get(resource);
-            if (configMap != null) return configMap;
+            if (configMap != null)
+                return configMap;
 
             try
             {
@@ -45,7 +42,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             return configMap;
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
@@ -56,13 +53,14 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 _logger.LogError("Error deleting config map for hc resource {name} : {message}", resource.Spec.Name, ex.Message);
             }
         }
+
         public V1ConfigMap Build(HealthCheckResource resource)
         {
             return new V1ConfigMap
             {
                 BinaryData = new Dictionary<string, byte[]>
                 {
-                    [Constants.StyleSheetName] = Encoding.UTF8.GetBytes(resource.Spec.StylesheetContent)
+                    [Constants.STYLE_SHEET_NAME] = Encoding.UTF8.GetBytes(resource.Spec.StylesheetContent)
                 },
                 Metadata = new V1ObjectMeta
                 {

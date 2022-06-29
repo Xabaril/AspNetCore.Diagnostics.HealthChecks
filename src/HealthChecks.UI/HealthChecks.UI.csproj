@@ -1,11 +1,11 @@
-﻿<Project Sdk=" Microsoft.NET.Sdk">
+<Project Sdk=" Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <PackageTags>$(PackageTags);UI</PackageTags>
     <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
-    <PackageTags>HealthCheck;UI</PackageTags>
     <Version>$(HealthCheckUI)</Version>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
-    <PackageId>AspNetCore.HealthChecks.UI</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,13 +17,13 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsHttp)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCore)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCoreDesign)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCoreSqlite)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="$(MicrosoftEntityFrameworkCoreSqliteDesign)" />
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
-    <PackageReference Include="KubernetesClient" Version="$(KubernetesClient)" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="2.0.0-preview1-final" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="KubernetesClient" Version="4.0.26" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,4 +44,5 @@
     <Message Importance="high" Text="*** Uglifying css files *** " />
     <Exec Command="npm run buildcss:prod" ContinueOnError="false" />
   </Target>
+
 </Project>

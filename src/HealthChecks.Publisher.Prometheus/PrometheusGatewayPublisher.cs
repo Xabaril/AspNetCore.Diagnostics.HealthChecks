@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 
 namespace HealthChecks.Publisher.Prometheus
@@ -15,11 +10,12 @@ namespace HealthChecks.Publisher.Prometheus
         private readonly Func<HttpClient> _httpClientFactory;
         private readonly Uri _targetUrl;
 
-        public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string instance = null)
+        public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string? instance = null)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
 
-            if (endpoint == null) throw new ArgumentNullException(nameof(endpoint));
+            if (endpoint == null)
+                throw new ArgumentNullException(nameof(endpoint));
 
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
 
@@ -28,19 +24,19 @@ namespace HealthChecks.Publisher.Prometheus
                 sb.AppendFormat("/instance/{0}", instance);
             }
 
-            if (!Uri.TryCreate(sb.ToString(), UriKind.Absolute, out _targetUrl))
-            {
-                throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
-            }
+            _targetUrl = Uri.TryCreate(sb.ToString(), UriKind.Absolute, out var temp)
+                ? temp
+                : throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
         }
 
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
         {
             WriteMetricsFromHealthReport(report);
 
-            await PushMetrics();
+            await PushMetricsAsync();
         }
-        private async Task PushMetrics()
+
+        private async Task PushMetricsAsync()
         {
             try
             {
@@ -49,8 +45,13 @@ namespace HealthChecks.Publisher.Prometheus
                     await Registry.CollectAndExportAsTextAsync(outStream);
                     outStream.Position = 0;
 
-                    var response = await _httpClientFactory()
-                        .PostAsync(_targetUrl, new StreamContent(outStream));
+                    using var request = new HttpRequestMessage(HttpMethod.Post, _targetUrl)
+                    {
+                        Content = new StreamContent(outStream)
+                    };
+
+                    using var response = await _httpClientFactory()
+                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                     response.EnsureSuccessStatusCode();
                 }
@@ -59,7 +60,7 @@ namespace HealthChecks.Publisher.Prometheus
             {
                 Trace.WriteLine($"Skipping metrics push due to failed scrape: {ex.Message}");
             }
-            catch (Exception ex) when (!(ex is OperationCanceledException))
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 Trace.WriteLine($"Error in PushMetrics: {ex.Message}");
             }

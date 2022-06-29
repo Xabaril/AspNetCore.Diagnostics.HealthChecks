@@ -1,5 +1,4 @@
-﻿using k8s.Models;
-using System;
+using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Extensions
 {

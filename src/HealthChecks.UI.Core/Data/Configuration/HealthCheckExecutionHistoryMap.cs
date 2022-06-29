@@ -1,10 +1,9 @@
-﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HealthChecks.UI.Core.Data.Configuration
 {
-    class HealthCheckExecutionHistoryMap
+    internal class HealthCheckExecutionHistoryMap
         : IEntityTypeConfiguration<HealthCheckExecutionHistory>
     {
         public void Configure(EntityTypeBuilder<HealthCheckExecutionHistory> builder)

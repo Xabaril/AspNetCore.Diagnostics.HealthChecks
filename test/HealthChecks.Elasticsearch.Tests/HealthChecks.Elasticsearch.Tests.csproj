@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
+  </ItemGroup>
+
+</Project>

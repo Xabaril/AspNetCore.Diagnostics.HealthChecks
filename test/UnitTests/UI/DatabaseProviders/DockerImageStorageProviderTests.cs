@@ -1,12 +1,7 @@
-﻿using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using Xunit;
 
 namespace UnitTests.UI.DatabaseProviders
 {
@@ -54,7 +49,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Equals(SqlProviderName);
+            context.Database.ProviderName.Should().Be(SqlProviderName);
         }
 
         [Fact]
@@ -94,7 +89,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Equals(SqliteProviderName);
+            context.Database.ProviderName.Should().Be(SqliteProviderName);
         }
 
         [Fact]
@@ -134,7 +129,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Equals(PostgreProviderName);
+            context.Database.ProviderName.Should().Be(PostgreProviderName);
         }
 
         [Fact]
@@ -173,24 +168,20 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Equals(InMemoryProviderName);
+            context.Database.ProviderName.Should().Be(InMemoryProviderName);
         }
 
         [Fact]
         public void register_inmemory_as_default_provider_when_no_option_is_configured()
         {
             var hostBuilder = new WebHostBuilder()
-                .ConfigureAppConfiguration(config =>
-                {
-                    config.Sources.Clear();
-
-                })
+                .ConfigureAppConfiguration(config => config.Sources.Clear())
                 .UseStartup<Startup>();
 
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Equals(InMemoryProviderName);
+            context.Database.ProviderName.Should().Be(InMemoryProviderName);
         }
 
         [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
@@ -214,7 +205,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Equals(MySqlProviderName);
+            context.Database.ProviderName.Should().Be(MySqlProviderName);
         }
 
         [Fact]

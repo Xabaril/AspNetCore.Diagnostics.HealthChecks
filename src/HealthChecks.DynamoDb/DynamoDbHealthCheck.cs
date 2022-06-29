@@ -1,31 +1,45 @@
-﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2;
 using Amazon.Runtime;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.DynamoDb
 {
-    public class DynamoDbHealthCheck
-        : IHealthCheck
+    public class DynamoDbHealthCheck : IHealthCheck
     {
         private readonly DynamoDBOptions _options;
+
         public DynamoDbHealthCheck(DynamoDBOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            if (string.IsNullOrEmpty(options.AccessKey)) throw new ArgumentNullException(nameof(DynamoDBOptions.AccessKey));
-            if (string.IsNullOrEmpty(options.SecretKey)) throw new ArgumentNullException(nameof(DynamoDBOptions.SecretKey));
-            if (options.RegionEndpoint == null) throw new ArgumentNullException(nameof(DynamoDBOptions.RegionEndpoint));
+
+            if (options.RegionEndpoint == null)
+                throw new ArgumentNullException(nameof(DynamoDBOptions.RegionEndpoint));
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
-                var client = new AmazonDynamoDBClient(credentials, _options.RegionEndpoint);
+                AWSCredentials? credentials = _options.Credentials;
 
-                await client.ListTablesAsync(cancellationToken);
+                if (credentials == null)
+                {
+#pragma warning disable CS0618 // Type or member is obsolete
+                    if (!string.IsNullOrEmpty(_options.AccessKey) && !string.IsNullOrEmpty(_options.SecretKey))
+                    {
+                        // for backwards compatibility we create the basic credentials if the old fields are used
+                        // but if they are not specified we fallback to using the default profile
+                        credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
+                    }
+#pragma warning restore CS0618 // Type or member is obsolete
+                }
+
+                using var client = credentials != null
+                    ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
+                    : new AmazonDynamoDBClient(_options.RegionEndpoint);
+
+                _ = await client.ListTablesAsync(cancellationToken);
+
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

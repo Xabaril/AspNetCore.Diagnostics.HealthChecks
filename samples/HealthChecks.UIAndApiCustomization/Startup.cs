@@ -1,12 +1,7 @@
-﻿using HealthChecks.UIAndApi.Options;
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using HealthChecks.UIAndApi.Options;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
-using System;
 
 namespace HealthChecks.UIAndApi
 {
@@ -54,6 +49,7 @@ namespace HealthChecks.UIAndApi
                 .AddControllers();
         }
 
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Sample")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting()
@@ -69,6 +65,7 @@ namespace HealthChecks.UIAndApi
                     {
                         setup.UIPath = "/show-health-ui"; // this is ui path in your browser
                         setup.ApiPath = "/health-ui-api"; // the UI ( spa app )  use this path to get information from the store ( this is NOT the healthz path, is internal ui api )
+                        setup.PageTitle = "My wonderful Health Checks UI"; // the page title in <head>
                     });
 
                     config.MapDefaultControllerRoute();

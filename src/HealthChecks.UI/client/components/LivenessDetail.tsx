@@ -26,7 +26,7 @@ const LivenessDetail: FunctionComponent<LivenessDetailsProps> = props => {
         {props.executionHistory.length > 0 && (
           <VerticalTimeline className="hc-timeline">
             {' '}
-            {props.executionHistory.reverse().map(e => {
+            {props.executionHistory.map(e => {
               return (
                 <VerticalTimelineElement
                   className="hc-timeline__event"

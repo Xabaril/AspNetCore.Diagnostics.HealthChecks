@@ -4,10 +4,10 @@ services:
         image: mcr.microsoft.com/mssql/server
         restart: always
         ports:
-            - ${SQLSERVER_PORT}:1433
+            - 5433:1433
         environment:
             - ACCEPT_EULA=Y
-            - SA_PASSWORD=${SQLSERVER_PASSWORD}
+            - SA_PASSWORD=Password12!
     redis:
         image: redis:alpine
         ports:
@@ -23,7 +23,7 @@ services:
             - ${SOLR_PORT}:8983
         volumes:
             - ./build/docker-services/solrcore:/var/solr/data/solrcore
-            - ./build/docker-services/solrcoredown:/var/solr/data/solrcoredown            
+            - ./build/docker-services/solrcoredown:/var/solr/data/solrcoredown
     postgres:
         image: postgres
         environment:
@@ -31,11 +31,13 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         ports:
             - ${POSTGRES_PORT}:5432
-    eventstore: 
+    eventstore:
         image: eventstore/eventstore
-        ports: 
+        ports:
           - "2113:2113"
           - ${EVENTSTORE_PORT}:1113
+        environment:
+            - EVENTSTORE_INSECURE=true
     mongodb:
         image: mongo
         ports:
@@ -64,7 +66,7 @@ services:
             - KAFKA_ADVERTISED_PORT=9092
         ports:
           - ${KAFKA_PORT}:9092
-        links: 
+        links:
           - zookeeper
     rabbitmq:
         image: rabbitmq
@@ -78,7 +80,7 @@ services:
 # Build image from src, pending legal issues with binary distribution https://github.com/wnameless/docker-oracle-xe-11g/issues/118
         build:
           context: https://github.com/wnameless/docker-oracle-xe-11g.git
-        ports: 
+        ports:
             - ${ORACLE_PORT}:1521
         environment:
             - ORACLE_ALLOW_REMOTE=true
@@ -93,7 +95,7 @@ services:
             - PASV_ADDRESS=127.0.0.1
     sftp:
         image: atmoz/sftp
-        ports: 
+        ports:
             - ${SFTP_PORT}:22
         volumes:
             - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro
@@ -102,14 +104,14 @@ services:
         image: tvial/docker-mailserver:latest
         hostname: mail
         container_name: mail
-        domainname: healthchecks.com        
+        domainname: healthchecks.com
         ports:
-            - 25:25               
+            - 25:25
             - 143:143
             - 465:465
             - 587:587
-            - 993:993          
-            - 995:995  
+            - 993:993
+            - 995:995
         environment:
             - SSL_TYPE=self-signed
             - DMS_DEBUG=1
@@ -130,7 +132,7 @@ services:
         - DOCKER_HOST=unix:///var/run/docker.sock
         volumes:
         - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
-        - "/var/run/docker.sock:/var/run/docker.sock"   
+        - "/var/run/docker.sock:/var/run/docker.sock"
     consul:
         image: consul:latest
         ports:
@@ -143,7 +145,7 @@ services:
         - "9157:9157"
         environment:
         - LICENSE=accept
-        - MQ_QMGR_NAME=QM.TEST.01
+        - MQ_QMGR_NAME=QM1
         - MQ_APP_PASSWORD=12345678
         - MQ_ENABLE_METRICS=true
     arangodb:
@@ -159,3 +161,16 @@ services:
         environment:
         - VIRTUAL_HOST=gremlin.docker
         - VIRTUAL_PORT=8182
+    npgsql:
+        image: postgres
+        ports:
+        - "8010:5432"
+        environment: 
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=Password12!
+    nats:
+        image: nats:latest
+        ports:
+        - "4222:4222"
+        - "8222:8222"
+        - "6222:6222"

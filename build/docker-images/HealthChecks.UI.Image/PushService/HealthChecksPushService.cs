@@ -1,8 +1,5 @@
-﻿using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Core.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Image.PushService
 {
@@ -16,9 +13,10 @@ namespace HealthChecks.UI.Image.PushService
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
+
         public async Task AddAsync(string name, string uri)
         {
-            if ((await Get(name)) == null)
+            if (await Get(name) == null)
             {
                 await _db.Configurations.AddAsync(new HealthCheckConfiguration
                 {
@@ -60,7 +58,7 @@ namespace HealthChecks.UI.Image.PushService
             }
         }
 
-        private Task<HealthCheckConfiguration> Get(string name)
+        private Task<HealthCheckConfiguration?> Get(string name)
         {
             return _db.Configurations.FirstOrDefaultAsync(c => c.Name == name);
         }

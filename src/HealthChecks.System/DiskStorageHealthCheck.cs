@@ -1,64 +1,59 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
-    public class DiskStorageHealthCheck
-        : IHealthCheck
+    public class DiskStorageHealthCheck : IHealthCheck
     {
         private readonly DiskStorageOptions _options;
+
         public DiskStorageHealthCheck(DiskStorageOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
+
+        /// <inheritdoc/>
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var configuredDrives = _options.ConfiguredDrives.Values;
+                var configuredDrives = _options.ConfiguredDrives;
+                List<string>? errors = null;
 
-                foreach (var (DriveName, MinimumFreeMegabytes) in configuredDrives)
+                if (configuredDrives.Count > 0)
                 {
-                    var (Exists, ActualFreeMegabytes) = GetSystemDriveInfo(DriveName);
+                    var drives = DriveInfo.GetDrives();
 
-                    if (Exists)
+                    foreach (var (DriveName, MinimumFreeMegabytes) in configuredDrives.Values)
                     {
-                        if (ActualFreeMegabytes < MinimumFreeMegabytes)
+                        var driveInfo = drives.FirstOrDefault(drive => string.Equals(drive.Name, DriveName, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (driveInfo != null)
                         {
-                            return Task.FromResult(
-                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Minimum configured megabytes for disk {DriveName} is {MinimumFreeMegabytes} but actual free space are {ActualFreeMegabytes} megabytes"));
+                            long actualFreeMegabytes = driveInfo.AvailableFreeSpace / 1024 / 1024;
+                            if (actualFreeMegabytes < MinimumFreeMegabytes)
+                            {
+                                (errors ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, actualFreeMegabytes));
+                                if (!_options.CheckAllDrives)
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            (errors ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, null));
+                            if (!_options.CheckAllDrives)
+                                break;
                         }
                     }
-                    else
-                    {
-                        return Task.FromResult(
-                            new HealthCheckResult(context.Registration.FailureStatus, description: $"Configured drive {DriveName} is not present on system"));
-                    }
                 }
-                return Task.FromResult(
-                    HealthCheckResult.Healthy());
+
+                return errors?.Count > 0
+                    ? Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errors)))
+                    : HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {
-                return Task.FromResult(
-                     new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
-        }
-        private static (bool Exists, long ActualFreeMegabytes) GetSystemDriveInfo(string driveName)
-        {
-            var driveInfo = DriveInfo.GetDrives()
-                .FirstOrDefault(drive => string.Equals(drive.Name, driveName, StringComparison.InvariantCultureIgnoreCase));
-
-            if (driveInfo != null)
-            {
-                return (true, driveInfo.AvailableFreeSpace / 1024 / 1024);
-            }
-
-            return (false, 0);
         }
     }
 }

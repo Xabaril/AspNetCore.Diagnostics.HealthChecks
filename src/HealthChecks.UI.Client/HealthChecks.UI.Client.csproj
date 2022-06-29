@@ -1,17 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <PackageTags>HealthCheck;UI;Client</PackageTags>
+    <PackageTags>$(PackageTags);UI;Client</PackageTags>
     <Description>HealthChecks.UI.Client contains some mandatory abstractions to work with HealthChecks.UI.</Description>
     <Version>$(HealthCheckUIClient)</Version>
-    <PackageId>AspNetCore.HealthChecks.UI.Client</PackageId>
   </PropertyGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <!--<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />-->
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.6" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
   </ItemGroup>

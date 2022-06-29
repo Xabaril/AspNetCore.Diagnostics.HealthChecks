@@ -1,7 +1,3 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-
 namespace HealthChecks.UI.Image.Configuration
 {
     public class Storage
@@ -43,6 +39,7 @@ namespace HealthChecks.UI.Image.Configuration
     {
         public bool RequiresConnectionString { get; set; }
         public Action<HealthChecksUIBuilder, string> SetupProvider { get; set; }
+            = (_, connection) => throw new InvalidOperationException($"Misconfigured storage provider for {connection}");
     }
 
     public enum StorageProviderEnum

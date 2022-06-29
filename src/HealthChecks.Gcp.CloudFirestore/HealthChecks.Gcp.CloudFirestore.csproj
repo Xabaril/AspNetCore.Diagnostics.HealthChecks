@@ -1,15 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <!--since v3.0.0 Google.Cloud.Firestore supports netstandard2.1 instead of netstandard2.0-->
+    <NetStandardVersion>netstandard2.1</NetStandardVersion>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;CloudFirestore</PackageTags>
+    <PackageTags>$(PackageTags);CloudFirestore</PackageTags>
     <Description>HealthChecks.Gcp.CloudFirestore is the health check package for the Firebase Cloud Firebase realtime database.</Description>
     <Version>$(HealthCheckCloudFirestore)</Version>
-    <PackageId>AspNetCore.HealthChecks.Gcp.CloudFirestore</PackageId>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Firestore" Version="$(GoogleCloudFirestore)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.6" />
   </ItemGroup>
 
 </Project>

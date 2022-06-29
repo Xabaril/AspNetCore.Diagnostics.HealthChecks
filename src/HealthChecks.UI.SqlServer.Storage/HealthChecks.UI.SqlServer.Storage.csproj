@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <PackageTags>$(PackageTags);SqlServer</PackageTags>
     <Description>HealthChecks.UI.SqlServer.Storage package contains the required classes to use SqlServer provider in the UI</Description>
-    <PackageTags>HealthCheck;HealthChecks;SqlServer</PackageTags>
     <Version>$(HealthCheckUISqlServerStorage)</Version>
-    <PackageId>AspNetCore.HealthChecks.UI.SqlServer.Storage</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(MicrosoftEntityFrameworkCoreSqlServer)" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsDependencyInjectionAbstractions)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

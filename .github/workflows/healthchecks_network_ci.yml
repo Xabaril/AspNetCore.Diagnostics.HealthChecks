@@ -1,0 +1,79 @@
+name: HealthChecks Network CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Network/**
+      - test/HealthChecks.Network.Tests/**
+      - .github/workflows/healthchecks_network_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.Network/**
+    - test/HealthChecks.Network.Tests/**
+    - .github/workflows/healthchecks_network_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    #services:
+    #  ftp:
+    #    image: bogem/ftp
+    #    ports:
+    #      - 21:21
+    #      - 47400-47470:47400-47470
+    #    env:
+    #      FTP_USER: bob
+    #      FTP_PASS: 12345
+    #      PASV_ADDRESS: 127.0.0.1
+    #  sftp:
+    #    image: atmoz/sftp
+    #    ports:
+    #      - 22:22
+    #    volumes:
+    #      - ${{ github.workspace }}/build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub #:ro
+    #      - ${{ github.workspace }}/build/docker-services/sftp/users.conf:/etc/sftp/users.conf #:ro
+    #  mail:
+    #    image: tvial/docker-mailserver:latest
+    #    options: --hostname mail --container_name mail --domainname healthchecks.com
+    #    ports:
+    #      - 25:25
+    #      - 143:143
+    #      - 465:465
+    #      - 587:587
+    #      - 993:993
+    #      - 995:995
+    #    env:
+    #      SSL_TYPE: self-signed
+    #      DMS_DEBUG: 1
+    #    volumes:
+    #      - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.202
+        include-prerelease: false
+    - name: Restore
+      run: |
+        dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj &&
+        dotnet restore ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Network/HealthChecks.Network.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+    - name: Build
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj
+    #- name: Test
+    #  run: dotnet test --no-restore --no-build ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj

@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI;
+using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Core.Discovery.K8S;
@@ -7,16 +7,13 @@ using HealthChecks.UI.Core.Notifications;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using System;
-using System.Net.Http;
-using System.Reflection.Metadata;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
         public static HealthChecksUIBuilder AddHealthChecksUI(this IServiceCollection services,
-            Action<Settings> setupSettings = null)
+            Action<Settings>? setupSettings = null)
         {
             services
                 .AddOptions<Settings>()
@@ -27,10 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             services.AddOptions<KubernetesDiscoverySettings>()
-                .Configure<IConfiguration>((settings, configuration) =>
-                {
-                    configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings);
-                });
+                .Configure<IConfiguration>((settings, configuration) => configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings));
 
             services.TryAddSingleton<ServerAddressesService>();
             services.TryAddScoped<IHealthCheckFailureNotifier, WebHookFailureNotifier>();
@@ -50,19 +44,19 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME, (sp, client) =>
                 {
-                    var settings = sp.GetService<IOptions<Settings>>();
+                    var settings = sp.GetRequiredService<IOptions<Settings>>();
                     settings.Value.ApiEndpointHttpClientConfig?.Invoke(sp, client);
                 })
                 .ConfigurePrimaryHttpMessageHandler(sp =>
                 {
-                    var settings = sp.GetService<IOptions<Settings>>();
+                    var settings = sp.GetRequiredService<IOptions<Settings>>();
                     return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
                 })
                 .ConfigureHttpMessageHandlerBuilder(builder =>
                 {
-                    var settings = builder.Services.GetService<IOptions<Settings>>();
+                    var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
 
-                    foreach (var handlerType in settings.Value.DelegatingHandlerTypes.Values)
+                    foreach (var handlerType in settings.Value.ApiEndpointDelegatingHandlerTypes.Values)
                     {
                         builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
                     }
@@ -74,18 +68,27 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services.AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME, (sp, client) =>
             {
-                var settings = sp.GetService<IOptions<Settings>>();
+                var settings = sp.GetRequiredService<IOptions<Settings>>();
                 settings.Value.WebHooksEndpointHttpClientConfig?.Invoke(sp, client);
             })
             .ConfigurePrimaryHttpMessageHandler(sp =>
              {
-                 var settings = sp.GetService<IOptions<Settings>>();
+                 var settings = sp.GetRequiredService<IOptions<Settings>>();
                  return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
              })
+            .ConfigureHttpMessageHandlerBuilder(builder =>
+            {
+                var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
+
+                foreach (var handlerType in settings.Value.WebHooksEndpointDelegatingHandlerTypes.Values)
+                {
+                    builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
+                }
+            })
             .Services;
         }
 
-        static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services)
+        private static IServiceCollection AddKubernetesDiscoveryService(this IServiceCollection services)
         {
             services
                 .AddHostedService<KubernetesDiscoveryHostedService>()

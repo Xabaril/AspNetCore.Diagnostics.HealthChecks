@@ -1,17 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Description>HealthChecks.Network is the health check package for network services.</Description>
-    <PackageTags>HealthCheck;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Version>$(HealthCheckNetwork)</Version>
-    <PackageId>AspNetCore.HealthChecks.Network</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SSH.NET" Version="$(SSHNet)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="System.Buffers" Version="$(SystemBuffers)" />
+    <PackageReference Include="SSH.NET" Version="2020.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.6" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
-
 
 </Project>

@@ -1,18 +1,16 @@
-﻿using HealthChecks.UI.Image.Configuration;
-using Microsoft.Extensions.Configuration;
-using System;
+using HealthChecks.UI.Image.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class HealthChecksUIBuilderExtensions
     {
-
         public static IServiceCollection AddStorageProvider(this HealthChecksUIBuilder builder, IConfiguration configuration)
         {
             string configuredStorage = configuration[UIKeys.STORAGE_PROVIDER];
             string connectionString = configuration[UIKeys.STORAGE_CONNECTION];
 
-            if (string.IsNullOrEmpty(configuredStorage)) configuredStorage = StorageProviderEnum.InMemory.ToString();
+            if (string.IsNullOrEmpty(configuredStorage))
+                configuredStorage = StorageProviderEnum.InMemory.ToString();
 
             if (Enum.TryParse(configuredStorage, out StorageProviderEnum storageEnum))
             {

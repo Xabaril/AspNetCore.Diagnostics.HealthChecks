@@ -11,14 +11,14 @@ With all of the following examples, you can additionally add the following param
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.
 
-### Check existence of a topic and load credentials from the application's default configuration
+### Check existence of a topic and loads credentials from the application's default configuration
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddSnsTopics(options =>
+        .AddTopicAndSubscriptions(options =>
         {
             options.AddTopic("topicName");
         });
@@ -32,7 +32,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddSnsTopics(options =>
+        .AddTopicAndSubscriptions(options =>
         {
             options.AddTopic("topicName");
             options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
@@ -47,7 +47,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddSnsTopics(options =>
+        .AddTopicAndSubscriptions(options =>
         {
             options.AddTopic("topicName");
             options.RegionEndpoint = RegionEndpoint.EUCentral1;
@@ -62,7 +62,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddSnsTopics(options =>
+        .AddTopicAndSubscriptions(options =>
         {
             options.AddTopic("topicName");
             options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
@@ -71,7 +71,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-### Check existence of a topic, its subscriptions and load credentials from the application's default configuration
+### Check existence of a topic, its subscriptions and loads credentials from the application's default configuration
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)

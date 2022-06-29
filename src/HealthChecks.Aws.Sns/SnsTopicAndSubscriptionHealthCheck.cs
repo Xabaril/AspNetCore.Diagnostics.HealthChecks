@@ -4,11 +4,11 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Aws.Sns
 {
-    public class SnsTopicHealthCheck : IHealthCheck
+    public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
     {
         private readonly SnsOptions _snsOptions;
 
-        public SnsTopicHealthCheck(SnsOptions snsOptions)
+        public SnsTopicAndSubscriptionHealthCheck(SnsOptions snsOptions)
         {
             _snsOptions = snsOptions ?? throw new ArgumentNullException(nameof(SnsOptions));
         }
@@ -26,6 +26,26 @@ namespace HealthChecks.Aws.Sns
                     if (topic == null)
                     {
                         throw new NotFoundException($"Topic {topicName} does not exist.");
+                    }
+                }
+
+                foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
+                {
+                    var topic = await client.FindTopicAsync(topicName);
+
+                    if (topic == null)
+                    {
+                        throw new NotFoundException($"Topic {topicName} does not exist.");
+                    }
+
+                    var subscriptionsFromAws = await client.ListSubscriptionsByTopicAsync(topic.TopicArn, cancellationToken);
+
+                    foreach (var subscription in subscriptionsFromAws.Subscriptions)
+                    {
+                        if (!subscriptions.Contains(subscription.SubscriptionArn))
+                        {
+                            throw new NotFoundException($"Subscription {subscription.SubscriptionArn} in Topic {topicName} does not exist.");
+                        }
                     }
                 }
 

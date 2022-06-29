@@ -1,8 +1,7 @@
 using Amazon;
 using Amazon.Runtime;
-using HealthChecks.Aws.Sns;
 
-namespace HealthChecks.Aws.SecretsManager.Tests.DependencyInjection;
+namespace HealthChecks.Aws.Sns.Tests.DependencyInjection;
 
 public class aws_sns_registration_should
 {

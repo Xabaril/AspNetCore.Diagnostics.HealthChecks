@@ -74,7 +74,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     timeout));
         }
 
-
         private static HttpClient CreateIdentityServerHttpClient(IServiceProvider sp, string registrationName, Func<IServiceProvider, Uri> uriProvider)
         {
             var authorityUri = uriProvider(sp);

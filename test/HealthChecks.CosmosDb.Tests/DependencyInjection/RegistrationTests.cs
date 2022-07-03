@@ -58,7 +58,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddCosmosDb("cosmosdbaccounturi", new MockTokenCredential(), "dabasename");
+                .AddCosmosDb("cosmosdbaccounturi", new MockTokenCredential(), "databasename");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

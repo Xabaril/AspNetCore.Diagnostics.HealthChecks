@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Azure;
+using Azure.Core;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -14,6 +15,8 @@ namespace HealthChecks.CosmosDb
 
         private readonly Uri? _endpoint;
         private readonly TableSharedKeyCredential? _credentials;
+        private readonly TokenCredential? _tokenCredential;
+
 
         public TableServiceHealthCheck(string connectionString, string tableName)
         {
@@ -25,6 +28,13 @@ namespace HealthChecks.CosmosDb
         {
             _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
             _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+            _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
+        }
+
+        public TableServiceHealthCheck(Uri endpoint, TokenCredential tokenCredential, string tableName)
+        {
+            _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+            _tokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
             _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
         }
 
@@ -61,7 +71,9 @@ namespace HealthChecks.CosmosDb
         {
             return !string.IsNullOrEmpty(_connectionString)
                 ? new TableServiceClient(_connectionString)
-                : new TableServiceClient(_endpoint, _credentials);
+                : (_credentials != null
+                    ? new TableServiceClient(_endpoint, _credentials)
+                    : new TableServiceClient(_endpoint, _tokenCredential));
         }
     }
 }

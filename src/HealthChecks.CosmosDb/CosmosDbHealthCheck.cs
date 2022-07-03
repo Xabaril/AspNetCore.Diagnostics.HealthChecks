@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Azure.Core;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -8,17 +9,25 @@ namespace HealthChecks.CosmosDb
     {
         private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new();
 
-        private readonly string _connectionString;
+        private readonly string? _connectionString;
+        private readonly string? _accountEndpoint;
+        private readonly TokenCredential? _tokenCredential;
         private readonly string? _database;
         private readonly IEnumerable<string>? _containers;
 
         public CosmosDbHealthCheck(string connectionString)
-            : this(connectionString, default, default)
+            : this(connectionString: connectionString, default, default)
         {
         }
 
         public CosmosDbHealthCheck(string connectionString, string database)
             : this(connectionString, database, default)
+        {
+            _database = database;
+        }
+
+        public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string database)
+            : this(accountEndpoint, tokenCredential, database, default)
         {
             _database = database;
         }
@@ -30,18 +39,28 @@ namespace HealthChecks.CosmosDb
             _containers = containers;
         }
 
+        public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string? database, IEnumerable<string>? containers)
+        {
+            _accountEndpoint = accountEndpoint ?? throw new ArgumentNullException(nameof(accountEndpoint));
+            _tokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
+            _database = database;
+            _containers = containers;
+        }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (!_connections.TryGetValue(_connectionString, out var cosmosDbClient))
-                {
-                    cosmosDbClient = new CosmosClient(_connectionString);
+                var connectionsKey = _connectionString ?? _accountEndpoint!;
 
-                    if (!_connections.TryAdd(_connectionString, cosmosDbClient))
+                if (!_connections.TryGetValue(connectionsKey, out var cosmosDbClient))
+                {
+                    cosmosDbClient = CreateCosmosDbClient();
+
+                    if (!_connections.TryAdd(connectionsKey, cosmosDbClient))
                     {
                         cosmosDbClient.Dispose();
-                        cosmosDbClient = _connections[_connectionString];
+                        cosmosDbClient = _connections[connectionsKey];
                     }
                 }
 
@@ -68,6 +87,13 @@ namespace HealthChecks.CosmosDb
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
+        }
+
+        private CosmosClient CreateCosmosDbClient()
+        {
+            return !string.IsNullOrEmpty(_connectionString)
+                    ? new CosmosClient(_connectionString!)
+                    : new CosmosClient(_accountEndpoint, _tokenCredential);
         }
     }
 }

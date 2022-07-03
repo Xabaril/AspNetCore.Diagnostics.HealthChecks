@@ -155,7 +155,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureTable(new Uri("mytableuri"), new TableSharedKeyCredential("mytableuri", "testKey"), "tableName");
+                .AddAzureTable(new Uri("http://localhost"), new TableSharedKeyCredential("mystorageaccount", "dGVzdEtleQ=="), "tableName");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -171,7 +171,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureTable(new Uri("mytableuri"), new MockTokenCredential(), "tableName");
+                .AddAzureTable(new Uri("http://localhost"), new MockTokenCredential(), "tableName");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

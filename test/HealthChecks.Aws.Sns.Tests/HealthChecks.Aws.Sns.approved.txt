@@ -5,7 +5,7 @@ namespace HealthChecks.Aws.Sns
         public SnsOptions() { }
         public Amazon.Runtime.AWSCredentials? Credentials { get; set; }
         public Amazon.RegionEndpoint? RegionEndpoint { get; set; }
-        public HealthChecks.Aws.Sns.SnsOptions AddTopicAndSubscriptions(string topicName, string[]? subscriptions = null) { }
+        public HealthChecks.Aws.Sns.SnsOptions AddTopicAndSubscriptions(string topicName, System.Collections.Generic.IEnumerable<string>? subscriptions = null) { }
     }
     public class SnsTopicAndSubscriptionHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {

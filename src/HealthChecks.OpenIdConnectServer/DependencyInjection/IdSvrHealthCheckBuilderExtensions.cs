@@ -32,6 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
             TimeSpan? timeout = default)
         {
             var registrationName = name ?? NAME;
+
             builder.Services.AddHttpClient(registrationName, client => client.BaseAddress = idSvrUri);
 
             return builder.Add(new HealthCheckRegistration(
@@ -62,6 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
             TimeSpan? timeout = null)
         {
             var registrationName = name ?? NAME;
+
             builder.Services.AddHttpClient(registrationName, (sp, client) =>
             {
                 var idSvrUri = uriProvider(sp);
@@ -74,6 +76,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 failureStatus,
                 tags,
                 timeout));
+        }
+        private static HttpClient CreateIdentityServerHttpClient(IServiceProvider sp, string registrationName, Func<IServiceProvider, Uri> uriProvider)
+        {
+            var authorityUri = uriProvider(sp);
+            var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+            var client = httpClientFactory.CreateClient(registrationName);
+            client.BaseAddress = authorityUri;
+
+            return client;
         }
     }
 }

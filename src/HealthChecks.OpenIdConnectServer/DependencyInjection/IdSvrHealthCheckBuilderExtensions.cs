@@ -32,7 +32,6 @@ namespace Microsoft.Extensions.DependencyInjection
             TimeSpan? timeout = default)
         {
             var registrationName = name ?? NAME;
-
             builder.Services.AddHttpClient(registrationName, client => client.BaseAddress = idSvrUri);
 
             return builder.Add(new HealthCheckRegistration(
@@ -57,30 +56,24 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddIdentityServer(
             this IHealthChecksBuilder builder,
             Func<IServiceProvider, Uri> uriProvider,
-            string name = null,
+            string? name = null,
             HealthStatus? failureStatus = null,
-            IEnumerable<string> tags = null,
+            IEnumerable<string>? tags = null,
             TimeSpan? timeout = null)
         {
-            builder.Services.AddHttpClient();
             var registrationName = name ?? NAME;
+            builder.Services.AddHttpClient(registrationName, (sp, client) =>
+            {
+                var idSvrUri = uriProvider(sp);
+                client.BaseAddress = idSvrUri;
+            });
 
-            return builder.Add(
-                new HealthCheckRegistration(
-                    registrationName,
-                    sp => new IdSvrHealthCheck(() => CreateIdentityServerHttpClient(sp, registrationName, uriProvider)),
-                    failureStatus,
-                    tags,
-                    timeout));
-        }
-        private static HttpClient CreateIdentityServerHttpClient(IServiceProvider sp, string registrationName, Func<IServiceProvider, Uri> uriProvider)
-        {
-            var authorityUri = uriProvider(sp);
-            var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-            var client = httpClientFactory.CreateClient(registrationName);
-            client.BaseAddress = authorityUri;
-
-            return client;
+            return builder.Add(new HealthCheckRegistration(
+                registrationName,
+                sp => new IdSvrHealthCheck(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName)),
+                failureStatus,
+                tags,
+                timeout));
         }
     }
 }

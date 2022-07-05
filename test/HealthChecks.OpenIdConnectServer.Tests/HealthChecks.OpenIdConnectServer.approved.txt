@@ -14,4 +14,3 @@ namespace Microsoft.Extensions.DependencyInjection
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddIdentityServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri idSvrUri, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }
-

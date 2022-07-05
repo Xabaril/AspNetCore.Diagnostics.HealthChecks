@@ -77,14 +77,5 @@ namespace Microsoft.Extensions.DependencyInjection
                 tags,
                 timeout));
         }
-        private static HttpClient CreateIdentityServerHttpClient(IServiceProvider sp, string registrationName, Func<IServiceProvider, Uri> uriProvider)
-        {
-            var authorityUri = uriProvider(sp);
-            var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-            var client = httpClientFactory.CreateClient(registrationName);
-            client.BaseAddress = authorityUri;
-
-            return client;
-        }
     }
 }

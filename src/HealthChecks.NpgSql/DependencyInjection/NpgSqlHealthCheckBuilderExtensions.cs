@@ -68,12 +68,12 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(connectionStringFactory));
             }
-
-            builder.Services.AddSingleton(sp => new NpgSqlHealthCheck(connectionStringFactory(sp), healthQuery, connectionAction));
+            var finalName = name ?? NAME;
+            builder.Services.AddTransient(sp => new NpgSqlHealthCheck(finalName, connectionStringFactory(sp), healthQuery, connectionAction));
 
             return builder.Add(new HealthCheckRegistration(
-                name ?? NAME,
-                sp => sp.GetRequiredService<NpgSqlHealthCheck>(),
+                finalName,
+                sp => sp.GetServices<NpgSqlHealthCheck>().Last(x => x.Name == finalName),
                 failureStatus,
                 tags,
                 timeout));

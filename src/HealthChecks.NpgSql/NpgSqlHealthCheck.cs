@@ -9,8 +9,11 @@ namespace HealthChecks.NpgSql
         private readonly string _sql;
         private readonly Action<NpgsqlConnection>? _connectionAction;
 
-        public NpgSqlHealthCheck(string npgsqlConnectionString, string sql, Action<NpgsqlConnection>? connectionAction = null)
+        public string Name { get; }
+
+        public NpgSqlHealthCheck(string name, string npgsqlConnectionString, string sql, Action<NpgsqlConnection>? connectionAction = null)
         {
+            Name = name;
             _connectionString = npgsqlConnectionString ?? throw new ArgumentNullException(nameof(npgsqlConnectionString));
             _sql = sql ?? throw new ArgumentNullException(nameof(sql));
             _connectionAction = connectionAction;

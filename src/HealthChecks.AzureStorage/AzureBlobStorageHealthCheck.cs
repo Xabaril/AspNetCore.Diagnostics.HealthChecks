@@ -49,8 +49,6 @@ namespace HealthChecks.AzureStorage
                     {
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Container '{_containerName}' not exists");
                     }
-
-                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
                 }
 
                 return HealthCheckResult.Healthy();

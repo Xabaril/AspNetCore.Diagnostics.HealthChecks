@@ -17,7 +17,7 @@
     <HealthCheckAzureStorage>6.0.4</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>6.0.2</HealthCheckCloudFirestore>
     <HealthCheckConsul>6.0.2</HealthCheckConsul>
-    <HealthCheckCosmosDb>6.0.2</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>6.0.3</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>6.0.2</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>6.0.2</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>6.0.2</HealthCheckElasticsearch>

@@ -1,0 +1,16 @@
+namespace HealthChecks.ApplicationStatus
+{
+    public class ApplicationStatusHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public ApplicationStatusHealthCheck(Microsoft.Extensions.Hosting.IHostApplicationLifetime lifetime) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace HealthChecks.ApplicationStatus.DependencyInjection
+{
+    public static class ApplicationStatusHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddApplicationStatus(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddApplicationStatus(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, Microsoft.Extensions.Hosting.IHostApplicationLifetime lifetime, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

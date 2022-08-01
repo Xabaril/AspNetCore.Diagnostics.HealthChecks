@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
+    <HealthCheckApplicationStatus>6.0.2</HealthCheckApplicationStatus>
     <HealthCheckArangoDb>6.0.2</HealthCheckArangoDb>
     <HealthCheckAWSS3>6.0.2</HealthCheckAWSS3>
     <HealthCheckAWSSecretsManager>6.0.0</HealthCheckAWSSecretsManager>

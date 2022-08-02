@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);ApplicationStatus</PackageTags>
-    <Description>HealthChecks.ArangoDb is the health check package for ArangoDb.</Description>
+    <Description>HealthChecks.ApplicationStatus is the health check package for detection graceful shutdown.</Description>
     <Version>$(HealthCheckApplicationStatus)</Version>
   </PropertyGroup>
 

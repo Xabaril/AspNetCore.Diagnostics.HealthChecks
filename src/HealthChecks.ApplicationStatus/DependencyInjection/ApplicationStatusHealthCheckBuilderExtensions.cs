@@ -3,6 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.ApplicationStatus.DependencyInjection;
+
 public static class ApplicationStatusHealthCheckBuilderExtensions
 {
     private const string NAME = "applicationstatus";
@@ -69,4 +70,3 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
             timeout));
     }
 }
-

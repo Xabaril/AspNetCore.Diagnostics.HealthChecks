@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.ApplicationStatus.Tests;
+
 public class TestHostApplicationLifeTime : IHostApplicationLifetime
 {
     private readonly CancellationTokenSource _startedSource = new CancellationTokenSource();

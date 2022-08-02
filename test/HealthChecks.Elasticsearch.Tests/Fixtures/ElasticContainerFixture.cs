@@ -60,7 +60,6 @@ public class ElasticContainerFixture : IAsyncLifetime
         GC.SuppressFinalize(this);
     }
 
-
     private async Task<string> SetApiKeyInElasticSearchAsync()
     {
         var handler = new HttpClientHandler

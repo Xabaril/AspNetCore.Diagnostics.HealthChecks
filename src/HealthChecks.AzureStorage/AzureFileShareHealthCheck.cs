@@ -6,26 +6,39 @@ namespace HealthChecks.AzureStorage
 {
     public class AzureFileShareHealthCheck : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string? _shareName;
+        private readonly Func<ShareClient> _clientFactory;
 
         private static readonly ConcurrentDictionary<string, ShareClient> _shareClientsHolder = new();
 
         public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _shareName = shareName;
+            if (connectionString == null)
+            {
+                throw new ArgumentNullException(nameof(connectionString));
+            }
+
+            _clientFactory = () => _shareClientsHolder.GetOrAdd($"{connectionString}{shareName}", _ => new ShareClient(connectionString, shareName));
+        }
+
+        public AzureFileShareHealthCheck(ShareClient shareClient)
+        {
+            if (shareClient == null)
+            {
+                throw new ArgumentNullException(nameof(shareClient));
+            }
+
+            _clientFactory = () => shareClient;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var shareClient = _shareClientsHolder.GetOrAdd($"{_connectionString}{_shareName}", _ => new ShareClient(_connectionString, _shareName));
+                var shareClient = _clientFactory();
 
                 if (!await shareClient.ExistsAsync(cancellationToken))
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"File Share '{_shareName}' does not exist");
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"File Share '{shareClient.Name}' does not exist");
                 };
 
                 return HealthCheckResult.Healthy();

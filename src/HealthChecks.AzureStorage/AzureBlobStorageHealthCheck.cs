@@ -7,35 +7,34 @@ namespace HealthChecks.AzureStorage
 {
     public class AzureBlobStorageHealthCheck : IHealthCheck
     {
-        private readonly TokenCredential? _azureCredential;
-        private readonly Uri? _blobServiceUri;
-
-        private readonly string? _connectionString;
+        private readonly Func<BlobServiceClient> _clientFactory;
         private readonly string? _containerName;
-        private readonly BlobClientOptions? _clientOptions;
 
         private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder = new();
 
         public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = null)
-        {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _containerName = containerName;
-            _clientOptions = clientOptions;
-        }
+            : this(CreateClientFactory(connectionString, clientOptions), containerName)
+        { }
 
         public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = null)
+            : this(CreateClientFactory(blobServiceUri, credential, clientOptions), containerName)
+        { }
+
+        public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, string? containerName = default)
+            : this(CreateClientFactory(blobServiceClient), containerName)
+        { }
+
+        private AzureBlobStorageHealthCheck(Func<BlobServiceClient> clientFactory, string? containerName)
         {
-            _blobServiceUri = blobServiceUri ?? throw new ArgumentNullException(nameof(blobServiceUri));
-            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
+            _clientFactory = clientFactory;
             _containerName = containerName;
-            _clientOptions = clientOptions;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var blobServiceClient = GetBlobServiceClient();
+                var blobServiceClient = _clientFactory();
                 await foreach (var page in blobServiceClient.GetBlobContainersAsync(cancellationToken: cancellationToken).AsPages(pageSizeHint: 1))
                 {
                     break;
@@ -61,25 +60,41 @@ namespace HealthChecks.AzureStorage
             }
         }
 
-        private BlobServiceClient GetBlobServiceClient()
+        private static Func<BlobServiceClient> CreateClientFactory(string connectionString, BlobClientOptions? clientOptions = null)
         {
-            var serviceUri = _connectionString ?? _blobServiceUri!.ToString();
-
-            if (!_blobClientsHolder.TryGetValue(serviceUri, out var client))
+            if (connectionString == null)
             {
-                if (_connectionString != null)
-                {
-                    client = new BlobServiceClient(_connectionString, _clientOptions);
-                }
-                else
-                {
-                    client = new BlobServiceClient(_blobServiceUri, _azureCredential, _clientOptions);
-                }
-
-                _blobClientsHolder.TryAdd(serviceUri, client);
+                throw new ArgumentNullException(nameof(connectionString));
             }
 
-            return client;
+            return () => _blobClientsHolder.GetOrAdd(connectionString, s => new BlobServiceClient(s, clientOptions));
+        }
+
+        private static Func<BlobServiceClient> CreateClientFactory(Uri blobServiceUri, TokenCredential azureCredential, BlobClientOptions? clientOptions = null)
+        {
+            if (blobServiceUri == null)
+            {
+                throw new ArgumentNullException(nameof(blobServiceUri));
+            }
+
+            if (azureCredential == null)
+            {
+                throw new ArgumentNullException(nameof(azureCredential));
+            }
+
+            return () => _blobClientsHolder.GetOrAdd(
+                blobServiceUri.ToString(),
+                _ => new BlobServiceClient(blobServiceUri, azureCredential, clientOptions));
+        }
+
+        private static Func<BlobServiceClient> CreateClientFactory(BlobServiceClient blobServiceClient)
+        {
+            if (blobServiceClient == null)
+            {
+                throw new ArgumentNullException(nameof(blobServiceClient));
+            }
+
+            return () => blobServiceClient;
         }
     }
 }

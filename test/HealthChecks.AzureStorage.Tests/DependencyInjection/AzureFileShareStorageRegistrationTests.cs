@@ -7,7 +7,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureFileShare("the-connection-string");
+                .AddAzureFileShare(connectionString: "the-connection-string");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

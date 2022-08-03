@@ -7,24 +7,26 @@ namespace HealthChecks.AzureStorage
 {
     public class AzureQueueStorageHealthCheck : IHealthCheck
     {
-        private readonly string? _connectionString;
+        private readonly Func<QueueServiceClient> _clientFactory;
         private readonly string? _queueName;
-
-        private readonly TokenCredential? _azureCredential;
-        private readonly Uri? _queueServiceUri;
 
         private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder = new();
 
-        public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
-        {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _queueName = queueName;
-        }
+        public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default, QueueClientOptions? clientOptions = null)
+            : this(CreateClientFactory(connectionString, clientOptions), queueName)
+        { }
 
-        public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
+        public AzureQueueStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? queueName = default, QueueClientOptions? clientOptions = null)
+            : this(CreateClientFactory(blobServiceUri, credential, clientOptions), queueName)
+        { }
+
+        public AzureQueueStorageHealthCheck(QueueServiceClient blobServiceClient, string? queueName = default)
+            : this(CreateClientFactory(blobServiceClient), queueName)
+        { }
+
+        private AzureQueueStorageHealthCheck(Func<QueueServiceClient> clientFactory, string? queueName)
         {
-            _queueServiceUri = queueServiceUri ?? throw new ArgumentNullException(nameof(queueServiceUri));
-            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
+            _clientFactory = clientFactory;
             _queueName = queueName;
         }
 
@@ -32,7 +34,7 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                var queueServiceClient = GetQueueServiceClient();
+                var queueServiceClient = _clientFactory();
                 var serviceProperties = await queueServiceClient.GetPropertiesAsync(cancellationToken);
 
                 if (!string.IsNullOrEmpty(_queueName))
@@ -55,25 +57,41 @@ namespace HealthChecks.AzureStorage
             }
         }
 
-        private QueueServiceClient GetQueueServiceClient()
+        private static Func<QueueServiceClient> CreateClientFactory(string connectionString, QueueClientOptions? clientOptions = null)
         {
-            var serviceUri = _connectionString ?? _queueServiceUri!.ToString();
-
-            if (!_queueClientsHolder.TryGetValue(serviceUri, out var client))
+            if (connectionString == null)
             {
-                if (_connectionString != null)
-                {
-                    client = new QueueServiceClient(_connectionString);
-                }
-                else
-                {
-                    client = new QueueServiceClient(_queueServiceUri, _azureCredential);
-                }
-
-                _queueClientsHolder.TryAdd(serviceUri, client);
+                throw new ArgumentNullException(nameof(connectionString));
             }
 
-            return client;
+            return () => _queueClientsHolder.GetOrAdd(connectionString, s => new QueueServiceClient(s, clientOptions));
+        }
+
+        private static Func<QueueServiceClient> CreateClientFactory(Uri blobServiceUri, TokenCredential azureCredential, QueueClientOptions? clientOptions = null)
+        {
+            if (blobServiceUri == null)
+            {
+                throw new ArgumentNullException(nameof(blobServiceUri));
+            }
+
+            if (azureCredential == null)
+            {
+                throw new ArgumentNullException(nameof(azureCredential));
+            }
+
+            return () => _queueClientsHolder.GetOrAdd(
+                blobServiceUri.ToString(),
+                _ => new QueueServiceClient(blobServiceUri, azureCredential, clientOptions));
+        }
+
+        private static Func<QueueServiceClient> CreateClientFactory(QueueServiceClient blobServiceClient)
+        {
+            if (blobServiceClient == null)
+            {
+                throw new ArgumentNullException(nameof(blobServiceClient));
+            }
+
+            return () => blobServiceClient;
         }
     }
 }

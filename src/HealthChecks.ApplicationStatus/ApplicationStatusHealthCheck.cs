@@ -3,14 +3,15 @@ using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.ApplicationStatus;
 
-public class ApplicationStatusHealthCheck : IHealthCheck
+public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
 {
     private readonly IHostApplicationLifetime _lifetime;
+    private readonly CancellationTokenRegistration _ctRegistration;
     private bool IsApplicationRunning { get; set; } = true;
     public ApplicationStatusHealthCheck(IHostApplicationLifetime lifetime)
     {
         _lifetime = lifetime ?? throw new ArgumentNullException(nameof(IHostApplicationLifetime));
-        _lifetime.ApplicationStopping.Register(OnStopping);
+        _ctRegistration = _lifetime.ApplicationStopping.Register(OnStopping);
     }
 
     private void OnStopping()
@@ -24,4 +25,7 @@ public class ApplicationStatusHealthCheck : IHealthCheck
 
         return Task.FromResult(IsApplicationRunning ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
     }
+
+    public void Dispose() => _ctRegistration.Dispose();
+
 }

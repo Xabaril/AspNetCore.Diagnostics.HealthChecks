@@ -1,9 +1,10 @@
 namespace HealthChecks.ApplicationStatus
 {
-    public class ApplicationStatusHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class ApplicationStatusHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck, System.IDisposable
     {
         public ApplicationStatusHealthCheck(Microsoft.Extensions.Hosting.IHostApplicationLifetime lifetime) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+        public void Dispose() { }
     }
 }
 namespace HealthChecks.ApplicationStatus.DependencyInjection

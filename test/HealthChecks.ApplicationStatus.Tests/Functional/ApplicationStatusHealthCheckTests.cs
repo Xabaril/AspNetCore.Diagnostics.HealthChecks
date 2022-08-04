@@ -1,4 +1,5 @@
 namespace HealthChecks.ApplicationStatus.Tests.Functional;
+
 public class applicationstatus_healthcheck_should
 {
     [Fact]

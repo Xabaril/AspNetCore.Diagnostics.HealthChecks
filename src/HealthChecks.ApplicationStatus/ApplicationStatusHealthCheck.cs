@@ -27,5 +27,4 @@ public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
     }
 
     public void Dispose() => _ctRegistration.Dispose();
-
 }

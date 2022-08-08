@@ -5,6 +5,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.ApplicationStatus.DependencyInjection;
 
+/// <summary>
+/// Extension methods to configure <see cref="ApplicationStatusHealthCheck"/>.
+/// </summary>
 public static class ApplicationStatusHealthCheckBuilderExtensions
 {
     private const string NAME = "applicationstatus";

@@ -20,6 +20,6 @@ public void ConfigureServices(IServiceCollection services, IHost)
 {
     services
         .AddHealthChecks()
-        .AddCheck<ApplicationStatusHealthCheck>();
+        .AddApplicationStatus();
 }
 ```

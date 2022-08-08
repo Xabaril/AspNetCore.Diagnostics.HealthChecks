@@ -1,36 +1,37 @@
 using Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.AzureStorage
 {
     public class AzureFileShareHealthCheck : IHealthCheck
     {
-        private readonly ShareClient _shareClient;
+        private readonly ShareServiceClient _shareServiceClient;
+        private readonly FileShareHealthCheckOptions _options;
 
-        public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
-            : this(ClientCache<ShareClient>.GetOrAdd($"{connectionString}{shareName}", _ => new ShareClient(connectionString, shareName)))
+        public AzureFileShareHealthCheck(string connectionString, string? shareName = default, ShareClientOptions? clientOptions = default)
+            : this(
+                  ClientCache<ShareServiceClient>.GetOrAdd(connectionString, _ => new ShareServiceClient(connectionString, clientOptions)),
+                  Options.Create(new FileShareHealthCheckOptions { ShareName = shareName }))
         { }
 
-        public AzureFileShareHealthCheck(ShareClient shareClient)
+        public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, IOptions<FileShareHealthCheckOptions> options)
         {
-            _shareClient = shareClient ?? throw new ArgumentNullException(nameof(shareClient));
+            _shareServiceClient = shareServiceClient ?? throw new ArgumentNullException(nameof(shareServiceClient));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                if (!await _shareClient.ExistsAsync(cancellationToken))
-                {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"File Share '{_shareClient.Name}' does not exist");
-                };
+            await _shareServiceClient.GetPropertiesAsync(cancellationToken);
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
+            if (!string.IsNullOrEmpty(_options.ShareName))
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                var containerClient = _shareServiceClient.GetShareClient(_options.ShareName);
+                await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
             }
+
+            return HealthCheckResult.Healthy();
         }
     }
 }

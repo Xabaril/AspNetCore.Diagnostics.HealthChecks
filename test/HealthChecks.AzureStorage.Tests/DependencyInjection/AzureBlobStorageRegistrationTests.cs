@@ -7,7 +7,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string");
+                .AddAzureBlobStorage("BlobEndpoint=https://unit-test.blob.core.windows.net");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -23,7 +23,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string", name: "my-azureblob-group");
+                .AddAzureBlobStorage("BlobEndpoint=https://unit-test.blob.core.windows.net", name: "my-azureblob-group");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -39,7 +39,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string", containerName: "container");
+                .AddAzureBlobStorage("BlobEndpoint=https://unit-test.blob.core.windows.net", containerName: "container");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

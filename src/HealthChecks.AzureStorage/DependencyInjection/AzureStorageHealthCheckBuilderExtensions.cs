@@ -104,7 +104,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureBlobStorage(
             this IHealthChecksBuilder builder,
-            Action<BlobStorageHealthCheckOptions>? configureOptions = null,
+            Action<BlobStorageHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -129,39 +129,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Add a health check for an Azure file share.
         /// </summary>
-        /// <remarks>
-        /// A <see cref="ShareClient"/> service must be registered in the service container.
-        /// </remarks>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurefileshare' will be used for the name.</param>
-        /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// </param>
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddAzureFileShare(
-            this IHealthChecksBuilder builder,
-            string? name = default,
-            HealthStatus? failureStatus = default,
-            IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default)
-        {
-            return builder.Add(new HealthCheckRegistration(
-               name ?? AZUREFILESHARE_NAME,
-               sp => new AzureFileShareHealthCheck(sp.GetRequiredService<ShareClient>()),
-               failureStatus,
-               tags,
-               timeout));
-        }
-
-        /// <summary>
-        /// Add a health check for an Azure file share.
-        /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The Azure Storage connection string to be used.</param>
         /// <param name="shareName">The name of the Azure file share to check if exist.</param>
+        /// <param name="clientOptions">Provide the client configuration options to connect with Azure Storage.</param>
         /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurefileshare' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
@@ -174,6 +145,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IHealthChecksBuilder builder,
             string connectionString,
             string? shareName = default,
+            ShareClientOptions? clientOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -181,7 +153,47 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREFILESHARE_NAME,
-               sp => new AzureFileShareHealthCheck(connectionString, shareName),
+               sp => new AzureFileShareHealthCheck(connectionString, shareName, clientOptions),
+               failureStatus,
+               tags,
+               timeout));
+        }
+
+        /// <summary>
+        /// Add a health check for an Azure file share.
+        /// </summary>
+        /// <remarks>
+        /// A <see cref="ShareServiceClient"/> service must be registered in the service container.
+        /// </remarks>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurefileshare' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureFileShare(
+            this IHealthChecksBuilder builder,
+            Action<FileShareHealthCheckOptions>? configureOptions = default,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
+        {
+            var optionsBuilder = builder.Services.AddOptions<FileShareHealthCheckOptions>();
+            if (configureOptions != null)
+            {
+                optionsBuilder.Configure(configureOptions);
+            }
+
+            return builder.Add(new HealthCheckRegistration(
+               name ?? AZUREFILESHARE_NAME,
+               sp => new AzureFileShareHealthCheck(
+                   sp.GetRequiredService<ShareServiceClient>(),
+                   sp.GetRequiredService<IOptions<FileShareHealthCheckOptions>>()),
                failureStatus,
                tags,
                timeout));
@@ -269,7 +281,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureQueueStorage(
             this IHealthChecksBuilder builder,
-            Action<QueueStorageHealthCheckOptions>? configureOptions = null,
+            Action<QueueStorageHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,

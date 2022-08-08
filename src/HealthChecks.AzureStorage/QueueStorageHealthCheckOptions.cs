@@ -1,7 +1,7 @@
 namespace HealthChecks.AzureStorage;
 
 /// <summary>
-/// Represents a collection of settings that configure Azure Queue Storage health checks.
+/// Represents a collection of settings that configure Azure Storage Queue Service health checks.
 /// </summary>
 public sealed class QueueStorageHealthCheckOptions
 {

@@ -7,7 +7,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string");
+                .AddAzureQueueStorage("QueueEndpoint=https://unit-test.queue.core.windows.net");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -24,7 +24,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group");
+                .AddAzureQueueStorage("QueueEndpoint=https://unit-test.queue.core.windows.net", name: "my-azurequeue-group");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -41,7 +41,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group", tags: new[] { "custom-tag" });
+                .AddAzureQueueStorage("QueueEndpoint=https://unit-test.queue.core.windows.net", name: "my-azurequeue-group", tags: new[] { "custom-tag" });
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -59,7 +59,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group", failureStatus: HealthStatus.Degraded);
+                .AddAzureQueueStorage("QueueEndpoint=https://unit-test.queue.core.windows.net", name: "my-azurequeue-group", failureStatus: HealthStatus.Degraded);
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -77,7 +77,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", queueName: "queue");
+                .AddAzureQueueStorage("QueueEndpoint=https://unit-test.queue.core.windows.net", queueName: "queue");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

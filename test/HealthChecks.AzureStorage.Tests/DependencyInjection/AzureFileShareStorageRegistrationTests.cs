@@ -7,7 +7,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureFileShare(connectionString: "the-connection-string");
+                .AddAzureFileShare("FileEndpoint=https://unit-test.file.core.windows.net");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -23,7 +23,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddHealthChecks()
-                .AddAzureFileShare("the-connection-string", name: "my-azurefileshare-group");
+                .AddAzureFileShare("FileEndpoint=https://unit-test.file.core.windows.net", name: "my-azurefileshare-group");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

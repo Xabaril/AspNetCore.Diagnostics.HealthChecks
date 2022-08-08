@@ -10,13 +10,13 @@ namespace HealthChecks.AzureStorage
         private readonly BlobServiceClient _blobServiceClient;
         private readonly BlobStorageHealthCheckOptions _options;
 
-        public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = null)
+        public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = default)
             : this(
                   ClientCache<BlobServiceClient>.GetOrAdd(connectionString, k => new BlobServiceClient(k, clientOptions)),
                   Options.Create(new BlobStorageHealthCheckOptions { ContainerName = containerName }))
         { }
 
-        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = null)
+        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = default)
             : this(
                   ClientCache<BlobServiceClient>.GetOrAdd(blobServiceUri?.ToString()!, _ => new BlobServiceClient(blobServiceUri, credential, clientOptions)),
                   Options.Create(new BlobStorageHealthCheckOptions { ContainerName = containerName }))
@@ -30,31 +30,15 @@ namespace HealthChecks.AzureStorage
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            try
+            await _blobServiceClient.GetPropertiesAsync(cancellationToken);
+
+            if (!string.IsNullOrEmpty(_options.ContainerName))
             {
-                await foreach (var page in _blobServiceClient.GetBlobContainersAsync(cancellationToken: cancellationToken).AsPages(pageSizeHint: 1))
-                {
-                    break;
-                }
-
-                if (!string.IsNullOrEmpty(_options.ContainerName))
-                {
-                    var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
-
-                    if (!await containerClient.ExistsAsync(cancellationToken))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Container '{containerClient.Name}' not exists");
-                    }
-
-                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
-                }
-
-                return HealthCheckResult.Healthy();
+                var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
+                await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
             }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+
+            return HealthCheckResult.Healthy();
         }
     }
 }

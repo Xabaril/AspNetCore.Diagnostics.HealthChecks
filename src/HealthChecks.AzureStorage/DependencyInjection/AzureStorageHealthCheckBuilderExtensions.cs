@@ -89,7 +89,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure Blob Storage.
         /// </summary>
         /// <remarks>
-        /// A <see cref="BlobServiceClient"/> service must be registered in service container.
+        /// A <see cref="BlobServiceClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <c>null</c> then container name check is not executed. </param>
@@ -121,7 +121,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for an Azure file share.
         /// </summary>
         /// <remarks>
-        /// A <see cref="ShareClient"/> service must be registered in service container.
+        /// A <see cref="ShareClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurefileshare' will be used for the name.</param>
@@ -246,7 +246,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure Queue Storage.
         /// </summary>
         /// <remarks>
-        /// A <see cref="QueueServiceClient"/> service must be registered in service container.
+        /// A <see cref="QueueServiceClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <c>null</c> then queue name check is not executed. </param>

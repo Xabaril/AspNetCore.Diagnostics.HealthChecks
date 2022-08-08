@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -6,39 +5,24 @@ namespace HealthChecks.AzureStorage
 {
     public class AzureFileShareHealthCheck : IHealthCheck
     {
-        private readonly Func<ShareClient> _clientFactory;
-
-        private static readonly ConcurrentDictionary<string, ShareClient> _shareClientsHolder = new();
+        private readonly ShareClient _shareClient;
 
         public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
-        {
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            _clientFactory = () => _shareClientsHolder.GetOrAdd($"{connectionString}{shareName}", _ => new ShareClient(connectionString, shareName));
-        }
+            : this(ClientCache<ShareClient>.GetOrAdd($"{connectionString}{shareName}", _ => new ShareClient(connectionString, shareName)))
+        { }
 
         public AzureFileShareHealthCheck(ShareClient shareClient)
         {
-            if (shareClient == null)
-            {
-                throw new ArgumentNullException(nameof(shareClient));
-            }
-
-            _clientFactory = () => shareClient;
+            _shareClient = shareClient ?? throw new ArgumentNullException(nameof(shareClient));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var shareClient = _clientFactory();
-
-                if (!await shareClient.ExistsAsync(cancellationToken))
+                if (!await _shareClient.ExistsAsync(cancellationToken))
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"File Share '{shareClient.Name}' does not exist");
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"File Share '{_shareClient.Name}' does not exist");
                 };
 
                 return HealthCheckResult.Healthy();

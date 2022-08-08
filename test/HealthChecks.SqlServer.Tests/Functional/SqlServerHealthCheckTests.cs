@@ -7,9 +7,6 @@ namespace HealthChecks.SqlServer.Tests.Functional
         [Fact]
         public async Task be_healthy_if_sqlServer_is_available()
         {
-            //read appveyor services default values on
-            //https://www.appveyor.com/docs/services-databases/#sql-server-2017
-
             var connectionString = "Server=tcp:localhost,5433;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false";
 
             var webHostBuilder = new WebHostBuilder()
@@ -64,9 +61,6 @@ namespace HealthChecks.SqlServer.Tests.Functional
         [Fact]
         public async Task be_unhealthy_if_sqlquery_spec_is_not_valid()
         {
-            //read appveyor services default values on
-            //https://www.appveyor.com/docs/services-databases/#sql-server-2017
-
             var connectionString = "Server=tcp:localhost,5433;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false";
 
             var webHostBuilder = new WebHostBuilder()

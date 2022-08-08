@@ -4,6 +4,7 @@ using Azure.Storage.Files.Shares;
 using Azure.Storage.Queues;
 using HealthChecks.AzureStorage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -92,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// A <see cref="BlobServiceClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <c>null</c> then container name check is not executed. </param>
+        /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureblob' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -103,15 +104,23 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureBlobStorage(
             this IHealthChecksBuilder builder,
-            string? containerName = default,
+            Action<BlobStorageHealthCheckOptions>? configureOptions = null,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
+            var optionsBuilder = builder.Services.AddOptions<BlobStorageHealthCheckOptions>();
+            if (configureOptions != null)
+            {
+                optionsBuilder.Configure(configureOptions);
+            }
+
             return builder.Add(new HealthCheckRegistration(
                name ?? AZURESTORAGE_NAME,
-               sp => new AzureBlobStorageHealthCheck(sp.GetRequiredService<BlobServiceClient>(), containerName),
+               sp => new AzureBlobStorageHealthCheck(
+                   sp.GetRequiredService<BlobServiceClient>(),
+                   sp.GetRequiredService<IOptions<BlobStorageHealthCheckOptions>>()),
                failureStatus,
                tags,
                timeout));
@@ -249,7 +258,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// A <see cref="QueueServiceClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <c>null</c> then queue name check is not executed. </param>
+        /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -260,15 +269,23 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureQueueStorage(
             this IHealthChecksBuilder builder,
-            string? queueName = default,
+            Action<QueueStorageHealthCheckOptions>? configureOptions = null,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
+            var optionsBuilder = builder.Services.AddOptions<QueueStorageHealthCheckOptions>();
+            if (configureOptions != null)
+            {
+                optionsBuilder.Configure(configureOptions);
+            }
+
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREQUEUE_NAME,
-               sp => new AzureQueueStorageHealthCheck(sp.GetRequiredService<QueueServiceClient>(), queueName),
+               sp => new AzureQueueStorageHealthCheck(
+                   sp.GetRequiredService<QueueServiceClient>(),
+                   sp.GetRequiredService<IOptions<QueueStorageHealthCheckOptions>>()),
                failureStatus,
                tags,
                timeout));

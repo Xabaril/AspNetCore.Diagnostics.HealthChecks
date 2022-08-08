@@ -35,8 +35,6 @@ namespace HealthChecks.SqlServer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("===========");
-                Console.WriteLine(ex.Message);
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }

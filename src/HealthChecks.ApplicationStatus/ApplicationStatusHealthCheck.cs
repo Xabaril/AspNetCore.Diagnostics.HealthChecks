@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 namespace HealthChecks.ApplicationStatus;
 
 /// <summary>
-/// Healthcheck that detect application graceful shutdown.
+/// Healthcheck that detects application graceful shutdown.
 /// </summary>
 public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
 {

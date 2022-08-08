@@ -9,7 +9,7 @@ public sealed class BlobStorageHealthCheckOptions
     /// Gets or sets the name of the Azure Storage container whose health should be checked.
     /// </summary>
     /// <remarks>
-    /// If the value is <c>null</c>, then no health check is performed for a specific container.
+    /// If the value is <see langword="null"/>, then no health check is performed for a specific container.
     /// </remarks>
     /// <value>An optional Azure Storage container name.</value>
     public string? ContainerName { get; set; }

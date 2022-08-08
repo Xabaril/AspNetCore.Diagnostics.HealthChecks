@@ -23,11 +23,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The Azure Storage connection string to be used. </param>
-        /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <c>null</c> then container name check is not executed. </param>
+        /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <see langword="null"/> then container name check is not executed. </param>
         /// <param name="clientOptions">Provide the client configuration options to connect with Azure Storage.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureblob' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azureblob' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -57,11 +57,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="blobServiceUri">The Azure Storage Blob service Uri like <see href="https://myaccount.blob.core.windows.net"/>. </param>
         /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
-        /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <c>null</c> then container name check is not executed. </param>
+        /// <param name="containerName">The Azure Storage container name to check if exist. Optional, If <see langword="null"/> then container name check is not executed. </param>
         /// <param name="clientOptions">Provide the client configuration options to connect with Azure Storage.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureblob' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azureblob' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -94,9 +94,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureblob' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azureblob' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -133,9 +133,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// A <see cref="ShareClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurefileshare' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurefileshare' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -162,9 +162,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The Azure Storage connection string to be used.</param>
         /// <param name="shareName">The name of the Azure file share to check if exist.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurefileshare' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurefileshare' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -192,10 +192,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The Azure Storage connection string to be used. </param>
-        /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <c>null</c> then queue name check is not executed. </param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+        /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <see langword="null"/> then queue name check is not executed. </param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -224,10 +224,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="queueServiceUri">The Azure Queue service Uri like <see href="https://myaccount.blob.core.windows.net"/>. </param>
         /// <param name="credential">The TokenCredentail to use, you can use Azure.Identity with DefaultAzureCredential or other kind of TokenCredential,you can read more on <see href="https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.2.2/sdk/identity/Azure.Identity/README.md"/>. </param>
-        /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <c>null</c> then queue name check is not executed. </param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+        /// <param name="queueName">The Azure Storage queue name to check if exist. Optional.If <see langword="null"/> then queue name check is not executed. </param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -259,9 +259,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurequeue' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>

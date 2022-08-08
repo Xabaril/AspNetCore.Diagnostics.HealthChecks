@@ -9,7 +9,7 @@ public sealed class QueueStorageHealthCheckOptions
     /// Gets or sets the name of the Azure Queue whose health should be checked.
     /// </summary>
     /// <remarks>
-    /// If the value is <c>null</c>, then no health check is performed for a specific queue.
+    /// If the value is <see langword="null"/>, then no health check is performed for a specific queue.
     /// </remarks>
     /// <value>An optional Azure Queue name.</value>
     public string? QueueName { get; set; }

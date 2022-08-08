@@ -22,7 +22,7 @@ namespace HealthChecks.IdSvr
 
                 return response.IsSuccessStatusCode
                     ? HealthCheckResult.Healthy()
-                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content { await response.Content.ReadAsStringAsync() }");
+                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync()}");
             }
             catch (Exception ex)
             {

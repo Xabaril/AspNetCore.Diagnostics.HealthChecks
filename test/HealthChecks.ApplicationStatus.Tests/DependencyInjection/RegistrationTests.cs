@@ -94,7 +94,7 @@ public class applicationstatus_registration_should
         var registration = services
              .Where(x => x.ServiceType.Equals(typeof(ApplicationStatusHealthCheck)));
 
-        registration.Count().ShouldBe(1);
-        registration.First().Lifetime.ShouldBe(ServiceLifetime.Singleton);
+        registration.Count().ShouldBe(2);
+        registration.All(x => x.Lifetime.Equals(ServiceLifetime.Singleton)).ShouldBeTrue();
     }
 }

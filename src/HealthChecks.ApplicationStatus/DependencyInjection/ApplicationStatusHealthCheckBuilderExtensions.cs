@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
@@ -39,7 +38,7 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
         }
 
         builder.Services
-            .TryAddSingleton(sp => new ApplicationStatusHealthCheck(lifetime));
+            .AddSingleton(sp => new ApplicationStatusHealthCheck(lifetime));
 
         return AddApplicationStatusCheck(builder, name, failureStatus, tags, timeout);
     }
@@ -64,7 +63,7 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
         TimeSpan? timeout = default)
     {
         builder.Services
-            .TryAddSingleton(sp => new ApplicationStatusHealthCheck(sp.GetRequiredService<IHostApplicationLifetime>()));
+            .AddSingleton(sp => new ApplicationStatusHealthCheck(sp.GetRequiredService<IHostApplicationLifetime>()));
 
         return AddApplicationStatusCheck(builder, name, failureStatus, tags, timeout);
     }

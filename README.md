@@ -1,3 +1,4 @@
+[![HealthChecks Application Status CI](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_applicationstatus_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_applicationstatus_ci.yml)
 [![ArangoDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_arangodb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_arangodb_ci.yml)
 [![Aws S3 Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_s3_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_s3_ci.yml)
 [![Aws SecretsManager Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_secretsmanager_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_aws_secretsmanager_ci.yml)
@@ -97,6 +98,7 @@ HealthChecks packages include health checks for:
 
 | Package                | Downloads                                                                                                                                                           | Notes                                                                  |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| ApplicationStatus      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ApplicationStatus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ApplicationStatus)     | 
 | ArangoDB               | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ArangoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ArangoDb)                       |
 | Amazon S3              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.S3)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.S3)                           |
 | Amazon Secrets Manager | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.SecretsManager)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.SecretsManager)   |
@@ -141,6 +143,7 @@ HealthChecks packages include health checks for:
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
 ```PowerShell
+Install-Package AspNetCore.HealthChecks.ApplicationStatus
 Install-Package AspNetCore.HealthChecks.ArangoDb
 Install-Package AspNetCore.HealthChecks.Aws.S3
 Install-Package AspNetCore.HealthChecks.Aws.SecretsManager

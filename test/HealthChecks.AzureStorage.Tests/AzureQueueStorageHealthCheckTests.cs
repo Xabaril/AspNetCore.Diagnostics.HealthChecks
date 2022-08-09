@@ -20,18 +20,15 @@ public class azurequeuestoragehealthcheck_should
 
     public azurequeuestoragehealthcheck_should()
     {
-        var snapshot = Substitute.For<IOptionsSnapshot<QueueStorageHealthCheckOptions>>();
-
         _queueServiceClient = Substitute.For<QueueServiceClient>();
         _queueClient = Substitute.For<QueueClient>();
         _options = new QueueStorageHealthCheckOptions();
-        _healthCheck = new AzureQueueStorageHealthCheck(_queueServiceClient, snapshot);
+        _healthCheck = new AzureQueueStorageHealthCheck(_queueServiceClient, _options);
         _context = new HealthCheckContext
         {
             Registration = new HealthCheckRegistration("unit-test-check", _healthCheck, HealthStatus.Unhealthy, null)
         };
 
-        snapshot.Get(HealthCheckName).Returns(_options);
         _queueServiceClient.GetQueueClient(QueueName).Returns(_queueClient);
     }
 
@@ -138,5 +135,28 @@ public class azurequeuestoragehealthcheck_should
             .GetPropertiesAsync(tokenSource.Token);
 
         actual.Status.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task return_unhealthy_when_invoked_from_healthcheckservice()
+    {
+        IServiceProvider provider = new ServiceCollection()
+            .AddSingleton(_queueServiceClient)
+            .AddLogging()
+            .AddHealthChecks()
+            .AddAzureQueueStorage(name: HealthCheckName)
+            .Services
+            .BuildServiceProvider();
+
+        _queueServiceClient
+            .GetPropertiesAsync(Arg.Any<CancellationToken>())
+            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        var service = provider.GetRequiredService<HealthCheckService>();
+        var report = await service.CheckHealthAsync();
+
+        var actual = report.Entries[HealthCheckName];
+        actual.Status.Should().Be(HealthStatus.Unhealthy);
+        actual.Exception!.ShouldBeOfType<RequestFailedException>();
     }
 }

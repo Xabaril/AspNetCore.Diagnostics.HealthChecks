@@ -4,7 +4,6 @@ using Azure.Storage.Files.Shares;
 using Azure.Storage.Queues;
 using HealthChecks.AzureStorage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -104,25 +103,20 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureBlobStorage(
             this IHealthChecksBuilder builder,
-            Action<BlobStorageHealthCheckOptions>? configureOptions = default,
+            Action<IServiceProvider, BlobStorageHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            name ??= AZUREBLOB_NAME;
-
-            var optionsBuilder = builder.Services.AddOptions<BlobStorageHealthCheckOptions>(name);
-            if (configureOptions != null)
-            {
-                optionsBuilder.Configure(configureOptions);
-            }
-
             return builder.Add(new HealthCheckRegistration(
-               name,
-               sp => new AzureBlobStorageHealthCheck(
-                   sp.GetRequiredService<BlobServiceClient>(),
-                   sp.GetRequiredService<IOptionsSnapshot<BlobStorageHealthCheckOptions>>()),
+               name ?? AZUREBLOB_NAME,
+               sp =>
+               {
+                   var options = new BlobStorageHealthCheckOptions();
+                   configureOptions?.Invoke(sp, options);
+                   return new AzureBlobStorageHealthCheck(sp.GetRequiredService<BlobServiceClient>(), options);
+               },
                failureStatus,
                tags,
                timeout));
@@ -177,25 +171,20 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureFileShare(
             this IHealthChecksBuilder builder,
-            Action<FileShareHealthCheckOptions>? configureOptions = default,
+            Action<IServiceProvider, FileShareHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            name ??= AZUREFILESHARE_NAME;
-
-            var optionsBuilder = builder.Services.AddOptions<FileShareHealthCheckOptions>(name);
-            if (configureOptions != null)
-            {
-                optionsBuilder.Configure(configureOptions);
-            }
-
             return builder.Add(new HealthCheckRegistration(
-               name,
-               sp => new AzureFileShareHealthCheck(
-                   sp.GetRequiredService<ShareServiceClient>(),
-                   sp.GetRequiredService<IOptionsSnapshot<FileShareHealthCheckOptions>>()),
+               name ?? AZUREFILESHARE_NAME,
+               sp =>
+               {
+                   var options = new FileShareHealthCheckOptions();
+                   configureOptions?.Invoke(sp, options);
+                   return new AzureFileShareHealthCheck(sp.GetRequiredService<ShareServiceClient>(), options);
+               },
                failureStatus,
                tags,
                timeout));
@@ -283,25 +272,20 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureQueueStorage(
             this IHealthChecksBuilder builder,
-            Action<QueueStorageHealthCheckOptions>? configureOptions = default,
+            Action<IServiceProvider, QueueStorageHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            name ??= AZUREQUEUE_NAME;
-
-            var optionsBuilder = builder.Services.AddOptions<QueueStorageHealthCheckOptions>(name);
-            if (configureOptions != null)
-            {
-                optionsBuilder.Configure(configureOptions);
-            }
-
             return builder.Add(new HealthCheckRegistration(
-               name,
-               sp => new AzureQueueStorageHealthCheck(
-                   sp.GetRequiredService<QueueServiceClient>(),
-                   sp.GetRequiredService<IOptionsSnapshot<QueueStorageHealthCheckOptions>>()),
+               name ?? AZUREQUEUE_NAME,
+               sp =>
+               {
+                   var options = new QueueStorageHealthCheckOptions();
+                   configureOptions?.Invoke(sp, options);
+                   return new AzureQueueStorageHealthCheck(sp.GetRequiredService<QueueServiceClient>(), options);
+               },
                failureStatus,
                tags,
                timeout));

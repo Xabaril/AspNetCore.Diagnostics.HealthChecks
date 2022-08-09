@@ -20,18 +20,15 @@ public class azurefilesharehealthcheck_should
 
     public azurefilesharehealthcheck_should()
     {
-        var snapshot = Substitute.For<IOptionsSnapshot<FileShareHealthCheckOptions>>();
-
         _shareServiceClient = Substitute.For<ShareServiceClient>();
         _shareClient = Substitute.For<ShareClient>();
         _options = new FileShareHealthCheckOptions();
-        _healthCheck = new AzureFileShareHealthCheck(_shareServiceClient, snapshot);
+        _healthCheck = new AzureFileShareHealthCheck(_shareServiceClient, _options);
         _context = new HealthCheckContext
         {
             Registration = new HealthCheckRegistration(HealthCheckName, _healthCheck, HealthStatus.Unhealthy, null)
         };
 
-        snapshot.Get(HealthCheckName).Returns(_options);
         _shareServiceClient.GetShareClient(ShareName).Returns(_shareClient);
     }
 
@@ -138,5 +135,28 @@ public class azurefilesharehealthcheck_should
             .GetPropertiesAsync(tokenSource.Token);
 
         actual.Status.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task return_unhealthy_when_invoked_from_healthcheckservice()
+    {
+        IServiceProvider provider = new ServiceCollection()
+            .AddSingleton(_shareServiceClient)
+            .AddLogging()
+            .AddHealthChecks()
+            .AddAzureFileShare(name: HealthCheckName)
+            .Services
+            .BuildServiceProvider();
+
+        _shareServiceClient
+            .GetPropertiesAsync(Arg.Any<CancellationToken>())
+            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        var service = provider.GetRequiredService<HealthCheckService>();
+        var report = await service.CheckHealthAsync();
+
+        var actual = report.Entries[HealthCheckName];
+        actual.Status.Should().Be(HealthStatus.Unhealthy);
+        actual.Exception!.ShouldBeOfType<RequestFailedException>();
     }
 }

@@ -1,21 +1,20 @@
 using Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 
 namespace HealthChecks.AzureStorage
 {
     public class AzureFileShareHealthCheck : IHealthCheck
     {
         private readonly ShareServiceClient _shareServiceClient;
-        private readonly IOptionsSnapshot<FileShareHealthCheckOptions> _options;
+        private readonly FileShareHealthCheckOptions _options;
 
         public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
             : this(
                   ClientCache<ShareServiceClient>.GetOrAdd(connectionString, _ => new ShareServiceClient(connectionString)),
-                  new SimpleSnapshot<FileShareHealthCheckOptions>(new FileShareHealthCheckOptions { ShareName = shareName }))
+                  new FileShareHealthCheckOptions { ShareName = shareName })
         { }
 
-        public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, IOptionsSnapshot<FileShareHealthCheckOptions> options)
+        public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, FileShareHealthCheckOptions options)
         {
             _shareServiceClient = shareServiceClient ?? throw new ArgumentNullException(nameof(shareServiceClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -23,13 +22,11 @@ namespace HealthChecks.AzureStorage
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            var options = _options.Get(context.Registration.Name);
-
             await _shareServiceClient.GetPropertiesAsync(cancellationToken);
 
-            if (!string.IsNullOrEmpty(options.ShareName))
+            if (!string.IsNullOrEmpty(_options.ShareName))
             {
-                var containerClient = _shareServiceClient.GetShareClient(options.ShareName);
+                var containerClient = _shareServiceClient.GetShareClient(_options.ShareName);
                 await containerClient.GetPropertiesAsync(cancellationToken);
             }
 

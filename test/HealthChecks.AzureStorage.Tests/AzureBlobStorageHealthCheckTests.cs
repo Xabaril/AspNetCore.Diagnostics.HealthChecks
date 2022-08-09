@@ -20,18 +20,15 @@ public class azureblobstoragehealthcheck_should
 
     public azureblobstoragehealthcheck_should()
     {
-        var snapshot = Substitute.For<IOptionsSnapshot<BlobStorageHealthCheckOptions>>();
-
         _blobServiceClient = Substitute.For<BlobServiceClient>();
         _blobContainerClient = Substitute.For<BlobContainerClient>();
         _options = new BlobStorageHealthCheckOptions();
-        _healthCheck = new AzureBlobStorageHealthCheck(_blobServiceClient, snapshot);
+        _healthCheck = new AzureBlobStorageHealthCheck(_blobServiceClient, _options);
         _context = new HealthCheckContext
         {
             Registration = new HealthCheckRegistration(HealthCheckName, _healthCheck, HealthStatus.Unhealthy, null)
         };
 
-        snapshot.Get(HealthCheckName).Returns(_options);
         _blobServiceClient.GetBlobContainerClient(ContainerName).Returns(_blobContainerClient);
     }
 
@@ -138,5 +135,28 @@ public class azureblobstoragehealthcheck_should
             .GetPropertiesAsync(conditions: null, cancellationToken: tokenSource.Token);
 
         actual.Status.Should().Be((int)HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task return_unhealthy_when_invoked_from_healthcheckservice()
+    {
+        IServiceProvider provider = new ServiceCollection()
+            .AddSingleton(_blobServiceClient)
+            .AddLogging()
+            .AddHealthChecks()
+            .AddAzureBlobStorage(name: HealthCheckName)
+            .Services
+            .BuildServiceProvider();
+
+        _blobServiceClient
+            .GetPropertiesAsync(Arg.Any<CancellationToken>())
+            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        var service = provider.GetRequiredService<HealthCheckService>();
+        var report = await service.CheckHealthAsync();
+
+        var actual = report.Entries[HealthCheckName];
+        actual.Status.Should().Be(HealthStatus.Unhealthy);
+        actual.Exception!.ShouldBeOfType<RequestFailedException>();
     }
 }

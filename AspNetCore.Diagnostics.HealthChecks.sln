@@ -233,6 +233,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Nats.Tests", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{531ABAB1-F4B5-4EAE-B310-6CB55D8FA4FD}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\healthchecks_applicationstatus_cd.yml = .github\workflows\healthchecks_applicationstatus_cd.yml
+		.github\workflows\healthchecks_applicationstatus_cd_preview.yml = .github\workflows\healthchecks_applicationstatus_cd_preview.yml
+		.github\workflows\healthchecks_applicationstatus_ci.yml = .github\workflows\healthchecks_applicationstatus_ci.yml
 		.github\workflows\healthchecks_arangodb_cd.yml = .github\workflows\healthchecks_arangodb_cd.yml
 		.github\workflows\healthchecks_arangodb_cd_preview.yml = .github\workflows\healthchecks_arangodb_cd_preview.yml
 		.github\workflows\healthchecks_arangodb_ci.yml = .github\workflows\healthchecks_arangodb_ci.yml
@@ -387,7 +390,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sns", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sns.Tests", "test\HealthChecks.Aws.Sns.Tests\HealthChecks.Aws.Sns.Tests.csproj", "{CB1A7B68-E24A-4729-9401-606F3A914586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ApplicationStatus", "src\HealthChecks.ApplicationStatus\HealthChecks.ApplicationStatus.csproj", "{88739521-A9BC-49E1-BB98-E9D63109C231}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ApplicationStatus", "src\HealthChecks.ApplicationStatus\HealthChecks.ApplicationStatus.csproj", "{88739521-A9BC-49E1-BB98-E9D63109C231}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ApplicationStatus.Tests", "test\HealthChecks.ApplicationStatus.Tests\HealthChecks.ApplicationStatus.Tests.csproj", "{403776CB-7229-4063-85C7-C34428BDAA8F}"
 EndProject

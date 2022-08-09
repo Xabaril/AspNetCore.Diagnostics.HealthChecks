@@ -78,23 +78,4 @@ public class applicationstatus_registration_should
         registration.Name.Should().Be("custom-status");
         check.GetType().Should().Be(typeof(ApplicationStatusHealthCheck));
     }
-
-    [Fact]
-    public void add_named_health_check_several_times_only_one_health_check_in_ioc()
-    {
-        var services = new ServiceCollection();
-        services.AddHealthChecks()
-            .AddApplicationStatus(new TestHostApplicationLifeTime(), name: "custom-status-0")
-            .AddApplicationStatus(new TestHostApplicationLifeTime(), name: "custom-status-1");
-
-        using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
-
-        options.Value.Registrations.Count.Should().Be(2);
-        var registration = services
-             .Where(x => x.ServiceType.Equals(typeof(ApplicationStatusHealthCheck)));
-
-        registration.Count().ShouldBe(2);
-        registration.All(x => x.Lifetime.Equals(ServiceLifetime.Singleton)).ShouldBeTrue();
-    }
 }

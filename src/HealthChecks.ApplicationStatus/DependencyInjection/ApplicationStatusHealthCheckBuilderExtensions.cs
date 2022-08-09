@@ -37,10 +37,12 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
             throw new ArgumentNullException(nameof(IHostApplicationLifetime));
         }
 
-        builder.Services
-            .AddSingleton(sp => new ApplicationStatusHealthCheck(lifetime));
-
-        return AddApplicationStatusCheck(builder, name, failureStatus, tags, timeout);
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp => new ApplicationStatusHealthCheck(lifetime),
+            failureStatus,
+            tags,
+            timeout));
     }
 
     /// <summary>
@@ -62,34 +64,9 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new ApplicationStatusHealthCheck(sp.GetRequiredService<IHostApplicationLifetime>()));
-
-        return AddApplicationStatusCheck(builder, name, failureStatus, tags, timeout);
-    }
-
-    /// <summary>
-    /// Add a health check for Application Status from DI container.
-    /// </summary>
-    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'applicationstatus' will be used for the name.</param>
-    /// <param name="failureStatus">
-    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-    /// </param>
-    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-    /// <returns>The specified <paramref name="builder"/>.</returns>
-    private static IHealthChecksBuilder AddApplicationStatusCheck(
-        this IHealthChecksBuilder builder,
-        string? name = default,
-        HealthStatus? failureStatus = default,
-        IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
-    {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<ApplicationStatusHealthCheck>(),
+            sp => new ApplicationStatusHealthCheck(sp.GetRequiredService<IHostApplicationLifetime>()),
             failureStatus,
             tags,
             timeout));

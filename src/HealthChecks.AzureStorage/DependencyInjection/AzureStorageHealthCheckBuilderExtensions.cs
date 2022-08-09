@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class AzureStorageHealthCheckBuilderExtensions
     {
-        private const string AZURESTORAGE_NAME = "azureblob";
+        private const string AZUREBLOB_NAME = "azureblob";
         private const string AZUREFILESHARE_NAME = "azurefileshare";
         private const string AZUREQUEUE_NAME = "azurequeue";
 
@@ -44,7 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
-               name ?? AZURESTORAGE_NAME,
+               name ?? AZUREBLOB_NAME,
                sp => new AzureBlobStorageHealthCheck(connectionString, containerName, clientOptions),
                failureStatus,
                tags,
@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
-               name ?? AZURESTORAGE_NAME,
+               name ?? AZUREBLOB_NAME,
                sp => new AzureBlobStorageHealthCheck(blobServiceUri, credential, containerName, clientOptions),
                failureStatus,
                tags,
@@ -110,17 +110,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var optionsBuilder = builder.Services.AddOptions<BlobStorageHealthCheckOptions>();
+            name ??= AZUREBLOB_NAME;
+
+            var optionsBuilder = builder.Services.AddOptions<BlobStorageHealthCheckOptions>(name);
             if (configureOptions != null)
             {
                 optionsBuilder.Configure(configureOptions);
             }
 
             return builder.Add(new HealthCheckRegistration(
-               name ?? AZURESTORAGE_NAME,
+               name,
                sp => new AzureBlobStorageHealthCheck(
                    sp.GetRequiredService<BlobServiceClient>(),
-                   sp.GetRequiredService<IOptions<BlobStorageHealthCheckOptions>>()),
+                   sp.GetRequiredService<IOptionsSnapshot<BlobStorageHealthCheckOptions>>()),
                failureStatus,
                tags,
                timeout));
@@ -132,7 +134,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The Azure Storage connection string to be used.</param>
         /// <param name="shareName">The name of the Azure file share to check if exist.</param>
-        /// <param name="clientOptions">Provide the client configuration options to connect with Azure Storage.</param>
         /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azurefileshare' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
@@ -145,7 +146,6 @@ namespace Microsoft.Extensions.DependencyInjection
             this IHealthChecksBuilder builder,
             string connectionString,
             string? shareName = default,
-            ShareClientOptions? clientOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -153,7 +153,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREFILESHARE_NAME,
-               sp => new AzureFileShareHealthCheck(connectionString, shareName, clientOptions),
+               sp => new AzureFileShareHealthCheck(connectionString, shareName),
                failureStatus,
                tags,
                timeout));
@@ -183,17 +183,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var optionsBuilder = builder.Services.AddOptions<FileShareHealthCheckOptions>();
+            name ??= AZUREFILESHARE_NAME;
+
+            var optionsBuilder = builder.Services.AddOptions<FileShareHealthCheckOptions>(name);
             if (configureOptions != null)
             {
                 optionsBuilder.Configure(configureOptions);
             }
 
             return builder.Add(new HealthCheckRegistration(
-               name ?? AZUREFILESHARE_NAME,
+               name,
                sp => new AzureFileShareHealthCheck(
                    sp.GetRequiredService<ShareServiceClient>(),
-                   sp.GetRequiredService<IOptions<FileShareHealthCheckOptions>>()),
+                   sp.GetRequiredService<IOptionsSnapshot<FileShareHealthCheckOptions>>()),
                failureStatus,
                tags,
                timeout));
@@ -287,17 +289,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var optionsBuilder = builder.Services.AddOptions<QueueStorageHealthCheckOptions>();
+            name ??= AZUREQUEUE_NAME;
+
+            var optionsBuilder = builder.Services.AddOptions<QueueStorageHealthCheckOptions>(name);
             if (configureOptions != null)
             {
                 optionsBuilder.Configure(configureOptions);
             }
 
             return builder.Add(new HealthCheckRegistration(
-               name ?? AZUREQUEUE_NAME,
+               name,
                sp => new AzureQueueStorageHealthCheck(
                    sp.GetRequiredService<QueueServiceClient>(),
-                   sp.GetRequiredService<IOptions<QueueStorageHealthCheckOptions>>()),
+                   sp.GetRequiredService<IOptionsSnapshot<QueueStorageHealthCheckOptions>>()),
                failureStatus,
                tags,
                timeout));

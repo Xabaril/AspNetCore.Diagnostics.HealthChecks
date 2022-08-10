@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.6.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
     <PackageReference Include="Azure.Storage.Queues" Version="12.11.0" />
     <PackageReference Include="Azure.Storage.Files.Shares" Version="12.11.0" />

@@ -1,4 +1,4 @@
-using Azure.Identity;
+using Azure.Core;
 using Azure.Storage.Queues;
 using NSubstitute;
 
@@ -46,7 +46,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddAzureQueueStorage(
                     new Uri("https://unit-test.queue.core.windows.net"),
-                    new DefaultAzureCredential(),
+                    Substitute.For<TokenCredential>(),
                     queueName: queueName,
                     name: registrationName,
                     failureStatus: failureStatus)

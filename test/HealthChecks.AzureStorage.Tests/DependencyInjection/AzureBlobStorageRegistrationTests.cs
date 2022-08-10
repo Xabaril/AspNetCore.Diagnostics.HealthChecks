@@ -1,4 +1,5 @@
-using Azure.Identity;
+using Azure;
+using Azure.Core;
 using Azure.Storage.Blobs;
 using NSubstitute;
 
@@ -46,7 +47,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddAzureBlobStorage(
                     new Uri("https://unit-test.blob.core.windows.net"),
-                    new DefaultAzureCredential(),
+                    Substitute.For<TokenCredential>(),
                     containerName: containerName,
                     name: registrationName,
                     failureStatus: failureStatus)

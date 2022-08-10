@@ -51,7 +51,7 @@ public class azurequeuestoragehealthcheck_should
             .DidNotReceiveWithAnyArgs()
             .GetPropertiesAsync(default);
 
-        actual.Status.Should().Be(HealthStatus.Healthy);
+        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class azurequeuestoragehealthcheck_should
             .Received(1)
             .GetPropertiesAsync(tokenSource.Token);
 
-        actual.Status.Should().Be(HealthStatus.Healthy);
+        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Theory]
@@ -105,7 +105,7 @@ public class azurequeuestoragehealthcheck_should
             .DidNotReceiveWithAnyArgs()
             .GetPropertiesAsync(default);
 
-        actual.Status.Should().Be((int)HttpStatusCode.Unauthorized);
+        actual.Status.ShouldBe((int)HttpStatusCode.Unauthorized);
     }
 
     [Fact]
@@ -134,29 +134,41 @@ public class azurequeuestoragehealthcheck_should
             .Received(1)
             .GetPropertiesAsync(tokenSource.Token);
 
-        actual.Status.Should().Be((int)HttpStatusCode.NotFound);
+        actual.Status.ShouldBe((int)HttpStatusCode.NotFound);
     }
 
     [Fact]
     public async Task return_unhealthy_when_invoked_from_healthcheckservice()
     {
-        IServiceProvider provider = new ServiceCollection()
+        using var provider = new ServiceCollection()
             .AddSingleton(_queueServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureQueueStorage(name: HealthCheckName)
+            .AddAzureQueueStorage((sp, o) => o.QueueName = QueueName, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 
         _queueServiceClient
             .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+            .Returns(Substitute.For<Response<QueueServiceProperties>>());
+
+        _queueClient
+            .GetPropertiesAsync(Arg.Any<CancellationToken>())
+            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Queue not found"));
 
         var service = provider.GetRequiredService<HealthCheckService>();
         var report = await service.CheckHealthAsync();
 
+        await _queueServiceClient
+            .Received(1)
+            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+
+        await _queueClient
+            .Received(1)
+            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+
         var actual = report.Entries[HealthCheckName];
-        actual.Status.Should().Be(HealthStatus.Unhealthy);
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual.Exception!.ShouldBeOfType<RequestFailedException>();
     }
 }

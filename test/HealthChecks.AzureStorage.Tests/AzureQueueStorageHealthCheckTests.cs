@@ -14,7 +14,7 @@ public class azurequeuestoragehealthcheck_should
 
     private readonly QueueServiceClient _queueServiceClient;
     private readonly QueueClient _queueClient;
-    private readonly QueueStorageHealthCheckOptions _options;
+    private readonly AzureQueueStorageHealthCheckOptions _options;
     private readonly AzureQueueStorageHealthCheck _healthCheck;
     private readonly HealthCheckContext _context;
 
@@ -22,7 +22,7 @@ public class azurequeuestoragehealthcheck_should
     {
         _queueServiceClient = Substitute.For<QueueServiceClient>();
         _queueClient = Substitute.For<QueueClient>();
-        _options = new QueueStorageHealthCheckOptions();
+        _options = new AzureQueueStorageHealthCheckOptions();
         _healthCheck = new AzureQueueStorageHealthCheck(_queueServiceClient, _options);
         _context = new HealthCheckContext
         {

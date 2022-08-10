@@ -103,7 +103,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureBlobStorage(
             this IHealthChecksBuilder builder,
-            Action<IServiceProvider, BlobStorageHealthCheckOptions>? configureOptions = default,
+            Action<IServiceProvider, AzureBlobStorageHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -113,7 +113,7 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? AZUREBLOB_NAME,
                sp =>
                {
-                   var options = new BlobStorageHealthCheckOptions();
+                   var options = new AzureBlobStorageHealthCheckOptions();
                    configureOptions?.Invoke(sp, options);
                    return new AzureBlobStorageHealthCheck(sp.GetRequiredService<BlobServiceClient>(), options);
                },
@@ -171,7 +171,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureFileShare(
             this IHealthChecksBuilder builder,
-            Action<IServiceProvider, FileShareHealthCheckOptions>? configureOptions = default,
+            Action<IServiceProvider, AzureFileShareHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -181,7 +181,7 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? AZUREFILESHARE_NAME,
                sp =>
                {
-                   var options = new FileShareHealthCheckOptions();
+                   var options = new AzureFileShareHealthCheckOptions();
                    configureOptions?.Invoke(sp, options);
                    return new AzureFileShareHealthCheck(sp.GetRequiredService<ShareServiceClient>(), options);
                },
@@ -272,7 +272,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddAzureQueueStorage(
             this IHealthChecksBuilder builder,
-            Action<IServiceProvider, QueueStorageHealthCheckOptions>? configureOptions = default,
+            Action<IServiceProvider, AzureQueueStorageHealthCheckOptions>? configureOptions = default,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -282,7 +282,7 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? AZUREQUEUE_NAME,
                sp =>
                {
-                   var options = new QueueStorageHealthCheckOptions();
+                   var options = new AzureQueueStorageHealthCheckOptions();
                    configureOptions?.Invoke(sp, options);
                    return new AzureQueueStorageHealthCheck(sp.GetRequiredService<QueueServiceClient>(), options);
                },

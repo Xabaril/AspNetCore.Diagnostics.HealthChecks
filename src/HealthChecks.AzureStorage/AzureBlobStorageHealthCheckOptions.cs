@@ -3,7 +3,7 @@ namespace HealthChecks.AzureStorage;
 /// <summary>
 /// Represents a collection of settings that configure Azure Storage Blob Service health checks.
 /// </summary>
-public sealed class BlobStorageHealthCheckOptions
+public sealed class AzureBlobStorageHealthCheckOptions
 {
     /// <summary>
     /// Gets or sets the name of the Azure Storage container whose health should be checked.

@@ -7,21 +7,21 @@ namespace HealthChecks.AzureStorage
     public class AzureQueueStorageHealthCheck : IHealthCheck
     {
         private readonly QueueServiceClient _queueServiceClient;
-        private readonly QueueStorageHealthCheckOptions _options;
+        private readonly AzureQueueStorageHealthCheckOptions _options;
 
         public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
             : this(
                   ClientCache<QueueServiceClient>.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
-                  new QueueStorageHealthCheckOptions { QueueName = queueName })
+                  new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
         { }
 
         public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
             : this(
                   ClientCache<QueueServiceClient>.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
-                  new QueueStorageHealthCheckOptions { QueueName = queueName })
+                  new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
         { }
 
-        public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, QueueStorageHealthCheckOptions options)
+        public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
         {
             _queueServiceClient = queueServiceClient ?? throw new ArgumentNullException(nameof(queueServiceClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));

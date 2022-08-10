@@ -14,7 +14,7 @@ public class azurefilesharehealthcheck_should
 
     private readonly ShareServiceClient _shareServiceClient;
     private readonly ShareClient _shareClient;
-    private readonly FileShareHealthCheckOptions _options;
+    private readonly AzureFileShareHealthCheckOptions _options;
     private readonly AzureFileShareHealthCheck _healthCheck;
     private readonly HealthCheckContext _context;
 
@@ -22,7 +22,7 @@ public class azurefilesharehealthcheck_should
     {
         _shareServiceClient = Substitute.For<ShareServiceClient>();
         _shareClient = Substitute.For<ShareClient>();
-        _options = new FileShareHealthCheckOptions();
+        _options = new AzureFileShareHealthCheckOptions();
         _healthCheck = new AzureFileShareHealthCheck(_shareServiceClient, _options);
         _context = new HealthCheckContext
         {

@@ -7,21 +7,21 @@ namespace HealthChecks.AzureStorage
     public class AzureBlobStorageHealthCheck : IHealthCheck
     {
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly BlobStorageHealthCheckOptions _options;
+        private readonly AzureBlobStorageHealthCheckOptions _options;
 
         public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = default)
             : this(
                   ClientCache<BlobServiceClient>.GetOrAdd(connectionString, k => new BlobServiceClient(k, clientOptions)),
-                  new BlobStorageHealthCheckOptions { ContainerName = containerName })
+                  new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
         { }
 
         public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = default)
             : this(
                   ClientCache<BlobServiceClient>.GetOrAdd(blobServiceUri?.ToString()!, _ => new BlobServiceClient(blobServiceUri, credential, clientOptions)),
-                  new BlobStorageHealthCheckOptions { ContainerName = containerName })
+                  new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
         { }
 
-        public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, BlobStorageHealthCheckOptions options)
+        public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, AzureBlobStorageHealthCheckOptions options)
         {
             _blobServiceClient = blobServiceClient ?? throw new ArgumentNullException(nameof(blobServiceClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));

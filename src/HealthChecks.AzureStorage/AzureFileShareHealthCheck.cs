@@ -6,15 +6,15 @@ namespace HealthChecks.AzureStorage
     public class AzureFileShareHealthCheck : IHealthCheck
     {
         private readonly ShareServiceClient _shareServiceClient;
-        private readonly FileShareHealthCheckOptions _options;
+        private readonly AzureFileShareHealthCheckOptions _options;
 
         public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
             : this(
                   ClientCache<ShareServiceClient>.GetOrAdd(connectionString, _ => new ShareServiceClient(connectionString)),
-                  new FileShareHealthCheckOptions { ShareName = shareName })
+                  new AzureFileShareHealthCheckOptions { ShareName = shareName })
         { }
 
-        public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, FileShareHealthCheckOptions options)
+        public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, AzureFileShareHealthCheckOptions options)
         {
             _shareServiceClient = shareServiceClient ?? throw new ArgumentNullException(nameof(shareServiceClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));

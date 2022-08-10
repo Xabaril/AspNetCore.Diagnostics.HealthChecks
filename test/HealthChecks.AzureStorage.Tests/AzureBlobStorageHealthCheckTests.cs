@@ -14,7 +14,7 @@ public class azureblobstoragehealthcheck_should
 
     private readonly BlobServiceClient _blobServiceClient;
     private readonly BlobContainerClient _blobContainerClient;
-    private readonly BlobStorageHealthCheckOptions _options;
+    private readonly AzureBlobStorageHealthCheckOptions _options;
     private readonly AzureBlobStorageHealthCheck _healthCheck;
     private readonly HealthCheckContext _context;
 
@@ -22,7 +22,7 @@ public class azureblobstoragehealthcheck_should
     {
         _blobServiceClient = Substitute.For<BlobServiceClient>();
         _blobContainerClient = Substitute.For<BlobContainerClient>();
-        _options = new BlobStorageHealthCheckOptions();
+        _options = new AzureBlobStorageHealthCheckOptions();
         _healthCheck = new AzureBlobStorageHealthCheck(_blobServiceClient, _options);
         _context = new HealthCheckContext
         {

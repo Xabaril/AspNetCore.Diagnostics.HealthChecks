@@ -1,4 +1,3 @@
-using Azure;
 using Azure.Core;
 using Azure.Storage.Blobs;
 using NSubstitute;

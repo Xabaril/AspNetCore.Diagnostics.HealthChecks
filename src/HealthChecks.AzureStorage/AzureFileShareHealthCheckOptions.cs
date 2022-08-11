@@ -1,7 +1,8 @@
 namespace HealthChecks.AzureStorage;
 
 /// <summary>
-/// Represents a collection of settings that configure Azure Storage File Share Service health checks.
+/// Represents a collection of settings that configure
+/// <see cref="AzureFileShareHealthCheck">Azure Storage File Share Service health checks</see>.
 /// </summary>
 public sealed class AzureFileShareHealthCheckOptions
 {

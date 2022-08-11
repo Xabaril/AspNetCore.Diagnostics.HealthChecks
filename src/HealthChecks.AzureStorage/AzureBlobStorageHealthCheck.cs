@@ -29,15 +29,22 @@ namespace HealthChecks.AzureStorage
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            await _blobServiceClient.GetPropertiesAsync(cancellationToken);
-
-            if (!string.IsNullOrEmpty(_options.ContainerName))
+            try
             {
-                var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
-                await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
-            }
+                await _blobServiceClient.GetPropertiesAsync(cancellationToken);
 
-            return HealthCheckResult.Healthy();
+                if (!string.IsNullOrEmpty(_options.ContainerName))
+                {
+                    var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
+                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
+                }
+
+                return HealthCheckResult.Healthy();
+            }
+            catch (Exception ex)
+            {
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            }
         }
     }
 }

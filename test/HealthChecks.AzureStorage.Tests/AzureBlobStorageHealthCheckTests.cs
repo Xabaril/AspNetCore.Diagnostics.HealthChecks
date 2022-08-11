@@ -84,7 +84,7 @@ public class azureblobstoragehealthcheck_should
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task throw_when_checking_unhealthy_service(bool checkContainer)
+    public async Task return_unhealthy_when_checking_unhealthy_service(bool checkContainer)
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -93,9 +93,7 @@ public class azureblobstoragehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
 
         _options.ContainerName = checkContainer ? ContainerName : null;
-        var actual = await _healthCheck
-            .CheckHealthAsync(_context, tokenSource.Token)
-            .ShouldThrowAsync<RequestFailedException>();
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         await _blobServiceClient
             .Received(1)
@@ -105,11 +103,14 @@ public class azureblobstoragehealthcheck_should
             .DidNotReceiveWithAnyArgs()
             .GetPropertiesAsync(default, default);
 
-        actual.Status.ShouldBe((int)HttpStatusCode.Unauthorized);
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task throw_when_checking_unhealthy_container()
+    public async Task return_unhealthy_when_checking_unhealthy_container()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -122,9 +123,7 @@ public class azureblobstoragehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Container not found"));
 
         _options.ContainerName = ContainerName;
-        var actual = await _healthCheck
-            .CheckHealthAsync(_context, tokenSource.Token)
-            .ShouldThrowAsync<RequestFailedException>();
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         await _blobServiceClient
             .Received(1)
@@ -134,7 +133,10 @@ public class azureblobstoragehealthcheck_should
             .Received(1)
             .GetPropertiesAsync(conditions: null, cancellationToken: tokenSource.Token);
 
-        actual.Status.ShouldBe((int)HttpStatusCode.NotFound);
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.NotFound);
     }
 
     [Fact]

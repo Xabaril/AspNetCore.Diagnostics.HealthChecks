@@ -109,12 +109,14 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var options = new AzureBlobStorageHealthCheckOptions();
-            configureOptions?.Invoke(options);
-
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREBLOB_NAME,
-               sp => new AzureBlobStorageHealthCheck(sp.GetRequiredService<BlobServiceClient>(), options),
+               sp =>
+               {
+                   var options = new AzureBlobStorageHealthCheckOptions();
+                   configureOptions?.Invoke(options);
+                   return new AzureBlobStorageHealthCheck(sp.GetRequiredService<BlobServiceClient>(), options);
+               },
                failureStatus,
                tags,
                timeout));
@@ -212,12 +214,14 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var options = new AzureFileShareHealthCheckOptions();
-            configureOptions?.Invoke(options);
-
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREFILESHARE_NAME,
-               sp => new AzureFileShareHealthCheck(sp.GetRequiredService<ShareServiceClient>(), options),
+               sp =>
+               {
+                   var options = new AzureFileShareHealthCheckOptions();
+                   configureOptions?.Invoke(options);
+                   return new AzureFileShareHealthCheck(sp.GetRequiredService<ShareServiceClient>(), options);
+               },
                failureStatus,
                tags,
                timeout));
@@ -348,12 +352,14 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var options = new AzureQueueStorageHealthCheckOptions();
-            configureOptions?.Invoke(options);
-
             return builder.Add(new HealthCheckRegistration(
                name ?? AZUREQUEUE_NAME,
-               sp => new AzureQueueStorageHealthCheck(sp.GetRequiredService<QueueServiceClient>(), options),
+               sp =>
+               {
+                   var options = new AzureQueueStorageHealthCheckOptions();
+                   configureOptions?.Invoke(options);
+                   return new AzureQueueStorageHealthCheck(sp.GetRequiredService<QueueServiceClient>(), options);
+               },
                failureStatus,
                tags,
                timeout));

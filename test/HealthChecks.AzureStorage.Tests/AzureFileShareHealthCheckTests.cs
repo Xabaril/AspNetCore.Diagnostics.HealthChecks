@@ -84,7 +84,7 @@ public class azurefilesharehealthcheck_should
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task throw_when_checking_unhealthy_service(bool checkShare)
+    public async Task return_unhealthy_when_checking_unhealthy_service(bool checkShare)
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -93,9 +93,7 @@ public class azurefilesharehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
 
         _options.ShareName = checkShare ? ShareName : null;
-        var actual = await _healthCheck
-            .CheckHealthAsync(_context, tokenSource.Token)
-            .ShouldThrowAsync<RequestFailedException>();
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         await _shareServiceClient
             .Received(1)
@@ -105,11 +103,13 @@ public class azurefilesharehealthcheck_should
             .DidNotReceiveWithAnyArgs()
             .GetPropertiesAsync(default);
 
-        actual.Status.ShouldBe((int)HttpStatusCode.Unauthorized);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task throw_when_checking_unhealthy_share()
+    public async Task return_unhealthy_when_checking_unhealthy_share()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -122,9 +122,7 @@ public class azurefilesharehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "File share not found"));
 
         _options.ShareName = ShareName;
-        var actual = await _healthCheck
-            .CheckHealthAsync(_context, tokenSource.Token)
-            .ShouldThrowAsync<RequestFailedException>();
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         await _shareServiceClient
             .Received(1)
@@ -134,7 +132,9 @@ public class azurefilesharehealthcheck_should
             .Received(1)
             .GetPropertiesAsync(tokenSource.Token);
 
-        actual.Status.ShouldBe((int)HttpStatusCode.NotFound);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.NotFound);
     }
 
     [Fact]

@@ -22,15 +22,22 @@ namespace HealthChecks.AzureStorage
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            await _shareServiceClient.GetPropertiesAsync(cancellationToken);
-
-            if (!string.IsNullOrEmpty(_options.ShareName))
+            try
             {
-                var containerClient = _shareServiceClient.GetShareClient(_options.ShareName);
-                await containerClient.GetPropertiesAsync(cancellationToken);
-            }
+                await _shareServiceClient.GetPropertiesAsync(cancellationToken);
 
-            return HealthCheckResult.Healthy();
+                if (!string.IsNullOrEmpty(_options.ShareName))
+                {
+                    var shareClient = _shareServiceClient.GetShareClient(_options.ShareName);
+                    await shareClient.GetPropertiesAsync(cancellationToken);
+                }
+
+                return HealthCheckResult.Healthy();
+            }
+            catch (Exception ex)
+            {
+                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            }
         }
     }
 }

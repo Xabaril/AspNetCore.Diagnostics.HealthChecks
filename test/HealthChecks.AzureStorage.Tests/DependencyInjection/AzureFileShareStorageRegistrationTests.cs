@@ -45,6 +45,34 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
                 .AddSingleton(Substitute.For<ShareServiceClient>())
                 .AddHealthChecks()
                 .AddAzureFileShare(
+                    o => o.ShareName = shareName,
+                    name: registrationName,
+                    failureStatus: failureStatus)
+                .Services
+                .BuildServiceProvider();
+
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.ShouldBe(registrationName ?? "azurefileshare");
+            registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+            check.ShouldBeOfType<AzureFileShareHealthCheck>();
+        }
+
+        [Theory]
+        [InlineData(null, null, null)]
+        [InlineData("share", null, null)]
+        [InlineData(null, "my-azurefileshare-group", null)]
+        [InlineData(null, null, HealthStatus.Degraded)]
+        [InlineData("share", "my-azurefileshare-group", HealthStatus.Degraded)]
+        public void add_health_check_with_client_from_service_provider_and_advanced_delegate(string? shareName, string? registrationName, HealthStatus? failureStatus)
+        {
+            using var serviceProvider = new ServiceCollection()
+                .AddSingleton(Substitute.For<ShareServiceClient>())
+                .AddHealthChecks()
+                .AddAzureFileShare(
                     (sp, o) => o.ShareName = shareName,
                     name: registrationName,
                     failureStatus: failureStatus)

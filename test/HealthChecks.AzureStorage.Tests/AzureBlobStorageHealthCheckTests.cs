@@ -146,7 +146,7 @@ public class azureblobstoragehealthcheck_should
             .AddSingleton(_blobServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureBlobStorage((sp, o) => o.ContainerName = ContainerName, name: HealthCheckName)
+            .AddAzureBlobStorage(o => o.ContainerName = ContainerName, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 

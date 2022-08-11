@@ -144,7 +144,7 @@ public class azurequeuestoragehealthcheck_should
             .AddSingleton(_queueServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureQueueStorage((sp, o) => o.QueueName = QueueName, name: HealthCheckName)
+            .AddAzureQueueStorage(o => o.QueueName = QueueName, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 

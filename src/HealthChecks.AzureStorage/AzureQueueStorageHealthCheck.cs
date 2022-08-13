@@ -11,13 +11,13 @@ namespace HealthChecks.AzureStorage
 
         public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
             : this(
-                  ClientCache<QueueServiceClient>.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
+                  ClientCache.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
                   new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
         { }
 
         public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
             : this(
-                  ClientCache<QueueServiceClient>.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
+                  ClientCache.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
                   new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
         { }
 

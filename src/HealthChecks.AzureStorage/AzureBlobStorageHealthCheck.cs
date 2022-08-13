@@ -11,13 +11,13 @@ namespace HealthChecks.AzureStorage
 
         public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = default)
             : this(
-                  ClientCache<BlobServiceClient>.GetOrAdd(connectionString, k => new BlobServiceClient(k, clientOptions)),
+                  ClientCache.GetOrAdd(connectionString, k => new BlobServiceClient(k, clientOptions)),
                   new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
         { }
 
         public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = default)
             : this(
-                  ClientCache<BlobServiceClient>.GetOrAdd(blobServiceUri?.ToString()!, _ => new BlobServiceClient(blobServiceUri, credential, clientOptions)),
+                  ClientCache.GetOrAdd(blobServiceUri?.ToString()!, _ => new BlobServiceClient(blobServiceUri, credential, clientOptions)),
                   new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
         { }
 

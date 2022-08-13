@@ -10,7 +10,7 @@ namespace HealthChecks.AzureStorage
 
         public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
             : this(
-                  ClientCache<ShareServiceClient>.GetOrAdd(connectionString, _ => new ShareServiceClient(connectionString)),
+                  ClientCache.GetOrAdd(connectionString, _ => new ShareServiceClient(connectionString)),
                   new AzureFileShareHealthCheckOptions { ShareName = shareName })
         { }
 

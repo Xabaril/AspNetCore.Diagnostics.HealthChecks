@@ -2,12 +2,15 @@ using System.Collections.Concurrent;
 
 namespace HealthChecks.AzureStorage;
 
-internal static class ClientCache<T>
+internal static class ClientCache
 {
-    private static readonly ConcurrentDictionary<string, T> _cache = new();
-
-    public static T GetOrAdd(string key, Func<string, T> clientFactory)
+    public static T GetOrAdd<T>(string key, Func<string, T> clientFactory)
     {
-        return _cache.GetOrAdd(key, clientFactory);
+        return Cache<T>.Instance.GetOrAdd(key, clientFactory);
+    }
+
+    private static class Cache<T>
+    {
+        public static ConcurrentDictionary<string, T> Instance { get; } = new();
     }
 }

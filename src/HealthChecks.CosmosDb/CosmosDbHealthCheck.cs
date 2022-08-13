@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Azure.Core;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -7,73 +6,53 @@ namespace HealthChecks.CosmosDb
 {
     public class CosmosDbHealthCheck : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new();
-
-        private readonly string? _connectionString;
-        private readonly string? _accountEndpoint;
-        private readonly TokenCredential? _tokenCredential;
-        private readonly string? _database;
-        private readonly IEnumerable<string>? _containers;
+        private readonly CosmosClient _cosmosClient;
+        private readonly CosmosDbHealthCheckOptions _options;
 
         public CosmosDbHealthCheck(string connectionString)
             : this(connectionString: connectionString, default, default)
-        {
-        }
+        { }
 
         public CosmosDbHealthCheck(string connectionString, string database)
             : this(connectionString, database, default)
-        {
-            _database = database;
-        }
+        { }
 
         public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string database)
             : this(accountEndpoint, tokenCredential, database, default)
-        {
-            _database = database;
-        }
+        { }
 
         public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
-        {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _database = database;
-            _containers = containers;
-        }
+            : this(
+                  ClientCache.GetOrAddDisposable(connectionString, k => new CosmosClient(connectionString)),
+                  new CosmosDbHealthCheckOptions { ContainerIds = containers, DatabaseId = database })
+        { }
 
         public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string? database, IEnumerable<string>? containers)
+            : this(
+                  ClientCache.GetOrAddDisposable(accountEndpoint, k => new CosmosClient(accountEndpoint, tokenCredential)),
+                  new CosmosDbHealthCheckOptions { ContainerIds = containers, DatabaseId = database })
+        { }
+
+        public CosmosDbHealthCheck(CosmosClient cosmosClient, CosmosDbHealthCheckOptions options)
         {
-            _accountEndpoint = accountEndpoint ?? throw new ArgumentNullException(nameof(accountEndpoint));
-            _tokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
-            _database = database;
-            _containers = containers;
+            _cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var connectionsKey = _connectionString ?? _accountEndpoint!;
+                await _cosmosClient.ReadAccountAsync();
 
-                if (!_connections.TryGetValue(connectionsKey, out var cosmosDbClient))
+                if (_options.DatabaseId != null)
                 {
-                    cosmosDbClient = CreateCosmosDbClient();
-
-                    if (!_connections.TryAdd(connectionsKey, cosmosDbClient))
-                    {
-                        cosmosDbClient.Dispose();
-                        cosmosDbClient = _connections[connectionsKey];
-                    }
-                }
-
-                await cosmosDbClient.ReadAccountAsync();
-
-                if (_database != null)
-                {
-                    var database = cosmosDbClient.GetDatabase(_database);
+                    var database = _cosmosClient.GetDatabase(_options.DatabaseId);
                     await database.ReadAsync();
 
-                    if (_containers != null && _containers.Any())
+                    if (_options.ContainerIds != null)
                     {
-                        foreach (var container in _containers)
+                        foreach (var container in _options.ContainerIds)
                         {
                             await database.GetContainer(container)
                                 .ReadContainerAsync();
@@ -87,13 +66,6 @@ namespace HealthChecks.CosmosDb
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
-        }
-
-        private CosmosClient CreateCosmosDbClient()
-        {
-            return !string.IsNullOrEmpty(_connectionString)
-                    ? new CosmosClient(_connectionString!)
-                    : new CosmosClient(_accountEndpoint, _tokenCredential);
         }
     }
 }

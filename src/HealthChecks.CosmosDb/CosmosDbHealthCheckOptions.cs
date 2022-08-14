@@ -6,7 +6,9 @@ namespace HealthChecks.CosmosDb;
 /// </summary>
 public sealed class CosmosDbHealthCheckOptions
 {
-    // TODO: Consider implementing IValidatableObject to ensure ContainerIds are not specified when DatabaseId is missing
+    // TODO: Consider implementing IValidatableObject to ensure ContainerIds are not specified
+    //       when DatabaseId is missing. Furthermore, it may be advantageous to use IReadOnlyCollection<T>
+    //       instead of IEnumerable<T> for the use of the Count property.
 
     /// <summary>
     /// Gets or sets zero or more identifiers for the Azure Cosmos DB containers
@@ -16,7 +18,7 @@ public sealed class CosmosDbHealthCheckOptions
     /// If the value is <see langword="null"/>, then no health check is performed for containers.
     /// </remarks>
     /// <value>Zero or more Azure Cosmos DB container identifiers.</value>
-    public IEnumerable<string>? ContainerIds { get; set; } // TODO: Use IReadOnlyCollection<T> on next major version
+    public IEnumerable<string>? ContainerIds { get; set; }
 
     /// <summary>
     /// Gets or sets the identifier for the Azure Cosmos database whose health should be checked.

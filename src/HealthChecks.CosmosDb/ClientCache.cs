@@ -11,7 +11,7 @@ internal static class ClientCache
 
     public static T GetOrAddDisposable<T>(string key, Func<string, T> clientFactory) where T : IDisposable
     {
-        if (!Cache<T>.Map.TryGetValue(key, out T? value))
+        if (!Cache<T>.Map.TryGetValue(key, out var value))
         {
             var client = clientFactory(key);
             if (!Cache<T>.Map.TryAdd(key, client))

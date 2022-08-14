@@ -20,9 +20,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">CosmosDb full connection string.</param>
         /// <param name="database">Database to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -52,9 +52,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="accountEndpoint">Uri to the CosmosDb account</param>
         /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication</param>
         /// <param name="database">Database to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -86,9 +86,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -123,9 +123,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -159,9 +159,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="connectionString">CosmosDb full connection string.</param>
         /// <param name="database">Database to check for existence.</param>
         /// <param name="collections">Cosmos DB collections to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -193,9 +193,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication</param>
         /// <param name="database">Database to check for existence.</param>
         /// <param name="collections">Cosmos DB collections to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -226,9 +226,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The CosmosDB Table or Azure Storage Table connection string. Credentials are included on connectionstring.</param>
         /// <param name="tableName">Table name to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -255,12 +255,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb/Azure Storage table.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endopoint.</param>
+        /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endpoint.</param>
         /// <param name="credentials">The table shared key credentials to be used.</param>
         /// <param name="tableName">Table name to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -270,7 +270,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IHealthChecksBuilder builder,
             Uri endpoint,
             TableSharedKeyCredential credentials,
-            string tableName,
+            string? tableName,
             string? name = default,
             HealthStatus? failureStatus = default,
             IEnumerable<string>? tags = default,
@@ -288,12 +288,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb/Azure Storage table.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endopoint.</param>
+        /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endpoint.</param>
         /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication</param>
         /// <param name="tableName">Table name to check for existence.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -325,9 +325,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
@@ -362,9 +362,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'cosmosdb' will be used for the name.</param>
+        /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>

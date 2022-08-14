@@ -9,19 +9,19 @@ namespace HealthChecks.CosmosDb
         private readonly TableServiceClient _tableServiceClient;
         private readonly TableServiceHealthCheckOptions _options;
 
-        public TableServiceHealthCheck(string connectionString, string tableName)
+        public TableServiceHealthCheck(string connectionString, string? tableName)
             : this(
                   ClientCache.GetOrAdd(connectionString, k => new TableServiceClient(k)),
                   new TableServiceHealthCheckOptions { TableName = tableName })
         { }
 
-        public TableServiceHealthCheck(Uri endpoint, TableSharedKeyCredential credentials, string tableName)
+        public TableServiceHealthCheck(Uri endpoint, TableSharedKeyCredential credentials, string? tableName)
             : this(
                   ClientCache.GetOrAdd(endpoint?.ToString()!, _ => new TableServiceClient(endpoint, credentials)),
                   new TableServiceHealthCheckOptions { TableName = tableName })
         { }
 
-        public TableServiceHealthCheck(Uri endpoint, TokenCredential tokenCredential, string tableName)
+        public TableServiceHealthCheck(Uri endpoint, TokenCredential tokenCredential, string? tableName)
             : this(
                   ClientCache.GetOrAdd(endpoint?.ToString()!, _ => new TableServiceClient(endpoint, tokenCredential)),
                   new TableServiceHealthCheckOptions { TableName = tableName })

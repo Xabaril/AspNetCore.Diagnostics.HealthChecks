@@ -6,18 +6,18 @@ internal static class ClientCache
 {
     public static T GetOrAdd<T>(string key, Func<string, T> clientFactory)
     {
-        return Cache<T>.Map.GetOrAdd(key, clientFactory);
+        return Cache<T>.Instance.GetOrAdd(key, clientFactory);
     }
 
     public static T GetOrAddDisposable<T>(string key, Func<string, T> clientFactory) where T : IDisposable
     {
-        if (!Cache<T>.Map.TryGetValue(key, out var value))
+        if (!Cache<T>.Instance.TryGetValue(key, out var value))
         {
-            var client = clientFactory(key);
-            if (!Cache<T>.Map.TryAdd(key, client))
+            value = clientFactory(key);
+            if (!Cache<T>.Instance.TryAdd(key, value))
             {
-                client.Dispose();
-                value = Cache<T>.Map[key];
+                value.Dispose();
+                value = Cache<T>.Instance[key];
             }
         }
 
@@ -26,6 +26,6 @@ internal static class ClientCache
 
     private static class Cache<T>
     {
-        public static ConcurrentDictionary<string, T> Map { get; } = new();
+        public static ConcurrentDictionary<string, T> Instance { get; } = new();
     }
 }

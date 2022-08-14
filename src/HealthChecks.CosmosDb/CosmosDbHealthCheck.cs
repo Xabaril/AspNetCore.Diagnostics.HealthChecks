@@ -23,7 +23,7 @@ namespace HealthChecks.CosmosDb
 
         public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
             : this(
-                  ClientCache.GetOrAddDisposable(connectionString, k => new CosmosClient(connectionString)),
+                  ClientCache.GetOrAddDisposable(connectionString, k => new CosmosClient(k)),
                   new CosmosDbHealthCheckOptions { ContainerIds = containers, DatabaseId = database })
         { }
 
@@ -48,14 +48,15 @@ namespace HealthChecks.CosmosDb
                 if (_options.DatabaseId != null)
                 {
                     var database = _cosmosClient.GetDatabase(_options.DatabaseId);
-                    await database.ReadAsync();
+                    await database.ReadAsync(cancellationToken: cancellationToken);
 
                     if (_options.ContainerIds != null)
                     {
                         foreach (var container in _options.ContainerIds)
                         {
-                            await database.GetContainer(container)
-                                .ReadContainerAsync();
+                            await database
+                                .GetContainer(container)
+                                .ReadContainerAsync(cancellationToken: cancellationToken);
                         }
                     }
                 }

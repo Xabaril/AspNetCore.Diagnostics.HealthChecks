@@ -17,7 +17,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
             using var serviceProvider = new ServiceCollection()
                 .AddHealthChecks()
                 .AddCosmosDb(
-                    "AccountEndpoint=https://unit-test.documents.azure.com:443/",
+                    $"AccountEndpoint=https://unit-test.documents.azure.com:443/;AccountKey={Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 })}",
                     database: databaseId,
                     name: registrationName,
                     failureStatus: failureStatus)
@@ -45,7 +45,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
             using var serviceProvider = new ServiceCollection()
                 .AddHealthChecks()
                 .AddCosmosDb(
-                    "https://unit-test.blob.core.windows.net",
+                    "https://unit-test.documents.azure.com:443/",
                     Substitute.For<TokenCredential>(),
                     database: databaseId,
                     name: registrationName,
@@ -141,7 +141,7 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
             using var serviceProvider = new ServiceCollection()
                 .AddHealthChecks()
                 .AddCosmosDbCollection(
-                    "AccountEndpoint=https://unit-test.documents.azure.com:443/",
+                    $"AccountEndpoint=https://unit-test.documents.azure.com:443/;AccountKey={Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 })}",
                     database: databaseId,
                     collections: containerIds,
                     name: registrationName,

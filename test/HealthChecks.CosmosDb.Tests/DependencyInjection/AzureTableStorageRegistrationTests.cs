@@ -18,7 +18,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
             using var serviceProvider = new ServiceCollection()
                 .AddHealthChecks()
                 .AddAzureTable(
-                    "TableEndpoint=https://unit-test.table.core.windows.net",
+                    $"AccountName=unit-test;AccountKey={Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 })}",
                     tableName: tableName!,
                     name: registrationName,
                     failureStatus: failureStatus)
@@ -76,7 +76,7 @@ namespace HealthChecks.AzureStorage.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddAzureTable(
                     new Uri("https://unit-test.table.core.windows.net"),
-                    Substitute.For<TableSharedKeyCredential>(),
+                    Substitute.For<TableSharedKeyCredential>("unit-test", Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 })),
                     tableName: tableName!,
                     name: registrationName,
                     failureStatus: failureStatus)

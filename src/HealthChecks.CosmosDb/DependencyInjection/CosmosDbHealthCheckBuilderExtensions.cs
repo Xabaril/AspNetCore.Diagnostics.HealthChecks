@@ -321,7 +321,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb/Azure Storage table.
         /// </summary>
         /// <remarks>
-        /// A <see cref="CosmosClient"/> service must be registered in the service container.
+        /// A <see cref="TableServiceClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
@@ -358,7 +358,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb/Azure Storage table.
         /// </summary>
         /// <remarks>
-        /// A <see cref="CosmosClient"/> service must be registered in the service container.
+        /// A <see cref="TableServiceClient"/> service must be registered in the service container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>

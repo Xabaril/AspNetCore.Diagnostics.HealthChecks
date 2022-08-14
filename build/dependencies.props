@@ -15,7 +15,7 @@
     <HealthCheckAWSSystemsManager>6.0.0</HealthCheckAWSSystemsManager>
     <HealthCheckAzureDigitalTwin>6.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureServiceBus>6.0.4</HealthCheckAzureServiceBus>
-    <HealthCheckAzureStorage>6.0.4</HealthCheckAzureStorage>
+    <HealthCheckAzureStorage>6.1.0</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>6.0.2</HealthCheckCloudFirestore>
     <HealthCheckConsul>6.0.2</HealthCheckConsul>
     <HealthCheckCosmosDb>6.0.3</HealthCheckCosmosDb>

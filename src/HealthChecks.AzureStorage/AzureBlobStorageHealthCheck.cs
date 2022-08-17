@@ -31,7 +31,14 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                await _blobServiceClient.GetPropertiesAsync(cancellationToken);
+                // Note: BlobServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Blob Data Contributor," so BlobServiceClient.GetBlobContainersAsync() is used instead to probe service health.
+                // However, BlobContainerClient.GetPropertiesAsync() does have sufficient permissions.
+                await _blobServiceClient
+                    .GetBlobContainersAsync(cancellationToken: cancellationToken)
+                    .AsPages(pageSizeHint: 1)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync();
 
                 if (!string.IsNullOrEmpty(_options.ContainerName))
                 {

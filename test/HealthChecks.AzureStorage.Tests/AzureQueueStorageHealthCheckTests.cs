@@ -38,14 +38,14 @@ public class azurequeuestoragehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _queueServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<QueueServiceProperties>>());
+            .GetQueuesAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<QueueItem>.FromPages(Array.Empty<Page<QueueItem>>()));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _queueServiceClient
+        _queueServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetQueuesAsync(cancellationToken: tokenSource.Token);
 
         await _queueClient
             .DidNotReceiveWithAnyArgs()
@@ -60,8 +60,8 @@ public class azurequeuestoragehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _queueServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<QueueServiceProperties>>());
+            .GetQueuesAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<QueueItem>.FromPages(new[] { Substitute.For<Page<QueueItem>>() }));
 
         _queueClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -70,9 +70,9 @@ public class azurequeuestoragehealthcheck_should
         _options.QueueName = QueueName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _queueServiceClient
+        _queueServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetQueuesAsync(cancellationToken: tokenSource.Token);
 
         await _queueClient
             .Received(1)
@@ -88,16 +88,44 @@ public class azurequeuestoragehealthcheck_should
     {
         using var tokenSource = new CancellationTokenSource();
 
-        _queueServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
+        var pageable = Substitute.For<AsyncPageable<QueueItem>>();
+        var enumerable = Substitute.For<IAsyncEnumerable<Page<QueueItem>>>();
+        var enumerator = Substitute.For<IAsyncEnumerator<Page<QueueItem>>>();
+
+        pageable
+            .AsPages(pageSizeHint: 1)
+            .Returns(enumerable);
+
+        enumerable
+            .GetAsyncEnumerator(tokenSource.Token)
+            .Returns(enumerator);
+
+        enumerator
+            .MoveNextAsync()
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        _queueServiceClient
+            .GetQueuesAsync(cancellationToken: tokenSource.Token)
+            .Returns(pageable);
 
         _options.QueueName = checkQueue ? QueueName : null;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _queueServiceClient
+        _queueServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetQueuesAsync(cancellationToken: tokenSource.Token);
+
+        pageable
+            .Received(1)
+            .AsPages(pageSizeHint: 1);
+
+        enumerable
+            .Received(1)
+            .GetAsyncEnumerator(tokenSource.Token);
+
+        await enumerator
+            .Received(1)
+            .MoveNextAsync();
 
         await _queueClient
             .DidNotReceiveWithAnyArgs()
@@ -114,8 +142,8 @@ public class azurequeuestoragehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _queueServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<QueueServiceProperties>>());
+            .GetQueuesAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<QueueItem>.FromPages(new[] { Substitute.For<Page<QueueItem>>() }));
 
         _queueClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -124,9 +152,9 @@ public class azurequeuestoragehealthcheck_should
         _options.QueueName = QueueName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _queueServiceClient
+        _queueServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetQueuesAsync(cancellationToken: tokenSource.Token);
 
         await _queueClient
             .Received(1)
@@ -149,8 +177,8 @@ public class azurequeuestoragehealthcheck_should
             .BuildServiceProvider();
 
         _queueServiceClient
-            .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .Returns(Substitute.For<Response<QueueServiceProperties>>());
+            .GetQueuesAsync(cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(AsyncPageable<QueueItem>.FromPages(new[] { Substitute.For<Page<QueueItem>>() }));
 
         _queueClient
             .GetPropertiesAsync(Arg.Any<CancellationToken>())
@@ -159,9 +187,9 @@ public class azurequeuestoragehealthcheck_should
         var service = provider.GetRequiredService<HealthCheckService>();
         var report = await service.CheckHealthAsync();
 
-        await _queueServiceClient
+        _queueServiceClient
             .Received(1)
-            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+            .GetQueuesAsync(cancellationToken: Arg.Any<CancellationToken>());
 
         await _queueClient
             .Received(1)

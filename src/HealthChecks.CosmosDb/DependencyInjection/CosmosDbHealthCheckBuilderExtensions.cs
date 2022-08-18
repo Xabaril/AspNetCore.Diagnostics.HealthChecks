@@ -82,7 +82,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb database.
         /// </summary>
         /// <remarks>
-        /// A <see cref="CosmosClient"/> service must be registered in the service container.
+        /// A <see cref="CosmosClient"/> service must be registered in the DI container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
@@ -119,7 +119,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb database.
         /// </summary>
         /// <remarks>
-        /// A <see cref="CosmosClient"/> service must be registered in the service container.
+        /// A <see cref="CosmosClient"/> service must be registered in the DI container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
@@ -221,7 +221,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for Azure CosmosDb/Azure Storage table.
+        /// Add a health check for Azure Tables hosted in either Azure storage accounts or Azure Cosmos DB table API.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="connectionString">The CosmosDB Table or Azure Storage Table connection string. Credentials are included on connectionstring.</param>
@@ -252,7 +252,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for Azure CosmosDb/Azure Storage table.
+        /// Add a health check for Azure Tables hosted in either Azure storage accounts or Azure Cosmos DB table API.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endpoint.</param>
@@ -285,7 +285,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for Azure CosmosDb/Azure Storage table.
+        /// Add a health check for Azure Tables hosted in either Azure storage accounts or Azure Cosmos DB table API.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endpoint.</param>
@@ -318,10 +318,10 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for Azure CosmosDb/Azure Storage table.
+        /// Add a health check for Azure Tables hosted in either Azure storage accounts or Azure Cosmos DB table API.
         /// </summary>
         /// <remarks>
-        /// A <see cref="TableServiceClient"/> service must be registered in the service container.
+        /// A <see cref="TableServiceClient"/> service must be registered in the DI container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
@@ -355,10 +355,10 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add a health check for Azure CosmosDb/Azure Storage table.
+        /// Add a health check for Azure Tables hosted in either Azure storage accounts or Azure Cosmos DB table API.
         /// </summary>
         /// <remarks>
-        /// A <see cref="TableServiceClient"/> service must be registered in the service container.
+        /// A <see cref="TableServiceClient"/> service must be registered in the DI container.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>

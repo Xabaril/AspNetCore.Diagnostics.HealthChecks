@@ -38,18 +38,18 @@ public class tableservicehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _tableServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<TableServiceProperties>>());
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _tableServiceClient
+        _tableServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token);
 
-        await _tableClient
+        _tableClient
             .DidNotReceiveWithAnyArgs()
-            .GetAccessPoliciesAsync(default);
+            .QueryAsync<TableEntity>(default(string), default, default, default);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -60,23 +60,23 @@ public class tableservicehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _tableServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<TableServiceProperties>>());
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
 
         _tableClient
-            .GetAccessPoliciesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<IReadOnlyList<TableSignedIdentifier>>>());
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<TableEntity>.FromPages(Array.Empty<Page<TableEntity>>()));
 
         _options.TableName = TableName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _tableServiceClient
+        _tableServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token);
 
-        await _tableClient
+        _tableClient
             .Received(1)
-            .GetAccessPoliciesAsync(tokenSource.Token);
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -88,20 +88,39 @@ public class tableservicehealthcheck_should
     {
         using var tokenSource = new CancellationTokenSource();
 
+        var pageable = Substitute.For<AsyncPageable<TableItem>>();
+        var enumerator = Substitute.For<IAsyncEnumerator<TableItem>>();
+
         _tableServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
+            .Returns(pageable);
+
+        pageable
+            .GetAsyncEnumerator(tokenSource.Token)
+            .Returns(enumerator);
+
+        enumerator
+            .MoveNextAsync()
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
 
         _options.TableName = checkTable ? TableName : null;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _tableServiceClient
+        _tableServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token);
 
-        await _tableClient
+        pageable
+            .Received(1)
+            .GetAsyncEnumerator(tokenSource.Token);
+
+        await enumerator
+            .Received(1)
+            .MoveNextAsync();
+
+        _tableClient
             .DidNotReceiveWithAnyArgs()
-            .GetAccessPoliciesAsync(default);
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
@@ -114,24 +133,43 @@ public class tableservicehealthcheck_should
     {
         using var tokenSource = new CancellationTokenSource();
 
+        var pageable = Substitute.For<AsyncPageable<TableEntity>>();
+        var enumerator = Substitute.For<IAsyncEnumerator<TableEntity>>();
+
         _tableServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<TableServiceProperties>>());
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
 
         _tableClient
-            .GetAccessPoliciesAsync(tokenSource.Token)
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token)
+            .Returns(pageable);
+
+        pageable
+            .GetAsyncEnumerator(tokenSource.Token)
+            .Returns(enumerator);
+
+        enumerator
+            .MoveNextAsync()
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Table not found"));
 
         _options.TableName = TableName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _tableServiceClient
+        _tableServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .QueryAsync(filter: "false", cancellationToken: tokenSource.Token);
 
-        await _tableClient
+        _tableClient
             .Received(1)
-            .GetAccessPoliciesAsync(tokenSource.Token);
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token);
+
+        pageable
+            .Received(1)
+            .GetAsyncEnumerator(tokenSource.Token);
+
+        await enumerator
+            .Received(1)
+            .MoveNextAsync();
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
@@ -150,24 +188,43 @@ public class tableservicehealthcheck_should
             .Services
             .BuildServiceProvider();
 
+        var pageable = Substitute.For<AsyncPageable<TableEntity>>();
+        var enumerator = Substitute.For<IAsyncEnumerator<TableEntity>>();
+
         _tableServiceClient
-            .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .Returns(Substitute.For<Response<TableServiceProperties>>());
+            .QueryAsync(filter: "false", cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
 
         _tableClient
-            .GetAccessPoliciesAsync(Arg.Any<CancellationToken>())
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(pageable);
+
+        pageable
+            .GetAsyncEnumerator(Arg.Any<CancellationToken>())
+            .Returns(enumerator);
+
+        enumerator
+            .MoveNextAsync()
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Table not found"));
 
         var service = provider.GetRequiredService<HealthCheckService>();
         var report = await service.CheckHealthAsync();
 
-        await _tableServiceClient
+        _tableServiceClient
             .Received(1)
-            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+            .QueryAsync(filter: "false", cancellationToken: Arg.Any<CancellationToken>());
 
-        await _tableClient
+        _tableClient
             .Received(1)
-            .GetAccessPoliciesAsync(Arg.Any<CancellationToken>());
+            .QueryAsync<TableEntity>(filter: "false", cancellationToken: Arg.Any<CancellationToken>());
+
+        pageable
+            .Received(1)
+            .GetAsyncEnumerator(Arg.Any<CancellationToken>());
+
+        await enumerator
+            .Received(1)
+            .MoveNextAsync();
 
         var actual = report.Entries[HealthCheckName];
         actual.Status.ShouldBe(HealthStatus.Unhealthy);

@@ -37,12 +37,21 @@ namespace HealthChecks.CosmosDb
         {
             try
             {
-                await _tableServiceClient.GetPropertiesAsync(cancellationToken);
+                // Note: TableServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Table Data Contributor," so TableServiceClient.QueryAsync() and
+                // TableClient.QueryAsync<T>() are used instead to probe service health.
+                await _tableServiceClient
+                    .QueryAsync(filter: "false", cancellationToken: cancellationToken)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync();
 
                 if (!string.IsNullOrEmpty(_options.TableName))
                 {
                     var tableClient = _tableServiceClient.GetTableClient(_options.TableName);
-                    await tableClient.GetAccessPoliciesAsync(cancellationToken);
+                    await tableClient
+                        .QueryAsync<TableEntity>(filter: "false", cancellationToken: cancellationToken)
+                        .GetAsyncEnumerator(cancellationToken)
+                        .MoveNextAsync();
                 }
 
                 return HealthCheckResult.Healthy();

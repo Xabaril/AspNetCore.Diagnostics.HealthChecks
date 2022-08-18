@@ -1,5 +1,4 @@
 using Azure.Core;
-using Azure.Storage.Blobs;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

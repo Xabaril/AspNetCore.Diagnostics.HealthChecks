@@ -1,5 +1,4 @@
 using Azure.Storage.Files.Shares;
-using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage

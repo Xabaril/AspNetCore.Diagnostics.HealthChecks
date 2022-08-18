@@ -24,7 +24,14 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                await _shareServiceClient.GetPropertiesAsync(cancellationToken);
+                // Note: ShareServiceClient does not support TokenCredentials as of writing, so only SAS tokens and
+                // Account keys may be used to authenticate. However, like the health checks for Azure Blob Storage and
+                // Azure Queue Storage, the AzureFileShareHealthCheck similarly enumerates the shares to probe service health.
+                await _shareServiceClient
+                    .GetSharesAsync(cancellationToken: cancellationToken)
+                    .AsPages(pageSizeHint: 1)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync();
 
                 if (!string.IsNullOrEmpty(_options.ShareName))
                 {

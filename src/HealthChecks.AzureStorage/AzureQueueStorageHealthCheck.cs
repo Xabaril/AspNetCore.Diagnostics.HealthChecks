@@ -31,7 +31,14 @@ namespace HealthChecks.AzureStorage
         {
             try
             {
-                await _queueServiceClient.GetPropertiesAsync(cancellationToken);
+                // Note: QueueServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Queue Data Contributor," so QueueServiceClient.GetQueuesAsync() is used instead to probe service health.
+                // However, QueueClient.GetPropertiesAsync() does have sufficient permissions.
+                await _queueServiceClient
+                    .GetQueuesAsync(cancellationToken: cancellationToken)
+                    .AsPages(pageSizeHint: 1)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync();
 
                 if (!string.IsNullOrEmpty(_options.QueueName))
                 {

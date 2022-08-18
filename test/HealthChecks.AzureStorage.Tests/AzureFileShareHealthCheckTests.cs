@@ -38,14 +38,14 @@ public class azurefilesharehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _shareServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<ShareServiceProperties>>());
+            .GetSharesAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<ShareItem>.FromPages(Array.Empty<Page<ShareItem>>()));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _shareServiceClient
+        _shareServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetSharesAsync(cancellationToken: tokenSource.Token);
 
         await _shareClient
             .DidNotReceiveWithAnyArgs()
@@ -60,8 +60,8 @@ public class azurefilesharehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _shareServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<ShareServiceProperties>>());
+            .GetSharesAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<ShareItem>.FromPages(new[] { Substitute.For<Page<ShareItem>>() }));
 
         _shareClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -70,9 +70,9 @@ public class azurefilesharehealthcheck_should
         _options.ShareName = ShareName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _shareServiceClient
+        _shareServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetSharesAsync(cancellationToken: tokenSource.Token);
 
         await _shareClient
             .Received(1)
@@ -88,16 +88,44 @@ public class azurefilesharehealthcheck_should
     {
         using var tokenSource = new CancellationTokenSource();
 
-        _shareServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
+        var pageable = Substitute.For<AsyncPageable<ShareItem>>();
+        var enumerable = Substitute.For<IAsyncEnumerable<Page<ShareItem>>>();
+        var enumerator = Substitute.For<IAsyncEnumerator<Page<ShareItem>>>();
+
+        pageable
+            .AsPages(pageSizeHint: 1)
+            .Returns(enumerable);
+
+        enumerable
+            .GetAsyncEnumerator(tokenSource.Token)
+            .Returns(enumerator);
+
+        enumerator
+            .MoveNextAsync()
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        _shareServiceClient
+            .GetSharesAsync(cancellationToken: tokenSource.Token)
+            .Returns(pageable);
 
         _options.ShareName = checkShare ? ShareName : null;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _shareServiceClient
+        _shareServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetSharesAsync(cancellationToken: tokenSource.Token);
+
+        pageable
+            .Received(1)
+            .AsPages(pageSizeHint: 1);
+
+        enumerable
+            .Received(1)
+            .GetAsyncEnumerator(tokenSource.Token);
+
+        await enumerator
+            .Received(1)
+            .MoveNextAsync();
 
         await _shareClient
             .DidNotReceiveWithAnyArgs()
@@ -114,8 +142,8 @@ public class azurefilesharehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _shareServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<ShareServiceProperties>>());
+            .GetSharesAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<ShareItem>.FromPages(new[] { Substitute.For<Page<ShareItem>>() }));
 
         _shareClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -124,9 +152,9 @@ public class azurefilesharehealthcheck_should
         _options.ShareName = ShareName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _shareServiceClient
+        _shareServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetSharesAsync(cancellationToken: tokenSource.Token);
 
         await _shareClient
             .Received(1)
@@ -149,8 +177,8 @@ public class azurefilesharehealthcheck_should
             .BuildServiceProvider();
 
         _shareServiceClient
-            .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .Returns(Substitute.For<Response<ShareServiceProperties>>());
+            .GetSharesAsync(cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(AsyncPageable<ShareItem>.FromPages(new[] { Substitute.For<Page<ShareItem>>() }));
 
         _shareClient
             .GetPropertiesAsync(Arg.Any<CancellationToken>())
@@ -159,9 +187,9 @@ public class azurefilesharehealthcheck_should
         var service = provider.GetRequiredService<HealthCheckService>();
         var report = await service.CheckHealthAsync();
 
-        await _shareServiceClient
+        _shareServiceClient
             .Received(1)
-            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+            .GetSharesAsync(cancellationToken: Arg.Any<CancellationToken>());
 
         await _shareClient
             .Received(1)

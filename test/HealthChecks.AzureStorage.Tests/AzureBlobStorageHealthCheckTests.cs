@@ -38,14 +38,14 @@ public class azureblobstoragehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _blobServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<BlobServiceProperties>>());
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages(Array.Empty<Page<BlobContainerItem>>()));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _blobServiceClient
+        _blobServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token);
 
         await _blobContainerClient
             .DidNotReceiveWithAnyArgs()
@@ -60,8 +60,8 @@ public class azureblobstoragehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _blobServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<BlobServiceProperties>>());
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages(new[] { Substitute.For<Page<BlobContainerItem>>() }));
 
         _blobContainerClient
             .GetPropertiesAsync(conditions: null, cancellationToken: tokenSource.Token)
@@ -70,9 +70,9 @@ public class azureblobstoragehealthcheck_should
         _options.ContainerName = ContainerName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _blobServiceClient
+        _blobServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token);
 
         await _blobContainerClient
             .Received(1)
@@ -88,16 +88,44 @@ public class azureblobstoragehealthcheck_should
     {
         using var tokenSource = new CancellationTokenSource();
 
-        _blobServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
+        var pageable = Substitute.For<AsyncPageable<BlobContainerItem>>();
+        var enumerable = Substitute.For<IAsyncEnumerable<Page<BlobContainerItem>>>();
+        var enumerator = Substitute.For<IAsyncEnumerator<Page<BlobContainerItem>>>();
+
+        pageable
+            .AsPages(pageSizeHint: 1)
+            .Returns(enumerable);
+
+        enumerable
+            .GetAsyncEnumerator(tokenSource.Token)
+            .Returns(enumerator);
+
+        enumerator
+            .MoveNextAsync()
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        _blobServiceClient
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
+            .Returns(pageable);
 
         _options.ContainerName = checkContainer ? ContainerName : null;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _blobServiceClient
+        _blobServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token);
+
+        pageable
+            .Received(1)
+            .AsPages(pageSizeHint: 1);
+
+        enumerable
+            .Received(1)
+            .GetAsyncEnumerator(tokenSource.Token);
+
+        await enumerator
+            .Received(1)
+            .MoveNextAsync();
 
         await _blobContainerClient
             .DidNotReceiveWithAnyArgs()
@@ -115,8 +143,8 @@ public class azureblobstoragehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
 
         _blobServiceClient
-            .GetPropertiesAsync(tokenSource.Token)
-            .Returns(Substitute.For<Response<BlobServiceProperties>>());
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages(new[] { Substitute.For<Page<BlobContainerItem>>() }));
 
         _blobContainerClient
             .GetPropertiesAsync(conditions: null, cancellationToken: tokenSource.Token)
@@ -125,9 +153,9 @@ public class azureblobstoragehealthcheck_should
         _options.ContainerName = ContainerName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _blobServiceClient
+        _blobServiceClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetBlobContainersAsync(cancellationToken: tokenSource.Token);
 
         await _blobContainerClient
             .Received(1)
@@ -151,8 +179,8 @@ public class azureblobstoragehealthcheck_should
             .BuildServiceProvider();
 
         _blobServiceClient
-            .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .Returns(Substitute.For<Response<BlobServiceProperties>>());
+            .GetBlobContainersAsync(cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages(new[] { Substitute.For<Page<BlobContainerItem>>() }));
 
         _blobContainerClient
             .GetPropertiesAsync(conditions: null, cancellationToken: Arg.Any<CancellationToken>())
@@ -161,9 +189,9 @@ public class azureblobstoragehealthcheck_should
         var service = provider.GetRequiredService<HealthCheckService>();
         var report = await service.CheckHealthAsync();
 
-        await _blobServiceClient
+        _blobServiceClient
             .Received(1)
-            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+            .GetBlobContainersAsync(cancellationToken: Arg.Any<CancellationToken>());
 
         await _blobContainerClient
             .Received(1)

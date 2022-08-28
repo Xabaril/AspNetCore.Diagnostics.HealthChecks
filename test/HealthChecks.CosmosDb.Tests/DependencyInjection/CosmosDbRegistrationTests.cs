@@ -70,6 +70,74 @@ namespace HealthChecks.CosmosDb.Tests.DependencyInjection
         [InlineData(null, null, HealthStatus.Degraded)]
         [InlineData(null, null, null, "first-collection", "second_collections")]
         [InlineData("cosmosdb", "my-azureblob-group", HealthStatus.Degraded, "first-collection", "second_collections")]
+        public void add_health_check_with_client_as_parameter(string? databaseId, string? registrationName, HealthStatus? failureStatus, params string[] containerIds)
+        {
+            var client = Substitute.For<CosmosClient>();
+            using var serviceProvider = new ServiceCollection()
+                .AddHealthChecks()
+                .AddCosmosDb(
+                    client,
+                    o =>
+                    {
+                        o.ContainerIds = containerIds;
+                        o.DatabaseId = databaseId;
+                    },
+                    name: registrationName,
+                    failureStatus: failureStatus)
+                .Services
+                .BuildServiceProvider();
+
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.ShouldBe(registrationName ?? "cosmosdb");
+            registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+            check.ShouldBeOfType<CosmosDbHealthCheck>();
+        }
+
+        [Theory]
+        [InlineData(null, null, null)]
+        [InlineData("cosmosdb", null, null)]
+        [InlineData(null, "my-cosmosdb-group", null)]
+        [InlineData(null, null, HealthStatus.Degraded)]
+        [InlineData(null, null, null, "first-collection", "second_collections")]
+        [InlineData("cosmosdb", "my-azureblob-group", HealthStatus.Degraded, "first-collection", "second_collections")]
+        public void add_health_check_with_client_as_parameter_and_advanced_delegate(string? databaseId, string? registrationName, HealthStatus? failureStatus, params string[] containerIds)
+        {
+            var client = Substitute.For<CosmosClient>();
+            using var serviceProvider = new ServiceCollection()
+                .AddHealthChecks()
+                .AddCosmosDb(
+                    client,
+                    (sp, o) =>
+                    {
+                        o.ContainerIds = containerIds;
+                        o.DatabaseId = databaseId;
+                    },
+                    name: registrationName,
+                    failureStatus: failureStatus)
+                .Services
+                .BuildServiceProvider();
+
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.ShouldBe(registrationName ?? "cosmosdb");
+            registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+            check.ShouldBeOfType<CosmosDbHealthCheck>();
+        }
+
+        [Theory]
+        [InlineData(null, null, null)]
+        [InlineData("cosmosdb", null, null)]
+        [InlineData(null, "my-cosmosdb-group", null)]
+        [InlineData(null, null, HealthStatus.Degraded)]
+        [InlineData(null, null, null, "first-collection", "second_collections")]
+        [InlineData("cosmosdb", "my-azureblob-group", HealthStatus.Degraded, "first-collection", "second_collections")]
         public void add_health_check_with_client_from_service_provider(string? databaseId, string? registrationName, HealthStatus? failureStatus, params string[] containerIds)
         {
             using var serviceProvider = new ServiceCollection()

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.Publisher.ApplicationInsights
 {
-    internal class ApplicationInsightsPublisher : IHealthCheckPublisher
+    internal class ApplicationInsightsPublisher : IHealthCheckPublisher, IDisposable
     {
         private const string EVENT_NAME = "AspNetCoreHealthCheck";
         private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
@@ -122,6 +122,11 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 }
             }
             return _client;
+        }
+
+        public void Dispose()
+        {
+            _telemetryConfiguration?.Dispose();
         }
     }
 }

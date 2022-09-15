@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.Npgsql.Tests.Functional
 {
@@ -184,9 +186,9 @@ namespace HealthChecks.Npgsql.Tests.Functional
 
             var testLoggerprovider = server.Services.GetRequiredService<ILoggerProvider>() as TestLoggerProvider;
             testLoggerprovider.Should().NotBeNull();
-            var logger = testLoggerprovider.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");
+            var logger = testLoggerprovider?.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");
             logger.Should().NotBeNull();
-            logger._eventLog[0].Item2.Should().NotContain("with message '(null)'");
+            logger?._eventLog[0].Item2.Should().NotContain("with message '(null)'");
         }
     }
 }

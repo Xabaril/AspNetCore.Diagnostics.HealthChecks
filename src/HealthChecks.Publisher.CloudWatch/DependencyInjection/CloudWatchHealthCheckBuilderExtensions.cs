@@ -14,9 +14,25 @@ namespace Microsoft.Extensions.DependencyInjection
         /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddCloudWatchPublisher(this IHealthChecksBuilder builder)
+        {
+            builder.Services.AddSingleton<IHealthCheckPublisher, CloudWatchPublisher>();
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Add a health check publisher for AWS CloudWatch.
+        /// </summary>
+        /// <remarks>
+        /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c>
+        /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
+        /// </remarks>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="serviceCheckName">The <see cref="string"/>.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddApplicationInsightsPublisher(
+        public static IHealthChecksBuilder AddCloudWatchPublisher(
             this IHealthChecksBuilder builder,
             string serviceCheckName)
         {
@@ -26,6 +42,29 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        /// <summary>
+        /// Add a health check publisher for AWS CloudWatch.
+        /// </summary>
+        /// <remarks>
+        /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c>
+        /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
+        /// </remarks>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="awsAccessKeyId">The <see cref="string"/>.</param>
+        /// <param name="awsSecretAccessKey">The <see cref="string"/>.</param>
+        /// <param name="region">The <see cref="RegionEndpoint"/>.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddCloudWatchPublisher(
+            this IHealthChecksBuilder builder,
+            RegionEndpoint region,
+            string awsAccessKeyId,
+            string awsSecretAccessKey)
+        {
+            builder.Services
+               .AddSingleton<IHealthCheckPublisher, CloudWatchPublisher>(sp => new CloudWatchPublisher(awsAccessKeyId, awsSecretAccessKey, region));
+
+            return builder;
+        }
 
         /// <summary>
         /// Add a health check publisher for AWS CloudWatch.
@@ -40,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="awsSecretAccessKey">The <see cref="string"/>.</param>
         /// <param name="region">The <see cref="RegionEndpoint"/>.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddApplicationInsightsPublisher(
+        public static IHealthChecksBuilder AddCloudWatchPublisher(
             this IHealthChecksBuilder builder,
             string serviceCheckName,
             RegionEndpoint region,
@@ -48,7 +87,7 @@ namespace Microsoft.Extensions.DependencyInjection
             string awsSecretAccessKey)
         {
             builder.Services
-               .AddSingleton<IHealthCheckPublisher, CloudWatchPublisher>(sp => new CloudWatchPublisher(serviceCheckName, region, awsAccessKeyId, awsSecretAccessKey));
+               .AddSingleton<IHealthCheckPublisher, CloudWatchPublisher>(sp => new CloudWatchPublisher(serviceCheckName, awsAccessKeyId, awsSecretAccessKey, region));
 
             return builder;
         }

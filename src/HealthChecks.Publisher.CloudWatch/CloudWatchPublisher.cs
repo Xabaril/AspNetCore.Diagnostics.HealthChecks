@@ -1,109 +1,172 @@
+using System.Reflection;
 using Amazon;
 using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Publisher.CloudWatch;
-internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
+namespace HealthChecks.Publisher.CloudWatch
 {
-    private readonly string _serviceCheckName;
-    private readonly AmazonCloudWatchClient _amazonCloudWatchClient;
-
-    public CloudWatchPublisher(string serviceCheckName)
+    /// <summary>
+    /// A health check publisher for AWS CloudWatch.
+    /// </summary>
+    internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
     {
-        _serviceCheckName = serviceCheckName ?? throw new ArgumentNullException(nameof(serviceCheckName));
-        _amazonCloudWatchClient ??= new AmazonCloudWatchClient();
-    }
+        private readonly List<Dimension> _dimensions;
+        private readonly AmazonCloudWatchClient _amazonCloudWatchClient;
 
-    public CloudWatchPublisher(string serviceCheckName, RegionEndpoint region, string awsAccessKeyId, string awsSecretAccessKey) : this(serviceCheckName)
-    {
-        _amazonCloudWatchClient = new AmazonCloudWatchClient(awsAccessKeyId, awsSecretAccessKey, region);
-    }
-
-    public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
-    {
-        var utcNow = DateTime.UtcNow;
-
-        var dimensions = new List<Dimension> {
-            new Dimension
-            {
-                Name = "ServiceCheckName",
-                Value = _serviceCheckName
-            }
-        };
-
-        var metricDatas = new List<MetricDatum>
+        /// <summary>
+        /// CloudWatchPublisher constructor
+        /// </summary>
+        public CloudWatchPublisher()
         {
-            new MetricDatum
-            {
-                Dimensions = dimensions,
-                MetricName = "Status",
-                StatisticValues = new StatisticSet(),
-                TimestampUtc = utcNow,
-                Unit = StandardUnit.Count,
-                Value = (double)report.Status
-            },
-            new MetricDatum
-            {
-                Dimensions = dimensions,
-                MetricName = "Duration",
-                StatisticValues = new StatisticSet(),
-                TimestampUtc = utcNow,
-                Unit = StandardUnit.Count,
-                Value = (double)report.TotalDuration.TotalMilliseconds
-            }
-        };
+            _amazonCloudWatchClient = new AmazonCloudWatchClient();
 
-        foreach (var keyedEntry in report.Entries)
-        {
-            if (cancellationToken.IsCancellationRequested)
-                break;
+            var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 
-            dimensions.AddRange(
-                new List<Dimension>
+            _dimensions = new List<Dimension> {
+                new Dimension
                 {
-                    new Dimension
-                    {
-                        Name = $"entry-{keyedEntry.Key}-duration",
-                        Value = keyedEntry.Value.Duration.ToString()
-                    },
-                    new Dimension
-                    {
-                        Name = $"entry-{keyedEntry.Key}-description",
-                        Value = keyedEntry.Value.Description
-                    }
+                    Name = serviceCheckName,
+                    Value = serviceCheckName
                 }
-            );
-
-            var metric = new MetricDatum
-            {
-                Dimensions = dimensions,
-                MetricName = $"entry-{keyedEntry.Key}",
-                StatisticValues = new StatisticSet(),
-                TimestampUtc = utcNow,
-                Unit = StandardUnit.Count,
-                Value = (double)keyedEntry.Value.Status
             };
-
-            metricDatas.Add(metric);
         }
 
-        var putMetricDataRequest = new PutMetricDataRequest
+        /// <summary>
+        /// CloudWatchPublisher constructor
+        /// </summary>
+        /// <param name="serviceCheckName"></param>
+        public CloudWatchPublisher(string serviceCheckName) : this()
         {
-            MetricData = metricDatas,
-            Namespace = "Xabaril/AspNetCoreDiagnosticsHealthChecks"
-        };
+            if (string.IsNullOrEmpty(serviceCheckName))
+                throw new ArgumentNullException(nameof(serviceCheckName));
 
-        if (cancellationToken.IsCancellationRequested)
+            _dimensions = new List<Dimension> {
+                new Dimension
+                {
+                    Name = serviceCheckName,
+                    Value = serviceCheckName
+                }
+            };
+        }
+
+        /// <summary>
+        /// CloudWatchPublisher constructor
+        /// </summary>
+        /// <param name="region"></param>
+        /// <param name="awsAccessKeyId"></param>
+        /// <param name="awsSecretAccessKey"></param>
+        public CloudWatchPublisher(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region)
+        {
+            _amazonCloudWatchClient = new AmazonCloudWatchClient(awsAccessKeyId, awsSecretAccessKey, region);
+
+            var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
+
+            _dimensions = new List<Dimension> {
+                new Dimension
+                {
+                    Name = serviceCheckName,
+                    Value = serviceCheckName
+                }
+            };
+        }
+
+        /// <summary>
+        /// CloudWatchPublisher constructor
+        /// </summary>
+        /// <param name="serviceCheckName"></param>
+        /// <param name="region"></param>
+        /// <param name="awsAccessKeyId"></param>
+        /// <param name="awsSecretAccessKey"></param>
+        public CloudWatchPublisher(string serviceCheckName, string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : this(awsAccessKeyId, awsSecretAccessKey, region)
+        {
+            if (string.IsNullOrEmpty(serviceCheckName))
+                throw new ArgumentNullException(nameof(serviceCheckName));
+
+            _dimensions = new List<Dimension> {
+                new Dimension
+                {
+                    Name = serviceCheckName,
+                    Value = serviceCheckName
+                }
+            };
+        }
+
+        /// <summary>
+        /// Publishes the HealthReport to AWS CloudWatch
+        /// </summary>
+        /// <param name="report"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
+        {
+            var putMetricDataRequest = BuildCloudWatchMetricDataRequest(report);
+
+            _amazonCloudWatchClient.PutMetricDataAsync(putMetricDataRequest, cancellationToken);
+
             return Task.CompletedTask;
+        }
 
-        _amazonCloudWatchClient.PutMetricDataAsync(putMetricDataRequest, cancellationToken);
+        /// <summary>
+        /// Builds the CloudWatch MetricDataRequest
+        /// </summary>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        private PutMetricDataRequest BuildCloudWatchMetricDataRequest(HealthReport report)
+        {
+            var utcNow = DateTime.UtcNow;
 
-        return Task.CompletedTask;
-    }
+            var metricDatas = new List<MetricDatum>
+            {
+                new MetricDatum
+                {
+                    Dimensions = _dimensions,
+                    MetricName = "status",
+                    StatisticValues = new StatisticSet(),
+                    TimestampUtc = utcNow,
+                    Unit = StandardUnit.Count,
+                    Value = (int)report.Status
+                }
+            };
 
-    public void Dispose()
-    {
-        _amazonCloudWatchClient?.Dispose();
+            var entriesMetricDatas = report.Entries.Select(keyedEntry =>
+            {
+                return new MetricDatum
+                {
+                    Dimensions = _dimensions,
+                    MetricName = keyedEntry.Key,
+                    StatisticValues = new StatisticSet(),
+                    TimestampUtc = utcNow,
+                    Unit = StandardUnit.Count,
+                    Value = (int)keyedEntry.Value.Status
+                };
+            });
+
+            if (entriesMetricDatas.Any())
+                metricDatas.AddRange(entriesMetricDatas);
+
+            return new PutMetricDataRequest
+            {
+                MetricData = metricDatas,
+                Namespace = "Xabaril/AspNetCoreDiagnosticsHealthChecks"
+            };
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                _amazonCloudWatchClient?.Dispose();
+        }
+
+        ~CloudWatchPublisher()
+        {
+            Dispose(false);
+        }
     }
 }

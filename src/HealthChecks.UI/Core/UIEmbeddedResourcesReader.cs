@@ -2,8 +2,7 @@ using System.Reflection;
 
 namespace HealthChecks.UI.Core
 {
-    internal class UIEmbeddedResourcesReader
-        : IUIResourcesReader
+    internal class UIEmbeddedResourcesReader : IUIResourcesReader
     {
         private readonly Assembly _assembly;
 
@@ -33,7 +32,7 @@ namespace HealthChecks.UI.Core
                 var fileName = segments[segments.Length - 2];
                 var extension = segments[segments.Length - 1];
 
-                using (var contentStream = _assembly.GetManifestResourceStream(file))
+                using (var contentStream = _assembly.GetManifestResourceStream(file)!)
                 using (var reader = new StreamReader(contentStream))
                 {
                     string result = reader.ReadToEnd();

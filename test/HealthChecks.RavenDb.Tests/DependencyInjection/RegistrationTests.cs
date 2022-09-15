@@ -1,9 +1,4 @@
-using FluentAssertions;
 using HealthChecks.RavenDB;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.RavenDb.Tests.DependencyInjection
 {
@@ -17,7 +12,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
                 .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -35,7 +30,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
                     name: "my-ravendb");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -52,7 +47,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
                 .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -69,7 +64,7 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
                 .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" }, name: "my-ravendb");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

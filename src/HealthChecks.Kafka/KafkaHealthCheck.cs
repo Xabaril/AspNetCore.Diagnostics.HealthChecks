@@ -19,12 +19,9 @@ namespace HealthChecks.Kafka
         {
             try
             {
-                if (_producer == null)
-                {
-                    _producer = new ProducerBuilder<string, string>(_configuration).Build();
-                }
+                _producer ??= new ProducerBuilder<string, string>(_configuration).Build();
 
-                var message = new Message<string, string>()
+                var message = new Message<string, string>
                 {
                     Key = "healthcheck-key",
                     Value = $"Check Kafka healthy on {DateTime.UtcNow}"

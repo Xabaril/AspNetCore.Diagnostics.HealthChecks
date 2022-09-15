@@ -1,0 +1,23 @@
+namespace HealthChecks.Azure.IoTHub
+{
+    public class IoTHubHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public IoTHubHealthCheck(HealthChecks.Azure.IoTHub.IoTHubOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class IoTHubOptions
+    {
+        public IoTHubOptions() { }
+        public HealthChecks.Azure.IoTHub.IoTHubOptions AddConnectionString(string connectionString) { }
+        public HealthChecks.Azure.IoTHub.IoTHubOptions AddRegistryReadCheck(string query = "SELECT deviceId FROM devices") { }
+        public HealthChecks.Azure.IoTHub.IoTHubOptions AddRegistryWriteCheck(System.Func<string>? deviceIdFactory = null) { }
+        public HealthChecks.Azure.IoTHub.IoTHubOptions AddServiceConnectionCheck(Microsoft.Azure.Devices.TransportType transport = 0) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class IoTHubHealthChecksBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureIoTHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Azure.IoTHub.IoTHubOptions>? optionsFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

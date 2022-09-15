@@ -1,0 +1,27 @@
+name: HealthChecks Aws Sns Preview CD
+
+on:
+  push:
+    tags:
+      - preview-aws_sns-*
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore
+      run: dotnet restore ./src/HealthChecks.Aws.Sns/HealthChecks.Aws.Sns.csproj
+    - name: Build
+      run: dotnet build --no-restore ./src/HealthChecks.Aws.Sns/HealthChecks.Aws.Sns.csproj -c $BUILD_CONFIG
+    - name: Pack
+      run: dotnet pack --no-build ./src/HealthChecks.Aws.Sns/HealthChecks.Aws.Sns.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Aws.Sns.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

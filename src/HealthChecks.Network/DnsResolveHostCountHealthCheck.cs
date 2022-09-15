@@ -1,5 +1,7 @@
 using System.Net;
+#if !NET5_0_OR_GREATER
 using HealthChecks.Network.Extensions;
+#endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
@@ -17,22 +19,26 @@ namespace HealthChecks.Network
         {
             try
             {
-                var resolutionsAboveThreshold = new List<(string host, int total)>();
+                List<(string host, int total)>? resolutionsAboveThreshold = null;
 
                 foreach (var entry in _options.HostRegistrations)
                 {
                     var (minHosts, maxHosts) = entry.Value;
 
+#if NET5_0_OR_GREATER
+                    var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key, cancellationToken);
+#else
                     var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken);
-                    var totalAddresses = ipAddresses.Count();
+#endif
+                    var totalAddresses = ipAddresses.Length;
 
                     if (totalAddresses < minHosts || totalAddresses > maxHosts)
                     {
-                        resolutionsAboveThreshold.Add((entry.Key, totalAddresses));
+                        (resolutionsAboveThreshold ??= new()).Add((entry.Key, totalAddresses));
                     }
                 }
 
-                if (resolutionsAboveThreshold.Any())
+                if (resolutionsAboveThreshold?.Count > 0)
                 {
                     var description = string.Join(",", resolutionsAboveThreshold.Select(f => $"Host: {f.host} resolves to {f.total} addresses"));
                     return new HealthCheckResult(context.Registration.FailureStatus, description);

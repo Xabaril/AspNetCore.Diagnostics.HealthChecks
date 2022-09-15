@@ -20,7 +20,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             _operatorDiagnostics = operatorDiagnostics ?? throw new ArgumentNullException(nameof(operatorDiagnostics));
         }
 
-        public Task<V1Deployment> Get(HealthCheckResource resource)
+        public Task<V1Deployment?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
@@ -34,19 +34,17 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             try
             {
                 var deploymentResource = Build(resource);
-                var response =
-                    await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource,
-                        resource.Metadata.NamespaceProperty);
+                var response = await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
 
                 _operatorDiagnostics.DeploymentCreated(deployment.Metadata.Name);
             }
             catch (Exception ex)
             {
-                _operatorDiagnostics.DeploymentOperationError(deployment.Metadata.Name, Deployment.Operation.ADD, ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(deployment?.Metadata.Name!, Deployment.Operation.ADD, ex.Message);
             }
 
-            return deployment;
+            return deployment!;
         }
 
         public async Task DeleteAsync(HealthCheckResource resource)
@@ -100,6 +98,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
             uiContainer.MapCustomUIPaths(resource, _operatorDiagnostics);
 
+            var tolerations = resource.Spec.Tolerations?.Select(toleration => new V1Toleration(toleration.Effect,
+                toleration.Key, toleration.Operator, toleration.Seconds, toleration.Value)).ToList() ?? new List<V1Toleration>();
+
             var spec = new V1DeploymentSpec
             {
                 Selector = new V1LabelSelector
@@ -124,7 +125,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                         Containers = new List<V1Container>
                         {
                            uiContainer
-                        }
+                        },
+                        Tolerations = tolerations
                     }
                 }
             };
@@ -153,10 +155,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             {
                 const string volumeName = "healthchecks-volume";
 
-                if (specification.Volumes == null)
-                    specification.Volumes = new List<V1Volume>();
-                if (container.VolumeMounts == null)
-                    container.VolumeMounts = new List<V1VolumeMount>();
+                specification.Volumes ??= new List<V1Volume>();
+                container.VolumeMounts ??= new List<V1VolumeMount>();
 
                 specification.Volumes.Add(new V1Volume(name: volumeName,
                     configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));

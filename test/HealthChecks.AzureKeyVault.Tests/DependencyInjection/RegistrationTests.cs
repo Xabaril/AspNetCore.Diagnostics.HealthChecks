@@ -1,9 +1,4 @@
 using Azure.Core;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
 {
@@ -22,7 +17,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                  });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -40,7 +35,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                 .AddAzureKeyVault(new Uri("http://localhost"), new MockTokenCredentials(), options => { }, name: "keyvaultcheck");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -57,7 +52,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                .AddAzureKeyVault(null, new MockTokenCredentials(), setup =>
+                .AddAzureKeyVault(null!, new MockTokenCredentials(), setup =>
                  {
                      setup
                      .AddSecret("mysecret")
@@ -74,7 +69,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                .AddAzureKeyVault(null as Uri, new MockTokenCredentials(), (_, setup) =>
+                .AddAzureKeyVault((Uri)null!, new MockTokenCredentials(), (_, setup) =>
                 {
                     setup
                     .AddSecret("mysecret")
@@ -91,7 +86,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                    .AddAzureKeyVault(new Uri("http://localhost"), null, setup =>
+                    .AddAzureKeyVault(new Uri("http://localhost"), null!, setup =>
                     {
                         setup
                             .AddSecret("mysecret")
@@ -118,7 +113,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                     (_, _) => setupCalled = true);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -141,7 +136,7 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
                     (_, _) => setupCalled = true);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

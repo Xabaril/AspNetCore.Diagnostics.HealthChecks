@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>$(PackageTags);AWS;SQS;Simple Queue Service</PackageTags>
+    <Description>HealthChecks.Aws.Sqs is the health check package for SQS queues.</Description>
+    <Version>$(HealthCheckAWSSqs)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.2.73" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.8" />
+  </ItemGroup>
+
+</Project>

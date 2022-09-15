@@ -16,7 +16,9 @@ namespace HealthChecks.UI.Core.Data
 
         public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
         }
 

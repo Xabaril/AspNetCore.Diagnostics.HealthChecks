@@ -1,4 +1,5 @@
 using Amazon;
+using Amazon.Runtime;
 
 namespace HealthChecks.DynamoDb
 {
@@ -7,9 +8,13 @@ namespace HealthChecks.DynamoDb
     /// </summary>
     public class DynamoDBOptions
     {
-        public string AccessKey { get; set; } = null!;
+        public AWSCredentials? Credentials { get; set; }
 
-        public string SecretKey { get; set; } = null!;
+        [Obsolete("Specify access key and secret as a BasicCredential to Credentials property instead")]
+        public string? AccessKey { get; set; }
+
+        [Obsolete("Specify access key and secret as a BasicCredential to Credentials property instead")]
+        public string? SecretKey { get; set; }
 
         public RegionEndpoint RegionEndpoint { get; set; } = null!;
     }

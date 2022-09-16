@@ -328,6 +328,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_publisher_applicationinsights_cd.yml = .github\workflows\healthchecks_publisher_applicationinsights_cd.yml
 		.github\workflows\healthchecks_publisher_applicationinsights_cd_preview.yml = .github\workflows\healthchecks_publisher_applicationinsights_cd_preview.yml
 		.github\workflows\healthchecks_publisher_applicationinsights_ci.yml = .github\workflows\healthchecks_publisher_applicationinsights_ci.yml
+		healthchecks_publisher_cloudwatch_cd.yml = healthchecks_publisher_cloudwatch_cd.yml
+		healthchecks_publisher_cloudwatch_cd_preview.yml = healthchecks_publisher_cloudwatch_cd_preview.yml
+		healthchecks_publisher_cloudwatch_ci.yml = healthchecks_publisher_cloudwatch_ci.yml
 		.github\workflows\healthchecks_publisher_datadog_cd.yml = .github\workflows\healthchecks_publisher_datadog_cd.yml
 		.github\workflows\healthchecks_publisher_datadog_cd_preview.yml = .github\workflows\healthchecks_publisher_datadog_cd_preview.yml
 		.github\workflows\healthchecks_publisher_datadog_ci.yml = .github\workflows\healthchecks_publisher_datadog_ci.yml
@@ -396,7 +399,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ApplicationSta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ApplicationStatus.Tests", "test\HealthChecks.ApplicationStatus.Tests\HealthChecks.ApplicationStatus.Tests.csproj", "{403776CB-7229-4063-85C7-C34428BDAA8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Publisher.CloudWatch.Tests", "test\HealthChecks.Publisher.CloudWatch.Tests\HealthChecks.Publisher.CloudWatch.Tests.csproj", "{555D90D5-22C7-433D-B908-2DFFF98ED08C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.CloudWatch.Tests", "test\HealthChecks.Publisher.CloudWatch.Tests\HealthChecks.Publisher.CloudWatch.Tests.csproj", "{555D90D5-22C7-433D-B908-2DFFF98ED08C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

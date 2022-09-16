@@ -219,8 +219,8 @@ public void ConfigureServices(IServiceCollection services)
 
 HealthChecks include a _push model_ to send HealthCheckReport results into configured consumers.
 The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights**, **AspNetCore.HealthChecks.Publisher.Datadog**,
-**AspNetCore.HealthChecks.Publisher.Prometheus** or **AspNetCore.HealthChecks.Publisher.Seq** define a consumers to
-send report results to Application Insights, Datadog, Prometheus or Seq.
+**AspNetCore.HealthChecks.Publisher.Prometheus**, **AspNetCore.HealthChecks.Publisher.Seq** or **AspNetCore.HealthChecks.Publisher.CloudWatch** define a consumers to
+send report results to Application Insights, Datadog, Prometheus, Seq or CloudWatch.
 
 | Package              | Downloads                                                                                                                                                                               | Notes          |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -228,6 +228,7 @@ send report results to Application Insights, Datadog, Prometheus or Seq.
 | Datadog              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Datadog)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Datadog)                         |
 | Prometheus Gateway   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Prometheus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Prometheus)                   | **DEPRECATED** |
 | Seq                  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Seq)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Seq)                                 |
+| CloudWatch           | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.CloudWatch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.CloudWatch)                   |
 
 Include the package in your project:
 
@@ -236,6 +237,7 @@ install-package AspNetcore.HealthChecks.Publisher.ApplicationInsights
 install-package AspNetcore.HealthChecks.Publisher.Datadog
 install-package AspNetcore.HealthChecks.Publisher.Prometheus
 install-package AspNetcore.HealthChecks.Publisher.Seq
+install-package AspNetcore.HealthChecks.Publisher.CloudWatch
 ```
 
 Add publisher[s] into the `IHealthCheckBuilder`:
@@ -247,6 +249,7 @@ services
     .AddCheck<RandomHealthCheck>("random")
     .AddApplicationInsightsPublisher()
     .AddDatadogPublisher("myservice.healthchecks")
+    .AddCloudWatchPublisher()
     .AddPrometheusGatewayPublisher();
 ```
 

@@ -56,9 +56,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddCloudWatchPublisher(
             this IHealthChecksBuilder builder,
-            RegionEndpoint region,
             string awsAccessKeyId,
-            string awsSecretAccessKey)
+            string awsSecretAccessKey,
+            RegionEndpoint region)
         {
             builder.Services
                .AddSingleton<IHealthCheckPublisher, CloudWatchPublisher>(sp => new CloudWatchPublisher(awsAccessKeyId, awsSecretAccessKey, region));
@@ -82,9 +82,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddCloudWatchPublisher(
             this IHealthChecksBuilder builder,
             string serviceCheckName,
-            RegionEndpoint region,
             string awsAccessKeyId,
-            string awsSecretAccessKey)
+            string awsSecretAccessKey,
+            RegionEndpoint region)
         {
             builder.Services
                .AddSingleton<IHealthCheckPublisher, CloudWatchPublisher>(sp => new CloudWatchPublisher(serviceCheckName, awsAccessKeyId, awsSecretAccessKey, region));

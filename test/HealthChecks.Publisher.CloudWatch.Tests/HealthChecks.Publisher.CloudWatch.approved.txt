@@ -1,0 +1,10 @@
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class CloudWatchHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCloudWatchPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCloudWatchPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceCheckName) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCloudWatchPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string awsAccessKeyId, string awsSecretAccessKey, Amazon.RegionEndpoint region) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCloudWatchPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceCheckName, string awsAccessKeyId, string awsSecretAccessKey, Amazon.RegionEndpoint region) { }
+    }
+}

@@ -249,8 +249,8 @@ services
     .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
     .AddCheck<RandomHealthCheck>("random")
     .AddApplicationInsightsPublisher()
-    .AddDatadogPublisher("myservice.healthchecks")
     .AddCloudWatchPublisher()
+    .AddDatadogPublisher("myservice.healthchecks")
     .AddPrometheusGatewayPublisher();
 ```
 

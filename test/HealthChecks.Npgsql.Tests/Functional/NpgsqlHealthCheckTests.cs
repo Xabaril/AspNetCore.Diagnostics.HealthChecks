@@ -184,7 +184,8 @@ namespace HealthChecks.Npgsql.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            var testLoggerprovider = server.Services.GetRequiredService<ILoggerProvider>() as TestLoggerProvider;
+            var testLoggerProvider = (TestLoggerProvider)server.Services.GetRequiredService<ILoggerProvider>();
+
             testLoggerprovider.Should().NotBeNull();
             var logger = testLoggerprovider?.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");
             logger.Should().NotBeNull();

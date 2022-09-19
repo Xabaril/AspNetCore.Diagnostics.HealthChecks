@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.Npgsql.Tests.Functional;
+
 public sealed class TestLoggerProvider : ILoggerProvider
 {
     private readonly ConcurrentDictionary<string, TestLogger> _loggers = new(StringComparer.OrdinalIgnoreCase);

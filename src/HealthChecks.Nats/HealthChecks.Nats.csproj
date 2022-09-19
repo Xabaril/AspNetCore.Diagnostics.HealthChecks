@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.8" />
-    <PackageReference Include="NATS.Client" Version="0.14.8" />
+    <PackageReference Include="NATS.Client" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

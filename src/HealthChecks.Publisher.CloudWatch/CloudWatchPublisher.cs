@@ -110,8 +110,7 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
             };
         });
 
-        if (entriesMetricDatas.Any())
-            metricDatas.AddRange(entriesMetricDatas);
+        metricDatas.AddRange(entriesMetricDatas);
 
         return new PutMetricDataRequest
         {

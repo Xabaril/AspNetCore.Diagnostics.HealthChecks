@@ -235,10 +235,10 @@ Include the package in your project:
 
 ```powershell
 install-package AspNetcore.HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.CloudWatch
 install-package AspNetcore.HealthChecks.Publisher.Datadog
 install-package AspNetcore.HealthChecks.Publisher.Prometheus
 install-package AspNetcore.HealthChecks.Publisher.Seq
-install-package AspNetcore.HealthChecks.Publisher.CloudWatch
 ```
 
 Add publisher[s] into the `IHealthCheckBuilder`:

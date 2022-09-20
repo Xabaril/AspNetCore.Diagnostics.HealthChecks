@@ -55,6 +55,9 @@
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
 
     <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" />
+    <Compile Include="../TestLogger.cs" Link="TestLogger.cs"/>
+    <Compile Include="../TestLoggerProvider.cs" Link="TestLoggerProvider.cs"/>
+
 
     <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.AspNetCore.Hosting" />

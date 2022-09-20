@@ -73,13 +73,11 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
             };
     }
 
-    public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
+    public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
     {
         var putMetricDataRequest = BuildCloudWatchMetricDataRequest(report);
 
-        _amazonCloudWatchClient.PutMetricDataAsync(putMetricDataRequest, cancellationToken);
-
-        return Task.CompletedTask;
+        _ = await _amazonCloudWatchClient.PutMetricDataAsync(putMetricDataRequest, cancellationToken);
     }
 
     private PutMetricDataRequest BuildCloudWatchMetricDataRequest(HealthReport report)

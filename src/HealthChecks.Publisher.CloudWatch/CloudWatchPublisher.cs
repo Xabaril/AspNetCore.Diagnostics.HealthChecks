@@ -38,13 +38,14 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         if (string.IsNullOrEmpty(serviceCheckName))
             throw new ArgumentNullException(nameof(serviceCheckName));
 
-        _dimensions = new List<Dimension> {
-                new Dimension
-                {
-                    Name = serviceCheckName,
-                    Value = serviceCheckName
-                }
-            };
+        _dimensions = new List<Dimension>
+        {
+            new Dimension
+            {
+                Name = serviceCheckName,
+                Value = serviceCheckName
+            }
+        };
     }
 
     /// <summary>

@@ -73,12 +73,6 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
             };
     }
 
-    /// <summary>
-    /// Publishes the HealthReport to AWS CloudWatch
-    /// </summary>
-    /// <param name="report"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
     {
         var putMetricDataRequest = BuildCloudWatchMetricDataRequest(report);
@@ -88,11 +82,6 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// Builds the CloudWatch MetricDataRequest
-    /// </summary>
-    /// <param name="report"></param>
-    /// <returns></returns>
     private PutMetricDataRequest BuildCloudWatchMetricDataRequest(HealthReport report)
     {
         var utcNow = DateTime.UtcNow;

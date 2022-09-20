@@ -3,7 +3,7 @@ using StatsdClient;
 
 namespace HealthChecks.Publisher.Datadog
 {
-    internal class DatadogPublisher : IHealthCheckPublisher, IDisposable
+    internal class DatadogPublisher : IHealthCheckPublisher
     {
         private readonly IDogStatsd _dogStatsd;
         private readonly string _serviceCheckName;
@@ -54,11 +54,6 @@ namespace HealthChecks.Publisher.Datadog
             }
 
             return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            _dogStatsd?.Dispose();
         }
     }
 }

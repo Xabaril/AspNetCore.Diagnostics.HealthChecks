@@ -219,8 +219,9 @@ public void ConfigureServices(IServiceCollection services)
 
 HealthChecks include a _push model_ to send HealthCheckReport results into configured consumers.
 The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights**, **AspNetCore.HealthChecks.Publisher.Datadog**,
-**AspNetCore.HealthChecks.Publisher.Prometheus**, **AspNetCore.HealthChecks.Publisher.Seq** or **AspNetCore.HealthChecks.Publisher.CloudWatch** define a consumers to
-send report results to Application Insights, Datadog, Prometheus, Seq or CloudWatch.
+**AspNetCore.HealthChecks.Publisher.Prometheus**, **AspNetCore.HealthChecks.Publisher.Seq** or
+**AspNetCore.HealthChecks.Publisher.CloudWatch** define a consumers to send report results to
+Application Insights, Datadog, Prometheus, Seq or CloudWatch.
 
 | Package              | Downloads                                                                                                                                                                               | Notes          |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -248,8 +249,8 @@ services
     .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
     .AddCheck<RandomHealthCheck>("random")
     .AddApplicationInsightsPublisher()
-    .AddDatadogPublisher("myservice.healthchecks")
     .AddCloudWatchPublisher()
+    .AddDatadogPublisher("myservice.healthchecks")
     .AddPrometheusGatewayPublisher();
 ```
 

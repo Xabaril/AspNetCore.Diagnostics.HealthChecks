@@ -29,10 +29,6 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
             };
     }
 
-    /// <summary>
-    /// CloudWatchPublisher constructor
-    /// </summary>
-    /// <param name="serviceCheckName"></param>
     public CloudWatchPublisher(string serviceCheckName) : this()
     {
         if (string.IsNullOrEmpty(serviceCheckName))
@@ -48,12 +44,6 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         };
     }
 
-    /// <summary>
-    /// CloudWatchPublisher constructor
-    /// </summary>
-    /// <param name="region"></param>
-    /// <param name="awsAccessKeyId"></param>
-    /// <param name="awsSecretAccessKey"></param>
     public CloudWatchPublisher(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region)
     {
         _amazonCloudWatchClient = new AmazonCloudWatchClient(awsAccessKeyId, awsSecretAccessKey, region);
@@ -69,13 +59,6 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
             };
     }
 
-    /// <summary>
-    /// CloudWatchPublisher constructor
-    /// </summary>
-    /// <param name="serviceCheckName"></param>
-    /// <param name="region"></param>
-    /// <param name="awsAccessKeyId"></param>
-    /// <param name="awsSecretAccessKey"></param>
     public CloudWatchPublisher(string serviceCheckName, string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : this(awsAccessKeyId, awsSecretAccessKey, region)
     {
         if (string.IsNullOrEmpty(serviceCheckName))

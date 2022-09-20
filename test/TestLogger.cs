@@ -1,7 +1,5 @@
 using Microsoft.Extensions.Logging;
 
-namespace HealthChecks.Npgsql.Tests.Functional;
-
 public sealed class TestLogger : ILogger
 {
     public readonly List<(DateTime, string)> _eventLog = new();

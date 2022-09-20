@@ -226,10 +226,10 @@ Application Insights, Datadog, Prometheus, Seq or CloudWatch.
 | Package              | Downloads                                                                                                                                                                               | Notes          |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
 | Application Insights | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.ApplicationInsights)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.ApplicationInsights) |
+| CloudWatch           | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.CloudWatch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.CloudWatch)                   |
 | Datadog              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Datadog)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Datadog)                         |
 | Prometheus Gateway   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Prometheus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Prometheus)                   | **DEPRECATED** |
 | Seq                  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Seq)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Seq)                                 |
-| CloudWatch           | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.CloudWatch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.CloudWatch)                   |
 
 Include the package in your project:
 

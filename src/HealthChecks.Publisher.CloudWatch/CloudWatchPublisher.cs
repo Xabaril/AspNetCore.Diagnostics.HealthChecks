@@ -130,9 +130,4 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         if (disposing)
             _amazonCloudWatchClient?.Dispose();
     }
-
-    ~CloudWatchPublisher()
-    {
-        Dispose(false);
-    }
 }

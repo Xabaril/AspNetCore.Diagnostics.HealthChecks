@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <remarks>
         /// For each <see cref="HealthReport"/> published a custom service check indicating the health check status (OK - Healthy, WARNING - Degraded, CRITICAL - Unhealthy)
-        /// and a metric indicating the total time the health check took to execute on milliseconds is sent to Datadog./>
+        /// and a metric indicating the total time the health check took to execute on milliseconds is sent to Datadog.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="serviceCheckName">Specifies the name of the custom check and metric that will be published to datadog. Example: "myservice.healthchecks".</param>

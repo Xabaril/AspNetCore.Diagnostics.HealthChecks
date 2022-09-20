@@ -11,7 +11,7 @@ public static class CloudWatchHealthCheckBuilderExtensions
     /// </summary>
     /// <remarks>
     /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c>
-    /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
+    /// indicating the health check status ( 1 - Healthy 0 - Unhealthy) and the total time the health check took to execute on milliseconds.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
@@ -27,7 +27,7 @@ public static class CloudWatchHealthCheckBuilderExtensions
     /// </summary>
     /// <remarks>
     /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c>
-    /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
+    /// indicating the health check status ( 1 - Healthy 0 - Unhealthy) and the total time the health check took to execute on milliseconds.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="serviceCheckName">The <see cref="string"/>.</param>
@@ -47,7 +47,7 @@ public static class CloudWatchHealthCheckBuilderExtensions
     /// </summary>
     /// <remarks>
     /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c>
-    /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
+    /// indicating the health check status ( 1 - Healthy 0 - Unhealthy)  and the total time the health check took to execute on milliseconds.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="awsAccessKeyId">The <see cref="string"/>.</param>
@@ -71,7 +71,7 @@ public static class CloudWatchHealthCheckBuilderExtensions
     /// </summary>
     /// <remarks>
     /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c>
-    /// indicating the health check status ( 1 Healthy 0 Unhealthy)  and the total time the health check took to execute on milliseconds./>
+    /// indicating the health check status ( 1 - Healthy 0 - Unhealthy) and the total time the health check took to execute on milliseconds.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="serviceCheckName">The <see cref="string"/>.</param>

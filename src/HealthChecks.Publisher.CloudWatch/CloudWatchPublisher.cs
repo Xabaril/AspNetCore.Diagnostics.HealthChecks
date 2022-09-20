@@ -14,9 +14,6 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
     private readonly List<Dimension> _dimensions;
     private readonly AmazonCloudWatchClient _amazonCloudWatchClient;
 
-    /// <summary>
-    /// CloudWatchPublisher constructor
-    /// </summary>
     public CloudWatchPublisher()
     {
         _amazonCloudWatchClient = new AmazonCloudWatchClient();

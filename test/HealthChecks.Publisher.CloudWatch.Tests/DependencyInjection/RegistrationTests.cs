@@ -2,6 +2,11 @@ namespace HealthChecks.Publisher.CloudWatch.Tests.DependencyInjection
 {
     public class cloud_watch_publisher_registration_should
     {
+        public cloud_watch_publisher_registration_should()
+        {
+            Environment.SetEnvironmentVariable("AWS_Region", "ue-east-1");
+        }
+
         [Fact]
         public void add_healthcheck_when_properly_configured_with_default_parameter()
         {

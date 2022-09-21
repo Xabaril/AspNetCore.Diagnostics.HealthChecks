@@ -39,6 +39,7 @@
     <HealthCheckOracle>6.0.3</HealthCheckOracle>
     <HealthCheckPrometheusMetrics>6.0.2</HealthCheckPrometheusMetrics>
     <HealthCheckPublisherAppplicationInsights>6.0.2</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherCloudWatch>6.0.0</HealthCheckPublisherCloudWatch>
     <HealthCheckPublisherDatadog>6.0.2</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>6.0.2</HealthCheckPublisherPrometheus>
     <HealthCheckPublisherSeq>6.0.2</HealthCheckPublisherSeq>

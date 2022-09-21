@@ -23,6 +23,8 @@ on:
 
 jobs:
   build:
+    env:
+      AWS_Region: us-east-1
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

@@ -20,7 +20,7 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 
         var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 
-        _dimensions = new List<Dimension> 
+        _dimensions = new List<Dimension>
         {
             new Dimension
             {
@@ -51,7 +51,7 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 
         var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 
-        _dimensions = new List<Dimension> 
+        _dimensions = new List<Dimension>
         {
             new Dimension
             {
@@ -66,7 +66,7 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         if (string.IsNullOrEmpty(serviceCheckName))
             throw new ArgumentNullException(nameof(serviceCheckName));
 
-        _dimensions = new List<Dimension> 
+        _dimensions = new List<Dimension>
         {
             new Dimension
             {

@@ -20,13 +20,14 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 
         var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 
-        _dimensions = new List<Dimension> {
-                new Dimension
-                {
-                    Name = serviceCheckName,
-                    Value = serviceCheckName
-                }
-            };
+        _dimensions = new List<Dimension> 
+        {
+            new Dimension
+            {
+                Name = serviceCheckName,
+                Value = serviceCheckName
+            }
+        };
     }
 
     public CloudWatchPublisher(string serviceCheckName) : this()
@@ -50,13 +51,14 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 
         var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 
-        _dimensions = new List<Dimension> {
-                new Dimension
-                {
-                    Name = serviceCheckName,
-                    Value = serviceCheckName
-                }
-            };
+        _dimensions = new List<Dimension> 
+        {
+            new Dimension
+            {
+                Name = serviceCheckName,
+                Value = serviceCheckName
+            }
+        };
     }
 
     public CloudWatchPublisher(string serviceCheckName, string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : this(awsAccessKeyId, awsSecretAccessKey, region)
@@ -64,13 +66,14 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         if (string.IsNullOrEmpty(serviceCheckName))
             throw new ArgumentNullException(nameof(serviceCheckName));
 
-        _dimensions = new List<Dimension> {
-                new Dimension
-                {
-                    Name = serviceCheckName,
-                    Value = serviceCheckName
-                }
-            };
+        _dimensions = new List<Dimension> 
+        {
+            new Dimension
+            {
+                Name = serviceCheckName,
+                Value = serviceCheckName
+            }
+        };
     }
 
     public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)

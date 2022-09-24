@@ -27,7 +27,7 @@
     <HealthCheckHangfire>6.0.2</HealthCheckHangfire>
     <HealthCheckIbmMQ>6.0.2</HealthCheckIbmMQ>
     <HealthCheckIoTHub>6.0.2</HealthCheckIoTHub>
-    <HealthCheckKafka>6.0.2</HealthCheckKafka>
+    <HealthCheckKafka>6.0.3</HealthCheckKafka>
     <HealthCheckKeyVault>6.0.3</HealthCheckKeyVault>
     <HealthCheckKubernetes>6.0.2</HealthCheckKubernetes>
     <HealthCheckMongoDB>6.0.2</HealthCheckMongoDB>

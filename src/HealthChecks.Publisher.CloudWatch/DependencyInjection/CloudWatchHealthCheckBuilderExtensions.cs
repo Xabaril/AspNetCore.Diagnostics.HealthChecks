@@ -1,3 +1,4 @@
+using Amazon;
 using HealthChecks.Publisher.CloudWatch;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

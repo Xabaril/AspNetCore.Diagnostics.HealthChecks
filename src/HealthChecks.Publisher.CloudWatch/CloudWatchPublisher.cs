@@ -1,5 +1,4 @@
 using System.Reflection;
-using Amazon;
 using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -22,37 +21,6 @@ internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         _amazonCloudWatchClient = new AmazonCloudWatchClient(options.AwsAccessKeyId, options.AwsSecretAccessKey, options.Region);
 
         string serviceCheckName = options.ServiceCheckName ?? Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
-
-        _dimensions = new List<Dimension>
-        {
-            new Dimension
-            {
-                Name = serviceCheckName,
-                Value = serviceCheckName
-            }
-        };
-    }
-
-    public CloudWatchPublisher(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region)
-    {
-        _amazonCloudWatchClient = new AmazonCloudWatchClient(awsAccessKeyId, awsSecretAccessKey, region);
-
-        var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
-
-        _dimensions = new List<Dimension>
-        {
-            new Dimension
-            {
-                Name = serviceCheckName,
-                Value = serviceCheckName
-            }
-        };
-    }
-
-    public CloudWatchPublisher(string serviceCheckName, string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : this(awsAccessKeyId, awsSecretAccessKey, region)
-    {
-        if (string.IsNullOrEmpty(serviceCheckName))
-            throw new ArgumentNullException(nameof(serviceCheckName));
 
         _dimensions = new List<Dimension>
         {
@@ -112,13 +80,6 @@ internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-            _amazonCloudWatchClient?.Dispose();
+        _amazonCloudWatchClient?.Dispose();
     }
 }

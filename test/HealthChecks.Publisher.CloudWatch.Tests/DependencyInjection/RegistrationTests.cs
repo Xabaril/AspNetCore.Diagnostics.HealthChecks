@@ -22,7 +22,7 @@ namespace HealthChecks.Publisher.CloudWatch.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddCloudWatchPublisher("serviceCheckName");
+                .AddCloudWatchPublisher(options => options.ServiceCheckName = "serviceCheckName");
 
             using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
@@ -36,7 +36,12 @@ namespace HealthChecks.Publisher.CloudWatch.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
             .AddHealthChecks()
-                .AddCloudWatchPublisher("awsAccessKeyId", "awsSecretAccessKey", Amazon.RegionEndpoint.USEast1);
+                .AddCloudWatchPublisher(options =>
+                {
+                    options.AwsAccessKeyId = "awsAccessKeyId";
+                    options.AwsSecretAccessKey = "awsSecretAccessKey";
+                    options.Region = Amazon.RegionEndpoint.USEast1;
+                });
 
             using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
@@ -50,7 +55,13 @@ namespace HealthChecks.Publisher.CloudWatch.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddCloudWatchPublisher("serviceCheckName", "awsAccessKeyId", "awsSecretAccessKey", Amazon.RegionEndpoint.USEast1);
+                .AddCloudWatchPublisher(options =>
+                {
+                    options.ServiceCheckName = "serviceCheckName";
+                    options.AwsAccessKeyId = "awsAccessKeyId";
+                    options.AwsSecretAccessKey = "awsSecretAccessKey";
+                    options.Region = Amazon.RegionEndpoint.USEast1;
+                });
 
             using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();

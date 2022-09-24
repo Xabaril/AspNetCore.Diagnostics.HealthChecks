@@ -1,5 +1,4 @@
 using System.Reflection;
-using Amazon;
 using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -9,62 +8,19 @@ namespace HealthChecks.Publisher.CloudWatch;
 /// <summary>
 /// A health check publisher for AWS CloudWatch.
 /// </summary>
-internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
+internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 {
+    private readonly CloudWatchOptions _options;
     private readonly List<Dimension> _dimensions;
     private readonly AmazonCloudWatchClient _amazonCloudWatchClient;
 
-    public CloudWatchPublisher()
+    public CloudWatchPublisher(CloudWatchOptions options)
     {
-        _amazonCloudWatchClient = new AmazonCloudWatchClient();
+        _options = options ?? throw new ArgumentNullException(nameof(options));
 
-        var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
+        _amazonCloudWatchClient = new AmazonCloudWatchClient(options.AwsAccessKeyId, options.AwsSecretAccessKey, options.Region);
 
-        _dimensions = new List<Dimension>
-        {
-            new Dimension
-            {
-                Name = serviceCheckName,
-                Value = serviceCheckName
-            }
-        };
-    }
-
-    public CloudWatchPublisher(string serviceCheckName) : this()
-    {
-        if (string.IsNullOrEmpty(serviceCheckName))
-            throw new ArgumentNullException(nameof(serviceCheckName));
-
-        _dimensions = new List<Dimension>
-        {
-            new Dimension
-            {
-                Name = serviceCheckName,
-                Value = serviceCheckName
-            }
-        };
-    }
-
-    public CloudWatchPublisher(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region)
-    {
-        _amazonCloudWatchClient = new AmazonCloudWatchClient(awsAccessKeyId, awsSecretAccessKey, region);
-
-        var serviceCheckName = Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
-
-        _dimensions = new List<Dimension>
-        {
-            new Dimension
-            {
-                Name = serviceCheckName,
-                Value = serviceCheckName
-            }
-        };
-    }
-
-    public CloudWatchPublisher(string serviceCheckName, string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : this(awsAccessKeyId, awsSecretAccessKey, region)
-    {
-        if (string.IsNullOrEmpty(serviceCheckName))
-            throw new ArgumentNullException(nameof(serviceCheckName));
+        string serviceCheckName = options.ServiceCheckName ?? Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 
         _dimensions = new List<Dimension>
         {
@@ -118,19 +74,12 @@ internal class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
         return new PutMetricDataRequest
         {
             MetricData = metricDatas,
-            Namespace = "Xabaril/AspNetCoreDiagnosticsHealthChecks"
+            Namespace = _options.Namespace
         };
     }
 
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-            _amazonCloudWatchClient?.Dispose();
+        _amazonCloudWatchClient?.Dispose();
     }
 }

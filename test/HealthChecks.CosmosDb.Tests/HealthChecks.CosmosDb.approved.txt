@@ -4,6 +4,7 @@ namespace HealthChecks.CosmosDb
     {
         public CosmosDbHealthCheck(string connectionString) { }
         public CosmosDbHealthCheck(Microsoft.Azure.Cosmos.CosmosClient cosmosClient, HealthChecks.CosmosDb.CosmosDbHealthCheckOptions options) { }
+        public CosmosDbHealthCheck(Microsoft.Azure.Cosmos.CosmosClient cosmosClient) { }
         public CosmosDbHealthCheck(string connectionString, string database) { }
         public CosmosDbHealthCheck(string accountEndpoint, Azure.Core.TokenCredential tokenCredential, string database) { }
         public CosmosDbHealthCheck(string connectionString, string? database, System.Collections.Generic.IEnumerable<string>? containers) { }

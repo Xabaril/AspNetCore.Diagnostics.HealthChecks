@@ -33,6 +33,10 @@ namespace HealthChecks.CosmosDb
                   new CosmosDbHealthCheckOptions { ContainerIds = containers, DatabaseId = database })
         { }
 
+        public CosmosDbHealthCheck(CosmosClient cosmosClient)
+            : this(cosmosClient, new CosmosDbHealthCheckOptions())
+        { }
+
         public CosmosDbHealthCheck(CosmosClient cosmosClient, CosmosDbHealthCheckOptions options)
         {
             _cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));

@@ -9,9 +9,8 @@ public static class CloudWatchHealthCheckBuilderExtensions
     /// Add a health check publisher for AWS CloudWatch.
     /// </summary>
     /// <remarks>
-    /// For each <see cref="HealthReport"/> published a new event <c>AspNetCoreHealthCheck</c> is sent to AWS CloudWatch
-    /// with two metrics <c>AspNetCoreHealthCheckStatus</c> and <c>AspNetCoreHealthCheckDuration</c> indicating the health
-    /// check status (1 - Healthy, 0 - Unhealthy) and the total time the health check took to execute on milliseconds.
+    /// For each <see cref="HealthReport"/> published a new metric is sent to AWS CloudWatch indicating 
+    /// the health check status (2 - Healthy, 1 - Degraded, 0 - Unhealthy)
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="setup">Delegate to configure publisher options.</param>

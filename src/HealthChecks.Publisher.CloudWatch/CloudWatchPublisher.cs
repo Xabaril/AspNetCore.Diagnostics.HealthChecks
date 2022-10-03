@@ -18,7 +18,7 @@ internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
     {
         _options = options ?? throw new ArgumentNullException(nameof(options));
 
-        _amazonCloudWatchClient = new AmazonCloudWatchClient(options.AwsAccessKeyId, options.AwsSecretAccessKey, options.Region);
+        _amazonCloudWatchClient = options.ClientBuilder(options);
 
         string serviceCheckName = options.ServiceCheckName ?? Assembly.GetEntryAssembly()?.GetName()?.Name ?? "undefined";
 

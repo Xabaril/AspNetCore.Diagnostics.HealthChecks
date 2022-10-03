@@ -9,7 +9,7 @@ public static class CloudWatchHealthCheckBuilderExtensions
     /// Add a health check publisher for AWS CloudWatch.
     /// </summary>
     /// <remarks>
-    /// For each <see cref="HealthReport"/> published a new metric is sent to AWS CloudWatch indicating 
+    /// For each <see cref="HealthReport"/> published a new metric is sent to AWS CloudWatch indicating
     /// the health check status (2 - Healthy, 1 - Degraded, 0 - Unhealthy)
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>

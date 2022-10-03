@@ -5,6 +5,7 @@ namespace HealthChecks.Publisher.CloudWatch
         public CloudWatchOptions() { }
         public string? AwsAccessKeyId { get; set; }
         public string? AwsSecretAccessKey { get; set; }
+        public System.Func<HealthChecks.Publisher.CloudWatch.CloudWatchOptions, Amazon.CloudWatch.AmazonCloudWatchClient> ClientBuilder { get; set; }
         public string Namespace { get; set; }
         public Amazon.RegionEndpoint? Region { get; set; }
         public string? ServiceCheckName { get; set; }

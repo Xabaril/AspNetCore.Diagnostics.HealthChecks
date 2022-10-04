@@ -90,7 +90,7 @@ namespace HealthChecks.UI.Middleware
 
                     groupedHealthCheckExecutions.Add(groupedHealthCheckExecution);
                 }
-                
+
                 var responseContent = JsonConvert.SerializeObject(groupedHealthCheckExecutions, _jsonSerializationSettings);
                 context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
 

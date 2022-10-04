@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthChecks;HealthCheck;Health;MySQL</PackageTags>
+    <PackageTags>$(PackageTags);MySQL</PackageTags>
     <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
     <Version>$(HealthCheckMySql)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
+    <PackageReference Include="MySqlConnector" Version="2.1.13" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
   </ItemGroup>
 
 </Project>

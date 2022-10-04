@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Publisher;Datadog</PackageTags>
+    <PackageTags>$(PackageTags);Publisher;Datadog</PackageTags>
     <Description>HealthChecks.Publisher.Datadog is the health check publisher for Datadog.</Description>
     <Version>$(HealthCheckPublisherDatadog)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DogStatsD-CSharp-Client" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
+    <PackageReference Include="DogStatsD-CSharp-Client" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
   </ItemGroup>
 
 </Project>

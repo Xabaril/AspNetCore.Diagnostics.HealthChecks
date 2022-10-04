@@ -9,14 +9,15 @@ namespace HealthChecks.Publisher.Seq
 {
     public class SeqPublisher : IHealthCheckPublisher
     {
-
         private readonly SeqOptions _options;
         private readonly Func<HttpClient> _httpClientFactory;
+        private readonly Uri _checkUri;
 
         public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _checkUri = BuildCheckUri(options);
         }
 
         public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -33,6 +34,8 @@ namespace HealthChecks.Publisher.Seq
                     break;
             }
 
+            string? assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+
             var events = new RawEvents
             {
                 Events = new RawEvent[]
@@ -40,12 +43,12 @@ namespace HealthChecks.Publisher.Seq
                     new RawEvent
                     {
                         Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = $"[{Assembly.GetEntryAssembly()?.GetName().Name} - HealthCheck Result]",
+                        MessageTemplate = $"[{assemblyName} - HealthCheck Result]",
                         Level = level.ToString(),
                         Properties = new Dictionary<string, object?>
                         {
                             { nameof(Environment.MachineName), Environment.MachineName },
-                            { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
+                            { nameof(Assembly), assemblyName },
                             { "Status", report.Status.ToString() },
                             { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
                             { "RawReport" , JsonConvert.SerializeObject(report)}
@@ -54,27 +57,48 @@ namespace HealthChecks.Publisher.Seq
                 }
             };
 
-            await PushMetricsAsync(JsonConvert.SerializeObject(events));
+            await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken);
         }
 
-        private async Task PushMetricsAsync(string json)
+        private async Task PushMetricsAsync(string json, CancellationToken cancellationToken)
         {
             try
             {
-                var httpClient = _httpClientFactory();
+                using var httpClient = _httpClientFactory();
 
-                using var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}")
+                using var pushMessage = new HttpRequestMessage(HttpMethod.Post, _checkUri)
                 {
                     Content = new StringContent(json, Encoding.UTF8, "application/json")
                 };
 
-                using var response = await httpClient.SendAsync(pushMessage, HttpCompletionOption.ResponseHeadersRead);
+                using var response = await httpClient.SendAsync(
+                    pushMessage,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken);
+
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"Exception is throwed publishing metrics to Seq with message: {ex.Message}");
+                Trace.WriteLine($"Exception thrown publishing metrics to Seq with message: {ex.Message}");
             }
+        }
+
+        private static Uri BuildCheckUri(SeqOptions options)
+        {
+            if (string.IsNullOrEmpty(options.Endpoint))
+                throw new ArgumentNullException(nameof(options.Endpoint));
+
+            var uriBuilder = new UriBuilder(options.Endpoint)
+            {
+                Path = "/api/events/raw",
+            };
+
+            // Add api key if supplied
+            if (!string.IsNullOrEmpty(options.ApiKey))
+                uriBuilder.Query = "?apiKey=" + options.ApiKey;
+
+            return uriBuilder.Uri;
         }
 
         private class RawEvents

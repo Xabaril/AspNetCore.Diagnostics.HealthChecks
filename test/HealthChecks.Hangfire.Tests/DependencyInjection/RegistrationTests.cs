@@ -1,9 +1,4 @@
-using FluentAssertions;
 using HealthChecks.Hangfire;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.Gremlin.Tests.DependencyInjection
 {
@@ -17,7 +12,7 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
                 .AddHangfire(setup => setup.MaximumJobsFailed = 3);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -33,7 +28,7 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
                 .AddHangfire(setup => setup.MaximumJobsFailed = 3, name: "my-hangfire-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

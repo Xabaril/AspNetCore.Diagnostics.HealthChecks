@@ -248,7 +248,6 @@ function GetHTTPResponse([Uri] $Uri)
     })
 }
 
-
 function Get-Latest-Version-Info([string]$AzureFeed, [string]$Channel, [bool]$Coherent) {
     Say-Invocation $MyInvocation
 
@@ -285,7 +284,6 @@ function Get-Latest-Version-Info([string]$AzureFeed, [string]$Channel, [bool]$Co
 
     return $VersionInfo
 }
-
 
 function Get-Specific-Version-From-Version([string]$AzureFeed, [string]$Channel, [string]$Version) {
     Say-Invocation $MyInvocation

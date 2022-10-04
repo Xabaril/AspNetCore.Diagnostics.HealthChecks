@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ServiceCollectionExtensions
     {
         public static HealthChecksUIBuilder AddHealthChecksUI(this IServiceCollection services,
-            Action<Settings> setupSettings = null)
+            Action<Settings>? setupSettings = null)
         {
             services
                 .AddOptions<Settings>()
@@ -44,19 +44,19 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services.AddHttpClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME, (sp, client) =>
                 {
-                    var settings = sp.GetService<IOptions<Settings>>();
+                    var settings = sp.GetRequiredService<IOptions<Settings>>();
                     settings.Value.ApiEndpointHttpClientConfig?.Invoke(sp, client);
                 })
                 .ConfigurePrimaryHttpMessageHandler(sp =>
                 {
-                    var settings = sp.GetService<IOptions<Settings>>();
+                    var settings = sp.GetRequiredService<IOptions<Settings>>();
                     return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
                 })
                 .ConfigureHttpMessageHandlerBuilder(builder =>
                 {
-                    var settings = builder.Services.GetService<IOptions<Settings>>();
+                    var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
 
-                    foreach (var handlerType in settings.Value.DelegatingHandlerTypes.Values)
+                    foreach (var handlerType in settings.Value.ApiEndpointDelegatingHandlerTypes.Values)
                     {
                         builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
                     }
@@ -68,14 +68,23 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services.AddHttpClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME, (sp, client) =>
             {
-                var settings = sp.GetService<IOptions<Settings>>();
+                var settings = sp.GetRequiredService<IOptions<Settings>>();
                 settings.Value.WebHooksEndpointHttpClientConfig?.Invoke(sp, client);
             })
             .ConfigurePrimaryHttpMessageHandler(sp =>
              {
-                 var settings = sp.GetService<IOptions<Settings>>();
+                 var settings = sp.GetRequiredService<IOptions<Settings>>();
                  return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
              })
+            .ConfigureHttpMessageHandlerBuilder(builder =>
+            {
+                var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
+
+                foreach (var handlerType in settings.Value.WebHooksEndpointDelegatingHandlerTypes.Values)
+                {
+                    builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
+                }
+            })
             .Services;
         }
 

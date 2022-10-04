@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Network;Sftp;Ftp;Tcp;DNS</PackageTags>
+    <PackageTags>$(PackageTags);Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Description>HealthChecks.Network is the health check package for network services.</Description>
     <Version>$(HealthCheckNetwork)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SSH.NET" Version="2020.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
+    <PackageReference Include="SSH.NET" Version="2020.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>

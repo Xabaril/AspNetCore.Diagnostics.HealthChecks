@@ -168,3 +168,9 @@ services:
         environment: 
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=Password12!
+    nats:
+        image: nats:latest
+        ports:
+        - "4222:4222"
+        - "8222:8222"
+        - "6222:6222"

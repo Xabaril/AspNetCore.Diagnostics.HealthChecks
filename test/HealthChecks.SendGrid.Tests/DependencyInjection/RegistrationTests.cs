@@ -1,9 +1,4 @@
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.SendGrid.Tests.DependencyInjection
 {
@@ -17,7 +12,7 @@ namespace HealthChecks.SendGrid.Tests.DependencyInjection
                 .AddSendGrid("wellformed_but_invalid_token");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -37,7 +32,7 @@ namespace HealthChecks.SendGrid.Tests.DependencyInjection
                 .AddSendGrid("wellformed_but_invalid_token", "my-sendgrid-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

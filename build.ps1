@@ -48,7 +48,6 @@ finally {
     Pop-Location
 }
 
-
 if (-Not (Test-Path 'env:APPVEYOR')) {
     exec { & docker-compose up -d }
 }
@@ -65,7 +64,6 @@ try {
 finally {
     Pop-Location
 }
-
 
 if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj -c Release -o .\artifacts --include-symbols --no-build }
@@ -115,6 +113,12 @@ if ($suffix -eq "") {
     exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.SendGrid\HealthChecks.SendGrid.csproj -c Release -o .\artifacts --include-symbols --no-build }
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Aws.SecretsManager\HealthChecks.Aws.SecretsManager.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Aws.Sns\HealthChecks.Aws.Sns.csproj -c Release -o .\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\HealthChecks.Aws.Sqs\HealthChecks.Aws.Sqs.csproj -c Release -o .\artifacts --include-symbols --no-build }
 }
 
 else {
@@ -165,4 +169,10 @@ else {
     exec { & dotnet pack .\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.SendGrid\HealthChecks.SendGrid.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
     exec { & dotnet pack .\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Nats\HealthChecks.Nats.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Aws.SecretsManager\HealthChecks.Aws.SecretsManager.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Aws.SystemsManager\HealthChecks.Aws.SystemsManager.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Aws.Sns\HealthChecks.Aws.Sns.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\HealthChecks.Aws.Sqs\HealthChecks.Aws.Sqs.csproj -c Release -o .\artifacts --include-symbols --no-build --version-suffix=$suffix }
 }

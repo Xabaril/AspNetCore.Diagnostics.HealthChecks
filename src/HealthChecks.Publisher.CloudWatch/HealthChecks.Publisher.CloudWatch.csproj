@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Publisher;AWS;CloudWatch</PackageTags>
+    <Description>HealthChecks.Publisher.CloudWatch is the health check publisher for AWS CloudWatch.</Description>
+    <Version>$(HealthCheckPublisherCloudWatch)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.7.21" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.8" />
+  </ItemGroup>
+
+</Project>

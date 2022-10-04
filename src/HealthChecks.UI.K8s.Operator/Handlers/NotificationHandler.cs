@@ -29,9 +29,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             await HealthChecksPushService.PushNotification(
                 type,
                 resource,
-                uiService,
+                uiService!, // TODO: check
                 service,
-                secret,
+                secret!, // TODO: check
                 _logger,
                 _httpClientFactory);
         }

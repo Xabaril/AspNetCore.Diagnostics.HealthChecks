@@ -1,4 +1,4 @@
-name: HealthChecks Aws S3 CD
+name: HealthChecks Aws.S3 CD
 
 on:
   push:
@@ -10,25 +10,17 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
         include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Aws.S3.Tests/HealthChecks.Aws.S3.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish Aws.S3 Health Check nuget
+      run: dotnet build --no-restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj -c $BUILD_CONFIG
+    - name: Pack
+      run: dotnet pack --no-build ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Aws.S3.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

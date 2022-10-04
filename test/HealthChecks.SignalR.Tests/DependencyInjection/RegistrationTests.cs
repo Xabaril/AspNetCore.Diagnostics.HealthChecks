@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.SignalR.Tests.DependencyInjection
 {
     public class signalr_registration_should
@@ -16,7 +10,7 @@ namespace HealthChecks.SignalR.Tests.DependencyInjection
                 .AddHealthChecks()
                 .AddSignalRHub("https://signalr.com/echo");
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 

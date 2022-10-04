@@ -10,16 +10,17 @@ namespace HealthChecks.UI.Core.Data
 
         public DateTime LastExecuted { get; set; }
 
-        public string Uri { get; set; }
+        public string Uri { get; set; } = null!;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public string Group { get; set; }
+        
+        public string? DiscoveryService { get; set; }
 
-        public string DiscoveryService { get; set; }
 
-        public List<HealthCheckExecutionEntry> Entries { get; set; }
+        public List<HealthCheckExecutionEntry> Entries { get; set; } = null!;
 
-        public List<HealthCheckExecutionHistory> History { get; set; }
+        public List<HealthCheckExecutionHistory> History { get; set; } = null!;
     }
 }

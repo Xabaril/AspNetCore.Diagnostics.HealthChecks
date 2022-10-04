@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;SignalR</PackageTags>
+    <PackageTags>$(PackageTags);SignalR</PackageTags>
     <Description>HealthChecks.SignalR is the health check package for SignalR.</Description>
     <Version>$(HealthCheckSignalR)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
   </ItemGroup>
 
 </Project>

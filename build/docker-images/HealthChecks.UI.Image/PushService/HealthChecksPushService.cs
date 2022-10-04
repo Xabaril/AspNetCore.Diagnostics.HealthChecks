@@ -59,7 +59,7 @@ namespace HealthChecks.UI.Image.PushService
             }
         }
 
-        private Task<HealthCheckConfiguration> Get(string name, string group)
+        private Task<HealthCheckConfiguration?> Get(string name, string group)
         {
             return _db.Configurations.FirstOrDefaultAsync(c => c.Name == name && c.Group == group);
         }

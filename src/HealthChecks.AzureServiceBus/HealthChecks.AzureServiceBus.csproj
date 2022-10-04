@@ -1,17 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Azure;ServiceBus;EventHub</PackageTags>
+    <PackageTags>$(PackageTags);Azure;ServiceBus;EventHub</PackageTags>
     <Description>HealthChecks.AzureServiceBus is the health check package for Azure EventHub, and Azure Service Bus Queues and Topics.</Description>
     <Version>$(HealthCheckAzureServiceBus)</Version>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.6.2" />
-    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.7.2" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
   </ItemGroup>
 
 </Project>

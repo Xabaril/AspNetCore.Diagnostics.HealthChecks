@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Nats</PackageTags>
+    <Description>HealthChecks.Nats is the health check package for Nats.</Description>
+    <Version>$(HealthCheckNats)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
+    <PackageReference Include="NATS.Client" Version="1.0.1" />
+  </ItemGroup>
+
+</Project>

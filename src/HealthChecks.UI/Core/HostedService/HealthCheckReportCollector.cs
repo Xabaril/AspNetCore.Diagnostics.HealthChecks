@@ -1,11 +1,12 @@
-using HealthChecks.UI.Configuration;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -13,17 +14,22 @@ namespace HealthChecks.UI.Core.HostedService
     {
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
-        private readonly Settings _settings;
         private readonly HttpClient _httpClient;
         private readonly ILogger<HealthCheckReportCollector> _logger;
         private readonly ServerAddressesService _serverAddressService;
         private readonly IEnumerable<IHealthCheckCollectorInterceptor> _interceptors;
         private static readonly Dictionary<int, Uri> _endpointAddresses = new();
+        private static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web)
+        {
+            Converters =
+            {
+                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
+            }
+        };
 
         public HealthCheckReportCollector(
             HealthChecksDb db,
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
-            IOptions<Settings> settings,
             IHttpClientFactory httpClientFactory,
             ILogger<HealthCheckReportCollector> logger,
             ServerAddressesService serverAddressService,
@@ -31,7 +37,6 @@ namespace HealthChecks.UI.Core.HostedService
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
-            _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _serverAddressService = serverAddressService ?? throw new ArgumentNullException(nameof(serverAddressService));
             _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
@@ -81,7 +86,6 @@ namespace HealthChecks.UI.Core.HostedService
                 }
 
                 _logger.LogDebug("HealthReportCollector has completed.");
-
             }
         }
 
@@ -92,11 +96,38 @@ namespace HealthChecks.UI.Core.HostedService
             try
             {
                 var absoluteUri = GetEndpointUri(configuration);
+                HttpResponseMessage? response = null;
 
-                using var response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
-                //response.EnsureSuccessStatusCode(); TODO: add or not ?
+                if (!string.IsNullOrEmpty(absoluteUri.UserInfo))
+                {
+                    var userInfoArr = absoluteUri.UserInfo.Split(':');
+                    if (userInfoArr.Length == 2 && !string.IsNullOrEmpty(userInfoArr[0]) && !string.IsNullOrEmpty(userInfoArr[1]))
+                    {
+                        //_httpClient.DefaultRequestHeaders.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
 
-                return await response.As<UIHealthReport>();
+                        // To support basic auth; we can add an auth header to _httpClient, in the DefaultRequestHeaders (as above commented line).
+                        // This would then be in place for the duration of the _httpClient lifetime, with the auth header present in every
+                        // request. This also means every call to GetHealthReportAsync should check if _httpClient's DefaultRequestHeaders
+                        // has already had auth added.
+                        // Otherwise, if you don't want to effect _httpClient's DefaultRequestHeaders, then you have to explicitly create
+                        // a request message (for each request) and add/set the auth header in each request message. Doing the latter
+                        // means you can't use _httpClient.GetAsync and have to use _httpClient.SendAsync
+
+                        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, absoluteUri);
+                        requestMessage.Headers.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
+                        response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                    }
+                }
+
+                response ??= await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
+
+                using (response)
+                {
+                    var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
+                    if (report == null)
+                        throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
+                    return report;
+                }
             }
             catch (Exception exception)
             {
@@ -120,6 +151,9 @@ namespace HealthChecks.UI.Core.HostedService
                 Uri.TryCreate(_serverAddressService.AbsoluteUriFromRelative(configuration.Uri), UriKind.Absolute, out absoluteUri);
             }
 
+            if (absoluteUri == null)
+                throw new InvalidOperationException("Could not get endpoint uri from configuration");
+
             _endpointAddresses[configuration.Id] = absoluteUri;
 
             return absoluteUri;
@@ -132,7 +166,7 @@ namespace HealthChecks.UI.Core.HostedService
             return previous != null && previous.Status != UIHealthStatus.Healthy;
         }
 
-        private async Task<HealthCheckExecution> GetHealthCheckExecutionAsync(HealthCheckConfiguration configuration)
+        private async Task<HealthCheckExecution?> GetHealthCheckExecutionAsync(HealthCheckConfiguration configuration)
         {
             return await _db.Executions
                 .Include(le => le.History)
@@ -151,7 +185,6 @@ namespace HealthChecks.UI.Core.HostedService
 
             if (execution != null)
             {
-
                 if (execution.Uri != configuration.Uri)
                 {
                     UpdateUris(execution, configuration);
@@ -168,13 +201,12 @@ namespace HealthChecks.UI.Core.HostedService
                     SaveExecutionHistoryEntries(healthReport, execution, lastExecutionTime);
                 }
 
-                //update existing entries from new health report
+                // update existing entries with values from new health report
 
                 foreach (var item in healthReport.ToExecutionEntries())
                 {
                     var existing = execution.Entries
-                        .Where(e => e.Name == item.Name)
-                        .SingleOrDefault();
+                        .SingleOrDefault(e => e.Name == item.Name);
 
                     if (existing != null)
                     {
@@ -189,30 +221,19 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                 }
 
-                //remove old entries in existing execution not present in new health report
+                // remove old entries if existing execution not present in new health report
 
                 foreach (var item in execution.Entries)
                 {
-                    var existing = healthReport.Entries
-                        .ContainsKey(item.Name);
-
-                    if (!existing)
-                    {
-                        var oldEntry = execution.Entries
-                            .Where(t => t.Name == item.Name)
-                            .SingleOrDefault();
-
-                        _db.HealthCheckExecutionEntries
-                            .Remove(oldEntry);
-                    }
+                    if (!healthReport.Entries.ContainsKey(item.Name))
+                        _db.HealthCheckExecutionEntries.Remove(item);
                 }
-
             }
             else
             {
                 _logger.LogDebug("Creating a new HealthReport history.");
 
-                execution = new HealthCheckExecution()
+                execution = new HealthCheckExecution
                 {
                     LastExecuted = lastExecutionTime,
                     OnStateFrom = lastExecutionTime,
@@ -239,7 +260,6 @@ namespace HealthChecks.UI.Core.HostedService
 
         private void SaveExecutionHistoryEntries(UIHealthReport healthReport, HealthCheckExecution execution, DateTime lastExecutionTime)
         {
-
             _logger.LogDebug("HealthCheckReportCollector already exists but on different state, updating the values.");
 
             foreach (var item in execution.Entries)
@@ -249,7 +269,7 @@ namespace HealthChecks.UI.Core.HostedService
                 {
                     if (item.Status != reportEntry.Status)
                     {
-                        execution.History.Add(new HealthCheckExecutionHistory()
+                        execution.History.Add(new HealthCheckExecutionHistory
                         {
                             On = lastExecutionTime,
                             Status = reportEntry.Status,

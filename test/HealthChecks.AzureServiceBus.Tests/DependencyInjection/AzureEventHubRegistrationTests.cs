@@ -1,9 +1,4 @@
 using Azure.Messaging.EventHubs;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.AzureServiceBus.Tests
 {
@@ -18,7 +13,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                     "hubName");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -37,7 +32,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureEventHub(factory);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -45,7 +40,6 @@ namespace HealthChecks.AzureServiceBus.Tests
             registration.Name.Should().Be("azureeventhub");
             check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
         }
-
 
         [Fact]
         public void add_named_health_check_when_properly_configured_using_connectionstring_and_eventhubname()
@@ -56,7 +50,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                     "hubName", name: "azureeventhubcheck");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -75,7 +69,7 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureEventHub(factory, name: "azureeventhubcheck");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -92,11 +86,40 @@ namespace HealthChecks.AzureServiceBus.Tests
                 .AddAzureEventHub(string.Empty, string.Empty);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
 
             Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        }
+
+        [Fact]
+        public void add_health_check_using_connection_string_factory_and_event_hub_name_factory_when_properly_configured()
+        {
+            var services = new ServiceCollection();
+            bool connectionStringFactoryCalled = false, eventHubNameFactoryCalled = false;
+            services.AddHealthChecks()
+                .AddAzureEventHub(_ =>
+                    {
+                        connectionStringFactoryCalled = true;
+                        return "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=";
+                    },
+                    _ =>
+                    {
+                        eventHubNameFactoryCalled = true;
+                        return "hubName";
+                    });
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.Should().Be("azureeventhub");
+            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            connectionStringFactoryCalled.Should().BeTrue();
+            eventHubNameFactoryCalled.Should().BeTrue();
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Liveness, CustomGrouping } from '../typings/models';
 import { discoveryServices, getStatusConfig } from '../healthChecksResources';
 import { CheckTable } from './CheckTable';
-
 
 interface LivenessTableProps {
   livenessData: Array<Liveness>;
@@ -34,7 +33,6 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
       );
     }), groups];
   };
-
 
   const toggleAll = (event: any) => {
     let { currentTarget } = event;
@@ -143,7 +141,6 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
     </table>
   );
 };
-
 
 const getDiscoveryServiceImage = (discoveryService: string) => {
   if (discoveryService != null) {

@@ -1,12 +1,4 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
-
 
 namespace HealthChecks.Consul.Tests.Functional
 {
@@ -28,7 +20,7 @@ namespace HealthChecks.Consul.Tests.Functional
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
                        Predicate = r => r.Tags.Contains("consul")
                    });
@@ -59,7 +51,7 @@ namespace HealthChecks.Consul.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("consul")
                     });

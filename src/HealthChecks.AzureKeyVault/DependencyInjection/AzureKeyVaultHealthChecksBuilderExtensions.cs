@@ -102,8 +102,6 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var options = new AzureKeyVaultOptions();
-
             if (keyVaultServiceUriFactory == null)
                 throw new ArgumentNullException(nameof(keyVaultServiceUriFactory));
 
@@ -114,6 +112,7 @@ namespace Microsoft.Extensions.DependencyInjection
                name ?? KEYVAULT_NAME,
                sp =>
                {
+                   var options = new AzureKeyVaultOptions();
                    setup?.Invoke(sp, options);
                    return new AzureKeyVaultHealthCheck(keyVaultServiceUriFactory(sp), credential, options);
                },

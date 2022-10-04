@@ -19,7 +19,7 @@ namespace HealthChecks.UI.Configuration
         internal Dictionary<string, Type> WebHooksEndpointDelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
-        public Settings AddHealthCheckEndpoint(string name, string uri, string group = default)
+        public Settings AddHealthCheckEndpoint(string name, string uri, string? group = default)
         {
             HealthChecks.Add(new HealthCheckSetting
             {
@@ -128,7 +128,7 @@ namespace HealthChecks.UI.Configuration
     {
         public string Name { get; set; } = null!;
         public string Uri { get; set; } = null!;
-        public string Group { get; set; }
+        public string? Group { get; set; }
     }
 
     public class WebHookNotification

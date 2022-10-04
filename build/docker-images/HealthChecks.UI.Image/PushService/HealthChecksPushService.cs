@@ -14,7 +14,7 @@ namespace HealthChecks.UI.Image.PushService
             _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
 
-        public async Task AddAsync(string name, string group, string uri)
+        public async Task AddAsync(string name, string? group, string uri)
         {
             if ((await Get(name, group)) == null)
             {
@@ -32,7 +32,7 @@ namespace HealthChecks.UI.Image.PushService
             }
         }
 
-        public async Task RemoveAsync(string name, string group)
+        public async Task RemoveAsync(string name, string? group)
         {
             var endpoint = await Get(name, group);
 
@@ -45,7 +45,7 @@ namespace HealthChecks.UI.Image.PushService
             }
         }
 
-        public async Task UpdateAsync(string name, string group, string uri)
+        public async Task UpdateAsync(string name, string? group, string uri)
         {
             var endpoint = await Get(name, group);
 
@@ -59,7 +59,7 @@ namespace HealthChecks.UI.Image.PushService
             }
         }
 
-        private Task<HealthCheckConfiguration?> Get(string name, string group)
+        private Task<HealthCheckConfiguration?> Get(string name, string? group)
         {
             return _db.Configurations.FirstOrDefaultAsync(c => c.Name == name && c.Group == group);
         }

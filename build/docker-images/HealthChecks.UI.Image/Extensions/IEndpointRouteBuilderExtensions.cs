@@ -48,7 +48,7 @@ namespace Microsoft.AspNetCore.Builder
 
                         if (type == PushServiceKeys.ServiceAdded)
                         {
-                            await pushService.AddAsync(name, group);
+                            await pushService.AddAsync(name, group, uri);
                         }
                         else if (type == PushServiceKeys.ServiceRemoved)
                         {

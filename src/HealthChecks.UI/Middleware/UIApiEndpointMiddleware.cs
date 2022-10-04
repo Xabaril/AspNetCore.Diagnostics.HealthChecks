@@ -50,6 +50,7 @@ namespace HealthChecks.UI.Middleware
                     var lastExecution = new DateTime?();
                     var status = UIHealthStatus.Healthy;
                     foreach (var item in group.OrderBy(item => item.Name))
+                    {
                         var execution = await db.Executions
                                     .Include(le => le.Entries)
                                     .Where(le => le.Name == item.Name && le.Group == item.Group)

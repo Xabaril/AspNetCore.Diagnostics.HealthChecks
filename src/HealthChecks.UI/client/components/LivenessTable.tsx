@@ -182,14 +182,13 @@ const toggleGroupDetails = (event: any) => {
 
   if (isHidden) {
     showElements(groupElementsToBeToggled);
-    showElements(detailsTables);
   } else {
     hideElements(groupElementsToBeToggled);
     hideElements(detailsTables);
   }
 
   updateGroupLvlIcon(event, isHidden);
-  updateSubGroupLvlIcons(isHidden, subGroupIconsToBeToggled);
+  updateSubGroupLvlIcons(!isHidden, subGroupIconsToBeToggled);
 
   function showElements(domElements: HTMLCollection) {
     for (let item of domElements) {

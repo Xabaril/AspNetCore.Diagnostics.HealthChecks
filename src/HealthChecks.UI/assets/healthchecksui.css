@@ -256,8 +256,9 @@ h4 {
 
 .groupRow {
   cursor: pointer;
-  background-color: var(--bgTable);
+  background-color: var(--midDarkColor);
   border-bottom: 4px solid var(--bgMain);
+  color: var(--fcNegative);
 }
 
 .groupRow td {
@@ -265,8 +266,11 @@ h4 {
 }
 
 .groupRow:hover {
-  background-color: var(--primaryColor);
-  background-image: var(--bgImageLigthen);
+  background-image: var(--bgImageDarken);
+}
+
+.groupButton {
+  color: var(--fcNegative);
 }
 
 @keyframes fadeIn {

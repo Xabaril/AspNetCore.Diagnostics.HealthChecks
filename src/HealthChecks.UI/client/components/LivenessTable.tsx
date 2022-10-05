@@ -77,7 +77,7 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
               <React.Fragment key={index}>
                 {indx === 0 ? <tr className="groupRow" onClick={e => toggleGroupDetails(e)}>
                   <td className="align-center">
-                    <button title="expand group">
+                    <button title="expand group" className="groupButton">
                       <i className="material-icons js-toggle-event">
                         add
                       </i>

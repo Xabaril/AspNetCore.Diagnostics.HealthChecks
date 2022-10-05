@@ -29,7 +29,7 @@
     "awesome-typescript-loader": "5.2.1",
     "css-loader": "^4.3.0",
     "style-loader": "^1.2.1",
-    "typescript": "4.0.2",
+    "typescript": "3.*",
     "uglifycss": "0.0.29",
     "url-loader": "4.1.0",
     "webpack": "4.44.1",

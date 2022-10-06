@@ -73,9 +73,11 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
           const statusConfigGroupLvl = getStatusConfig(groupHealthList[index]);
           return group.map((item: any, indx: any) => {
             const statusConfig = getStatusConfig(item.status);
+            const isDefaultGroup = !item.group;
+            item.group = item.group ? item.group : "Default";
             return (
               <React.Fragment key={index}>
-                {indx === 0 ? <tr className="groupRow" onClick={e => toggleGroupDetails(e)}>
+                {indx === 0 && !isDefaultGroup ? <tr className="groupRow" onClick={e => toggleGroupDetails(e)}>
                   <td className="align-center">
                     <button title="expand group" className="groupButton">
                       <i className="material-icons js-toggle-event">
@@ -100,7 +102,7 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
                 </tr> : null}
 
                 <tr
-                  className={"hc-table__row is-hidden" + " " + item.group}
+                  className={ isDefaultGroup ? "hc-table__row " + item.group : "hc-table__row is-hidden" + " " + item.group}
                   onClick={toggleVisibility}>
                   <td className="align-center">
                     <i

@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Branding
                 .AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.SetHeaderText("Branding Demo - Health Checks Status");
-                    setup.AddHealthCheckEndpoint("endpoint1", "/health-random", "Group1");
+                    setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
                     setup.AddHealthCheckEndpoint("endpoint2", "health-process", "Group2");
                     //Webhook endpoint with custom notification hours, and custom failure and description messages
 

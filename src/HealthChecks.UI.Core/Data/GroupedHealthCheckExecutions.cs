@@ -11,7 +11,7 @@ namespace HealthChecks.UI.Core.Data
         /// <summary>
         /// Gets or sets the name of the group.
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the date/time on which the group was last updated.
@@ -40,6 +40,6 @@ namespace HealthChecks.UI.Core.Data
         /// <summary>
         /// Gets or sets the executions that have been grouped together.
         /// </summary>
-        public List<HealthCheckExecution>? Executions { get; set; }
+        public List<HealthCheckExecution> Executions { get; set; }
     }
 }

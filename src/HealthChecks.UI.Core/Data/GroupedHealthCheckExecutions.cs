@@ -42,4 +42,3 @@ namespace HealthChecks.UI.Core.Data
         /// </summary>
         public List<HealthCheckExecution> Executions { get; set; }
     }
-}

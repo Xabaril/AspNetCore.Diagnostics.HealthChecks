@@ -65,7 +65,7 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
         Array.from(
             tableElement.getElementsByClassName('hc-table__row')
         ).forEach((el: any) => {
-            if (!el.classList.contains('Default')) {
+            if (!el.classList.contains('isOnlyGroup')) {
                 el.classList.add('is-hidden');
             }
         });

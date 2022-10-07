@@ -64,7 +64,11 @@ const LivenessPage: React.FunctionComponent<LivenessProps> = ({ apiSettings }) =
 
         Array.from(
             tableElement.getElementsByClassName('hc-table__row')
-        ).forEach((el: any) => el.classList.add('is-hidden'));
+        ).forEach((el: any) => {
+            if (!el.classList.contains('isOnlyGroup')) {
+                el.classList.add('is-hidden');
+            }
+        });
 
         Array.from(tableElement.getElementsByClassName('js-toggle-event')).forEach(
             (el: any) => {

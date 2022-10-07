@@ -71,13 +71,17 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
         <tbody className="hc-table__body">
         {groupedEntries.map((group: any, index: any) => {
           const statusConfigGroupLvl = getStatusConfig(groupHealthList[index]);
+          const isOnlyOneGroup = groupedEntries.length == 1 ? true : false;
+          // console.log(isOnlyOneGroup);
           return group.map((item: any, indx: any) => {
             const statusConfig = getStatusConfig(item.status);
+            // const isDefaultGroup = !item.group;
+            item.group = item.group ? item.group : "Default";
             return (
               <React.Fragment key={index}>
-                {indx === 0 ? <tr className="groupRow" onClick={e => toggleGroupDetails(e)}>
+                {indx === 0 && !isOnlyOneGroup ? <tr className="groupRow" onClick={e => toggleGroupDetails(e)}>
                   <td className="align-center">
-                    <button title="expand group">
+                    <button title="expand group" className="groupButton">
                       <i className="material-icons js-toggle-event">
                         add
                       </i>
@@ -100,7 +104,7 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
                 </tr> : null}
 
                 <tr
-                  className={"hc-table__row is-hidden" + " " + item.group}
+                  className={ isOnlyOneGroup ? "hc-table__row isOnlyGroup " + item.group : "hc-table__row is-hidden" + " " + item.group}
                   onClick={toggleVisibility}>
                   <td className="align-center">
                     <i
@@ -182,14 +186,13 @@ const toggleGroupDetails = (event: any) => {
 
   if (isHidden) {
     showElements(groupElementsToBeToggled);
-    showElements(detailsTables);
   } else {
     hideElements(groupElementsToBeToggled);
     hideElements(detailsTables);
   }
 
   updateGroupLvlIcon(event, isHidden);
-  updateSubGroupLvlIcons(isHidden, subGroupIconsToBeToggled);
+  updateSubGroupLvlIcons(!isHidden, subGroupIconsToBeToggled);
 
   function showElements(domElements: HTMLCollection) {
     for (let item of domElements) {

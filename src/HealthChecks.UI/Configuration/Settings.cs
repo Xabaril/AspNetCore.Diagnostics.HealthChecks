@@ -128,7 +128,7 @@ namespace HealthChecks.UI.Configuration
     {
         public string Name { get; set; } = null!;
         public string Uri { get; set; } = null!;
-        public string? Group { get; set; }
+        public string Group { get; set; }
     }
 
     public class WebHookNotification

@@ -14,7 +14,7 @@ namespace HealthChecks.UI.Core.Data
 
         public string Name { get; set; } = null!;
 
-        public string? Group { get; set; }
+        public string Group { get; set; }
         
         public string? DiscoveryService { get; set; }
 

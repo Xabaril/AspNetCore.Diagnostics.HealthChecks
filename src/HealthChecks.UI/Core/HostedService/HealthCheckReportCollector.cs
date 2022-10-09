@@ -119,10 +119,7 @@ namespace HealthChecks.UI.Core.HostedService
                     }
                 }
 
-                if (response is null)
-                {
-                    response = await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
-                }
+                response ??= await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
 
                 using (response)
                 {

@@ -1,0 +1,20 @@
+namespace HealthChecks.Publisher.CloudWatch
+{
+    public class CloudWatchOptions
+    {
+        public CloudWatchOptions() { }
+        public string? AwsAccessKeyId { get; set; }
+        public string? AwsSecretAccessKey { get; set; }
+        public System.Func<HealthChecks.Publisher.CloudWatch.CloudWatchOptions, Amazon.CloudWatch.AmazonCloudWatchClient> ClientBuilder { get; set; }
+        public string Namespace { get; set; }
+        public Amazon.RegionEndpoint? Region { get; set; }
+        public string? ServiceCheckName { get; set; }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class CloudWatchHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCloudWatchPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Publisher.CloudWatch.CloudWatchOptions>? setup = null) { }
+    }
+}

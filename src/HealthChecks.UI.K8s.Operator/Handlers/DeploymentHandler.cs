@@ -155,10 +155,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             {
                 const string volumeName = "healthchecks-volume";
 
-                if (specification.Volumes == null)
-                    specification.Volumes = new List<V1Volume>();
-                if (container.VolumeMounts == null)
-                    container.VolumeMounts = new List<V1VolumeMount>();
+                specification.Volumes ??= new List<V1Volume>();
+                container.VolumeMounts ??= new List<V1VolumeMount>();
 
                 specification.Volumes.Add(new V1Volume(name: volumeName,
                     configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));

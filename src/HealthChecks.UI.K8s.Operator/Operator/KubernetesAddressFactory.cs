@@ -48,8 +48,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 healthPath = Constants.DEFAULT_HEALTH_PATH;
             }
 
-            return $"{address}/{ healthPath.TrimStart('/')}";
-
+            return $"{address}/{healthPath.TrimStart('/')}";
         }
 
         private static string GetLoadBalancerAddress(V1Service service)

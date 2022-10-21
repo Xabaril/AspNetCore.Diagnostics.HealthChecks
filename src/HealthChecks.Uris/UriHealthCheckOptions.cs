@@ -89,7 +89,6 @@ namespace HealthChecks.Uris
         internal HttpMethod HttpMethod { get; private set; }
         internal TimeSpan Timeout { get; private set; }
         internal (int Min, int Max) ExpectedHttpCodes { get; private set; }
-        internal string? ExpectedContent { get; private set; }
 
         public UriHealthCheckOptions()
         {
@@ -141,12 +140,6 @@ namespace HealthChecks.Uris
         public UriHealthCheckOptions ExpectHttpCodes(int minCodeToExpect, int maxCodeToExpect)
         {
             ExpectedHttpCodes = (minCodeToExpect, maxCodeToExpect);
-            return this;
-        }
-
-        public UriHealthCheckOptions ExpectContent(string expectedContent)
-        {
-            ExpectedContent = expectedContent;
             return this;
         }
 

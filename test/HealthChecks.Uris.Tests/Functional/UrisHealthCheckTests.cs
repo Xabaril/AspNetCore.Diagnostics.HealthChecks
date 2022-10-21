@@ -248,7 +248,6 @@ namespace HealthChecks.Uris.Tests.Functional
                         .AddUrlGroup(opt =>
                         {
                             opt.AddUri(uri);
-                            opt.ExpectContent("User-agent: *");
                         }, tags: new string[] { "uris" });
                 })
                 .Configure(app =>

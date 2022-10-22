@@ -29,6 +29,9 @@ trim_trailing_whitespace = true
 [*.json]
 insert_final_newline = false
 
+[*.txt]
+insert_final_newline = false
+
 [*.cs]
 indent_size = 4
 

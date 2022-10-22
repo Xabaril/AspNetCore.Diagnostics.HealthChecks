@@ -29,7 +29,7 @@ trim_trailing_whitespace = true
 [*.json]
 insert_final_newline = false
 
-[*.approved.txt]
+[*.txt]
 insert_final_newline = false
 
 [*.cs]

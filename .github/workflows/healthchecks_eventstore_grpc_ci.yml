@@ -1,0 +1,54 @@
+name: HealthChecks EventStore.gRPC CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.EventStore.gRPC/**
+      - test/HealthChecks.EventStore.gRPC.Tests/**
+      - .github/workflows/healthchecks_eventstore_grpc_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.EventStore.gRPC/**
+    - test/HealthChecks.EventStore.gRPC.Tests/**
+    - .github/workflows/healthchecks_eventstore_grpc_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      eventstore:
+        image: eventstore
+        ports:
+          - "2113:2113"
+        environment:
+          - EVENTSTORE_INSECURE=true
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: Restore
+      run: |
+        dotnet restore ./src/HealthChecks.EventStore.gRPC/HealthChecks.EventStore.gRPC.csproj &&
+        dotnet restore ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.EventStore.gRPC/HealthChecks.EventStore.gRPC.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+    - name: Build
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.EventStore.gRPC/HealthChecks.EventStore.gRPC.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj

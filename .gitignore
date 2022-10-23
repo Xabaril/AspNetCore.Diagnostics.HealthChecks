@@ -94,7 +94,7 @@ StyleCopReport.xml
 # Chutzpah Test files
 _Chutzpah*
 
-# Visual C++ cache files  
+# Visual C++ cache files
 ipch/
 *.aps
 *.ncb
@@ -227,7 +227,7 @@ ClientBin/
 *.publishsettings
 orleans.codegen.cs
 
-# Including strong name files can present a security risk 
+# Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
 #*.snk
 
@@ -323,7 +323,7 @@ __pycache__/
 # OpenCover UI analysis results
 OpenCover/
 
-# Azure Stream Analytics local run output 
+# Azure Stream Analytics local run output
 ASALocalRun/
 
 # MSBuild Binary and Structured Log
@@ -332,8 +332,10 @@ ASALocalRun/
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
 
-# MFractors (Xamarin productivity tool) working folder 
+# MFractors (Xamarin productivity tool) working folder
 .mfractor/
 
 # Azure DevOps tasks ignores
 AzureDevOpsTasks/**/*.vsix
+
+*.received.txt

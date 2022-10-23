@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="NEST" Version="7.17.4" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Gremlin.Net" Version="3.6.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

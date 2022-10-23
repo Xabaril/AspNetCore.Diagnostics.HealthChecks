@@ -37,7 +37,7 @@ namespace HealthChecks.EventStore.gRPC.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddEventStore("esdb://nonexistingdomain:2113", tags: new[] { "eventstore" });
+                        .AddEventStore("esdb://localhost:2113", tags: new[] { "eventstore" });
                 })
                 .Configure(app =>
                 {

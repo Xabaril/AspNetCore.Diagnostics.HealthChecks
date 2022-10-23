@@ -18,7 +18,9 @@ namespace HealthChecks.EventStore.gRPC
             {
                 await using var client = new EventStoreClient(EventStoreClientSettings.Create(_connectionString));
 
-                using var subscription = await client.SubscribeToAllAsync(FromAll.Start, (subscription, @event, token) => Task.CompletedTask, cancellationToken: cancellationToken);
+                using var subscription = await client.SubscribeToAllAsync(FromAll.End,
+                    eventAppeared: (_, _, _) => Task.CompletedTask,
+                    cancellationToken: cancellationToken);
 
                 return new HealthCheckResult(HealthStatus.Healthy);
             }

@@ -5,11 +5,13 @@ namespace HealthChecks.EventStore.gRPC;
 
 public class EventStoreHealthCheck : IHealthCheck
 {
-    private readonly string _connectionString;
+    private readonly EventStoreClient _client;
 
     public EventStoreHealthCheck(string connectionString)
     {
-        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        ArgumentNullException.ThrowIfNull(connectionString);
+
+        _client = new EventStoreClient(EventStoreClientSettings.Create(connectionString));
     }
 
     /// <summary>
@@ -22,8 +24,7 @@ public class EventStoreHealthCheck : IHealthCheck
     {
         try
         {
-            await using var client = new EventStoreClient(EventStoreClientSettings.Create(_connectionString));
-            using var subscription = await client.SubscribeToAllAsync(FromAll.End,
+            using var subscription = await _client.SubscribeToAllAsync(FromAll.End,
                 eventAppeared: (_, _, _) => Task.CompletedTask,
                 cancellationToken: cancellationToken);
 

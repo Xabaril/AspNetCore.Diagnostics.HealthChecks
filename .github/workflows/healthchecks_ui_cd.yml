@@ -16,7 +16,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-        include-prerelease: false
     - name: Restore UI
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Restore UI.Client

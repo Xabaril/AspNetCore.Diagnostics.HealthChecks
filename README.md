@@ -116,8 +116,8 @@ HealthChecks packages include health checks for:
 | Azure DocumentDb       | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.DocumentDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DocumentDb)                   |
 | Amazon DynamoDb        | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.DynamoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DynamoDb)                       |
 | Elasticsearch          | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Elasticsearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Elasticsearch)             |
-| EventStore             | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore)                   |
-| EventStore gRPC        | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore.gRPC)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore.gRPC)         |
+| EventStore             | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore)                   | [TCP EventStore](https://github.com/EventStore/EventStoreDB-Client-Dotnet-Legacy)
+| EventStore gRPC        | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore.gRPC)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore.gRPC)         | [gRPC EventStore](https://github.com/EventStore/EventStore-Client-Dotnet)
 | Google Cloud Firestore | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Gcp.CloudFirestore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gcp.CloudFirestore)   |
 | Gremlin                | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Gremlin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gremlin)                         |
 | Hangfire               | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Hangfire)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Hangfire)                       |

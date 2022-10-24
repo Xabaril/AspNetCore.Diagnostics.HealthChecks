@@ -1,9 +1,7 @@
-using HealthChecks.ApplicationStatus;
 using HealthChecks.ApplicationStatus.DependencyInjection;
-using HealthChecks.ApplicationStatus.Tests;
 using Microsoft.Extensions.Hosting;
 
-namespace HealthChecks.ArangoDb.Tests.DependencyInjection;
+namespace HealthChecks.ApplicationStatus.Tests.DependencyInjection;
 
 public class applicationstatus_registration_should
 {

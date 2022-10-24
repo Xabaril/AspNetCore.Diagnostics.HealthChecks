@@ -1,39 +1,38 @@
-namespace HealthChecks.EventStore.gRPC.Tests.DependencyInjection
+namespace HealthChecks.EventStore.gRPC.Tests.DependencyInjection;
+
+public class eventstore_registration_should
 {
-    public class eventstore_registration_should
+    [Fact]
+    public void add_health_check_when_properly_configured()
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddEventStore("connection-string");
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddEventStore("connection-string");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("eventstore");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
-        }
+        registration.Name.Should().Be("eventstore");
+        check.GetType().Should().Be(typeof(EventStoreHealthCheck));
+    }
 
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddEventStore("connection-string", name: "my-group");
+    [Fact]
+    public void add_named_health_check_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddEventStore("connection-string", name: "my-group");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-group");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
-        }
+        registration.Name.Should().Be("my-group");
+        check.GetType().Should().Be(typeof(EventStoreHealthCheck));
     }
 }

@@ -6,7 +6,7 @@ namespace HealthChecks.EventStore.gRPC;
 /// <summary>
 /// Checks whether a gRPC connection can be made to <see cref="EventStore"/>, using the supplied <c>connectionString</c>
 /// </summary>
-public class EventStoreHealthCheck : IHealthCheck
+public class EventStoreHealthCheck : IHealthCheck, IDisposable
 {
     private readonly EventStoreClient _client;
 
@@ -37,4 +37,6 @@ public class EventStoreHealthCheck : IHealthCheck
             return new HealthCheckResult(context.Registration.FailureStatus, exception: exception);
         }
     }
+
+    public void Dispose() => _client.Dispose();
 }

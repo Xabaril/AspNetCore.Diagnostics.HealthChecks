@@ -31,9 +31,10 @@ public static class EventStoreHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
+        builder.Services.AddSingleton(sp => new EventStoreHealthCheck(connectionString))
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new EventStoreHealthCheck(connectionString),
+            sp => sp.GetRequiredService<EventStoreHealthCheck>(),
             failureStatus,
             tags,
             timeout));

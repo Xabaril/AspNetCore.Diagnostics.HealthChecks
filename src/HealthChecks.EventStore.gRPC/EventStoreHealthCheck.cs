@@ -25,7 +25,9 @@ public class EventStoreHealthCheck : IHealthCheck
     {
         try
         {
-            using var subscription = await _client.SubscribeToAllAsync(FromAll.End,
+            using var subscription = await _client.SubscribeToAllAsync(
+                FromAll.End,
+
                 eventAppeared: (_, _, _) => Task.CompletedTask,
                 cancellationToken: cancellationToken);
 

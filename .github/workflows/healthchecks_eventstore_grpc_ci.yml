@@ -31,7 +31,7 @@ jobs:
           - "1113:1113"
           - "2113:2113"
         env:
-          - EVENTSTORE_INSECURE=true
+          EVENTSTORE_INSECURE: true
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

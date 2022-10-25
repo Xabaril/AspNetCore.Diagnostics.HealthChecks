@@ -18,9 +18,6 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
     }
 
     /// <inheritdoc/>
-    /// <param name="context">Health check context. Provides the <see cref="HealthCheckRegistration"/>, which contains information regarding the registration of the <see cref="EventStoreHealthCheck"/>.</param>
-    /// <param name="cancellationToken">Propagates notification that operations should be cancelled.</param>
-    /// <returns><c>Healthy</c> if a connection can be made, otherwise <c>Unhealthy</c></returns>
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

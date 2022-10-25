@@ -7,7 +7,7 @@ public class eventstore_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddEventStore("connection-string");
+            .AddEventStore("esdb://localhost:2113?tls=false");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -24,7 +24,7 @@ public class eventstore_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddEventStore("connection-string", name: "my-group");
+            .AddEventStore("esdb://localhost:2113?tls=false", name: "my-group");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

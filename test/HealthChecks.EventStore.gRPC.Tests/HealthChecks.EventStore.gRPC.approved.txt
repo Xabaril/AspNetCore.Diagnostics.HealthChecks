@@ -1,6 +1,6 @@
 namespace HealthChecks.EventStore.gRPC
 {
-    public class EventStoreHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class EventStoreHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck, System.IDisposable
     {
         public EventStoreHealthCheck(string connectionString) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }

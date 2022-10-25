@@ -119,7 +119,8 @@ namespace HealthChecks.Publisher.ApplicationInsights
                             ? string.IsNullOrWhiteSpace(_instrumentationKey)
                                 ? _telemetryConfiguration
                                 : new TelemetryConfiguration(_instrumentationKey)
-                            : new TelemetryConfiguration() { ConnectionString = _connectionString };
+                            : new TelemetryConfiguration { ConnectionString = _connectionString };
+
 
                         _client = new TelemetryClient(configuration);
                     }

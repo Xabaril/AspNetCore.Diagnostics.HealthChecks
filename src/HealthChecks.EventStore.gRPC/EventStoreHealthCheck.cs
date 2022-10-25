@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 namespace HealthChecks.EventStore.gRPC;
 
 /// <summary>
-/// Checks whether a gRPC connection can be made to <see cref="EventStore"/>, using the supplied <c>connectionString</c>
+/// Checks whether a gRPC connection can be made to EventStore services using the supplied connection string.
 /// </summary>
 public class EventStoreHealthCheck : IHealthCheck, IDisposable
 {

@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -284,6 +284,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_elasticsearch_cd.yml = .github\workflows\healthchecks_elasticsearch_cd.yml
 		.github\workflows\healthchecks_elasticsearch_cd_preview.yml = .github\workflows\healthchecks_elasticsearch_cd_preview.yml
 		.github\workflows\healthchecks_elasticsearch_ci.yml = .github\workflows\healthchecks_elasticsearch_ci.yml
+		.github\workflows\healthchecks_eventstore_grpc_cd.yml = .github\workflows\healthchecks_eventstore_grpc_cd.yml
+		.github\workflows\healthchecks_eventstore_grpc_cd_preview.yml = .github\workflows\healthchecks_eventstore_grpc_cd_preview.yml
+		.github\workflows\healthchecks_eventstore_grpc_ci.yml = .github\workflows\healthchecks_eventstore_grpc_ci.yml
 		.github\workflows\healthchecks_gcp_cloudfirestore_cd.yml = .github\workflows\healthchecks_gcp_cloudfirestore_cd.yml
 		.github\workflows\healthchecks_gcp_cloudfirestore_cd_preview.yml = .github\workflows\healthchecks_gcp_cloudfirestore_cd_preview.yml
 		.github\workflows\healthchecks_gcp_cloudfirestore_ci.yml = .github\workflows\healthchecks_gcp_cloudfirestore_ci.yml
@@ -398,6 +401,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ApplicationStatus.Tests", "test\HealthChecks.ApplicationStatus.Tests\HealthChecks.ApplicationStatus.Tests.csproj", "{403776CB-7229-4063-85C7-C34428BDAA8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Publisher.CloudWatch.Tests", "test\HealthChecks.Publisher.CloudWatch.Tests\HealthChecks.Publisher.CloudWatch.Tests.csproj", "{555D90D5-22C7-433D-B908-2DFFF98ED08C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.EventStore.gRPC.Tests", "test\HealthChecks.EventStore.gRPC.Tests\HealthChecks.EventStore.gRPC.Tests.csproj", "{8F174B4B-9F70-4309-B716-02B0D862FA00}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.EventStore.gRPC", "src\HealthChecks.EventStore.gRPC\HealthChecks.EventStore.gRPC.csproj", "{30B12BAB-F5DA-48D8-A706-6D9904C196A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -853,6 +860,14 @@ Global
 		{555D90D5-22C7-433D-B908-2DFFF98ED08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{555D90D5-22C7-433D-B908-2DFFF98ED08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{555D90D5-22C7-433D-B908-2DFFF98ED08C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F174B4B-9F70-4309-B716-02B0D862FA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F174B4B-9F70-4309-B716-02B0D862FA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F174B4B-9F70-4309-B716-02B0D862FA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F174B4B-9F70-4309-B716-02B0D862FA00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30B12BAB-F5DA-48D8-A706-6D9904C196A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30B12BAB-F5DA-48D8-A706-6D9904C196A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30B12BAB-F5DA-48D8-A706-6D9904C196A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30B12BAB-F5DA-48D8-A706-6D9904C196A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -971,6 +986,8 @@ Global
 		{88739521-A9BC-49E1-BB98-E9D63109C231} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{403776CB-7229-4063-85C7-C34428BDAA8F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{555D90D5-22C7-433D-B908-2DFFF98ED08C} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{8F174B4B-9F70-4309-B716-02B0D862FA00} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{30B12BAB-F5DA-48D8-A706-6D9904C196A7} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

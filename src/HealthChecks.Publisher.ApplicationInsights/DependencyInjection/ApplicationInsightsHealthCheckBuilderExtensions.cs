@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// indicating the health check status (1 - Healthy, 0 - Unhealthy) and the total time the health check took to execute in milliseconds.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="connectionString">Specified Application Insights connection string. Optional. If <c>null</c> <see cref="TelemetryConfiguration"/> is resolved from DI container.</param>
+        /// <param name="connectionString">Specified Application Insights connection string. Optional. If <c>null</c> <paramref name="instrumentationKey"/> is used.</param>
         /// <param name="instrumentationKey">Specified Application Insights instrumentation key. Optional. If <c>null</c> <see cref="TelemetryConfiguration"/> is resolved from DI container.</param>
         /// <param name="saveDetailedReport">Specifies if save an Application Insights event for each HealthCheck or just save one event with the global status for all the HealthChecks. Optional</param>
         /// <param name="excludeHealthyReports">Specifies if save an Application Insights event only for reports indicating an unhealthy status</param>

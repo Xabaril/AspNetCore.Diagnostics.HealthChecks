@@ -31,14 +31,16 @@ namespace HealthChecks.EventStore
                 {
                     connectionSettings = ConnectionSettings.Create()
                         .LimitReconnectionsTo(RECONNECTION_LIMIT)
-                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS));
+                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS))
+                        .SetCompatibilityMode("auto");
                 }
                 else
                 {
                     connectionSettings = ConnectionSettings.Create()
                         .LimitReconnectionsTo(RECONNECTION_LIMIT)
                         .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS))
-                        .SetDefaultUserCredentials(new UserCredentials(_login, _password));
+                        .SetDefaultUserCredentials(new UserCredentials(_login, _password))
+                        .SetCompatibilityMode("auto");
                 }
 
                 using (var connection = EventStoreConnection.Create(

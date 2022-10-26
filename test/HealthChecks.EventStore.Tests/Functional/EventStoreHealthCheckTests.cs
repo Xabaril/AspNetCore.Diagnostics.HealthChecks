@@ -18,7 +18,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                     .AddEventStore("ConnectTo=tcp://localhost:1113", tags: new string[] { "eventstore" });
+                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
@@ -36,6 +36,7 @@ namespace HealthChecks.EventStore.Tests.Functional
             response.StatusCode
                 .Should().Be(HttpStatusCode.OK);
         }
+
         [Fact]
         public async Task be_healthy_if_eventstore_is_available()
         {
@@ -43,7 +44,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                     .AddEventStore("ConnectTo=tcp://localhost:1113; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
+                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {

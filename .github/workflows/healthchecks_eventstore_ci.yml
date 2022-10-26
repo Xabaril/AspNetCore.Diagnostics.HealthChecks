@@ -32,6 +32,8 @@ jobs:
           - "1113:1113"
         env:
           EVENTSTORE_INSECURE: true
+          EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: true
+          EVENTSTORE_ENABLE_EXTERNAL_TCP: true
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET

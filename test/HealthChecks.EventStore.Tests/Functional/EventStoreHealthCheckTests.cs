@@ -11,7 +11,6 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.Configure<HealthCheckOptions>(opt => opt.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse);
                     services.AddHealthChecks()
                         .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: new string[] { "eventstore" });
                 })
@@ -19,7 +18,8 @@ namespace HealthChecks.EventStore.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -38,7 +38,6 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.Configure<HealthCheckOptions>(opt => opt.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse);
                     services.AddHealthChecks()
                         .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
@@ -46,7 +45,8 @@ namespace HealthChecks.EventStore.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -65,7 +65,6 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.Configure<HealthCheckOptions>(opt => opt.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse);
                     services.AddHealthChecks()
                     .AddEventStore("tcp://nonexistingdomain:1113", tags: new string[] { "eventstore" });
                 })
@@ -73,7 +72,8 @@ namespace HealthChecks.EventStore.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 

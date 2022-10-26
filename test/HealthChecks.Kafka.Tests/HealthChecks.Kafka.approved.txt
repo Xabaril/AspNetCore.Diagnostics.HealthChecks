@@ -1,0 +1,17 @@
+namespace HealthChecks.Kafka
+{
+    public class KafkaHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck, System.IDisposable
+    {
+        public KafkaHealthCheck(Confluent.Kafka.ProducerConfig configuration, string? topic) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+        public void Dispose() { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class KafkaHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddKafka(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, Confluent.Kafka.ProducerConfig config, string? topic = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddKafka(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<Confluent.Kafka.ProducerConfig> setup, string? topic = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
 {
     public class cloud_firestore_registration_should
@@ -16,7 +10,7 @@ namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
                 .AddCloudFirestore(setup => setup.RequiredCollections = new string[] { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -32,7 +26,7 @@ namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
                 .AddCloudFirestore(setup => setup.RequiredCollections = new string[] { }, name: "my-cloud-firestore-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

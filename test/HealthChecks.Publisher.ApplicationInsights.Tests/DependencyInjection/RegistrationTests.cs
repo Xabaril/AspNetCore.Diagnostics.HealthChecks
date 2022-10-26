@@ -1,7 +1,4 @@
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Publisher.ApplicationInsights.Tests.DependencyInjection
 {

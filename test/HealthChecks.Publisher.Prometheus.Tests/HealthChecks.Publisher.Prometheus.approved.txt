@@ -1,0 +1,24 @@
+namespace HealthChecks.Publisher.Prometheus
+{
+    public abstract class LivenessPrometheusMetrics
+    {
+        protected const string CONTENT_TYPE = "text/plain; version=0.0.4";
+        protected readonly Prometheus.CollectorRegistry Registry;
+        protected void WriteMetricsFromHealthReport(Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
+    }
+    public sealed class PrometheusResponseWriter : HealthChecks.Publisher.Prometheus.LivenessPrometheusMetrics
+    {
+        public PrometheusResponseWriter() { }
+        public static System.Threading.Tasks.Task WritePrometheusResultText(Microsoft.AspNetCore.Http.HttpContext context, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
+        public static System.Threading.Tasks.Task WritePrometheusResultText(Microsoft.AspNetCore.Http.HttpContext context, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report, bool alwaysReturnHttp200Ok) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class PrometheusGatewayHealthCheckBuilderExtensions
+    {
+        [System.Obsolete("This package is deprecated! We recommend using the pull model instead of Gateway." +
+            " Try to use the package AspNetCore.HealthChecks.Prometheus.Metrics instead of.")]
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddPrometheusGatewayPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string endpoint, string job, string? instance = null) { }
+    }
+}

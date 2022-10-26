@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.System.Tests.DependencyInjection
 {
     public class system_registration_should
@@ -16,7 +10,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
             var ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 services.AddHealthChecks()
-                    .AddProcessHealthCheck("dotnet", null);
+                    .AddProcessHealthCheck("dotnet", null!);
             });
 
             ex.Message.Should().Be("Value cannot be null. (Parameter 'predicate')");
@@ -45,7 +39,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
                 .AddProcessHealthCheck("dotnet", p => p?.Any() ?? false);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

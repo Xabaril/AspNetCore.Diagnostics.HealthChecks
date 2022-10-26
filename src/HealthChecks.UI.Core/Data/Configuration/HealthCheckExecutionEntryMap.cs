@@ -29,7 +29,7 @@ namespace HealthChecks.UI.Core.Data.Configuration
                     v => JsonSerializer.Deserialize<List<string>>(v, default(JsonSerializerOptions))
                 )
                 .Metadata.SetValueComparer(new ValueComparer<List<string>>(
-                                            (c1, c2) => c1.SequenceEqual(c2),
+                                            (c1, c2) => c1!.SequenceEqual(c2!),
                                             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                                             c => c.ToList()));
         }

@@ -1,11 +1,6 @@
-using FluentAssertions;
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.UI.Tests
 {
@@ -37,7 +32,6 @@ namespace HealthChecks.UI.Tests
 
                     serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
                      .Should().Be($"{serverAddress}/segment1/segment2/segment3");
-
                 });
 
             var featureCollection = new FeatureCollection();
@@ -45,7 +39,5 @@ namespace HealthChecks.UI.Tests
 
             var testServer = new TestServer(host, featureCollection);
         }
-
     }
-
 }

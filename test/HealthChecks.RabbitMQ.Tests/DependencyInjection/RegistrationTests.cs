@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 {
     public class rabbitmq_registration_should
@@ -19,7 +13,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
                 .AddRabbitMQ(rabbitConnectionString: FAKE_CONNECTION_STRING);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -30,7 +24,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             ((RabbitMQHealthCheck)check).Dispose();
             var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
             result.Status.Should().Be(HealthStatus.Unhealthy);
-            result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
+            result.Exception!.GetType().Should().Be(typeof(ObjectDisposedException));
         }
 
         [Fact]
@@ -43,7 +37,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
                 .AddRabbitMQ(FAKE_CONNECTION_STRING, name: customCheckName);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -54,7 +48,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             ((RabbitMQHealthCheck)check).Dispose();
             var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
             result.Status.Should().Be(HealthStatus.Unhealthy);
-            result.Exception.GetType().Should().Be(typeof(ObjectDisposedException));
+            result.Exception!.GetType().Should().Be(typeof(ObjectDisposedException));
         }
 
         [Fact]
@@ -71,7 +65,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
                 .AddRabbitMQ(sp => sp.GetRequiredService<RabbitMqSetting>().ConnectionString, name: customCheckName);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -94,7 +88,7 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
                 .AddRabbitMQ(sp => new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString), name: customCheckName);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -106,6 +100,6 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
 
     public class RabbitMqSetting
     {
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get; set; } = null!;
     }
 }

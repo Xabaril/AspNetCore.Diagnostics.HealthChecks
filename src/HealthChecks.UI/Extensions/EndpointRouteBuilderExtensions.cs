@@ -9,7 +9,7 @@ namespace Microsoft.AspNetCore.Builder
     public static class EndpointRouteBuilderExtensions
     {
         public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
-            Action<Options> setupOptions = null)
+            Action<Options>? setupOptions = null)
         {
             var options = new Options();
             setupOptions?.Invoke(options);
@@ -30,7 +30,6 @@ namespace Microsoft.AspNetCore.Builder
                 builder.CreateApplicationBuilder()
                     .UseMiddleware<UIWebHooksApiMiddleware>()
                     .Build();
-
 
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 

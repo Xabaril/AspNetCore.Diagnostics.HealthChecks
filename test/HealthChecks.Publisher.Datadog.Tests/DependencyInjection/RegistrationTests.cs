@@ -1,7 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
-
 namespace HealthChecks.Publisher.Datadog.Tests.DependencyInjection
 {
     public class datadog_publisher_registration_should

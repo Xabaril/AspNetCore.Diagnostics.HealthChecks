@@ -1,4 +1,5 @@
 using System.Net;
+using HealthChecks.UI.Client;
 
 namespace HealthChecks.EventStore.Tests.Functional
 {
@@ -10,6 +11,7 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
+                    services.Configure<HealthCheckOptions>(opt => opt.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse);
                     services.AddHealthChecks()
                         .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: new string[] { "eventstore" });
                 })
@@ -27,7 +29,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -54,7 +56,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -63,6 +65,7 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
+                    services.Configure<HealthCheckOptions>(opt => opt.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse);
                     services.AddHealthChecks()
                     .AddEventStore("tcp://nonexistingdomain:1113", tags: new string[] { "eventstore" });
                 })
@@ -80,7 +83,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .Should().Be(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
     }
 }

@@ -1,11 +1,4 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.Functional
@@ -77,7 +70,7 @@ namespace HealthChecks.Nats.Tests.Functional
                 response => response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable),
                 name: CredentialsPathDoesnExist);
 
-        private async Task FactAsync(Action<NatsOptions> setupAction, Action<HttpResponseMessage> assertAction, string name = null)
+        private async Task FactAsync(Action<NatsOptions> setupAction, Action<HttpResponseMessage> assertAction, string? name = null)
         {
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services => services
@@ -95,7 +88,7 @@ namespace HealthChecks.Nats.Tests.Functional
             assertAction(response);
         }
 
-        private async Task FactAsync(Action<NatsOptions> setupAction, Func<HttpResponseMessage, Task> asyncAssertAction, string name = null)
+        private async Task FactAsync(Action<NatsOptions> setupAction, Func<HttpResponseMessage, Task> asyncAssertAction, string? name = null)
         {
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services => services

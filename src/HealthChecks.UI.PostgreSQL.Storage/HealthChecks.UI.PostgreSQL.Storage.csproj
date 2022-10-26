@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <PackageTags>HealthCheck;HealthChecks;PostgreSQL</PackageTags>
+    <PackageTags>$(PackageTags);PostgreSQL</PackageTags>
     <Description>HealthChecks.UI.PostgreSQL.Storage package contains the required classes to use Postgres NpgSql provider in the UI</Description>
     <Version>$(HealthChecksUIPostgreSQLStorage)</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
   </ItemGroup>
 
   <ItemGroup>

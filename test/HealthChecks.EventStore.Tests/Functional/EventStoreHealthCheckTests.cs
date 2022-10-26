@@ -1,11 +1,5 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
+using HealthChecks.UI.Client;
 
 namespace HealthChecks.EventStore.Tests.Functional
 {
@@ -22,9 +16,10 @@ namespace HealthChecks.EventStore.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -34,7 +29,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -48,9 +43,10 @@ namespace HealthChecks.EventStore.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -60,7 +56,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -74,9 +70,10 @@ namespace HealthChecks.EventStore.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -86,7 +83,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .Should().Be(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
     }
 }

@@ -1,6 +1,7 @@
 name: HealthChecks DynamoDb CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
@@ -26,20 +27,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.DynamoDb
+    - name: Restore
       run: |
-        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
-        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
+        dotnet restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj &&
+        dotnet restore ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.DynamoDb/HealthChecks.DynamoDb.csproj
+        dotnet build --no-restore ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj
     - name: Test
-      run: dotnet test ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj --verbosity normal
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.DynamoDb.Tests/HealthChecks.DynamoDb.Tests.csproj

@@ -41,7 +41,7 @@ namespace HealthChecks.Network.Core
             }
             await ExecuteCommand(SmtpCommands.EHLO(Host));
             await ExecuteCommand(SmtpCommands.AUTHLOGIN());
-            await ExecuteCommand($"{ ToBase64(userName)}\r\n");
+            await ExecuteCommand($"{ToBase64(userName)}\r\n");
 
             password = password?.Length > 0 ? ToBase64(password) : "";
 

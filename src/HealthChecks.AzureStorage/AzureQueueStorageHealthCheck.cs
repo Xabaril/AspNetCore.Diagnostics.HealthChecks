@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Azure.Core;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -7,43 +6,43 @@ namespace HealthChecks.AzureStorage
 {
     public class AzureQueueStorageHealthCheck : IHealthCheck
     {
-        private readonly string? _connectionString;
-        private readonly string? _queueName;
-
-        private readonly TokenCredential? _azureCredential;
-        private readonly Uri? _queueServiceUri;
-
-        private static readonly ConcurrentDictionary<string, QueueServiceClient> _queueClientsHolder = new();
+        private readonly QueueServiceClient _queueServiceClient;
+        private readonly AzureQueueStorageHealthCheckOptions _options;
 
         public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
-        {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _queueName = queueName;
-        }
+            : this(
+                  ClientCache.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
+                  new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
+        { }
 
         public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
+            : this(
+                  ClientCache.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
+                  new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
+        { }
+
+        public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
         {
-            _queueServiceUri = queueServiceUri ?? throw new ArgumentNullException(nameof(queueServiceUri));
-            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
-            _queueName = queueName;
+            _queueServiceClient = queueServiceClient ?? throw new ArgumentNullException(nameof(queueServiceClient));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var queueServiceClient = GetQueueServiceClient();
-                var serviceProperties = await queueServiceClient.GetPropertiesAsync(cancellationToken);
+                // Note: QueueServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Queue Data Contributor," so QueueServiceClient.GetQueuesAsync() is used instead to probe service health.
+                // However, QueueClient.GetPropertiesAsync() does have sufficient permissions.
+                await _queueServiceClient
+                    .GetQueuesAsync(cancellationToken: cancellationToken)
+                    .AsPages(pageSizeHint: 1)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync();
 
-                if (!string.IsNullOrEmpty(_queueName))
+                if (!string.IsNullOrEmpty(_options.QueueName))
                 {
-                    var queueClient = queueServiceClient.GetQueueClient(_queueName);
-
-                    if (!await queueClient.ExistsAsync(cancellationToken))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Queue '{_queueName}' not exists");
-                    }
-
+                    var queueClient = _queueServiceClient.GetQueueClient(_options.QueueName);
                     await queueClient.GetPropertiesAsync(cancellationToken);
                 }
 
@@ -53,27 +52,6 @@ namespace HealthChecks.AzureStorage
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
-        }
-
-        private QueueServiceClient GetQueueServiceClient()
-        {
-            var serviceUri = _connectionString ?? _queueServiceUri!.ToString();
-
-            if (!_queueClientsHolder.TryGetValue(serviceUri, out var client))
-            {
-                if (_connectionString != null)
-                {
-                    client = new QueueServiceClient(_connectionString);
-                }
-                else
-                {
-                    client = new QueueServiceClient(_queueServiceUri, _azureCredential);
-                }
-
-                _queueClientsHolder.TryAdd(serviceUri, client);
-            }
-
-            return client;
         }
     }
 }

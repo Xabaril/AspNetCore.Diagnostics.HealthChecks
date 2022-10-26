@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class HealthChecksUIBuilderExtensions
     {
-        public static HealthChecksUIBuilder AddSqlServerStorage(this HealthChecksUIBuilder builder, string connectionString, Action<DbContextOptionsBuilder> configureOptions = null)
+        public static HealthChecksUIBuilder AddSqlServerStorage(this HealthChecksUIBuilder builder, string connectionString, Action<DbContextOptionsBuilder>? configureOptions = null)
         {
             builder.Services.AddDbContext<HealthChecksDb>(options =>
             {

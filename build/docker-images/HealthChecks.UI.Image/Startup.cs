@@ -15,11 +15,13 @@ namespace HealthChecks.UI.Image
 
         public void ConfigureServices(IServiceCollection services)
         {
+#pragma warning disable ASP5001, CS0618 // Type or member is obsolete
             services
                 .AddHealthChecksUI()
                 .AddStorageProvider(Configuration)
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+#pragma warning restore ASP5001, CS0618 // Type or member is obsolete
 
             if (bool.TryParse(Configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
             {

@@ -1,8 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.DependencyInjection
@@ -28,13 +23,13 @@ namespace HealthChecks.Nats.Tests.DependencyInjection
                 setup => setup.Url = DemoConnectionString,
                 check => check.GetType().Should().Be(typeof(NatsHealthCheck)));
 
-        private void RegistrationFact(Action<NatsOptions> setup, Action<IHealthCheck> assert, string name = null)
+        private void RegistrationFact(Action<NatsOptions> setup, Action<IHealthCheck> assert, string? name = null)
         {
             var services = new ServiceCollection();
             services.AddHealthChecks().AddNats(setup, name);
 
             var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             registration.Name.Should().Be(name ?? NatsName);

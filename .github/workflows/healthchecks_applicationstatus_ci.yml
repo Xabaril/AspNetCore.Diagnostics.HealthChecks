@@ -1,0 +1,46 @@
+name: HealthChecks Application Status CI
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths:
+    - src/HealthChecks.ApplicationStatus/**
+    - test/HealthChecks.ApplicationStatus.Tests/**
+    - .github/workflows/healthchecks_applicationstatus_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+   tags-ignore:
+    - release-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+    - src/HealthChecks.ApplicationStatus/**
+    - test/HealthChecks.ApplicationStatus.Tests/**
+    - .github/workflows/healthchecks_applicationstatus_ci.yml
+    - Directory.Build.props
+    - Directory.Build.targets
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore
+      run: |
+        dotnet restore ./src/HealthChecks.ApplicationStatus/HealthChecks.ApplicationStatus.csproj &&
+        dotnet restore ./test/HealthChecks.ApplicationStatus.Tests/HealthChecks.ApplicationStatus.Tests.csproj
+    - name: Check formatting
+      run: |
+        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.ApplicationStatus/HealthChecks.ApplicationStatus.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.ApplicationStatus.Tests/HealthChecks.ApplicationStatus.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+    - name: Build
+      run: |
+        dotnet build --no-restore ./src/HealthChecks.ApplicationStatus/HealthChecks.ApplicationStatus.csproj &&
+        dotnet build --no-restore ./test/HealthChecks.ApplicationStatus.Tests/HealthChecks.ApplicationStatus.Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --no-build ./test/HealthChecks.ApplicationStatus.Tests/HealthChecks.ApplicationStatus.Tests.csproj

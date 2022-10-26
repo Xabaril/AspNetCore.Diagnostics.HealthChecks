@@ -3,7 +3,7 @@ name: HealthChecks AzureDigitalTwin CD
 on:
   push:
     tags:
-      - release-azure_digitaltwin-*  # Push events to release-azure_iothub*
+      - release-azure_digitaltwin-*  # Push events to release-azure_digitaltwin*
 jobs:
   build:
     env:
@@ -12,21 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish AzureDigitalTwin Health Check nuget
+      run: dotnet build --no-restore ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj -c $BUILD_CONFIG
+    - name: Pack
+      run: dotnet pack --no-build ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.AzureDigitalTwin.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

@@ -1,10 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
-
 namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
 {
     public class elasticsearch_registration_should
@@ -17,7 +10,7 @@ namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
                 .AddElasticsearch("uri");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
@@ -34,7 +27,7 @@ namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
                 .AddElasticsearch("uri", name: "my-elasticsearch");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);

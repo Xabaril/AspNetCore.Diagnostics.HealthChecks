@@ -1,9 +1,5 @@
-using FluentAssertions;
 using HealthChecks.UI.Core.Data;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace UnitTests.UI.DatabaseProviders
 {
@@ -23,7 +19,7 @@ namespace UnitTests.UI.DatabaseProviders
                 });
 
             var services = hostBuilder.Build().Services;
-            var context = services.GetService<HealthChecksDb>();
+            var context = services.GetRequiredService<HealthChecksDb>();
 
             context.Should().NotBeNull();
             context.Database.GetMigrations().Count().Should().BeGreaterThan(0);

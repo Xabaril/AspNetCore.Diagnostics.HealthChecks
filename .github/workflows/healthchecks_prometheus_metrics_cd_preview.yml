@@ -14,24 +14,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj
     - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish Prometheus.Metrics Health Check nuget
+      run: dotnet build --no-restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj -c $BUILD_CONFIG
+    - name: Pack
+      run: dotnet pack --no-build ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+    - name: Publish
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Prometheus.Metrics.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
-

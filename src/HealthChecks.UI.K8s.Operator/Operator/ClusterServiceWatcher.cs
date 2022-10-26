@@ -12,7 +12,8 @@ namespace HealthChecks.UI.K8s.Operator.Operator
         private readonly ILogger<K8sOperator> _logger;
         private readonly OperatorDiagnostics _diagnostics;
         private readonly NotificationHandler _notificationHandler;
-        private Watcher<V1Service> _watcher;
+        private Watcher<V1Service>? _watcher;
+
         public ClusterServiceWatcher(
           IKubernetes client,
           ILogger<K8sOperator> logger,

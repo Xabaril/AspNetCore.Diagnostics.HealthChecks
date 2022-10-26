@@ -6,14 +6,17 @@ namespace HealthChecks.AzureServiceBus
         public AzureEventHubHealthCheck(string connectionString, string eventHubName) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
-    public abstract class AzureServiceBusHealthCheck
+    public abstract class AzureServiceBusHealthCheck : System.IAsyncDisposable
     {
+        protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.ServiceBusClient> ClientConnections;
         protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient> ManagementClientConnections;
         protected AzureServiceBusHealthCheck(string connectionString) { }
         protected AzureServiceBusHealthCheck(string endpoint, Azure.Core.TokenCredential tokenCredential) { }
         protected abstract string ConnectionKey { get; }
         protected string Prefix { get; }
+        protected Azure.Messaging.ServiceBus.ServiceBusClient CreateClient() { }
         protected Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient CreateManagementClient() { }
+        public System.Threading.Tasks.ValueTask DisposeAsync() { }
     }
     public class AzureServiceBusQueueHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {

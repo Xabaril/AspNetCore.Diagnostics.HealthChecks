@@ -1,4 +1,4 @@
-# ArangoDb Health Check
+# Application Status Health Check
 
 This health check verifies that application is up and runnning based on `IHostApplicationLifetime`.
 If application received stop signal, eg: SIGTERM in docker container - then health status will be unhealthy and

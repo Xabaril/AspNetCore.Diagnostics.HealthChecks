@@ -1,11 +1,14 @@
 using System.Collections.Concurrent;
 using Azure.Core;
+using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 
 namespace HealthChecks.AzureServiceBus
 {
     public abstract class AzureServiceBusHealthCheck
     {
+        protected static readonly ConcurrentDictionary<string, ServiceBusClient>
+            ClientConnections = new();
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
             ManagementClientConnections = new();
 
@@ -36,6 +39,13 @@ namespace HealthChecks.AzureServiceBus
 
             Endpoint = endpoint;
             TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
+        }
+
+        protected ServiceBusClient CreateClient()
+        {
+            return TokenCredential == null
+                ? new ServiceBusClient(ConnectionString)
+                : new ServiceBusClient(Endpoint, TokenCredential);
         }
 
         protected ServiceBusAdministrationClient CreateManagementClient()

@@ -5,7 +5,7 @@ using Azure.Messaging.ServiceBus.Administration;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public abstract class AzureServiceBusHealthCheck : IAsyncDisposable
+    public abstract class AzureServiceBusHealthCheck
     {
         protected static readonly ConcurrentDictionary<string, ServiceBusClient>
             ClientConnections = new();
@@ -56,10 +56,5 @@ namespace HealthChecks.AzureServiceBus
         }
 
         protected abstract string ConnectionKey { get; }
-
-        public async ValueTask DisposeAsync()
-        {
-            await Task.WhenAll(ClientConnections.Select(c => c.Value.DisposeAsync().AsTask()));
-        }
     }
 }

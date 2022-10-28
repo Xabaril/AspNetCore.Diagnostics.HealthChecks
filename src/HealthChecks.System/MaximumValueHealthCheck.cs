@@ -11,7 +11,7 @@ namespace HealthChecks.System
         public MaximumValueHealthCheck(T maximumValue, Func<T> currentValueFunc)
         {
             _maximumValue = maximumValue;
-            _currentValueFunc = currentValueFunc ?? throw new ArgumentNullException(nameof(currentValueFunc));
+            _currentValueFunc = Guard.ThrowIfNull(currentValueFunc);
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

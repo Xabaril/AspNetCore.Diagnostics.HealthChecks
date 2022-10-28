@@ -159,11 +159,8 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (string.IsNullOrEmpty(processName))
-                throw new ArgumentNullException(nameof(processName));
-
-            if (predicate is null)
-                throw new ArgumentNullException(nameof(predicate));
+            Guard.ThrowIfNull(processName, true);
+            Guard.ThrowIfNull(predicate);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? PROCESS_NAME,

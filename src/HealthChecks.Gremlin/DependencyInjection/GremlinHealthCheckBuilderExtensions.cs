@@ -31,7 +31,7 @@ public static class GremlinHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        _ = connectionOptionsFactory ?? throw new ArgumentNullException(nameof(connectionOptionsFactory));
+        _ = Guard.ThrowIfNull(connectionOptionsFactory);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,

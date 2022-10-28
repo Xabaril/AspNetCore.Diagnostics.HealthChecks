@@ -10,7 +10,7 @@ public class SystemsManagerHealthCheck : IHealthCheck
 
     public SystemsManagerHealthCheck(SystemsManagerOptions systemsManagerOptions)
     {
-        _systemsManagerOptions = systemsManagerOptions ?? throw new ArgumentNullException(nameof(systemsManagerOptions));
+        _systemsManagerOptions = Guard.ThrowIfNull(systemsManagerOptions);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

@@ -16,8 +16,8 @@ namespace HealthChecks.AzureStorage
 
         public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, AzureFileShareHealthCheckOptions options)
         {
-            _shareServiceClient = shareServiceClient ?? throw new ArgumentNullException(nameof(shareServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _shareServiceClient = Guard.ThrowIfNull(shareServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

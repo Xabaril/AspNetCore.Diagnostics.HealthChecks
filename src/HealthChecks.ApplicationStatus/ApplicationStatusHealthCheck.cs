@@ -14,12 +14,12 @@ public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
 
     public ApplicationStatusHealthCheck(IHostApplicationLifetime lifetime)
     {
-        _lifetime = lifetime ?? throw new ArgumentNullException(nameof(IHostApplicationLifetime));
+        _lifetime = Guard.ThrowIfNull(lifetime);
         _ctRegistration = _lifetime.ApplicationStopping.Register(OnStopping);
     }
 
     /// <summary>
-    /// Handler that will be triggered on application stoping event.
+    /// Handler that will be triggered on application stopping event.
     /// </summary>
     private void OnStopping()
     {

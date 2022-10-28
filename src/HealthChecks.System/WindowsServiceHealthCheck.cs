@@ -12,8 +12,8 @@ namespace HealthChecks.System
 
         public WindowsServiceHealthCheck(string serviceName, Func<ServiceController, bool> predicate, string? machineName = default)
         {
-            _serviceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
-            _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+            _serviceName = Guard.ThrowIfNull(serviceName);
+            _predicate = Guard.ThrowIfNull(predicate);
             _machineName = machineName;
         }
 

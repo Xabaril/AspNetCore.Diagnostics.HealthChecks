@@ -12,10 +12,9 @@ namespace HealthChecks.Publisher.Prometheus
 
         public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string? instance = null)
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
 
-            if (endpoint == null)
-                throw new ArgumentNullException(nameof(endpoint));
+            Guard.ThrowIfNull(endpoint);
 
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
 

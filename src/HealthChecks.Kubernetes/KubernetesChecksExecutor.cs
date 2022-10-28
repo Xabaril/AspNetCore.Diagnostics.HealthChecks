@@ -9,7 +9,7 @@ namespace HealthChecks.Kubernetes
 
         public KubernetesChecksExecutor(k8s.Kubernetes client)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+            _client = Guard.ThrowIfNull(client);
             _handlers = new Dictionary<Type, Func<KubernetesResourceCheck, CancellationToken, Task<(bool, string)>>>()
             {
                 [typeof(V1Deployment)] = CheckDeploymentAsync,

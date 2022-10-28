@@ -10,7 +10,7 @@ namespace HealthChecks.Sqlite
 
         public SqliteHealthCheck(string connectionString, string sql)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _connectionString = Guard.ThrowIfNull(connectionString);
             _sql = sql ?? throw new ArgumentException(nameof(sql));
         }
 

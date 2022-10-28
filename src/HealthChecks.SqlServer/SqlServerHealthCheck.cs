@@ -11,8 +11,8 @@ namespace HealthChecks.SqlServer
 
         public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection>? beforeOpenConnectionConfigurer = null)
         {
-            _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            _connectionString = Guard.ThrowIfNull(sqlserverconnectionstring);
+            _sql = Guard.ThrowIfNull(sql);
             _beforeOpenConnectionConfigurer = beforeOpenConnectionConfigurer;
         }
 

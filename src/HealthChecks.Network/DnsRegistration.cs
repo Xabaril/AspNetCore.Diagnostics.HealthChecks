@@ -8,7 +8,7 @@ namespace HealthChecks.Network
 
         public DnsRegistration(string host)
         {
-            Host = host ?? throw new ArgumentNullException(nameof(host));
+            Host = Guard.ThrowIfNull(host);
         }
     }
 }

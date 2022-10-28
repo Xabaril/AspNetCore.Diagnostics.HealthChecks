@@ -16,7 +16,7 @@ internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
 
     public CloudWatchPublisher(CloudWatchOptions options)
     {
-        _options = options ?? throw new ArgumentNullException(nameof(options));
+        _options = Guard.ThrowIfNull(options);
 
         _amazonCloudWatchClient = options.ClientBuilder(options);
 

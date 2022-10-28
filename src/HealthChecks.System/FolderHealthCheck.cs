@@ -8,7 +8,7 @@ namespace HealthChecks.System
 
         public FolderHealthCheck(FolderHealthCheckOptions folderOptions)
         {
-            _folderOptions = folderOptions ?? throw new ArgumentNullException(nameof(folderOptions));
+            _folderOptions = Guard.ThrowIfNull(folderOptions);
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

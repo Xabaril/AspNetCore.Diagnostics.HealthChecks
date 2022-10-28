@@ -11,34 +11,14 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName) : base(connectionString)
         {
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
-
-            if (string.IsNullOrEmpty(subscriptionName))
-            {
-                throw new ArgumentNullException(nameof(subscriptionName));
-            }
-
-            _topicName = topicName;
-            _subscriptionName = subscriptionName;
+            _topicName = Guard.ThrowIfNull(topicName, true);
+            _subscriptionName = Guard.ThrowIfNull(subscriptionName, true);
         }
 
         public AzureServiceBusSubscriptionHealthCheck(string endPoint, string topicName, string subscriptionName, TokenCredential tokenCredential) : base(endPoint, tokenCredential)
         {
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
-
-            if (string.IsNullOrEmpty(subscriptionName))
-            {
-                throw new ArgumentNullException(nameof(subscriptionName));
-            }
-
-            _topicName = topicName;
-            _subscriptionName = subscriptionName;
+            _topicName = Guard.ThrowIfNull(topicName, true);
+            _subscriptionName = Guard.ThrowIfNull(subscriptionName, true);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

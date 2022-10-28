@@ -19,9 +19,9 @@ namespace HealthChecks.AzureKeyVault
 
         public AzureKeyVaultHealthCheck(Uri keyVaultUri, TokenCredential credential, AzureKeyVaultOptions options)
         {
-            _keyVaultUri = keyVaultUri ?? throw new ArgumentNullException(nameof(keyVaultUri));
-            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _keyVaultUri = Guard.ThrowIfNull(keyVaultUri);
+            _azureCredential = Guard.ThrowIfNull(credential);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

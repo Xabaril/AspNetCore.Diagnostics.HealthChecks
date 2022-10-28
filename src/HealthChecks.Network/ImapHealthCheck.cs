@@ -10,12 +10,9 @@ namespace HealthChecks.Network
 
         public ImapHealthCheck(ImapHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
 
-            if (string.IsNullOrEmpty(_options.Host))
-            {
-                throw new ArgumentNullException(nameof(_options.Host));
-            }
+            Guard.ThrowIfNull(_options.Host, true);
 
             if (_options.Port == default)
             {

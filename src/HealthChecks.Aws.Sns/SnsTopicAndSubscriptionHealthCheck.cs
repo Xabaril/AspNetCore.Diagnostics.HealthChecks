@@ -10,7 +10,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
     public SnsTopicAndSubscriptionHealthCheck(SnsOptions snsOptions)
     {
-        _snsOptions = snsOptions ?? throw new ArgumentNullException(nameof(SnsOptions));
+        _snsOptions = Guard.ThrowIfNull(snsOptions);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

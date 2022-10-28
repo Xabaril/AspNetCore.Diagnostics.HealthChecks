@@ -11,8 +11,8 @@ namespace HealthChecks.NpgSql
 
         public NpgSqlHealthCheck(string npgsqlConnectionString, string sql, Action<NpgsqlConnection>? connectionAction = null)
         {
-            _connectionString = npgsqlConnectionString ?? throw new ArgumentNullException(nameof(npgsqlConnectionString));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            _connectionString = Guard.ThrowIfNull(npgsqlConnectionString);
+            _sql = Guard.ThrowIfNull(sql);
             _connectionAction = connectionAction;
         }
 

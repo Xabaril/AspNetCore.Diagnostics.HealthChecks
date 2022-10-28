@@ -22,8 +22,7 @@ namespace HealthChecks.Network.Core
         internal ImapConnection(ImapConnectionOptions options)
             : base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
+            Guard.ThrowIfNull(options);
 
             ConnectionType = options.ConnectionType;
             ComputeDefaultValues();

@@ -11,7 +11,7 @@ namespace HealthChecks.Kafka
 
         public KafkaHealthCheck(ProducerConfig configuration, string? topic)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = Guard.ThrowIfNull(configuration);
             _topic = topic ?? "healthchecks-topic";
         }
 

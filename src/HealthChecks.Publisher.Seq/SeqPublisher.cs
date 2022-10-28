@@ -15,8 +15,8 @@ namespace HealthChecks.Publisher.Seq
 
         public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _options = Guard.ThrowIfNull(options);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
             _checkUri = BuildCheckUri(options);
         }
 
@@ -86,8 +86,7 @@ namespace HealthChecks.Publisher.Seq
 
         private static Uri BuildCheckUri(SeqOptions options)
         {
-            if (string.IsNullOrEmpty(options.Endpoint))
-                throw new ArgumentNullException(nameof(options.Endpoint));
+            Guard.ThrowIfNull(options.Endpoint, true);
 
             var uriBuilder = new UriBuilder(options.Endpoint)
             {

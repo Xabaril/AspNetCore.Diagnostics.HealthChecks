@@ -9,10 +9,12 @@ namespace HealthChecks.Network
     public class DnsResolveHealthCheck : IHealthCheck
     {
         private readonly DnsResolveOptions _options;
+
         public DnsResolveHealthCheck(DnsResolveOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
+
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

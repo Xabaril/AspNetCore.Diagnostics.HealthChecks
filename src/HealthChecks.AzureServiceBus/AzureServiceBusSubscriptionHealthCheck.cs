@@ -47,7 +47,7 @@ namespace HealthChecks.AzureServiceBus
             {
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
                 var receiver = ServiceBusReceivers
-                    .GetOrAdd($"{ConnectionKey}-{_topicName}-{_subscriptionName}", client.CreateReceiver(_topicName, _subscriptionName));
+                    .GetOrAdd($"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}", client.CreateReceiver(_topicName, _subscriptionName));
 
                 _ = await receiver.PeekMessageAsync(cancellationToken: cancellationToken);
                 return HealthCheckResult.Healthy();

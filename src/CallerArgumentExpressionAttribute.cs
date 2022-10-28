@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
 #if !NET6_0_OR_GREATER
 
 namespace System.Runtime.CompilerServices
@@ -15,9 +18,6 @@ namespace System.Runtime.CompilerServices
 }
 
 #endif
-
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 
 public class Guard
 {

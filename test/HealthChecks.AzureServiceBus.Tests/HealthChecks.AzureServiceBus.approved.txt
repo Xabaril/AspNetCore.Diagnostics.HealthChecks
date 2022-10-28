@@ -10,6 +10,7 @@ namespace HealthChecks.AzureServiceBus
     {
         protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.ServiceBusClient> ClientConnections;
         protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient> ManagementClientConnections;
+        protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.ServiceBusReceiver> ServiceBusReceivers;
         protected AzureServiceBusHealthCheck(string connectionString) { }
         protected AzureServiceBusHealthCheck(string endpoint, Azure.Core.TokenCredential tokenCredential) { }
         protected abstract string ConnectionKey { get; }

@@ -11,6 +11,8 @@ namespace HealthChecks.AzureServiceBus
             ClientConnections = new();
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
             ManagementClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, ServiceBusReceiver>
+            ServiceBusReceivers = new();
 
         private string? ConnectionString { get; }
 

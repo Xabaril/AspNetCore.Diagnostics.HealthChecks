@@ -41,7 +41,7 @@ public class seq_publisher_should
         HttpClient HttpClientFactory() => new();
 
         var ex = Should.Throw<ArgumentNullException>(() => new SeqPublisher(HttpClientFactory, options));
-        ex.ParamName.ShouldBe(nameof(SeqOptions.Endpoint));
+        ex.ParamName.ShouldBe("options.Endpoint");
     }
 
     private class MockClientHandler : HttpClientHandler

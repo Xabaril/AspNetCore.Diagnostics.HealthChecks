@@ -65,10 +65,7 @@ namespace Microsoft.Extensions.DependencyInjection
             TimeSpan? timeout = default,
             Action<SqlConnection>? beforeOpenConnectionConfigurer = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

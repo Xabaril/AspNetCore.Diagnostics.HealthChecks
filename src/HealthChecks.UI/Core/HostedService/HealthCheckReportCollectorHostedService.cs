@@ -24,10 +24,10 @@ namespace HealthChecks.UI.Core.HostedService
             ILogger<HealthCheckCollectorHostedService> logger,
             IHostApplicationLifetime lifetime)
         {
-            _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
-            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(provider));
-            _lifetime = lifetime ?? throw new ArgumentNullException(nameof(lifetime));
+            _serviceProvider = Guard.ThrowIfNull(provider);
+            _serverAddressesService = Guard.ThrowIfNull(serverAddressesService);
+            _logger = Guard.ThrowIfNull(logger);
+            _lifetime = Guard.ThrowIfNull(lifetime);
             _settings = settings.Value ?? new Settings();
             _cancellationTokenSource = new CancellationTokenSource();
         }

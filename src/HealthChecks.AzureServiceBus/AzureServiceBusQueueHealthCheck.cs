@@ -10,23 +10,13 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {
-            if (string.IsNullOrEmpty(queueName))
-            {
-                throw new ArgumentNullException(nameof(queueName));
-            }
-
-            _queueName = queueName;
+            _queueName = Guard.ThrowIfNull(queueName, true);
         }
 
         public AzureServiceBusQueueHealthCheck(string endPoint, string queueName, TokenCredential tokenCredential) :
             base(endPoint, tokenCredential)
         {
-            if (string.IsNullOrEmpty(queueName))
-            {
-                throw new ArgumentNullException(nameof(queueName));
-            }
-
-            _queueName = queueName;
+            _queueName = Guard.ThrowIfNull(queueName, true);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

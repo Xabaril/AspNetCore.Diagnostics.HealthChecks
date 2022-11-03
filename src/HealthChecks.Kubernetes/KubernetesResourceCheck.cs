@@ -13,9 +13,9 @@ namespace HealthChecks.Kubernetes
         private KubernetesResourceCheck(Type type, string name, string @namespace, Func<IKubernetesObject, bool> condition)
         {
             _condition = condition;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
-            ResourceType = type ?? throw new ArgumentNullException(nameof(type));
+            Name = Guard.ThrowIfNull(name);
+            Namespace = Guard.ThrowIfNull(@namespace);
+            ResourceType = Guard.ThrowIfNull(type);
         }
 
         public static KubernetesResourceCheck Create<T>(string name, string @namespace, Func<IKubernetesObject, bool> condition)

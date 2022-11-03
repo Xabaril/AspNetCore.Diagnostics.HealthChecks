@@ -16,7 +16,7 @@ namespace HealthChecks.EventStore
 
         public EventStoreHealthCheck(string eventStoreConnection, string? login, string? password)
         {
-            _eventStoreConnection = eventStoreConnection ?? throw new ArgumentNullException(nameof(eventStoreConnection));
+            _eventStoreConnection = Guard.ThrowIfNull(eventStoreConnection);
             _login = login;
             _password = password;
         }

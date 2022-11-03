@@ -11,7 +11,7 @@ namespace HealthChecks.Redis
 
         public RedisHealthCheck(string redisConnectionString)
         {
-            _redisConnectionString = redisConnectionString ?? throw new ArgumentNullException(nameof(redisConnectionString));
+            _redisConnectionString = Guard.ThrowIfNull(redisConnectionString);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

@@ -21,7 +21,7 @@ namespace HealthChecks.Network.Core
         public SmtpConnection(SmtpConnectionOptions options)
             : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
             ConnectionType = _options.ConnectionType;
             ComputeDefaultValues();
         }

@@ -12,7 +12,7 @@ namespace HealthChecks.Network
 
         public TcpHealthCheck(TcpHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

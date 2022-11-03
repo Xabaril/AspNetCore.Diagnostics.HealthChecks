@@ -8,9 +8,9 @@ namespace HealthChecks.UI.Core
 
         private UIResource(string fileName, string content, string contentType)
         {
-            Content = content ?? throw new ArgumentNullException(nameof(content));
-            ContentType = contentType ?? throw new ArgumentNullException(nameof(contentType));
-            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            Content = Guard.ThrowIfNull(content);
+            ContentType = Guard.ThrowIfNull(contentType);
+            FileName = Guard.ThrowIfNull(fileName);
         }
 
         public static UIResource Create(string fileName, string content, string contentType)

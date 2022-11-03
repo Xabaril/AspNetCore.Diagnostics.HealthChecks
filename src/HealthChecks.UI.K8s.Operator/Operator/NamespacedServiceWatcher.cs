@@ -22,11 +22,11 @@ namespace HealthChecks.UI.K8s.Operator
             NotificationHandler notificationHandler,
             IHttpClientFactory httpClientFactory)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
+            _diagnostics = Guard.ThrowIfNull(diagnostics);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+            _notificationHandler = Guard.ThrowIfNull(notificationHandler);
         }
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)

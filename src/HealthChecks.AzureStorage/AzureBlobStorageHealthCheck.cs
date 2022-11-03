@@ -23,8 +23,8 @@ namespace HealthChecks.AzureStorage
 
         public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, AzureBlobStorageHealthCheckOptions options)
         {
-            _blobServiceClient = blobServiceClient ?? throw new ArgumentNullException(nameof(blobServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _blobServiceClient = Guard.ThrowIfNull(blobServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

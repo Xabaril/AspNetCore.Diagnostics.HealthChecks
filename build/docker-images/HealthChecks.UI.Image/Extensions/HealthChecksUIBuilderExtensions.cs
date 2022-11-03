@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 if (targetProvider.RequiresConnectionString && string.IsNullOrEmpty(connectionString))
                 {
-                    throw new ArgumentNullException($"{UIKeys.STORAGE_CONNECTION} value has not been configured and it's required for {storageEnum.ToString()}");
+                    throw new ArgumentNullException($"{UIKeys.STORAGE_CONNECTION} value has not been configured and it's required for {storageEnum}");
                 }
 
                 Console.WriteLine($"Configuring image to work with {storageEnum} provider");

@@ -11,11 +11,10 @@ public class IbmMQHealthCheck : IHealthCheck
 
     public IbmMQHealthCheck(string queueManager, Hashtable connectionProperties)
     {
-        if (string.IsNullOrEmpty(queueManager))
-            throw new ArgumentNullException(nameof(queueManager));
+        Guard.ThrowIfNull(queueManager, true);
 
         _queueManager = queueManager;
-        _connectionProperties = connectionProperties ?? throw new ArgumentNullException(nameof(connectionProperties));
+        _connectionProperties = Guard.ThrowIfNull(connectionProperties);
     }
 
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

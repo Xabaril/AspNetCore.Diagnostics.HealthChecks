@@ -21,7 +21,7 @@ public sealed class NatsHealthCheck : IHealthCheck, IDisposable
 
     public NatsHealthCheck(NatsOptions natsOptions)
     {
-        _options = natsOptions ?? throw new ArgumentNullException(nameof(natsOptions));
+        _options = Guard.ThrowIfNull(natsOptions);
     }
 
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -29,8 +29,7 @@ public sealed class NatsHealthCheck : IHealthCheck, IDisposable
         try
         {
             _connection ??= CreateConnection(_options);
-            if (_connection is null)
-                throw new ArgumentNullException(nameof(_connection));
+            Guard.ThrowIfNull(_connection);
             var healthCheckResult = GetHealthCheckResultFromState(_connection);
             return Task.FromResult(healthCheckResult);
         }

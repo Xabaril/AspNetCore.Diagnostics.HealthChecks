@@ -23,8 +23,8 @@ namespace HealthChecks.AzureStorage
 
         public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
         {
-            _queueServiceClient = queueServiceClient ?? throw new ArgumentNullException(nameof(queueServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _queueServiceClient = Guard.ThrowIfNull(queueServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

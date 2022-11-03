@@ -39,8 +39,8 @@ namespace HealthChecks.CosmosDb
 
         public CosmosDbHealthCheck(CosmosClient cosmosClient, CosmosDbHealthCheckOptions options)
         {
-            _cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _cosmosClient = Guard.ThrowIfNull(cosmosClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

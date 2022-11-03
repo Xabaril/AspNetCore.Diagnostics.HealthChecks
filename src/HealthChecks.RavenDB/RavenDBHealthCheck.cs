@@ -26,15 +26,8 @@ namespace HealthChecks.RavenDB
 
         public RavenDBHealthCheck(RavenDBOptions options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            if (options.Urls == null)
-            {
-                throw new ArgumentNullException(nameof(options.Urls));
-            }
+            Guard.ThrowIfNull(options);
+            Guard.ThrowIfNull(options.Urls);
 
             _options = options;
         }

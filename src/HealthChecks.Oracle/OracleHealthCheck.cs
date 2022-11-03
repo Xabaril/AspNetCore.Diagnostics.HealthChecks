@@ -10,8 +10,8 @@ namespace HealthChecks.Oracle
 
         public OracleHealthCheck(string connectionString, string sql)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            _connectionString = Guard.ThrowIfNull(connectionString);
+            _sql = Guard.ThrowIfNull(sql);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

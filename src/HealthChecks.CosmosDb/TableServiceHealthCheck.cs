@@ -29,8 +29,8 @@ namespace HealthChecks.CosmosDb
 
         public TableServiceHealthCheck(TableServiceClient tableServiceClient, TableServiceHealthCheckOptions options)
         {
-            _tableServiceClient = tableServiceClient ?? throw new ArgumentNullException(nameof(tableServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _tableServiceClient = Guard.ThrowIfNull(tableServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

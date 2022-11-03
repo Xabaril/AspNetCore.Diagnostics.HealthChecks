@@ -10,7 +10,7 @@ public class SecretsManagerHealthCheck : IHealthCheck
 
     public SecretsManagerHealthCheck(SecretsManagerOptions secretsManagerOptions)
     {
-        _secretsManagerOptions = secretsManagerOptions ?? throw new ArgumentNullException(nameof(secretsManagerOptions));
+        _secretsManagerOptions = Guard.ThrowIfNull(secretsManagerOptions);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

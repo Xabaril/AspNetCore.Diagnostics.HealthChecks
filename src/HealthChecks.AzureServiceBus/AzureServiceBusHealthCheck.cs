@@ -24,23 +24,13 @@ namespace HealthChecks.AzureServiceBus
 
         protected AzureServiceBusHealthCheck(string connectionString)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            ConnectionString = connectionString;
+            ConnectionString = Guard.ThrowIfNull(connectionString, true);
         }
 
         protected AzureServiceBusHealthCheck(string endpoint, TokenCredential tokenCredential)
         {
-            if (string.IsNullOrEmpty(endpoint))
-            {
-                throw new ArgumentNullException(nameof(endpoint));
-            }
-
-            Endpoint = endpoint;
-            TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
+            Endpoint = Guard.ThrowIfNull(endpoint, true);
+            TokenCredential = Guard.ThrowIfNull(tokenCredential);
         }
 
         protected ServiceBusClient CreateClient()

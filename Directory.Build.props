@@ -34,6 +34,7 @@
     <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" />
+    <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">

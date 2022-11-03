@@ -10,7 +10,7 @@ namespace HealthChecks.IdSvr
 
         public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

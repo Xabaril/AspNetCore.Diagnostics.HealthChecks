@@ -14,15 +14,8 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            if (string.IsNullOrEmpty(eventHubName))
-            {
-                throw new ArgumentNullException(nameof(eventHubName));
-            }
+            Guard.ThrowIfNull(connectionString, true);
+            Guard.ThrowIfNull(eventHubName, true);
 
             _eventHubConnectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
 
@@ -34,10 +27,7 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureEventHubHealthCheck(EventHubConnection connection)
         {
-            if (connection == null)
-            {
-                throw new ArgumentNullException(nameof(connection));
-            }
+            Guard.ThrowIfNull(connection);
 
             _eventHubConnectionString = $"{connection.FullyQualifiedNamespace};{ENTITY_PATH_SEGMENT}{connection.EventHubName}";
 

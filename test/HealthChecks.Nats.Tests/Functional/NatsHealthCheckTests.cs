@@ -1,4 +1,5 @@
 using System.Net;
+using HealthChecks.UI.Client;
 using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.Functional
@@ -9,19 +10,19 @@ namespace HealthChecks.Nats.Tests.Functional
         public Task be_healthy_if_nats_is_available_locally() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                response => response.StatusCode.Should().Be(HttpStatusCode.OK));
+                async response => response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
 
         [Fact]
         public Task be_healthy_for_official_demo_instance() =>
             FactAsync(
                 setup => setup.Url = DemoConnectionString,
-                response => response.StatusCode.Should().Be(HttpStatusCode.OK));
+                async response => response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
 
         [Fact]
         public Task be_healthy_if_nats_is_available_and_has_custom_name() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                response => response.StatusCode.Should().Be(HttpStatusCode.OK),
+                async response => response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()),
                 name: "Demo");
 
         [Fact]
@@ -110,6 +111,7 @@ namespace HealthChecks.Nats.Tests.Functional
             app.UseHealthChecks(HealthRequestRelativePath, new HealthCheckOptions
             {
                 Predicate = r => r.Tags.Contains(NatsName) || r.Name == NatsName,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                 AllowCachingResponses = false
             });
     }

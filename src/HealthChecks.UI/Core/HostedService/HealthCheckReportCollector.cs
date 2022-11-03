@@ -35,10 +35,10 @@ namespace HealthChecks.UI.Core.HostedService
             ServerAddressesService serverAddressService,
             IEnumerable<IHealthCheckCollectorInterceptor> interceptors)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-            _healthCheckFailureNotifier = healthCheckFailureNotifier ?? throw new ArgumentNullException(nameof(healthCheckFailureNotifier));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _serverAddressService = serverAddressService ?? throw new ArgumentNullException(nameof(serverAddressService));
+            _db = Guard.ThrowIfNull(db);
+            _healthCheckFailureNotifier = Guard.ThrowIfNull(healthCheckFailureNotifier);
+            _logger = Guard.ThrowIfNull(logger);
+            _serverAddressService = Guard.ThrowIfNull(serverAddressService);
             _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
         }

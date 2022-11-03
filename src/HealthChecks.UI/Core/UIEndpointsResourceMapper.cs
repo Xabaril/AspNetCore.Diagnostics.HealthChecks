@@ -11,7 +11,7 @@ namespace HealthChecks.UI.Core
 
         public UIEndpointsResourceMapper(IUIResourcesReader reader)
         {
-            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            _reader = Guard.ThrowIfNull(reader);
         }
 
         public IEnumerable<IEndpointConventionBuilder> Map(IEndpointRouteBuilder builder, Options options)

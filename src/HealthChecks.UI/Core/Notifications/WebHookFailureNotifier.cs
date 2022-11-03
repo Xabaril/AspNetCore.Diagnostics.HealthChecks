@@ -24,10 +24,10 @@ namespace HealthChecks.UI.Core.Notifications
             ILogger<WebHookFailureNotifier> logger,
             IHttpClientFactory httpClientFactory)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
+            _db = Guard.ThrowIfNull(db);
+            _serverAddressesService = Guard.ThrowIfNull(serverAddressesService);
             _settings = settings.Value ?? new Settings();
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = Guard.ThrowIfNull(logger);
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
         }
 

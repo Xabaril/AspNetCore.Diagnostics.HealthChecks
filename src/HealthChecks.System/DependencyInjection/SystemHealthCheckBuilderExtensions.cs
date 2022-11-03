@@ -218,7 +218,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddWindowsServiceHealthCheck(
-            this IHealthChecksBuilder builder, string serviceName,
+            this IHealthChecksBuilder builder,
+            string serviceName,
             Func<ServiceController, bool> predicate,
             string? machineName = default,
             string? name = default,
@@ -231,11 +232,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new PlatformNotSupportedException($"{nameof(WindowsServiceHealthCheck)} can only be registered in Windows Systems");
             }
 
-            if (string.IsNullOrEmpty(serviceName))
-                throw new ArgumentNullException(nameof(serviceName));
+            Guard.ThrowIfNull(serviceName, true);
 
-            if (predicate is null)
-                throw new ArgumentNullException(nameof(predicate));
+            Guard.ThrowIfNull(predicate);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? WINDOWS_SERVICE_NAME,

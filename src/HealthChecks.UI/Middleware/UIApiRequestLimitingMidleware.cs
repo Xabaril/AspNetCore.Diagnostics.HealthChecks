@@ -13,9 +13,9 @@ namespace HealthChecks.UI.Middleware
 
         public UIApiRequestLimitingMidleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next));
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _next = Guard.ThrowIfNull(next);
+            _settings = Guard.ThrowIfNull(settings);
+            _logger = Guard.ThrowIfNull(logger);
 
             var maxActiveRequests = _settings.Value.ApiMaxActiveRequests;
 

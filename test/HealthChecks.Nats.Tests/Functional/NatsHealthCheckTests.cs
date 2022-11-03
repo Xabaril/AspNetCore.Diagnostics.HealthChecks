@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using static HealthChecks.Nats.Tests.Defines;
@@ -35,7 +36,7 @@ namespace HealthChecks.Nats.Tests.Functional
                 {
                     response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
                     var content = await response.Content.ReadAsStringAsync();
-                    var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+                    var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
                     report.Status.Should().Be(UIHealthStatus.Unhealthy);
                     report.Entries["nats"].Exception.Should().Be("Failed to connect");
 
@@ -49,7 +50,7 @@ namespace HealthChecks.Nats.Tests.Functional
                 {
                     response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
                     var content = await response.Content.ReadAsStringAsync();
-                    var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+                    var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
                     report.Status.Should().Be(UIHealthStatus.Unhealthy);
                     report.Entries["nats"].Exception.Should().Be("Failed to connect");
                 });

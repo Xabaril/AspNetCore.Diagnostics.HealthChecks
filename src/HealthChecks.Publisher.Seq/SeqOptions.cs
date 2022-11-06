@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public string Endpoint { get; set; } = null!;
 
-        public string ApiKey { get; set; } = null!;
+        public string? ApiKey { get; set; }
 
         public SeqInputLevel DefaultInputLevel { get; set; }
     }

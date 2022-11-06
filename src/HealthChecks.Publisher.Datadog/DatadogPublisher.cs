@@ -11,8 +11,8 @@ namespace HealthChecks.Publisher.Datadog
 
         public DatadogPublisher(IDogStatsd dogStatsd, string serviceCheckName, string[]? defaultTags)
         {
-            _dogStatsd = dogStatsd ?? throw new ArgumentNullException(nameof(dogStatsd));
-            _serviceCheckName = serviceCheckName ?? throw new ArgumentNullException(nameof(serviceCheckName));
+            _dogStatsd = Guard.ThrowIfNull(dogStatsd);
+            _serviceCheckName = Guard.ThrowIfNull(serviceCheckName);
             _defaultTags = defaultTags ?? Array.Empty<string>();
         }
 

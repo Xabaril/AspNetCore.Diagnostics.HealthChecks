@@ -24,10 +24,10 @@ namespace HealthChecks.UI.Core.Notifications
             ILogger<WebHookFailureNotifier> logger,
             IHttpClientFactory httpClientFactory)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
+            _db = Guard.ThrowIfNull(db);
+            _serverAddressesService = Guard.ThrowIfNull(serverAddressesService);
             _settings = settings.Value ?? new Settings();
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = Guard.ThrowIfNull(logger);
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
         }
 
@@ -57,7 +57,7 @@ namespace HealthChecks.UI.Core.Notifications
 
                 foreach (var webHook in _settings.Webhooks)
                 {
-                    bool shouldNotify = webHook.ShouldNotifyFunc?.Invoke(report) ?? true;
+                    bool shouldNotify = webHook.ShouldNotifyFunc?.Invoke(name, report) ?? true;
 
                     if (!shouldNotify)
                     {
@@ -67,8 +67,8 @@ namespace HealthChecks.UI.Core.Notifications
 
                     if (!isHealthy)
                     {
-                        failure = webHook.CustomMessageFunc?.Invoke(report) ?? GetFailedMessageFromContent(report);
-                        description = webHook.CustomDescriptionFunc?.Invoke(report) ?? GetFailedDescriptionsFromContent(report);
+                        failure = webHook.CustomMessageFunc?.Invoke(name, report) ?? GetFailedMessageFromContent(report);
+                        description = webHook.CustomDescriptionFunc?.Invoke(name, report) ?? GetFailedDescriptionsFromContent(report);
                     }
 
                     var payload = isHealthy ? webHook.RestoredPayload : webHook.Payload;

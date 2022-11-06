@@ -11,8 +11,8 @@ namespace HealthChecks.Consul
 
         public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _options = Guard.ThrowIfNull(options);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

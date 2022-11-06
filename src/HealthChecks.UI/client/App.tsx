@@ -23,7 +23,7 @@ const App: FunctionComponent<AppProps> = ({ uiSettings }) => {
     };
 
     if (isError) {
-        return <AlertPanel message="Error retrivieng UI api settings from endpoint" />
+        return <AlertPanel message="Error retrieving UI api settings from endpoint" />
     }
 
     if (!apiSettings) return null;

@@ -14,12 +14,12 @@ namespace HealthChecks.RabbitMQ
 
         public RabbitMQHealthCheck(IConnection connection)
         {
-            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _connection = Guard.ThrowIfNull(connection);
         }
 
         public RabbitMQHealthCheck(IConnectionFactory factory)
         {
-            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            _factory = Guard.ThrowIfNull(factory);
             _ownsConnection = true;
         }
 

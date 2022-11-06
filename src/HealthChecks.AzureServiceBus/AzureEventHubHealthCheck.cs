@@ -14,29 +14,27 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureEventHubHealthCheck(string connectionString, string eventHubName)
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            if (string.IsNullOrEmpty(eventHubName))
-            {
-                throw new ArgumentNullException(nameof(eventHubName));
-            }
+            Guard.ThrowIfNull(connectionString, true);
+            Guard.ThrowIfNull(eventHubName, true);
 
             _eventHubConnectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
-            _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(_eventHubConnectionString));
+
+            if (!_eventHubConnections.ContainsKey(_eventHubConnectionString))
+            {
+                _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(_eventHubConnectionString));
+            }
         }
 
         public AzureEventHubHealthCheck(EventHubConnection connection)
         {
-            if (connection == null)
-            {
-                throw new ArgumentNullException(nameof(connection));
-            }
+            Guard.ThrowIfNull(connection);
 
             _eventHubConnectionString = $"{connection.FullyQualifiedNamespace};{ENTITY_PATH_SEGMENT}{connection.EventHubName}";
-            _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(connection));
+
+            if (!_eventHubConnections.ContainsKey(_eventHubConnectionString))
+            {
+                _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(connection));
+            }
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

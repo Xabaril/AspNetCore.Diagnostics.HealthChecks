@@ -70,14 +70,8 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
-            if (eventHubNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(eventHubNameFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
+            Guard.ThrowIfNull(eventHubNameFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREEVENTHUB_NAME,
@@ -169,14 +163,8 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
-            if (queueNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(queueNameFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
+            Guard.ThrowIfNull(queueNameFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUE_NAME,
@@ -244,18 +232,9 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (endpointFactory == null)
-            {
-                throw new ArgumentNullException(nameof(endpointFactory));
-            }
-            if (queueNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(queueNameFactory));
-            }
-            if (tokenCredentialFactory == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredentialFactory));
-            }
+            Guard.ThrowIfNull(endpointFactory);
+            Guard.ThrowIfNull(queueNameFactory);
+            Guard.ThrowIfNull(tokenCredentialFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZUREQUEUE_NAME,
@@ -321,14 +300,8 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
-            if (topicNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(topicNameFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
+            Guard.ThrowIfNull(topicNameFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURETOPIC_NAME,
@@ -396,18 +369,9 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (endpointFactory == null)
-            {
-                throw new ArgumentNullException(nameof(endpointFactory));
-            }
-            if (topicNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(topicNameFactory));
-            }
-            if (tokenCredentialFactory == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredentialFactory));
-            }
+            Guard.ThrowIfNull(endpointFactory);
+            Guard.ThrowIfNull(topicNameFactory);
+            Guard.ThrowIfNull(tokenCredentialFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURETOPIC_NAME,
@@ -478,18 +442,9 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
-            if (topicNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(topicNameFactory));
-            }
-            if (subscriptionNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(subscriptionNameFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
+            Guard.ThrowIfNull(topicNameFactory);
+            Guard.ThrowIfNull(subscriptionNameFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURESUBSCRIPTION_NAME,
@@ -565,22 +520,10 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (endpointFactory == null)
-            {
-                throw new ArgumentNullException(nameof(endpointFactory));
-            }
-            if (topicNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(topicNameFactory));
-            }
-            if (subscriptionNameFactory == null)
-            {
-                throw new ArgumentNullException(nameof(subscriptionNameFactory));
-            }
-            if (tokenCredentialFactory == null)
-            {
-                throw new ArgumentNullException(nameof(tokenCredentialFactory));
-            }
+            Guard.ThrowIfNull(endpointFactory);
+            Guard.ThrowIfNull(topicNameFactory);
+            Guard.ThrowIfNull(subscriptionNameFactory);
+            Guard.ThrowIfNull(tokenCredentialFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? AZURESUBSCRIPTION_NAME,

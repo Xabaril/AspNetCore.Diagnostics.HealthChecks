@@ -177,7 +177,7 @@ namespace HealthChecks.Uris.Tests.Functional
                     .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
         [Fact]
-        public async Task be_healthy_if_request_sucess_and_default_timeout_is_configured()
+        public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
         {
             var uri = new Uri($"https://httpbin.org/delay/2");
 
@@ -208,7 +208,7 @@ namespace HealthChecks.Uris.Tests.Functional
                     .Should().Be(HttpStatusCode.OK);
         }
         [Fact]
-        public async Task be_healthy_if_request_sucess_and_timeout_is_configured()
+        public async Task be_healthy_if_request_success_and_timeout_is_configured()
         {
             var uri = new Uri($"https://httpbin.org/delay/2");
 

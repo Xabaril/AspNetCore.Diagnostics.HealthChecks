@@ -20,7 +20,7 @@ namespace HealthChecks.Network.Core
 
         public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false)
         {
-            Host = host ?? throw new ArgumentNullException(nameof(host));
+            Host = Guard.ThrowIfNull(host);
             if (port == default)
                 throw new ArgumentNullException(nameof(port));
             Port = port;

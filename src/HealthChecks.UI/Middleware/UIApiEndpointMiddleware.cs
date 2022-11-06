@@ -20,7 +20,7 @@ namespace HealthChecks.UI.Middleware
         {
             _ = next;
             _serviceScopeFactory = serviceScopeFactory;
-            _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
+            _settings = Guard.ThrowIfNull(settings?.Value);
             _jsonSerializationSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

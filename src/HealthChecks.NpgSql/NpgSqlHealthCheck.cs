@@ -11,8 +11,8 @@ namespace HealthChecks.NpgSql
 
         public NpgSqlHealthCheck(string npgsqlConnectionString, string sql, Action<NpgsqlConnection>? connectionAction = null)
         {
-            _connectionString = npgsqlConnectionString ?? throw new ArgumentNullException(nameof(npgsqlConnectionString));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            _connectionString = Guard.ThrowIfNull(npgsqlConnectionString);
+            _sql = Guard.ThrowIfNull(sql);
             _connectionAction = connectionAction;
         }
 
@@ -37,7 +37,7 @@ namespace HealthChecks.NpgSql
             }
             catch (Exception ex)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, description: ex.Message, exception: ex);
             }
         }
     }

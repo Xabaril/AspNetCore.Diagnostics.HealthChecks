@@ -14,7 +14,7 @@ namespace HealthChecks.UI.Middleware
         public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
         {
             _ = next;
-            _ = settings ?? throw new ArgumentNullException(nameof(settings));
+            _ = Guard.ThrowIfNull(settings);
             _uiOutputSettings = new
             {
                 PollingInterval = settings.Value.EvaluationTimeInSeconds,

@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ArangoDBNetStandard" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
+    <PackageReference Include="ArangoDBNetStandard" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

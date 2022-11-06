@@ -2,25 +2,52 @@ namespace HealthChecks.CosmosDb
 {
     public class CosmosDbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
+        public CosmosDbHealthCheck(Microsoft.Azure.Cosmos.CosmosClient cosmosClient) { }
         public CosmosDbHealthCheck(string connectionString) { }
+        public CosmosDbHealthCheck(Microsoft.Azure.Cosmos.CosmosClient cosmosClient, HealthChecks.CosmosDb.CosmosDbHealthCheckOptions options) { }
         public CosmosDbHealthCheck(string connectionString, string database) { }
+        public CosmosDbHealthCheck(string accountEndpoint, Azure.Core.TokenCredential tokenCredential, string database) { }
         public CosmosDbHealthCheck(string connectionString, string? database, System.Collections.Generic.IEnumerable<string>? containers) { }
+        public CosmosDbHealthCheck(string accountEndpoint, Azure.Core.TokenCredential tokenCredential, string? database, System.Collections.Generic.IEnumerable<string>? containers) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public sealed class CosmosDbHealthCheckOptions
+    {
+        public CosmosDbHealthCheckOptions() { }
+        public System.Collections.Generic.IEnumerable<string>? ContainerIds { get; set; }
+        public string? DatabaseId { get; set; }
     }
     public class TableServiceHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public TableServiceHealthCheck(string connectionString, string tableName) { }
-        public TableServiceHealthCheck(System.Uri endpoint, Azure.Data.Tables.TableSharedKeyCredential credentials, string tableName) { }
+        public TableServiceHealthCheck(Azure.Data.Tables.TableServiceClient tableServiceClient, HealthChecks.CosmosDb.TableServiceHealthCheckOptions options) { }
+        public TableServiceHealthCheck(string connectionString, string? tableName) { }
+        public TableServiceHealthCheck(System.Uri endpoint, Azure.Core.TokenCredential tokenCredential, string? tableName) { }
+        public TableServiceHealthCheck(System.Uri endpoint, Azure.Data.Tables.TableSharedKeyCredential credentials, string? tableName) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public sealed class TableServiceHealthCheckOptions
+    {
+        public TableServiceHealthCheckOptions() { }
+        public string? TableName { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CosmosDbHealthCheckBuilderExtensions
     {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.CosmosDb.TableServiceHealthCheckOptions>? configureOptions = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<System.IServiceProvider, HealthChecks.CosmosDb.TableServiceHealthCheckOptions>? configureOptions = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string tableName, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri endpoint, Azure.Data.Tables.TableSharedKeyCredential credentials, string tableName, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri endpoint, Azure.Core.TokenCredential tokenCredential, string tableName, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri endpoint, Azure.Data.Tables.TableSharedKeyCredential credentials, string? tableName, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, Microsoft.Azure.Cosmos.CosmosClient client, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.CosmosDb.CosmosDbHealthCheckOptions>? configureOptions = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<System.IServiceProvider, HealthChecks.CosmosDb.CosmosDbHealthCheckOptions>? configureOptions = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, Microsoft.Azure.Cosmos.CosmosClient client, System.Action<HealthChecks.CosmosDb.CosmosDbHealthCheckOptions> configureOptions, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, Microsoft.Azure.Cosmos.CosmosClient client, System.Action<System.IServiceProvider, HealthChecks.CosmosDb.CosmosDbHealthCheckOptions> configureOptions, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? database = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string accountEndpoint, Azure.Core.TokenCredential tokenCredential, string? database = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDbCollection(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? database = null, System.Collections.Generic.IEnumerable<string>? collections = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCosmosDbCollection(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string accountEndpoint, Azure.Core.TokenCredential tokenCredential, string? database = null, System.Collections.Generic.IEnumerable<string>? collections = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

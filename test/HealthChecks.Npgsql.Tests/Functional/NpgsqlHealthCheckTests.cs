@@ -1,4 +1,6 @@
 using System.Net;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.Npgsql.Tests.Functional
 {
@@ -151,6 +153,44 @@ namespace HealthChecks.Npgsql.Tests.Functional
 
             response.StatusCode
                     .Should().Be(HttpStatusCode.ServiceUnavailable);
+        }
+
+        [Fact]
+        public async Task unhealthy_check_log_detailed_messages()
+        {
+            var connectionString = "Server=127.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres";
+
+            var webHostBuilder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddLogging(b =>
+                            b.ClearProviders()
+                            .Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TestLoggerProvider>())
+                        )
+                    .AddHealthChecks()
+                    .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB", tags: new string[] { "npgsql" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("npgsql")
+                    });
+                });
+
+            using var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest("/health")
+                .GetAsync();
+
+            var testLoggerProvider = (TestLoggerProvider)server.Services.GetRequiredService<ILoggerProvider>();
+
+            testLoggerProvider.Should().NotBeNull();
+            var logger = testLoggerProvider.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");
+
+            logger.Should().NotBeNull();
+            logger?._eventLog[0].Item2.Should().NotContain("with message '(null)'");
         }
     }
 }

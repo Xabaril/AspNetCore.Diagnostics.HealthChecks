@@ -10,8 +10,8 @@ namespace HealthChecks.Solr
 
         public SolrOptions UseServer(string uri, string core, TimeSpan? timeout)
         {
-            Uri = uri ?? throw new ArgumentNullException(nameof(uri));
-            Core = core ?? throw new ArgumentNullException(nameof(core));
+            Uri = Guard.ThrowIfNull(uri);
+            Core = Guard.ThrowIfNull(core);
             Timeout = timeout ?? TimeSpan.FromMilliseconds(1000);
 
             return this;

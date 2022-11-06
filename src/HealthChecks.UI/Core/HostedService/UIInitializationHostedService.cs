@@ -20,9 +20,9 @@ namespace HealthChecks.UI.Core.HostedService
             ILogger<UIInitializationHostedService> logger,
             IOptions<Settings> settings)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
+            _provider = Guard.ThrowIfNull(provider);
+            _logger = Guard.ThrowIfNull(logger);
+            _settings = Guard.ThrowIfNull(settings?.Value);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

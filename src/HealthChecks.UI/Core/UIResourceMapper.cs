@@ -10,7 +10,7 @@ namespace HealthChecks.UI.Core
 
         public UIResourcesMapper(IUIResourcesReader reader)
         {
-            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            _reader = Guard.ThrowIfNull(reader);
         }
 
         public void Map(IApplicationBuilder app, Options options)

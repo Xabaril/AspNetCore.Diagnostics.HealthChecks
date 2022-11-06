@@ -3,9 +3,14 @@ namespace HealthChecks.DynamoDb
     public class DynamoDBOptions
     {
         public DynamoDBOptions() { }
-        public string AccessKey { get; set; }
+        [System.Obsolete("Specify access key and secret as a BasicCredential to Credentials property instea" +
+            "d")]
+        public string? AccessKey { get; set; }
+        public Amazon.Runtime.AWSCredentials? Credentials { get; set; }
         public Amazon.RegionEndpoint RegionEndpoint { get; set; }
-        public string SecretKey { get; set; }
+        [System.Obsolete("Specify access key and secret as a BasicCredential to Credentials property instea" +
+            "d")]
+        public string? SecretKey { get; set; }
     }
     public class DynamoDbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {

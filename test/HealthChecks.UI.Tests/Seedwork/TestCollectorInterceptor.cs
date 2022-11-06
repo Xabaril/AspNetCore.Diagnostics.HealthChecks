@@ -9,7 +9,7 @@ namespace HealthChecks.UI.Tests
 
         public TestCollectorInterceptor(ManualResetEventSlim resetEvent)
         {
-            _resetEvent = resetEvent ?? throw new ArgumentNullException(nameof(resetEvent));
+            _resetEvent = Guard.ThrowIfNull(resetEvent);
         }
 
         public ValueTask OnCollectExecuted(UIHealthReport report)

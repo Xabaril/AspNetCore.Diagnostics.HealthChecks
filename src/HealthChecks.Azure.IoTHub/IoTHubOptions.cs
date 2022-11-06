@@ -14,7 +14,7 @@ namespace HealthChecks.Azure.IoTHub
 
         public IoTHubOptions AddConnectionString(string connectionString)
         {
-            ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            ConnectionString = Guard.ThrowIfNull(connectionString);
             return this;
         }
 

@@ -36,10 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (keyVaultServiceUri == null)
-            {
-                throw new ArgumentNullException(nameof(keyVaultServiceUri));
-            }
+            Guard.ThrowIfNull(keyVaultServiceUri);
 
             return AddAzureKeyVault(builder, _ => keyVaultServiceUri, credential, (_, options) => setup?.Invoke(options), name, failureStatus, tags, timeout);
         }
@@ -69,10 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (keyVaultServiceUri == null)
-            {
-                throw new ArgumentNullException(nameof(keyVaultServiceUri));
-            }
+            Guard.ThrowIfNull(keyVaultServiceUri);
 
             return AddAzureKeyVault(builder, _ => keyVaultServiceUri, credential, setup, name, failureStatus, tags, timeout);
         }
@@ -102,18 +96,14 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var options = new AzureKeyVaultOptions();
-
-            if (keyVaultServiceUriFactory == null)
-                throw new ArgumentNullException(nameof(keyVaultServiceUriFactory));
-
-            if (credential == null)
-                throw new ArgumentNullException(nameof(credential));
+            Guard.ThrowIfNull(keyVaultServiceUriFactory);
+            Guard.ThrowIfNull(credential);
 
             return builder.Add(new HealthCheckRegistration(
                name ?? KEYVAULT_NAME,
                sp =>
                {
+                   var options = new AzureKeyVaultOptions();
                    setup?.Invoke(sp, options);
                    return new AzureKeyVaultHealthCheck(keyVaultServiceUriFactory(sp), credential, options);
                },

@@ -1,4 +1,4 @@
-name: HealthChecks Aws S3 CD
+name: HealthChecks Aws.S3 CD
 
 on:
   push:
@@ -12,10 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.202
-        include-prerelease: false
+        dotnet-version: 6.0.x
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj
     - name: Build

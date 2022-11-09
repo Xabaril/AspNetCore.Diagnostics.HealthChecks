@@ -1,6 +1,4 @@
-using HealthChecks.EventStore;
-
-namespace HealthChecks.Consul.Tests.DependencyInjection
+namespace HealthChecks.EventStore.Tests.DependencyInjection
 {
     public class eventstore_registration_should
     {

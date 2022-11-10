@@ -36,9 +36,11 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
+            builder.Services.AddSingleton(_ => new EventStoreHealthCheck(eventStoreConnection, login, password));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new EventStoreHealthCheck(eventStoreConnection, login, password),
+                sp => sp.GetRequiredService<EventStoreHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
@@ -65,9 +67,11 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
+            builder.Services.AddSingleton(_ => new EventStoreHealthCheck(eventStoreConnection));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new EventStoreHealthCheck(eventStoreConnection),
+                sp => sp.GetRequiredService<EventStoreHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));

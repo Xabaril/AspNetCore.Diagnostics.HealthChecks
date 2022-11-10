@@ -1,10 +1,11 @@
 namespace HealthChecks.EventStore
 {
-    public class EventStoreHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class EventStoreHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck, System.IDisposable
     {
         public EventStoreHealthCheck(EventStore.ClientAPI.IEventStoreConnection eventStoreConnection) { }
         public EventStoreHealthCheck(string eventStoreConnection, string? login, string? password) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+        public void Dispose() { }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection

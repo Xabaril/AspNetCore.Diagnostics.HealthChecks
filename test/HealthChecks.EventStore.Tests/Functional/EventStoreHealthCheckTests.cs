@@ -21,7 +21,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddEventStore(connection, tags: new[] { "eventstore" });
+                        .AddEventStore(connection, tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
@@ -126,11 +126,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500",
-                            tags: new[]
-                            {
-                                "eventstore"
-                            });
+                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
@@ -158,11 +154,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500",
-                            tags: new[]
-                            {
-                                "eventstore"
-                            });
+                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
@@ -195,11 +187,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 {
                     services.AddHealthChecks()
                         // Wrong port, correct hostname - Inaccessible hostname results in a timeout
-                        .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500",
-                            tags: new[]
-                            {
-                                "eventstore"
-                            });
+                        .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {

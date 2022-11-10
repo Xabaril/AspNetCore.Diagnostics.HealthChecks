@@ -110,11 +110,13 @@ namespace HealthChecks.EventStore.Tests.Functional
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
+
             var secondResponse = await server.CreateRequest($"/health")
                 .GetAsync();
 
             response.StatusCode
                 .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+
             secondResponse.StatusCode
                 .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
@@ -170,11 +172,13 @@ namespace HealthChecks.EventStore.Tests.Functional
 
             var response = await server.CreateRequest($"/health")
                 .GetAsync();
+
             var secondResponse = await server.CreateRequest($"/health")
                 .GetAsync();
 
             response.StatusCode
                 .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+
             secondResponse.StatusCode
                 .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }

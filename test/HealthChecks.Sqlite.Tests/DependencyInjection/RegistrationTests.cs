@@ -15,8 +15,8 @@ namespace HealthChecks.Sqlite.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("sqlite");
-            check.GetType().Should().Be(typeof(SqliteHealthCheck));
+            registration.Name.ShouldBe("sqlite");
+            check.ShouldBeOfType<SqliteHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.Sqlite.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-sqlite");
-            check.GetType().Should().Be(typeof(SqliteHealthCheck));
+            registration.Name.ShouldBe("my-sqlite");
+            check.ShouldBeOfType<SqliteHealthCheck>();
         }
     }
 }

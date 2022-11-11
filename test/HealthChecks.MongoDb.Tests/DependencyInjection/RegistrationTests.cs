@@ -17,8 +17,8 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("mongodb");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("mongodb");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
         [Fact]
         public void add_health_check_when_properly_configured_mongoClientSettings()
@@ -33,8 +33,8 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("mongodb");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("mongodb");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_connectionString()
@@ -49,8 +49,8 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-mongodb-group");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("my-mongodb-group");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_mongoClientSettings()
@@ -65,8 +65,8 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-mongodb-group");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("my-mongodb-group");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
     }
 }

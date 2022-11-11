@@ -36,7 +36,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-              .Should().Be(HttpStatusCode.OK);
+              .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                                        .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.OK);
+                    .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
                                        .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.ServiceUnavailable);
+                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -186,11 +186,11 @@ namespace HealthChecks.Npgsql.Tests.Functional
 
             var testLoggerProvider = (TestLoggerProvider)server.Services.GetRequiredService<ILoggerProvider>();
 
-            testLoggerProvider.Should().NotBeNull();
+            testLoggerProvider.ShouldNotBeNull();
             var logger = testLoggerProvider.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");
 
-            logger.Should().NotBeNull();
-            logger?._eventLog[0].Item2.Should().NotContain("with message '(null)'");
+            logger.ShouldNotBeNull();
+            logger?._eventLog[0].Item2.ShouldNotContain("with message '(null)'");
         }
     }
 }

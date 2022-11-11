@@ -15,8 +15,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwin");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwin");
+            check.ShouldBeOfType<AzureDigitalTwinSubscriptionHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwincheck");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwincheck");
+            check.ShouldBeOfType<AzureDigitalTwinSubscriptionHealthCheck>();
         }
 
         [Fact]
@@ -64,8 +64,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwin");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwin");
+            check.ShouldBeOfType<AzureDigitalTwinSubscriptionHealthCheck>();
         }
 
         [Fact]
@@ -81,8 +81,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwincheck");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinSubscriptionHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwincheck");
+            check.ShouldBeOfType<AzureDigitalTwinSubscriptionHealthCheck>();
         }
 
         [Fact]

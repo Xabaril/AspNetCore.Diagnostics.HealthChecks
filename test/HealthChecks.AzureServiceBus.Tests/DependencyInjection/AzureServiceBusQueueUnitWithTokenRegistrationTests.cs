@@ -17,8 +17,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azurequeue");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
+            registration.Name.ShouldBe("azurequeue");
+            check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
         }
 
         [Fact]
@@ -49,11 +49,11 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azurequeue");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-            endpointFactoryCalled.Should().BeTrue();
-            queueNameFactoryCalled.Should().BeTrue();
-            tokenCredentialFactoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("azurequeue");
+            check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+            endpointFactoryCalled.ShouldBeTrue();
+            queueNameFactoryCalled.ShouldBeTrue();
+            tokenCredentialFactoryCalled.ShouldBeTrue();
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureservicebusqueuecheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
+            registration.Name.ShouldBe("azureservicebusqueuecheck");
+            check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
         }
 
         [Fact]
@@ -103,11 +103,11 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureservicebusqueuecheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-            endpointFactoryCalled.Should().BeTrue();
-            queueNameFactoryCalled.Should().BeTrue();
-            tokenCredentialFactoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("azureservicebusqueuecheck");
+            check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+            endpointFactoryCalled.ShouldBeTrue();
+            queueNameFactoryCalled.ShouldBeTrue();
+            tokenCredentialFactoryCalled.ShouldBeTrue();
         }
 
         [Fact]

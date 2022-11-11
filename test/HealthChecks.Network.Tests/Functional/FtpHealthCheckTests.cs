@@ -32,7 +32,7 @@ namespace HealthChecks.Network.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+            response.StatusCode.ShouldBe((HttpStatusCode)StatusCodes.Status200OK);
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace HealthChecks.Network.Tests.Functional
                     null, timeout: null)
             }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
-            result.Exception.Should().BeOfType<OperationCanceledException>();
+            result.Exception.ShouldBeOfType<OperationCanceledException>();
         }
     }
 }

@@ -17,8 +17,8 @@ namespace HealthChecks.Kafka.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("kafka");
-            check.GetType().Should().Be(typeof(KafkaHealthCheck));
+            registration.Name.ShouldBe("kafka");
+            check.ShouldBeOfType<KafkaHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -33,8 +33,8 @@ namespace HealthChecks.Kafka.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-kafka-group");
-            check.GetType().Should().Be(typeof(KafkaHealthCheck));
+            registration.Name.ShouldBe("my-kafka-group");
+            check.ShouldBeOfType<KafkaHealthCheck>();
         }
     }
 }

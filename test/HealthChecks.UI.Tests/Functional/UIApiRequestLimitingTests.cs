@@ -52,8 +52,8 @@ namespace HealthChecks.UI.Tests
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
-            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().Should().Be(requests.Count() - maxActiveRequests);
-            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().Should().Be(maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count() - maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
 
         [Fact]
@@ -101,10 +101,10 @@ namespace HealthChecks.UI.Tests
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests)
                 .Count()
-                .Should().Be(requests.Count() - serverSettings.ApiMaxActiveRequests);
+                .ShouldBe(requests.Count() - serverSettings.ApiMaxActiveRequests);
 
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count()
-                .Should().Be(serverSettings.ApiMaxActiveRequests);
+                .ShouldBe(serverSettings.ApiMaxActiveRequests);
         }
     }
 }

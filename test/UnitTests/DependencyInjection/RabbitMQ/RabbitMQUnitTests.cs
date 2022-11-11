@@ -20,8 +20,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(_defaultCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(_defaultCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
         }
 
         [Fact]
@@ -39,8 +39,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(customCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(customCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
         }
     }
 }

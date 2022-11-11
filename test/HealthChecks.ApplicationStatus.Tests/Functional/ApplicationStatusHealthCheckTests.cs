@@ -7,7 +7,7 @@ public class applicationstatus_healthcheck_should
     {
         var sut = new ApplicationStatusHealthCheck(new TestHostApplicationLifeTime());
         var result = await sut.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(false);
-        result.Should().Be(HealthCheckResult.Healthy());
+        result.ShouldBe(HealthCheckResult.Healthy());
     }
 
     [Fact]
@@ -19,6 +19,6 @@ public class applicationstatus_healthcheck_should
 
         var result = await sut.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(false);
 
-        result.Should().Be(HealthCheckResult.Unhealthy());
+        result.ShouldBe(HealthCheckResult.Unhealthy());
     }
 }

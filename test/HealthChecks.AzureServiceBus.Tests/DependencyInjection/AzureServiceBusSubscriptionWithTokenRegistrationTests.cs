@@ -17,8 +17,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscription");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+            registration.Name.ShouldBe("azuresubscription");
+            check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
         }
 
         [Fact]
@@ -57,12 +57,12 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscription");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
-            endpointFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
-            subscriptionNameFactoryCalled.Should().BeTrue();
-            tokenCredentialsFactoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("azuresubscription");
+            check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+            endpointFactoryCalled.ShouldBeTrue();
+            topicNameFactoryCalled.ShouldBeTrue();
+            subscriptionNameFactoryCalled.ShouldBeTrue();
+            tokenCredentialsFactoryCalled.ShouldBeTrue();
         }
 
         [Fact]
@@ -79,8 +79,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscriptioncheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
+            registration.Name.ShouldBe("azuresubscriptioncheck");
+            check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
         }
 
         [Fact]
@@ -120,12 +120,12 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscriptioncheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
-            endpointFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
-            subscriptionNameFactoryCalled.Should().BeTrue();
-            tokenCredentialsFactoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("azuresubscriptioncheck");
+            check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+            endpointFactoryCalled.ShouldBeTrue();
+            topicNameFactoryCalled.ShouldBeTrue();
+            subscriptionNameFactoryCalled.ShouldBeTrue();
+            tokenCredentialsFactoryCalled.ShouldBeTrue();
         }
 
         [Fact]

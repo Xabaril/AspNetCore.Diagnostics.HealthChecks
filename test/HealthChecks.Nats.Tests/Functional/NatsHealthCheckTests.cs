@@ -13,19 +13,19 @@ namespace HealthChecks.Nats.Tests.Functional
         public Task be_healthy_if_nats_is_available_locally() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                async response => response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
 
         [Fact]
         public Task be_healthy_for_official_demo_instance() =>
             FactAsync(
                 setup => setup.Url = DemoConnectionString,
-                async response => response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
 
         [Fact]
         public Task be_healthy_if_nats_is_available_and_has_custom_name() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                async response => response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()),
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()),
                 name: "Demo");
 
         [Fact]
@@ -34,11 +34,11 @@ namespace HealthChecks.Nats.Tests.Functional
                 setup => setup.Url = ConnectionStringDoesNotExistOrStopped,
                 async response =>
                 {
-                    response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+                    response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
                     var content = await response.Content.ReadAsStringAsync();
                     var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
-                    report.Status.Should().Be(UIHealthStatus.Unhealthy);
-                    report.Entries["nats"].Exception.Should().Be("Failed to connect");
+                    report.Status.ShouldBe(UIHealthStatus.Unhealthy);
+                    report.Entries["nats"].Exception.ShouldBe("Failed to connect");
 
                 });
 
@@ -48,11 +48,11 @@ namespace HealthChecks.Nats.Tests.Functional
                 setup => setup.Url = "bogus",
                 async response =>
                 {
-                    response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+                    response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
                     var content = await response.Content.ReadAsStringAsync();
                     var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
-                    report.Status.Should().Be(UIHealthStatus.Unhealthy);
-                    report.Entries["nats"].Exception.Should().Be("Failed to connect");
+                    report.Status.ShouldBe(UIHealthStatus.Unhealthy);
+                    report.Entries["nats"].Exception.ShouldBe("Failed to connect");
                 });
 
         [Fact]
@@ -63,7 +63,7 @@ namespace HealthChecks.Nats.Tests.Functional
                     setup.Url = DefaultLocalConnectionString;
                     setup.CredentialsPath = CredentialsPathDoesnExist;
                 },
-                response => response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable),
+                response => response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable),
                 name: CredentialsPathDoesnExist);
 
         [Fact]
@@ -76,7 +76,7 @@ namespace HealthChecks.Nats.Tests.Functional
                     setup.Jwt = "jwt";
                     setup.PrivateNKey = CredentialsPathDoesnExist;
                 },
-                response => response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable),
+                response => response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable),
                 name: CredentialsPathDoesnExist);
 
         private async Task FactAsync(Action<NatsOptions> setupAction, Action<HttpResponseMessage> assertAction, string? name = null)

@@ -18,13 +18,13 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(DEFAULT_CHECK_NAME);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(DEFAULT_CHECK_NAME);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
 
             ((RabbitMQHealthCheck)check).Dispose();
             var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
-            result.Status.Should().Be(HealthStatus.Unhealthy);
-            result.Exception!.GetType().Should().Be(typeof(ObjectDisposedException));
+            result.Status.ShouldBe(HealthStatus.Unhealthy);
+            result.Exception!.GetType().ShouldBe(typeof(ObjectDisposedException));
         }
 
         [Fact]
@@ -42,13 +42,13 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(customCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(customCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
 
             ((RabbitMQHealthCheck)check).Dispose();
             var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
-            result.Status.Should().Be(HealthStatus.Unhealthy);
-            result.Exception!.GetType().Should().Be(typeof(ObjectDisposedException));
+            result.Status.ShouldBe(HealthStatus.Unhealthy);
+            result.Exception!.GetType().ShouldBe(typeof(ObjectDisposedException));
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(customCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(customCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
         }
 
         [Fact]
@@ -93,8 +93,8 @@ namespace HealthChecks.RabbitMQ.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(customCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(customCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
         }
     }
 

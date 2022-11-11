@@ -29,7 +29,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
         [Fact]
         public async Task be_healthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist()
@@ -84,7 +84,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
         [Fact]
         public async Task be_unhealthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist()
@@ -111,7 +111,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -163,7 +163,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureeventhub");
-            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            registration.Name.ShouldBe("azureeventhub");
+            check.ShouldBeOfType<AzureEventHubHealthCheck>();
         }
 
         [Fact]
@@ -37,8 +37,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureeventhub");
-            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            registration.Name.ShouldBe("azureeventhub");
+            check.ShouldBeOfType<AzureEventHubHealthCheck>();
         }
 
         [Fact]
@@ -55,8 +55,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureeventhubcheck");
-            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            registration.Name.ShouldBe("azureeventhubcheck");
+            check.ShouldBeOfType<AzureEventHubHealthCheck>();
         }
 
         [Fact]
@@ -74,8 +74,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureeventhubcheck");
-            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
+            registration.Name.ShouldBe("azureeventhubcheck");
+            check.ShouldBeOfType<AzureEventHubHealthCheck>();
         }
 
         [Fact]
@@ -116,10 +116,10 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureeventhub");
-            check.GetType().Should().Be(typeof(AzureEventHubHealthCheck));
-            connectionStringFactoryCalled.Should().BeTrue();
-            eventHubNameFactoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("azureeventhub");
+            check.ShouldBeOfType<AzureEventHubHealthCheck>();
+            connectionStringFactoryCalled.ShouldBeTrue();
+            eventHubNameFactoryCalled.ShouldBeTrue();
         }
     }
 }

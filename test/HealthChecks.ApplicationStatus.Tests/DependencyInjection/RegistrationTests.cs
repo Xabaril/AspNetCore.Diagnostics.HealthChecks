@@ -20,8 +20,8 @@ public class applicationstatus_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("applicationstatus");
-        check.GetType().Should().Be(typeof(ApplicationStatusHealthCheck));
+        registration.Name.ShouldBe("applicationstatus");
+        check.ShouldBeOfType<ApplicationStatusHealthCheck>();
     }
 
     [Fact]
@@ -39,8 +39,8 @@ public class applicationstatus_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("custom-status");
-        check.GetType().Should().Be(typeof(ApplicationStatusHealthCheck));
+        registration.Name.ShouldBe("custom-status");
+        check.ShouldBeOfType<ApplicationStatusHealthCheck>();
     }
 
     [Fact]
@@ -56,8 +56,8 @@ public class applicationstatus_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("applicationstatus");
-        check.GetType().Should().Be(typeof(ApplicationStatusHealthCheck));
+        registration.Name.ShouldBe("applicationstatus");
+        check.ShouldBeOfType<ApplicationStatusHealthCheck>();
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class applicationstatus_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("custom-status");
-        check.GetType().Should().Be(typeof(ApplicationStatusHealthCheck));
+        registration.Name.ShouldBe("custom-status");
+        check.ShouldBeOfType<ApplicationStatusHealthCheck>();
     }
 }

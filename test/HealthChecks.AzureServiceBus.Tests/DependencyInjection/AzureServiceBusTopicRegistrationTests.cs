@@ -15,8 +15,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopic");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            registration.Name.ShouldBe("azuretopic");
+            check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
         }
 
         [Fact]
@@ -33,8 +33,8 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopiccheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
+            registration.Name.ShouldBe("azuretopiccheck");
+            check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
         }
 
         [Fact]
@@ -75,10 +75,10 @@ namespace HealthChecks.AzureServiceBus.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopic");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
-            connectionStringFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("azuretopic");
+            check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
+            connectionStringFactoryCalled.ShouldBeTrue();
+            topicNameFactoryCalled.ShouldBeTrue();
         }
     }
 }

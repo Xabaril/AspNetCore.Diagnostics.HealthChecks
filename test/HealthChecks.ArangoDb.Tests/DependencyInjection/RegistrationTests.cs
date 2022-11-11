@@ -15,8 +15,8 @@ namespace HealthChecks.ArangoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("arangodb");
-            check.GetType().Should().Be(typeof(ArangoDbHealthCheck));
+            registration.Name.ShouldBe("arangodb");
+            check.ShouldBeOfType<ArangoDbHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.ArangoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-arango");
-            check.GetType().Should().Be(typeof(ArangoDbHealthCheck));
+            registration.Name.ShouldBe("my-arango");
+            check.ShouldBeOfType<ArangoDbHealthCheck>();
         }
     }
 }

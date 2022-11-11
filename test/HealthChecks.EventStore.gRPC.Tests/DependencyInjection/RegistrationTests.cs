@@ -32,7 +32,7 @@ public class eventstore_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("eventstore");
+        registration.Name.ShouldBe("eventstore");
         check.ShouldBeOfType<ApplicationStatusHealthCheck>();
     }
 

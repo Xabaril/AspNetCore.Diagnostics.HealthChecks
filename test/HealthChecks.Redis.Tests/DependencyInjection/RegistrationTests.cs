@@ -15,8 +15,8 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("redis");
-            check.GetType().Should().Be(typeof(RedisHealthCheck));
+            registration.Name.ShouldBe("redis");
+            check.ShouldBeOfType<RedisHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-redis");
-            check.GetType().Should().Be(typeof(RedisHealthCheck));
+            registration.Name.ShouldBe("my-redis");
+            check.ShouldBeOfType<RedisHealthCheck>();
         }
 
         [Fact]
@@ -54,9 +54,9 @@ namespace HealthChecks.Redis.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("redis");
-            check.GetType().Should().Be(typeof(RedisHealthCheck));
-            factoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("redis");
+            check.ShouldBeOfType<RedisHealthCheck>();
+            factoryCalled.ShouldBeTrue();
         }
     }
 }

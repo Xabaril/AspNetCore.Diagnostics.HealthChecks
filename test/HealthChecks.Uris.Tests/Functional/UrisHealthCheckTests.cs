@@ -29,7 +29,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [InlineData(199)]
@@ -115,7 +115,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.ServiceUnavailable);
+                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.ServiceUnavailable);
+                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
         [Fact]
         public async Task be_unhealthy_if_request_is_timeout_using_default_timeout()
@@ -174,7 +174,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.ServiceUnavailable);
+                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
         [Fact]
         public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
@@ -205,7 +205,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.OK);
+                    .ShouldBe(HttpStatusCode.OK);
         }
         [Fact]
         public async Task be_healthy_if_request_success_and_timeout_is_configured()
@@ -232,7 +232,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                    .Should().Be(HttpStatusCode.OK);
+                    .ShouldBe(HttpStatusCode.OK);
         }
     }
 }

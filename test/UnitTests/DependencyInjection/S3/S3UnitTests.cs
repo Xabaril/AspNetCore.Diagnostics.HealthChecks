@@ -18,8 +18,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.S3
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("aws s3");
-            check.GetType().Should().Be(typeof(S3HealthCheck));
+            registration.Name.ShouldBe("aws s3");
+            check.ShouldBeOfType<S3HealthCheck>();
         }
 
         [Fact]
@@ -35,8 +35,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.S3
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-s3-group");
-            check.GetType().Should().Be(typeof(S3HealthCheck));
+            registration.Name.ShouldBe("my-s3-group");
+            check.ShouldBeOfType<S3HealthCheck>();
         }
     }
 }

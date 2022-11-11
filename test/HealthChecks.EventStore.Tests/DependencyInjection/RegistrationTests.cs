@@ -17,8 +17,8 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("eventstore");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
+            registration.Name.ShouldBe("eventstore");
+            check.ShouldBeOfType<EventStoreHealthCheck>();
         }
 
         [Fact]
@@ -34,8 +34,8 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("eventstore");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
+            registration.Name.ShouldBe("eventstore");
+            check.ShouldBeOfType<EventStoreHealthCheck>();
         }
 
         [Fact]
@@ -51,8 +51,8 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-group");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
+            registration.Name.ShouldBe("my-group");
+            check.ShouldBeOfType<EventStoreHealthCheck>();
         }
     }
 }

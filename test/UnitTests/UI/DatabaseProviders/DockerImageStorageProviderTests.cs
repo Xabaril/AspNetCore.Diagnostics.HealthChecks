@@ -49,7 +49,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(SqlProviderName);
+            context.Database.ProviderName.ShouldBe(SqlProviderName);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(SqliteProviderName);
+            context.Database.ProviderName.ShouldBe(SqliteProviderName);
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(PostgreProviderName);
+            context.Database.ProviderName.ShouldBe(PostgreProviderName);
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(InMemoryProviderName);
+            context.Database.ProviderName.ShouldBe(InMemoryProviderName);
         }
 
         [Fact]
@@ -181,7 +181,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(InMemoryProviderName);
+            context.Database.ProviderName.ShouldBe(InMemoryProviderName);
         }
 
         [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
@@ -205,7 +205,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(MySqlProviderName);
+            context.Database.ProviderName.ShouldBe(MySqlProviderName);
         }
 
         [Fact]

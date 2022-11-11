@@ -30,7 +30,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -187,7 +187,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -221,7 +221,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             var response1 = await server.CreateRequest($"/health").GetAsync();
             response1.StatusCode
-               .Should().Be(HttpStatusCode.ServiceUnavailable);
+               .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -251,7 +251,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
     }
 }

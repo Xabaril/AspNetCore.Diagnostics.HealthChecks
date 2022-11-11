@@ -15,8 +15,8 @@ namespace HealthChecks.IdSvr.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("idsvr");
-            check.GetType().Should().Be(typeof(IdSvrHealthCheck));
+            registration.Name.ShouldBe("idsvr");
+            check.ShouldBeOfType<IdSvrHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -31,8 +31,8 @@ namespace HealthChecks.IdSvr.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-idsvr-group");
-            check.GetType().Should().Be(typeof(IdSvrHealthCheck));
+            registration.Name.ShouldBe("my-idsvr-group");
+            check.ShouldBeOfType<IdSvrHealthCheck>();
         }
         [Fact]
         public void add_health_check_when_properly_configured_with_uri_provider()
@@ -47,8 +47,8 @@ namespace HealthChecks.IdSvr.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("idsvr");
-            check.GetType().Should().Be(typeof(IdSvrHealthCheck));
+            registration.Name.ShouldBe("idsvr");
+            check.ShouldBeOfType<IdSvrHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_with_uri_provider()
@@ -63,8 +63,8 @@ namespace HealthChecks.IdSvr.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-idsvr-group");
-            check.GetType().Should().Be(typeof(IdSvrHealthCheck));
+            registration.Name.ShouldBe("my-idsvr-group");
+            check.ShouldBeOfType<IdSvrHealthCheck>();
         }
     }
 }

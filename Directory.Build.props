@@ -41,7 +41,6 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
-    <PackageReference Include="FluentAssertions" Version="6.7.0" />
     <PackageReference Include="Shouldly" Version="4.1.0" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
@@ -67,7 +66,6 @@
     <Using Include="Microsoft.Extensions.DependencyInjection" />
     <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.Extensions.Options" />
-    <Using Include="FluentAssertions" />
     <Using Include="Shouldly" />
     <Using Include="Xunit" />
   </ItemGroup>

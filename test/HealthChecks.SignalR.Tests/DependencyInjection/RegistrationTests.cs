@@ -14,8 +14,8 @@ namespace HealthChecks.SignalR.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("signalr");
-            check.Should().BeOfType<SignalRHealthCheck>();
+            registration.Name.ShouldBe("signalr");
+            check.ShouldBeOfType<SignalRHealthCheck>();
         }
     }
 }

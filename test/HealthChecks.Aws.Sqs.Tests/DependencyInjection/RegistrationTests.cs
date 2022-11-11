@@ -22,8 +22,8 @@ public class aws_sqs_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sqs");
-        check.GetType().Should().Be(typeof(SqsHealthCheck));
+        registration.Name.ShouldBe("aws sqs");
+        check.ShouldBeOfType<SqsHealthCheck>();
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class aws_sqs_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sqs");
-        check.GetType().Should().Be(typeof(SqsHealthCheck));
+        registration.Name.ShouldBe("aws sqs");
+        check.ShouldBeOfType<SqsHealthCheck>();
     }
 
     [Fact]
@@ -60,8 +60,8 @@ public class aws_sqs_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssqs");
-        check.GetType().Should().Be(typeof(SqsHealthCheck));
+        registration.Name.ShouldBe("awssqs");
+        check.ShouldBeOfType<SqsHealthCheck>();
     }
 
     [Fact]
@@ -79,9 +79,9 @@ public class aws_sqs_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssqs");
-        check.GetType().Should().Be(typeof(SqsHealthCheck));
-        setupCalled.Should().BeTrue();
+        registration.Name.ShouldBe("awssqs");
+        check.ShouldBeOfType<SqsHealthCheck>();
+        setupCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -97,8 +97,8 @@ public class aws_sqs_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sqs");
-        check.GetType().Should().Be(typeof(SqsHealthCheck));
+        registration.Name.ShouldBe("aws sqs");
+        check.ShouldBeOfType<SqsHealthCheck>();
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public class aws_sqs_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sqs");
-        check.GetType().Should().Be(typeof(SqsHealthCheck));
+        registration.Name.ShouldBe("aws sqs");
+        check.ShouldBeOfType<SqsHealthCheck>();
     }
 }

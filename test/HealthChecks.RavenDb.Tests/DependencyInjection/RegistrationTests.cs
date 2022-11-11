@@ -17,8 +17,8 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ravendb");
-            check.GetType().Should().Be(typeof(RavenDBHealthCheck));
+            registration.Name.ShouldBe("ravendb");
+            check.ShouldBeOfType<RavenDBHealthCheck>();
         }
 
         [Fact]
@@ -35,8 +35,8 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-ravendb");
-            check.GetType().Should().Be(typeof(RavenDBHealthCheck));
+            registration.Name.ShouldBe("my-ravendb");
+            check.ShouldBeOfType<RavenDBHealthCheck>();
         }
 
         [Fact]
@@ -52,8 +52,8 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ravendb");
-            check.GetType().Should().Be(typeof(RavenDBHealthCheck));
+            registration.Name.ShouldBe("ravendb");
+            check.ShouldBeOfType<RavenDBHealthCheck>();
         }
 
         [Fact]
@@ -69,8 +69,8 @@ namespace HealthChecks.RavenDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-ravendb");
-            check.GetType().Should().Be(typeof(RavenDBHealthCheck));
+            registration.Name.ShouldBe("my-ravendb");
+            check.ShouldBeOfType<RavenDBHealthCheck>();
         }
     }
 }

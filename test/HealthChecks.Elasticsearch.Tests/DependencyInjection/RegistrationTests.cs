@@ -15,8 +15,8 @@ namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("elasticsearch");
-            check.GetType().Should().Be(typeof(ElasticsearchHealthCheck));
+            registration.Name.ShouldBe("elasticsearch");
+            check.ShouldBeOfType<ElasticsearchHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-elasticsearch");
-            check.GetType().Should().Be(typeof(ElasticsearchHealthCheck));
+            registration.Name.ShouldBe("my-elasticsearch");
+            check.ShouldBeOfType<ElasticsearchHealthCheck>();
         }
     }
 }

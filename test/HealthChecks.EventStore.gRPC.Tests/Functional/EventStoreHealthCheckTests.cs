@@ -27,7 +27,7 @@ public class eventstore_healthcheck_should
             .GetAsync();
 
         response.StatusCode
-            .Should().Be(HttpStatusCode.OK);
+            .ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class eventstore_healthcheck_should
             .GetAsync();
 
         response.StatusCode
-            .Should().Be(HttpStatusCode.ServiceUnavailable);
+            .ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
     [Fact]
@@ -79,6 +79,6 @@ public class eventstore_healthcheck_should
             .GetAsync();
 
         response.StatusCode
-            .Should().Be(HttpStatusCode.ServiceUnavailable);
+            .ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

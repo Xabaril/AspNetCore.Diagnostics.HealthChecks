@@ -33,7 +33,7 @@ public class eventstore_registration_should
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("eventstore");
-        check.ShouldBeOfType<ApplicationStatusHealthCheck>();
+        check.ShouldBeOfType<EventStoreHealthCheck>();
     }
 
     [Fact]

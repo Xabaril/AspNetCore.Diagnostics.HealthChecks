@@ -65,8 +65,9 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
+                    // Existing hostname, incorrect port. If the hostname cannot be reached, CreateRequest will hang.
                     services.AddHealthChecks()
-                    .AddEventStore("tcp://nonexistingdomain:1113", tags: new string[] { "eventstore" });
+                    .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {

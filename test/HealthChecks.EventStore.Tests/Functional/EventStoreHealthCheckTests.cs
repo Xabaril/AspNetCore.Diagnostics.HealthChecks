@@ -118,7 +118,8 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
 
             secondResponse.StatusCode
-                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+                .Should().Be(HttpStatusCode.OK, await secondResponse.Content.ReadAsStringAsync());
+
         }
 
         [Fact]

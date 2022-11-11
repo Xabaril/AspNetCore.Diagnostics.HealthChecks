@@ -189,8 +189,8 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
+                    // Wrong port, correct hostname - Inaccessible hostname results in a timeout
                     services.AddHealthChecks()
-                        // Wrong port, correct hostname - Inaccessible hostname results in a timeout
                         .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>

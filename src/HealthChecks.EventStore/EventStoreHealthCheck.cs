@@ -48,7 +48,7 @@ namespace HealthChecks.EventStore
                     connectionSettings,
                     CONNECTION_NAME))
                 {
-                    var tcs = new TaskCompletionSource<HealthCheckResult>();
+                    var tcs = new TaskCompletionSource<HealthCheckResult>(TaskCreationOptions.RunContinuationsAsynchronously);
 
                     //connected
                     connection.Connected += (s, e) => tcs.TrySetResult(HealthCheckResult.Healthy());

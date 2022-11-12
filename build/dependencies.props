@@ -22,8 +22,8 @@
     <HealthCheckDocumentDb>6.0.2</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>6.0.2</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>6.0.2</HealthCheckElasticsearch>
-    <HealthCheckEventStoregRPC>6.0.0</HealthCheckEventStoregRPC>
-    <HealthCheckEventStore>6.0.2</HealthCheckEventStore>
+    <HealthCheckEventStoregRPC>6.0.1</HealthCheckEventStoregRPC>
+    <HealthCheckEventStore>6.0.3</HealthCheckEventStore>
     <HealthCheckGremlin>6.0.2</HealthCheckGremlin>
     <HealthCheckHangfire>6.0.2</HealthCheckHangfire>
     <HealthCheckIbmMQ>6.0.2</HealthCheckIbmMQ>

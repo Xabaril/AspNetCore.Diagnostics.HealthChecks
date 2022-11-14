@@ -85,6 +85,76 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for specified Azure Event Hub.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="endpoint">The azure event hub fully qualified namespace.</param>
+        /// <param name="eventHubName">The azure event hub name.</param>
+        /// <param name="tokenCredential">The token credential for auth.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureeventhub' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureEventHub(
+            this IHealthChecksBuilder builder,
+            string endpoint,
+            string eventHubName,
+            TokenCredential tokenCredential,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default) =>
+            builder.AddAzureEventHub(
+                _ => endpoint,
+                _ => eventHubName,
+                _ => tokenCredential,
+                name,
+                failureStatus,
+                tags,
+                timeout);
+
+        /// <summary>
+        /// Add a health check for specified Azure Event Hub.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="endpointFactory">A factory to build the azure event hub fully qualified namespace.</param>
+        /// <param name="eventHubNameFactory">A factory to build the azure event hub name.</param>
+        /// <param name="tokenCredentialFactory">A factory to build the token credential for auth.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureeventhub' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddAzureEventHub(
+            this IHealthChecksBuilder builder,
+            Func<IServiceProvider, string> endpointFactory,
+            Func<IServiceProvider, string> eventHubNameFactory,
+            Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
+        {
+            Guard.ThrowIfNull(endpointFactory);
+            Guard.ThrowIfNull(eventHubNameFactory);
+            Guard.ThrowIfNull(tokenCredentialFactory);
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? AZUREEVENTHUB_NAME,
+                sp => new AzureEventHubHealthCheck(endpointFactory(sp), eventHubNameFactory(sp), tokenCredentialFactory(sp)),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        /// <summary>
+        /// Add a health check for specified Azure Event Hub.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="eventHubConnectionFactory">The event hub connection factory used to create a event hub connection for this health check.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azureeventhub' will be used for the name.</param>
         /// <param name="failureStatus">

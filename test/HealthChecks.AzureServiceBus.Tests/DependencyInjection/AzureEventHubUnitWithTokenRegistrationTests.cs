@@ -122,7 +122,8 @@ namespace HealthChecks.AzureServiceBus.Tests
 
             var registration = options.Value.Registrations.First();
 
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+            var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
+            exception.ParamName.ShouldBe("endpoint");
         }
     }
 }

@@ -14,11 +14,11 @@
     <HealthCheckAWSSqs>6.0.0</HealthCheckAWSSqs>
     <HealthCheckAWSSystemsManager>6.0.0</HealthCheckAWSSystemsManager>
     <HealthCheckAzureDigitalTwin>6.0.0</HealthCheckAzureDigitalTwin>
-    <HealthCheckAzureServiceBus>6.0.4</HealthCheckAzureServiceBus>
-    <HealthCheckAzureStorage>6.1.1</HealthCheckAzureStorage>
+    <HealthCheckAzureServiceBus>6.1.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureStorage>6.1.2</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>6.0.2</HealthCheckCloudFirestore>
     <HealthCheckConsul>6.0.2</HealthCheckConsul>
-    <HealthCheckCosmosDb>6.2.0</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>6.2.1</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>6.0.2</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>6.0.2</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>6.0.2</HealthCheckElasticsearch>

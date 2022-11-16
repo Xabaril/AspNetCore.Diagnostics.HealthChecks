@@ -13,6 +13,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
     private readonly string? _endpoint;
     private readonly string? _eventHubName;
     private readonly TokenCredential? _tokenCredential;
+    private readonly EventHubConnection? _connection;
 
     private string? _connectionKey;
 
@@ -25,17 +26,14 @@ public class AzureEventHubHealthCheck : IHealthCheck
         Guard.ThrowIfNull(eventHubName, true);
 
         _connectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
-
-        ClientCache.GetOrAdd(ConnectionKey, key => new EventHubProducerClient(key));
     }
 
     public AzureEventHubHealthCheck(EventHubConnection connection)
     {
         Guard.ThrowIfNull(connection);
 
-        _connectionString = $"{connection.FullyQualifiedNamespace};{ENTITY_PATH_SEGMENT}{connection.EventHubName}";
-
-        ClientCache.GetOrAdd(ConnectionKey, _ => new EventHubProducerClient(connection));
+        _connectionKey = $"{connection.FullyQualifiedNamespace}_{connection.EventHubName}";
+        _connection = connection;
     }
 
     public AzureEventHubHealthCheck(string endpoint, string eventHubName, TokenCredential tokenCredential)
@@ -43,16 +41,15 @@ public class AzureEventHubHealthCheck : IHealthCheck
         _endpoint = Guard.ThrowIfNull(endpoint, true);
         _eventHubName = Guard.ThrowIfNull(eventHubName, true);
         _tokenCredential = Guard.ThrowIfNull(tokenCredential);
-
-        ClientCache.GetOrAdd(ConnectionKey,
-            _ => new EventHubProducerClient(_endpoint, _eventHubName, _tokenCredential));
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            var client = ClientCache.GetOrAdd(ConnectionKey, _ => CreateClient());
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey,
+                async _ => await Task.FromResult(CreateClient()));
+
             _ = await client.GetEventHubPropertiesAsync(cancellationToken);
 
             return HealthCheckResult.Healthy();
@@ -63,7 +60,14 @@ public class AzureEventHubHealthCheck : IHealthCheck
         }
     }
 
-    private EventHubProducerClient CreateClient() => _tokenCredential == null
-        ? new EventHubProducerClient(_connectionString)
-        : new EventHubProducerClient(_endpoint, _eventHubName, _tokenCredential);
+    private EventHubProducerClient CreateClient()
+    {
+        if (_connectionString is not null)
+            return new EventHubProducerClient(_connectionString);
+
+        if (_connection is not null)
+            return new EventHubProducerClient(_connection);
+
+        return new EventHubProducerClient(_endpoint, _eventHubName, _tokenCredential);
+    }
 }

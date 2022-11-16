@@ -36,6 +36,22 @@ internal static class ClientCache
         return value;
     }
 
+    public static async ValueTask<T> GetOrAddAsyncDisposableAsync<T>(string key, Func<string, T> clientFactory) where T : IAsyncDisposable
+    {
+        if (Cache<T>.Instance.TryGetValue(key, out var value))
+            return value;
+
+        value = clientFactory(key);
+
+        if (!Cache<T>.Instance.TryAdd(key, value))
+        {
+            await value.DisposeAsync();
+            return Cache<T>.Instance[key];
+        }
+
+        return value;
+    }
+
     public static async ValueTask<T> GetOrAddAsyncDisposableAsync<T>(string key, Func<string, ValueTask<T>> clientFactory) where T : IAsyncDisposable
     {
         if (Cache<T>.Instance.TryGetValue(key, out var value))

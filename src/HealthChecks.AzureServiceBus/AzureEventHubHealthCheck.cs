@@ -1,63 +1,72 @@
-using System.Collections.Concurrent;
+using Azure.Core;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureServiceBus
+namespace HealthChecks.AzureServiceBus;
+
+public class AzureEventHubHealthCheck : IHealthCheck
 {
-    public class AzureEventHubHealthCheck : IHealthCheck
+    private const string ENTITY_PATH_SEGMENT = "EntityPath=";
+
+    private readonly string? _connectionString;
+    private readonly string? _endpoint;
+    private readonly string? _eventHubName;
+    private readonly TokenCredential? _tokenCredential;
+    private readonly EventHubConnection? _connection;
+
+    private string? _connectionKey;
+
+    private string ConnectionKey =>
+        _connectionKey ??= _connectionString ?? $"{_endpoint}_{_eventHubName}";
+
+    public AzureEventHubHealthCheck(string connectionString, string eventHubName)
     {
-        private const string ENTITY_PATH_SEGMENT = "EntityPath=";
+        Guard.ThrowIfNull(connectionString, true);
+        Guard.ThrowIfNull(eventHubName, true);
 
-        private static readonly ConcurrentDictionary<string, EventHubProducerClient> _eventHubConnections = new ConcurrentDictionary<string, EventHubProducerClient>();
-        private readonly string _eventHubConnectionString;
+        _connectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
+    }
 
-        public AzureEventHubHealthCheck(string connectionString, string eventHubName)
+    public AzureEventHubHealthCheck(EventHubConnection connection)
+    {
+        Guard.ThrowIfNull(connection);
+
+        _connectionKey = $"{connection.FullyQualifiedNamespace}_{connection.EventHubName}";
+        _connection = connection;
+    }
+
+    public AzureEventHubHealthCheck(string endpoint, string eventHubName, TokenCredential tokenCredential)
+    {
+        _endpoint = Guard.ThrowIfNull(endpoint, true);
+        _eventHubName = Guard.ThrowIfNull(eventHubName, true);
+        _tokenCredential = Guard.ThrowIfNull(tokenCredential);
+    }
+
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            Guard.ThrowIfNull(connectionString, true);
-            Guard.ThrowIfNull(eventHubName, true);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient());
 
-            _eventHubConnectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
+            _ = await client.GetEventHubPropertiesAsync(cancellationToken);
 
-            if (!_eventHubConnections.ContainsKey(_eventHubConnectionString))
-            {
-                _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(_eventHubConnectionString));
-            }
+            return HealthCheckResult.Healthy();
         }
-
-        public AzureEventHubHealthCheck(EventHubConnection connection)
+        catch (Exception ex)
         {
-            Guard.ThrowIfNull(connection);
-
-            _eventHubConnectionString = $"{connection.FullyQualifiedNamespace};{ENTITY_PATH_SEGMENT}{connection.EventHubName}";
-
-            if (!_eventHubConnections.ContainsKey(_eventHubConnectionString))
-            {
-                _eventHubConnections.TryAdd(_eventHubConnectionString, new EventHubProducerClient(connection));
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
+    }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                if (!_eventHubConnections.TryGetValue(_eventHubConnectionString, out var producer))
-                {
-                    producer = new EventHubProducerClient(_eventHubConnectionString);
+    private EventHubProducerClient CreateClient()
+    {
+        if (_connectionString is not null)
+            return new EventHubProducerClient(_connectionString);
 
-                    if (!_eventHubConnections.TryAdd(_eventHubConnectionString, producer))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "EventHubProducerClient can't be added into dictionary.");
-                    }
-                }
+        if (_connection is not null)
+            return new EventHubProducerClient(_connection);
 
-                _ = await producer.GetEventHubPropertiesAsync(cancellationToken);
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
-        }
+        return new EventHubProducerClient(_endpoint, _eventHubName, _tokenCredential);
     }
 }

@@ -2,14 +2,14 @@ using Azure.Identity;
 
 namespace HealthChecks.AzureServiceBus.Tests;
 
-public class azure_service_bus_subscription_registration_with_token_should
+public class azure_event_hub_registration_with_token_should
 {
     [Fact]
     public void add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName", new AzureCliCredential());
+            .AddAzureEventHub("cnn", "eventHubName", new AzureCliCredential());
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -17,37 +17,29 @@ public class azure_service_bus_subscription_registration_with_token_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("azuresubscription");
-        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        registration.Name.ShouldBe("azureeventhub");
+        check.ShouldBeOfType<AzureEventHubHealthCheck>();
     }
 
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
         var services = new ServiceCollection();
-        bool endpointFactoryCalled = false,
-            topicNameFactoryCalled = false,
-            subscriptionNameFactoryCalled = false,
-            tokenCredentialsFactoryCalled = false;
+        bool endpointFactoryCalled = false, eventHubNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
         services.AddHealthChecks()
-            .AddAzureServiceBusSubscription(_ =>
+            .AddAzureEventHub(_ =>
                 {
                     endpointFactoryCalled = true;
                     return "cnn";
                 },
                 _ =>
                 {
-                    topicNameFactoryCalled = true;
-                    return "topicName";
+                    eventHubNameFactoryCalled = true;
+                    return "eventHubName";
                 },
                 _ =>
                 {
-                    subscriptionNameFactoryCalled = true;
-                    return "subscriptionName";
-                },
-                _ =>
-                {
-                    tokenCredentialsFactoryCalled = true;
+                    tokenCredentialFactoryCalled = true;
                     return new AzureCliCredential();
                 });
 
@@ -57,12 +49,11 @@ public class azure_service_bus_subscription_registration_with_token_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("azuresubscription");
-        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        registration.Name.ShouldBe("azureeventhub");
+        check.ShouldBeOfType<AzureEventHubHealthCheck>();
         endpointFactoryCalled.ShouldBeTrue();
-        topicNameFactoryCalled.ShouldBeTrue();
-        subscriptionNameFactoryCalled.ShouldBeTrue();
-        tokenCredentialsFactoryCalled.ShouldBeTrue();
+        eventHubNameFactoryCalled.ShouldBeTrue();
+        tokenCredentialFactoryCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -70,8 +61,8 @@ public class azure_service_bus_subscription_registration_with_token_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName", new AzureCliCredential(),
-                name: "azuresubscriptioncheck");
+            .AddAzureEventHub("cnn", "eventHubName", new AzureCliCredential(),
+                name: "azureeventhubcheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -79,40 +70,32 @@ public class azure_service_bus_subscription_registration_with_token_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("azuresubscriptioncheck");
-        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        registration.Name.ShouldBe("azureeventhubcheck");
+        check.ShouldBeOfType<AzureEventHubHealthCheck>();
     }
 
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
         var services = new ServiceCollection();
-        bool endpointFactoryCalled = false,
-            topicNameFactoryCalled = false,
-            subscriptionNameFactoryCalled = false,
-            tokenCredentialsFactoryCalled = false;
+        bool endpointFactoryCalled = false, eventHubNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
         services.AddHealthChecks()
-            .AddAzureServiceBusSubscription(_ =>
+            .AddAzureEventHub(_ =>
                 {
                     endpointFactoryCalled = true;
                     return "cnn";
                 },
                 _ =>
                 {
-                    topicNameFactoryCalled = true;
-                    return "topicName";
+                    eventHubNameFactoryCalled = true;
+                    return "eventHubName";
                 },
                 _ =>
                 {
-                    subscriptionNameFactoryCalled = true;
-                    return "subscriptionName";
-                },
-                _ =>
-                {
-                    tokenCredentialsFactoryCalled = true;
+                    tokenCredentialFactoryCalled = true;
                     return new AzureCliCredential();
                 },
-                "azuresubscriptioncheck");
+                "azureeventhubcheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -120,12 +103,11 @@ public class azure_service_bus_subscription_registration_with_token_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("azuresubscriptioncheck");
-        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        registration.Name.ShouldBe("azureeventhubcheck");
+        check.ShouldBeOfType<AzureEventHubHealthCheck>();
         endpointFactoryCalled.ShouldBeTrue();
-        topicNameFactoryCalled.ShouldBeTrue();
-        subscriptionNameFactoryCalled.ShouldBeTrue();
-        tokenCredentialsFactoryCalled.ShouldBeTrue();
+        eventHubNameFactoryCalled.ShouldBeTrue();
+        tokenCredentialFactoryCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -133,7 +115,7 @@ public class azure_service_bus_subscription_registration_with_token_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusSubscription(string.Empty, string.Empty, string.Empty, new AzureCliCredential());
+            .AddAzureEventHub(string.Empty, string.Empty, new AzureCliCredential());
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

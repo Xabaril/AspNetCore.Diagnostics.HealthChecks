@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);Data</PackageTags>
-    <Description>HealthChecks.UI.Data package containing builder and model definitions</Description>
+    <Description>HealthChecks.UI.Data package containing data models and database context definition</Description>
     <Version>$(HealthCheckUIData)</Version>
   </PropertyGroup>
 

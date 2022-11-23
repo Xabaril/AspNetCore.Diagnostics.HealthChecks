@@ -21,6 +21,8 @@ jobs:
       run: dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
     - name: Restore UI.Client
       run: dotnet restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
+    - name: Restore UI.Data
+      run: dotnet restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj
     - name: Restore UI.Core
       run: dotnet restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
     - name: Restore UI.InMemory.Storage
@@ -39,6 +41,8 @@ jobs:
       run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj -c $BUILD_CONFIG
     - name: Build UI.Client
       run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj -c $BUILD_CONFIG
+    - name: Build UI.Data
+      run: dotnet build --no-restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj -c $BUILD_CONFIG
     - name: Build UI.Core
       run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj -c $BUILD_CONFIG
     - name: Build UI.InMemory.Storage

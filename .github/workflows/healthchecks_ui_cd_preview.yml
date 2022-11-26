@@ -61,6 +61,8 @@ jobs:
       run: dotnet pack --no-build ./src/HealthChecks.UI/HealthChecks.UI.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.Client
       run: dotnet pack --no-build ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+    - name: Pack UI.Data
+      run: dotnet pack --no-build ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.Core
       run: dotnet pack --no-build ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
     - name: Pack UI.InMemory.Storage
@@ -79,6 +81,8 @@ jobs:
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.6*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.Client Health Check
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Client.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+    - name: Publish UI.Data Health Check
+      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Data.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.Core Health Check
       run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Core.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
     - name: Publish UI.InMemory.Storage Health Check

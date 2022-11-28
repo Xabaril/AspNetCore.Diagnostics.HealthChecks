@@ -26,7 +26,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
-    <NoWarn>$(NoWarn);IDE1006</NoWarn>
+    <NoWarn>$(NoWarn);IDE1006;CS8633</NoWarn>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
@@ -42,9 +42,15 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.11" Condition=" '$(NetFrameworkVersionLts)' == '$(CurrentLts)'"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" Condition=" '$(NetFrameworkVersionLts)' == '$(CurrentLts)'" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.11" Condition=" '$(NetFrameworkVersionLts)' == '$(CurrentLts)'"/>
+
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0" Condition=" '$(NetFrameworkVersionCurrent)' == '$(CurrentLts)'"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" Condition=" '$(NetFrameworkVersionCurrent)' == '$(CurrentLts)'" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.0" Condition=" '$(NetFrameworkVersionCurrent)' == '$(CurrentLts)'"/>
+
+
     <PackageReference Include="Shouldly" Version="4.1.0" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />

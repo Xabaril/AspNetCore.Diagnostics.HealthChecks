@@ -11,7 +11,7 @@ namespace HealthChecks.UI.SqlServer.Storage.Migrations
 {
     [DbContext(typeof(HealthChecksDb))]
     [Migration("20200410110604_initial")]
-    partial class initial
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
-
+namespace HealthChecks.ApplicationStatus.Tests;
 public sealed class TestLoggerProvider : ILoggerProvider
 {
     private readonly ConcurrentDictionary<string, TestLogger> _loggers = new(StringComparer.OrdinalIgnoreCase);

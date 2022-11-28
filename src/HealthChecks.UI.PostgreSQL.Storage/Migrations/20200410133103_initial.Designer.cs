@@ -11,7 +11,7 @@ namespace HealthChecks.UI.PostgreSQL.Storage.Migrations
 {
     [DbContext(typeof(HealthChecksDb))]
     [Migration("20200410133103_initial")]
-    partial class initial
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

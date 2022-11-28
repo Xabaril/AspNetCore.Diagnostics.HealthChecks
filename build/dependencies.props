@@ -3,7 +3,7 @@
   <PropertyGroup Label="SDK Versions">
     <NetFrameworkVersionLts>net6.0</NetFrameworkVersionLts>
     <NetFrameworkVersionCurrent>net7.0</NetFrameworkVersionCurrent>
-    
+    <CurrentLts>net6.0</CurrentLts>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
   </PropertyGroup>
 

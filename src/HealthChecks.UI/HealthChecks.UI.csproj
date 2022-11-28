@@ -1,7 +1,7 @@
 <Project Sdk=" Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersionLts);$(NetFrameworkVersionCurrent)</TargetFrameworks>
     <PackageTags>$(PackageTags);UI</PackageTags>
     <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
     <Version>$(HealthCheckUI)</Version>
@@ -17,10 +17,11 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" Condition=" '$(NetFrameworkVersionLts)' == '$(CurrentLts)'"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" Condition=" '$(NetFrameworkVersionCurrent)' == '$(CurrentLts)'"   />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="2.0.0-preview1-final" NoWarn="NU5104" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="KubernetesClient" Version="4.0.26" />
@@ -32,7 +33,7 @@
 
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">
     <Message Importance="high" Text="*** Installing npm packages ***" />
-    <Exec Command="npm install" ContinueOnError="false" />
+    <Exec Command="npm install --legacy-peer-deps" ContinueOnError="false" />
   </Target>
 
   <Target Name="BuildClient" BeforeTargets="BeforeBuild" DependsOnTargets="InstallPackages">

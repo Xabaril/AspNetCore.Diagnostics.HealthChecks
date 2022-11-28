@@ -1,5 +1,5 @@
 using HealthChecks.UI.Image.Configuration;
-
+#nullable disable
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class HealthChecksUIBuilderExtensions

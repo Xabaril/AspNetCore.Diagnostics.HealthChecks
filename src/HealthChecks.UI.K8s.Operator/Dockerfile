@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:6.0.1-bullseye-slim AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0.101-bullseye-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.111-bullseye-slim AS build
 WORKDIR /src
 COPY ["src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj", "src/HealthChecks.UI.K8s.Operator/"]
 RUN dotnet restore "src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj"

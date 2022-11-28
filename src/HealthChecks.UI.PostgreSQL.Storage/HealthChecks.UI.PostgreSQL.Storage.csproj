@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
+    <TargetFrameworks>$(NetFrameworkVersionLts);$(NetFrameworkVersionCurrent)</TargetFrameworks>
     <PackageTags>$(PackageTags);PostgreSQL</PackageTags>
     <Description>HealthChecks.UI.PostgreSQL.Storage package contains the required classes to use Postgres NpgSql provider in the UI</Description>
     <Version>$(HealthChecksUIPostgreSQLStorage)</Version>

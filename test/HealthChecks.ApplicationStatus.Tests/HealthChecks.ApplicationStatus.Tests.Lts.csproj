@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersionLts);$(NetFrameworkVersionCurrent)</TargetFrameworks>
+    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

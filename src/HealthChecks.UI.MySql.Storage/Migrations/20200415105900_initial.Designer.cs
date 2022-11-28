@@ -10,7 +10,7 @@ namespace HealthChecks.UI.MySql.Storage.Migrations
 {
     [DbContext(typeof(HealthChecksDb))]
     [Migration("20200415105900_initial")]
-    partial class initial
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

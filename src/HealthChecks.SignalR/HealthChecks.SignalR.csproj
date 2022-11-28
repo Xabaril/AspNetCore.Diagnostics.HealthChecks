@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetFrameworkVersionLts);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);SignalR</PackageTags>
     <Description>HealthChecks.SignalR is the health check package for SignalR.</Description>
     <Version>$(HealthCheckSignalR)</Version>

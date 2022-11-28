@@ -1,7 +1,7 @@
 <Project Sdk=" Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
     <PackageTags>$(PackageTags);UI</PackageTags>
     <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
     <Version>$(HealthCheckUI)</Version>

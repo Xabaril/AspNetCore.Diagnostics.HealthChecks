@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
     <PackageTags>$(PackageTags);SqlServer</PackageTags>
     <Description>HealthChecks.UI.SqlServer.Storage package contains the required classes to use SqlServer provider in the UI</Description>
     <Version>$(HealthCheckUISqlServerStorage)</Version>

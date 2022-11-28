@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetFrameworkVersionLts)</TargetFrameworks>
     <PackageTags>$(PackageTags);Publisher;Seq</PackageTags>
     <Description>HealthChecks.Publisher.Seq is the health check publisher for Seq.</Description>
     <Version>$(HealthCheckPublisherSeq)</Version>

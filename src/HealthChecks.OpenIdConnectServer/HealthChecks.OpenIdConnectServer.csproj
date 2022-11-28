@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetFrameworkVersionLts);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);IdentityServer;IdSvr;OpenId;OpenIdConnect</PackageTags>
     <Description>HealthChecks.OpenIdConnectServer is the health check package for OpenIdConnect servers</Description>
     <Version>$(HealthCheckOpenIdConnectServer)</Version>

@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
     <PackageTags>$(PackageTags);MySql</PackageTags>
     <Description>HealthChecks.UI.MySql.Storage package contains the required classes to use the MySql database provider in the UI</Description>
     <Version>$(HealthCheckUIMySqlStorage)</Version>

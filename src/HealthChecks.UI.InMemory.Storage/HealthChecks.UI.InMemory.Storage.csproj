@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFramework>$(NetFrameworkVersionLts)</TargetFramework>
     <PackageTags>$(PackageTags);InMemory</PackageTags>
     <Description>HealthChecks.UI.InMemory.Storage package contains the required classes to use InMemory provider in the UI</Description>
     <Version>$(HealthCheckUIInMemoryStorage)</Version>

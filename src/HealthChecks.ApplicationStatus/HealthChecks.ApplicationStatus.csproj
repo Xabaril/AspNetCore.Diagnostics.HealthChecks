@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetFrameworkVersionLts);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);ApplicationStatus</PackageTags>
     <Description>HealthChecks.ApplicationStatus is the health check package for detection graceful shutdown.</Description>
     <Version>$(HealthCheckApplicationStatus)</Version>

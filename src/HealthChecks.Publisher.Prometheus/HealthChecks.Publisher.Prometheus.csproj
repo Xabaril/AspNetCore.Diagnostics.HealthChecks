@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>$(NetFrameworkVersionLts)</TargetFrameworks>
     <PackageTags>$(PackageTags);Publisher;Prometheus;Prometheus Gateway</PackageTags>
     <Description>[Deprecated! Use pull model with AspNetCore.HealthChecks.Prometheus.Metrics package instead] HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
     <Version>$(HealthCheckPublisherPrometheus)</Version>

@@ -1,7 +1,9 @@
 <Project>
 
   <PropertyGroup Label="SDK Versions">
-    <NetFrameworkVersion>net6.0</NetFrameworkVersion>
+    <NetFrameworkVersionLts>net6.0</NetFrameworkVersionLts>
+    <NetFrameworkVersionCurrent>net7.0</NetFrameworkVersionCurrent>
+    
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
   </PropertyGroup>
 

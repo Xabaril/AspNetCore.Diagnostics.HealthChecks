@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Sqlite</PackageTags>
     <Description>HealthChecks.Sqlite is the health check package for Sqlite.</Description>
-    <Version>$(HealthCheckSqlite)</Version>
+    <VersionPrefix>$(HealthCheckSqlite)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

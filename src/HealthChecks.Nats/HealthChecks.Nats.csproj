@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Nats</PackageTags>
     <Description>HealthChecks.Nats is the health check package for Nats.</Description>
-    <Version>$(HealthCheckNats)</Version>
+    <VersionPrefix>$(HealthCheckNats)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

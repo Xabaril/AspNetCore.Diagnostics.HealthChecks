@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;DocumentDb</PackageTags>
     <Description>HealthChecks.DocumentDb is the health check package for Azure DocumentDb.</Description>
-    <Version>$(HealthCheckDocumentDb)</Version>
+    <VersionPrefix>$(HealthCheckDocumentDb)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

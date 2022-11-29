@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);solr</PackageTags>
     <Description>HealthChecks.solr is the health check package for solr.</Description>
-    <Version>$(HealthCheckSolr)</Version>
+    <VersionPrefix>$(HealthCheckSolr)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);SignalR</PackageTags>
     <Description>HealthChecks.SignalR is the health check package for SignalR.</Description>
-    <Version>$(HealthCheckSignalR)</Version>
+    <VersionPrefix>$(HealthCheckSignalR)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

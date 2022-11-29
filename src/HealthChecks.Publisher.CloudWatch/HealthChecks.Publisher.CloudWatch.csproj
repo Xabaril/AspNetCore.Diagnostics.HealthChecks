@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Publisher;AWS;CloudWatch</PackageTags>
     <Description>HealthChecks.Publisher.CloudWatch is the health check publisher for AWS CloudWatch.</Description>
-    <Version>$(HealthCheckPublisherCloudWatch)</Version>
+    <VersionPrefix>$(HealthCheckPublisherCloudWatch)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

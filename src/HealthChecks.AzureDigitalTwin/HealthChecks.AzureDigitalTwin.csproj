@@ -3,7 +3,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;DigitalTwin</PackageTags>
     <Description>HealthChecks.AzureDigitalTwin is the health check package for Azure DigitalTwin.</Description>
-    <Version>$(HealthCheckAzureDigitalTwin)</Version>
+    <VersionPrefix>$(HealthCheckAzureDigitalTwin)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

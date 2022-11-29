@@ -4,7 +4,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);SqlServer</PackageTags>
     <Description>HealthChecks.UI.SqlServer.Storage package contains the required classes to use SqlServer provider in the UI</Description>
-    <Version>$(HealthCheckUISqlServerStorage)</Version>
+    <VersionPrefix>$(HealthCheckUISqlServerStorage)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

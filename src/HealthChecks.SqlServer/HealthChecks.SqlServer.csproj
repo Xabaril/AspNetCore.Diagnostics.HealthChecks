@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Sql Server</PackageTags>
     <Description>HealthChecks.SqlServer is the health check package for SqlServer.</Description>
-    <Version>$(HealthCheckSqlServer)</Version>
+    <VersionPrefix>$(HealthCheckSqlServer)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

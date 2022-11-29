@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;IoT Hub</PackageTags>
     <Description>HealthChecks.Azure.IoTHub is the health check package for Azure IoT Hub.</Description>
-    <Version>$(HealthCheckIoTHub)</Version>
+    <VersionPrefix>$(HealthCheckIoTHub)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

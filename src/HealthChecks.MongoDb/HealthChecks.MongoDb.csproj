@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);MongoDb</PackageTags>
     <Description>HealthChecks.MongoDb is the health check package for MongoDb.</Description>
-    <Version>$(HealthCheckMongoDB)</Version>
+    <VersionPrefix>$(HealthCheckMongoDB)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.AzureStorage is the health check package for Blobs, Tables and Queues.</Description>
-    <Version>$(HealthCheckAzureStorage)</Version>
+    <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

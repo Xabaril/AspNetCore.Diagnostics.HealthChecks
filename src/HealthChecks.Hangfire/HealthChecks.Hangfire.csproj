@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Hangfire</PackageTags>
     <Description>HealthChecks.Hangfire is the health check package for Hangfire.</Description>
-    <Version>$(HealthCheckHangfire)</Version>
+    <VersionPrefix>$(HealthCheckHangfire)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

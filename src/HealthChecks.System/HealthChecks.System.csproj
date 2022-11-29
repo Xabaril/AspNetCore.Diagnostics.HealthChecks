@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Beat;System;Ping;Disk Storage</PackageTags>
     <Description>HealthChecks.System is the system health check package.</Description>
-    <Version>$(HealthCheckSystem)</Version>
+    <VersionPrefix>$(HealthCheckSystem)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

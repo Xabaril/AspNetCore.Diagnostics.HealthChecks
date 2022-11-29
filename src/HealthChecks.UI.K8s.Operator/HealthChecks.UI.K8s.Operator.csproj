@@ -5,7 +5,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <Version>$(HealthChecksUIK8sOperator)</Version>
+    <VersionPrefix>$(HealthChecksUIK8sOperator)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

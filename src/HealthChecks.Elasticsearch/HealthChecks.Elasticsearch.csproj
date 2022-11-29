@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Elasticsearch</PackageTags>
     <Description>HealthChecks.Elasticsearch is the health check package for Elasticsearch.</Description>
-    <Version>$(HealthCheckElasticsearch)</Version>
+    <VersionPrefix>$(HealthCheckElasticsearch)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

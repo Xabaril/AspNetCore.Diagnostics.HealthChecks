@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);AWS;SNS;Amazon Simple Notification Service</PackageTags>
     <Description>HealthChecks.Aws.Sns is the health check package for Amazon Simple Notification Service.</Description>
-    <Version>$(HealthCheckAWSSns)</Version>
+    <VersionPrefix>$(HealthCheckAWSSns)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

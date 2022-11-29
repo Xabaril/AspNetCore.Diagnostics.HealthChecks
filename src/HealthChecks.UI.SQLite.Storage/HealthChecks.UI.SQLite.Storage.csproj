@@ -4,7 +4,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);SQLite</PackageTags>
     <Description>HealthChecks.UI.SQLite.Storage package contains the required classes to use SQLite provider in the UI</Description>
-    <Version>$(HealthCheckUISQLiteStorage)</Version>
+    <VersionPrefix>$(HealthCheckUISQLiteStorage)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

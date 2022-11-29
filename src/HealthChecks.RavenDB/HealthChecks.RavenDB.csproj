@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);RavenDB</PackageTags>
     <Description>HealthChecks.RavenDB is the health check package for RavenDB.</Description>
-    <Version>$(HealthCheckRavenDB)</Version>
+    <VersionPrefix>$(HealthCheckRavenDB)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

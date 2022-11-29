@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Description>HealthChecks.Network is the health check package for network services.</Description>
-    <Version>$(HealthCheckNetwork)</Version>
+    <VersionPrefix>$(HealthCheckNetwork)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

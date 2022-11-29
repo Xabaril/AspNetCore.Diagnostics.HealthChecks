@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);EventStore</PackageTags>
     <Description>HealthChecks.EventStore is the health check package for EventStore, using the TCP Client.</Description>
-    <Version>$(HealthCheckEventStore)</Version>
+    <VersionPrefix>$(HealthCheckEventStore)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

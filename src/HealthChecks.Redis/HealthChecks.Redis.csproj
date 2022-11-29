@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Redis</PackageTags>
     <Description>HealthChecks.Redis is the health check package for Redis.</Description>
-    <Version>$(HealthCheckRedis)</Version>
+    <VersionPrefix>$(HealthCheckRedis)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

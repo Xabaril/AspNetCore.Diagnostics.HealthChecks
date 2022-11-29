@@ -4,7 +4,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);InMemory</PackageTags>
     <Description>HealthChecks.UI.InMemory.Storage package contains the required classes to use InMemory provider in the UI</Description>
-    <Version>$(HealthCheckUIInMemoryStorage)</Version>
+    <VersionPrefix>$(HealthCheckUIInMemoryStorage)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

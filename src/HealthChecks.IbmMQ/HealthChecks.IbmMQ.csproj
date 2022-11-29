@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);IbmMQ</PackageTags>
     <Description>HealthChecks.IbmMQ is the health check package for IbmMQ.</Description>
-    <Version>$(HealthCheckIbmMQ)</Version>
+    <VersionPrefix>$(HealthCheckIbmMQ)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

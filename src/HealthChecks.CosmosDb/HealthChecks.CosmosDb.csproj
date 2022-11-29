@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;CosmosDb</PackageTags>
     <Description>HealthChecks.CosmosDb is the health check package for Azure CosmosDb.</Description>
-    <Version>$(HealthCheckCosmosDb)</Version>
+    <VersionPrefix>$(HealthCheckCosmosDb)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

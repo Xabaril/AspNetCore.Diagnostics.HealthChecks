@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);MySQL</PackageTags>
     <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
-    <Version>$(HealthCheckMySql)</Version>
+    <VersionPrefix>$(HealthCheckMySql)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

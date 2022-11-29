@@ -4,7 +4,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);PostgreSQL</PackageTags>
     <Description>HealthChecks.UI.PostgreSQL.Storage package contains the required classes to use Postgres NpgSql provider in the UI</Description>
-    <Version>$(HealthChecksUIPostgreSQLStorage)</Version>
+    <VersionPrefix>$(HealthChecksUIPostgreSQLStorage)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

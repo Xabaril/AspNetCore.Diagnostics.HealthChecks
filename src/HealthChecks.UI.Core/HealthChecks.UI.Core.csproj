@@ -4,7 +4,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);Core</PackageTags>
     <Description>HealthChecks.UI.Core package containing builder and model definitions</Description>
-    <Version>$(HealthCheckUICore)</Version>
+    <VersionPrefix>$(HealthCheckUICore)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

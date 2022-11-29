@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure Key Vault;Secrets</PackageTags>
     <Description>HealthChecks.AzureKeyVault is the health check package for Azure Key Vault secrets</Description>
-    <Version>$(HealthCheckKeyVault)</Version>
+    <VersionPrefix>$(HealthCheckKeyVault)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

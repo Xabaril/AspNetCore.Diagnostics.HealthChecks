@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);AWS;S3;Simple Storage Service</PackageTags>
     <Description>HealthChecks.Aws.S3 is the health check package for S3 Buckets and files.</Description>
-    <Version>$(HealthCheckAWSS3)</Version>
+    <VersionPrefix>$(HealthCheckAWSS3)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

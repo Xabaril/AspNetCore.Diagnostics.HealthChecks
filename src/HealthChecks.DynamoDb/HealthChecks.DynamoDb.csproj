@@ -4,7 +4,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);DynamoDb;AWS</PackageTags>
     <Description>HealthChecks.DynamoDb is the health check package for AWS DynamoDb.</Description>
-    <Version>$(HealthCheckDynamoDb)</Version>
+    <VersionPrefix>$(HealthCheckDynamoDb)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

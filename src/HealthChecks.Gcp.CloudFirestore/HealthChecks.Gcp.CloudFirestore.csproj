@@ -6,7 +6,7 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);CloudFirestore</PackageTags>
     <Description>HealthChecks.Gcp.CloudFirestore is the health check package for the Firebase Cloud Firebase realtime database.</Description>
-    <Version>$(HealthCheckCloudFirestore)</Version>
+    <VersionPrefix>$(HealthCheckCloudFirestore)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

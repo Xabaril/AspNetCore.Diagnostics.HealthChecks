@@ -4,7 +4,7 @@
     <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
     <PackageTags>$(PackageTags);UI;Client</PackageTags>
     <Description>HealthChecks.UI.Client contains some mandatory abstractions to work with HealthChecks.UI.</Description>
-    <Version>$(HealthCheckUIClient)</Version>
+    <VersionPrefix>$(HealthCheckUIClient)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

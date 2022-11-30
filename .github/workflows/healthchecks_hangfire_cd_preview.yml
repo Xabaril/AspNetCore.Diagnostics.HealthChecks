@@ -3,7 +3,7 @@ name: HealthChecks Hangfire Preview CD
 on:
   push:
     tags:
-      - preview-hangfire-*  # Push events to release-hangfire*
+      - preview-hangfire-*
 
 jobs:
   build:

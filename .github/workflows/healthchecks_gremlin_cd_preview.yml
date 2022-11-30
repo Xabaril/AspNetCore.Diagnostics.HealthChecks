@@ -3,7 +3,7 @@ name: HealthChecks Gremlin Preview CD
 on:
   push:
     tags:
-      - preview-gremlin-*  # Push events to release-gremlin*
+      - preview-gremlin-*
 
 jobs:
   build:

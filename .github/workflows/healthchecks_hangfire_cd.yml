@@ -3,7 +3,7 @@ name: HealthChecks Hangfire CD
 on:
   push:
     tags:
-      - release-hangfire-*  # Push events to release-hangfire*
+      - release-hangfire-*
 
 jobs:
   build:

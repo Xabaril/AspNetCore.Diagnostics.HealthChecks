@@ -3,7 +3,7 @@ name: HealthChecks Consul CD
 on:
   push:
     tags:
-      - release-consul-*  # Push events to release-consul*
+      - release-consul-*
 
 jobs:
   build:

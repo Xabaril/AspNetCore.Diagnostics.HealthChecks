@@ -3,7 +3,7 @@ name: HealthChecks Aws Sqs CD
 on:
   push:
     tags:
-      - release-aws_sqs-*  # Push events to release-aws_sqs*
+      - release-aws_sqs-*
 jobs:
   build:
     env:

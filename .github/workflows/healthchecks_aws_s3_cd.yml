@@ -3,7 +3,7 @@ name: HealthChecks Aws.S3 CD
 on:
   push:
     tags:
-      - release-aws_s3-*  # Push events to release-aws_s3*
+      - release-aws_s3-*
 jobs:
   build:
     env:

@@ -3,7 +3,7 @@ name: HealthChecks Gcp.CloudFirestore Preview CD
 on:
   push:
     tags:
-      - preview-gcp_cloudfirestore-*  # Push events to release-gcp_cloudfirestore*
+      - preview-gcp_cloudfirestore-*
 
 jobs:
   build:

@@ -3,7 +3,7 @@ name: HealthChecks CosmosDb Preview CD
 on:
   push:
     tags:
-      - preview-cosmosdb-*  # Push events to release-cosmosdb*
+      - preview-cosmosdb-*
 jobs:
   build:
     env:

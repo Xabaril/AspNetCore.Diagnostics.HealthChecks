@@ -3,7 +3,7 @@ name: HealthChecks Consul Preview CD
 on:
   push:
     tags:
-      - preview-consul-*  # Push events to release-consul*
+      - preview-consul-*
 jobs:
   build:
     env:

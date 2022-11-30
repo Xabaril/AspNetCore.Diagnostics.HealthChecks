@@ -3,7 +3,7 @@ name: HealthChecks DocumentDb Preview CD
 on:
   push:
     tags:
-      - preview-documentdb-*  # Push events to release-documentdb*
+      - preview-documentdb-*
 jobs:
   build:
     env:

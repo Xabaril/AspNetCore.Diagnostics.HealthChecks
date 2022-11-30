@@ -3,7 +3,7 @@ name: HealthChecks Aws Systems Manager CD
 on:
   push:
     tags:
-      - release-aws_systemsmanager-*  # Push events to release-aws_systemsmanager*
+      - release-aws_systemsmanager-*
 jobs:
   build:
     env:

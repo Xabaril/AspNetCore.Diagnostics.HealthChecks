@@ -3,7 +3,7 @@ name: HealthChecks DynamoDb CD
 on:
   push:
     tags:
-      - release-dynamodb-*  # Push events to release-dynamodb*
+      - release-dynamodb-*
 
 jobs:
   build:

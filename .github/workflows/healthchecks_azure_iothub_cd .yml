@@ -3,7 +3,7 @@ name: HealthChecks Azure.IoTHub CD
 on:
   push:
     tags:
-      - release-azure_iothub-*  # Push events to release-azure_iothub*
+      - release-azure_iothub-*
 jobs:
   build:
     env:

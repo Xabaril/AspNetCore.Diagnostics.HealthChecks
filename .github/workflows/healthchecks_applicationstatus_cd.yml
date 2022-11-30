@@ -3,7 +3,7 @@ name: HealthChecks Application Status CD
 on:
   push:
     tags:
-      - release-applicationstatus-*  # Push events to release-applicationstatus*
+      - release-applicationstatus-*
 jobs:
   build:
     env:

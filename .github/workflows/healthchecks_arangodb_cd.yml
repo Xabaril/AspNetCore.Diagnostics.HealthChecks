@@ -3,7 +3,7 @@ name: HealthChecks Arango DB CD
 on:
   push:
     tags:
-      - release-arangodb-*  # Push events to release-arangodb*
+      - release-arangodb-*
 jobs:
   build:
     env:

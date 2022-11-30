@@ -30,13 +30,6 @@
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" />
-    <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" />
-  </ItemGroup>
-
   <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.AzureServiceBus' OR $(MSBuildProjectName) == 'HealthChecks.AzureStorage' OR $(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
     <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
   </ItemGroup>

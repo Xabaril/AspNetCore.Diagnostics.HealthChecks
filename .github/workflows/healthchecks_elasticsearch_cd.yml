@@ -3,7 +3,7 @@ name: HealthChecks Elastic Search CD
 on:
   push:
     tags:
-      - release-elasticsearch-*  # Push events to release-elasticsearch*
+      - release-elasticsearch-*
 
 jobs:
   build:

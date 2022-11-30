@@ -3,7 +3,7 @@ name: HealthChecks Aws Sns CD
 on:
   push:
     tags:
-      - release-aws_sns-*  # Push events to release-aws_sns*
+      - release-aws_sns-*
 jobs:
   build:
     env:

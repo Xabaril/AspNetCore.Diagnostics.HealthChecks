@@ -22,6 +22,27 @@ public class azure_service_bus_queue_registration_with_token_should
     }
 
     [Fact]
+    public void add_health_check_with_setup_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        AzureServiceBusOptions? setupOptions = null;
+        bool setupCalled = false;
+
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(string.Empty, string.Empty, new AzureCliCredential(),
+                setup: options =>
+                {
+                    setupCalled = true;
+                    setupOptions = options;
+                });
+
+        setupCalled.ShouldBeTrue();
+
+        setupOptions.ShouldNotBeNull();
+        setupOptions.UsePeekMode.ShouldBeTrue();
+    }
+
+    [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
         var services = new ServiceCollection();
@@ -54,6 +75,27 @@ public class azure_service_bus_queue_registration_with_token_should
         endpointFactoryCalled.ShouldBeTrue();
         queueNameFactoryCalled.ShouldBeTrue();
         tokenCredentialFactoryCalled.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void add_health_check_using_factories_with_setup_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        AzureServiceBusOptions? setupOptions = null;
+        bool setupCalled = false;
+
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(_ => string.Empty, _ => string.Empty, _ => new AzureCliCredential(),
+                setup: options =>
+                {
+                    setupCalled = true;
+                    setupOptions = options;
+                });
+
+        setupCalled.ShouldBeTrue();
+
+        setupOptions.ShouldNotBeNull();
+        setupOptions.UsePeekMode.ShouldBeTrue();
     }
 
     [Fact]

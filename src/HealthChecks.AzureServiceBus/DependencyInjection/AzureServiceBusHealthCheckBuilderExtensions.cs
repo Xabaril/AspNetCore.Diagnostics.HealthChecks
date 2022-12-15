@@ -193,6 +193,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueue(
         this IHealthChecksBuilder builder,
@@ -201,14 +202,16 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default) =>
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default) =>
         builder.AddAzureServiceBusQueue(
             _ => connectionString,
             _ => queueName,
             name,
             failureStatus,
             tags,
-            timeout);
+            timeout,
+            setup);
 
     /// <summary>
     /// Add a health check for specified Azure Service Bus Queue.
@@ -223,6 +226,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueue(
         this IHealthChecksBuilder builder,
@@ -231,14 +235,18 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default)
     {
         Guard.ThrowIfNull(connectionStringFactory);
         Guard.ThrowIfNull(queueNameFactory);
 
+        var options = new AzureServiceBusOptions();
+        setup?.Invoke(options);
+
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREQUEUE_NAME,
-            sp => new AzureServiceBusQueueHealthCheck(connectionStringFactory(sp), queueNameFactory(sp)),
+            sp => new AzureServiceBusQueueHealthCheck(connectionStringFactory(sp), queueNameFactory(sp), options),
             failureStatus,
             tags,
             timeout));
@@ -258,6 +266,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueue(
         this IHealthChecksBuilder builder,
@@ -267,7 +276,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default) =>
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default) =>
         builder.AddAzureServiceBusQueue(
             _ => endpoint,
             _ => queueName,
@@ -275,7 +285,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name,
             failureStatus,
             tags,
-            timeout);
+            timeout,
+            setup);
 
     /// <summary>
     /// Add a health check for specified Azure Service Bus Queue.
@@ -291,6 +302,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueue(
         this IHealthChecksBuilder builder,
@@ -300,18 +312,23 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default)
     {
         Guard.ThrowIfNull(endpointFactory);
         Guard.ThrowIfNull(queueNameFactory);
         Guard.ThrowIfNull(tokenCredentialFactory);
+
+        var options = new AzureServiceBusOptions();
+        setup?.Invoke(options);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREQUEUE_NAME,
             sp => new AzureServiceBusQueueHealthCheck(
                 endpointFactory(sp),
                 queueNameFactory(sp),
-                tokenCredentialFactory(sp)),
+                tokenCredentialFactory(sp),
+                options),
             failureStatus,
             tags,
             timeout));
@@ -468,6 +485,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusSubscription(
         this IHealthChecksBuilder builder,
@@ -477,7 +495,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default) =>
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default) =>
         builder.AddAzureServiceBusSubscription(
             _ => connectionString,
             _ => topicName,
@@ -485,7 +504,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name,
             failureStatus,
             tags,
-            timeout);
+            timeout,
+            setup);
 
     /// <summary>
     /// Add a health check for Azure Service Bus Subscription.
@@ -501,6 +521,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusSubscription(
         this IHealthChecksBuilder builder,
@@ -510,18 +531,23 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default)
     {
         Guard.ThrowIfNull(connectionStringFactory);
         Guard.ThrowIfNull(topicNameFactory);
         Guard.ThrowIfNull(subscriptionNameFactory);
+
+        var options = new AzureServiceBusOptions();
+        setup?.Invoke(options);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZURESUBSCRIPTION_NAME,
             sp => new AzureServiceBusSubscriptionHealthCheck(
                 connectionStringFactory(sp),
                 topicNameFactory(sp),
-                subscriptionNameFactory(sp)),
+                subscriptionNameFactory(sp),
+                options),
             failureStatus,
             tags,
             timeout));
@@ -542,6 +568,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusSubscription(
         this IHealthChecksBuilder builder,
@@ -552,7 +579,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default) =>
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default) =>
         builder.AddAzureServiceBusSubscription(
             _ => endpoint,
             _ => topicName,
@@ -561,7 +589,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name,
             failureStatus,
             tags,
-            timeout);
+            timeout,
+            setup);
 
     /// <summary>
     /// Add a health check for Azure Service Bus Subscription.
@@ -578,6 +607,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="setup">Setup action to configure Azure Service Bus options.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusSubscription(
         this IHealthChecksBuilder builder,
@@ -588,12 +618,16 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
+        TimeSpan? timeout = default,
+        Action<AzureServiceBusOptions>? setup = default)
     {
         Guard.ThrowIfNull(endpointFactory);
         Guard.ThrowIfNull(topicNameFactory);
         Guard.ThrowIfNull(subscriptionNameFactory);
         Guard.ThrowIfNull(tokenCredentialFactory);
+
+        var options = new AzureServiceBusOptions();
+        setup?.Invoke(options);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZURESUBSCRIPTION_NAME,
@@ -601,7 +635,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 endpointFactory(sp),
                 topicNameFactory(sp),
                 subscriptionNameFactory(sp),
-                tokenCredentialFactory(sp)),
+                tokenCredentialFactory(sp),
+                options),
             failureStatus,
             tags,
             timeout));

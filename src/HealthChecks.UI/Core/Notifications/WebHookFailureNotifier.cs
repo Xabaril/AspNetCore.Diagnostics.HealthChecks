@@ -160,10 +160,7 @@ namespace HealthChecks.UI.Core.Notifications
 
         public void Dispose()
         {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
+            _db?.Dispose();
         }
 
         private static (string plural, string noun) PluralizeHealthcheck(int count) =>

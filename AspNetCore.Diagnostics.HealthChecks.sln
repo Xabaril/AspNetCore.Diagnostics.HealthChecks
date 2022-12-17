@@ -8,10 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
 		.github\dependabot.yml = .github\dependabot.yml
-		build\dependencies.props = build\dependencies.props
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		docker-compose.yml = docker-compose.yml
+		build\versions.props = build\versions.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}"

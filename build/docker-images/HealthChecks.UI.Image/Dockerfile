@@ -19,7 +19,8 @@ FROM updated-npm AS build
 WORKDIR /src
 COPY AspNetCore.Diagnostics.HealthChecks.sln ./
 COPY Directory.Build.props ./
-COPY ./build/dependencies.props ./build/
+COPY Directory.Build.targets ./
+COPY ./build/versions.props ./build/
 COPY ./src/HealthChecks.UI/build ./src/HealthChecks.UI/build
 COPY ./src/HealthChecks.UI/assets ./src/HealthChecks.UI/assets
 COPY ./src/HealthChecks.UI/client ./src/HealthChecks.UI/client

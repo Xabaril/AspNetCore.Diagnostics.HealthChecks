@@ -283,9 +283,9 @@ namespace HealthChecks.UI.Tests
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("HealthChecksUI:DisableMigrations", "true")
+                        new KeyValuePair<string, string?>("HealthChecksUI:DisableMigrations", "true")
                     });
                 })
                 .ConfigureServices(services =>

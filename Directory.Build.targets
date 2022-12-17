@@ -6,10 +6,10 @@
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <None Condition="Exists('$(ProjectDir)README.md')" Include="README.md" Pack="true" PackagePath="\" />
-    <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" Visible="false" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" />
-    <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" />
+    <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" Visible="false" />
+    <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" Visible="false" />
   </ItemGroup>
 
 </Project>

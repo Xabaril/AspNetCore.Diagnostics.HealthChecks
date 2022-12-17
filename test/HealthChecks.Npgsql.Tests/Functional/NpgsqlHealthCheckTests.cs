@@ -190,7 +190,7 @@ namespace HealthChecks.Npgsql.Tests.Functional
             var logger = testLoggerProvider.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");
 
             logger.ShouldNotBeNull();
-            logger?._eventLog[0].Item2.ShouldNotContain("with message '(null)'");
+            logger?.EventLog[0].Item2.ShouldNotContain("with message '(null)'");
         }
     }
 }

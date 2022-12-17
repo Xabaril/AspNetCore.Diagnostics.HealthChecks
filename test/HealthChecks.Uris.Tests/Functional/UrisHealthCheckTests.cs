@@ -1,4 +1,5 @@
 using System.Net;
+using HealthChecks.UI.Client;
 
 namespace HealthChecks.Uris.Tests.Functional
 {
@@ -19,17 +20,14 @@ namespace HealthChecks.Uris.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("uris")
+                        Predicate = r => r.Tags.Contains("uris"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -47,17 +45,14 @@ namespace HealthChecks.Uris.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("uris")
+                        Predicate = r => r.Tags.Contains("uris"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -195,18 +190,16 @@ namespace HealthChecks.Uris.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("uris")
+                        Predicate = r => r.Tags.Contains("uris"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                    .ShouldBe(HttpStatusCode.OK);
+            var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
+
         [Fact]
         public async Task be_healthy_if_request_success_and_timeout_is_configured()
         {
@@ -222,17 +215,14 @@ namespace HealthChecks.Uris.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("uris")
+                        Predicate = r => r.Tags.Contains("uris"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                    .ShouldBe(HttpStatusCode.OK);
+            var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
     }
 }

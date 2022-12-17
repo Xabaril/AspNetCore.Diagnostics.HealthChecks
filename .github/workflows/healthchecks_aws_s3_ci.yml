@@ -30,7 +30,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: |
+          6.0.x
+          7.0.x
     - name: Restore
       run: |
         dotnet restore ./src/HealthChecks.Aws.S3/HealthChecks.Aws.S3.csproj &&

@@ -21,9 +21,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", "invalidvalue")
+                        new KeyValuePair<string, string?>("storage_provider", "invalidvalue")
                     });
                 })
                 .UseStartup<Startup>();
@@ -38,10 +38,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "connectionstring"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
                     });
                 })
                 .UseStartup<Startup>();
@@ -60,9 +60,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.SqlServer.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -78,10 +78,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "connectionstring"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
                     });
                 })
                 .UseStartup<Startup>();
@@ -100,9 +100,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.Sqlite.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -118,10 +118,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "connectionstring"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
                     });
                 })
                 .UseStartup<Startup>();
@@ -140,9 +140,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -158,9 +158,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.InMemory.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.InMemory.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -193,10 +193,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.MySql.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
 
                     });
                 })
@@ -216,9 +216,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.MySql.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString())
                     });
                 })
                 .UseStartup<Startup>();

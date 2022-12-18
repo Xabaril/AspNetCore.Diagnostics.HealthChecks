@@ -3,45 +3,46 @@ using Azure.Core;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 
-namespace HealthChecks.AzureServiceBus;
-
-public abstract class AzureServiceBusHealthCheck
+namespace HealthChecks.AzureServiceBus
 {
-    protected static readonly ConcurrentDictionary<string, ServiceBusClient>
-        ClientConnections = new();
-    protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
-        ManagementClientConnections = new();
-    protected static readonly ConcurrentDictionary<string, ServiceBusReceiver>
-        ServiceBusReceivers = new();
-
-    private string? ConnectionString { get; }
-
-    protected string Prefix => ConnectionString ?? Endpoint!;
-
-    private string? Endpoint { get; }
-
-    private TokenCredential? TokenCredential { get; }
-
-    protected AzureServiceBusHealthCheck(string connectionString)
+    public abstract class AzureServiceBusHealthCheck
     {
-        ConnectionString = Guard.ThrowIfNull(connectionString, true);
+        protected static readonly ConcurrentDictionary<string, ServiceBusClient>
+            ClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
+            ManagementClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, ServiceBusReceiver>
+            ServiceBusReceivers = new();
+
+        private string? ConnectionString { get; }
+
+        protected string Prefix => ConnectionString ?? Endpoint!;
+
+        private string? Endpoint { get; }
+
+        private TokenCredential? TokenCredential { get; }
+
+        protected AzureServiceBusHealthCheck(string connectionString)
+        {
+            ConnectionString = Guard.ThrowIfNull(connectionString, true);
+        }
+
+        protected AzureServiceBusHealthCheck(string endpoint, TokenCredential tokenCredential)
+        {
+            Endpoint = Guard.ThrowIfNull(endpoint, true);
+            TokenCredential = Guard.ThrowIfNull(tokenCredential);
+        }
+
+        protected ServiceBusClient CreateClient() =>
+            TokenCredential == null
+                ? new ServiceBusClient(ConnectionString)
+                : new ServiceBusClient(Endpoint, TokenCredential);
+
+        protected ServiceBusAdministrationClient CreateManagementClient() =>
+            TokenCredential == null
+                ? new ServiceBusAdministrationClient(ConnectionString)
+                : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
+
+        protected abstract string ConnectionKey { get; }
     }
-
-    protected AzureServiceBusHealthCheck(string endpoint, TokenCredential tokenCredential)
-    {
-        Endpoint = Guard.ThrowIfNull(endpoint, true);
-        TokenCredential = Guard.ThrowIfNull(tokenCredential);
-    }
-
-    protected ServiceBusClient CreateClient() =>
-        TokenCredential == null
-            ? new ServiceBusClient(ConnectionString)
-            : new ServiceBusClient(Endpoint, TokenCredential);
-
-    protected ServiceBusAdministrationClient CreateManagementClient() =>
-        TokenCredential == null
-            ? new ServiceBusAdministrationClient(ConnectionString)
-            : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
-
-    protected abstract string ConnectionKey { get; }
 }

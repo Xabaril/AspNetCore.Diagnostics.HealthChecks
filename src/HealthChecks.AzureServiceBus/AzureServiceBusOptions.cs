@@ -1,5 +1,8 @@
 namespace HealthChecks.AzureServiceBus;
 
+/// <summary>
+/// Azure Service Bus configuration options.
+/// </summary>
 public class AzureServiceBusOptions
 {
     /// <summary>

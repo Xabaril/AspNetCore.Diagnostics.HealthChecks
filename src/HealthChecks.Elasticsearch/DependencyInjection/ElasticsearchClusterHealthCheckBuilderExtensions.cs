@@ -1,0 +1,79 @@
+using HealthChecks.Elasticsearch;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+namespace Microsoft.Extensions.DependencyInjection
+{
+    /// <summary>
+    /// Extension methods to configure <see cref="ElasticsearchHealthCheck"/>.
+    /// </summary>
+    public static class ElasticsearchClusterHealthCheckBuilderExtensions
+    {
+        private const string NAME = "elasticsearch_cluster";
+
+        /// <summary>
+        /// Add a health check for Elasticsearch databases.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="elasticsearchUri">The Elasticsearch connection string to be used.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'elasticsearch' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddElasticsearchCluster(
+            this IHealthChecksBuilder builder,
+            string elasticsearchUri,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
+        {
+            var options = new ElasticsearchOptions();
+            options.UseServer(elasticsearchUri);
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? NAME,
+                sp => new ElasticsearchClusterHealthCheck(options),
+                failureStatus,
+                tags,
+                timeout));
+        }
+
+        /// <summary>
+        /// Add a health check for Elasticsearch databases.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+        /// <param name="setup">The Elasticsearch option setup.</param>
+        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'elasticsearch' will be used for the name.</param>
+        /// <param name="failureStatus">
+        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+        /// </param>
+        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+        /// <returns>The specified <paramref name="builder"/>.</returns>
+        public static IHealthChecksBuilder AddElasticsearchCluster(
+            this IHealthChecksBuilder builder,
+            Action<ElasticsearchOptions>? setup,
+            string? name = default,
+            HealthStatus? failureStatus = default,
+            IEnumerable<string>? tags = default,
+            TimeSpan? timeout = default)
+        {
+            var options = new ElasticsearchOptions();
+            setup?.Invoke(options);
+
+            options.RequestTimeout ??= timeout;
+
+            return builder.Add(new HealthCheckRegistration(
+                name ?? NAME,
+                sp => new ElasticsearchClusterHealthCheck(options),
+                failureStatus,
+                tags,
+                timeout));
+        }
+    }
+}

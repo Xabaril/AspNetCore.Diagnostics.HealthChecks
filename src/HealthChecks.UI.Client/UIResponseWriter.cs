@@ -31,6 +31,27 @@ namespace HealthChecks.UI.Client
             }
         }
 
+        /// <summary>
+        /// Will change the response for the health check with details but will obfuscate exceptions.
+        /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task WriteHealthCheckUIResponseNoExceptions(HttpContext httpContext, HealthReport report)
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            if (report != null)
+            {
+                httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
+
+                var uiReport = UIHealthReport.CreateFrom(report, true);
+
+                await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value);
+            }
+            else
+            {
+                await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse);
+            }
+        }
+
         private static JsonSerializerOptions CreateJsonOptions()
         {
             var options = new JsonSerializerOptions

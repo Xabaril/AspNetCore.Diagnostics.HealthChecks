@@ -1,0 +1,28 @@
+test:
+  - test/**/*
+
+github_actions:
+  - .github/**/*
+
+code style:
+  - .editorconfig
+
+docs:
+  - README.md
+  - doc/**/*
+
+arrango-db:
+  - src/HealthChecks.ArangoDb/**/*
+
+aws:
+  - src/HealthChecks.Aws.*/**/*
+
+azure:
+  - src/HealthChecks.Azure*/**/*
+
+consul:
+  - src/HealthChecks.Consul/**/*
+
+UI:
+  - src/HealthChecks.UI/**/*
+  - src/HealthChecks.UI.*/**/*

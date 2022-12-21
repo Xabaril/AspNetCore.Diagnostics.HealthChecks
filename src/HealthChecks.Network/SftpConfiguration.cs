@@ -13,8 +13,8 @@ namespace HealthChecks.Network
         internal List<AuthenticationMethod> AuthenticationMethods { get; } = new();
         public SftpConfigurationBuilder(string host, int port, string userName)
         {
-            _host = host ?? throw new ArgumentNullException(nameof(host));
-            _userName = userName ?? throw new ArgumentNullException(userName);
+            _host = Guard.ThrowIfNull(host);
+            _userName = Guard.ThrowIfNull(userName);
 
             if (port == default)
                 port = 22;
@@ -28,10 +28,8 @@ namespace HealthChecks.Network
         }
         public SftpConfigurationBuilder AddPrivateKeyAuthentication(string privateKey, string passphrase)
         {
-            if (string.IsNullOrEmpty(privateKey))
-                throw new ArgumentNullException(nameof(privateKey));
-            if (string.IsNullOrEmpty(passphrase))
-                throw new ArgumentNullException(nameof(passphrase));
+            Guard.ThrowIfNull(privateKey, true);
+            Guard.ThrowIfNull(passphrase, true);
 
             var keyBytes = Encoding.UTF8.GetBytes(privateKey);
 

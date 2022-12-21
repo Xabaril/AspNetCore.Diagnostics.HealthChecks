@@ -3,7 +3,7 @@ name: HealthChecks Gremlin CD
 on:
   push:
     tags:
-      - release-gremlin-*  # Push events to release-gremlin*
+      - release-gremlin-*
 
 jobs:
   build:
@@ -13,10 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.202
-        include-prerelease: false
+        dotnet-version: |
+          6.0.x
+          7.0.x
     - name: Restore
       run: dotnet restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
     - name: Build

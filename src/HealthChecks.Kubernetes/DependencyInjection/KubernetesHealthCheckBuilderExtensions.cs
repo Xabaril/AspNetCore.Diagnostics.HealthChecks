@@ -35,10 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var kubernetesHealthCheckBuilder = new KubernetesHealthCheckBuilder();
             setup?.Invoke(kubernetesHealthCheckBuilder);
 
-            if (kubernetesHealthCheckBuilder.Configuration == null)
-            {
-                throw new ArgumentNullException(nameof(kubernetesHealthCheckBuilder.Configuration));
-            }
+            Guard.ThrowIfNull(kubernetesHealthCheckBuilder.Configuration);
 
             var client = new Kubernetes(kubernetesHealthCheckBuilder.Configuration);
             var kubernetesChecksExecutor = new KubernetesChecksExecutor(client);

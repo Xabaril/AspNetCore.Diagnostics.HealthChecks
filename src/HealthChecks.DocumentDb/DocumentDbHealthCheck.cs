@@ -11,8 +11,8 @@ namespace HealthChecks.DocumentDb
 
         public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions)
         {
-            _documentDbOptions.UriEndpoint = documentDbOptions.UriEndpoint ?? throw new ArgumentNullException(nameof(documentDbOptions.UriEndpoint));
-            _documentDbOptions.PrimaryKey = documentDbOptions.PrimaryKey ?? throw new ArgumentNullException(nameof(documentDbOptions.PrimaryKey));
+            _documentDbOptions.UriEndpoint = Guard.ThrowIfNull(documentDbOptions.UriEndpoint);
+            _documentDbOptions.PrimaryKey = Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

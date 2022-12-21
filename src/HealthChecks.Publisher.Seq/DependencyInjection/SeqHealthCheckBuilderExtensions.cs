@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
-        /// <param name="setup">The Sql configuration options.</param>
+        /// <param name="setup">The Seq configuration options.</param>
         /// <param name="name"> The registration name. This is also the associated http client name if you use AddHttpClient </param>
         /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
         public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions>? setup, string? name = default)

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Kafka
 {
-    public class KafkaHealthCheck : IHealthCheck
+    public class KafkaHealthCheck : IHealthCheck, IDisposable
     {
         private readonly ProducerConfig _configuration;
         private readonly string _topic;
@@ -11,7 +11,7 @@ namespace HealthChecks.Kafka
 
         public KafkaHealthCheck(ProducerConfig configuration, string? topic)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = Guard.ThrowIfNull(configuration);
             _topic = topic ?? "healthchecks-topic";
         }
 
@@ -19,10 +19,7 @@ namespace HealthChecks.Kafka
         {
             try
             {
-                if (_producer == null)
-                {
-                    _producer = new ProducerBuilder<string, string>(_configuration).Build();
-                }
+                _producer ??= new ProducerBuilder<string, string>(_configuration).Build();
 
                 var message = new Message<string, string>
                 {
@@ -44,5 +41,7 @@ namespace HealthChecks.Kafka
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
+
+        public void Dispose() => _producer?.Dispose();
     }
 }

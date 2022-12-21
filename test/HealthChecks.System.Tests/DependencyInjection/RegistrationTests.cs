@@ -13,7 +13,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
                     .AddProcessHealthCheck("dotnet", null!);
             });
 
-            ex.Message.Should().Be("Value cannot be null. (Parameter 'predicate')");
+            ex.Message.ShouldBe("Value cannot be null. (Parameter 'predicate')");
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
                     .AddProcessHealthCheck("", p => p.Any());
             });
 
-            ex.Message.Should().Be("Value cannot be null. (Parameter 'processName')");
+            ex.Message.ShouldBe("Value cannot be null. (Parameter 'processName')");
         }
 
         [Fact]
@@ -44,8 +44,8 @@ namespace HealthChecks.System.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("process");
-            check.GetType().Should().Be(typeof(ProcessHealthCheck));
+            registration.Name.ShouldBe("process");
+            check.ShouldBeOfType<ProcessHealthCheck>();
         }
     }
 }

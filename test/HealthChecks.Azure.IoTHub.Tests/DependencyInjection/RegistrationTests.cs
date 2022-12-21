@@ -15,8 +15,8 @@ namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("iothub");
-            check.GetType().Should().Be(typeof(IoTHubHealthCheck));
+            registration.Name.ShouldBe("iothub");
+            check.ShouldBeOfType<IoTHubHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("iothubcheck");
-            check.GetType().Should().Be(typeof(IoTHubHealthCheck));
+            registration.Name.ShouldBe("iothubcheck");
+            check.ShouldBeOfType<IoTHubHealthCheck>();
         }
     }
 }

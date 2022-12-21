@@ -11,10 +11,12 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                 .AddS3(options =>
                 {
+#pragma warning disable CS0618 // Type or member is obsolete
                     options.AccessKey = "access-key";
                     options.BucketName = "bucket-name";
                     options.SecretKey = "secret-key";
                     options.S3Config = new AmazonS3Config();
+#pragma warning restore CS0618 // Type or member is obsolete
                 });
 
             using var serviceProvider = services.BuildServiceProvider();
@@ -23,8 +25,8 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("aws s3");
-            check.GetType().Should().Be(typeof(S3HealthCheck));
+            registration.Name.ShouldBe("aws s3");
+            check.ShouldBeOfType<S3HealthCheck>();
         }
 
         [Fact]
@@ -34,10 +36,12 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             services.AddHealthChecks()
                  .AddS3(options =>
                  {
+#pragma warning disable CS0618 // Type or member is obsolete
                      options.AccessKey = "access-key";
                      options.BucketName = "bucket-name";
                      options.SecretKey = "secret-key";
                      options.S3Config = new AmazonS3Config();
+#pragma warning restore CS0618 // Type or member is obsolete
                  }, name: "aws s3 check");
 
             using var serviceProvider = services.BuildServiceProvider();
@@ -46,8 +50,8 @@ namespace HealthChecks.Aws.S3.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("aws s3 check");
-            check.GetType().Should().Be(typeof(S3HealthCheck));
+            registration.Name.ShouldBe("aws s3 check");
+            check.ShouldBeOfType<S3HealthCheck>();
         }
     }
 }

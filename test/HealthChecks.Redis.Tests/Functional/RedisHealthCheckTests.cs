@@ -7,9 +7,6 @@ namespace HealthChecks.Redis.Tests.Functional
         [Fact]
         public async Task be_healthy_if_redis_is_available()
         {
-            //read appveyor services default values on
-            //https://www.appveyor.com/docs/services-databases/#sql-server-2017
-
             var connectionString = "localhost:6379,allowAdmin=true";
 
             var webHostBuilder = new WebHostBuilder()
@@ -32,15 +29,12 @@ namespace HealthChecks.Redis.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task be_healthy_if_multiple_redis_are_available()
         {
-            //read appveyor services default values on
-            //https://www.appveyor.com/docs/services-databases/#sql-server-2017
-
             var connectionString = "localhost:6379,allowAdmin=true";
 
             var webHostBuilder = new WebHostBuilder()
@@ -64,7 +58,7 @@ namespace HealthChecks.Redis.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -90,7 +84,7 @@ namespace HealthChecks.Redis.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

@@ -1,5 +1,7 @@
 using System.Net.Sockets;
+#if !NET5_0_OR_GREATER
 using HealthChecks.Network.Extensions;
+#endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
@@ -10,7 +12,7 @@ namespace HealthChecks.Network
 
         public TcpHealthCheck(TcpHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -21,7 +23,11 @@ namespace HealthChecks.Network
                 {
                     using (var tcpClient = new TcpClient(_options.AddressFamily))
                     {
+#if NET5_0_OR_GREATER
+                        await tcpClient.ConnectAsync(host, port, cancellationToken);
+#else
                         await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
+#endif
 
                         if (!tcpClient.Connected)
                         {

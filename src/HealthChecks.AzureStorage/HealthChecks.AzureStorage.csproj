@@ -4,14 +4,14 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.AzureStorage is the health check package for Blobs, Tables and Queues.</Description>
-    <Version>$(HealthCheckAzureStorage)</Version>
+    <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
-    <PackageReference Include="Azure.Storage.Queues" Version="12.10.0" />
-	<PackageReference Include="Azure.Storage.Files.Shares" Version="12.10.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.12.0" />
+    <PackageReference Include="Azure.Storage.Files.Shares" Version="12.12.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

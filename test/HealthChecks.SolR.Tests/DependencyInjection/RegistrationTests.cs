@@ -17,8 +17,8 @@ namespace HealthChecks.SolR.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("solr");
-            check.Should().BeOfType<SolrHealthCheck>();
+            registration.Name.ShouldBe("solr");
+            check.ShouldBeOfType<SolrHealthCheck>();
         }
     }
 }

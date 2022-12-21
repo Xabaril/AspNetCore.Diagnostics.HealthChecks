@@ -28,11 +28,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             ILogger<KubernetesDiscoveryHostedService> logger,
             IHostApplicationLifetime hostLifetime)
         {
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _discoveryOptions = discoveryOptions?.Value ?? throw new ArgumentNullException(nameof(discoveryOptions));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _hostLifetime = hostLifetime ?? throw new ArgumentNullException(nameof(hostLifetime));
-            _clusterServiceClient = httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME) ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _serviceProvider = Guard.ThrowIfNull(serviceProvider);
+            _discoveryOptions = Guard.ThrowIfNull(discoveryOptions?.Value);
+            _logger = Guard.ThrowIfNull(logger);
+            _hostLifetime = Guard.ThrowIfNull(hostLifetime);
+            _clusterServiceClient = Guard.ThrowIfNull(httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME));
             _addressFactory = new KubernetesAddressFactory(_discoveryOptions);
         }
 

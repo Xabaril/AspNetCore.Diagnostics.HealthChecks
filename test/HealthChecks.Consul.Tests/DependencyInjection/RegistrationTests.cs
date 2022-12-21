@@ -20,8 +20,8 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("consul");
-            check.GetType().Should().Be(typeof(ConsulHealthCheck));
+            registration.Name.ShouldBe("consul");
+            check.ShouldBeOfType<ConsulHealthCheck>();
         }
 
         [Fact]
@@ -42,8 +42,8 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-consul-group");
-            check.GetType().Should().Be(typeof(ConsulHealthCheck));
+            registration.Name.ShouldBe("my-consul-group");
+            check.ShouldBeOfType<ConsulHealthCheck>();
         }
     }
 }

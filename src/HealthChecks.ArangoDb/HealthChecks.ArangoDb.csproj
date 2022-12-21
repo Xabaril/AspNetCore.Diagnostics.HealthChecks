@@ -4,12 +4,12 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);ArangoDb</PackageTags>
     <Description>HealthChecks.ArangoDb is the health check package for ArangoDb.</Description>
-    <Version>$(HealthCheckArangoDb)</Version>
+    <VersionPrefix>$(HealthCheckArangoDb)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ArangoDBNetStandard" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
+    <PackageReference Include="ArangoDBNetStandard" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

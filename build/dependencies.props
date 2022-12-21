@@ -6,34 +6,41 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Health Checks Package Versions">
+    <HealthCheckApplicationStatus>6.0.0</HealthCheckApplicationStatus>
     <HealthCheckArangoDb>6.0.2</HealthCheckArangoDb>
     <HealthCheckAWSS3>6.0.2</HealthCheckAWSS3>
+    <HealthCheckAWSSecretsManager>6.0.0</HealthCheckAWSSecretsManager>
+    <HealthCheckAWSSns>6.0.0</HealthCheckAWSSns>
+    <HealthCheckAWSSqs>6.0.0</HealthCheckAWSSqs>
+    <HealthCheckAWSSystemsManager>6.0.0</HealthCheckAWSSystemsManager>
     <HealthCheckAzureDigitalTwin>6.0.0</HealthCheckAzureDigitalTwin>
-    <HealthCheckAzureServiceBus>6.0.3</HealthCheckAzureServiceBus>
-    <HealthCheckAzureStorage>6.0.4</HealthCheckAzureStorage>
+    <HealthCheckAzureServiceBus>6.1.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureStorage>6.1.2</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>6.0.2</HealthCheckCloudFirestore>
     <HealthCheckConsul>6.0.2</HealthCheckConsul>
-    <HealthCheckCosmosDb>6.0.2</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>6.2.1</HealthCheckCosmosDb>
     <HealthCheckDocumentDb>6.0.2</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>6.0.2</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>6.0.2</HealthCheckElasticsearch>
-    <HealthCheckEventStore>6.0.2</HealthCheckEventStore>
+    <HealthCheckEventStoregRPC>6.0.1</HealthCheckEventStoregRPC>
+    <HealthCheckEventStore>6.0.3</HealthCheckEventStore>
     <HealthCheckGremlin>6.0.2</HealthCheckGremlin>
     <HealthCheckHangfire>6.0.2</HealthCheckHangfire>
     <HealthCheckIbmMQ>6.0.2</HealthCheckIbmMQ>
     <HealthCheckIoTHub>6.0.2</HealthCheckIoTHub>
-    <HealthCheckKafka>6.0.2</HealthCheckKafka>
-    <HealthCheckKeyVault>6.0.2</HealthCheckKeyVault>
+    <HealthCheckKafka>6.0.3</HealthCheckKafka>
+    <HealthCheckKeyVault>6.0.3</HealthCheckKeyVault>
     <HealthCheckKubernetes>6.0.2</HealthCheckKubernetes>
     <HealthCheckMongoDB>6.0.2</HealthCheckMongoDB>
     <HealthCheckMySql>6.0.2</HealthCheckMySql>
-    <HealthCheckNetwork>6.0.3</HealthCheckNetwork>
-    <HealthCheckNats>6.0.0</HealthCheckNats>
+    <HealthCheckNetwork>6.0.4</HealthCheckNetwork>
+    <HealthCheckNats>6.0.4</HealthCheckNats>
     <HealthCheckNpgSql>6.0.2</HealthCheckNpgSql>
     <HealthCheckOpenIdConnectServer>6.0.2</HealthCheckOpenIdConnectServer>
     <HealthCheckOracle>6.0.3</HealthCheckOracle>
     <HealthCheckPrometheusMetrics>6.0.2</HealthCheckPrometheusMetrics>
     <HealthCheckPublisherAppplicationInsights>6.0.2</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherCloudWatch>6.1.0</HealthCheckPublisherCloudWatch>
     <HealthCheckPublisherDatadog>6.0.2</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>6.0.2</HealthCheckPublisherPrometheus>
     <HealthCheckPublisherSeq>6.0.2</HealthCheckPublisherSeq>
@@ -48,15 +55,14 @@
     <HealthChecksUIK8sOperator>6.0.4</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>6.0.4</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>6.0.5</HealthCheckSystem>
-    <HealthCheckUI>6.0.4</HealthCheckUI>
-    <HealthCheckUIClient>6.0.4</HealthCheckUIClient>
-    <HealthCheckUICore>6.0.4</HealthCheckUICore>
-    <HealthCheckUIInMemoryStorage>6.0.4</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>6.0.4</HealthCheckUIMySqlStorage>
-    <HealthCheckUISQLiteStorage>6.0.4</HealthCheckUISQLiteStorage>
-    <HealthCheckUISqlServerStorage>6.0.4</HealthCheckUISqlServerStorage>
+    <HealthCheckUI>6.0.5</HealthCheckUI>
+    <HealthCheckUIClient>6.0.5</HealthCheckUIClient>
+    <HealthCheckUICore>6.0.5</HealthCheckUICore>
+    <HealthCheckUIInMemoryStorage>6.0.5</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>6.0.5</HealthCheckUIMySqlStorage>
+    <HealthCheckUISQLiteStorage>6.0.5</HealthCheckUISQLiteStorage>
+    <HealthCheckUISqlServerStorage>6.0.5</HealthCheckUISqlServerStorage>
     <HealthCheckUri>6.0.3</HealthCheckUri>
-    <HealthCheckNats>6.0.2</HealthCheckNats>
   </PropertyGroup>
 
 </Project>

@@ -25,8 +25,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("k8s");
-            check.GetType().Should().Be(typeof(KubernetesHealthCheck));
+            registration.Name.ShouldBe("k8s");
+            check.ShouldBeOfType<KubernetesHealthCheck>();
         }
 
         [Fact]
@@ -49,8 +49,8 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("second-k8s-cluster");
-            check.GetType().Should().Be(typeof(KubernetesHealthCheck));
+            registration.Name.ShouldBe("second-k8s-cluster");
+            check.ShouldBeOfType<KubernetesHealthCheck>();
         }
     }
 }

@@ -10,8 +10,8 @@ namespace HealthChecks.UI.Image.PushService
 
         public HealthChecksPushService(HealthChecksDb db, ILogger<HealthChecksPushService> logger)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-            _logger = logger ?? throw new ArgumentException(nameof(logger));
+            _db = Guard.ThrowIfNull(db);
+            _logger = Guard.ThrowIfNull(logger);
         }
 
         public async Task AddAsync(string name, string uri)

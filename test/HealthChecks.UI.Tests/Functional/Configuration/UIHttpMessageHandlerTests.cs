@@ -125,8 +125,8 @@ namespace HealthChecks.UI.Tests
 
             public ClientHandler(MessageHandlerTracer tracer, IDictionary<string, string> properties)
             {
-                _tracer = tracer ?? throw new ArgumentNullException(nameof(tracer));
-                _ = properties ?? throw new ArgumentNullException(nameof(properties));
+                _tracer = Guard.ThrowIfNull(tracer);
+                _ = Guard.ThrowIfNull(properties);
 
                 foreach (var kv in properties)
                 {
@@ -150,7 +150,7 @@ namespace HealthChecks.UI.Tests
 
             public CustomDelegatingHandler(MessageHandlerTracer tracer)
             {
-                _tracer = tracer ?? throw new ArgumentNullException(nameof(tracer));
+                _tracer = Guard.ThrowIfNull(tracer);
             }
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
@@ -165,7 +165,7 @@ namespace HealthChecks.UI.Tests
 
             public CustomDelegatingHandler2(MessageHandlerTracer tracer)
             {
-                _tracer = tracer ?? throw new ArgumentNullException(nameof(tracer));
+                _tracer = Guard.ThrowIfNull(tracer);
             }
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {

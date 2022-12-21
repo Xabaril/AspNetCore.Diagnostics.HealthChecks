@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public IServiceCollection Services { get; }
         public HealthChecksUIBuilder(IServiceCollection services)
         {
-            Services = services ?? throw new ArgumentNullException(nameof(services));
+            Services = Guard.ThrowIfNull(services);
         }
     }
 }

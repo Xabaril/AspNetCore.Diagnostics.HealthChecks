@@ -57,10 +57,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,

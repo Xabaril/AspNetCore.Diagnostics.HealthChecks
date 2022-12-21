@@ -1,4 +1,5 @@
 using System.Net;
+using HealthChecks.UI.Client;
 
 namespace HealthChecks.EventStore.Tests.Functional
 {
@@ -11,13 +12,14 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                     .AddEventStore("ConnectTo=tcp://localhost:1113", tags: new string[] { "eventstore" });
+                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -27,8 +29,9 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
+
         [Fact]
         public async Task be_healthy_if_eventstore_is_available()
         {
@@ -36,13 +39,14 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                     .AddEventStore("ConnectTo=tcp://localhost:1113; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
+                        .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -52,7 +56,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -61,14 +65,16 @@ namespace HealthChecks.EventStore.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
+                    // Existing hostname, incorrect port. If the hostname cannot be reached, CreateRequest will hang.
                     services.AddHealthChecks()
-                    .AddEventStore("tcp://nonexistingdomain:1113", tags: new string[] { "eventstore" });
+                    .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
                 })
                 .Configure(app =>
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("eventstore")
+                        Predicate = r => r.Tags.Contains("eventstore"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -78,7 +84,7 @@ namespace HealthChecks.EventStore.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
     }
 }

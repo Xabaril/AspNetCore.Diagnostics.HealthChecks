@@ -4,12 +4,12 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);Kubernetes;k8s;Cluster</PackageTags>
     <Description>HealthChecks.HealthChecks is the health check package for Kubernetes clusters.</Description>
-    <Version>$(HealthCheckKubernetes)</Version>
+    <VersionPrefix>$(HealthCheckKubernetes)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="KubernetesClient" Version="4.0.26" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

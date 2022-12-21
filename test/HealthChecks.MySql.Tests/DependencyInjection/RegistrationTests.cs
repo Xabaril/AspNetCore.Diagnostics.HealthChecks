@@ -15,8 +15,8 @@ namespace HealthChecks.MySql.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("mysql");
-            check.GetType().Should().Be(typeof(MySqlHealthCheck));
+            registration.Name.ShouldBe("mysql");
+            check.ShouldBeOfType<MySqlHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -31,8 +31,8 @@ namespace HealthChecks.MySql.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-mysql-group");
-            check.GetType().Should().Be(typeof(MySqlHealthCheck));
+            registration.Name.ShouldBe("my-mysql-group");
+            check.ShouldBeOfType<MySqlHealthCheck>();
         }
     }
 }

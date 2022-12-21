@@ -15,8 +15,8 @@ namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("cloud firestore");
-            check.GetType().Should().Be(typeof(CloudFirestoreHealthCheck));
+            registration.Name.ShouldBe("cloud firestore");
+            check.ShouldBeOfType<CloudFirestoreHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -31,8 +31,8 @@ namespace HealthChecks.Gcp.CloudFirestore.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-cloud-firestore-group");
-            check.GetType().Should().Be(typeof(CloudFirestoreHealthCheck));
+            registration.Name.ShouldBe("my-cloud-firestore-group");
+            check.ShouldBeOfType<CloudFirestoreHealthCheck>();
         }
     }
 }

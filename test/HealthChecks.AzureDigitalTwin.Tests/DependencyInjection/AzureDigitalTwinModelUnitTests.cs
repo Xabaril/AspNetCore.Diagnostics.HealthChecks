@@ -22,8 +22,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwinmodels");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinModelsHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwinmodels");
+            check.ShouldBeOfType<AzureDigitalTwinModelsHealthCheck>();
         }
 
         [Fact]
@@ -45,8 +45,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwinmodels_check");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinModelsHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwinmodels_check");
+            check.ShouldBeOfType<AzureDigitalTwinModelsHealthCheck>();
         }
 
         [Fact]
@@ -80,8 +80,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwinmodels");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinModelsHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwinmodels");
+            check.ShouldBeOfType<AzureDigitalTwinModelsHealthCheck>();
         }
 
         [Fact]
@@ -101,8 +101,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwinmodels_check");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinModelsHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwinmodels_check");
+            check.ShouldBeOfType<AzureDigitalTwinModelsHealthCheck>();
         }
 
         [Fact]

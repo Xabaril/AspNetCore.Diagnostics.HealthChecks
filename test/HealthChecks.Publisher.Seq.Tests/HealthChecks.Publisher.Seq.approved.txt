@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public class SeqOptions
     {
         public SeqOptions() { }
-        public string ApiKey { get; set; }
+        public string? ApiKey { get; set; }
         public HealthChecks.Publisher.Seq.SeqInputLevel DefaultInputLevel { get; set; }
         public string Endpoint { get; set; }
     }

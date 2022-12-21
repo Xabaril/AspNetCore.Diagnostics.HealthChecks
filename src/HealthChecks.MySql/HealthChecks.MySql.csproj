@@ -4,12 +4,12 @@
     <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
     <PackageTags>$(PackageTags);MySQL</PackageTags>
     <Description>HealthChecks.MySql is the health check package for MySQL.</Description>
-    <Version>$(HealthCheckMySql)</Version>
+    <VersionPrefix>$(HealthCheckMySql)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="2.1.9" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
+    <PackageReference Include="MySqlConnector" Version="2.2.2" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
   </ItemGroup>
 
 </Project>

@@ -29,7 +29,7 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace HealthChecks.Elasticsearch.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

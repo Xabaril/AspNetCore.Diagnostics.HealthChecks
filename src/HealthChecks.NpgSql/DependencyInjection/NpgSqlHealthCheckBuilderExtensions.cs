@@ -64,10 +64,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            if (connectionStringFactory == null)
-            {
-                throw new ArgumentNullException(nameof(connectionStringFactory));
-            }
+            Guard.ThrowIfNull(connectionStringFactory);
 
             builder.Services.AddSingleton(sp => new NpgSqlHealthCheck(connectionStringFactory(sp), healthQuery, connectionAction));
 

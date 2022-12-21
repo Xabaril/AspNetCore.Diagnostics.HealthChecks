@@ -9,15 +9,16 @@ jobs:
   build:
     env:
       BUILD_CONFIG: Release
-      VERSION_SUFFIX: -rc2.${{ github.run_number }}
+      VERSION_SUFFIX: rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.202
-        include-prerelease: false
+        dotnet-version: |
+          6.0.x
+          7.0.x
     - name: Restore
       run: dotnet restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
     - name: Build

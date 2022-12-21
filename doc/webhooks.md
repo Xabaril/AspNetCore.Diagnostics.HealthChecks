@@ -49,13 +49,13 @@ setup
 .AddWebhookNotification("webhook1",
     uri: "status/200?code=ax3rt56s", payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
     restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}",
-    shouldNotifyFunc: report => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23
-    customMessageFunc: (report) =>
+    shouldNotifyFunc: (livenessName, report) => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23
+    customMessageFunc: (livenessName, report) =>
     {
         var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
         return $"{failing.Count()} healthchecks are failing";
     },
-    customDescriptionFunc: report =>
+    customDescriptionFunc: (livenessName, report) =>
     {
         var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
         return $"HealthChecks with names {string.Join("/", failing.Select(f => f.Key))} are failing";

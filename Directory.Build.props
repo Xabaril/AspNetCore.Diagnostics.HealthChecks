@@ -30,31 +30,30 @@
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" />
+  <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.AzureServiceBus' OR $(MSBuildProjectName) == 'HealthChecks.AzureStorage' OR $(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
+    <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.12" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.5" />
-    <PackageReference Include="FluentAssertions" Version="6.7.0" />
-    <PackageReference Include="Shouldly" Version="4.0.3" />
-    <PackageReference Include="NSubstitute" Version="4.3.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
+    <PackageReference Include="Shouldly" Version="4.1.0" />
+    <PackageReference Include="NSubstitute" Version="4.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
+    <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageReference Include="PublicApiGenerator" Version="10.3.0" />
-    <PackageReference Include="coverlet.collector" Version="3.1.2">
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
 
-    <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" />
+    <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" />
+    <Compile Include="../TestLogger.cs" Link="TestLogger.cs" Visible="false" />
+    <Compile Include="../TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
 
     <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.AspNetCore.Hosting" />
@@ -63,7 +62,6 @@
     <Using Include="Microsoft.Extensions.DependencyInjection" />
     <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.Extensions.Options" />
-    <Using Include="FluentAssertions" />
     <Using Include="Shouldly" />
     <Using Include="Xunit" />
   </ItemGroup>

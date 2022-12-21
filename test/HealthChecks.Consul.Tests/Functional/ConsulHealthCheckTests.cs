@@ -32,7 +32,7 @@ namespace HealthChecks.Consul.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace HealthChecks.Consul.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

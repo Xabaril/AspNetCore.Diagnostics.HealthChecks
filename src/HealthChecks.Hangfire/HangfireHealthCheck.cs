@@ -8,7 +8,7 @@ namespace HealthChecks.Hangfire
 
         public HangfireHealthCheck(HangfireOptions hangfireOptions)
         {
-            _hangfireOptions = hangfireOptions ?? throw new ArgumentNullException(nameof(hangfireOptions));
+            _hangfireOptions = Guard.ThrowIfNull(hangfireOptions);
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

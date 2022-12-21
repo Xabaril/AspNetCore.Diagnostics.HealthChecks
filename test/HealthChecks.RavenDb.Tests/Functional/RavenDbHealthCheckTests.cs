@@ -1,4 +1,5 @@
 using System.Net;
+using HealthChecks.UI.Client;
 using Raven.Client.Documents;
 using Raven.Client.ServerWide;
 using Raven.Client.ServerWide.Operations;
@@ -42,7 +43,8 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("ravendb")
+                        Predicate = r => r.Tags.Contains("ravendb"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -52,7 +54,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -73,7 +75,8 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("ravendb")
+                        Predicate = r => r.Tags.Contains("ravendb"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -83,7 +86,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -102,7 +105,8 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("ravendb")
+                        Predicate = r => r.Tags.Contains("ravendb"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -112,7 +116,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -133,7 +137,8 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("ravendb")
+                        Predicate = r => r.Tags.Contains("ravendb"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 
@@ -143,7 +148,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
     }
 }

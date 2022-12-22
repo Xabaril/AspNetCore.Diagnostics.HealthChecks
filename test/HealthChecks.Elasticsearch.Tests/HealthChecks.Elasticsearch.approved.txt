@@ -1,10 +1,5 @@
 namespace HealthChecks.Elasticsearch
 {
-    public class ElasticsearchClusterHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
-    {
-        public ElasticsearchClusterHealthCheck(HealthChecks.Elasticsearch.ElasticsearchOptions options) { }
-        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
-    }
     public class ElasticsearchHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public ElasticsearchHealthCheck(HealthChecks.Elasticsearch.ElasticsearchOptions options) { }
@@ -22,6 +17,7 @@ namespace HealthChecks.Elasticsearch
         public string? Password { get; }
         public System.TimeSpan? RequestTimeout { get; set; }
         public string Uri { get; }
+        public bool UseClusterHealthApi { get; set; }
         public string? UserName { get; }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseApiKey(Elasticsearch.Net.ApiKeyAuthenticationCredentials apiKey) { }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseBasicAuthentication(string name, string password) { }
@@ -32,11 +28,6 @@ namespace HealthChecks.Elasticsearch
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ElasticsearchClusterHealthCheckBuilderExtensions
-    {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddElasticsearchCluster(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Elasticsearch.ElasticsearchOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddElasticsearchCluster(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string elasticsearchUri, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-    }
     public static class ElasticsearchHealthCheckBuilderExtensions
     {
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddElasticsearch(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Elasticsearch.ElasticsearchOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }

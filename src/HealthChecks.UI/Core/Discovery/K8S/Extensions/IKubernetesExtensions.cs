@@ -8,7 +8,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S.Extensions
     {
         internal static async Task<V1ServiceList> GetServicesAsync(this IKubernetes client, string label, List<string> k8sNamespaces, CancellationToken cancellationToken)
         {
-            if (k8sNamespaces is null || !k8sNamespaces.Any())
+            if (k8sNamespaces is null || k8sNamespaces.Count == 0)
             {
                 return await client.ListServiceForAllNamespacesAsync(labelSelector: label, cancellationToken: cancellationToken);
             }

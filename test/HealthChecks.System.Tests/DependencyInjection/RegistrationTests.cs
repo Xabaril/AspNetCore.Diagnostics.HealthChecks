@@ -21,11 +21,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
 
-            var ex = Assert.Throws<ArgumentNullException>(() =>
-            {
-                services.AddHealthChecks()
-                    .AddProcessHealthCheck("", p => p.Any());
-            });
+            var ex = Assert.Throws<ArgumentNullException>(() => services.AddHealthChecks().AddProcessHealthCheck("", p => p.Length > 0));
 
             ex.Message.ShouldBe("Value cannot be null. (Parameter 'processName')");
         }

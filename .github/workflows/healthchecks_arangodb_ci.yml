@@ -5,23 +5,24 @@ on:
   push:
    branches: [ master ]
    paths:
-    - src/HealthChecks.ArangoDb/**
-    - test/HealthChecks.ArangoDb.Tests/**
-    - .github/workflows/healthchecks_arangodb_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+     - src/HealthChecks.ArangoDb/**
+     - test/HealthChecks.ArangoDb.Tests/**
+     - .github/workflows/healthchecks_arangodb_ci.yml
+     - Directory.Build.props
+     - Directory.Build.targets
    tags-ignore:
-    - release-*
-    - preview-*
+     - release-*
+     - preview-*
 
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.ArangoDb/**
-    - test/HealthChecks.ArangoDb.Tests/**
-    - .github/workflows/healthchecks_arangodb_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.ArangoDb/**
+      - test/HealthChecks.ArangoDb.Tests/**
+      - .github/workflows/healthchecks_arangodb_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,22 +34,22 @@ jobs:
         env:
           ARANGO_ROOT_PASSWORD: strongArangoDbPassword
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj &&
-        dotnet restore ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj &&
+          dotnet restore ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.ArangoDb.Tests/HealthChecks.ArangoDb.Tests.csproj

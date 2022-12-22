@@ -17,11 +17,11 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Nats/**
-    - test/HealthChecks.Nats.Tests/**
-    - .github/workflows/healthchecks_nats_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Nats/**
+      - test/HealthChecks.Nats.Tests/**
+      - .github/workflows/healthchecks_nats_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -34,24 +34,24 @@ jobs:
         - "8222:8222"
         - "6222:6222"
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          6.0.x
-          7.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj &&
-        dotnet restore ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Nats/HealthChecks.Nats.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj &&
+          dotnet restore ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Nats/HealthChecks.Nats.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Nats/HealthChecks.Nats.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.Nats.Tests/HealthChecks.Nats.Tests.csproj

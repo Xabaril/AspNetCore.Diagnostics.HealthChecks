@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-mysql-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

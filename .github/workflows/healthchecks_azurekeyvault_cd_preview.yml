@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-azurekeyvault-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

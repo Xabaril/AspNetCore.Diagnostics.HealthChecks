@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-gremlin-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

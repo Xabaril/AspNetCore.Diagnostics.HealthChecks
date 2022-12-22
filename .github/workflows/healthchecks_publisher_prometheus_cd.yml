@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-publisher_prometheus-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-hangfire-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-azurestorage-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

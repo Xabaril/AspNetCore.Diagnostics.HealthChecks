@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-cosmosdb-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

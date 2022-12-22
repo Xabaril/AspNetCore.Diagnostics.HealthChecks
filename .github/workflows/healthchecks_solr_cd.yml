@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-solr-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

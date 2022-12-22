@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-publisher_applicationinsights-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

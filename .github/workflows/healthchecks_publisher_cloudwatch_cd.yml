@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-publisher_cloudwatch-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-azure_iothub-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

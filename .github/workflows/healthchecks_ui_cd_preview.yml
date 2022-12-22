@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-ui-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-eventstore-* 
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-aws_s3-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

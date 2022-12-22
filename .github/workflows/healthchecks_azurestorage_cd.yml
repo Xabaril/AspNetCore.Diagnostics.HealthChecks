@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-azurestorage-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

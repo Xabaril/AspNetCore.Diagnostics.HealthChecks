@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-azure_iothub-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-azurekeyvault-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

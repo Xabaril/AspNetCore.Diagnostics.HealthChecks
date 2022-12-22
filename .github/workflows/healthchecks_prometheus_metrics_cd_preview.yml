@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-prometheus_metrics-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - preview-azure_digitaltwin-*
-      - preview-all
+      - preview-all-*
 
 jobs:
   build:

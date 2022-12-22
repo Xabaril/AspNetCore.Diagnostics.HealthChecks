@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - release-oracle-*
-      - release-all
+      - release-all-*
 
 jobs:
   build:

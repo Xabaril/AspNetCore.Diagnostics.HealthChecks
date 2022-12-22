@@ -224,5 +224,66 @@ namespace HealthChecks.Uris.Tests.Functional
             var response = await server.CreateRequest($"/health").GetAsync();
             response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
+
+        [Fact]
+        public async Task be_healthy_if_request_succeeds_and_expected_response_matches()
+        {
+            var uri = new Uri("https://httpbin.org/robots.txt");
+
+            var webHostBuilder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddUrlGroup(opt =>
+                        {
+                            opt.AddUri(uri);
+                        }, tags: new string[] { "uris" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("uris")
+                    });
+                });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest("/health").GetAsync();
+
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task be_unhealthy_if_request_succeeds_and_expected_response_fails()
+        {
+            var uri = new Uri("https://httpbin.org/robots.txt");
+
+            var webHostBuilder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddUrlGroup(opt =>
+                        {
+                            opt.AddUri(uri, options =>
+                            {
+                                options.ExpectContent("non-existent");
+                            });
+                        }, tags: new string[] { "uris" });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("uris")
+                    });
+                });
+
+            var server = new TestServer(webHostBuilder);
+
+            var response = await server.CreateRequest("/health").GetAsync();
+
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+        }
     }
 }

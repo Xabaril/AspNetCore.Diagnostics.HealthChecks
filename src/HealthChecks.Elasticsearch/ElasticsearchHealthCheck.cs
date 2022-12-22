@@ -17,7 +17,6 @@ namespace HealthChecks.Elasticsearch
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-
         {
             try
             {

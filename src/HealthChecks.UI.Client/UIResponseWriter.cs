@@ -35,7 +35,7 @@ namespace HealthChecks.UI.Client
         /// Will change the response for the health check with details but will obfuscate exceptions messages.
         /// </summary>
 #pragma warning disable IDE1006 // Naming Styles
-        public static async Task WriteHealthCheckUIResponseNoExceptions(HttpContext httpContext, HealthReport report)
+        public static async Task WriteHealthCheckUIResponseNoExceptionDetails(HttpContext httpContext, HealthReport report)
 #pragma warning restore IDE1006 // Naming Styles
         {
             if (report != null)

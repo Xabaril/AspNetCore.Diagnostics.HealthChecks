@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Elasticsearch</PackageTags>
     <Description>HealthChecks.Elasticsearch is the health check package for Elasticsearch.</Description>
     <VersionPrefix>$(HealthCheckElasticsearch)</VersionPrefix>
@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="NEST" Version="7.17.5" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

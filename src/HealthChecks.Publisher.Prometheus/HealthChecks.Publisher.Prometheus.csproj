@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion)</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <PackageTags>$(PackageTags);Publisher;Prometheus;Prometheus Gateway</PackageTags>
     <Description>[Deprecated! Use pull model with AspNetCore.HealthChecks.Prometheus.Metrics package instead] HealthChecks.Publisher.PrometheusGateway is the health check publisher for Prometheus Gateway.</Description>
     <VersionPrefix>$(HealthCheckPublisherPrometheus)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="prometheus-net" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="prometheus-net" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

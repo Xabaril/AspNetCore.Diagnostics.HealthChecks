@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="build/dependencies.props" />
+  <Import Project="build/versions.props" />
 
   <PropertyGroup Label="Package information">
     <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
@@ -35,9 +35,10 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" Condition="'$(TargetFramework)' != 'net7.0'" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.12" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.1" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Shouldly" Version="4.1.0" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
@@ -51,7 +52,7 @@
 
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
 
-    <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" />
+    <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
     <Compile Include="../TestLogger.cs" Link="TestLogger.cs" Visible="false" />
     <Compile Include="../TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
 

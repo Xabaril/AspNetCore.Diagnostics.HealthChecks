@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;DigitalTwin</PackageTags>
     <Description>HealthChecks.AzureDigitalTwin is the health check package for Azure DigitalTwin.</Description>
     <VersionPrefix>$(HealthCheckAzureDigitalTwin)</VersionPrefix>
@@ -11,6 +11,6 @@
     <PackageReference Include="Azure.Identity" Version="1.8.0" />
     <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" Version="1.2.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
 </Project>

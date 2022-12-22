@@ -6,8 +6,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddStorageProvider(this HealthChecksUIBuilder builder, IConfiguration configuration)
         {
-            string configuredStorage = configuration[UIKeys.STORAGE_PROVIDER];
-            string connectionString = configuration[UIKeys.STORAGE_CONNECTION];
+            string? configuredStorage = configuration[UIKeys.STORAGE_PROVIDER];
+            string? connectionString = configuration[UIKeys.STORAGE_CONNECTION];
 
             if (string.IsNullOrEmpty(configuredStorage))
                 configuredStorage = StorageProviderEnum.InMemory.ToString();
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 Console.WriteLine($"Configuring image to work with {storageEnum} provider");
 
-                targetProvider.SetupProvider(builder, connectionString);
+                targetProvider.SetupProvider(builder, connectionString!);
             }
             else
             {

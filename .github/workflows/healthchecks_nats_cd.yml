@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-nats-*
+      - release-all
 
 jobs:
   build:

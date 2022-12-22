@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-kafka-*
+      - preview-all
 
 jobs:
   build:

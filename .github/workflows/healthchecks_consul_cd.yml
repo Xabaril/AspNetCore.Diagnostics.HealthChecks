@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-consul-*
+      - release-all
 
 jobs:
   build:

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-gremlin-*
+      - release-all
 
 jobs:
   build:

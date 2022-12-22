@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-sqlserver-*
+      - preview-all
 
 jobs:
   build:

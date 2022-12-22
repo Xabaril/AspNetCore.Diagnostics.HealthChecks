@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-consul-*
+      - preview-all
 
 jobs:
   build:

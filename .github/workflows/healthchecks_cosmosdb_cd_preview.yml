@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-cosmosdb-*
+      - preview-all
 
 jobs:
   build:

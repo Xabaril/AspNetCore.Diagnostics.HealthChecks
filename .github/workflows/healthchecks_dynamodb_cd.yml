@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-dynamodb-*
+      - release-all
 
 jobs:
   build:

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-publisher_seq-*
+      - release-all
 
 jobs:
   build:

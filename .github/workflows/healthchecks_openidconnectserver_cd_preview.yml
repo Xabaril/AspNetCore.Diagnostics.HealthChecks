@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-openidconnectserver-*
+      - preview-all
 
 jobs:
   build:

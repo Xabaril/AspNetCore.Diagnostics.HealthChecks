@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-ravendb-*
+      - preview-all
 
 jobs:
   build:

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-network-*
+      - preview-all
 
 jobs:
   build:

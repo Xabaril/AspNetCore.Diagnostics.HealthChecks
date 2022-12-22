@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-signalr-*
+      - preview-all
 
 jobs:
   build:

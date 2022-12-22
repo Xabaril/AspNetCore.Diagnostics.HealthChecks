@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-elasticsearch-*
+      - preview-all
 
 jobs:
   build:

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-mongodb-*
+      - release-all
 
 jobs:
   build:

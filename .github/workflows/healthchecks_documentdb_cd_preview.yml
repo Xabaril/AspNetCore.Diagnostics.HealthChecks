@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-documentdb-*
+      - preview-all
 
 jobs:
   build:

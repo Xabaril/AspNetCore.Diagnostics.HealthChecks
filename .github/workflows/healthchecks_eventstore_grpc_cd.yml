@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-eventstore_grpc-*
+      - release-all
 
 jobs:
   build:

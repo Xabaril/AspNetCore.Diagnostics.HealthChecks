@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Reflection;
 using PublicApiGenerator;
 
-/// <see href="https://github.com/JakeGinnivan/ApiApprover"/>
 public class ApiApprovalTests
 {
     [Fact]
@@ -28,6 +27,7 @@ public class ApiApprovalTests
 
         var asmForTest = dependencies.Select(dep => Assembly.Load(dep)).Where(asm => asm.GetTypes().Any(type => type.Name == "ApiMarker") && asm.GetName().Name!.Contains(nameToFind, StringComparison.InvariantCultureIgnoreCase)).Single();
 
+        // https://github.com/PublicApiGenerator/PublicApiGenerator
         string publicApi = asmForTest.GeneratePublicApi(new ApiGeneratorOptions
         {
             IncludeAssemblyAttributes = false,

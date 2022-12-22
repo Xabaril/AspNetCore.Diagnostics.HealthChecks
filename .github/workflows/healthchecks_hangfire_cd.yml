@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-hangfire-*
+      - release-all
 
 jobs:
   build:

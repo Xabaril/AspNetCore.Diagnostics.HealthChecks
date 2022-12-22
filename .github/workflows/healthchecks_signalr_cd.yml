@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-signalr-*
+      - release-all
 
 jobs:
   build:

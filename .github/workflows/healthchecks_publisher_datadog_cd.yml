@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-publisher_datadog-*
+      - release-all
 
 jobs:
   build:

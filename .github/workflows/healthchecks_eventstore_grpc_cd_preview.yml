@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-eventstore_grpc-*
+      - preview-all
 
 jobs:
   build:

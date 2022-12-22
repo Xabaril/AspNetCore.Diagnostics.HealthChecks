@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-publisher_prometheus-*
+      - preview-all
 
 jobs:
   build:

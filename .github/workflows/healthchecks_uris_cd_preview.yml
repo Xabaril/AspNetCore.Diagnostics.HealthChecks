@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-uris-*
+      - preview-all
 
 jobs:
   build:

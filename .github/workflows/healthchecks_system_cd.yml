@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-system-*
+      - release-all
 
 jobs:
   build:

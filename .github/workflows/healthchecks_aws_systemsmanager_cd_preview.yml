@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-aws_systemsmanager-*
+      - preview-all
 
 jobs:
   build:

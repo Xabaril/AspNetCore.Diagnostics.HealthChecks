@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-solr-*
+      - preview-all
 
 jobs:
   build:

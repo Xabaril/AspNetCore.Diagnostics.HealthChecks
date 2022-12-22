@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-mysql-*
+      - release-all
 
 jobs:
   build:

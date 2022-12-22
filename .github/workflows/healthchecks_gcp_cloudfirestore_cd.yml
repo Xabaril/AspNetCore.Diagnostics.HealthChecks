@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-gcp_cloudfirestore-*
+      - release-all
 
 jobs:
   build:

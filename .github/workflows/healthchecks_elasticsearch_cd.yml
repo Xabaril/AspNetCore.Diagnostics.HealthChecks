@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-elasticsearch-*
+      - release-all
 
 jobs:
   build:

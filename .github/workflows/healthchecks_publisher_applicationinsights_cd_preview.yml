@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-publisher_applicationinsights-*
+      - preview-all
 
 jobs:
   build:

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-publisher_seq-*
+      - preview-all
 
 jobs:
   build:

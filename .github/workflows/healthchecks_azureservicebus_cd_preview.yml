@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-azureservicebus-*
+      - preview-all
 
 jobs:
   build:

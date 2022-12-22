@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-applicationstatus-*
+      - release-all
 
 jobs:
   build:

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-sqlserver-*
+      - release-all
 
 jobs:
   build:

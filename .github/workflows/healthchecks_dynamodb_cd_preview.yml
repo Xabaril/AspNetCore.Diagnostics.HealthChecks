@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-dynamodb-*
+      - preview-all
 
 jobs:
   build:

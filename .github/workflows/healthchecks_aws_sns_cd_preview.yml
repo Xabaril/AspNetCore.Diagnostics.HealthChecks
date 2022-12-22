@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-aws_sns-*
+      - preview-all
 
 jobs:
   build:

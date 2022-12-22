@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-sqlite-*
+      - release-all
 
 jobs:
   build:

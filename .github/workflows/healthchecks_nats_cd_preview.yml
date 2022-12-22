@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - preview-nats-*
+      - preview-all
 
 jobs:
   build:

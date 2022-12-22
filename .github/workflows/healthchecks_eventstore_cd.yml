@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-eventstore-*
+      - release-all
 
 jobs:
   build:

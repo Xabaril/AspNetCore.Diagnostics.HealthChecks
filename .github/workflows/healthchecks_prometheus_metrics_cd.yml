@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - release-prometheus_metrics-*
+      - release-all
 
 jobs:
   build:

@@ -17,11 +17,11 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Kafka/**
-    - test/HealthChecks.Kafka.Tests/**
-    - .github/workflows/healthchecks_kafka_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Kafka/**
+      - test/HealthChecks.Kafka.Tests/**
+      - .github/workflows/healthchecks_kafka_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -40,24 +40,24 @@ jobs:
           KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
           KAFKA_ADVERTISED_PORT: 9092
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          6.0.x
-          7.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj &&
-        dotnet restore ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj &&
+          dotnet restore ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Kafka/HealthChecks.Kafka.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.Tests.csproj

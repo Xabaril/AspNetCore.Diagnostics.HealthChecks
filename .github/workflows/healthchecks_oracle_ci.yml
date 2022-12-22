@@ -17,11 +17,11 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Oracle/**
-    - test/HealthChecks.Oracle.Tests/**
-    - .github/workflows/healthchecks_oracle_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Oracle/**
+      - test/HealthChecks.Oracle.Tests/**
+      - .github/workflows/healthchecks_oracle_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -34,24 +34,24 @@ jobs:
         env:
           ORACLE_PASSWORD: oracle
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          6.0.x
-          7.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
-        dotnet restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
+          dotnet restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj

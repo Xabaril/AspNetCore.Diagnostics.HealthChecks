@@ -42,7 +42,7 @@ namespace HealthChecks.UI.Client
             {
                 httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
 
-                var uiReport = UIHealthReport.CreateFrom(report, true);
+                var uiReport = UIHealthReport.CreateFrom(report, _ => "Exception Occurred.");
 
                 await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value);
             }

@@ -33,7 +33,7 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
                 Assert.Equal(connectionstring, connection.ConnectionString);
             };
             services.AddHealthChecks()
-                .AddSqlServer(connectionstring, beforeOpenConnectionConfigurer: beforeOpen);
+                .AddSqlServer(connectionstring, configure: beforeOpen);
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

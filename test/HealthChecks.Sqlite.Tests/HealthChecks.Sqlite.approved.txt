@@ -2,14 +2,24 @@ namespace HealthChecks.Sqlite
 {
     public class SqliteHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public SqliteHealthCheck(string connectionString, string sql) { }
+        public SqliteHealthCheck(HealthChecks.Sqlite.SqliteHealthCheckOptions options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class SqliteHealthCheckOptions
+    {
+        public SqliteHealthCheckOptions() { }
+        public string CommandText { get; set; }
+        public System.Action<Microsoft.Data.Sqlite.SqliteConnection>? Configure { get; set; }
+        public string ConnectionString { get; set; }
+        public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SqliteHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlite(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string sqliteConnectionString, string healthQuery = "select name from sqlite_master where type='table'", string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOracle(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string healthQuery = "select name from sqlite_master where type='table'", System.Action<Microsoft.Data.Sqlite.SqliteConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlite(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, HealthChecks.Sqlite.SqliteHealthCheckOptions options, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlite(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string healthQuery = "select name from sqlite_master where type='table'", System.Action<Microsoft.Data.Sqlite.SqliteConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

@@ -3,6 +3,9 @@ using MySqlConnector;
 
 namespace HealthChecks.MySql
 {
+    /// <summary>
+    /// A health check for MySql databases.
+    /// </summary>
     public class MySqlHealthCheck : IHealthCheck
     {
         private readonly string _connectionString;
@@ -12,6 +15,7 @@ namespace HealthChecks.MySql
             _connectionString = Guard.ThrowIfNull(connectionString);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

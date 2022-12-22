@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new MySqlHealthCheck(connectionString),
+                _ => new MySqlHealthCheck(connectionString),
                 failureStatus,
                 tags,
                 timeout));

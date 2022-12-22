@@ -3,32 +3,36 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Sqlite
 {
+    /// <summary>
+    /// A health check for Sqlite services.
+    /// </summary>
     public class SqliteHealthCheck : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string _sql;
+        private readonly SqliteHealthCheckOptions _options;
 
-        public SqliteHealthCheck(string connectionString, string sql)
+        public SqliteHealthCheck(SqliteHealthCheckOptions options)
         {
-            _connectionString = Guard.ThrowIfNull(connectionString);
-            _sql = sql ?? throw new ArgumentException(nameof(sql));
+            Guard.ThrowIfNull(options.ConnectionString, true);
+            Guard.ThrowIfNull(options.CommandText, true);
+            _options = options;
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var connection = new SqliteConnection(_connectionString))
+                using (var connection = new SqliteConnection(_options.ConnectionString))
                 {
+                    _options.Configure?.Invoke(connection);
                     await connection.OpenAsync(cancellationToken);
 
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    using var command = connection.CreateCommand();
+                    command.CommandText = _options.CommandText;
+                    var result = await command.ExecuteScalarAsync(cancellationToken);
+                    return _options.HealthCheckResultBuilder == null
+                        ? HealthCheckResult.Healthy()
+                        : _options.HealthCheckResultBuilder(result);
                 }
             }
             catch (Exception ex)

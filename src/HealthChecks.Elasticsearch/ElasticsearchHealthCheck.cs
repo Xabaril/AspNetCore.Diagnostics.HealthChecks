@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Elasticsearch.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Nest;
 
@@ -54,8 +55,25 @@ namespace HealthChecks.Elasticsearch
                     }
                 }
 
+                if (_options.UseClusterHealthApi)
+                {
+                    var healthResponse = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken);
+
+                    if (healthResponse.ApiCall.HttpStatusCode != 200)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus);
+                    }
+
+                    return healthResponse.Status switch
+                    {
+                        Health.Green => HealthCheckResult.Healthy(),
+                        Health.Yellow => HealthCheckResult.Degraded(),
+                        _ => new HealthCheckResult(context.Registration.FailureStatus)
+                    };
+                }
+
                 var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken);
-                var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
+                bool isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
                 return isSuccess
                     ? HealthCheckResult.Healthy()

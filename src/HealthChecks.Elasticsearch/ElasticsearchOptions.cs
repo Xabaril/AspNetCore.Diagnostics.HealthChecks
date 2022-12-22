@@ -25,6 +25,8 @@ namespace HealthChecks.Elasticsearch
 
         public bool AuthenticateWithApiKey { get; private set; }
 
+        public bool UseClusterHealthApi { get; set; }
+
         public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool>? CertificateValidationCallback { get; private set; }
 
         public TimeSpan? RequestTimeout { get; set; }

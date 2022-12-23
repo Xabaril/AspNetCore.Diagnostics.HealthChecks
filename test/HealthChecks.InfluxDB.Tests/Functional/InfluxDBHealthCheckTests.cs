@@ -11,8 +11,6 @@ namespace HealthChecks.InfluxDB.Tests.Functional
 {
     public class ibmmq_healthcheck_should
     {
-
-
         [Fact]
         public async Task be_healthy_if_influxdb_is_available()
         {

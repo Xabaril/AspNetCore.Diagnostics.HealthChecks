@@ -1,8 +1,4 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
+
 
 namespace HealthChecks.InfluxDB.Tests.DependencyInjection
 {
@@ -14,15 +10,15 @@ namespace HealthChecks.InfluxDB.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password".ToCharArray(), "influxdb");
+                .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password", "influxdb");
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+            var registration = options?.Value.Registrations.First();
+            var check = registration?.Factory(serviceProvider);
 
-            registration.Name.Should().Be("influxdb");
-            check.Should().BeOfType<InfluxDBHealthCheck>();
+            registration?.Name.ShouldBe("influxdb");
+            check.ShouldBeOfType<InfluxDBHealthCheck>();
         }
     }
 }

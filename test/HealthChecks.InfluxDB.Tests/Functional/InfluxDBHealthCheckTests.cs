@@ -1,11 +1,4 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.InfluxDB.Tests.Functional
 {
@@ -19,7 +12,7 @@ namespace HealthChecks.InfluxDB.Tests.Functional
                 {
                     services
                     .AddHealthChecks()
-                    .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password".ToCharArray(), "influxdb", tags: new string[] { "influxdb" });
+                    .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password", "influxdb", tags: new string[] { "influxdb" });
                 })
                 .Configure(app =>
                 {
@@ -34,8 +27,7 @@ namespace HealthChecks.InfluxDB.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -46,7 +38,7 @@ namespace HealthChecks.InfluxDB.Tests.Functional
                 {
                     services
                         .AddHealthChecks()
-                        .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user_unavailable", "password".ToCharArray(), "influxdb", tags: new string[] { "influxdb" });
+                        .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user_unavailable", "password", "influxdb", tags: new string[] { "influxdb" });
                 })
                 .Configure(app =>
                 {
@@ -61,8 +53,7 @@ namespace HealthChecks.InfluxDB.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

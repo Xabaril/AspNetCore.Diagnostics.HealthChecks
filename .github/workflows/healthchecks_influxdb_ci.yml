@@ -17,11 +17,11 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.influxdb/**
-    - test/HealthChecks.influxdb.Tests/**
-    - .github/workflows/healthchecks_influxdb_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.InfluxDB/**
+      - test/HealthChecks.InfluxDB.Tests/**
+      - .github/workflows/healthchecks_influxdb_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:

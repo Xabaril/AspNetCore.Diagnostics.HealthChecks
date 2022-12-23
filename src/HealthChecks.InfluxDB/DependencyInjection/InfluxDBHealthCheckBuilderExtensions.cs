@@ -14,7 +14,6 @@ public static class InfluxDBHealthCheckBuilderExtensions
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionString">The InfluxDB connection string to be used.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'influxdb' will be used for the name.</param>
-
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.

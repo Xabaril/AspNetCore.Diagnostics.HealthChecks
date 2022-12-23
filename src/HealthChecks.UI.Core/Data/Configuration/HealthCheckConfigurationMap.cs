@@ -20,6 +20,9 @@ namespace HealthChecks.UI.Core.Data.Configuration
 
             builder.Property(lc => lc.DiscoveryService)
                 .HasMaxLength(100);
+
+            builder.Property(lc => lc.Group)
+                .HasMaxLength(100);
         }
     }
 }

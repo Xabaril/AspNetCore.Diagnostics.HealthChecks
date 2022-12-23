@@ -14,39 +14,40 @@ namespace HealthChecks.UI.Image.PushService
             _logger = Guard.ThrowIfNull(logger);
         }
 
-        public async Task AddAsync(string name, string uri)
+        public async Task AddAsync(string name, string? group, string uri)
         {
-            if (await Get(name) == null)
+            if ((await Get(name, group)) == null)
             {
                 await _db.Configurations.AddAsync(new HealthCheckConfiguration
                 {
                     Name = name,
+                    Group = group,
                     Uri = uri,
                     DiscoveryService = "kubernetes"
                 });
 
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation("[Push] New service added: {name} with uri: {uri}", name, uri);
+                _logger.LogInformation("[Push] New service added: {name} ({group}) with uri: {uri}", name, group, uri);
             }
         }
 
-        public async Task RemoveAsync(string name)
+        public async Task RemoveAsync(string name, string? group)
         {
-            var endpoint = await Get(name);
+            var endpoint = await Get(name, group);
 
             if (endpoint != null)
             {
                 _db.Configurations.Remove(endpoint);
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation("[Push] Service removed: {name}", name);
+                _logger.LogInformation("[Push] Service removed: {name} ({group})", name, group);
             }
         }
 
-        public async Task UpdateAsync(string name, string uri)
+        public async Task UpdateAsync(string name, string? group, string uri)
         {
-            var endpoint = await Get(name);
+            var endpoint = await Get(name, group);
 
             if (endpoint != null)
             {
@@ -54,13 +55,13 @@ namespace HealthChecks.UI.Image.PushService
                 _db.Configurations.Update(endpoint);
                 await _db.SaveChangesAsync();
 
-                _logger.LogInformation("[Push] Service updated: {name} with uri {uri}", name, uri);
+                _logger.LogInformation("[Push] Service updated: {name} ({group}) with uri {uri}", name, group, uri);
             }
         }
 
-        private Task<HealthCheckConfiguration?> Get(string name)
+        private Task<HealthCheckConfiguration?> Get(string name, string? group)
         {
-            return _db.Configurations.FirstOrDefaultAsync(c => c.Name == name);
+            return _db.Configurations.FirstOrDefaultAsync(c => c.Name == name && c.Group == group);
         }
     }
 }

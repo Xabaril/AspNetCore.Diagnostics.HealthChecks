@@ -171,7 +171,7 @@ namespace HealthChecks.UI.Core.HostedService
             return await _db.Executions
                 .Include(le => le.History)
                 .Include(le => le.Entries)
-                .Where(le => le.Name == configuration.Name)
+                .Where(le => le.Name == configuration.Name && le.Group == configuration.Group)
                 .SingleOrDefaultAsync();
         }
 
@@ -240,6 +240,7 @@ namespace HealthChecks.UI.Core.HostedService
                     Entries = healthReport.ToExecutionEntries(),
                     Status = healthReport.Status,
                     Name = configuration.Name,
+                    Group = configuration.Group,
                     Uri = configuration.Uri,
                     DiscoveryService = configuration.DiscoveryService
                 };

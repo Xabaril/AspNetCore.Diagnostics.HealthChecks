@@ -100,7 +100,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                                     var statusCode = await CallClusterServiceAsync(serviceAddress);
                                     if (IsValidHealthChecksStatusCode(statusCode))
                                     {
-                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                        await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name, item.Metadata.NamespaceProperty);
                                         _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
                                     }
                                 }
@@ -138,13 +138,14 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             return response.StatusCode;
         }
 
-        private Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
+        private Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name, string kubernetesNamespace)
         {
             livenessDb.Configurations.Add(new HealthCheckConfiguration
             {
                 Name = name,
                 Uri = host,
-                DiscoveryService = "kubernetes"
+                DiscoveryService = "kubernetes",
+                Group = kubernetesNamespace,
             });
 
             return livenessDb.SaveChangesAsync();

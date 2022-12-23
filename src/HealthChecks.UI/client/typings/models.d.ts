@@ -13,6 +13,15 @@ export interface Liveness {
   discoveryService: string;
   entries: Array<Check>;
   history: Array<ExecutionHistory>;
+  group: string;
+}
+
+export interface CustomGrouping {
+  executions: Liveness[];
+  lastExecuted: string;
+  name: string;
+  onStateFrom: string;
+  status: string;
 }
 
 export interface LivenessResult {

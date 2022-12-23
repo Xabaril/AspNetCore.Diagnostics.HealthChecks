@@ -38,6 +38,7 @@ namespace Microsoft.AspNetCore.Builder
                     var endpoint = JsonDocument.Parse(content);
                     var root = endpoint.RootElement;
                     var name = root.GetProperty("name").GetString();
+                    var group = root.GetProperty("group").GetString();
                     var uri = root.GetProperty("uri").GetString();
                     var type = root.GetProperty("type").GetInt16();
 
@@ -47,15 +48,15 @@ namespace Microsoft.AspNetCore.Builder
 
                         if (type == PushServiceKeys.ServiceAdded)
                         {
-                            await pushService.AddAsync(name, uri);
+                            await pushService.AddAsync(name, group, uri);
                         }
                         else if (type == PushServiceKeys.ServiceRemoved)
                         {
-                            await pushService.RemoveAsync(name);
+                            await pushService.RemoveAsync(name, group);
                         }
                         else if (type == PushServiceKeys.ServiceUpdated)
                         {
-                            await pushService.UpdateAsync(name, uri);
+                            await pushService.UpdateAsync(name, group, uri);
                         }
                     }
                 }

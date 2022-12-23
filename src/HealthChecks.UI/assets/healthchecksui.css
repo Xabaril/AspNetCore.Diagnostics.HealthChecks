@@ -254,6 +254,25 @@ h4 {
   background-image: var(--bgImageLigthen);
 }
 
+.groupRow {
+  cursor: pointer;
+  background-color: var(--midDarkColor);
+  border-bottom: 4px solid var(--bgMain);
+  color: var(--fcNegative);
+}
+
+.groupRow td {
+  padding: 0.5rem;
+}
+
+.groupRow:hover {
+  background-image: var(--bgImageDarken);
+}
+
+.groupButton {
+  color: var(--fcNegative);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -277,6 +296,11 @@ h4 {
 }
 
 .hc-checks-table-container.is-hidden {
+  display: none;
+  animation: fadeOut 1s;
+}
+
+.hc-table__row.is-hidden {
   display: none;
   animation: fadeOut 1s;
 }

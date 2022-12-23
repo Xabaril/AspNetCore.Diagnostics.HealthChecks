@@ -1,5 +1,3 @@
-
-
 namespace HealthChecks.InfluxDB.Tests.DependencyInjection
 {
     public class ibmq_registration_should

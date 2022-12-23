@@ -58,7 +58,5 @@ namespace HealthChecks.InfluxDB
         }
 
         public void Dispose() => _influxdb_client.Dispose();
-
-
     }
 }

@@ -8,7 +8,7 @@ public class UIHealthReportTests
         var healthReportKey = "Health Check with Exception";
         var entries = new Dictionary<string, HealthReportEntry>
         {
-            { "Health Check with Exception", new HealthReportEntry(HealthStatus.Unhealthy, null, TimeSpan.FromSeconds(1), new Exception("Custom Exception"), null) }
+            { healthReportKey, new HealthReportEntry(HealthStatus.Unhealthy, null, TimeSpan.FromSeconds(1), new Exception("Custom Exception"), null) }
         };
         var report = new HealthReport(entries, TimeSpan.FromSeconds(1));
         var exceptionMessage = "Exception Occurred.";

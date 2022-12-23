@@ -1,4 +1,5 @@
 namespace HealthChecks.UI.Core.Tests;
+
 public class UIHealthReportTests
 {
     [Fact]

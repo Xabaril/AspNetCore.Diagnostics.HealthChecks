@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.InfluxDB
 {
-    public class InfluxDBHealthCheck  : IHealthCheck, IDisposable
+    public class InfluxDBHealthCheck : IHealthCheck, IDisposable
     {
         private readonly InfluxDBClient _influxdb_client;
 

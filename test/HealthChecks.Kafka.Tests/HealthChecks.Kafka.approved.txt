@@ -9,7 +9,6 @@ namespace HealthChecks.Kafka
     public class KafkaHealthCheckOptions
     {
         public KafkaHealthCheckOptions() { }
-        public bool A { get; set; }
         public Confluent.Kafka.ProducerConfig Configuration { get; set; }
         public System.Action<Confluent.Kafka.ProducerBuilder<string, string>>? Configure { get; set; }
         public System.Func<HealthChecks.Kafka.KafkaHealthCheckOptions, Confluent.Kafka.Message<string, string>> MessageBuilder { get; set; }

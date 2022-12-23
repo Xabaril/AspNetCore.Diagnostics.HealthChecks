@@ -72,7 +72,8 @@ public static class InfluxDBHealthCheckBuilderExtensions
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+
     /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
     public static IHealthChecksBuilder AddInfluxDB(this IHealthChecksBuilder builder, string url, string token, string? name = default, HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
     {

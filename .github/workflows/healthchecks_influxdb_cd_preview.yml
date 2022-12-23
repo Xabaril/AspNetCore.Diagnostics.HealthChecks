@@ -21,7 +21,6 @@ jobs:
             6.0.x
             7.0.x
     - name: Restore
-
       run: dotnet restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj
     - name: Build
       run: dotnet build --no-restore ./src/HealthChecks.influxdb/HealthChecks.InfluxDB.csproj

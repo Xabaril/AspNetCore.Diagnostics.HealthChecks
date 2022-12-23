@@ -23,6 +23,9 @@ azure:
 consul:
   - src/HealthChecks.Consul/**/*
 
+kafka:
+  - src/HealthChecks.Kafka/**/*
+
 UI:
   - src/HealthChecks.UI/**/*
   - src/HealthChecks.UI.*/**/*

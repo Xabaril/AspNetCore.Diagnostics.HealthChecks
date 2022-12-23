@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -9,11 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
 		.github\dependabot.yml = .github\dependabot.yml
-		build\dependencies.props = build\dependencies.props
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		docker-compose.yml = docker-compose.yml
-		global.json = global.json
+		build\versions.props = build\versions.props
+		.github\labeler.yml = .github\labeler.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}"
@@ -377,6 +376,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_uris_cd.yml = .github\workflows\healthchecks_uris_cd.yml
 		.github\workflows\healthchecks_uris_cd_preview.yml = .github\workflows\healthchecks_uris_cd_preview.yml
 		.github\workflows\healthchecks_uris_ci.yml = .github\workflows\healthchecks_uris_ci.yml
+		.github\workflows\label.yml = .github\workflows\label.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin", "src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj", "{256B649E-9631-44AB-B577-96B3627C889E}"

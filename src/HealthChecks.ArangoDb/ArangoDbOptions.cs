@@ -1,5 +1,8 @@
 namespace HealthChecks.ArangoDb;
 
+/// <summary>
+/// Configuration options for <see cref="ArangoDbHealthCheck"/>.
+/// </summary>
 public class ArangoDbOptions
 {
     public string HostUri { get; set; } = null!;

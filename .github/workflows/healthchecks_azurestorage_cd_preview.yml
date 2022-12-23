@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - preview-azurestorage-*
+      - preview-all-*
+
 jobs:
   build:
     env:
@@ -11,16 +13,18 @@ jobs:
       VERSION_SUFFIX: rc2.${{ github.run_number }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: dotnet restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj -c $BUILD_CONFIG
-    - name: Pack
-      run: dotnet pack --no-build ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
-    - name: Publish
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.AzureStorage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: dotnet restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj
+      - name: Build
+        run: dotnet build --no-restore ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj -c $BUILD_CONFIG
+      - name: Pack
+        run: dotnet pack --no-build ./src/HealthChecks.AzureStorage/HealthChecks.AzureStorage.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+      - name: Publish
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.AzureStorage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

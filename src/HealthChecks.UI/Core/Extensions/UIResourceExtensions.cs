@@ -41,7 +41,7 @@ namespace HealthChecks.UI.Core
         {
             var styleSheets = new List<UIStylesheet>();
 
-            if (!options.CustomStylesheets.Any())
+            if (options.CustomStylesheets.Count == 0)
             {
                 resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_STYLESHEETS_TARGET, string.Empty);
                 return styleSheets;

@@ -16,11 +16,11 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.EventStore/**
-    - test/HealthChecks.EventStore.Tests/**
-    - .github/workflows/healthchecks_eventstore_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.EventStore/**
+      - test/HealthChecks.EventStore.Tests/**
+      - .github/workflows/healthchecks_eventstore_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -36,22 +36,24 @@ jobs:
           EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: true
           EVENTSTORE_ENABLE_EXTERNAL_TCP: true
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
-        dotnet restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
+          dotnet restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.EventStore/HealthChecks.EventStore.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.EventStore.Tests/HealthChecks.EventStore.Tests.csproj

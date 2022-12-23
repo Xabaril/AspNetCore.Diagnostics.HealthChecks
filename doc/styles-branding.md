@@ -20,7 +20,6 @@ To customize your styles and branding just register your custom stylesheets in U
 
 ```
 
-
 We introduced custom properties to change grey scale and main color paillete. Another benefit is the use of BEM like naming convention for css classes.
 
 ```

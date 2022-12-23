@@ -17,32 +17,34 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Publisher.Datadog/**
-    - test/HealthChecks.Publisher.Datadog.Tests/**
-    - .github/workflows/healthchecks_publisher_datadog_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Publisher.Datadog/**
+      - test/HealthChecks.Publisher.Datadog.Tests/**
+      - .github/workflows/healthchecks_publisher_datadog_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj &&
-        dotnet restore ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj &&
+          dotnet restore ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.Publisher.Datadog.Tests/HealthChecks.Publisher.Datadog.Tests.csproj

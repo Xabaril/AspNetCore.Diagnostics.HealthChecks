@@ -36,7 +36,7 @@ jobs:
             7.0.x
       - name: Restore
         run: dotnet restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj &&
-               dotnet restore ./test/HealthChecks.InfluxDB.Tests/HealthChecks.InfluxDB.Tests.csproj
+             dotnet restore ./test/HealthChecks.InfluxDB.Tests/HealthChecks.InfluxDB.Tests.csproj
       - name: Check formatting
         working-directory:
         run: |

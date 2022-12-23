@@ -1,5 +1,8 @@
+# https://github.com/actions/labeler/blob/master/README.md
+
 test:
-  - test/**/*
+  - 'test/**/*'
+  - all: ['!test/**/*.approved.txt']
 
 github_actions:
   - .github/**/*
@@ -22,6 +25,9 @@ azure:
 
 consul:
   - src/HealthChecks.Consul/**/*
+
+kafka:
+  - src/HealthChecks.Kafka/**/*
 
 UI:
   - src/HealthChecks.UI/**/*

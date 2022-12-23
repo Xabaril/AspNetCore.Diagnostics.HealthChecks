@@ -52,7 +52,7 @@ namespace HealthChecks.Network
         }
         public SftpConfiguration Build()
         {
-            if (!AuthenticationMethods.Any())
+            if (AuthenticationMethods.Count == 0)
             {
                 throw new Exception("No AuthenticationMethods have been configured for Sftp Configuration");
             }

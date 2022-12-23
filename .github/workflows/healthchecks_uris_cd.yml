@@ -4,24 +4,26 @@ on:
   push:
     tags:
       - release-uris-*
+      - release-all-*
+
 jobs:
   build:
     env:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          6.0.x
-          7.0.x
-    - name: Restore
-      run: dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj -c $BUILD_CONFIG
-    - name: Pack
-      run: dotnet pack --no-build ./src/HealthChecks.Uris/HealthChecks.Uris.csproj --version-suffix $VERSION_SUFFIX  -c $BUILD_CONFIG -o ./artifacts
-    - name: Publish
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Uris.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
+      - name: Build
+        run: dotnet build --no-restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj -c $BUILD_CONFIG
+      - name: Pack
+        run: dotnet pack --no-build ./src/HealthChecks.Uris/HealthChecks.Uris.csproj --version-suffix $VERSION_SUFFIX  -c $BUILD_CONFIG -o ./artifacts
+      - name: Publish
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Uris.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

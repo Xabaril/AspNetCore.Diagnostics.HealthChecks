@@ -17,11 +17,11 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.MySql/**
-    - test/HealthChecks.MySql.Tests/**
-    - .github/workflows/healthchecks_mysql_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.MySql/**
+      - test/HealthChecks.MySql.Tests/**
+      - .github/workflows/healthchecks_mysql_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -34,24 +34,24 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: Password12!
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          6.0.x
-          7.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj &&
-        dotnet restore ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.MySql/HealthChecks.MySql.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj &&
+          dotnet restore ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.MySql/HealthChecks.MySql.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj

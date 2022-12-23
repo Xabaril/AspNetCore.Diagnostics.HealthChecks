@@ -97,11 +97,13 @@ namespace HealthChecks.UI.Core.Notifications
 
         private async Task<bool> IsNotifiedOnWindowTimeAsync(string livenessName, bool restore)
         {
+#pragma warning disable RCS1155 // Use StringComparison when comparing strings.
             var lastNotification = await _db.Failures
                 .Where(lf => lf.HealthCheckName.ToLower() == livenessName.ToLower())
                 .OrderByDescending(lf => lf.LastNotified)
                 .Take(1)
                 .SingleOrDefaultAsync();
+#pragma warning restore RCS1155 // Use StringComparison when comparing strings.
 
             return lastNotification != null
                 &&

@@ -8,7 +8,7 @@ namespace HealthChecks.UI.Client.Tests;
 public class UIResponseWriterTests
 {
     [Fact]
-    public async Task should_fill_response_with_obfuscated_exception_when_exception_message_is_defined()
+    public async Task should_response_with_obfuscated_exception_when_exception_message_is_defined()
     {
         var healthReportKey = "Health Check with Exception";
         var exceptionMessage = "Exception Occurred.";

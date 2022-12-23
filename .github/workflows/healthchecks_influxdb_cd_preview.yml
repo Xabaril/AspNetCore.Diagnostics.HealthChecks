@@ -28,5 +28,6 @@ jobs:
       - name: dotnet pack
         run: dotnet pack --no-build ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Publish
-        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.influxdb.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.InfluxDB.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
 

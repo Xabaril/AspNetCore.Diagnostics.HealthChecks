@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.Uris.Tests.DependencyInjection
 {
     public class uris_registration_should
@@ -16,13 +10,13 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"));
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("uri-group");
-            check.Should().BeOfType<UriHealthCheck>();
+            registration.Name.ShouldBe("uri-group");
+            check.ShouldBeOfType<UriHealthCheck>();
         }
 
         [Fact]
@@ -33,13 +27,13 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
                 .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "my-uri-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-uri-group");
-            check.Should().BeOfType<UriHealthCheck>();
+            registration.Name.ShouldBe("my-uri-group");
+            check.ShouldBeOfType<UriHealthCheck>();
         }
 
         [Fact]
@@ -50,12 +44,12 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
                 .AddUrlGroup(sp => new Uri("http://httpbin.org/status/200"));
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            check.Should().BeOfType<UriHealthCheck>();
+            check.ShouldBeOfType<UriHealthCheck>();
         }
     }
 }

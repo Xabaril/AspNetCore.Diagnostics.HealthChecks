@@ -9,18 +9,15 @@ namespace HealthChecks.UI.Tests
 
         public TestCollectorInterceptor(ManualResetEventSlim resetEvent)
         {
-            _resetEvent = resetEvent ?? throw new ArgumentNullException(nameof(resetEvent));
+            _resetEvent = Guard.ThrowIfNull(resetEvent);
         }
 
         public ValueTask OnCollectExecuted(UIHealthReport report)
         {
             _resetEvent.Set();
-            return new ValueTask();
+            return default;
         }
 
-        public ValueTask OnCollectExecuting(HealthCheckConfiguration healthCheck)
-        {
-            return new ValueTask();
-        }
+        public ValueTask OnCollectExecuting(HealthCheckConfiguration healthCheck) => default;
     }
 }

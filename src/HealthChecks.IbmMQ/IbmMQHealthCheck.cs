@@ -2,33 +2,31 @@ using System.Collections;
 using IBM.WMQ;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.IbmMQ
+namespace HealthChecks.IbmMQ;
+
+public class IbmMQHealthCheck : IHealthCheck
 {
-    public class IbmMQHealthCheck : IHealthCheck
+    private readonly Hashtable _connectionProperties;
+    private readonly string _queueManager;
+
+    public IbmMQHealthCheck(string queueManager, Hashtable connectionProperties)
     {
-        private readonly Hashtable _connectionProperties;
-        private readonly string _queueManager;
+        Guard.ThrowIfNull(queueManager, true);
 
-        public IbmMQHealthCheck(string queueManager, Hashtable connectionProperties)
+        _queueManager = queueManager;
+        _connectionProperties = Guard.ThrowIfNull(connectionProperties);
+    }
+
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            if (string.IsNullOrEmpty(queueManager))
-                throw new ArgumentNullException(nameof(queueManager));
-
-            _queueManager = queueManager;
-            _connectionProperties = connectionProperties ?? throw new ArgumentNullException(nameof(connectionProperties));
+            using var connection = new MQQueueManager(_queueManager, _connectionProperties);
+            return HealthCheckResultTask.Healthy;
         }
-
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                using var connection = new MQQueueManager(_queueManager, _connectionProperties);
-                return HealthCheckResultTask.Healthy;
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
-            }
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
     }
 }

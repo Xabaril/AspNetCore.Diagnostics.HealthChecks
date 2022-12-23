@@ -1,11 +1,5 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
+using HealthChecks.UI.Client;
 
 namespace HealthChecks.SolR.Tests.Functional
 {
@@ -14,7 +8,6 @@ namespace HealthChecks.SolR.Tests.Functional
         [Fact]
         public async Task be_healthy_if_solr_is_available()
         {
-
             var webHostBuilder = new WebHostBuilder()
                .ConfigureServices(services =>
                {
@@ -23,19 +16,16 @@ namespace HealthChecks.SolR.Tests.Functional
                })
                .Configure(app =>
                {
-                   app.UseHealthChecks("/health", new HealthCheckOptions()
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
-                       Predicate = r => r.Tags.Contains("solr")
+                       Predicate = r => r.Tags.Contains("solr"),
+                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                    });
                });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+            using var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -49,19 +39,16 @@ namespace HealthChecks.SolR.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("solr")
+                        Predicate = r => r.Tags.Contains("solr"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            using var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -75,19 +62,16 @@ namespace HealthChecks.SolR.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("solr")
+                        Predicate = r => r.Tags.Contains("solr"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                     });
                 });
 
             using var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
-
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            using var response = await server.CreateRequest($"/health").GetAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
     }
 }

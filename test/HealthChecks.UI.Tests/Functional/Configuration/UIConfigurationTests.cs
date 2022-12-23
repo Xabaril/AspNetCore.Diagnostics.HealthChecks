@@ -1,14 +1,8 @@
 using System.Net;
-using FluentAssertions;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.UI.Tests
 {
@@ -27,6 +21,7 @@ namespace HealthChecks.UI.Tests
             var minimumSeconds = 30;
 
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI(setupSettings: settings =>
@@ -42,29 +37,30 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
-            UISettings.EvaluationTimeInSeconds.Should().Be(evaluationTimeInSeconds);
-            UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(minimumSeconds);
+            UISettings.EvaluationTimeInSeconds.ShouldBe(evaluationTimeInSeconds);
+            UISettings.MinimumSecondsBetweenFailureNotifications.ShouldBe(minimumSeconds);
 
-            UISettings.Webhooks.Count.Should().Be(1);
-            UISettings.HealthChecks.Count.Should().Be(1);
+            UISettings.Webhooks.Count.ShouldBe(1);
+            UISettings.HealthChecks.Count.ShouldBe(1);
 
             var healthcheck = UISettings.HealthChecks[0];
-            healthcheck.Name.Should().Be(healthCheckName);
-            healthcheck.Uri.Should().Be(healthCheckUri);
+            healthcheck.Name.ShouldBe(healthCheckName);
+            healthcheck.Uri.ShouldBe(healthCheckUri);
 
             var webhook = UISettings.Webhooks[0];
-            webhook.Name.Should().Be(webhookName);
-            webhook.Uri.Should().Be(webhookUri);
-            webhook.Payload.Should().Be(webhookPayload);
-            webhook.RestoredPayload.Should().Be(webhookRestorePayload);
+            webhook.Name.ShouldBe(webhookName);
+            webhook.Uri.ShouldBe(webhookUri);
+            webhook.Payload.ShouldBe(webhookPayload);
+            webhook.RestoredPayload.ShouldBe(webhookRestorePayload);
         }
 
         [Fact]
         public void load_ui_settings_from_configuration_key()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -73,22 +69,22 @@ namespace HealthChecks.UI.Tests
                 }).ConfigureServices(services => services.AddHealthChecksUI());
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
-            UISettings.EvaluationTimeInSeconds.Should().Be(20);
-            UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(120);
-            UISettings.HealthChecks.Count.Should().Be(1);
-            UISettings.Webhooks.Count.Should().Be(1);
+            UISettings.EvaluationTimeInSeconds.ShouldBe(20);
+            UISettings.MinimumSecondsBetweenFailureNotifications.ShouldBe(120);
+            UISettings.HealthChecks.Count.ShouldBe(1);
+            UISettings.Webhooks.Count.ShouldBe(1);
 
             var healthcheck = UISettings.HealthChecks[0];
-            healthcheck.Name.Should().Be("api1");
-            healthcheck.Uri.Should().Be("http://api1/healthz");
+            healthcheck.Name.ShouldBe("api1");
+            healthcheck.Uri.ShouldBe("http://api1/healthz");
 
             var webhook = UISettings.Webhooks[0];
-            webhook.Name.Should().Be("webhook1");
-            webhook.Uri.Should().Be("http://webhook1");
-            webhook.Payload.Should().Be("payload");
-            webhook.RestoredPayload.Should().Be("restoredpayload");
+            webhook.Name.ShouldBe("webhook1");
+            webhook.Uri.ShouldBe("http://webhook1");
+            webhook.Payload.ShouldBe("payload");
+            webhook.RestoredPayload.ShouldBe("restoredpayload");
         }
 
         [Fact]
@@ -101,6 +97,7 @@ namespace HealthChecks.UI.Tests
             var webhookPayload = "payload1";
 
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -118,27 +115,27 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
-            UISettings.MinimumSecondsBetweenFailureNotifications.Should().Be(200);
-            UISettings.EvaluationTimeInSeconds.Should().Be(20);
-            UISettings.Webhooks.Count.Should().Be(2);
-            UISettings.HealthChecks.Count.Should().Be((2));
+            UISettings.MinimumSecondsBetweenFailureNotifications.ShouldBe(200);
+            UISettings.EvaluationTimeInSeconds.ShouldBe(20);
+            UISettings.Webhooks.Count.ShouldBe(2);
+            UISettings.HealthChecks.Count.ShouldBe((2));
 
             var healthCheck1 = UISettings.HealthChecks[0];
             var healthCheck2 = UISettings.HealthChecks[1];
             var webHook1 = UISettings.Webhooks[0];
             var webHook2 = UISettings.Webhooks[1];
 
-            healthCheck1.Name.Should().Be("api1");
-            healthCheck1.Uri.Should().Be("http://api1/healthz");
-            healthCheck2.Name.Should().Be("api2");
-            healthCheck2.Uri.Should().Be("http://api2/healthz");
+            healthCheck1.Name.ShouldBe("api1");
+            healthCheck1.Uri.ShouldBe("http://api1/healthz");
+            healthCheck2.Name.ShouldBe("api2");
+            healthCheck2.Uri.ShouldBe("http://api2/healthz");
 
-            webHook1.Name.Should().Be("webhook1");
-            webHook1.Uri.Should().Be("http://webhook1");
-            webHook2.Name.Should().Be(webhookName);
-            webHook2.Uri.Should().Be(webhookUri);
+            webHook1.Name.ShouldBe("webhook1");
+            webHook1.Uri.ShouldBe("http://webhook1");
+            webHook2.Name.ShouldBe(webhookName);
+            webHook2.Uri.ShouldBe(webhookUri);
         }
 
         [Fact]
@@ -150,6 +147,7 @@ namespace HealthChecks.UI.Tests
             var webhookClientConfigured = false;
 
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(conf =>
                 {
                     conf.Sources.Clear();
@@ -184,20 +182,21 @@ namespace HealthChecks.UI.Tests
                     });
                 }).Build();
 
-            var clientFactory = webhost.Services.GetService<IHttpClientFactory>();
+            var clientFactory = webhost.Services.GetRequiredService<IHttpClientFactory>();
             var apiClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
             var webhookClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
 
-            apiHandlerConfigured.Should().BeTrue();
-            apiClientConfigured.Should().BeTrue();
-            webhookHandlerConfigured.Should().BeTrue();
-            webhookClientConfigured.Should().BeTrue();
+            apiHandlerConfigured.ShouldBeTrue();
+            apiClientConfigured.ShouldBeTrue();
+            webhookHandlerConfigured.ShouldBeTrue();
+            webhookClientConfigured.ShouldBeTrue();
         }
 
         [Fact]
         public void register_server_addresses_service_to_resolve_relative_uris_using_endpoints()
         {
             var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .UseKestrel()
                 .ConfigureServices(services =>
                 {
@@ -216,14 +215,15 @@ namespace HealthChecks.UI.Tests
             var serviceProvider = webHostBuilder.Build().Services;
             var serverAddressesService = serviceProvider.GetRequiredService<ServerAddressesService>();
 
-            serverAddressesService.Should().NotBeNull();
-            serverAddressesService.Addresses.Should().NotBeNull();
+            serverAddressesService.ShouldNotBeNull();
+            serverAddressesService.Addresses.ShouldNotBeNull();
         }
 
         [Fact]
         public void register_server_addresses_service_to_resolve_relative_uris_using_application_builder()
         {
             var webHostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .UseKestrel()
                 .ConfigureServices(services =>
                 {
@@ -235,14 +235,15 @@ namespace HealthChecks.UI.Tests
             var serviceProvider = webHostBuilder.Build().Services;
             var serverAddressesService = serviceProvider.GetRequiredService<ServerAddressesService>();
 
-            serverAddressesService.Should().NotBeNull();
-            serverAddressesService.Addresses.Should().NotBeNull();
+            serverAddressesService.ShouldNotBeNull();
+            serverAddressesService.Addresses.ShouldNotBeNull();
         }
 
         [Fact]
         public void have_enabled_database_migrations_by_default()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI()
@@ -250,15 +251,16 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
-            UISettings.DisableMigrations.Should().Be(false);
+            UISettings.DisableMigrations.ShouldBe(false);
         }
 
         [Fact]
         public void allow_disable_running_database_migrations_in_ui_setup()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services
@@ -267,22 +269,23 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
-            UISettings.DisableMigrations.Should().Be(true);
+            UISettings.DisableMigrations.ShouldBe(true);
         }
 
         [Fact]
         public void allow_disable_running_database_migrations_using_configuration_providers()
         {
             var webhost = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureAppConfiguration(config =>
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("HealthChecksUI:DisableMigrations", "true")
+                        new KeyValuePair<string, string?>("HealthChecksUI:DisableMigrations", "true")
                     });
                 })
                 .ConfigureServices(services =>
@@ -293,9 +296,42 @@ namespace HealthChecks.UI.Tests
                 });
 
             var serviceProvider = webhost.Build().Services;
-            var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
+            var UISettings = serviceProvider.GetRequiredService<IOptions<Settings>>().Value;
 
-            UISettings.DisableMigrations.Should().Be(true);
+            UISettings.DisableMigrations.ShouldBe(true);
+        }
+
+        [Fact]
+        public async Task support_configuring_page_title()
+        {
+            const string pageTitle = "My Health Checks UI";
+
+            var builder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddRouting()
+                        .AddHealthChecksUI();
+                })
+                .Configure(app =>
+                {
+                    app
+                        .UseRouting()
+                        .UseEndpoints(setup =>
+                        {
+                            setup.MapHealthChecksUI(options =>
+                            {
+                                options.PageTitle = pageTitle;
+                            });
+                        });
+                });
+
+            var server = new TestServer(builder);
+            var options = server.Services.GetRequiredService<IOptions<Configuration.Options>>().Value;
+            var response = await server.CreateRequest(options.UIPath).GetAsync();
+            var html = await response.Content.ReadAsStringAsync();
+
+            html.ShouldContain($"<title>{pageTitle}</title>");
         }
     }
 }

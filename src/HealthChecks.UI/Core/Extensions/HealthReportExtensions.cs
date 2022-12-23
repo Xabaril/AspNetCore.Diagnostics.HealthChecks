@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.Diagnostics.HealthChecks
             return report.Entries
                 .Select(item =>
                 {
-                    return new HealthCheckExecutionEntry()
+                    return new HealthCheckExecutionEntry
                     {
                         Name = item.Key,
                         Status = item.Value.Status,

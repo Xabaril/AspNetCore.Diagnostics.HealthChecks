@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+using Azure.Core;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -6,58 +6,61 @@ namespace HealthChecks.CosmosDb
 {
     public class CosmosDbHealthCheck : IHealthCheck
     {
-        private static readonly ConcurrentDictionary<string, CosmosClient> _connections = new();
-
-        private readonly string _connectionString;
-        private readonly string? _database;
-        private readonly IEnumerable<string>? _containers;
+        private readonly CosmosClient _cosmosClient;
+        private readonly CosmosDbHealthCheckOptions _options;
 
         public CosmosDbHealthCheck(string connectionString)
-            : this(connectionString, default, default)
-        {
-        }
+            : this(connectionString: connectionString, default, default)
+        { }
 
         public CosmosDbHealthCheck(string connectionString, string database)
             : this(connectionString, database, default)
-        {
-            _database = database;
-        }
+        { }
+
+        public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string database)
+            : this(accountEndpoint, tokenCredential, database, default)
+        { }
 
         public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
+            : this(
+                  ClientCache.GetOrAddDisposable(connectionString, k => new CosmosClient(k)),
+                  new CosmosDbHealthCheckOptions { ContainerIds = containers, DatabaseId = database })
+        { }
+
+        public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string? database, IEnumerable<string>? containers)
+            : this(
+                  ClientCache.GetOrAddDisposable(accountEndpoint, k => new CosmosClient(accountEndpoint, tokenCredential)),
+                  new CosmosDbHealthCheckOptions { ContainerIds = containers, DatabaseId = database })
+        { }
+
+        public CosmosDbHealthCheck(CosmosClient cosmosClient)
+            : this(cosmosClient, new CosmosDbHealthCheckOptions())
+        { }
+
+        public CosmosDbHealthCheck(CosmosClient cosmosClient, CosmosDbHealthCheckOptions options)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _database = database;
-            _containers = containers;
+            _cosmosClient = Guard.ThrowIfNull(cosmosClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (!_connections.TryGetValue(_connectionString, out var cosmosDbClient))
+                await _cosmosClient.ReadAccountAsync();
+
+                if (_options.DatabaseId != null)
                 {
-                    cosmosDbClient = new CosmosClient(_connectionString);
+                    var database = _cosmosClient.GetDatabase(_options.DatabaseId);
+                    await database.ReadAsync(cancellationToken: cancellationToken);
 
-                    if (!_connections.TryAdd(_connectionString, cosmosDbClient))
+                    if (_options.ContainerIds != null)
                     {
-                        cosmosDbClient.Dispose();
-                        cosmosDbClient = _connections[_connectionString];
-                    }
-                }
-
-                await cosmosDbClient.ReadAccountAsync();
-
-                if (_database != null)
-                {
-                    var database = cosmosDbClient.GetDatabase(_database);
-                    await database.ReadAsync();
-
-                    if (_containers != null && _containers.Any())
-                    {
-                        foreach (var container in _containers)
+                        foreach (var container in _options.ContainerIds)
                         {
-                            await database.GetContainer(container)
-                                .ReadContainerAsync();
+                            await database
+                                .GetContainer(container)
+                                .ReadContainerAsync(cancellationToken: cancellationToken);
                         }
                     }
                 }

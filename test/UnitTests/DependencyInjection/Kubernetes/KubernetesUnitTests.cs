@@ -1,10 +1,5 @@
-using FluentAssertions;
 using HealthChecks.Kubernetes;
 using k8s;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
 {
@@ -25,13 +20,13 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
                 });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("k8s");
-            check.GetType().Should().Be(typeof(KubernetesHealthCheck));
+            registration.Name.ShouldBe("k8s");
+            check.ShouldBeOfType<KubernetesHealthCheck>();
         }
 
         [Fact]
@@ -49,13 +44,13 @@ namespace UnitTests.HealthChecks.DependencyInjection.Kubernetes
                 }, name: "second-k8s-cluster");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("second-k8s-cluster");
-            check.GetType().Should().Be(typeof(KubernetesHealthCheck));
+            registration.Name.ShouldBe("second-k8s-cluster");
+            check.ShouldBeOfType<KubernetesHealthCheck>();
         }
     }
 }

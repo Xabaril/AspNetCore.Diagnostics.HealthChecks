@@ -1,7 +1,4 @@
 using System.Net.Sockets;
-using FluentAssertions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
@@ -23,7 +20,7 @@ namespace HealthChecks.Network.Tests.Functional
                     null, timeout: null)
             }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
-            result.Exception.Should().BeOfType<OperationCanceledException>();
+            result.Exception.ShouldBeOfType<OperationCanceledException>();
         }
     }
 }

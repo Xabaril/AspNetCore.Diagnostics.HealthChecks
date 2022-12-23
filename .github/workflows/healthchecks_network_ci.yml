@@ -1,6 +1,7 @@
 name: HealthChecks Network CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
@@ -11,14 +12,16 @@ on:
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Network/**
-    - test/HealthChecks.Network.Tests/**
-    - .github/workflows/healthchecks_network_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Network/**
+      - test/HealthChecks.Network.Tests/**
+      - .github/workflows/healthchecks_network_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -56,22 +59,24 @@ jobs:
     #    volumes:
     #      - ${{ github.workspace }}/build/docker-services/mail/:/tmp/docker-mailserver/
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Network
-      run: |
-        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
-        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj
-    #- name: Test
-    #  run: dotnet test ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj --verbosity normal
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj &&
+          dotnet restore ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Network/HealthChecks.Network.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Network/HealthChecks.Network.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj
+      #- name: Test
+      #  run: dotnet test --no-restore --no-build ./test/HealthChecks.Network.Tests/HealthChecks.Network.Tests.csproj

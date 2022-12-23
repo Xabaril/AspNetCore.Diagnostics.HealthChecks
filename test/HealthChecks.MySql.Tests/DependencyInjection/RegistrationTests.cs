@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.MySql.Tests.DependencyInjection
 {
     public class mysql_registration_should
@@ -16,13 +10,13 @@ namespace HealthChecks.MySql.Tests.DependencyInjection
                 .AddMySql("connectionstring");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("mysql");
-            check.GetType().Should().Be(typeof(MySqlHealthCheck));
+            registration.Name.ShouldBe("mysql");
+            check.ShouldBeOfType<MySqlHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -32,13 +26,13 @@ namespace HealthChecks.MySql.Tests.DependencyInjection
                 .AddMySql("connectionstring", name: "my-mysql-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-mysql-group");
-            check.GetType().Should().Be(typeof(MySqlHealthCheck));
+            registration.Name.ShouldBe("my-mysql-group");
+            check.ShouldBeOfType<MySqlHealthCheck>();
         }
     }
 }

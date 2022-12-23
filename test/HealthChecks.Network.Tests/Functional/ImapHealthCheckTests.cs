@@ -1,13 +1,5 @@
 using System.Net;
-using FluentAssertions;
 using HealthChecks.Network.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
@@ -35,7 +27,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -65,12 +57,11 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
                 });
-
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health")
@@ -97,7 +88,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -107,7 +98,7 @@ namespace HealthChecks.Network.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -128,7 +119,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -159,7 +150,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -169,7 +160,7 @@ namespace HealthChecks.Network.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -188,7 +179,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -218,7 +209,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -250,7 +241,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     });
@@ -278,7 +269,7 @@ namespace HealthChecks.Network.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    var options = new HealthCheckOptions()
+                    var options = new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("imap")
                     };
@@ -291,7 +282,7 @@ namespace HealthChecks.Network.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -308,7 +299,7 @@ namespace HealthChecks.Network.Tests.Functional
                     null, timeout: null)
             }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
-            result.Exception.Should().BeOfType<OperationCanceledException>();
+            result.Exception.ShouldBeOfType<OperationCanceledException>();
         }
     }
 }

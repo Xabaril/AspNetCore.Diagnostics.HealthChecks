@@ -9,8 +9,8 @@ namespace HealthChecks.Uris
 
         public UriHealthCheck(UriHealthCheckOptions options, Func<HttpClient> httpClientFactory)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _options = Guard.ThrowIfNull(options);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -55,6 +55,13 @@ namespace HealthChecks.Uris
                         if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
                         {
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
+                        }
+
+                        if (item.ExpectedContent != null)
+                        {
+                            var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            if (responseBody != item.ExpectedContent)
+                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the response body.");
                         }
 
                         ++idx;

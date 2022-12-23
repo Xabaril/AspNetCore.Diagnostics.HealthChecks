@@ -29,6 +29,9 @@ trim_trailing_whitespace = true
 [*.json]
 insert_final_newline = false
 
+[*.txt]
+insert_final_newline = false
+
 [*.cs]
 indent_size = 4
 
@@ -262,3 +265,18 @@ dotnet_diagnostic.IDE0005.severity = error
 
 # Enforce formatting https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/formatting-rules#rule-id-ide0055-fix-formatting
 dotnet_diagnostic.IDE0055.severity = error
+
+# https://github.com/JosefPihrt/Roslynator/blob/master/docs/analyzers/RCS0060.md
+dotnet_diagnostic.RCS0060.severity = warning
+roslynator_blank_line_after_file_scoped_namespace_declaration = true
+
+# https://github.com/JosefPihrt/Roslynator/blob/main/docs/analyzers/RCS1080.md
+dotnet_diagnostic.RCS1080.severity = warning
+
+# ConfigureAwait https://github.com/JosefPihrt/Roslynator/blob/master/docs/analyzers/RCS1090.md
+dotnet_diagnostic.RCS1090.severity = suggestion
+roslynator_configure_await = true
+
+# https://github.com/JosefPihrt/Roslynator/blob/master/docs/analyzers/RCS1102.md
+# TODO: NullabilityInfo issue in Patching.cs in internal class SR
+dotnet_diagnostic.RCS1102.severity = suggestion

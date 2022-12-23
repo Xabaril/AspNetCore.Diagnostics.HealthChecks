@@ -8,7 +8,7 @@ namespace HealthChecks.Gcp.CloudFirestore
 
         public CloudFirestoreHealthCheck(CloudFirestoreOptions cloudFirestoreOptions)
         {
-            _cloudFirestoreOptions = cloudFirestoreOptions ?? throw new ArgumentNullException(nameof(cloudFirestoreOptions));
+            _cloudFirestoreOptions = Guard.ThrowIfNull(cloudFirestoreOptions);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

@@ -34,9 +34,12 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
+            builder.Services
+                .AddSingleton(sp => new KafkaHealthCheck(config, topic));
+
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new KafkaHealthCheck(config, topic),
+                sp => sp.GetRequiredService<KafkaHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));
@@ -65,12 +68,17 @@ namespace Microsoft.Extensions.DependencyInjection
             IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
-            var config = new ProducerConfig();
-            setup?.Invoke(config);
+            builder.Services
+               .AddSingleton(sp =>
+               {
+                   var config = new ProducerConfig();
+                   setup?.Invoke(config);
+                   return new KafkaHealthCheck(config, topic);
+               });
 
             return builder.Add(new HealthCheckRegistration(
                 name ?? NAME,
-                new KafkaHealthCheck(config, topic),
+                sp => sp.GetRequiredService<KafkaHealthCheck>(),
                 failureStatus,
                 tags,
                 timeout));

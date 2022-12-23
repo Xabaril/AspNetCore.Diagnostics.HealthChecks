@@ -1,13 +1,6 @@
 using System.Diagnostics;
 using System.Net;
-using FluentAssertions;
 using HealthChecks.System.Tests.Seedwork;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.System.Tests.Functional
 {
@@ -29,7 +22,7 @@ namespace HealthChecks.System.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("privatememory")
                     });
@@ -37,7 +30,7 @@ namespace HealthChecks.System.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -54,16 +47,15 @@ namespace HealthChecks.System.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("privatememory")
                     });
                 });
 
-
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -80,7 +72,7 @@ namespace HealthChecks.System.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("workingset")
                     });
@@ -88,7 +80,7 @@ namespace HealthChecks.System.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -105,7 +97,7 @@ namespace HealthChecks.System.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("privatememory")
                     });
@@ -113,7 +105,7 @@ namespace HealthChecks.System.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -130,7 +122,7 @@ namespace HealthChecks.System.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("virtualmemory")
                     });
@@ -138,7 +130,7 @@ namespace HealthChecks.System.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -155,7 +147,7 @@ namespace HealthChecks.System.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("virtualmemory")
                     });
@@ -163,7 +155,7 @@ namespace HealthChecks.System.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
             var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace HealthChecks.MySql
 
         public MySqlHealthCheck(string connectionString)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _connectionString = Guard.ThrowIfNull(connectionString);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

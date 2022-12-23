@@ -22,12 +22,12 @@ namespace HealthChecks.UI.K8s.Operator.Controller
             ConfigMaphandler configMapHandler,
             ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _deploymentHandler = deploymentHandler ?? throw new ArgumentNullException(nameof(deploymentHandler));
-            _serviceHandler = serviceHandler ?? throw new ArgumentNullException(nameof(serviceHandler));
-            _secretHandler = secretHandler ?? throw new ArgumentNullException(nameof(secretHandler));
-            _configMapHandler = configMapHandler ?? throw new ArgumentNullException(nameof(configMapHandler));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _deploymentHandler = Guard.ThrowIfNull(deploymentHandler);
+            _serviceHandler = Guard.ThrowIfNull(serviceHandler);
+            _secretHandler = Guard.ThrowIfNull(secretHandler);
+            _configMapHandler = Guard.ThrowIfNull(configMapHandler);
+            _logger = Guard.ThrowIfNull(logger);
         }
 
         public async Task<DeploymentResult> DeployAsync(HealthCheckResource resource)

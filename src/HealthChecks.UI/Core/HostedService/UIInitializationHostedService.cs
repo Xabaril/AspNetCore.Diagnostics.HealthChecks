@@ -20,9 +20,9 @@ namespace HealthChecks.UI.Core.HostedService
             ILogger<UIInitializationHostedService> logger,
             IOptions<Settings> settings)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
+            _provider = Guard.ThrowIfNull(provider);
+            _logger = Guard.ThrowIfNull(logger);
+            _settings = Guard.ThrowIfNull(settings?.Value);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace HealthChecks.UI.Core.HostedService
 
             bool isInitialized = await context.Configurations.AnyAsync();
 
-            if (!isInitialized && healthCheckConfigurations.Any())
+            if (!isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
             {
                 _logger.LogInformation("Saving healthchecks configuration to database");
 
@@ -69,7 +69,7 @@ namespace HealthChecks.UI.Core.HostedService
                      .AddRangeAsync(healthCheckConfigurations);
 
             }
-            else if (isInitialized && healthCheckConfigurations.Any())
+            else if (isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
             {
                 var dbConfigurations = await context.Configurations.ToListAsync();
 
@@ -109,5 +109,4 @@ namespace HealthChecks.UI.Core.HostedService
                 (await context.Database.GetPendingMigrationsAsync()).Any();
         }
     }
-
 }

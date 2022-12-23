@@ -7,7 +7,7 @@ namespace HealthChecks.UI.Core
         public static UIResource GetMainUI(this IEnumerable<UIResource> resources, Options options)
         {
             var resource = resources
-                .FirstOrDefault(r => r.ContentType == ContentType.HTML && r.FileName == Keys.HEALTHCHECKSUI_MAIN_UI_RESOURCE);
+                .First(r => r.ContentType == ContentType.HTML && r.FileName == Keys.HEALTHCHECKSUI_MAIN_UI_RESOURCE);
 
             var apiPath = options.UseRelativeApiPath ? options.ApiPath.AsRelativeResource() : options.ApiPath;
 
@@ -23,7 +23,6 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_WEBHOOKS_API_TARGET, webhooksPath);
 
-
             var resourcePath = options.UseRelativeResourcesPath ? options.ResourcesPath.AsRelativeResource() : options.ResourcesPath;
 
             resource.Content = resource.Content
@@ -32,6 +31,9 @@ namespace HealthChecks.UI.Core
             resource.Content = resource.Content
                 .Replace(Keys.HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET, options.AsideMenuOpened.ToString().ToLower());
 
+            resource.Content = resource.Content
+                .Replace(Keys.HEALTHCHECKSUI_PAGE_TITLE, options.PageTitle);
+
             return resource;
         }
 
@@ -39,7 +41,7 @@ namespace HealthChecks.UI.Core
         {
             var styleSheets = new List<UIStylesheet>();
 
-            if (!options.CustomStylesheets.Any())
+            if (options.CustomStylesheets.Count == 0)
             {
                 resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_STYLESHEETS_TARGET, string.Empty);
                 return styleSheets;

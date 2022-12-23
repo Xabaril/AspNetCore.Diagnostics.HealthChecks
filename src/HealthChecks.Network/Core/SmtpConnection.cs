@@ -21,7 +21,7 @@ namespace HealthChecks.Network.Core
         public SmtpConnection(SmtpConnectionOptions options)
             : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
             ConnectionType = _options.ConnectionType;
             ComputeDefaultValues();
         }
@@ -41,7 +41,7 @@ namespace HealthChecks.Network.Core
             }
             await ExecuteCommand(SmtpCommands.EHLO(Host));
             await ExecuteCommand(SmtpCommands.AUTHLOGIN());
-            await ExecuteCommand($"{ ToBase64(userName)}\r\n");
+            await ExecuteCommand($"{ToBase64(userName)}\r\n");
 
             password = password?.Length > 0 ? ToBase64(password) : "";
 

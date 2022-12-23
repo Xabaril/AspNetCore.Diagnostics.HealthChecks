@@ -1,14 +1,6 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
-
 
 namespace HealthChecks.SignalR.Tests.Functional
 {
@@ -17,7 +9,7 @@ namespace HealthChecks.SignalR.Tests.Functional
         [Fact]
         public async Task be_healthy_if_signalr_hub_is_available()
         {
-            TestServer server = null;
+            TestServer server = null!;
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
@@ -35,7 +27,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 {
 
                     app
-                        .UseHealthChecks("/health", new HealthCheckOptions()
+                        .UseHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => r.Tags.Contains("signalr")
                         })
@@ -49,13 +41,13 @@ namespace HealthChecks.SignalR.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task be_unhealthy_if_signalr_hub_is_unavailable()
         {
-            TestServer server = null;
+            TestServer server = null!;
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
@@ -72,7 +64,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 .Configure(app =>
                 {
                     app
-                        .UseHealthChecks("/health", new HealthCheckOptions()
+                        .UseHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => r.Tags.Contains("signalr")
                         })
@@ -86,7 +78,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         private class TestHub : Hub

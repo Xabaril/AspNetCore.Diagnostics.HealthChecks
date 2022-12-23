@@ -1,12 +1,4 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
-
 
 namespace HealthChecks.Sqlite.Tests.Functional
 {
@@ -23,7 +15,7 @@ namespace HealthChecks.Sqlite.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("sqlite")
                     });
@@ -35,7 +27,7 @@ namespace HealthChecks.Sqlite.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -49,7 +41,7 @@ namespace HealthChecks.Sqlite.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("sqlite")
                     });
@@ -60,8 +52,7 @@ namespace HealthChecks.Sqlite.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should()
-                .Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -75,7 +66,7 @@ namespace HealthChecks.Sqlite.Tests.Functional
                 })
                 .Configure(app =>
                 {
-                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("sqlite")
                     });
@@ -86,8 +77,7 @@ namespace HealthChecks.Sqlite.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should()
-                .Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

@@ -1,9 +1,4 @@
-using FluentAssertions;
 using HealthChecks.EventStore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.Consul.Tests.DependencyInjection
 {
@@ -17,13 +12,30 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
                 .AddEventStore("connection-string");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("eventstore");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
+            registration.Name.ShouldBe("eventstore");
+            check.ShouldBeOfType<EventStoreHealthCheck>();
+        }
+
+        [Fact]
+        public void add_health_check_when_properly_configured_using_service_provider_overload()
+        {
+            var services = new ServiceCollection();
+            services.AddHealthChecks()
+                .AddEventStore(sp => "connection-string");
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+            var registration = options.Value.Registrations.First();
+            var check = registration.Factory(serviceProvider);
+
+            registration.Name.ShouldBe("eventstore");
+            check.ShouldBeOfType<EventStoreHealthCheck>();
         }
 
         [Fact]
@@ -34,13 +46,13 @@ namespace HealthChecks.Consul.Tests.DependencyInjection
                 .AddEventStore("connection-string", name: "my-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-group");
-            check.GetType().Should().Be(typeof(EventStoreHealthCheck));
+            registration.Name.ShouldBe("my-group");
+            check.ShouldBeOfType<EventStoreHealthCheck>();
         }
     }
 }

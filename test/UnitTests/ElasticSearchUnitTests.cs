@@ -1,7 +1,4 @@
-using FluentAssertions;
 using HealthChecks.Elasticsearch;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace UnitTests
 {
@@ -19,8 +16,8 @@ namespace UnitTests
             });
 
             //Ensure no further modifications were carried by extension method
-            settings.RequestTimeout.Should().HaveValue();
-            settings.RequestTimeout.Should().Be(new TimeSpan(0, 0, 6));
+            settings.RequestTimeout.ShouldNotBeNull();
+            settings.RequestTimeout.ShouldBe(new TimeSpan(0, 0, 6));
         }
 
         [Fact]
@@ -30,8 +27,8 @@ namespace UnitTests
             var settings = new ElasticsearchOptions();
             services.AddHealthChecks().AddElasticsearch(setup => settings = setup, timeout: new TimeSpan(0, 0, 7));
 
-            settings.RequestTimeout.Should().HaveValue();
-            settings.RequestTimeout.Should().Be(new TimeSpan(0, 0, 7));
+            settings.RequestTimeout.ShouldNotBeNull();
+            settings.RequestTimeout.ShouldBe(new TimeSpan(0, 0, 7));
         }
 
         [Fact]
@@ -41,7 +38,7 @@ namespace UnitTests
             var settings = new ElasticsearchOptions();
             services.AddHealthChecks().AddElasticsearch(setup => settings = setup);
 
-            settings.RequestTimeout.Should().NotHaveValue();
+            settings.RequestTimeout.ShouldBeNull();
         }
     }
 }

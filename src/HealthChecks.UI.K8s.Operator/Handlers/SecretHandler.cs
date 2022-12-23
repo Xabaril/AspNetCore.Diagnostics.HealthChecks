@@ -13,8 +13,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public SecretHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
         }
 
         public async Task<V1Secret> GetOrCreateAsync(HealthCheckResource resource)
@@ -34,12 +34,13 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             catch (Exception ex)
             {
                 _logger.LogError("Error creating Secret: {message}", ex.Message);
+                throw;
             }
 
             return secret;
         }
 
-        public Task<V1Secret> Get(HealthCheckResource resource)
+        public Task<V1Secret?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }

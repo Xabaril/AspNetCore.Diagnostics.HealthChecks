@@ -9,7 +9,7 @@ namespace HealthChecks.SignalR
 
         public SignalRHealthCheck(Func<HubConnection> hubConnectionBuilder)
         {
-            _hubConnectionBuilder = hubConnectionBuilder ?? throw new ArgumentNullException(nameof(hubConnectionBuilder));
+            _hubConnectionBuilder = Guard.ThrowIfNull(hubConnectionBuilder);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

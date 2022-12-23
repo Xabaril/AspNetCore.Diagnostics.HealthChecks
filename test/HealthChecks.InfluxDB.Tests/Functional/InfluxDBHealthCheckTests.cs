@@ -64,6 +64,5 @@ namespace HealthChecks.InfluxDB.Tests.Functional
             response.StatusCode
                 .Should().Be(HttpStatusCode.ServiceUnavailable);
         }
-
     }
 }

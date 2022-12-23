@@ -1,33 +1,37 @@
 using Confluent.Kafka;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Kafka
 {
+    /// <summary>
+    /// A health check for Kafka cluster.
+    /// </summary>
     public class KafkaHealthCheck : IHealthCheck, IDisposable
     {
-        private readonly ProducerConfig _configuration;
-        private readonly string _topic;
+        private readonly KafkaHealthCheckOptions _options;
         private IProducer<string, string>? _producer;
 
-        public KafkaHealthCheck(ProducerConfig configuration, string? topic)
+        public KafkaHealthCheck(KafkaHealthCheckOptions options)
         {
-            _configuration = Guard.ThrowIfNull(configuration);
-            _topic = topic ?? "healthchecks-topic";
+            Guard.ThrowIfNull(options.Configuration);
+            _options = options;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                _producer ??= new ProducerBuilder<string, string>(_configuration).Build();
-
-                var message = new Message<string, string>
+                if (_producer == null)
                 {
-                    Key = "healthcheck-key",
-                    Value = $"Check Kafka healthy on {DateTime.UtcNow}"
-                };
+                    var builder = new ProducerBuilder<string, string>(_options.Configuration);
+                    _options.Configure?.Invoke(builder);
+                    _producer ??= builder.Build();
+                }
 
-                var result = await _producer.ProduceAsync(_topic, message, cancellationToken);
+                var message = _options.MessageBuilder(_options);
+
+                var result = await _producer.ProduceAsync(_options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC, message, cancellationToken);
 
                 if (result.Status == PersistenceStatus.NotPersisted)
                 {

@@ -1,6 +1,7 @@
 namespace HealthChecks.InfluxDB.Tests.DependencyInjection
 {
-    public class ibmq_registration_should
+    public class influxdb_registration_should
+
     {
         [Fact]
         public void add_health_check_when_properly_configured()

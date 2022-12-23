@@ -28,9 +28,8 @@ public class UIResponseWriterTests
         var healthReport = await JsonSerializer.DeserializeAsync<UIHealthReport>(httpContext.Response.Body, CreateJsonOptions());
 
         httpContext.Response.ContentType.ShouldBe("application/json");
-        healthReport.ShouldNotBeNull();
-        healthReport?.Entries.ShouldHaveSingleItem();
-        healthReport?.Entries[healthReportKey].Exception.ShouldBe(exceptionMessage);
+        healthReport.ShouldNotBeNull().Entries.ShouldHaveSingleItem();
+        healthReport.ShouldNotBeNull().Entries[healthReportKey].Exception.ShouldBe(exceptionMessage);
     }
 
     private static JsonSerializerOptions CreateJsonOptions()

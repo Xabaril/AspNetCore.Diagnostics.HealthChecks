@@ -6,16 +6,16 @@ namespace HealthChecks.InfluxDB;
 
 public class InfluxDBHealthCheck : IHealthCheck, IDisposable
 {
-    private readonly InfluxDBClient _influxdb_client;
+    private readonly InfluxDBClient _influxDbClient;
 
     public InfluxDBHealthCheck(Func<InfluxDBClientOptions.Builder, InfluxDBClientOptions> _options)
     {
-        _influxdb_client = new InfluxDBClient(_options.Invoke(InfluxDBClientOptions.Builder.CreateNew()));
+        _influxDbClient = new InfluxDBClient(_options.Invoke(InfluxDBClientOptions.Builder.CreateNew()));
     }
 
     public InfluxDBHealthCheck(InfluxDBClient influxDBClient)
     {
-        _influxdb_client = influxDBClient;
+        _influxDbClient = influxDBClient;
     }
 
     /// <inheritdoc />
@@ -23,8 +23,8 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
     {
         try
         {
-            var ready = await _influxdb_client.ReadyAsync();
-            var ping = await _influxdb_client.PingAsync();
+            var ready = await _influxDbClient.ReadyAsync();
+            var ping = await _influxDbClient.PingAsync();
             return ping && ready.Status == Ready.StatusEnum.Ready
                 ? HealthCheckResult.Healthy()
                 : new HealthCheckResult(context.Registration.FailureStatus, $"Status:{ready.Status} Started:{ready.Started} Up:{ready.Up}");
@@ -35,5 +35,5 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
         }
     }
 
-    public void Dispose() => _influxdb_client.Dispose();
+    public void Dispose() => _influxDbClient.Dispose();
 }

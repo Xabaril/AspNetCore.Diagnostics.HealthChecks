@@ -1,4 +1,4 @@
-name: HealthChecks KAFKA CI
+name: HealthChecks Kafka CI
 
 on:
   workflow_dispatch:

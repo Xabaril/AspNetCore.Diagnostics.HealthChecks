@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - preview-influxdb-*
+      - preview-all-*
+      
 jobs:
   build:
     env:

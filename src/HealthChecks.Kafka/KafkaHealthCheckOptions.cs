@@ -31,4 +31,6 @@ public class KafkaHealthCheckOptions
         Key = "healthcheck-key",
         Value = $"Check Kafka healthy on {DateTime.UtcNow}"
     };
+
+    public bool A { get; set; }
 }

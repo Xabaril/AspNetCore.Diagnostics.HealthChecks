@@ -8,39 +8,14 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
 {
     private readonly InfluxDBClient _influxdb_client;
 
-    public InfluxDBHealthCheck(string url, string username, string password)
+    public InfluxDBHealthCheck(Func<InfluxDBClientOptions.Builder, InfluxDBClientOptions> _options)
     {
-        _influxdb_client = new InfluxDBClient(url, username, password);
+        _influxdb_client = new InfluxDBClient(_options.Invoke(InfluxDBClientOptions.Builder.CreateNew()));
     }
 
-    public InfluxDBHealthCheck(string url, string token)
+    public InfluxDBHealthCheck(InfluxDBClient influxDBClient)
     {
-        _influxdb_client = new InfluxDBClient(url, token);
-    }
-
-    public InfluxDBHealthCheck(InfluxDBClientOptions options)
-    {
-        _influxdb_client = new InfluxDBClient(options);
-    }
-
-    public InfluxDBHealthCheck(string url, string username, string password, string database, string retentionPolicy)
-    {
-        _influxdb_client = new InfluxDBClient(url, username, password, database, retentionPolicy);
-    }
-
-    public InfluxDBHealthCheck(string influxDBConnectionString)
-    {
-        _influxdb_client = new InfluxDBClient(influxDBConnectionString);
-    }
-
-    public InfluxDBHealthCheck(InfluxDBClient influxdb_client)
-    {
-        _influxdb_client = influxdb_client;
-    }
-
-    public InfluxDBHealthCheck(Uri influxDBConnectionString)
-    {
-        _influxdb_client = new InfluxDBClient(influxDBConnectionString.ToString());
+        _influxdb_client = influxDBClient;
     }
 
     /// <inheritdoc />

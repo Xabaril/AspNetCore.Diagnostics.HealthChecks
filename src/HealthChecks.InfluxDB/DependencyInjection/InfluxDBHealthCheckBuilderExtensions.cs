@@ -77,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddInfluxDBV1(this IHealthChecksBuilder builder, string url, string username, char[] password, string database, string retentionPolicy, string? name = default, HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddInfluxDBV1(this IHealthChecksBuilder builder, string url, string username, string password, string database, string retentionPolicy, string? name = default, HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
         {
             builder.Services
                 .AddSingleton(sp => new InfluxDBHealthCheck(url, username, password, database, retentionPolicy));
@@ -132,7 +132,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-        public static IHealthChecksBuilder AddInfluxDB(this IHealthChecksBuilder builder, string url, string username, char[] password, string? name = default, HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
+        public static IHealthChecksBuilder AddInfluxDB(this IHealthChecksBuilder builder, string url, string username, string password, string? name = default, HealthStatus? failureStatus = default, IEnumerable<string>? tags = default, TimeSpan? timeout = default)
         {
             builder.Services
                 .AddSingleton(sp => new InfluxDBHealthCheck(url, username, password));

@@ -9,19 +9,40 @@ namespace HealthChecks.InfluxDB
     {
         private readonly InfluxDBClient _influxdb_client;
 
-        public InfluxDBHealthCheck(string url, string username, char[] password) => _influxdb_client = InfluxDBClientFactory.Create(url, username, password);
+        public InfluxDBHealthCheck(string url, string username, string password)
+        {
+            _influxdb_client = new InfluxDBClient(url, username, password);
+        }
 
-        public InfluxDBHealthCheck(string url, string token) => _influxdb_client = InfluxDBClientFactory.Create(url, token);
+        public InfluxDBHealthCheck(string url, string token)
+        {
+            _influxdb_client = new InfluxDBClient(url, token);
+        }
 
-        public InfluxDBHealthCheck(InfluxDBClientOptions options) => _influxdb_client = InfluxDBClientFactory.Create(options);
+        public InfluxDBHealthCheck(InfluxDBClientOptions options)
+        {
+            _influxdb_client = new InfluxDBClient(options);
+        }
 
-        public InfluxDBHealthCheck(string url, string username, char[] password, string database, string retentionPolicy) => _influxdb_client = InfluxDBClientFactory.CreateV1(url, username, password, database, retentionPolicy);
+        public InfluxDBHealthCheck(string url, string username, string password, string database, string retentionPolicy)
+        {
+            _influxdb_client = new InfluxDBClient(url, username, password, database, retentionPolicy);
+        }
 
-        public InfluxDBHealthCheck(string influxDBConnectionString) => _influxdb_client = InfluxDBClientFactory.Create(influxDBConnectionString);
+        public InfluxDBHealthCheck(string influxDBConnectionString)
+        {
+            _influxdb_client = new InfluxDBClient(influxDBConnectionString);
+        }
 
-        public InfluxDBHealthCheck(InfluxDBClient influxdb_client) => _influxdb_client = influxdb_client;
+        public InfluxDBHealthCheck(InfluxDBClient influxdb_client)
+        {
+            _influxdb_client = influxdb_client;
+        }
 
-        public InfluxDBHealthCheck(Uri influxDBConnectionString) => _influxdb_client = InfluxDBClientFactory.Create(influxDBConnectionString.ToString());
+        public InfluxDBHealthCheck(Uri influxDBConnectionString)
+        {
+            _influxdb_client = new InfluxDBClient(influxDBConnectionString.ToString());
+        }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

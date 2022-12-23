@@ -12,35 +12,20 @@ jobs:
       BUILD_CONFIG: Release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
           dotnet-version: |
             6.0.x
             7.0.x
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj
-    - name: Setup InfluxDB
-      uses: influxdata/influxdb-action@v3
-      with:
-        influxdb_version: latest
-        influxdb_org: influxdata
-        influxdb_user: ci_user
-        influxdb_password: password
-        influxdb_bucket: dummy
-    - name: Test
-      run: dotnet test ./test/HealthChecks.InfluxDB.Tests/HealthChecks.InfluxDB.Tests.csproj --verbosity normal
-    - name: dotnet pack
-      run: dotnet pack ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj -c $BUILD_CONFIG --include-source --include-symbols -o ./artifacts
-    - name: setup nuget
-      uses: NuGet/setup-nuget@v1.0.5
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      with:
-        nuget-version: latest
-    - name: Publish influxdb Health Check nuget
-      run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.InfluxDB.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Restore
+        run: dotnet restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj
+      - name: Build
+        run: dotnet build --no-restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj -c $BUILD_CONFIG
+      - name: Pack
+        run: dotnet pack --no-build ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj -c $BUILD_CONFIG -o ./artifacts
+      - name: Publish
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.InfluxDB.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
 

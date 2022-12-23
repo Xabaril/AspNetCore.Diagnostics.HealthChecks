@@ -2,7 +2,7 @@
 
 test:
   - any: ['test/**/*']
-    all: ['!test/**/*.approved.txt']
+    all: ['!test/HealthChecks.Kafka.Tests/HealthChecks.Kafka.approved.txt']
 
 github_actions:
   - .github/**/*

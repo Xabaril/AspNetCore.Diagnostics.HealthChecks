@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>HealthCheck;Health;InfluxDB</PackageTags>
     <Description>HealthChecks.InfluxDB is the health check package for InfluxDB.</Description>
-    <Version>$(HealthCheckInfluxDB)</Version>
+    <VersionPrefix>$(HealthCheckInfluxDB)</VersionPrefix>
     <PackageId>AspNetCore.HealthChecks.InfluxDB</PackageId>
     <Nullable>enable</Nullable>
   </PropertyGroup>

@@ -34,7 +34,7 @@ public class azure_service_bus_subscription_registration_with_token_should
                 string.Empty,
                 string.Empty,
                 new AzureCliCredential(),
-                setup: options =>
+                options =>
                 {
                     setupCalled = true;
                     setupOptions = options;
@@ -103,7 +103,7 @@ public class azure_service_bus_subscription_registration_with_token_should
                 _ => string.Empty,
                 _ => string.Empty,
                 _ => new AzureCliCredential(),
-                setup: options =>
+                options =>
                 {
                     setupCalled = true;
                     setupOptions = options;

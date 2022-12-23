@@ -28,7 +28,7 @@ public class azure_service_bus_subscription_registration_should
 
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(string.Empty, string.Empty, string.Empty,
-                setup: options =>
+                options =>
                 {
                     setupCalled = true;
                     setupOptions = options;
@@ -84,7 +84,7 @@ public class azure_service_bus_subscription_registration_should
 
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(_ => string.Empty, _ => string.Empty, _ => string.Empty,
-                setup: options =>
+                options =>
                 {
                     setupCalled = true;
                     setupOptions = options;

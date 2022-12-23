@@ -28,7 +28,7 @@ public class azure_service_bus_queue_registration_should
 
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(string.Empty, string.Empty,
-                setup: options =>
+                options =>
                 {
                     setupCalled = true;
                     setupOptions = options;
@@ -112,7 +112,7 @@ public class azure_service_bus_queue_registration_should
 
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ => string.Empty, _ => string.Empty,
-                setup: options =>
+                options =>
                 {
                     setupCalled = true;
                     setupOptions = options;

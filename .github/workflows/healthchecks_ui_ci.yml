@@ -20,13 +20,13 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.UI/**
-    - test/HealthChecks.UI.Tests/**
-    - test/HealthChecks.UI.Core.Tests/**
-    - test/HealthChecks.UI.Client.Tests/**
-    - .github/workflows/healthchecks_ui_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.UI/**
+      - test/HealthChecks.UI.Tests/**
+      - test/HealthChecks.UI.Core.Tests/**
+      - test/HealthChecks.UI.Client.Tests/**
+      - .github/workflows/healthchecks_ui_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:

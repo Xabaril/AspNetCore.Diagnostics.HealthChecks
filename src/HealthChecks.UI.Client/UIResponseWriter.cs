@@ -31,6 +31,24 @@ namespace HealthChecks.UI.Client
             }
         }
 
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task WriteHealthCheckUIResponseNoExceptionDetails(HttpContext httpContext, HealthReport report)
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            if (report != null)
+            {
+                httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
+
+                var uiReport = UIHealthReport.CreateFrom(report, _ => "Exception Occurred.");
+
+                await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value);
+            }
+            else
+            {
+                await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse);
+            }
+        }
+
         private static JsonSerializerOptions CreateJsonOptions()
         {
             var options = new JsonSerializerOptions

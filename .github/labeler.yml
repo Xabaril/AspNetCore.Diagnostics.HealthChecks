@@ -1,0 +1,34 @@
+# https://github.com/actions/labeler/blob/master/README.md
+
+test:
+  - 'test/**/*'
+  - all: ['!test/**/*.approved.txt']
+
+github_actions:
+  - .github/**/*
+
+code style:
+  - .editorconfig
+
+docs:
+  - README.md
+  - doc/**/*
+
+arrango-db:
+  - src/HealthChecks.ArangoDb/**/*
+
+aws:
+  - src/HealthChecks.Aws.*/**/*
+
+azure:
+  - src/HealthChecks.Azure*/**/*
+
+consul:
+  - src/HealthChecks.Consul/**/*
+
+kafka:
+  - src/HealthChecks.Kafka/**/*
+
+UI:
+  - src/HealthChecks.UI/**/*
+  - src/HealthChecks.UI.*/**/*

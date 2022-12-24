@@ -22,8 +22,8 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sns subs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("aws sns subs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sns subs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("aws sns subs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 
     [Fact]
@@ -64,8 +64,8 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sns subs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("aws sns subs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 
     [Fact]
@@ -85,8 +85,8 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sns subs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("aws sns subs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 
     [Fact]
@@ -102,8 +102,8 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssnssubs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("awssnssubs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 
     [Fact]
@@ -121,9 +121,9 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssnssubs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
-        setupCalled.Should().BeTrue();
+        registration.Name.ShouldBe("awssnssubs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
+        setupCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -139,8 +139,8 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sns subs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("aws sns subs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 
     [Fact]
@@ -160,7 +160,7 @@ public class aws_sns_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws sns subs");
-        check.GetType().Should().Be(typeof(SnsTopicAndSubscriptionHealthCheck));
+        registration.Name.ShouldBe("aws sns subs");
+        check.ShouldBeOfType<SnsTopicAndSubscriptionHealthCheck>();
     }
 }

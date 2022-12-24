@@ -21,10 +21,10 @@ namespace UnitTests.UI.DatabaseProviders
             var services = hostBuilder.Build().Services;
             var context = services.GetRequiredService<HealthChecksDb>();
 
-            context.Should().NotBeNull();
-            context.Database.GetMigrations().Count().Should().BeGreaterThan(0);
-            context.Database.ProviderName.Should().Be(ProviderName);
-            customOptionsInvoked.Should().BeTrue();
+            context.ShouldNotBeNull();
+            context.Database.GetMigrations().Count().ShouldBeGreaterThan(0);
+            context.Database.ProviderName.ShouldBe(ProviderName);
+            customOptionsInvoked.ShouldBeTrue();
         }
     }
 }

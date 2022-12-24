@@ -21,9 +21,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", "invalidvalue")
+                        new KeyValuePair<string, string?>("storage_provider", "invalidvalue")
                     });
                 })
                 .UseStartup<Startup>();
@@ -38,10 +38,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "connectionstring"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
                     });
                 })
                 .UseStartup<Startup>();
@@ -49,7 +49,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(SqlProviderName);
+            context.Database.ProviderName.ShouldBe(SqlProviderName);
         }
 
         [Fact]
@@ -60,9 +60,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.SqlServer.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -78,10 +78,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "connectionstring"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
                     });
                 })
                 .UseStartup<Startup>();
@@ -89,7 +89,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(SqliteProviderName);
+            context.Database.ProviderName.ShouldBe(SqliteProviderName);
         }
 
         [Fact]
@@ -100,9 +100,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.Sqlite.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -118,10 +118,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "connectionstring"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
                     });
                 })
                 .UseStartup<Startup>();
@@ -129,7 +129,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(PostgreProviderName);
+            context.Database.ProviderName.ShouldBe(PostgreProviderName);
         }
 
         [Fact]
@@ -140,9 +140,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -158,9 +158,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.InMemory.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.InMemory.ToString())
                     });
                 })
                 .UseStartup<Startup>();
@@ -168,7 +168,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(InMemoryProviderName);
+            context.Database.ProviderName.ShouldBe(InMemoryProviderName);
         }
 
         [Fact]
@@ -181,7 +181,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(InMemoryProviderName);
+            context.Database.ProviderName.ShouldBe(InMemoryProviderName);
         }
 
         [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
@@ -193,10 +193,10 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.MySql.ToString()),
-                        new KeyValuePair<string,string>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString()),
+                        new KeyValuePair<string, string?>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
 
                     });
                 })
@@ -205,7 +205,7 @@ namespace UnitTests.UI.DatabaseProviders
             var host = hostBuilder.Build();
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            context.Database.ProviderName.Should().Be(MySqlProviderName);
+            context.Database.ProviderName.ShouldBe(MySqlProviderName);
         }
 
         [Fact]
@@ -216,9 +216,9 @@ namespace UnitTests.UI.DatabaseProviders
                 {
                     config.Sources.Clear();
 
-                    config.AddInMemoryCollection(new List<KeyValuePair<string, string>>
+                    config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                     {
-                        new KeyValuePair<string,string>("storage_provider", StorageProviderEnum.MySql.ToString())
+                        new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString())
                     });
                 })
                 .UseStartup<Startup>();

@@ -12,14 +12,16 @@ on:
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.RavenDB/**
-    - test/HealthChecks.RavenDb.Tests/**
-    - .github/workflows/healthchecks_ravendb_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.RavenDB/**
+      - test/HealthChecks.RavenDb.Tests/**
+      - .github/workflows/healthchecks_ravendb_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -32,22 +34,22 @@ jobs:
         env:
           RAVEN_ARGS: --Setup.Mode=None
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj &&
-        dotnet restore ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj &&
+          dotnet restore ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.RavenDb.Tests/HealthChecks.RavenDb.Tests.csproj

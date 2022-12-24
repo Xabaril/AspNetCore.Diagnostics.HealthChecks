@@ -54,7 +54,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace HealthChecks.RavenDb.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
         }
     }
 }

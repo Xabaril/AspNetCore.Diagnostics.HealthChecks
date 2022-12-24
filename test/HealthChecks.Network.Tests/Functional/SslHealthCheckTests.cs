@@ -38,7 +38,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -134,9 +134,9 @@ namespace HealthChecks.Network.Tests.Functional
 
             var response = await server.CreateRequest($"/health").GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().Contain(HealthStatus.Unhealthy.ToString());
+            resultAsString.ShouldContain(HealthStatus.Unhealthy.ToString());
         }
 
         [Fact]
@@ -153,7 +153,7 @@ namespace HealthChecks.Network.Tests.Functional
                     null, timeout: null)
             }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
-            result.Exception.Should().BeOfType<OperationCanceledException>();
+            result.Exception.ShouldBeOfType<OperationCanceledException>();
         }
     }
 }

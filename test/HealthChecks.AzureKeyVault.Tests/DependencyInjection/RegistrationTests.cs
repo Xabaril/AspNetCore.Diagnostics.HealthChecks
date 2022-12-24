@@ -22,9 +22,8 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azurekeyvault");
-            check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
-
+            registration.Name.ShouldBe("azurekeyvault");
+            check.ShouldBeOfType<AzureKeyVaultHealthCheck>();
         }
 
         [Fact]
@@ -40,8 +39,8 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("keyvaultcheck");
-            check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
+            registration.Name.ShouldBe("keyvaultcheck");
+            check.ShouldBeOfType<AzureKeyVaultHealthCheck>();
         }
 
         [Fact]
@@ -118,9 +117,9 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
-            factoryCalled.Should().BeTrue();
-            setupCalled.Should().BeTrue();
+            check.ShouldBeOfType<AzureKeyVaultHealthCheck>();
+            factoryCalled.ShouldBeTrue();
+            setupCalled.ShouldBeTrue();
         }
 
         [Fact]
@@ -141,8 +140,8 @@ namespace HealthChecks.AzureKeyVault.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            check.GetType().Should().Be(typeof(AzureKeyVaultHealthCheck));
-            setupCalled.Should().BeTrue();
+            check.ShouldBeOfType<AzureKeyVaultHealthCheck>();
+            setupCalled.ShouldBeTrue();
         }
     }
 

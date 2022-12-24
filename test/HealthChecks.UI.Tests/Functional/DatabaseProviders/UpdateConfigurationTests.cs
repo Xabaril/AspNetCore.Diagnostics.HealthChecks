@@ -38,8 +38,8 @@ namespace HealthChecks.UI.Tests
             var context = host1.Services.GetRequiredService<HealthChecksDb>();
             var configurations = await context.Configurations.ToListAsync();
 
-            configurations[0].Name.Should().Be(endpointName);
-            configurations[0].Uri.Should().Be(endpointUri);
+            configurations[0].Name.ShouldBe(endpointName);
+            configurations[0].Uri.ShouldBe(endpointUri);
 
             hostReset = new ManualResetEventSlim(false);
             using var host2 = new TestServer(getHost(updatedEndpointUri, hostReset));
@@ -48,8 +48,8 @@ namespace HealthChecks.UI.Tests
             context = host2.Services.GetRequiredService<HealthChecksDb>();
             configurations = await context.Configurations.ToListAsync();
 
-            configurations[0].Name.Should().Be(endpointName);
-            configurations[0].Uri.Should().Be(updatedEndpointUri);
+            configurations[0].Name.ShouldBe(endpointName);
+            configurations[0].Uri.ShouldBe(updatedEndpointUri);
         }
     }
 }

@@ -18,16 +18,15 @@ RUN npm i -g npm
 FROM updated-npm AS build
 WORKDIR /src
 COPY AspNetCore.Diagnostics.HealthChecks.sln ./
-COPY global.json ./
 COPY Directory.Build.props ./
-COPY ./build/dependencies.props ./build/
+COPY Directory.Build.targets ./
+COPY ./build/versions.props ./build/
 COPY ./src/HealthChecks.UI/build ./src/HealthChecks.UI/build
 COPY ./src/HealthChecks.UI/assets ./src/HealthChecks.UI/assets
 COPY ./src/HealthChecks.UI/client ./src/HealthChecks.UI/client
 COPY ./build/docker-images/HealthChecks.UI.Image/HealthChecks.UI.Image.csproj ./build/docker-images/HealthChecks.UI.Image/
 COPY . .
 WORKDIR /src/build/docker-images/HealthChecks.UI.Image
-RUN rm ../../../global.json
 RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build -c Release -o /app
 

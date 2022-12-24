@@ -1,14 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);ApplicationStatus</PackageTags>
     <Description>HealthChecks.ApplicationStatus is the health check package for detection graceful shutdown.</Description>
-    <Version>$(HealthCheckApplicationStatus)</Version>
+    <VersionPrefix>$(HealthCheckApplicationStatus)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

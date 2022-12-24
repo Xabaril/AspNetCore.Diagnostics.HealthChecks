@@ -41,7 +41,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+                .ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace HealthChecks.SignalR.Tests.Functional
                 .GetAsync();
 
             response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+                .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         private class TestHub : Hub

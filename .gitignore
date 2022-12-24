@@ -339,3 +339,5 @@ ASALocalRun/
 AzureDevOpsTasks/**/*.vsix
 
 *.received.txt
+
+.DS_Store

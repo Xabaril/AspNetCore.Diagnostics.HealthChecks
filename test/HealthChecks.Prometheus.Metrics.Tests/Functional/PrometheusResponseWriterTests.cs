@@ -20,7 +20,7 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
 
             response.EnsureSuccessStatusCode();
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Healthy);
+            resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Healthy);
         }
 
         [Fact]
@@ -37,9 +37,9 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
             var response = await sut.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Unhealthy);
+            resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
 
         [Fact]
@@ -56,9 +56,9 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
             var response = await sut.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Unhealthy);
+            resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
     }
 }

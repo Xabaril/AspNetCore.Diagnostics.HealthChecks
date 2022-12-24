@@ -35,7 +35,7 @@ namespace HealthChecks.Network.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace HealthChecks.Network.Tests.Functional
             var response = await server.CreateRequest("/health")
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

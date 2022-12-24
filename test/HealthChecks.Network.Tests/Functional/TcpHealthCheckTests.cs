@@ -20,7 +20,7 @@ namespace HealthChecks.Network.Tests.Functional
                     null, timeout: null)
             }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
-            result.Exception.Should().BeOfType<OperationCanceledException>();
+            result.Exception.ShouldBeOfType<OperationCanceledException>();
         }
     }
 }

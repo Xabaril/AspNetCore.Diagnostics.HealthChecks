@@ -12,14 +12,16 @@ on:
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Solr/**
-    - test/HealthChecks.SolR.Tests/**
-    - .github/workflows/healthchecks_solr_ci.
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Solr/**
+      - test/HealthChecks.SolR.Tests/**
+      - .github/workflows/healthchecks_solr_ci.
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -34,32 +36,34 @@ jobs:
     #       - ${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore
     #       - ${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown
     steps:
-    # - name: Provide permission for deleting volume files
-    #   run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
+      # - name: Provide permission for deleting volume files
+      #   run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
 
-    - uses: actions/checkout@v3
-    - name: Initialize Solr
-      run: |
-        docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1
-    - name: Test SOLR
-      run: |
-        wget http://localhost:8983/solr/#
-        curl http://localhost:8983/solr/# -v
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
-        dotnet restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Solr/HealthChecks.Solr.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
-    #- name: Test
-    #  run: dotnet test --no-restore --no-build ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Initialize Solr
+        run: |
+          docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1
+      - name: Test SOLR
+        run: |
+          wget http://localhost:8983/solr/#
+          curl http://localhost:8983/solr/# -v
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
+          dotnet restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Solr/HealthChecks.Solr.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+      #- name: Test
+      #  run: dotnet test --no-restore --no-build ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj

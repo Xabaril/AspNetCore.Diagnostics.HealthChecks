@@ -46,7 +46,7 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj &&
           dotnet build --no-restore ./test/HealthChecks.InfluxDB.Tests/HealthChecks.InfluxDB.Tests.csproj
       - name: Setup InfluxDB
-        uses: influxdata/influxdb-action@v3
+        uses: maikebing/influxdb-action@v4
         with:
           influxdb_version: latest
           influxdb_org: influxdata

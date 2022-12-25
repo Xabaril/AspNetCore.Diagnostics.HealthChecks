@@ -13,19 +13,19 @@ namespace HealthChecks.Nats.Tests.Functional
         public Task be_healthy_if_nats_is_available_locally() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
 
         [Fact]
         public Task be_healthy_for_official_demo_instance() =>
             FactAsync(
                 setup => setup.Url = DemoConnectionString,
-                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
 
         [Fact]
         public Task be_healthy_if_nats_is_available_and_has_custom_name() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()),
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)),
                 name: "Demo");
 
         [Fact]
@@ -35,7 +35,7 @@ namespace HealthChecks.Nats.Tests.Functional
                 async response =>
                 {
                     response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
                     report.Status.ShouldBe(UIHealthStatus.Unhealthy);
                     report.Entries["nats"].Exception.ShouldBe("Failed to connect");
@@ -49,7 +49,7 @@ namespace HealthChecks.Nats.Tests.Functional
                 async response =>
                 {
                     response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
                     report.Status.ShouldBe(UIHealthStatus.Unhealthy);
                     report.Entries["nats"].Exception.ShouldBe("Failed to connect");
@@ -92,7 +92,7 @@ namespace HealthChecks.Nats.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync();
+            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync().ConfigureAwait(false);
 
             assertAction(response);
         }
@@ -110,9 +110,9 @@ namespace HealthChecks.Nats.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync();
+            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync().ConfigureAwait(false);
 
-            await asyncAssertAction(response);
+            await asyncAssertAction(response).ConfigureAwait(false);
         }
 
         private void ConfigureApplicationBuilder(IApplicationBuilder app) =>

@@ -67,7 +67,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecks()
                         .AddAsyncCheck("Delayed", async () =>
                         {
-                            await Task.Delay(200);
+                            await Task.Delay(200).ConfigureAwait(false);
                             return HealthCheckResult.Healthy();
                         })
                         .Services

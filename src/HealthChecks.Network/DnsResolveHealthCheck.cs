@@ -22,9 +22,9 @@ namespace HealthChecks.Network
                 foreach (var item in _options.ConfigureHosts.Values)
                 {
 #if NET5_0_OR_GREATER
-                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host, cancellationToken);
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host, cancellationToken).ConfigureAwait(false);
 #else
-                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken);
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
 
                     foreach (var ipAddress in ipAddresses)

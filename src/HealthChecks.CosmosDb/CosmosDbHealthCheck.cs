@@ -47,12 +47,12 @@ namespace HealthChecks.CosmosDb
         {
             try
             {
-                await _cosmosClient.ReadAccountAsync();
+                await _cosmosClient.ReadAccountAsync().ConfigureAwait(false);
 
                 if (_options.DatabaseId != null)
                 {
                     var database = _cosmosClient.GetDatabase(_options.DatabaseId);
-                    await database.ReadAsync(cancellationToken: cancellationToken);
+                    await database.ReadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
                     if (_options.ContainerIds != null)
                     {
@@ -60,7 +60,8 @@ namespace HealthChecks.CosmosDb
                         {
                             await database
                                 .GetContainer(container)
-                                .ReadContainerAsync(cancellationToken: cancellationToken);
+                                .ReadContainerAsync(cancellationToken: cancellationToken)
+                                .ConfigureAwait(false);
                         }
                     }
                 }

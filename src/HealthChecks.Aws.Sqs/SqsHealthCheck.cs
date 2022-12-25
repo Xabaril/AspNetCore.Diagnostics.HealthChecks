@@ -19,7 +19,7 @@ public class SqsHealthCheck : IHealthCheck
             using var client = CreateSqsClient();
             foreach (var queueName in _sqsOptions.Queues)
             {
-                _ = await client.GetQueueUrlAsync(queueName);
+                _ = await client.GetQueueUrlAsync(queueName).ConfigureAwait(false);
             }
 
             return HealthCheckResult.Healthy();

@@ -31,8 +31,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -63,8 +62,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
@@ -97,8 +95,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -132,8 +129,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -167,8 +163,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -199,8 +194,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }

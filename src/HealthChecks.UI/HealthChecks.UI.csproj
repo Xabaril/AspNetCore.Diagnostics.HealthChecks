@@ -6,6 +6,7 @@
     <Description>HealthChecks.UI is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks. For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
     <VersionPrefix>$(HealthCheckUI)</VersionPrefix>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);RCS1090</WarningsNotAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

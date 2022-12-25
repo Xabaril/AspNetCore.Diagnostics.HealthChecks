@@ -24,8 +24,8 @@ namespace HealthChecks.SolR.Tests.Functional
                });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest($"/health").GetAsync();
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            using var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -47,8 +47,8 @@ namespace HealthChecks.SolR.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest($"/health").GetAsync();
-            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+            using var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace HealthChecks.SolR.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest($"/health").GetAsync();
-            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+            using var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
     }
 }

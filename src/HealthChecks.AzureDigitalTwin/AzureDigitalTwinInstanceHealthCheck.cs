@@ -29,7 +29,7 @@ public class AzureDigitalTwinInstanceHealthCheck
         try
         {
             var digitalTwinClient = DigitalTwinClientConnections.GetOrAdd(ClientConnectionKey, _ => CreateDigitalTwinClient(_hostName));
-            _ = await digitalTwinClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken);
+            _ = await digitalTwinClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken).ConfigureAwait(false);
             return HealthCheckResult.Healthy();
 
         }

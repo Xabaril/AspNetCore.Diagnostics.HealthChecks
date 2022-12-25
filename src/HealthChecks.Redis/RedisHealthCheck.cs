@@ -20,7 +20,7 @@ namespace HealthChecks.Redis
             {
                 if (!_connections.TryGetValue(_redisConnectionString, out var connection))
                 {
-                    connection = await ConnectionMultiplexer.ConnectAsync(_redisConnectionString);
+                    connection = await ConnectionMultiplexer.ConnectAsync(_redisConnectionString).ConfigureAwait(false);
 
                     if (!_connections.TryAdd(_redisConnectionString, connection))
                     {
@@ -36,12 +36,12 @@ namespace HealthChecks.Redis
 
                     if (server.ServerType != ServerType.Cluster)
                     {
-                        await connection.GetDatabase().PingAsync();
-                        await server.PingAsync();
+                        await connection.GetDatabase().PingAsync().ConfigureAwait(false);
+                        await server.PingAsync().ConfigureAwait(false);
                     }
                     else
                     {
-                        var clusterInfo = await server.ExecuteAsync("CLUSTER", "INFO");
+                        var clusterInfo = await server.ExecuteAsync("CLUSTER", "INFO").ConfigureAwait(false);
 
                         if (clusterInfo is object && !clusterInfo.IsNull)
                         {

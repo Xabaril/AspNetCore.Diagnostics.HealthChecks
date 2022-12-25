@@ -7,9 +7,7 @@ on:
     paths:
       - src/HealthChecks.UI/**
       - src/HealthChecks.UI.*/**
-      - test/HealthChecks.UI.Tests/**
-      - test/HealthChecks.UI.Core.Tests/**
-      - test/HealthChecks.UI.Client.Tests/**
+      - test/HealthChecks.UI.*/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -21,9 +19,8 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.UI/**
-      - test/HealthChecks.UI.Tests/**
-      - test/HealthChecks.UI.Core.Tests/**
-      - test/HealthChecks.UI.Client.Tests/**
+      - src/HealthChecks.UI.*/**
+      - test/HealthChecks.UI.*/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

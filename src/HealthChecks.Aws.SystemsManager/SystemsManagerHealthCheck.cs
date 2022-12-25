@@ -20,7 +20,7 @@ public class SystemsManagerHealthCheck : IHealthCheck
             using var client = CreateParametersManagerClient();
             foreach (var parameter in _systemsManagerOptions.Parameters)
             {
-                await CheckParameterAsync(client, parameter, cancellationToken);
+                await CheckParameterAsync(client, parameter, cancellationToken).ConfigureAwait(false);
             }
 
             return HealthCheckResult.Healthy();

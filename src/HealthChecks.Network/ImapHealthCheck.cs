@@ -26,11 +26,11 @@ namespace HealthChecks.Network
             {
                 using (var imapConnection = new ImapConnection(_options))
                 {
-                    if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken))
+                    if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
                     {
                         if (_options.AccountOptions.Login)
                         {
-                            return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection);
+                            return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection).ConfigureAwait(false);
                         }
                     }
                     else
@@ -51,10 +51,10 @@ namespace HealthChecks.Network
         {
             var (User, Password) = _options.AccountOptions.Account;
 
-            if (await imapConnection.AuthenticateAsync(User, Password))
+            if (await imapConnection.AuthenticateAsync(User, Password).ConfigureAwait(false))
             {
                 if (_options.FolderOptions.CheckFolder
-                    && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName))
+                    && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName).ConfigureAwait(false))
                 {
                     return new HealthCheckResult(context.Registration.FailureStatus, description: $"Folder {_options.FolderOptions.FolderName} check failed.");
                 }

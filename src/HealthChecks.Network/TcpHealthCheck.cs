@@ -24,9 +24,9 @@ namespace HealthChecks.Network
                     using (var tcpClient = new TcpClient(_options.AddressFamily))
                     {
 #if NET5_0_OR_GREATER
-                        await tcpClient.ConnectAsync(host, port, cancellationToken);
+                        await tcpClient.ConnectAsync(host, port, cancellationToken).ConfigureAwait(false);
 #else
-                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
+                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
 
                         if (!tcpClient.Connected)

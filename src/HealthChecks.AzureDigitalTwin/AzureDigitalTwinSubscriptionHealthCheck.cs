@@ -19,7 +19,7 @@ public class AzureDigitalTwinSubscriptionHealthCheck
         try
         {
             var managementClient = ManagementClientConnections.GetOrAdd(ClientConnectionKey, _ => CreateManagementClient());
-            _ = await managementClient.Operations.ListWithHttpMessagesAsync(cancellationToken: cancellationToken);
+            _ = await managementClient.Operations.ListWithHttpMessagesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             return HealthCheckResult.Healthy();
         }
         catch (Exception ex)

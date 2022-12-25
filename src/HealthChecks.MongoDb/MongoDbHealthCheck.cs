@@ -39,13 +39,14 @@ namespace HealthChecks.MongoDb
 
                     using var cursor = await mongoClient
                         .GetDatabase(_specifiedDatabase)
-                        .ListCollectionNamesAsync(cancellationToken: cancellationToken);
-                    await cursor.FirstAsync(cancellationToken);
+                        .ListCollectionNamesAsync(cancellationToken: cancellationToken)
+                        .ConfigureAwait(false);
+                    await cursor.FirstAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
-                    using var cursor = await mongoClient.ListDatabaseNamesAsync(cancellationToken);
-                    await cursor.FirstOrDefaultAsync(cancellationToken);
+                    using var cursor = await mongoClient.ListDatabaseNamesAsync(cancellationToken).ConfigureAwait(false);
+                    await cursor.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

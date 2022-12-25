@@ -24,12 +24,12 @@ namespace HealthChecks.NpgSql
                 {
                     _connectionAction?.Invoke(connection);
 
-                    await connection.OpenAsync(cancellationToken);
+                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
+                        await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
                     }
 
                     return HealthCheckResult.Healthy();

@@ -25,7 +25,7 @@ namespace HealthChecks.Kubernetes
                     checks.Add(_kubernetesChecksExecutor.CheckAsync(item, cancellationToken));
                 }
 
-                var results = await Task.WhenAll(checks).PreserveMultipleExceptions();
+                var results = await Task.WhenAll(checks).PreserveMultipleExceptions().ConfigureAwait(false);
 
                 if (results.Any(r => !r.result))
                 {

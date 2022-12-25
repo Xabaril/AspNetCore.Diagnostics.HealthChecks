@@ -72,14 +72,14 @@ namespace HealthChecks.EventStore
                     using (cancellationToken.Register(() => connection.Close()))
                     {
                         //completes after tcp connection init, but before successful connection and login
-                        await connection.ConnectAsync();
+                        await connection.ConnectAsync().ConfigureAwait(false);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
 
                     using (cancellationToken.Register(() => tcs.TrySetCanceled()))
                     {
-                        return await tcs.Task;
+                        return await tcs.Task.ConfigureAwait(false);
                     }
                 }
             }

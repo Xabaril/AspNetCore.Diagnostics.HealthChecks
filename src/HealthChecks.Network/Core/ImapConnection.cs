@@ -50,17 +50,17 @@ namespace HealthChecks.Network.Core
         {
             if (ConnectionType == ImapConnectionType.STARTTLS)
             {
-                await UpgradeToSecureConnectionAsync();
+                await UpgradeToSecureConnectionAsync().ConfigureAwait(false);
             }
 
-            var result = await ExecuteCommand(ImapCommands.Login(user, password));
+            var result = await ExecuteCommand(ImapCommands.Login(user, password)).ConfigureAwait(false);
             IsAuthenticated = !result.Contains(ImapResponse.AUTHFAILED);
             return IsAuthenticated;
         }
 
         private async Task<bool> UpgradeToSecureConnectionAsync()
         {
-            var commandResult = await ExecuteCommand(ImapCommands.StartTLS());
+            var commandResult = await ExecuteCommand(ImapCommands.StartTLS()).ConfigureAwait(false);
             var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
             if (upgradeSuccess)
             {
@@ -78,7 +78,7 @@ namespace HealthChecks.Network.Core
         public async Task<bool> SelectFolder(string folder) //TODO: public API change
 #pragma warning restore IDE1006 // Naming Styles
         {
-            var result = await ExecuteCommand(ImapCommands.SelectFolder(folder));
+            var result = await ExecuteCommand(ImapCommands.SelectFolder(folder)).ConfigureAwait(false);
 
             //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
             return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
@@ -88,7 +88,7 @@ namespace HealthChecks.Network.Core
         public async Task<string> GetFolders() //TODO: public API change
 #pragma warning restore IDE1006 // Naming Styles
         {
-            return await ExecuteCommand(ImapCommands.ListFolders());
+            return await ExecuteCommand(ImapCommands.ListFolders()).ConfigureAwait(false);
         }
     }
 }

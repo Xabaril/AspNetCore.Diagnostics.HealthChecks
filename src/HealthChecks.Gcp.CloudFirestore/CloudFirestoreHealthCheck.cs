@@ -15,7 +15,7 @@ namespace HealthChecks.Gcp.CloudFirestore
         {
             try
             {
-                var currentRootCollections = await GetRootCollectionsAsync(cancellationToken);
+                var currentRootCollections = await GetRootCollectionsAsync(cancellationToken).ConfigureAwait(false);
                 if (_cloudFirestoreOptions.RequiredCollections != null)
                 {
                     var inexistantCollections = _cloudFirestoreOptions.RequiredCollections

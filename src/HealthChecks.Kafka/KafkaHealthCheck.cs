@@ -31,7 +31,7 @@ namespace HealthChecks.Kafka
 
                 var message = _options.MessageBuilder(_options);
 
-                var result = await _producer.ProduceAsync(_options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC, message, cancellationToken);
+                var result = await _producer.ProduceAsync(_options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC, message, cancellationToken).ConfigureAwait(false);
 
                 if (result.Status == PersistenceStatus.NotPersisted)
                 {

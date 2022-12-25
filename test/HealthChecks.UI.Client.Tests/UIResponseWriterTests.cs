@@ -21,11 +21,11 @@ public class UIResponseWriterTests
         };
         var report = new HealthReport(entries, TimeSpan.FromSeconds(1));
 
-        await UIResponseWriter.WriteHealthCheckUIResponseNoExceptionDetails(httpContext, report);
+        await UIResponseWriter.WriteHealthCheckUIResponseNoExceptionDetails(httpContext, report).ConfigureAwait(false);
 
         // reset pointer to the beginning 
         httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
-        var healthReport = await JsonSerializer.DeserializeAsync<UIHealthReport>(httpContext.Response.Body, CreateJsonOptions());
+        var healthReport = await JsonSerializer.DeserializeAsync<UIHealthReport>(httpContext.Response.Body, CreateJsonOptions()).ConfigureAwait(false);
 
         httpContext.Response.ContentType.ShouldBe("application/json");
         healthReport.ShouldNotBeNull().Entries.ShouldHaveSingleItem();

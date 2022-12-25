@@ -20,7 +20,7 @@ namespace HealthChecks.SignalR
             {
                 connection = _hubConnectionBuilder();
 
-                await connection.StartAsync(cancellationToken);
+                await connection.StartAsync(cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }
@@ -31,7 +31,7 @@ namespace HealthChecks.SignalR
             finally
             {
                 if (connection != null)
-                    await connection.DisposeAsync();
+                    await connection.DisposeAsync().ConfigureAwait(false);
             }
         }
     }

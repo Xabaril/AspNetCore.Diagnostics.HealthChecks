@@ -18,15 +18,15 @@ namespace HealthChecks.Azure.IoTHub
             {
                 if (_options.RegistryWriteCheck)
                 {
-                    await ExecuteRegistryWriteCheckAsync(cancellationToken);
+                    await ExecuteRegistryWriteCheckAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else if (_options.RegistryReadCheck)
                 {
-                    await ExecuteRegistryReadCheckAsync();
+                    await ExecuteRegistryReadCheckAsync().ConfigureAwait(false);
                 }
                 if (_options.ServiceConnectionCheck)
                 {
-                    await ExecuteServiceConnectionCheckAsync(cancellationToken);
+                    await ExecuteServiceConnectionCheckAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();
@@ -41,7 +41,7 @@ namespace HealthChecks.Azure.IoTHub
         {
             using (var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, _options.ServiceConnectionTransport))
             {
-                await client.GetServiceStatisticsAsync(cancellationToken);
+                await client.GetServiceStatisticsAsync(cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -50,7 +50,7 @@ namespace HealthChecks.Azure.IoTHub
             using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
             {
                 var query = client.CreateQuery(_options.RegistryReadQuery, 1);
-                await query.GetNextAsJsonAsync();
+                await query.GetNextAsJsonAsync().ConfigureAwait(false);
             }
         }
 
@@ -59,19 +59,19 @@ namespace HealthChecks.Azure.IoTHub
             using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
             {
                 var deviceId = _options.RegistryWriteDeviceIdFactory();
-                var device = await client.GetDeviceAsync(deviceId, cancellationToken);
+                var device = await client.GetDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
 
                 // in default implementation of configuration deviceId equals "health-check-registry-write-device-id"
                 // if in previous health check device were not removed -- try remove it
                 // if in previous health check device were added and removed -- try create and remove it
                 if (device != null)
                 {
-                    await client.RemoveDeviceAsync(deviceId, cancellationToken);
+                    await client.RemoveDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
-                    await client.AddDeviceAsync(new Device(deviceId), cancellationToken);
-                    await client.RemoveDeviceAsync(deviceId, cancellationToken);
+                    await client.AddDeviceAsync(new Device(deviceId), cancellationToken).ConfigureAwait(false);
+                    await client.RemoveDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

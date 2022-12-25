@@ -57,7 +57,7 @@ namespace HealthChecks.Elasticsearch
 
                 if (_options.UseClusterHealthApi)
                 {
-                    var healthResponse = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken);
+                    var healthResponse = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken).ConfigureAwait(false);
 
                     if (healthResponse.ApiCall.HttpStatusCode != 200)
                     {
@@ -72,7 +72,7 @@ namespace HealthChecks.Elasticsearch
                     };
                 }
 
-                var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken);
+                var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken).ConfigureAwait(false);
                 bool isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
                 return isSuccess

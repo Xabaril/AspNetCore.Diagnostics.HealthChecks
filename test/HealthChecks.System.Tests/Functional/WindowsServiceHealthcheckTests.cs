@@ -21,12 +21,12 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true
+                        Predicate = _ => true
                     });
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
@@ -43,12 +43,12 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true
+                        Predicate = _ => true
                     });
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
@@ -65,7 +65,7 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true
+                        Predicate = _ => true
                     });
                 });
 

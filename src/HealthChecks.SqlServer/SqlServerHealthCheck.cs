@@ -24,7 +24,7 @@ namespace HealthChecks.SqlServer
                 {
                     _beforeOpenConnectionConfigurer?.Invoke(connection);
 
-                    await connection.OpenAsync(cancellationToken);
+                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = _sql;

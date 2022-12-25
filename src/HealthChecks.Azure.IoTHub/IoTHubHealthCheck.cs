@@ -18,15 +18,15 @@ namespace HealthChecks.Azure.IoTHub
             {
                 if (_options.RegistryWriteCheck)
                 {
-                    await ExecuteRegistryWriteCheckAsync(cancellationToken);
+                    await ExecuteRegistryWriteCheckAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else if (_options.RegistryReadCheck)
                 {
-                    await ExecuteRegistryReadCheckAsync();
+                    await ExecuteRegistryReadCheckAsync().ConfigureAwait(false);
                 }
                 if (_options.ServiceConnectionCheck)
                 {
-                    await ExecuteServiceConnectionCheckAsync(cancellationToken);
+                    await ExecuteServiceConnectionCheckAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

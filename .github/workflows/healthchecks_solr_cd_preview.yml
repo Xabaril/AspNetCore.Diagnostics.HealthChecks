@@ -1,4 +1,4 @@
-name: HealthChecks SolR Preview CD
+name: HealthChecks Solr Preview CD
 
 on:
   push:

@@ -173,7 +173,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.EventStore.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SignalR.Tests", "test\HealthChecks.SignalR.Tests\HealthChecks.SignalR.Tests.csproj", "{7E97D2BC-1914-4F70-B2D8-65A81AA3F0A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.SolR.Tests", "test\HealthChecks.SolR.Tests\HealthChecks.SolR.Tests.csproj", "{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Solr.Tests", "test\HealthChecks.Solr.Tests\HealthChecks.Solr.Tests.csproj", "{5E93E1E7-E09C-4DBC-8FF8-F1A6689F16E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.IbmMQ.Tests", "test\HealthChecks.IbmMQ.Tests\HealthChecks.IbmMQ.Tests.csproj", "{7883B1F9-9A81-4481-A2EC-FD101DAF6811}"
 EndProject

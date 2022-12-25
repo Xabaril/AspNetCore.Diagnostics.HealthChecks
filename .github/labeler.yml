@@ -38,6 +38,9 @@ npgsql:
 oracle:
   - src/HealthChecks.Oracle/**/*
 
+solr:
+  - src/HealthChecks.Solr/**/*
+
 sqlite:
   - src/HealthChecks.Sqlite/**/*
 

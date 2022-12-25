@@ -66,6 +66,8 @@ jobs:
         run: dotnet restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
       - name: Restore UI.Core
         run: dotnet restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+      - name: Restore UI.Data
+        run: dotnet restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj
       - name: Restore UI.InMemory.Storage
         run: dotnet restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
       - name: Restore UI.MySql.Storage
@@ -85,6 +87,8 @@ jobs:
         run: dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Check formatting UI.Core
         run: dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Check formatting UI.Data
+        run: dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Check formatting UI.InMemory.Storage
         run: dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Check formatting UI.MySql.Storage
@@ -104,6 +108,8 @@ jobs:
         run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
       - name: Build UI.Core
         run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+      - name: Build UI.Data
+        run: dotnet build --no-restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj
       - name: Build UI.InMemory.Storage
         run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
       - name: Build UI.MySql.Storage

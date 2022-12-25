@@ -1,4 +1,6 @@
-namespace HealthChecks.UI.Core.Data
+using HealthChecks.UI.Core;
+
+namespace HealthChecks.UI.Data
 {
     public class HealthCheckExecutionEntry
     {

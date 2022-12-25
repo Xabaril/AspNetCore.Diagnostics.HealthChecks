@@ -57,7 +57,7 @@ namespace HealthChecks.Publisher.Seq
                 }
             };
 
-            await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken);
+            await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken).ConfigureAwait(false);
         }
 
         private async Task PushMetricsAsync(string json, CancellationToken cancellationToken)
@@ -74,7 +74,7 @@ namespace HealthChecks.Publisher.Seq
                 using var response = await httpClient.SendAsync(
                     pushMessage,
                     HttpCompletionOption.ResponseHeadersRead,
-                    cancellationToken);
+                    cancellationToken).ConfigureAwait(false);
 
                 response.EnsureSuccessStatusCode();
             }

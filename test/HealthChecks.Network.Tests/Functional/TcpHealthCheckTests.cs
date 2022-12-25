@@ -16,9 +16,13 @@ namespace HealthChecks.Network.Tests.Functional
 
             var result = await tcpHealthCheck.CheckHealthAsync(new HealthCheckContext
             {
-                Registration = new HealthCheckRegistration("tcp", instance: tcpHealthCheck, failureStatus: HealthStatus.Degraded,
-                    null, timeout: null)
-            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
+                Registration = new HealthCheckRegistration(
+                    "tcp",
+                    instance: tcpHealthCheck,
+                    failureStatus: HealthStatus.Degraded,
+                    null,
+                    timeout: null)
+            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
 
             result.Exception.ShouldBeOfType<OperationCanceledException>();
         }

@@ -36,7 +36,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health").GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
@@ -60,7 +60,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health").GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
@@ -84,7 +84,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health").GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
@@ -108,7 +108,7 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health").GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
@@ -132,10 +132,10 @@ namespace HealthChecks.Network.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health").GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             resultAsString.ShouldContain(HealthStatus.Unhealthy.ToString());
         }
 
@@ -149,9 +149,13 @@ namespace HealthChecks.Network.Tests.Functional
 
             var result = await sslHealthCheck.CheckHealthAsync(new HealthCheckContext
             {
-                Registration = new HealthCheckRegistration("ssl", instance: sslHealthCheck, failureStatus: HealthStatus.Degraded,
-                    null, timeout: null)
-            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
+                Registration = new HealthCheckRegistration(
+                    "ssl",
+                    instance: sslHealthCheck,
+                    failureStatus: HealthStatus.Degraded,
+                    null,
+                    timeout: null)
+            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
 
             result.Exception.ShouldBeOfType<OperationCanceledException>();
         }

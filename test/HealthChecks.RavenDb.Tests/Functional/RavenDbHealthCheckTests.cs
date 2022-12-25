@@ -50,11 +50,9 @@ namespace HealthChecks.RavenDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -82,11 +80,9 @@ namespace HealthChecks.RavenDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -112,11 +108,9 @@ namespace HealthChecks.RavenDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -144,11 +138,9 @@ namespace HealthChecks.RavenDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
     }
 }

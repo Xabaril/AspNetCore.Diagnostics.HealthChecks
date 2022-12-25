@@ -38,12 +38,13 @@ namespace HealthChecks.AzureStorage
                     .GetQueuesAsync(cancellationToken: cancellationToken)
                     .AsPages(pageSizeHint: 1)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.QueueName))
                 {
                     var queueClient = _queueServiceClient.GetQueueClient(_options.QueueName);
-                    await queueClient.GetPropertiesAsync(cancellationToken);
+                    await queueClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

@@ -72,7 +72,7 @@ namespace HealthChecks.RavenDB
 
                 if (string.IsNullOrWhiteSpace(_options.Database))
                 {
-                    await CheckServerHealthAsync(store, cancellationToken);
+                    await CheckServerHealthAsync(store, cancellationToken).ConfigureAwait(false);
 
                     return HealthCheckResult.Healthy();
                 }
@@ -81,12 +81,12 @@ namespace HealthChecks.RavenDB
                 {
                     try
                     {
-                        await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken);
+                        await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                     }
                     catch (ClientVersionMismatchException e) when (e.Message.Contains(nameof(RouteNotFoundException)))
                     {
                         value.Legacy = true;
-                        await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken);
+                        await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                     }
 
                     return HealthCheckResult.Healthy();
@@ -115,11 +115,11 @@ namespace HealthChecks.RavenDB
 
             if (legacy)
             {
-                await executor.SendAsync(_legacyDatabaseHealthCheck, cancellationToken);
+                await executor.SendAsync(_legacyDatabaseHealthCheck, cancellationToken).ConfigureAwait(false);
                 return;
             }
 
-            await executor.SendAsync(_databaseHealthCheck, cancellationToken);
+            await executor.SendAsync(_databaseHealthCheck, cancellationToken).ConfigureAwait(false);
         }
 
         private class DatabaseHealthCheckOperation : IMaintenanceOperation

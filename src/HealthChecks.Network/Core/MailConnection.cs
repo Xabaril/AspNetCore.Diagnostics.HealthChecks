@@ -31,10 +31,10 @@ namespace HealthChecks.Network.Core
         public async Task<bool> ConnectAsync()
         {
             _tcpClient = new TcpClient();
-            await _tcpClient.ConnectAsync(Host, Port);
+            await _tcpClient.ConnectAsync(Host, Port).ConfigureAwait(false);
 
             _stream = GetStream();
-            await ExecuteCommand(string.Empty);
+            await ExecuteCommand(string.Empty).ConfigureAwait(false);
 
             return _tcpClient.Connected;
         }
@@ -78,10 +78,10 @@ namespace HealthChecks.Network.Core
                 throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
 
             var buffer = Encoding.ASCII.GetBytes(command);
-            await _stream.WriteAsync(buffer, 0, buffer.Length);
+            await _stream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
 
             var readBuffer = ArrayPool<byte>.Shared.Rent(512);
-            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length);
+            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false);
             var output = Encoding.UTF8.GetString(readBuffer);
 
             ArrayPool<byte>.Shared.Return(readBuffer);

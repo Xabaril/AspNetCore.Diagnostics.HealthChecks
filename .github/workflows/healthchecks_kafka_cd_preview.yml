@@ -1,4 +1,4 @@
-name: HealthChecks KAFKA Preview CD
+name: HealthChecks Kafka Preview CD
 
 on:
   push:

@@ -41,7 +41,7 @@ public class azurequeuestoragehealthcheck_should
             .GetQueuesAsync(cancellationToken: tokenSource.Token)
             .Returns(AsyncPageable<QueueItem>.FromPages(Array.Empty<Page<QueueItem>>()));
 
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         _queueServiceClient
             .Received(1)
@@ -49,7 +49,8 @@ public class azurequeuestoragehealthcheck_should
 
         await _queueClient
             .DidNotReceiveWithAnyArgs()
-            .GetPropertiesAsync(default);
+            .GetPropertiesAsync(default)
+            .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -68,7 +69,7 @@ public class azurequeuestoragehealthcheck_should
             .Returns(Substitute.For<Response<QueueProperties>>());
 
         _options.QueueName = QueueName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         _queueServiceClient
             .Received(1)
@@ -76,7 +77,8 @@ public class azurequeuestoragehealthcheck_should
 
         await _queueClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetPropertiesAsync(tokenSource.Token)
+            .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -109,7 +111,7 @@ public class azurequeuestoragehealthcheck_should
             .Returns(pageable);
 
         _options.QueueName = checkQueue ? QueueName : null;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         _queueServiceClient
             .Received(1)
@@ -125,11 +127,13 @@ public class azurequeuestoragehealthcheck_should
 
         await enumerator
             .Received(1)
-            .MoveNextAsync();
+            .MoveNextAsync()
+            .ConfigureAwait(false);
 
         await _queueClient
             .DidNotReceiveWithAnyArgs()
-            .GetPropertiesAsync(default);
+            .GetPropertiesAsync(default)
+            .ConfigureAwait(false);
 
         actual
             .Exception!.ShouldBeOfType<RequestFailedException>()
@@ -150,7 +154,7 @@ public class azurequeuestoragehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Queue not found"));
 
         _options.QueueName = QueueName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         _queueServiceClient
             .Received(1)
@@ -158,7 +162,8 @@ public class azurequeuestoragehealthcheck_should
 
         await _queueClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token);
+            .GetPropertiesAsync(tokenSource.Token)
+            .ConfigureAwait(false);
 
         actual
             .Exception!.ShouldBeOfType<RequestFailedException>()
@@ -185,7 +190,7 @@ public class azurequeuestoragehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Queue not found"));
 
         var service = provider.GetRequiredService<HealthCheckService>();
-        var report = await service.CheckHealthAsync();
+        var report = await service.CheckHealthAsync().ConfigureAwait(false);
 
         _queueServiceClient
             .Received(1)
@@ -193,7 +198,8 @@ public class azurequeuestoragehealthcheck_should
 
         await _queueClient
             .Received(1)
-            .GetPropertiesAsync(Arg.Any<CancellationToken>());
+            .GetPropertiesAsync(Arg.Any<CancellationToken>())
+            .ConfigureAwait(false);
 
         var actual = report.Entries[HealthCheckName];
         actual.Status.ShouldBe(HealthStatus.Unhealthy);

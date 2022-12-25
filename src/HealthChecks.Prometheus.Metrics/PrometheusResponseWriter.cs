@@ -13,7 +13,7 @@ namespace HealthChecks.Prometheus.Metrics
             instance.WriteMetricsFromHealthReport(report);
 
             context.Response.ContentType = CONTENT_TYPE;
-            await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
+            await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted).ConfigureAwait(false);
         }
     }
 }

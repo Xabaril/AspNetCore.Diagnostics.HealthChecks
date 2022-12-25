@@ -53,6 +53,7 @@
     <HealthCheckUI>7.0.0</HealthCheckUI>
     <HealthCheckUIClient>7.0.0</HealthCheckUIClient>
     <HealthCheckUICore>7.0.0</HealthCheckUICore>
+    <HealthCheckUIData>7.0.0</HealthCheckUIData>
     <HealthCheckUIInMemoryStorage>7.0.0</HealthCheckUIInMemoryStorage>
     <HealthCheckUIMySqlStorage>7.0.0</HealthCheckUIMySqlStorage>
     <HealthCheckUISQLiteStorage>7.0.0</HealthCheckUISQLiteStorage>

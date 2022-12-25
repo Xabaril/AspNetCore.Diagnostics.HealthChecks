@@ -19,13 +19,13 @@ namespace HealthChecks.Network
             {
                 using (var smtpConnection = new SmtpConnection(_options))
                 {
-                    if (await smtpConnection.ConnectAsync())
+                    if (await smtpConnection.ConnectAsync().ConfigureAwait(false))
                     {
                         if (_options.AccountOptions.Login)
                         {
                             var (user, password) = _options.AccountOptions.Account;
 
-                            if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken))
+                            if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
                             {
                                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
                             }

@@ -29,7 +29,7 @@ namespace HealthChecks.DocumentDb
                         documentDbClient = _connections[_documentDbOptions.UriEndpoint];
                     }
                 }
-                await documentDbClient.OpenAsync(cancellationToken);
+                await documentDbClient.OpenAsync(cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }

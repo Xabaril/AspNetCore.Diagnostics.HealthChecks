@@ -25,11 +25,11 @@ namespace HealthChecks.SqlServer
                 using (var connection = new SqlConnection(_options.ConnectionString))
                 {
                     _options.Configure?.Invoke(connection);
-                    await connection.OpenAsync(cancellationToken);
+                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
                     using var command = connection.CreateCommand();
                     command.CommandText = _options.CommandText;
-                    var result = await command.ExecuteScalarAsync(cancellationToken);
+                    var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
                     return _options.HealthCheckResultBuilder == null
                         ? HealthCheckResult.Healthy()
                         : _options.HealthCheckResultBuilder(result);

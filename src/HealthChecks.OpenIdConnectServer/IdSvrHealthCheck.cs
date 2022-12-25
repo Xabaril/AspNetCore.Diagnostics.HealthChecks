@@ -18,11 +18,11 @@ namespace HealthChecks.IdSvr
             try
             {
                 var httpClient = _httpClientFactory();
-                using var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                using var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
                 return response.IsSuccessStatusCode
                     ? HealthCheckResult.Healthy()
-                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync()}");
+                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
             }
             catch (Exception ex)
             {

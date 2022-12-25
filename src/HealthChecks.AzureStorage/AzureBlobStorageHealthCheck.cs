@@ -38,12 +38,13 @@ namespace HealthChecks.AzureStorage
                     .GetBlobContainersAsync(cancellationToken: cancellationToken)
                     .AsPages(pageSizeHint: 1)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.ContainerName))
                 {
                     var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
-                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
+                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

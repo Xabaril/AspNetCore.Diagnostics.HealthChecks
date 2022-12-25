@@ -25,7 +25,7 @@ internal static class ClientCache
         if (Cache<T>.Instance.TryGetValue(key, out var value))
             return value;
 
-        value = await clientFactory(key);
+        value = await clientFactory(key).ConfigureAwait(false);
 
         if (!Cache<T>.Instance.TryAdd(key, value))
         {
@@ -45,7 +45,7 @@ internal static class ClientCache
 
         if (!Cache<T>.Instance.TryAdd(key, value))
         {
-            await value.DisposeAsync();
+            await value.DisposeAsync().ConfigureAwait(false);
             return Cache<T>.Instance[key];
         }
 
@@ -57,11 +57,11 @@ internal static class ClientCache
         if (Cache<T>.Instance.TryGetValue(key, out var value))
             return value;
 
-        value = await clientFactory(key);
+        value = await clientFactory(key).ConfigureAwait(false);
 
         if (!Cache<T>.Instance.TryAdd(key, value))
         {
-            await value.DisposeAsync();
+            await value.DisposeAsync().ConfigureAwait(false);
             return Cache<T>.Instance[key];
         }
 

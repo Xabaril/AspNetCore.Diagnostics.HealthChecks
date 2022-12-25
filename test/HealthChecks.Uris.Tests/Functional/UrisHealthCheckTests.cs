@@ -51,8 +51,8 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync();
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -76,11 +76,9 @@ namespace HealthChecks.Uris.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [InlineData(199)]
@@ -106,11 +104,9 @@ namespace HealthChecks.Uris.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -134,8 +130,7 @@ namespace HealthChecks.Uris.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode
                     .ShouldBe(HttpStatusCode.ServiceUnavailable);

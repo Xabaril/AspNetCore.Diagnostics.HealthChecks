@@ -53,6 +53,6 @@ public class SystemsManagerHealthCheck : IHealthCheck
             WithDecryption = true
         };
 
-        _ = await client.GetParameterAsync(request, cancellationToken);
+        _ = await client.GetParameterAsync(request, cancellationToken).ConfigureAwait(false);
     }
 }

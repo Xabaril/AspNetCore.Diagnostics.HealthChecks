@@ -3,34 +3,36 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.SqlServer
 {
+    /// <summary>
+    /// A health check for SqlServer services.
+    /// </summary>
     public class SqlServerHealthCheck : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string _sql;
-        private readonly Action<SqlConnection>? _beforeOpenConnectionConfigurer;
+        private readonly SqlServerHealthCheckOptions _options;
 
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, Action<SqlConnection>? beforeOpenConnectionConfigurer = null)
+        public SqlServerHealthCheck(SqlServerHealthCheckOptions options)
         {
-            _connectionString = Guard.ThrowIfNull(sqlserverconnectionstring);
-            _sql = Guard.ThrowIfNull(sql);
-            _beforeOpenConnectionConfigurer = beforeOpenConnectionConfigurer;
+            Guard.ThrowIfNull(options.ConnectionString, true);
+            Guard.ThrowIfNull(options.CommandText, true);
+            _options = options;
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
+                using (var connection = new SqlConnection(_options.ConnectionString))
                 {
-                    _beforeOpenConnectionConfigurer?.Invoke(connection);
-
+                    _options.Configure?.Invoke(connection);
                     await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        _ = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
-                    }
-                    return HealthCheckResult.Healthy();
+
+                    using var command = connection.CreateCommand();
+                    command.CommandText = _options.CommandText;
+                    var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+                    return _options.HealthCheckResultBuilder == null
+                        ? HealthCheckResult.Healthy()
+                        : _options.HealthCheckResultBuilder(result);
                 }
             }
             catch (Exception ex)

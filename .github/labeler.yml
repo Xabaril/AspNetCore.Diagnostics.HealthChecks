@@ -29,6 +29,21 @@ consul:
 kafka:
   - src/HealthChecks.Kafka/**/*
 
+mysql:
+  - src/HealthChecks.MySql/**/*
+
+npgsql:
+  - src/HealthChecks.NpgSql/**/*
+
+oracle:
+  - src/HealthChecks.Oracle/**/*
+
+sqlite:
+  - src/HealthChecks.Sqlite/**/*
+
+sqlserver:
+  - src/HealthChecks.SqlServer/**/*
+
 UI:
   - src/HealthChecks.UI/**/*
   - src/HealthChecks.UI.*/**/*

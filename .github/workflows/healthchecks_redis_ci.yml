@@ -57,7 +57,7 @@ jobs:
           ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
           --no-restore
           --no-build
-           --collect "XPlat Code Coverage"
+          --collect "XPlat Code Coverage"
           --results-directory .coverage
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover

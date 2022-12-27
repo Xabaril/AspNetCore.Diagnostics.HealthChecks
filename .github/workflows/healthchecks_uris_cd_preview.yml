@@ -23,8 +23,8 @@ jobs:
       - name: Restore
         run: dotnet restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
       - name: Build
-        run: dotnet build --no-restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj
+        run: dotnet build --no-restore ./src/HealthChecks.Uris/HealthChecks.Uris.csproj -c $BUILD_CONFIG
       - name: Pack
-        run: dotnet pack --no-build ./src/HealthChecks.Uris/HealthChecks.Uris.csproj --version-suffix $VERSION_SUFFIX  -c $BUILD_CONFIG -o ./artifacts
+        run: dotnet pack --no-build ./src/HealthChecks.Uris/HealthChecks.Uris.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Publish
         run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Uris.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

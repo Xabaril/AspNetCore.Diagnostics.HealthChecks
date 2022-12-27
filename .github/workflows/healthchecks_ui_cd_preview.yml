@@ -59,7 +59,7 @@ jobs:
       - name: Build UI.SqlServer.Storage
         run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG
       #- name: Build UI.K8s.Operator
-      #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
+      #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG
       - name: Pack UI
         run: dotnet pack --no-build ./src/HealthChecks.UI/HealthChecks.UI.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Pack UI.Client
@@ -81,7 +81,7 @@ jobs:
       #- name: Pack UI.K8s.Operator
       #  run: dotnet pack --no-build ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Publish UI Health Check
-        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.6*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish UI.Client Health Check
         run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Client.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish UI.Core Health Check

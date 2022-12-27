@@ -38,6 +38,15 @@ npgsql:
 oracle:
   - src/HealthChecks.Oracle/**/*
 
+rabbitmq:
+  - src/HealthChecks.Rabbitmq/**/*
+
+ravendb:
+  - src/HealthChecks.RavenDB/**/*
+
+redis:
+  - src/HealthChecks.Redis/**/*
+
 solr:
   - src/HealthChecks.Solr/**/*
 

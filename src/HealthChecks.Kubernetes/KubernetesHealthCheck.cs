@@ -10,9 +10,8 @@ namespace HealthChecks.Kubernetes
         public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder,
             KubernetesChecksExecutor kubernetesChecksExecutor)
         {
-            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
-            _kubernetesChecksExecutor = kubernetesChecksExecutor ??
-                                        throw new ArgumentNullException(nameof(kubernetesChecksExecutor));
+            _builder = Guard.ThrowIfNull(builder);
+            _kubernetesChecksExecutor = Guard.ThrowIfNull(kubernetesChecksExecutor);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -26,7 +25,7 @@ namespace HealthChecks.Kubernetes
                     checks.Add(_kubernetesChecksExecutor.CheckAsync(item, cancellationToken));
                 }
 
-                var results = await Task.WhenAll(checks).PreserveMultipleExceptions();
+                var results = await Task.WhenAll(checks).PreserveMultipleExceptions().ConfigureAwait(false);
 
                 if (results.Any(r => !r.result))
                 {

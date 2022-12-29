@@ -22,8 +22,8 @@ public class aws_systems_manager_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws systems manager");
-        check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
+        registration.Name.ShouldBe("aws systems manager");
+        check.ShouldBeOfType<SystemsManagerHealthCheck>();
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class aws_systems_manager_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws systems manager");
-        check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
+        registration.Name.ShouldBe("aws systems manager");
+        check.ShouldBeOfType<SystemsManagerHealthCheck>();
     }
 
     [Fact]
@@ -63,8 +63,8 @@ public class aws_systems_manager_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssystemsmanager");
-        check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
+        registration.Name.ShouldBe("awssystemsmanager");
+        check.ShouldBeOfType<SystemsManagerHealthCheck>();
     }
 
     [Fact]
@@ -82,9 +82,9 @@ public class aws_systems_manager_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssystemsmanager");
-        check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
-        setupCalled.Should().BeTrue();
+        registration.Name.ShouldBe("awssystemsmanager");
+        check.ShouldBeOfType<SystemsManagerHealthCheck>();
+        setupCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -103,8 +103,8 @@ public class aws_systems_manager_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws systems manager");
-        check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
+        registration.Name.ShouldBe("aws systems manager");
+        check.ShouldBeOfType<SystemsManagerHealthCheck>();
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public class aws_systems_manager_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws systems manager");
-        check.GetType().Should().Be(typeof(SystemsManagerHealthCheck));
+        registration.Name.ShouldBe("aws systems manager");
+        check.ShouldBeOfType<SystemsManagerHealthCheck>();
     }
 }

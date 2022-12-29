@@ -29,10 +29,9 @@ namespace HealthChecks.Network.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+            response.StatusCode.ShouldBe((HttpStatusCode)StatusCodes.Status200OK);
         }
 
         [Fact]
@@ -58,8 +57,7 @@ namespace HealthChecks.Network.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -73,11 +71,15 @@ namespace HealthChecks.Network.Tests.Functional
 
             var result = await ftpHealthCheck.CheckHealthAsync(new HealthCheckContext
             {
-                Registration = new HealthCheckRegistration("ftp", instance: ftpHealthCheck, failureStatus: HealthStatus.Degraded,
-                    null, timeout: null)
-            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
+                Registration = new HealthCheckRegistration(
+                    "ftp",
+                    instance: ftpHealthCheck,
+                    failureStatus: HealthStatus.Degraded,
+                    null,
+                    timeout: null)
+            }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
 
-            result.Exception.Should().BeOfType<OperationCanceledException>();
+            result.Exception.ShouldBeOfType<OperationCanceledException>();
         }
     }
 }

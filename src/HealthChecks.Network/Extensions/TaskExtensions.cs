@@ -8,12 +8,12 @@ namespace HealthChecks.Network.Extensions
 
             cancellationToken.Register(() => tcs.SetResult(true));
 
-            if (task != await Task.WhenAny(task, tcs.Task))
+            if (task != await Task.WhenAny(task, tcs.Task).ConfigureAwait(false))
             {
                 throw new OperationCanceledException("The operation has timed out", cancellationToken);
             }
 
-            await task;
+            await task.ConfigureAwait(false);
         }
 
         public static async Task<T> WithCancellationTokenAsync<T>(this Task<T> task, CancellationToken cancellationToken)
@@ -22,13 +22,13 @@ namespace HealthChecks.Network.Extensions
 
             cancellationToken.Register(() => tcs.SetResult(default!));
 
-            if (task != await Task.WhenAny(task, tcs.Task))
+            if (task != await Task.WhenAny(task, tcs.Task).ConfigureAwait(false))
             {
                 throw new OperationCanceledException("The operation has timed out", cancellationToken);
             }
             else
             {
-                return await task;
+                return await task.ConfigureAwait(false);
             }
         }
     }

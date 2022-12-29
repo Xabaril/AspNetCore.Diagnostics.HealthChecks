@@ -12,7 +12,7 @@ namespace HealthChecks.Network
 
         public DnsResolveHostCountHealthCheck(DnsResolveCountOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ namespace HealthChecks.Network
 #if NET5_0_OR_GREATER
                     var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key, cancellationToken);
 #else
-                    var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken);
+                    var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
                     var totalAddresses = ipAddresses.Length;
 

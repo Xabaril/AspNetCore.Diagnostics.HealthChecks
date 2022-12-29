@@ -11,8 +11,8 @@ namespace HealthChecks.Consul
 
         public ConsulHealthCheck(ConsulOptions options, Func<HttpClient> httpClientFactory)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _options = Guard.ThrowIfNull(options);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -22,12 +22,12 @@ namespace HealthChecks.Consul
                 var client = _httpClientFactory();
                 if (_options.RequireBasicAuthentication)
                 {
-                    var credentials = ASCIIEncoding.ASCII.GetBytes($"{_options.Username}:{_options.Password}");
+                    var credentials = Encoding.ASCII.GetBytes($"{_options.Username}:{_options.Password}");
                     var authHeaderValue = Convert.ToBase64String(credentials);
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
                 }
-                using var result = await client.GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                using var result = await client.GetAsync($"{(_options.RequireHttps ? "https" : "http")}://{_options.HostName}:{_options.Port}/v1/status/leader", HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
                 return result.IsSuccessStatusCode ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus, description: "Consul response was not a successful HTTP status code");
             }

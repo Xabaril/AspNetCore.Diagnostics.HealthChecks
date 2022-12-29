@@ -13,15 +13,15 @@ public class AzureDigitalTwinInstanceHealthCheck
     public AzureDigitalTwinInstanceHealthCheck(string clientId, string clientSecret, string tenantId, string hostName, string instanceName)
         : base(clientId, clientSecret, tenantId)
     {
-        _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
-        _instanceName = (!string.IsNullOrEmpty(instanceName)) ? hostName : throw new ArgumentNullException(nameof(instanceName));
+        _hostName = Guard.ThrowIfNull(hostName, true);
+        _instanceName = Guard.ThrowIfNull(instanceName, true);
     }
 
     public AzureDigitalTwinInstanceHealthCheck(TokenCredential tokenCredential, string hostName, string instanceName)
         : base(tokenCredential)
     {
-        _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
-        _instanceName = (!string.IsNullOrEmpty(instanceName)) ? hostName : throw new ArgumentNullException(nameof(instanceName));
+        _hostName = Guard.ThrowIfNull(hostName, true);
+        _instanceName = Guard.ThrowIfNull(instanceName, true);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -29,7 +29,7 @@ public class AzureDigitalTwinInstanceHealthCheck
         try
         {
             var digitalTwinClient = DigitalTwinClientConnections.GetOrAdd(ClientConnectionKey, _ => CreateDigitalTwinClient(_hostName));
-            _ = await digitalTwinClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken);
+            _ = await digitalTwinClient.GetDigitalTwinAsync<BasicDigitalTwin>(_instanceName, cancellationToken: cancellationToken).ConfigureAwait(false);
             return HealthCheckResult.Healthy();
 
         }

@@ -1,92 +1,94 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 
-namespace HealthChecks.RabbitMQ
+namespace HealthChecks.RabbitMQ;
+
+/// <summary>
+/// A health check for RabbitMQ services.
+/// </summary>
+public class RabbitMQHealthCheck : IHealthCheck, IDisposable
 {
-    public class RabbitMQHealthCheck : IHealthCheck, IDisposable
+    private IConnection? _connection;
+    private IConnectionFactory? _factory;
+    private readonly Uri? _rabbitConnectionString;
+    private readonly SslOption? _sslOption;
+    private readonly bool _ownsConnection;
+    private bool _disposed;
+
+    public RabbitMQHealthCheck(IConnection connection)
     {
-        private IConnection? _connection;
-        private IConnectionFactory? _factory;
-        private readonly Uri? _rabbitConnectionString;
-        private readonly SslOption? _sslOption;
-        private readonly bool _ownsConnection;
-        private bool _disposed;
+        _connection = Guard.ThrowIfNull(connection);
+    }
 
-        public RabbitMQHealthCheck(IConnection connection)
+    public RabbitMQHealthCheck(IConnectionFactory factory)
+    {
+        _factory = Guard.ThrowIfNull(factory);
+        _ownsConnection = true;
+    }
+
+    public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl)
+    {
+        _rabbitConnectionString = rabbitConnectionString;
+        _sslOption = ssl;
+        _ownsConnection = true;
+    }
+
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            using var model = EnsureConnection().CreateModel();
+            return HealthCheckResultTask.Healthy;
         }
-
-        public RabbitMQHealthCheck(IConnectionFactory factory)
+        catch (Exception ex)
         {
-            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            _ownsConnection = true;
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
+    }
 
-        public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl)
-        {
-            _rabbitConnectionString = rabbitConnectionString;
-            _sslOption = ssl;
-            _ownsConnection = true;
-        }
+    private IConnection EnsureConnection()
+    {
+        if (_disposed)
+            throw new ObjectDisposedException(nameof(RabbitMQHealthCheck));
 
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        if (_connection == null)
         {
-            try
+            if (_factory == null)
             {
-                using var model = EnsureConnection().CreateModel();
-                return HealthCheckResultTask.Healthy;
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
-            }
-        }
-
-        private IConnection EnsureConnection()
-        {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(RabbitMQHealthCheck));
-
-            if (_connection == null)
-            {
-                if (_factory == null)
+                _factory = new ConnectionFactory()
                 {
-                    _factory = new ConnectionFactory()
-                    {
-                        Uri = _rabbitConnectionString,
-                        AutomaticRecoveryEnabled = true,
-                        UseBackgroundThreadsForIO = true,
-                    };
+                    Uri = _rabbitConnectionString,
+                    AutomaticRecoveryEnabled = true,
+                    UseBackgroundThreadsForIO = true,
+                };
 
-                    if (_sslOption != null)
-                        ((ConnectionFactory)_factory).Ssl = _sslOption;
-                }
-
-                _connection = _factory.CreateConnection();
+                if (_sslOption != null)
+                    ((ConnectionFactory)_factory).Ssl = _sslOption;
             }
 
-            return _connection;
+            _connection = _factory.CreateConnection();
         }
 
-        protected virtual void Dispose(bool disposing)
+        return _connection;
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            if (disposing)
+            // dispose connection only if RabbitMQHealthCheck owns it
+            if (!_disposed && _connection != null && _ownsConnection)
             {
-                // dispose connection only if RabbitMQHealthCheck owns it
-                if (!_disposed && _connection != null && _ownsConnection)
-                {
-                    _connection.Dispose();
-                    _connection = null;
-                }
-                _disposed = true;
+                _connection.Dispose();
+                _connection = null;
             }
+            _disposed = true;
         }
+    }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

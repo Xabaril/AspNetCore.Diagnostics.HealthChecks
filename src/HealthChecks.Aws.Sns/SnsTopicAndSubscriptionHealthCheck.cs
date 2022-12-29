@@ -10,7 +10,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
     public SnsTopicAndSubscriptionHealthCheck(SnsOptions snsOptions)
     {
-        _snsOptions = snsOptions ?? throw new ArgumentNullException(nameof(SnsOptions));
+        _snsOptions = Guard.ThrowIfNull(snsOptions);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -21,7 +21,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
             foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
             {
-                var topic = await client.FindTopicAsync(topicName);
+                var topic = await client.FindTopicAsync(topicName).ConfigureAwait(false);
 
                 if (topic == null)
                 {
@@ -33,7 +33,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
                     continue;
                 }
 
-                var subscriptionsFromAws = await client.ListSubscriptionsByTopicAsync(topic.TopicArn, cancellationToken);
+                var subscriptionsFromAws = await client.ListSubscriptionsByTopicAsync(topic.TopicArn, cancellationToken).ConfigureAwait(false);
 
                 var subscriptionsArn = subscriptionsFromAws.Subscriptions.Select(s => s.SubscriptionArn);
 

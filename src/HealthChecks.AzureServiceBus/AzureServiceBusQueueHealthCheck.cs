@@ -10,31 +10,22 @@ namespace HealthChecks.AzureServiceBus
 
         public AzureServiceBusQueueHealthCheck(string connectionString, string queueName) : base(connectionString)
         {
-            if (string.IsNullOrEmpty(queueName))
-            {
-                throw new ArgumentNullException(nameof(queueName));
-            }
-
-            _queueName = queueName;
+            _queueName = Guard.ThrowIfNull(queueName, true);
         }
 
         public AzureServiceBusQueueHealthCheck(string endPoint, string queueName, TokenCredential tokenCredential) :
             base(endPoint, tokenCredential)
         {
-            if (string.IsNullOrEmpty(queueName))
-            {
-                throw new ArgumentNullException(nameof(queueName));
-            }
-
-            _queueName = queueName;
+            _queueName = Guard.ThrowIfNull(queueName, true);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                _ = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
+                var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
+                var receiver = ServiceBusReceivers.GetOrAdd($"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}", client.CreateReceiver(_queueName));
+                _ = await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)

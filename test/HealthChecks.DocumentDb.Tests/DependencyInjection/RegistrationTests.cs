@@ -15,8 +15,8 @@ namespace HealthChecks.DocumentDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("documentdb");
-            check.GetType().Should().Be(typeof(DocumentDbHealthCheck));
+            registration.Name.ShouldBe("documentdb");
+            check.ShouldBeOfType<DocumentDbHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -31,8 +31,8 @@ namespace HealthChecks.DocumentDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-documentdb-group");
-            check.GetType().Should().Be(typeof(DocumentDbHealthCheck));
+            registration.Name.ShouldBe("my-documentdb-group");
+            check.ShouldBeOfType<DocumentDbHealthCheck>();
         }
     }
 }

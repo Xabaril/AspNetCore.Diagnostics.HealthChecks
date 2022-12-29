@@ -17,6 +17,7 @@ namespace HealthChecks.Elasticsearch
         public string? Password { get; }
         public System.TimeSpan? RequestTimeout { get; set; }
         public string Uri { get; }
+        public bool UseClusterHealthApi { get; set; }
         public string? UserName { get; }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseApiKey(Elasticsearch.Net.ApiKeyAuthenticationCredentials apiKey) { }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseBasicAuthentication(string name, string password) { }

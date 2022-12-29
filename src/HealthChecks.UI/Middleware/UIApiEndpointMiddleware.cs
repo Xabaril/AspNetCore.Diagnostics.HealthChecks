@@ -1,5 +1,5 @@
 using HealthChecks.UI.Configuration;
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +20,7 @@ namespace HealthChecks.UI.Middleware
         {
             _ = next;
             _serviceScopeFactory = serviceScopeFactory;
-            _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
+            _settings = Guard.ThrowIfNull(settings?.Value);
             _jsonSerializationSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

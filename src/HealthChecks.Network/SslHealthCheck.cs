@@ -14,7 +14,7 @@ namespace HealthChecks.Network
 
         public SslHealthCheck(SslHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ namespace HealthChecks.Network
 #if NET5_0_OR_GREATER
                         await tcpClient.ConnectAsync(host, port, cancellationToken);
 #else
-                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
+                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
 
                         if (!tcpClient.Connected)
@@ -36,7 +36,7 @@ namespace HealthChecks.Network
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
                         }
 
-                        var certificate = await GetSslCertificateAsync(tcpClient, host);
+                        var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
 
                         if (certificate is null || !certificate.Verify())
                         {
@@ -66,7 +66,7 @@ namespace HealthChecks.Network
 
             try
             {
-                await ssl.AuthenticateAsClientAsync(host);
+                await ssl.AuthenticateAsClientAsync(host).ConfigureAwait(false);
                 var cert = ssl.RemoteCertificate;
                 return cert == null ? null : new X509Certificate2(cert);
             }

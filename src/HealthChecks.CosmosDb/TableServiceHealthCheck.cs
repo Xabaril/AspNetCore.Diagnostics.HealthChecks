@@ -29,8 +29,8 @@ namespace HealthChecks.CosmosDb
 
         public TableServiceHealthCheck(TableServiceClient tableServiceClient, TableServiceHealthCheckOptions options)
         {
-            _tableServiceClient = tableServiceClient ?? throw new ArgumentNullException(nameof(tableServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _tableServiceClient = Guard.ThrowIfNull(tableServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -43,7 +43,8 @@ namespace HealthChecks.CosmosDb
                 await _tableServiceClient
                     .QueryAsync(filter: "false", cancellationToken: cancellationToken)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.TableName))
                 {
@@ -51,7 +52,8 @@ namespace HealthChecks.CosmosDb
                     await tableClient
                         .QueryAsync<TableEntity>(filter: "false", cancellationToken: cancellationToken)
                         .GetAsyncEnumerator(cancellationToken)
-                        .MoveNextAsync();
+                        .MoveNextAsync()
+                        .ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

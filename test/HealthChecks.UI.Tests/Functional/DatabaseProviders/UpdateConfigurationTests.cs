@@ -1,4 +1,4 @@
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
@@ -36,20 +36,20 @@ namespace HealthChecks.UI.Tests
             hostReset.Wait();
 
             var context = host1.Services.GetRequiredService<HealthChecksDb>();
-            var configurations = await context.Configurations.ToListAsync();
+            var configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
 
-            configurations[0].Name.Should().Be(endpointName);
-            configurations[0].Uri.Should().Be(endpointUri);
+            configurations[0].Name.ShouldBe(endpointName);
+            configurations[0].Uri.ShouldBe(endpointUri);
 
             hostReset = new ManualResetEventSlim(false);
             using var host2 = new TestServer(getHost(updatedEndpointUri, hostReset));
             hostReset.Wait();
 
             context = host2.Services.GetRequiredService<HealthChecksDb>();
-            configurations = await context.Configurations.ToListAsync();
+            configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
 
-            configurations[0].Name.Should().Be(endpointName);
-            configurations[0].Uri.Should().Be(updatedEndpointUri);
+            configurations[0].Name.ShouldBe(endpointName);
+            configurations[0].Uri.ShouldBe(updatedEndpointUri);
         }
     }
 }

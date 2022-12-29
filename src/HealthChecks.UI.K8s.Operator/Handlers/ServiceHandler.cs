@@ -12,8 +12,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public ServiceHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
         }
 
         public Task<V1Service?> Get(HealthCheckResource resource)

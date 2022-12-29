@@ -2,15 +2,24 @@ namespace HealthChecks.Oracle
 {
     public class OracleHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public OracleHealthCheck(string connectionString, string sql) { }
+        public OracleHealthCheck(HealthChecks.Oracle.OracleHealthCheckOptions options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class OracleHealthCheckOptions
+    {
+        public OracleHealthCheckOptions() { }
+        public string CommandText { get; set; }
+        public System.Action<Oracle.ManagedDataAccess.Client.OracleConnection>? Configure { get; set; }
+        public string ConnectionString { get; set; }
+        public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class OracleHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOracle(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string healthQuery = "select * from v$version", string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOracle(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string healthQuery = "select * from v$version", string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOracle(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, HealthChecks.Oracle.OracleHealthCheckOptions options, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOracle(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string healthQuery = "select * from v$version", System.Action<Oracle.ManagedDataAccess.Client.OracleConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOracle(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string healthQuery = "select * from v$version", System.Action<Oracle.ManagedDataAccess.Client.OracleConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

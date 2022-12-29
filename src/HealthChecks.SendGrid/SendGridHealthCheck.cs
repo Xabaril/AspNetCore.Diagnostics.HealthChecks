@@ -17,8 +17,8 @@ public class SendGridHealthCheck : IHealthCheck
 
     public SendGridHealthCheck(string apiKey, IHttpClientFactory httpClientFactory)
     {
-        _apiKey = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
-        _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        _apiKey = Guard.ThrowIfNull(apiKey);
+        _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -33,7 +33,7 @@ public class SendGridHealthCheck : IHealthCheck
             var msg = MailHelper.CreateSingleEmail(from, to, SUBJECT, SUBJECT, null);
             msg.SetSandBoxMode(true);
 
-            var response = await client.SendEmailAsync(msg, cancellationToken);
+            var response = await client.SendEmailAsync(msg, cancellationToken).ConfigureAwait(false);
 
             if (response.StatusCode != HttpStatusCode.OK)
             {

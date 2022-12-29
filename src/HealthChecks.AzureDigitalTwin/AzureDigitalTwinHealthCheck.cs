@@ -37,19 +37,19 @@ public abstract class AzureDigitalTwinHealthCheck
 
     public AzureDigitalTwinHealthCheck(string clientId, string clientSecret, string tenantId)
     {
-        ClientId = (!string.IsNullOrEmpty(clientId)) ? clientId : throw new ArgumentNullException(nameof(clientId));
-        ClientSecret = (!string.IsNullOrEmpty(clientSecret)) ? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
-        TenantId = (!string.IsNullOrEmpty(tenantId)) ? tenantId : throw new ArgumentNullException(nameof(tenantId));
+        ClientId = Guard.ThrowIfNull(clientId, true);
+        ClientSecret = Guard.ThrowIfNull(clientSecret, true);
+        TenantId = Guard.ThrowIfNull(tenantId, true);
     }
 
     public AzureDigitalTwinHealthCheck(ServiceClientCredentials serviceClientCredentials)
     {
-        ServiceClientCredentials = serviceClientCredentials ?? throw new ArgumentNullException(nameof(serviceClientCredentials));
+        ServiceClientCredentials = Guard.ThrowIfNull(serviceClientCredentials);
     }
 
     public AzureDigitalTwinHealthCheck(TokenCredential tokenCredential)
     {
-        TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
+        TokenCredential = Guard.ThrowIfNull(tokenCredential);
     }
 
     protected AzureDigitalTwinsManagementClient CreateManagementClient()

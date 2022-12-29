@@ -8,7 +8,7 @@ namespace HealthChecks.UI.Core
 
         public UIEmbeddedResourcesReader(Assembly assembly)
         {
-            _assembly = assembly ?? throw new ArgumentNullException(nameof(assembly));
+            _assembly = Guard.ThrowIfNull(assembly);
         }
 
         public IEnumerable<UIResource> UIResources

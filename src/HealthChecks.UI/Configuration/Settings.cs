@@ -16,7 +16,7 @@ namespace HealthChecks.UI.Configuration
         internal Dictionary<string, Type> ApiEndpointDelegatingHandlerTypes { get; set; } = new();
         internal Func<IServiceProvider, HttpMessageHandler>? WebHooksEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient>? WebHooksEndpointHttpClientConfig { get; private set; }
-        internal Dictionary<string, Type> WebHooksEndpointDelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
+        internal Dictionary<string, Type> WebHooksEndpointDelegatingHandlerTypes { get; set; } = new();
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
         public Settings AddHealthCheckEndpoint(string name, string uri)

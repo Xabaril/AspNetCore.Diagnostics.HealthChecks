@@ -22,8 +22,8 @@ public class aws_secrets_manager_registration_should
         var registration = options!.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws secrets manager");
-        check.GetType().Should().Be(typeof(SecretsManagerHealthCheck));
+        registration.Name.ShouldBe("aws secrets manager");
+        check.ShouldBeOfType<SecretsManagerHealthCheck>();
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class aws_secrets_manager_registration_should
         var registration = options!.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws secrets manager");
-        check.GetType().Should().Be(typeof(SecretsManagerHealthCheck));
+        registration.Name.ShouldBe("aws secrets manager");
+        check.ShouldBeOfType<SecretsManagerHealthCheck>();
     }
 
     [Fact]
@@ -60,8 +60,8 @@ public class aws_secrets_manager_registration_should
         var registration = options!.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssecretsmanager");
-        check.GetType().Should().Be(typeof(SecretsManagerHealthCheck));
+        registration.Name.ShouldBe("awssecretsmanager");
+        check.ShouldBeOfType<SecretsManagerHealthCheck>();
     }
 
     [Fact]
@@ -79,9 +79,9 @@ public class aws_secrets_manager_registration_should
         var registration = options!.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("awssecretsmanager");
-        check.GetType().Should().Be(typeof(SecretsManagerHealthCheck));
-        setupCalled.Should().BeTrue();
+        registration.Name.ShouldBe("awssecretsmanager");
+        check.ShouldBeOfType<SecretsManagerHealthCheck>();
+        setupCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -97,8 +97,8 @@ public class aws_secrets_manager_registration_should
         var registration = options!.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws secrets manager");
-        check.GetType().Should().Be(typeof(SecretsManagerHealthCheck));
+        registration.Name.ShouldBe("aws secrets manager");
+        check.ShouldBeOfType<SecretsManagerHealthCheck>();
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public class aws_secrets_manager_registration_should
         var registration = options!.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("aws secrets manager");
-        check.GetType().Should().Be(typeof(SecretsManagerHealthCheck));
+        registration.Name.ShouldBe("aws secrets manager");
+        check.ShouldBeOfType<SecretsManagerHealthCheck>();
     }
 }

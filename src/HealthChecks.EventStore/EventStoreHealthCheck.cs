@@ -16,7 +16,7 @@ namespace HealthChecks.EventStore
 
         public EventStoreHealthCheck(string eventStoreConnection, string? login, string? password)
         {
-            _eventStoreConnection = eventStoreConnection ?? throw new ArgumentNullException(nameof(eventStoreConnection));
+            _eventStoreConnection = Guard.ThrowIfNull(eventStoreConnection);
             _login = login;
             _password = password;
         }
@@ -31,14 +31,16 @@ namespace HealthChecks.EventStore
                 {
                     connectionSettings = ConnectionSettings.Create()
                         .LimitReconnectionsTo(RECONNECTION_LIMIT)
-                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS));
+                        .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS))
+                        .SetCompatibilityMode("auto");
                 }
                 else
                 {
                     connectionSettings = ConnectionSettings.Create()
                         .LimitReconnectionsTo(RECONNECTION_LIMIT)
                         .SetReconnectionDelayTo(TimeSpan.FromMilliseconds(ELAPSED_DELAY_MILLISECONDS))
-                        .SetDefaultUserCredentials(new UserCredentials(_login, _password));
+                        .SetDefaultUserCredentials(new UserCredentials(_login, _password))
+                        .SetCompatibilityMode("auto");
                 }
 
                 using (var connection = EventStoreConnection.Create(
@@ -46,7 +48,7 @@ namespace HealthChecks.EventStore
                     connectionSettings,
                     CONNECTION_NAME))
                 {
-                    var tcs = new TaskCompletionSource<HealthCheckResult>();
+                    var tcs = new TaskCompletionSource<HealthCheckResult>(TaskCreationOptions.RunContinuationsAsynchronously);
 
                     //connected
                     connection.Connected += (s, e) => tcs.TrySetResult(HealthCheckResult.Healthy());
@@ -70,14 +72,14 @@ namespace HealthChecks.EventStore
                     using (cancellationToken.Register(() => connection.Close()))
                     {
                         //completes after tcp connection init, but before successful connection and login
-                        await connection.ConnectAsync();
+                        await connection.ConnectAsync().ConfigureAwait(false);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
 
                     using (cancellationToken.Register(() => tcs.TrySetCanceled()))
                     {
-                        return await tcs.Task;
+                        return await tcs.Task.ConfigureAwait(false);
                     }
                 }
             }

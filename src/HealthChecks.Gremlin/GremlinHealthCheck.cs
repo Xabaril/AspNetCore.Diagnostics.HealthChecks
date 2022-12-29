@@ -11,8 +11,8 @@ public class GremlinHealthCheck : IHealthCheck
 
     public GremlinHealthCheck(GremlinOptions options)
     {
-        _ = options ?? throw new ArgumentNullException(nameof(options));
-        _ = options.Hostname ?? throw new ArgumentNullException(nameof(options.Hostname));
+        _ = Guard.ThrowIfNull(options);
+        _ = Guard.ThrowIfNull(options.Hostname);
 
         _server = new GremlinServer(options.Hostname, options.Port, options.EnableSsl);
     }
@@ -25,7 +25,7 @@ public class GremlinHealthCheck : IHealthCheck
             using (var conn = new DriverRemoteConnection(client))
             {
                 var g = Traversal().WithRemote(conn);
-                await g.Inject(0).Promise(t => t.Next());
+                await g.Inject(0).Promise(t => t.Next()).ConfigureAwait(false);
             }
         }
         catch (Exception ex)

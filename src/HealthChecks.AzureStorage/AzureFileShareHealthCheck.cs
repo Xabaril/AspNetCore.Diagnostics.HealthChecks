@@ -16,8 +16,8 @@ namespace HealthChecks.AzureStorage
 
         public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, AzureFileShareHealthCheckOptions options)
         {
-            _shareServiceClient = shareServiceClient ?? throw new ArgumentNullException(nameof(shareServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _shareServiceClient = Guard.ThrowIfNull(shareServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -31,12 +31,13 @@ namespace HealthChecks.AzureStorage
                     .GetSharesAsync(cancellationToken: cancellationToken)
                     .AsPages(pageSizeHint: 1)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.ShareName))
                 {
                     var shareClient = _shareServiceClient.GetShareClient(_options.ShareName);
-                    await shareClient.GetPropertiesAsync(cancellationToken);
+                    await shareClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

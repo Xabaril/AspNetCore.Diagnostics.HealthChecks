@@ -13,15 +13,15 @@ public class AzureDigitalTwinModelsHealthCheck
     public AzureDigitalTwinModelsHealthCheck(string clientId, string clientSecret, string tenantId, string hostName, string[] models)
         : base(clientId, clientSecret, tenantId)
     {
-        _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
-        _models = models ?? throw new ArgumentNullException(nameof(models));
+        _hostName = Guard.ThrowIfNull(hostName, true);
+        _models = Guard.ThrowIfNull(models);
     }
 
     public AzureDigitalTwinModelsHealthCheck(TokenCredential tokenCredential, string hostName, string[] models)
         : base(tokenCredential)
     {
-        _hostName = (!string.IsNullOrEmpty(hostName)) ? hostName : throw new ArgumentNullException(nameof(hostName));
-        _models = models ?? throw new ArgumentNullException(nameof(models));
+        _hostName = Guard.ThrowIfNull(hostName, true);
+        _models = Guard.ThrowIfNull(models);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

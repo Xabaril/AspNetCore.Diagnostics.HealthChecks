@@ -31,10 +31,7 @@ public static class ArangoDbHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        if (connectionOptionsFactory == null)
-        {
-            throw new ArgumentNullException(nameof(connectionOptionsFactory));
-        }
+        Guard.ThrowIfNull(connectionOptionsFactory);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,

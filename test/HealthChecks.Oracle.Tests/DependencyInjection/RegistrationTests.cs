@@ -15,8 +15,8 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("oracle");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            registration.Name.ShouldBe("oracle");
+            check.ShouldBeOfType<OracleHealthCheck>();
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-oracle-1");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            registration.Name.ShouldBe("my-oracle-1");
+            check.ShouldBeOfType<OracleHealthCheck>();
         }
 
         [Fact]
@@ -49,8 +49,8 @@ namespace HealthChecks.Oracle.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("oracle");
-            check.GetType().Should().Be(typeof(OracleHealthCheck));
+            registration.Name.ShouldBe("oracle");
+            check.ShouldBeOfType<OracleHealthCheck>();
         }
     }
 }

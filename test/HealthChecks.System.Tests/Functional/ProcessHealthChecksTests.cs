@@ -26,8 +26,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -48,8 +48,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

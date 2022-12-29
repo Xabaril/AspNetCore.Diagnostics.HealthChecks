@@ -8,8 +8,8 @@ namespace HealthChecks.Nats;
 /// Health check for Nats Server.
 /// </summary>
 /// <remarks>
-/// Relies on a static <see cref="ConnectionFactory"/> which provides factory methods to create connections to NATS Servers,
-/// and a <see cref="NATS.Client.IConnection"/> object connected to the NATS server.
+/// Relies on a static <see cref="ConnectionFactory"/> which provides factory methods to create
+/// connections to NATS Servers, and a <see cref="IConnection"/> object connected to the NATS server.
 /// </remarks>
 public sealed class NatsHealthCheck : IHealthCheck, IDisposable
 {
@@ -21,17 +21,32 @@ public sealed class NatsHealthCheck : IHealthCheck, IDisposable
 
     public NatsHealthCheck(NatsOptions natsOptions)
     {
-        _options = natsOptions ?? throw new ArgumentNullException(nameof(natsOptions));
+        _options = Guard.ThrowIfNull(natsOptions);
     }
 
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            _connection ??= CreateConnection(_options);
-            if (_connection is null)
-                throw new ArgumentNullException(nameof(_connection));
-            var healthCheckResult = GetHealthCheckResultFromState(_connection);
+            // Create new connection if there is no existing one
+            IConnection? connection = _connection;
+            if (connection == null)
+            {
+                connection = CreateConnection(_options);
+                var exchanged = Interlocked.CompareExchange(ref _connection, connection, null);
+                if (exchanged != null) // was set by other thread
+                {
+                    connection.Dispose();
+                    connection = exchanged;
+                }
+            }
+
+            // reset connection in case of stuck so the next HC call will establish it again
+            // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1544
+            if (connection.State == ConnState.DISCONNECTED || connection.State == ConnState.CLOSED)
+                _connection = null;
+
+            var healthCheckResult = GetHealthCheckResultFromState(connection);
             return Task.FromResult(healthCheckResult);
         }
         catch (Exception ex)

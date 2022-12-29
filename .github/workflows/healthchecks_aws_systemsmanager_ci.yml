@@ -5,44 +5,46 @@ on:
   push:
    branches: [ master ]
    paths:
-    - src/HealthChecks.Aws.SystemsManager/**
-    - test/HealthChecks.Aws.SystemsManager.Tests/**
-    - .github/workflows/healthchecks_aws_systemsManager_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+     - src/HealthChecks.Aws.SystemsManager/**
+     - test/HealthChecks.Aws.SystemsManager.Tests/**
+     - .github/workflows/healthchecks_aws_systemsManager_ci.yml
+     - Directory.Build.props
+     - Directory.Build.targets
    tags-ignore:
-    - release-*
+     - release-*
+     - preview-*
 
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Aws.SystemsManager/**
-    - test/HealthChecks.Aws.SystemsManager.Tests/**
-    - .github/workflows/healthchecks_aws_systemsManager_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Aws.SystemsManager/**
+      - test/HealthChecks.Aws.SystemsManager.Tests/**
+      - .github/workflows/healthchecks_aws_systemsManager_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
-        dotnet restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
-
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
+          dotnet restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
+      - name: Test
+        run: dotnet test --no-restore --no-build ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj

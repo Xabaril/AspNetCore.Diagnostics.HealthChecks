@@ -21,7 +21,7 @@ namespace HealthChecks.Network
                 {
                     var ftpRequest = CreateFtpWebRequest(host, createFile, credentials);
 
-                    using (var ftpResponse = (FtpWebResponse)await ftpRequest.GetResponseAsync().WithCancellationTokenAsync(cancellationToken))
+                    using (var ftpResponse = (FtpWebResponse)await ftpRequest.GetResponseAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
                     {
                         if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated
                             && ftpResponse.StatusCode != FtpStatusCode.ClosingData)

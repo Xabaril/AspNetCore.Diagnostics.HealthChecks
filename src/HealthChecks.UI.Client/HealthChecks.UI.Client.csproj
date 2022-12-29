@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <PackageTags>$(PackageTags);UI;Client</PackageTags>
     <Description>HealthChecks.UI.Client contains some mandatory abstractions to work with HealthChecks.UI.</Description>
-    <Version>$(HealthCheckUIClient)</Version>
+    <VersionPrefix>$(HealthCheckUIClient)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>

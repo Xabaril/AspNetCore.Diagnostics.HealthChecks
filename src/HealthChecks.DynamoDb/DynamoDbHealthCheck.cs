@@ -10,10 +10,9 @@ namespace HealthChecks.DynamoDb
 
         public DynamoDbHealthCheck(DynamoDBOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
 
-            if (options.RegionEndpoint == null)
-                throw new ArgumentNullException(nameof(DynamoDBOptions.RegionEndpoint));
+            Guard.ThrowIfNull(options.RegionEndpoint);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -38,7 +37,7 @@ namespace HealthChecks.DynamoDb
                     ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
                     : new AmazonDynamoDBClient(_options.RegionEndpoint);
 
-                _ = await client.ListTablesAsync(cancellationToken);
+                _ = await client.ListTablesAsync(cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }

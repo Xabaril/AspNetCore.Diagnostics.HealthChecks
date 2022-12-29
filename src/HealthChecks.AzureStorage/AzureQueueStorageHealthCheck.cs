@@ -23,8 +23,8 @@ namespace HealthChecks.AzureStorage
 
         public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
         {
-            _queueServiceClient = queueServiceClient ?? throw new ArgumentNullException(nameof(queueServiceClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _queueServiceClient = Guard.ThrowIfNull(queueServiceClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -38,12 +38,13 @@ namespace HealthChecks.AzureStorage
                     .GetQueuesAsync(cancellationToken: cancellationToken)
                     .AsPages(pageSizeHint: 1)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.QueueName))
                 {
                     var queueClient = _queueServiceClient.GetQueueClient(_options.QueueName);
-                    await queueClient.GetPropertiesAsync(cancellationToken);
+                    await queueClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

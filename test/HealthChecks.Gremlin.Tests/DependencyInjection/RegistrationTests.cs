@@ -20,8 +20,8 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("gremlin");
-            check.GetType().Should().Be(typeof(GremlinHealthCheck));
+            registration.Name.ShouldBe("gremlin");
+            check.ShouldBeOfType<GremlinHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured()
@@ -42,8 +42,8 @@ namespace HealthChecks.Gremlin.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-gremlin");
-            check.GetType().Should().Be(typeof(GremlinHealthCheck));
+            registration.Name.ShouldBe("my-gremlin");
+            check.ShouldBeOfType<GremlinHealthCheck>();
         }
     }
 }

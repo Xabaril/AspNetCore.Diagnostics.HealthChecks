@@ -32,10 +32,9 @@ namespace HealthChecks.Network.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -56,10 +55,9 @@ namespace HealthChecks.Network.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

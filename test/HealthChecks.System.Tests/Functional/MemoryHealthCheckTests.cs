@@ -29,8 +29,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -54,8 +54,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -79,8 +79,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -104,8 +104,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -129,8 +129,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -154,8 +154,8 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

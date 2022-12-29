@@ -32,10 +32,7 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        if (lifetime == null)
-        {
-            throw new ArgumentNullException(nameof(IHostApplicationLifetime));
-        }
+        Guard.ThrowIfNull(lifetime);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,

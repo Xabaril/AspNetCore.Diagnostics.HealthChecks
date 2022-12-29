@@ -30,7 +30,7 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -58,9 +58,9 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -81,9 +81,9 @@ namespace HealthChecks.System.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

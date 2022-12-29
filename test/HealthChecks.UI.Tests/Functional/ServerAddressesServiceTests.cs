@@ -17,21 +17,21 @@ namespace HealthChecks.UI.Tests
                 .ConfigureServices(services => services.AddSingleton<ServerAddressesService>())
                 .Configure(app =>
                 {
-                    app.ServerFeatures.Get<IServerAddressesFeature>().Should().NotBeNull();
+                    app.ServerFeatures.Get<IServerAddressesFeature>().ShouldNotBeNull();
 
                     var serverAddressService = app.ApplicationServices.GetRequiredService<ServerAddressesService>();
 
                     serverAddressService.AbsoluteUriFromRelative("/health2")
-                        .Should().Be($"{serverAddress}/health2");
+                        .ShouldBe($"{serverAddress}/health2");
 
                     serverAddressService.AbsoluteUriFromRelative("healthz")
-                        .Should().Be($"{serverAddress}/healthz");
+                        .ShouldBe($"{serverAddress}/healthz");
 
                     serverAddressService.AbsoluteUriFromRelative("/my/relative/url")
-                       .Should().Be($"{serverAddress}/my/relative/url");
+                       .ShouldBe($"{serverAddress}/my/relative/url");
 
                     serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
-                     .Should().Be($"{serverAddress}/segment1/segment2/segment3");
+                     .ShouldBe($"{serverAddress}/segment1/segment2/segment3");
                 });
 
             var featureCollection = new FeatureCollection();

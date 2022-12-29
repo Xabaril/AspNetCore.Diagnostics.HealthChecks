@@ -7,7 +7,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
         [Fact]
         public async Task be_healthy_listing_all_databases_if_mongodb_is_available()
         {
-            var connectionString = @"mongodb://localhost:27017";
+            var connectionString = "mongodb://localhost:27017";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -25,17 +25,15 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task be_healthy_on_specified_database_if_mongodb_is_available_and_database_exist()
         {
-            var connectionString = @"mongodb://localhost:27017";
+            var connectionString = "mongodb://localhost:27017";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -53,16 +51,14 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
         [Fact]
         public async Task be_healthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist()
         {
-            var connectionString = @"mongodb://localhost:27017/local";
+            var connectionString = "mongodb://localhost:27017/local";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -80,16 +76,14 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
         [Fact]
         public async Task be_unhealthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist()
         {
-            var connectionString = @"mongodb://localhost:27017/nonexisting";
+            var connectionString = "mongodb://localhost:27017/nonexisting";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -107,11 +101,9 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -133,11 +125,9 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -159,11 +149,9 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }
 }

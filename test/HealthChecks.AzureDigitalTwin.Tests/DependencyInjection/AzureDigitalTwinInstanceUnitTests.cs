@@ -22,8 +22,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwininstance");
+            check.ShouldBeOfType<AzureDigitalTwinInstanceHealthCheck>();
         }
 
         [Fact]
@@ -45,8 +45,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance_check");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwininstance_check");
+            check.ShouldBeOfType<AzureDigitalTwinInstanceHealthCheck>();
         }
 
         [Fact]
@@ -80,8 +80,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwininstance");
+            check.ShouldBeOfType<AzureDigitalTwinInstanceHealthCheck>();
         }
 
         [Fact]
@@ -101,8 +101,8 @@ namespace HealthChecks.AzureDigitalTwin.Tests
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuredigitaltwininstance_check");
-            check.GetType().Should().Be(typeof(AzureDigitalTwinInstanceHealthCheck));
+            registration.Name.ShouldBe("azuredigitaltwininstance_check");
+            check.ShouldBeOfType<AzureDigitalTwinInstanceHealthCheck>();
         }
 
         [Fact]

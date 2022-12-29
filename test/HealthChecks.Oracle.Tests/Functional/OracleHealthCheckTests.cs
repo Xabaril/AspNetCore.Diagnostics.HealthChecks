@@ -26,8 +26,8 @@ namespace HealthChecks.Oracle.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -50,8 +50,8 @@ namespace HealthChecks.Oracle.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -73,8 +73,8 @@ namespace HealthChecks.Oracle.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -104,9 +104,9 @@ namespace HealthChecks.Oracle.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            using var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
-            factoryCalled.Should().BeTrue();
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            factoryCalled.ShouldBeTrue();
         }
     }
 }

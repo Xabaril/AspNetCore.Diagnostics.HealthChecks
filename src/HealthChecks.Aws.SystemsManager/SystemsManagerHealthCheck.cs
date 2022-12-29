@@ -10,7 +10,7 @@ public class SystemsManagerHealthCheck : IHealthCheck
 
     public SystemsManagerHealthCheck(SystemsManagerOptions systemsManagerOptions)
     {
-        _systemsManagerOptions = systemsManagerOptions ?? throw new ArgumentNullException(nameof(systemsManagerOptions));
+        _systemsManagerOptions = Guard.ThrowIfNull(systemsManagerOptions);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -20,7 +20,7 @@ public class SystemsManagerHealthCheck : IHealthCheck
             using var client = CreateParametersManagerClient();
             foreach (var parameter in _systemsManagerOptions.Parameters)
             {
-                await CheckParameterAsync(client, parameter, cancellationToken);
+                await CheckParameterAsync(client, parameter, cancellationToken).ConfigureAwait(false);
             }
 
             return HealthCheckResult.Healthy();
@@ -53,6 +53,6 @@ public class SystemsManagerHealthCheck : IHealthCheck
             WithDecryption = true
         };
 
-        _ = await client.GetParameterAsync(request, cancellationToken);
+        _ = await client.GetParameterAsync(request, cancellationToken).ConfigureAwait(false);
     }
 }

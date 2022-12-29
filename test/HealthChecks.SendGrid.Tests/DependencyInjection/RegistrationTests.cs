@@ -1,5 +1,3 @@
-using FluentAssertions.Execution;
-
 namespace HealthChecks.SendGrid.Tests.DependencyInjection
 {
     public class sendgrid_registration_should
@@ -17,11 +15,8 @@ namespace HealthChecks.SendGrid.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            using (new AssertionScope())
-            {
-                registration.Name.Should().Be("sendgrid");
-                check.GetType().Should().Be<SendGridHealthCheck>();
-            }
+            registration.Name.ShouldBe("sendgrid");
+            check.ShouldBeOfType<SendGridHealthCheck>();
         }
 
         [Fact]
@@ -37,11 +32,8 @@ namespace HealthChecks.SendGrid.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            using (new AssertionScope())
-            {
-                registration.Name.Should().Be("my-sendgrid-group");
-                check.GetType().Should().Be(typeof(SendGridHealthCheck));
-            }
+            registration.Name.ShouldBe("my-sendgrid-group");
+            check.ShouldBeOfType<SendGridHealthCheck>();
         }
     }
 }

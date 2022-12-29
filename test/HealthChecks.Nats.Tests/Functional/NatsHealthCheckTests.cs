@@ -1,4 +1,8 @@
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using HealthChecks.UI.Client;
+using HealthChecks.UI.Core;
 using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.Functional
@@ -9,19 +13,19 @@ namespace HealthChecks.Nats.Tests.Functional
         public Task be_healthy_if_nats_is_available_locally() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                response => response.StatusCode.Should().Be(HttpStatusCode.OK));
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
 
         [Fact]
         public Task be_healthy_for_official_demo_instance() =>
             FactAsync(
                 setup => setup.Url = DemoConnectionString,
-                response => response.StatusCode.Should().Be(HttpStatusCode.OK));
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
 
         [Fact]
         public Task be_healthy_if_nats_is_available_and_has_custom_name() =>
             FactAsync(
                 setup => setup.Url = DefaultLocalConnectionString,
-                response => response.StatusCode.Should().Be(HttpStatusCode.OK),
+                async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)),
                 name: "Demo");
 
         [Fact]
@@ -30,9 +34,12 @@ namespace HealthChecks.Nats.Tests.Functional
                 setup => setup.Url = ConnectionStringDoesNotExistOrStopped,
                 async response =>
                 {
-                    response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-                    var content = await response.Content.ReadAsStringAsync();
-                    content.Should().Be("Unhealthy");
+                    response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
+                    report.Status.ShouldBe(UIHealthStatus.Unhealthy);
+                    report.Entries["nats"].Exception.ShouldBe("Failed to connect");
+
                 });
 
         [Fact]
@@ -41,9 +48,11 @@ namespace HealthChecks.Nats.Tests.Functional
                 setup => setup.Url = "bogus",
                 async response =>
                 {
-                    response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-                    var content = await response.Content.ReadAsStringAsync();
-                    content.Should().Be("Unhealthy");
+                    response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
+                    report.Status.ShouldBe(UIHealthStatus.Unhealthy);
+                    report.Entries["nats"].Exception.ShouldBe("Failed to connect");
                 });
 
         [Fact]
@@ -54,7 +63,7 @@ namespace HealthChecks.Nats.Tests.Functional
                     setup.Url = DefaultLocalConnectionString;
                     setup.CredentialsPath = CredentialsPathDoesnExist;
                 },
-                response => response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable),
+                response => response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable),
                 name: CredentialsPathDoesnExist);
 
         [Fact]
@@ -67,7 +76,7 @@ namespace HealthChecks.Nats.Tests.Functional
                     setup.Jwt = "jwt";
                     setup.PrivateNKey = CredentialsPathDoesnExist;
                 },
-                response => response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable),
+                response => response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable),
                 name: CredentialsPathDoesnExist);
 
         private async Task FactAsync(Action<NatsOptions> setupAction, Action<HttpResponseMessage> assertAction, string? name = null)
@@ -83,7 +92,7 @@ namespace HealthChecks.Nats.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync();
+            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync().ConfigureAwait(false);
 
             assertAction(response);
         }
@@ -101,15 +110,16 @@ namespace HealthChecks.Nats.Tests.Functional
 
             var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync();
+            var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync().ConfigureAwait(false);
 
-            await asyncAssertAction(response);
+            await asyncAssertAction(response).ConfigureAwait(false);
         }
 
         private void ConfigureApplicationBuilder(IApplicationBuilder app) =>
             app.UseHealthChecks(HealthRequestRelativePath, new HealthCheckOptions
             {
                 Predicate = r => r.Tags.Contains(NatsName) || r.Name == NatsName,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                 AllowCachingResponses = false
             });
     }

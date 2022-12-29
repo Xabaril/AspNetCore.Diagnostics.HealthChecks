@@ -25,14 +25,16 @@ namespace HealthChecks.Elasticsearch
 
         public bool AuthenticateWithApiKey { get; private set; }
 
+        public bool UseClusterHealthApi { get; set; }
+
         public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool>? CertificateValidationCallback { get; private set; }
 
         public TimeSpan? RequestTimeout { get; set; }
 
         public ElasticsearchOptions UseBasicAuthentication(string name, string password)
         {
-            UserName = name ?? throw new ArgumentNullException(nameof(name));
-            Password = password ?? throw new ArgumentNullException(nameof(password));
+            UserName = Guard.ThrowIfNull(name);
+            Password = Guard.ThrowIfNull(password);
 
             Certificate = null;
             AuthenticateWithApiKey = false;
@@ -43,7 +45,7 @@ namespace HealthChecks.Elasticsearch
 
         public ElasticsearchOptions UseCertificate(X509Certificate certificate)
         {
-            Certificate = certificate ?? throw new ArgumentNullException(nameof(certificate));
+            Certificate = Guard.ThrowIfNull(certificate);
 
             UserName = string.Empty;
             Password = string.Empty;
@@ -55,7 +57,7 @@ namespace HealthChecks.Elasticsearch
 
         public ElasticsearchOptions UseApiKey(ApiKeyAuthenticationCredentials apiKey)
         {
-            ApiKeyAuthenticationCredentials = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+            ApiKeyAuthenticationCredentials = Guard.ThrowIfNull(apiKey);
 
             UserName = string.Empty;
             Password = string.Empty;
@@ -69,7 +71,7 @@ namespace HealthChecks.Elasticsearch
 
         public ElasticsearchOptions UseServer(string uri)
         {
-            Uri = uri ?? throw new ArgumentNullException(nameof(uri));
+            Uri = Guard.ThrowIfNull(uri);
 
             return this;
         }

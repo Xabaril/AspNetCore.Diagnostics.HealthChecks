@@ -10,15 +10,9 @@ namespace HealthChecks.Aws.S3
 
         public S3HealthCheck(S3BucketOptions bucketOptions)
         {
-            if (bucketOptions == null)
-            {
-                throw new ArgumentNullException(nameof(bucketOptions));
-            }
+            Guard.ThrowIfNull(bucketOptions);
+            Guard.ThrowIfNull(bucketOptions.S3Config);
 
-            if (bucketOptions.S3Config == null)
-            {
-                throw new ArgumentNullException(nameof(S3BucketOptions.S3Config));
-            }
             _bucketOptions = bucketOptions;
         }
 
@@ -46,7 +40,7 @@ namespace HealthChecks.Aws.S3
 
                 using (client)
                 {
-                    var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
+                    var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken).ConfigureAwait(false);
 
                     if (_bucketOptions.CustomResponseCheck != null)
                     {

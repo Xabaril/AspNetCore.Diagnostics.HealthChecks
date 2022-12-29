@@ -10,8 +10,8 @@ namespace HealthChecks.System
 
         public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
         {
-            _processName = processName ?? throw new ArgumentNullException(nameof(processName));
-            _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+            _processName = Guard.ThrowIfNull(processName);
+            _predicate = Guard.ThrowIfNull(predicate);
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

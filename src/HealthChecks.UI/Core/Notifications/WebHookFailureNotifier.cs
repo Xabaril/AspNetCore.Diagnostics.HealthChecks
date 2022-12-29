@@ -1,8 +1,8 @@
 using System.Text;
 using System.Web;
 using HealthChecks.UI.Configuration;
-using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Extensions;
+using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -24,10 +24,10 @@ namespace HealthChecks.UI.Core.Notifications
             ILogger<WebHookFailureNotifier> logger,
             IHttpClientFactory httpClientFactory)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
+            _db = Guard.ThrowIfNull(db);
+            _serverAddressesService = Guard.ThrowIfNull(serverAddressesService);
             _settings = settings.Value ?? new Settings();
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = Guard.ThrowIfNull(logger);
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
         }
 
@@ -97,11 +97,13 @@ namespace HealthChecks.UI.Core.Notifications
 
         private async Task<bool> IsNotifiedOnWindowTimeAsync(string livenessName, bool restore)
         {
+#pragma warning disable RCS1155 // Use StringComparison when comparing strings.
             var lastNotification = await _db.Failures
                 .Where(lf => lf.HealthCheckName.ToLower() == livenessName.ToLower())
                 .OrderByDescending(lf => lf.LastNotified)
                 .Take(1)
                 .SingleOrDefaultAsync();
+#pragma warning restore RCS1155 // Use StringComparison when comparing strings.
 
             return lastNotification != null
                 &&
@@ -160,10 +162,7 @@ namespace HealthChecks.UI.Core.Notifications
 
         public void Dispose()
         {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
+            _db?.Dispose();
         }
 
         private static (string plural, string noun) PluralizeHealthcheck(int count) =>

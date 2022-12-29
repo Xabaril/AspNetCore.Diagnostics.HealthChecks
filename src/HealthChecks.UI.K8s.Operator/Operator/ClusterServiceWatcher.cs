@@ -21,10 +21,10 @@ namespace HealthChecks.UI.K8s.Operator.Operator
           NotificationHandler notificationHandler
           )
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
+            _diagnostics = Guard.ThrowIfNull(diagnostics);
+            _notificationHandler = Guard.ThrowIfNull(notificationHandler);
         }
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)

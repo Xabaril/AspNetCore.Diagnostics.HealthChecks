@@ -17,8 +17,8 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("npgsql");
-            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
+            registration.Name.ShouldBe("npgsql");
+            check.ShouldBeOfType<NpgSqlHealthCheck>();
 
         }
 
@@ -35,8 +35,8 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-npg-1");
-            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
+            registration.Name.ShouldBe("my-npg-1");
+            check.ShouldBeOfType<NpgSqlHealthCheck>();
         }
 
         [Fact]
@@ -58,9 +58,9 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-npg-1");
-            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
-            factoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("my-npg-1");
+            check.ShouldBeOfType<NpgSqlHealthCheck>();
+            factoryCalled.ShouldBeTrue();
         }
     }
 }

@@ -21,15 +21,15 @@ namespace HealthChecks.Network.Core
         public SmtpConnection(SmtpConnectionOptions options)
             : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
             ConnectionType = _options.ConnectionType;
             ComputeDefaultValues();
         }
 
         public new async Task<bool> ConnectAsync()
         {
-            await base.ConnectAsync();
-            var result = await ExecuteCommand(SmtpCommands.EHLO(Host));
+            await base.ConnectAsync().ConfigureAwait(false);
+            var result = await ExecuteCommand(SmtpCommands.EHLO(Host)).ConfigureAwait(false);
             return result.Contains(SmtpResponse.ACTION_OK);
         }
 
@@ -37,15 +37,15 @@ namespace HealthChecks.Network.Core
         {
             if (ShouldUpgradeConnection)
             {
-                await UpgradeToSecureConnectionAsync();
+                await UpgradeToSecureConnectionAsync().ConfigureAwait(false);
             }
-            await ExecuteCommand(SmtpCommands.EHLO(Host));
-            await ExecuteCommand(SmtpCommands.AUTHLOGIN());
-            await ExecuteCommand($"{ToBase64(userName)}\r\n");
+            await ExecuteCommand(SmtpCommands.EHLO(Host)).ConfigureAwait(false);
+            await ExecuteCommand(SmtpCommands.AUTHLOGIN()).ConfigureAwait(false);
+            await ExecuteCommand($"{ToBase64(userName)}\r\n").ConfigureAwait(false);
 
             password = password?.Length > 0 ? ToBase64(password) : "";
 
-            var result = await ExecuteCommand($"{password}\r\n");
+            var result = await ExecuteCommand($"{password}\r\n").ConfigureAwait(false);
             return result.Contains(SmtpResponse.AUTHENTICATION_SUCCESS);
         }
 
@@ -74,7 +74,7 @@ namespace HealthChecks.Network.Core
 
         private async Task<bool> UpgradeToSecureConnectionAsync()
         {
-            var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS());
+            var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS()).ConfigureAwait(false);
             if (upgradeResult.Contains(SmtpResponse.SERVICE_READY))
             {
                 UseSSL = true;

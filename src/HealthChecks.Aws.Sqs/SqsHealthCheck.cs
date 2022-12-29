@@ -9,7 +9,7 @@ public class SqsHealthCheck : IHealthCheck
 
     public SqsHealthCheck(SqsOptions sqsOptions)
     {
-        _sqsOptions = sqsOptions ?? throw new ArgumentNullException(nameof(SqsOptions));
+        _sqsOptions = Guard.ThrowIfNull(sqsOptions);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -19,7 +19,7 @@ public class SqsHealthCheck : IHealthCheck
             using var client = CreateSqsClient();
             foreach (var queueName in _sqsOptions.Queues)
             {
-                _ = await client.GetQueueUrlAsync(queueName);
+                _ = await client.GetQueueUrlAsync(queueName).ConfigureAwait(false);
             }
 
             return HealthCheckResult.Healthy();

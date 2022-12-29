@@ -8,7 +8,7 @@ namespace HealthChecks.System
 
         public DiskStorageHealthCheck(DiskStorageOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
         /// <inheritdoc/>

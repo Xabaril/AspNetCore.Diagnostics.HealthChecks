@@ -12,10 +12,9 @@ namespace HealthChecks.Publisher.Prometheus
 
         public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string? instance = null)
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
 
-            if (endpoint == null)
-                throw new ArgumentNullException(nameof(endpoint));
+            Guard.ThrowIfNull(endpoint);
 
             var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
 
@@ -33,7 +32,7 @@ namespace HealthChecks.Publisher.Prometheus
         {
             WriteMetricsFromHealthReport(report);
 
-            await PushMetricsAsync();
+            await PushMetricsAsync().ConfigureAwait(false);
         }
 
         private async Task PushMetricsAsync()
@@ -42,7 +41,7 @@ namespace HealthChecks.Publisher.Prometheus
             {
                 using (var outStream = new MemoryStream())
                 {
-                    await Registry.CollectAndExportAsTextAsync(outStream);
+                    await Registry.CollectAndExportAsTextAsync(outStream).ConfigureAwait(false);
                     outStream.Position = 0;
 
                     using var request = new HttpRequestMessage(HttpMethod.Post, _targetUrl)
@@ -51,7 +50,8 @@ namespace HealthChecks.Publisher.Prometheus
                     };
 
                     using var response = await _httpClientFactory()
-                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
+                        .ConfigureAwait(false);
 
                     response.EnsureSuccessStatusCode();
                 }

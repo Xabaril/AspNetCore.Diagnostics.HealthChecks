@@ -9,7 +9,7 @@ namespace HealthChecks.Network
 
         public PingHealthCheck(PingHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -22,7 +22,7 @@ namespace HealthChecks.Network
                 {
                     using (var ping = new Ping())
                     {
-                        var pingReply = await ping.SendPingAsync(host, timeout);
+                        var pingReply = await ping.SendPingAsync(host, timeout).ConfigureAwait(false);
 
                         if (pingReply.Status != IPStatus.Success)
                         {

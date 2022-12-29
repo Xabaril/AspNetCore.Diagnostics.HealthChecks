@@ -39,20 +39,20 @@ namespace HealthChecks.CosmosDb
 
         public CosmosDbHealthCheck(CosmosClient cosmosClient, CosmosDbHealthCheckOptions options)
         {
-            _cosmosClient = cosmosClient ?? throw new ArgumentNullException(nameof(cosmosClient));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _cosmosClient = Guard.ThrowIfNull(cosmosClient);
+            _options = Guard.ThrowIfNull(options);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                await _cosmosClient.ReadAccountAsync();
+                await _cosmosClient.ReadAccountAsync().ConfigureAwait(false);
 
                 if (_options.DatabaseId != null)
                 {
                     var database = _cosmosClient.GetDatabase(_options.DatabaseId);
-                    await database.ReadAsync(cancellationToken: cancellationToken);
+                    await database.ReadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
                     if (_options.ContainerIds != null)
                     {
@@ -60,7 +60,8 @@ namespace HealthChecks.CosmosDb
                         {
                             await database
                                 .GetContainer(container)
-                                .ReadContainerAsync(cancellationToken: cancellationToken);
+                                .ReadContainerAsync(cancellationToken: cancellationToken)
+                                .ConfigureAwait(false);
                         }
                     }
                 }

@@ -28,11 +28,11 @@ namespace UnitTests.Uris
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
-            var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
+            var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
 
-            result.Status.Should().Be(HealthStatus.Healthy);
+            result.Status.ShouldBe(HealthStatus.Healthy);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
-            client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").Should().BeTrue();
+            client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").ShouldBeTrue();
         }
 
         [Fact]
@@ -60,10 +60,10 @@ namespace UnitTests.Uris
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
-            var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
+            var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
 
-            result.Status.Should().Be(HealthStatus.Unhealthy);
-            client.DefaultRequestHeaders.Any(s => s.Key == headerName).Should().BeTrue();
+            result.Status.ShouldBe(HealthStatus.Unhealthy);
+            client.DefaultRequestHeaders.Any(s => s.Key == headerName).ShouldBeTrue();
         }
 
         [Fact]
@@ -84,10 +84,10 @@ namespace UnitTests.Uris
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
-            var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
+            var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
 
-            client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").Should().BeTrue();
-            result.Status.Should().Be(HealthStatus.Unhealthy);
+            client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").ShouldBeTrue();
+            result.Status.ShouldBe(HealthStatus.Unhealthy);
         }
 
         [Fact]
@@ -105,8 +105,8 @@ namespace UnitTests.Uris
             var hc = registration.Factory(sp);
             var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
 
-            client.DefaultRequestHeaders.Should().BeEmpty();
-            hc.Should().BeOfType<UriHealthCheck>();
+            client.DefaultRequestHeaders.ShouldBeEmpty();
+            hc.ShouldBeOfType<UriHealthCheck>();
         }
 
         private HttpMessageHandler GetMockedStatusCodeHandler(int statusCode)

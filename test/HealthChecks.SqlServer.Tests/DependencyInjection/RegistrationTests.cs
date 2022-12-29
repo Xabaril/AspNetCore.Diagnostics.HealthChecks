@@ -17,8 +17,8 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("sqlserver");
-            check.GetType().Should().Be(typeof(SqlServerHealthCheck));
+            registration.Name.ShouldBe("sqlserver");
+            check.ShouldBeOfType<SqlServerHealthCheck>();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
                 Assert.Equal(connectionstring, connection.ConnectionString);
             };
             services.AddHealthChecks()
-                .AddSqlServer(connectionstring, beforeOpenConnectionConfigurer: beforeOpen);
+                .AddSqlServer(connectionstring, configure: beforeOpen);
 
             using var serviceProvider = services.BuildServiceProvider();
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -58,8 +58,8 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-sql-server-1");
-            check.GetType().Should().Be(typeof(SqlServerHealthCheck));
+            registration.Name.ShouldBe("my-sql-server-1");
+            check.ShouldBeOfType<SqlServerHealthCheck>();
         }
 
         [Fact]
@@ -80,9 +80,9 @@ namespace HealthChecks.SqlServer.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("sqlserver");
-            check.GetType().Should().Be(typeof(SqlServerHealthCheck));
-            factoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("sqlserver");
+            check.ShouldBeOfType<SqlServerHealthCheck>();
+            factoryCalled.ShouldBeTrue();
         }
     }
 }

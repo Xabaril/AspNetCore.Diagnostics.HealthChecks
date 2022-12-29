@@ -21,13 +21,13 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true
+                        Predicate = _ => true
                     });
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [SkipOnPlatform(Platform.LINUX, Platform.OSX)]
@@ -43,13 +43,13 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true
+                        Predicate = _ => true
                     });
                 });
 
             var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync();
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [SkipOnPlatform(Platform.WINDOWS)]
@@ -65,7 +65,7 @@ namespace HealthChecks.System.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true
+                        Predicate = _ => true
                     });
                 });
 
@@ -74,7 +74,7 @@ namespace HealthChecks.System.Tests.Functional
                 var server = new TestServer(webhostBuilder);
             });
 
-            exception.Message.Should().Be("WindowsServiceHealthCheck can only be registered in Windows Systems");
+            exception.Message.ShouldBe("WindowsServiceHealthCheck can only be registered in Windows Systems");
         }
     }
 }

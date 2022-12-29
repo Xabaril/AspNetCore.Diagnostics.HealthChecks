@@ -20,8 +20,8 @@ namespace HealthChecks.DynamoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("dynamodb");
-            check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
+            registration.Name.ShouldBe("dynamodb");
+            check.ShouldBeOfType<DynamoDbHealthCheck>();
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace HealthChecks.DynamoDb.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-dynamodb-group");
-            check.GetType().Should().Be(typeof(DynamoDbHealthCheck));
+            registration.Name.ShouldBe("my-dynamodb-group");
+            check.ShouldBeOfType<DynamoDbHealthCheck>();
         }
     }
 }

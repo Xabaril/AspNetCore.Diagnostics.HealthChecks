@@ -39,7 +39,7 @@ public class ApiApprovalTests
         var index = Array.IndexOf(pathItems, "test");
         Debug.Assert(index > 0 && index < pathItems.Length - 1);
 
-        // See: https://shouldly.readthedocs.io/en/latest/assertions/shouldMatchApproved.html
+        // See: https://docs.shouldly.org/documentation/equality/matchapproved
         // Note: If the AssemblyName.approved.txt file doesn't match the latest publicApi value,
         // this call will try to launch a diff tool to help you out but that can fail on
         // your machine if a diff tool isn't configured/setup.

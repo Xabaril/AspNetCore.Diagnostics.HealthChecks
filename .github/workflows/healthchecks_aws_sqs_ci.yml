@@ -7,6 +7,7 @@ on:
    paths:
      - src/HealthChecks.Aws.Sqs/**
      - test/HealthChecks.Aws.Sqs.Tests/**
+     - test/_SHARED/**
      - .github/workflows/healthchecks_aws_sqs_ci.yml
      - Directory.Build.props
      - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.Aws.Sqs/**
       - test/HealthChecks.Aws.Sqs.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_aws_sqs_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

@@ -7,6 +7,7 @@ on:
    paths:
      - src/HealthChecks.Aws.Sns/**
      - test/HealthChecks.Aws.Sns.Tests/**
+     - test/_SHARED/**
      - .github/workflows/healthchecks_aws_sns_ci.yml
      - Directory.Build.props
      - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.Aws.Sns/**
       - test/HealthChecks.Aws.Sns.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_aws_sns_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

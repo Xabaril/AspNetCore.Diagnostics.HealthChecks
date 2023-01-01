@@ -97,7 +97,7 @@ namespace HealthChecks.UI.Tests
             var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests)
                 .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
 
-            var results = await Task.WhenAll(requests);
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests)
                 .Count()

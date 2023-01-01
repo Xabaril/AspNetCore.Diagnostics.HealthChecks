@@ -8,6 +8,7 @@ on:
       - src/HealthChecks.UI/**
       - src/HealthChecks.UI.*/**
       - test/HealthChecks.UI.*/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -21,6 +22,7 @@ on:
       - src/HealthChecks.UI/**
       - src/HealthChecks.UI.*/**
       - test/HealthChecks.UI.*/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

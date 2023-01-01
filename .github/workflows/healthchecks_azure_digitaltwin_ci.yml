@@ -7,6 +7,7 @@ on:
    paths:
      - src/HealthChecks.AzureDigitalTwin/**
      - test/HealthChecks.AzureDigitalTwin.Tests/**
+     - test/_SHARED/**
      - .github/workflows/healthchecks_azure_digitaltwin_ci.yml
      - Directory.Build.props
      - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.AzureDigitalTwin/**
       - test/HealthChecks.AzureDigitalTwin.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_azure_digitaltwin_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

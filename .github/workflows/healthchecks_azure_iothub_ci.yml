@@ -7,6 +7,7 @@ on:
    paths:
      - src/HealthChecks.Azure.IoTHub/**
      - test/HealthChecks.Azure.IoTHub.Tests/**
+     - test/_SHARED/**
      - .github/workflows/healthchecks_azure_iothub_ci.yml
      - Directory.Build.props
      - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.Azure.IoTHub/**
       - test/HealthChecks.Azure.IoTHub.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_azure_iothub_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

@@ -14,7 +14,7 @@ docs:
   - README.md
   - doc/**/*
 
-arrango-db:
+arrangodb:
   - src/HealthChecks.ArangoDb/**/*
 
 aws:

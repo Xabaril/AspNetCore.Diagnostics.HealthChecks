@@ -6,6 +6,7 @@ on:
     paths:
       - src/HealthChecks.EventStore/**
       - test/HealthChecks.EventStore.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_eventstore_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -18,6 +19,7 @@ on:
     paths:
       - src/HealthChecks.EventStore/**
       - test/HealthChecks.EventStore.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_eventstore_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

@@ -3,22 +3,24 @@ name: HealthChecks Application Status CI
 on:
   workflow_dispatch:
   push:
-   branches: [ master ]
-   paths:
-     - src/HealthChecks.ApplicationStatus/**
-     - test/HealthChecks.ApplicationStatus.Tests/**
-     - .github/workflows/healthchecks_applicationstatus_ci.yml
-     - Directory.Build.props
-     - Directory.Build.targets
-   tags-ignore:
-     - release-*
-     - preview-*
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.ApplicationStatus/**
+      - test/HealthChecks.ApplicationStatus.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_applicationstatus_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+      - preview-*
 
   pull_request:
     branches: [ master ]
     paths:
       - src/HealthChecks.ApplicationStatus/**
       - test/HealthChecks.ApplicationStatus.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_applicationstatus_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

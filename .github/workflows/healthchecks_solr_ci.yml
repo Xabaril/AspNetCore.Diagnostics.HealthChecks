@@ -7,6 +7,7 @@ on:
     paths:
       - src/HealthChecks.Solr/**
       - test/HealthChecks.Solr.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_solr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.Solr/**
       - test/HealthChecks.Solr.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_solr_ci.
       - Directory.Build.props
       - Directory.Build.targets

@@ -7,6 +7,7 @@ on:
     paths:
       - src/HealthChecks.Gremlin/**
       - test/HealthChecks.Gremlin.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_gremlin_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.Gremlin/**
       - test/HealthChecks.Gremlin.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_gremlin_ci.yml
       - Directory.Build.props
       - Directory.Build.targets

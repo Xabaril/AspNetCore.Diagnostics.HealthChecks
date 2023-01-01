@@ -1,8 +1,8 @@
 # https://github.com/actions/labeler/blob/master/README.md
 
 test:
-  - 'test/**/*'
-  - all: ['!test/**/*.approved.txt']
+  - any: ['test/**/*']
+    all: ['!test/**/*.approved.txt']
 
 github_actions:
   - .github/**/*

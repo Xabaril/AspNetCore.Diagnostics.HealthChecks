@@ -49,4 +49,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.Aws.Sns/HealthChecks.Aws.Sns.csproj &&
           dotnet build --no-restore ./test/HealthChecks.Aws.Sns.Tests/HealthChecks.Aws.Sns.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.Aws.Sns.Tests/HealthChecks.Aws.Sns.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.Aws.Sns.Tests/HealthChecks.Aws.Sns.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Aws.Sns
+          directory: .coverage

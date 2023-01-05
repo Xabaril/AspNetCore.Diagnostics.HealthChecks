@@ -122,4 +122,17 @@ jobs:
       - name: Build UI.K8s.Operator
         run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
       #- name: Test
-      #  run: dotnet test ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj
+      #  run: >
+      #    dotnet test
+      #    ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj
+      #    --no-restore
+      #    --no-build
+      #    --collect "XPlat Code Coverage"
+      #    --results-directory .coverage
+      #    --
+      #    DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      #- name: Upload Coverage
+      #  uses: codecov/codecov-action@v3
+      #  with:
+      #    flags: UI
+      #    directory: .coverage

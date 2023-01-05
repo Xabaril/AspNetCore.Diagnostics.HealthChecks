@@ -60,4 +60,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj &&
           dotnet build --no-restore ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: IbmMQ
+          directory: .coverage

@@ -56,4 +56,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.MySql/HealthChecks.MySql.csproj &&
           dotnet build --no-restore ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.MySql.Tests/HealthChecks.MySql.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: MySql
+          directory: .coverage

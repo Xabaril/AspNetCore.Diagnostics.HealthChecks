@@ -57,4 +57,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj &&
           dotnet build --no-restore ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Gremlin
+          directory: .coverage

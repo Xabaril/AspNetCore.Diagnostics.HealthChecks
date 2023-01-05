@@ -49,4 +49,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.Publisher.ApplicationInsights/HealthChecks.Publisher.ApplicationInsights.csproj &&
           dotnet build --no-restore ./test/HealthChecks.Publisher.ApplicationInsights.Tests/HealthChecks.Publisher.ApplicationInsights.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.Publisher.ApplicationInsights.Tests/HealthChecks.Publisher.ApplicationInsights.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.Publisher.ApplicationInsights.Tests/HealthChecks.Publisher.ApplicationInsights.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Publisher.ApplicationInsights
+          directory: .coverage

@@ -3,9 +3,89 @@ comment:
   behavior: new
 
 flags:
+  ApplicationStatus:
+    carryforward: true
+  ArangoDb:
+    carryforward: true
+  Aws.S3:
+    carryforward: true
+  Aws.Sns:
+    carryforward: true
+  Aws.Sqs:
+    carryforward: true
+  AzureDigitalTwin:
+    carryforward: true
+  Azure.IoTHub:
+    carryforward: true
+  AzureKeyVault:
+    carryforward: true
+  AzureServiceBus:
+    carryforward: true
+  AzureStorage:
+    carryforward: true
+  Consul:
+    carryforward: true
+  CosmosDb:
+    carryforward: true
+  DocumentDb:
+    carryforward: true
+  DynamoDb:
+    carryforward: true
+  Elasticsearch:
+    carryforward: true
+  EventStore:
+    carryforward: true
+  EventStore.gRPC:
+    carryforward: true
+  Gcp.CloudFirestore:
+    carryforward: true
+  Gremlin:
+    carryforward: true
+  Hangfire:
+    carryforward: true
+  IbmMQ:
+    carryforward: true
+  InfluxDB:
+    carryforward: true
+  Kafka:
+    carryforward: true
+  MongoDb:
+    carryforward: true
+  MySql:
+    carryforward: true
+  Nats:
+    carryforward: true
+  Npgsql:
+    carryforward: true
+  Oracle:
+    carryforward: true
+  Prometheus.Metrics:
+    carryforward: true
+  Publisher.ApplicationInsights:
+    carryforward: true
+  Publisher.CloudWatch:
+    carryforward: true
+  Publisher.Datadog:
+    carryforward: true
+  Publisher.Prometheus:
+    carryforward: true
+  Publisher.Seq:
+    carryforward: true
   RabbitMQ:
     carryforward: true
   RavenDb:
     carryforward: true
   Redis:
+    carryforward: true
+  SendGrid:
+    carryforward: true
+  SignalR:
+    carryforward: true
+  Sqlite:
+    carryforward: true
+  SqlServer:
+    carryforward: true
+  System:
+    carryforward: true
+  Uris:
     carryforward: true

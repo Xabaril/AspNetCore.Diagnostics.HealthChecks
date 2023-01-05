@@ -55,6 +55,8 @@ flags:
     carryforward: true
   Nats:
     carryforward: true
+  Network:
+    carryforward: true
   Npgsql:
     carryforward: true
   Oracle:
@@ -81,11 +83,15 @@ flags:
     carryforward: true
   SignalR:
     carryforward: true
+  Solr:
+    carryforward: true
   Sqlite:
     carryforward: true
   SqlServer:
     carryforward: true
   System:
+    carryforward: true
+  UI:
     carryforward: true
   Uris:
     carryforward: true

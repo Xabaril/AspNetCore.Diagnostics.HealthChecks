@@ -1,3 +1,11 @@
 # https://docs.codecov.com/docs/codecov-yaml
 comment:
   behavior: new
+
+flags:
+  RabbitMQ:
+    carryforward: true
+  RavenDb:
+    carryforward: true
+  Redis:
+    carryforward: true

@@ -24,19 +24,14 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
         try
         {
             var ready = await _influxDbClient.ReadyAsync().ConfigureAwait(false);
-            var ping = await _influxDbClient.PingAsync().ConfigureAwait(false);
-            var ok = ping && ready.Status == Ready.StatusEnum.Ready;
+            bool ping = await _influxDbClient.PingAsync().ConfigureAwait(false);
+            bool ok = ping && ready.Status == Ready.StatusEnum.Ready;
             if (ok)
             {
                 var me = await _influxDbClient.GetUsersApi().MeAsync(cancellationToken).ConfigureAwait(false);
-                if (me?.Status == User.StatusEnum.Active)
-                {
-                    return HealthCheckResult.Healthy($"Started:{ready.Started} Up:{ready.Up}");
-                }
-                else
-                {
-                    return HealthCheckResult.Degraded($"User status is {me?.Status}.");
-                }
+                return me?.Status == User.StatusEnum.Active
+                    ? HealthCheckResult.Healthy($"Started:{ready.Started} Up:{ready.Up}")
+                    : HealthCheckResult.Degraded($"User status is {me?.Status}.");
             }
             else
             {

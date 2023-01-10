@@ -28,9 +28,9 @@ namespace HealthChecks.AzureServiceBus
             try
             {
                 if (_options.UsePeekMode)
-                    await CheckWithReceiver();
+                    await CheckWithReceiver().ConfigureAwait(false);
                 else
-                    await CheckWithManagement();
+                    await CheckWithManagement().ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }
@@ -39,17 +39,17 @@ namespace HealthChecks.AzureServiceBus
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
 
-            async Task CheckWithReceiver()
+            Task CheckWithReceiver()
             {
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
                 var receiver = ServiceBusReceivers.GetOrAdd($"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}", client.CreateReceiver(_queueName));
-                _ = await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+                return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
             }
 
-            async Task CheckWithManagement()
+            Task CheckWithManagement()
             {
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                _ = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
+                return managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
             }
         }
 

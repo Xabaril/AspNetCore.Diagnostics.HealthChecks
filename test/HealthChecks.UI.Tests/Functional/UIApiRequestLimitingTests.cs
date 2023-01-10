@@ -67,7 +67,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecks()
                         .AddAsyncCheck("Delayed", async () =>
                         {
-                            await Task.Delay(200);
+                            await Task.Delay(200).ConfigureAwait(false);
                             return HealthCheckResult.Healthy();
                         })
                         .Services
@@ -97,7 +97,7 @@ namespace HealthChecks.UI.Tests
             var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests)
                 .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
 
-            var results = await Task.WhenAll(requests);
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests)
                 .Count()

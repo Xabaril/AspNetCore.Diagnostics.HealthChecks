@@ -7,6 +7,7 @@ on:
     paths:
       - src/HealthChecks.EventStore.gRPC/**
       - test/HealthChecks.EventStore.gRPC.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_eventstore_grpc_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.EventStore.gRPC/**
       - test/HealthChecks.EventStore.gRPC.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_eventstore_grpc_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -55,4 +57,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.EventStore.gRPC/HealthChecks.EventStore.gRPC.csproj &&
           dotnet build --no-restore ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.EventStore.gRPC.Tests/HealthChecks.EventStore.gRPC.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: EventStore.gRPC
+          directory: .coverage

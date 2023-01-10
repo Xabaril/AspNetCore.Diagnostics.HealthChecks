@@ -8,7 +8,7 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
         [Fact]
         public async Task be_healthy_if_rabbitmq_is_available()
         {
-            var connectionString = @"amqp://localhost:5672";
+            var connectionString = "amqp://localhost:5672";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -26,17 +26,15 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_ssloption()
         {
-            var connectionString = @"amqp://localhost:5672";
+            var connectionString = "amqp://localhost:5672";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -54,11 +52,9 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -80,17 +76,15 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_iconnectionfactory()
         {
-            var connectionString = @"amqp://localhost:5672";
+            var connectionString = "amqp://localhost:5672";
 
             var factory = new ConnectionFactory()
             {
@@ -116,17 +110,15 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_iconnection()
         {
-            var connectionString = @"amqp://localhost:5672";
+            var connectionString = "amqp://localhost:5672";
 
             var factory = new ConnectionFactory()
             {
@@ -155,17 +147,15 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_and_specify_default_ssloption()
         {
-            var connectionString = @"amqp://localhost:5672";
+            var connectionString = "amqp://localhost:5672";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -183,11 +173,9 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
@@ -219,22 +207,21 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response1 = await server.CreateRequest($"/health").GetAsync();
-            response1.StatusCode
-               .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            var response1 = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+            response1.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
         public async Task be_healthy_if_rabbitmq_is_available_using_iServiceProvider()
         {
-            var connectionString = @"amqp://localhost:5672";
+            var connectionString = "amqp://localhost:5672";
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
                     services
                         .AddHealthChecks()
-                        .AddRabbitMQ(sp => new Uri(connectionString), tags: new string[] { "rabbitmq" });
+                        .AddRabbitMQ(_ => new Uri(connectionString), tags: new string[] { "rabbitmq" });
 
                 })
                 .Configure(app =>
@@ -247,11 +234,9 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
     }
 }

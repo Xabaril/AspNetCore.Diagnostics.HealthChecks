@@ -16,17 +16,20 @@ namespace HealthChecks.Publisher.ApplicationInsights
         private static TelemetryClient? _client;
         private static readonly object _syncRoot = new object();
         private readonly TelemetryConfiguration? _telemetryConfiguration;
+        private readonly string? _connectionString;
         private readonly string? _instrumentationKey;
         private readonly bool _saveDetailedReport;
         private readonly bool _excludeHealthyReports;
 
         public ApplicationInsightsPublisher(
             IOptions<TelemetryConfiguration>? telemetryConfiguration,
+            string? connectionString = default,
             string? instrumentationKey = default,
             bool saveDetailedReport = false,
             bool excludeHealthyReports = false)
         {
             _telemetryConfiguration = telemetryConfiguration?.Value;
+            _connectionString = connectionString;
             _instrumentationKey = instrumentationKey;
             _saveDetailedReport = saveDetailedReport;
             _excludeHealthyReports = excludeHealthyReports;
@@ -110,12 +113,14 @@ namespace HealthChecks.Publisher.ApplicationInsights
                 {
                     if (_client == null)
                     {
-                        //override instrumentation key or use default telemetry
-                        //configuration active on the project.
+                        // Create TelemetryConfiguration
+                        // Hierachy: _connectionString > _instrumentationKey > _telemetryConfiguration
+                        var configuration = string.IsNullOrWhiteSpace(_connectionString)
+                            ? string.IsNullOrWhiteSpace(_instrumentationKey)
+                                ? _telemetryConfiguration
+                                : new TelemetryConfiguration(_instrumentationKey)
+                            : new TelemetryConfiguration { ConnectionString = _connectionString };
 
-                        var configuration = string.IsNullOrWhiteSpace(_instrumentationKey)
-                            ? _telemetryConfiguration
-                            : new TelemetryConfiguration(_instrumentationKey);
 
                         _client = new TelemetryClient(configuration);
                     }

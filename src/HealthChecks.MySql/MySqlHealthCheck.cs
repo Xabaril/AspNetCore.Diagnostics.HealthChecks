@@ -1,34 +1,37 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySqlConnector;
 
-namespace HealthChecks.MySql
+namespace HealthChecks.MySql;
+
+/// <summary>
+/// A health check for MySql databases.
+/// </summary>
+public class MySqlHealthCheck : IHealthCheck
 {
-    public class MySqlHealthCheck : IHealthCheck
+    private readonly string _connectionString;
+
+    public MySqlHealthCheck(string connectionString)
     {
-        private readonly string _connectionString;
+        _connectionString = Guard.ThrowIfNull(connectionString);
+    }
 
-        public MySqlHealthCheck(string connectionString)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _connectionString = Guard.ThrowIfNull(connectionString);
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+                return await connection.PingAsync(cancellationToken).ConfigureAwait(false)
+                    ? HealthCheckResult.Healthy()
+                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
+            }
         }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                using (var connection = new MySqlConnection(_connectionString))
-                {
-                    await connection.OpenAsync(cancellationToken);
-
-                    return await connection.PingAsync(cancellationToken)
-                        ? HealthCheckResult.Healthy()
-                        : new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

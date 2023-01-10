@@ -50,21 +50,24 @@ public class cosmosdbhealthcheck_should
             .ReadAccountAsync()
             .Returns(Substitute.For<AccountProperties>());
 
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .DidNotReceiveWithAnyArgs()
-            .ReadAsync(default);
+            .ReadAsync(default)
+            .ConfigureAwait(false);
 
         await Task.WhenAll(_containers
             .Values
             .Select(x => x
                 .DidNotReceiveWithAnyArgs()
-                .ReadContainerAsync(default, default)));
+                .ReadContainerAsync(default, default)))
+                .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -83,21 +86,24 @@ public class cosmosdbhealthcheck_should
             .Returns(Substitute.For<DatabaseResponse>());
 
         _options.DatabaseId = DatabaseId;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .Received(1)
-            .ReadAsync(null, tokenSource.Token);
+            .ReadAsync(null, tokenSource.Token)
+            .ConfigureAwait(false);
 
         await Task.WhenAll(_containers
             .Values
             .Select(x => x
                 .DidNotReceiveWithAnyArgs()
-                .ReadContainerAsync(default, default)));
+                .ReadContainerAsync(default, default)))
+                .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -124,21 +130,24 @@ public class cosmosdbhealthcheck_should
 
         _options.ContainerIds = ContainerIds;
         _options.DatabaseId = DatabaseId;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .Received(1)
-            .ReadAsync(null, tokenSource.Token);
+            .ReadAsync(null, tokenSource.Token)
+            .ConfigureAwait(false);
 
         await Task.WhenAll(_containers
             .Values
             .Select(x => x
                 .Received(1)
-                .ReadContainerAsync(null, tokenSource.Token)));
+                .ReadContainerAsync(null, tokenSource.Token)))
+                .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -157,21 +166,24 @@ public class cosmosdbhealthcheck_should
 
         _options.ContainerIds = checkContainers ? ContainerIds : null;
         _options.DatabaseId = checkDatabase ? DatabaseId : null;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .DidNotReceiveWithAnyArgs()
-            .ReadAsync(default);
+            .ReadAsync(default)
+            .ConfigureAwait(false);
 
         await Task.WhenAll(_containers
             .Values
             .Select(x => x
                 .DidNotReceiveWithAnyArgs()
-                .ReadContainerAsync(default, default)));
+                .ReadContainerAsync(default, default)))
+                .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
@@ -196,21 +208,24 @@ public class cosmosdbhealthcheck_should
 
         _options.ContainerIds = checkContainers ? ContainerIds : null;
         _options.DatabaseId = DatabaseId;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .Received(1)
-            .ReadAsync(null, tokenSource.Token);
+            .ReadAsync(null, tokenSource.Token)
+            .ConfigureAwait(false);
 
         await Task.WhenAll(_containers
             .Values
             .Select(x => x
                 .DidNotReceiveWithAnyArgs()
-                .ReadContainerAsync(default, default)));
+                .ReadContainerAsync(default, default)))
+                .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
@@ -241,27 +256,32 @@ public class cosmosdbhealthcheck_should
 
         _options.ContainerIds = ContainerIds;
         _options.DatabaseId = DatabaseId;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .Received(1)
-            .ReadAsync(null, tokenSource.Token);
+            .ReadAsync(null, tokenSource.Token)
+            .ConfigureAwait(false);
 
         await _containers["one"]
             .Received(1)
-            .ReadContainerAsync(null, tokenSource.Token);
+            .ReadContainerAsync(null, tokenSource.Token)
+            .ConfigureAwait(false);
 
         await _containers["two"]
             .Received(1)
-            .ReadContainerAsync(null, tokenSource.Token);
+            .ReadContainerAsync(null, tokenSource.Token)
+            .ConfigureAwait(false);
 
         await _containers["three"]
             .DidNotReceiveWithAnyArgs()
-            .ReadContainerAsync(default, default);
+            .ReadContainerAsync(default, default)
+            .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
@@ -289,21 +309,24 @@ public class cosmosdbhealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Database not found"));
 
         var service = provider.GetRequiredService<HealthCheckService>();
-        var report = await service.CheckHealthAsync();
+        var report = await service.CheckHealthAsync().ConfigureAwait(false);
 
         await _cosmosClient
             .Received(1)
-            .ReadAccountAsync();
+            .ReadAccountAsync()
+            .ConfigureAwait(false);
 
         await _database
             .Received(1)
-            .ReadAsync(null, Arg.Any<CancellationToken>());
+            .ReadAsync(null, Arg.Any<CancellationToken>())
+            .ConfigureAwait(false);
 
         await Task.WhenAll(_containers
             .Values
             .Select(x => x
                 .DidNotReceiveWithAnyArgs()
-                .ReadContainerAsync(default, default)));
+                .ReadContainerAsync(default, default)))
+                .ConfigureAwait(false);
 
         var actual = report.Entries[HealthCheckName];
         actual.Status.ShouldBe(HealthStatus.Unhealthy);

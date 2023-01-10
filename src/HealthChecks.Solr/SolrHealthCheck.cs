@@ -44,7 +44,7 @@ namespace HealthChecks.Solr
                     dihStatusParser: null,
                     extractResponseParser: null);
 
-                var result = await server.PingAsync();
+                var result = await server.PingAsync().ConfigureAwait(false);
 
                 var isSuccess = result.Status == 0;
 

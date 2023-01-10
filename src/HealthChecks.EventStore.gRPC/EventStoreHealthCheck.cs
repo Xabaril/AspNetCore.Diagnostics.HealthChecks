@@ -25,7 +25,8 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
             using var subscription = await _client.SubscribeToAllAsync(
                 FromAll.End,
                 eventAppeared: (_, _, _) => Task.CompletedTask,
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             return new HealthCheckResult(HealthStatus.Healthy);
         }

@@ -33,7 +33,7 @@ namespace HealthChecks.Kubernetes
             try
             {
                 var result = await _client.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
-                    resourceCheck.Namespace, cancellationToken: cancellationToken);
+                    resourceCheck.Namespace, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }
@@ -43,7 +43,7 @@ namespace HealthChecks.Kubernetes
                     new Exception($"The Deployment {resourceCheck.Name} failed with error: {ex.Message}"));
             }
 
-            return await tsc.Task;
+            return await tsc.Task.ConfigureAwait(false);
         }
 
         private async Task<(bool, string)> CheckPodAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
@@ -52,7 +52,7 @@ namespace HealthChecks.Kubernetes
             try
             {
                 var result = await _client.ReadNamespacedPodStatusWithHttpMessagesAsync(resourceCheck.Name,
-                    resourceCheck.Namespace, cancellationToken: cancellationToken);
+                    resourceCheck.Namespace, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }
@@ -62,7 +62,7 @@ namespace HealthChecks.Kubernetes
                     new Exception($"The pod {resourceCheck.Name} failed with error: {ex.Message}"));
             }
 
-            return await tsc.Task;
+            return await tsc.Task.ConfigureAwait(false);
         }
 
         private async Task<(bool, string)> CheckServiceAsync(KubernetesResourceCheck resourceCheck, CancellationToken cancellationToken)
@@ -71,7 +71,7 @@ namespace HealthChecks.Kubernetes
             try
             {
                 var result = await _client.ReadNamespacedServiceStatusWithHttpMessagesAsync(resourceCheck.Name,
-                    resourceCheck.Namespace, cancellationToken: cancellationToken);
+                    resourceCheck.Namespace, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
             }
@@ -81,7 +81,7 @@ namespace HealthChecks.Kubernetes
                     new Exception($"The service {resourceCheck.Name} failed with error: {ex.Message}"));
             }
 
-            return await tsc.Task;
+            return await tsc.Task.ConfigureAwait(false);
         }
     }
 }

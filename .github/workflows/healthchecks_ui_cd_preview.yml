@@ -26,6 +26,8 @@ jobs:
         run: dotnet restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
       - name: Restore UI.Core
         run: dotnet restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj
+      - name: Restore UI.Data
+        run: dotnet restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj
       - name: Restore UI.InMemory.Storage
         run: dotnet restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj
       - name: Restore UI.MySql.Storage
@@ -44,6 +46,8 @@ jobs:
         run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj -c $BUILD_CONFIG
       - name: Build UI.Core
         run: dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj -c $BUILD_CONFIG
+      - name: Build UI.Data
+        run: dotnet build --no-restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj -c $BUILD_CONFIG
       - name: Build UI.InMemory.Storage
         run: dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj -c $BUILD_CONFIG
       - name: Build UI.MySql.Storage
@@ -55,13 +59,15 @@ jobs:
       - name: Build UI.SqlServer.Storage
         run: dotnet build --no-restore ./src/HealthChecks.UI.SqlServer.Storage/HealthChecks.UI.SqlServer.Storage.csproj -c $BUILD_CONFIG
       #- name: Build UI.K8s.Operator
-      #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj
+      #  run: dotnet build --no-restore ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj -c $BUILD_CONFIG
       - name: Pack UI
         run: dotnet pack --no-build ./src/HealthChecks.UI/HealthChecks.UI.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Pack UI.Client
         run: dotnet pack --no-build ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Pack UI.Core
         run: dotnet pack --no-build ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+      - name: Pack UI.Data
+        run: dotnet pack --no-build ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Pack UI.InMemory.Storage
         run: dotnet pack --no-build ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Pack UI.MySql.Storage
@@ -75,11 +81,13 @@ jobs:
       #- name: Pack UI.K8s.Operator
       #  run: dotnet pack --no-build ./src/HealthChecks.UI.K8s.Operator/HealthChecks.UI.K8s.Operator.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Publish UI Health Check
-        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.6*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish UI.Client Health Check
         run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Client.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish UI.Core Health Check
         run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Core.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Publish UI.Data Health Check
+        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.Data.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish UI.InMemory.Storage Health Check
         run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.UI.InMemory.Storage.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish UI.MySql.Storage Health Check

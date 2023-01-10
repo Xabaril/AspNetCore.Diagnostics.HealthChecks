@@ -21,6 +21,7 @@
 [![GremlinDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_gremlin_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_gremlin_ci.yml)
 [![Hangfire Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_hangfire_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_hangfire_ci.yml)
 [![IbmMQ Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ibmmq_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ibmmq_ci.yml)
+[![InfluxDB Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_influxdb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_influxdb_ci.yml)
 [![Kafka Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_kafka_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_kafka_ci.yml)
 [![MongoDb Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_mongodb_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_mongodb_ci.yml)
 [![MySql Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_mysql_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_mysql_ci.yml)
@@ -40,7 +41,7 @@
 [![SqlServer Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_sqlserver_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_sqlserver_ci.yml)
 [![SendGrid Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_sendgrid_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_sendgrid_ci.yml)
 [![SignalR Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_signalr_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_signalr_ci.yml)
-[![SolR Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_solr_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_solr_ci.yml)
+[![Solr Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_solr_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_solr_ci.yml)
 [![SqlLite Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_sqlite_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_sqlite_ci.yml)
 [![System Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_system_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_system_ci.yml)
 [![UI Build status](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ui_ci.yml/badge.svg)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/actions/workflows/healthchecks_ui_ci.yml)
@@ -123,6 +124,7 @@ HealthChecks packages include health checks for:
 | Gremlin                | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Gremlin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gremlin)                         |
 | Hangfire               | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Hangfire)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Hangfire)                       |
 | IbmMQ                  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.IbmMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.IbmMQ)                             |
+| InfluxDB               | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.InfluxDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.InfluxDB)                       |
 | Kafka                  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Kafka)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kafka)                             |
 | Kubernetes             | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Kubernetes)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kubernetes)                   |
 | MongoDB                | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.MongoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MongoDb)                         |
@@ -169,6 +171,7 @@ Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
 Install-Package AspNetCore.HealthChecks.Gremlin
 Install-Package AspNetCore.HealthChecks.Hangfire
 Install-Package AspNetCore.HealthChecks.IbmMQ
+Install-Package AspNetCore.HealthChecks.InfluxDB
 Install-Package AspNetCore.HealthChecks.Kafka
 Install-Package AspNetCore.HealthChecks.Kubernetes
 Install-Package AspNetCore.HealthChecks.MongoDb

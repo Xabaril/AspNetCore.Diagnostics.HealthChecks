@@ -31,12 +31,13 @@ namespace HealthChecks.AzureStorage
                     .GetSharesAsync(cancellationToken: cancellationToken)
                     .AsPages(pageSizeHint: 1)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.ShareName))
                 {
                     var shareClient = _shareServiceClient.GetShareClient(_options.ShareName);
-                    await shareClient.GetPropertiesAsync(cancellationToken);
+                    await shareClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

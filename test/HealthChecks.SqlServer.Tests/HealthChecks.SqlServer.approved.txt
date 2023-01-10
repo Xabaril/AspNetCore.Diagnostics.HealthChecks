@@ -2,15 +2,24 @@ namespace HealthChecks.SqlServer
 {
     public class SqlServerHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql, System.Action<Microsoft.Data.SqlClient.SqlConnection>? beforeOpenConnectionConfigurer = null) { }
+        public SqlServerHealthCheck(HealthChecks.SqlServer.SqlServerHealthCheckOptions options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class SqlServerHealthCheckOptions
+    {
+        public SqlServerHealthCheckOptions() { }
+        public string CommandText { get; set; }
+        public System.Action<Microsoft.Data.SqlClient.SqlConnection>? Configure { get; set; }
+        public string ConnectionString { get; set; }
+        public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SqlServerHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string? healthQuery = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<Microsoft.Data.SqlClient.SqlConnection>? beforeOpenConnectionConfigurer = null) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? healthQuery = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default, System.Action<Microsoft.Data.SqlClient.SqlConnection>? beforeOpenConnectionConfigurer = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, HealthChecks.SqlServer.SqlServerHealthCheckOptions options, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string healthQuery = "SELECT 1;", System.Action<Microsoft.Data.SqlClient.SqlConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSqlServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string healthQuery = "SELECT 1;", System.Action<Microsoft.Data.SqlClient.SqlConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

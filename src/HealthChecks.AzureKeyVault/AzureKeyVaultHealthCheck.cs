@@ -31,19 +31,19 @@ namespace HealthChecks.AzureKeyVault
                 foreach (var secret in _options.Secrets)
                 {
                     var secretClient = CreateSecretClient();
-                    await secretClient.GetSecretAsync(secret, cancellationToken: cancellationToken);
+                    await secretClient.GetSecretAsync(secret, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 
                 foreach (var key in _options.Keys)
                 {
                     var keyClient = CreateKeyClient();
-                    await keyClient.GetKeyAsync(key, cancellationToken: cancellationToken);
+                    await keyClient.GetKeyAsync(key, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 
                 foreach (var (key, checkExpired) in _options.Certificates)
                 {
                     var certificateClient = CreateCertificateClient();
-                    var certificate = await certificateClient.GetCertificateAsync(key, cancellationToken: cancellationToken);
+                    var certificate = await certificateClient.GetCertificateAsync(key, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                     if (checkExpired && certificate.Value.Properties.ExpiresOn.HasValue)
                     {

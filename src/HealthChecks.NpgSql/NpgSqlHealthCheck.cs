@@ -3,36 +3,36 @@ using Npgsql;
 
 namespace HealthChecks.NpgSql
 {
+    /// <summary>
+    /// A health check for Postgres databases.
+    /// </summary>
     public class NpgSqlHealthCheck : IHealthCheck
     {
-        private readonly string _connectionString;
-        private readonly string _sql;
-        private readonly Action<NpgsqlConnection>? _connectionAction;
+        private readonly NpgSqlHealthCheckOptions _options;
 
-        public NpgSqlHealthCheck(string npgsqlConnectionString, string sql, Action<NpgsqlConnection>? connectionAction = null)
+        public NpgSqlHealthCheck(NpgSqlHealthCheckOptions options)
         {
-            _connectionString = Guard.ThrowIfNull(npgsqlConnectionString);
-            _sql = Guard.ThrowIfNull(sql);
-            _connectionAction = connectionAction;
+            Guard.ThrowIfNull(options.ConnectionString, true);
+            Guard.ThrowIfNull(options.CommandText, true);
+            _options = options;
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var connection = new NpgsqlConnection(_connectionString))
+                using (var connection = new NpgsqlConnection(_options.ConnectionString))
                 {
-                    _connectionAction?.Invoke(connection);
+                    _options.Configure?.Invoke(connection);
+                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-                    await connection.OpenAsync(cancellationToken);
-
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    using var command = connection.CreateCommand();
+                    command.CommandText = _options.CommandText;
+                    var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+                    return _options.HealthCheckResultBuilder == null
+                        ? HealthCheckResult.Healthy()
+                        : _options.HealthCheckResultBuilder(result);
                 }
             }
             catch (Exception ex)

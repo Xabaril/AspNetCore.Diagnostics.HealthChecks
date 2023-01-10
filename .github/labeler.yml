@@ -1,5 +1,8 @@
+# https://github.com/actions/labeler/blob/master/README.md
+
 test:
-  - test/**/*
+  - any: ['test/**/*']
+    all: ['!test/**/*.approved.txt']
 
 github_actions:
   - .github/**/*
@@ -11,7 +14,13 @@ docs:
   - README.md
   - doc/**/*
 
-arrango-db:
+samples:
+  - samples/**/*
+
+applicationstatus:
+  - src/HealthChecks.ApplicationStatus/**/*
+
+arrangodb:
   - src/HealthChecks.ArangoDb/**/*
 
 aws:
@@ -23,6 +32,109 @@ azure:
 consul:
   - src/HealthChecks.Consul/**/*
 
+cosmosdb:
+  - src/HealthChecks.CosmosDb/**/*
+
+documentdb:
+  - src/HealthChecks.DocumentDb/**/*
+
+dynamodb:
+  - src/HealthChecks.DynamoDb/**/*
+
+elasticsearch:
+  - src/HealthChecks.Elasticsearch/**/*
+
+eventstore:
+  - src/HealthChecks.EventStore*/**/*
+
+cloudfirestore:
+  - src/HealthChecks.Gcp.CloudFirestore/**/*
+
+gremlin:
+  - src/HealthChecks.Gremlin/**/*
+
+hangfire:
+  - src/HealthChecks.Hangfire/**/*
+
+ibmmq:
+  src/HealthChecks.IbmMQ/**/*
+
+influxdb:
+  src/HealthChecks.InfluxDB/**/*
+
+kafka:
+  - src/HealthChecks.Kafka/**/*
+
+kubernetes:
+  - src/HealthChecks.Kubernetes/**/*
+
+mongodb:
+  - src/HealthChecks.MongoDb/**/*
+
+mysql:
+  - src/HealthChecks.MySql/**/*
+
+nats:
+  - src/HealthChecks.Nats/**/*
+
+network:
+  - src/HealthChecks.Network/**/*
+
+npgsql:
+  - src/HealthChecks.NpgSql/**/*
+
+openidconnect:
+  - src/HealthChecks.OpenIdConnectServer/**/*
+
+oracle:
+  - src/HealthChecks.Oracle/**/*
+
+prometheus:
+  - src/HealthChecks.Prometheus.Metrics/**/*
+  - src/HealthChecks.Publisher.Prometheus/**/*
+
+applicationinsights:
+  - src/HealthChecks.Publisher/ApplicationInsights/**/*
+
+cloudwatch:
+  - src/HealthChecks.Publisher/CloudWatch/**/*
+
+datadog:
+  - src/HealthChecks.Publisher.Datadog/**/*
+
+seq:
+  -src/HealthChecks.Publisher/Seq/**/*
+
+rabbitmq:
+  - src/HealthChecks.Rabbitmq/**/*
+
+ravendb:
+  - src/HealthChecks.RavenDB/**/*
+
+redis:
+  - src/HealthChecks.Redis/**/*
+
+sendgrid:
+  - src/HealthChecks.SendGrid/**/*
+
+signalr:
+  - src/HealthChecks.SignalR/**/*
+
+solr:
+  - src/HealthChecks.Solr/**/*
+
+sqlite:
+  - src/HealthChecks.Sqlite/**/*
+
+sqlserver:
+  - src/HealthChecks.SqlServer/**/*
+
+system:
+  - src/HealthChecks.System/**/*
+
 UI:
   - src/HealthChecks.UI/**/*
   - src/HealthChecks.UI.*/**/*
+
+uris:
+  - src/HealthChecks.Uris/**/*

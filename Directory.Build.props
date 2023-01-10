@@ -52,9 +52,9 @@
 
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
 
-    <Compile Include="../ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <Compile Include="../TestLogger.cs" Link="TestLogger.cs" Visible="false" />
-    <Compile Include="../TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
+    <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <Compile Include="../_SHARED/TestLogger.cs" Link="TestLogger.cs" Visible="false" />
+    <Compile Include="../_SHARED/TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
 
     <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.AspNetCore.Hosting" />

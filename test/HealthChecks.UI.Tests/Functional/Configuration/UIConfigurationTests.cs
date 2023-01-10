@@ -328,8 +328,8 @@ namespace HealthChecks.UI.Tests
 
             var server = new TestServer(builder);
             var options = server.Services.GetRequiredService<IOptions<Configuration.Options>>().Value;
-            var response = await server.CreateRequest(options.UIPath).GetAsync();
-            var html = await response.Content.ReadAsStringAsync();
+            var response = await server.CreateRequest(options.UIPath).GetAsync().ConfigureAwait(false);
+            var html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             html.ShouldContain($"<title>{pageTitle}</title>");
         }

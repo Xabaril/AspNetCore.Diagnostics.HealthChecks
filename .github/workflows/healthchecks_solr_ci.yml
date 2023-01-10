@@ -1,4 +1,4 @@
-name: HealthChecks SolR CI
+name: HealthChecks Solr CI
 
 on:
   workflow_dispatch:
@@ -6,7 +6,8 @@ on:
     branches: [ master, netcore-6.0 ]
     paths:
       - src/HealthChecks.Solr/**
-      - test/HealthChecks.SolR.Tests/**
+      - test/HealthChecks.Solr.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_solr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -18,7 +19,8 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.Solr/**
-      - test/HealthChecks.SolR.Tests/**
+      - test/HealthChecks.Solr.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_solr_ci.
       - Directory.Build.props
       - Directory.Build.targets
@@ -43,7 +45,7 @@ jobs:
       - name: Initialize Solr
         run: |
           docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1
-      - name: Test SOLR
+      - name: Test Solr
         run: |
           wget http://localhost:8983/solr/#
           curl http://localhost:8983/solr/# -v
@@ -56,14 +58,27 @@ jobs:
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
-          dotnet restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+          dotnet restore ./test/HealthChecks.Solr.Tests/HealthChecks.Solr.Tests.csproj
       - name: Check formatting
         run: |
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Solr/HealthChecks.Solr.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Solr.Tests/HealthChecks.Solr.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Build
         run: |
           dotnet build --no-restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&
-          dotnet build --no-restore ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+          dotnet build --no-restore ./test/HealthChecks.Solr.Tests/HealthChecks.Solr.Tests.csproj
       #- name: Test
-      #  run: dotnet test --no-restore --no-build ./test/HealthChecks.SolR.Tests/HealthChecks.SolR.Tests.csproj
+      #  run: >
+      #  dotnet test
+      #  ./test/HealthChecks.Solr.Tests/HealthChecks.Solr.Tests.csproj
+      #  --no-restore
+      #  --no-build
+      #  --collect "XPlat Code Coverage"
+      #    --results-directory .coverage
+      #    --
+      #    DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      #- name: Upload Coverage
+      #  uses: codecov/codecov-action@v3
+      #  with:
+      #    flags: Solr
+      #    directory: .coverage

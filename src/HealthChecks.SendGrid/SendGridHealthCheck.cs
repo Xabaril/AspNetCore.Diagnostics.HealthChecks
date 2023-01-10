@@ -33,7 +33,7 @@ public class SendGridHealthCheck : IHealthCheck
             var msg = MailHelper.CreateSingleEmail(from, to, SUBJECT, SUBJECT, null);
             msg.SetSandBoxMode(true);
 
-            var response = await client.SendEmailAsync(msg, cancellationToken);
+            var response = await client.SendEmailAsync(msg, cancellationToken).ConfigureAwait(false);
 
             if (response.StatusCode != HttpStatusCode.OK)
             {

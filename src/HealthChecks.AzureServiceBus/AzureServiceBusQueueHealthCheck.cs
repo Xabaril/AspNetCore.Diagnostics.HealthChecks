@@ -43,13 +43,13 @@ namespace HealthChecks.AzureServiceBus
             {
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
                 var receiver = ServiceBusReceivers.GetOrAdd($"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}", client.CreateReceiver(_queueName));
-                _ = await receiver.PeekMessageAsync(cancellationToken: cancellationToken);
+                _ = await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
             async Task CheckWithManagement()
             {
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                _ = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
+                _ = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
             }
         }
 

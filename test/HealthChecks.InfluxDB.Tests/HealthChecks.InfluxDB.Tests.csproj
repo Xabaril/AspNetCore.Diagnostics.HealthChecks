@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.InfluxDB\HealthChecks.InfluxDB.csproj" />
   </ItemGroup>
 
 </Project>

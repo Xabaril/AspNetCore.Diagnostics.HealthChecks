@@ -1,4 +1,4 @@
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Tests
@@ -21,7 +21,7 @@ namespace HealthChecks.UI.Tests
             hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
             var context = host.Services.GetRequiredService<HealthChecksDb>();
-            var configurations = await context.Configurations.ToListAsync();
+            var configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
 
             var host1 = ProviderTestHelper.Endpoints[0];
 
@@ -32,7 +32,7 @@ namespace HealthChecks.UI.Tests
 
             collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
 
-            var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api");
+            var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api").ConfigureAwait(false);
             report.First().Name.ShouldBe(host1.Name);
         }
     }

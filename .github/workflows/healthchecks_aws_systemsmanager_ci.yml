@@ -7,6 +7,7 @@ on:
    paths:
      - src/HealthChecks.Aws.SystemsManager/**
      - test/HealthChecks.Aws.SystemsManager.Tests/**
+     - test/_SHARED/**
      - .github/workflows/healthchecks_aws_systemsManager_ci.yml
      - Directory.Build.props
      - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.Aws.SystemsManager/**
       - test/HealthChecks.Aws.SystemsManager.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_aws_systemsManager_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -47,4 +49,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.Aws.SystemsManager/HealthChecks.Aws.SystemsManager.csproj &&
           dotnet build --no-restore ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.Aws.SystemsManager.Tests/HealthChecks.Aws.SystemsManager.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Aws.SystemsManager
+          directory: .coverage

@@ -33,11 +33,9 @@ namespace HealthChecks.Kafka.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -65,11 +63,9 @@ namespace HealthChecks.Kafka.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
     }
 }

@@ -15,11 +15,10 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
                 })
                 .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
-            var response = await sut.CreateRequest("/health")
-                .GetAsync();
+            var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Healthy);
         }
 
@@ -34,11 +33,10 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
                 })
                 .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
-            var response = await sut.CreateRequest("/health")
-                .GetAsync();
+            var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
 
@@ -53,11 +51,10 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
                 })
                 .Configure(app => app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)));
 
-            var response = await sut.CreateRequest("/health")
-                .GetAsync();
+            var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
     }

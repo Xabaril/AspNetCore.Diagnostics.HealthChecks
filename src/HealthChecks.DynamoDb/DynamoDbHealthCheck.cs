@@ -37,7 +37,7 @@ namespace HealthChecks.DynamoDb
                     ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
                     : new AmazonDynamoDBClient(_options.RegionEndpoint);
 
-                _ = await client.ListTablesAsync(cancellationToken);
+                _ = await client.ListTablesAsync(cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }

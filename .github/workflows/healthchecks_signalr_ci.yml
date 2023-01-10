@@ -7,6 +7,7 @@ on:
     paths:
       - src/HealthChecks.SignalR/**
       - test/HealthChecks.SignalR.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_signalr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -19,6 +20,7 @@ on:
     paths:
       - src/HealthChecks.SignalR/**
       - test/HealthChecks.SignalR.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_signalr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
@@ -47,4 +49,17 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj &&
           dotnet build --no-restore ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj
       - name: Test
-        run: dotnet test --no-restore --no-build ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj
+        run: >
+          dotnet test
+          ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: SignalR
+          directory: .coverage

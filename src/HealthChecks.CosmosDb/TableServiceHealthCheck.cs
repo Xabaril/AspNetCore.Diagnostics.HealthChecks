@@ -43,7 +43,8 @@ namespace HealthChecks.CosmosDb
                 await _tableServiceClient
                     .QueryAsync(filter: "false", cancellationToken: cancellationToken)
                     .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync();
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(_options.TableName))
                 {
@@ -51,7 +52,8 @@ namespace HealthChecks.CosmosDb
                     await tableClient
                         .QueryAsync<TableEntity>(filter: "false", cancellationToken: cancellationToken)
                         .GetAsyncEnumerator(cancellationToken)
-                        .MoveNextAsync();
+                        .MoveNextAsync()
+                        .ConfigureAwait(false);
                 }
 
                 return HealthCheckResult.Healthy();

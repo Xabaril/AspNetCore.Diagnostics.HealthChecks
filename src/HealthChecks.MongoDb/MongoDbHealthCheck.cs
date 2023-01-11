@@ -41,7 +41,7 @@ namespace HealthChecks.MongoDb
                         .GetDatabase(_specifiedDatabase)
                         .ListCollectionNamesAsync(cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
-                    await cursor.FirstAsync(cancellationToken).ConfigureAwait(false);
+                    await cursor.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {

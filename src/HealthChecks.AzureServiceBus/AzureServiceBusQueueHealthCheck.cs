@@ -1,29 +1,25 @@
-using Azure.Core;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private readonly AzureServiceBusOptions _options;
-        private readonly string _queueName;
+        private readonly AzureServiceBusQueueOptions _options;
         private string? _connectionKey;
 
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName, AzureServiceBusOptions options)
-            : base(connectionString)
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_options.QueueName}";
+
+        public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueOptions options)
+            : base(options)
         {
+            Guard.ThrowIfNull(options.QueueName, true);
+
             _options = options;
-            _queueName = Guard.ThrowIfNull(queueName, true);
         }
 
-        public AzureServiceBusQueueHealthCheck(string endPoint, string queueName, TokenCredential tokenCredential, AzureServiceBusOptions options)
-            : base(endPoint, tokenCredential)
-        {
-            _options = options;
-            _queueName = Guard.ThrowIfNull(queueName, true);
-        }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -42,17 +38,20 @@ namespace HealthChecks.AzureServiceBus
             Task CheckWithReceiver()
             {
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
-                var receiver = ServiceBusReceivers.GetOrAdd($"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}", client.CreateReceiver(_queueName));
+                var receiver = ServiceBusReceivers.GetOrAdd(
+                    $"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}",
+                    client.CreateReceiver(_options.QueueName));
+
                 return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
             }
 
             Task CheckWithManagement()
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                return managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
+                var managementClient = ManagementClientConnections.GetOrAdd(
+                    ConnectionKey, _ => CreateManagementClient());
+
+                return managementClient.GetQueueRuntimePropertiesAsync(_options.QueueName, cancellationToken);
             }
         }
-
-        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_queueName}";
     }
 }

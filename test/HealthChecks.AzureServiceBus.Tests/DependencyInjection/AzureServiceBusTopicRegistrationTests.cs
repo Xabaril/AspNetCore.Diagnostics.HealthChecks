@@ -49,8 +49,8 @@ public class azure_service_bus_topic_registration_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("connectionString");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 
     [Fact]

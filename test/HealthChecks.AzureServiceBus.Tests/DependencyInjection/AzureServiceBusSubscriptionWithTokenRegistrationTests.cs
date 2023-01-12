@@ -1,4 +1,5 @@
 using Azure.Identity;
+using HealthChecks.AzureServiceBus.Configuration;
 
 namespace HealthChecks.AzureServiceBus.Tests;
 
@@ -22,28 +23,35 @@ public class azure_service_bus_subscription_registration_with_token_should
     }
 
     [Fact]
-    public void add_health_check_with_setup_when_properly_configured()
+    public void add_health_check_with_options_when_properly_configured()
     {
         var services = new ServiceCollection();
-        AzureServiceBusOptions? setupOptions = null;
-        bool setupCalled = false;
+        AzureServiceBusSubscriptionOptions? configurationOptions = null;
+        bool configurationCalled = false;
 
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(
-                string.Empty,
-                string.Empty,
-                string.Empty,
+                "endpoint://",
+                "topicName",
+                "subscriptionName",
                 new AzureCliCredential(),
                 options =>
                 {
-                    setupCalled = true;
-                    setupOptions = options;
+                    configurationCalled = true;
+                    configurationOptions = options;
                 });
 
-        setupCalled.ShouldBeTrue();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        setupOptions.ShouldNotBeNull();
-        setupOptions.UsePeekMode.ShouldBeTrue();
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("azuresubscription");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
     }
 
     [Fact]
@@ -91,28 +99,35 @@ public class azure_service_bus_subscription_registration_with_token_should
     }
 
     [Fact]
-    public void add_health_check_using_factories_with_setup_when_properly_configured()
+    public void add_health_check_using_factories_with_options_when_properly_configured()
     {
         var services = new ServiceCollection();
-        AzureServiceBusOptions? setupOptions = null;
-        bool setupCalled = false;
+        AzureServiceBusSubscriptionOptions? configurationOptions = null;
+        bool configurationCalled = false;
 
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(
-                _ => string.Empty,
-                _ => string.Empty,
-                _ => string.Empty,
+                _ => "endpoint://",
+                _ => "topicName",
+                _ => "subscriptionName",
                 _ => new AzureCliCredential(),
                 options =>
                 {
-                    setupCalled = true;
-                    setupOptions = options;
+                    configurationCalled = true;
+                    configurationOptions = options;
                 });
 
-        setupCalled.ShouldBeTrue();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        setupOptions.ShouldNotBeNull();
-        setupOptions.UsePeekMode.ShouldBeTrue();
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("azuresubscription");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
     }
 
     [Fact]
@@ -162,7 +177,7 @@ public class azure_service_bus_subscription_registration_with_token_should
                     tokenCredentialsFactoryCalled = true;
                     return new AzureCliCredential();
                 },
-                "azuresubscriptioncheck");
+                name: "azuresubscriptioncheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -190,7 +205,7 @@ public class azure_service_bus_subscription_registration_with_token_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("endpoint");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 }

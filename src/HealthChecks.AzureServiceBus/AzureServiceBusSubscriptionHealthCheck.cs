@@ -1,32 +1,27 @@
-using Azure.Core;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private readonly AzureServiceBusOptions _options;
-        private readonly string _topicName;
-        private readonly string _subscriptionName;
+        private readonly AzureServiceBusSubscriptionOptions _options;
         private string? _connectionKey;
 
-        public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName, AzureServiceBusOptions options)
-            : base(connectionString)
+        protected override string ConnectionKey =>
+            _connectionKey ??= $"{Prefix}_{_options.TopicName}_{_options.SubscriptionName}";
+
+        public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionOptions options)
+            : base(options)
         {
+            Guard.ThrowIfNull(options.TopicName, true);
+            Guard.ThrowIfNull(options.SubscriptionName, true);
+
             _options = options;
-            _topicName = Guard.ThrowIfNull(topicName, true);
-            _subscriptionName = Guard.ThrowIfNull(subscriptionName, true);
         }
 
-        public AzureServiceBusSubscriptionHealthCheck(string endPoint, string topicName, string subscriptionName, TokenCredential tokenCredential, AzureServiceBusOptions options)
-            : base(endPoint, tokenCredential)
-        {
-            _options = options;
-            _topicName = Guard.ThrowIfNull(topicName, true);
-            _subscriptionName = Guard.ThrowIfNull(subscriptionName, true);
-        }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -45,17 +40,21 @@ namespace HealthChecks.AzureServiceBus
             Task CheckWithReceiver()
             {
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
-                var receiver = ServiceBusReceivers.GetOrAdd($"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}", client.CreateReceiver(_topicName, _subscriptionName));
+                var receiver = ServiceBusReceivers.GetOrAdd(
+                    $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
+                    client.CreateReceiver(_options.TopicName, _options.SubscriptionName));
+
                 return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
             }
 
             Task CheckWithManagement()
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                return managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
+                var managementClient = ManagementClientConnections.GetOrAdd(
+                    ConnectionKey, _ => CreateManagementClient());
+
+                return managementClient.GetSubscriptionRuntimePropertiesAsync(
+                    _options.TopicName, _options.SubscriptionName, cancellationToken);
             }
         }
-
-        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_topicName}_{_subscriptionName}";
     }
 }

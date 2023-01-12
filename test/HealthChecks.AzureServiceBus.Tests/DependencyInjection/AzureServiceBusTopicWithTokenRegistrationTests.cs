@@ -95,7 +95,7 @@ public class azure_service_bus_topic_registration_with_token_should
                     tokenCredentialFactoryCalled = true;
                     return new AzureCliCredential();
                 },
-                "azuretopiccheck");
+                name: "azuretopiccheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -122,7 +122,7 @@ public class azure_service_bus_topic_registration_with_token_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("endpoint");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 }

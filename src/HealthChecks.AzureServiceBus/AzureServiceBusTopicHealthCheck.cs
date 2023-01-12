@@ -1,4 +1,4 @@
-using Azure.Core;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
@@ -6,19 +6,17 @@ namespace HealthChecks.AzureServiceBus
     public class AzureServiceBusTopicHealthCheck
         : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private readonly string _topicName;
+        private readonly AzureServiceBusTopicOptions _options;
         private string? _connectionKey;
 
-        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
-            : base(connectionString)
-        {
-            _topicName = Guard.ThrowIfNull(topicName, true);
-        }
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_options.TopicName}";
 
-        public AzureServiceBusTopicHealthCheck(string endpoint, string topicName, TokenCredential tokenCredential)
-            : base(endpoint, tokenCredential)
+        public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicOptions options)
+            : base(options)
         {
-            _topicName = Guard.ThrowIfNull(topicName, true);
+            Guard.ThrowIfNull(options.TopicName, true);
+
+            _options = options;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
@@ -26,8 +24,12 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                _ = await managementClient.GetTopicRuntimePropertiesAsync(_topicName, cancellationToken).ConfigureAwait(false);
+                var managementClient = ManagementClientConnections.GetOrAdd(
+                    ConnectionKey, _ => CreateManagementClient());
+
+                _ = await managementClient.GetTopicRuntimePropertiesAsync(_options.TopicName, cancellationToken)
+                    .ConfigureAwait(false);
+
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
@@ -35,7 +37,5 @@ namespace HealthChecks.AzureServiceBus
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
-
-        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_topicName}";
     }
 }

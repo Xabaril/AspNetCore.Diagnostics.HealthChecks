@@ -9,7 +9,8 @@ public class azure_event_hub_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureEventHub("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
+            .AddAzureEventHub(
+                "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
                 "hubName");
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -26,7 +27,9 @@ public class azure_event_hub_registration_should
     public void add_health_check_when_properly_configured_using_eventhubconnectionfactory()
     {
         Func<IServiceProvider, EventHubConnection> factory =
-            _ => new EventHubConnection("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", "hubnameconnection");
+            _ => new EventHubConnection(
+                "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
+                "hubnameconnection");
         var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(factory);
@@ -46,7 +49,8 @@ public class azure_event_hub_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureEventHub("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
+            .AddAzureEventHub(
+                "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
                 "hubName", name: "azureeventhubcheck");
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -63,7 +67,9 @@ public class azure_event_hub_registration_should
     public void add_named_health_check_when_properly_configured_using_connectionfactory()
     {
         Func<IServiceProvider, EventHubConnection> factory =
-            _ => new EventHubConnection("Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=", "hubname");
+            _ => new EventHubConnection(
+                "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
+                "hubname");
         var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(factory, name: "azureeventhubcheck");
@@ -90,8 +96,8 @@ public class azure_event_hub_registration_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("connectionString");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 
     [Fact]
@@ -103,7 +109,8 @@ public class azure_event_hub_registration_should
             .AddAzureEventHub(_ =>
                 {
                     connectionStringFactoryCalled = true;
-                    return "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=";
+                    return
+                        "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=";
                 },
                 _ =>
                 {

@@ -1,6 +1,7 @@
 using Azure.Core;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus;
@@ -20,27 +21,38 @@ public class AzureEventHubHealthCheck : IHealthCheck
     private string ConnectionKey =>
         _connectionKey ??= _connectionString ?? $"{_endpoint}_{_eventHubName}";
 
-    public AzureEventHubHealthCheck(string connectionString, string eventHubName)
+    public AzureEventHubHealthCheck(AzureEventHubOptions options)
     {
-        Guard.ThrowIfNull(connectionString, true);
-        Guard.ThrowIfNull(eventHubName, true);
+        if (!string.IsNullOrWhiteSpace(options.ConnectionString))
+        {
+            Guard.ThrowIfNull(options.EventHubName, true);
 
-        _connectionString = connectionString.Contains(ENTITY_PATH_SEGMENT) ? connectionString : $"{connectionString};{ENTITY_PATH_SEGMENT}{eventHubName}";
-    }
+            string connectionString = options.ConnectionString!;
+            _connectionString = connectionString.Contains(ENTITY_PATH_SEGMENT)
+                ? connectionString
+                : $"{connectionString};{ENTITY_PATH_SEGMENT}{options.EventHubName}";
 
-    public AzureEventHubHealthCheck(EventHubConnection connection)
-    {
-        Guard.ThrowIfNull(connection);
+            return;
+        }
 
-        _connectionKey = $"{connection.FullyQualifiedNamespace}_{connection.EventHubName}";
-        _connection = connection;
-    }
+        if (options.Credential is not null)
+        {
+            _endpoint = Guard.ThrowIfNull(options.Endpoint, true);
+            _eventHubName = Guard.ThrowIfNull(options.EventHubName, true);
+            _tokenCredential = options.Credential;
 
-    public AzureEventHubHealthCheck(string endpoint, string eventHubName, TokenCredential tokenCredential)
-    {
-        _endpoint = Guard.ThrowIfNull(endpoint, true);
-        _eventHubName = Guard.ThrowIfNull(eventHubName, true);
-        _tokenCredential = Guard.ThrowIfNull(tokenCredential);
+            return;
+        }
+
+        if (options.Connection is not null)
+        {
+            _connection = options.Connection;
+            _connectionKey = $"{_connection.FullyQualifiedNamespace}_{_connection.EventHubName}";
+
+            return;
+        }
+
+        throw new ArgumentException("A connection string, TokenCredential or EventHubConnection must be set!", nameof(options));
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

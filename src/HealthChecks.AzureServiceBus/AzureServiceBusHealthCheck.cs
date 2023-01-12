@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Azure.Core;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
+using HealthChecks.AzureServiceBus.Configuration;
 
 namespace HealthChecks.AzureServiceBus
 {
@@ -22,15 +23,22 @@ namespace HealthChecks.AzureServiceBus
 
         private TokenCredential? TokenCredential { get; }
 
-        protected AzureServiceBusHealthCheck(string connectionString)
+        public AzureServiceBusHealthCheck(AzureServiceBusOptions options)
         {
-            ConnectionString = Guard.ThrowIfNull(connectionString, true);
-        }
+            if (!string.IsNullOrWhiteSpace(options.ConnectionString))
+            {
+                ConnectionString = options.ConnectionString;
+                return;
+            }
 
-        protected AzureServiceBusHealthCheck(string endpoint, TokenCredential tokenCredential)
-        {
-            Endpoint = Guard.ThrowIfNull(endpoint, true);
-            TokenCredential = Guard.ThrowIfNull(tokenCredential);
+            if (!string.IsNullOrWhiteSpace(options.Endpoint))
+            {
+                TokenCredential = Guard.ThrowIfNull(options.Credential);
+                Endpoint = options.Endpoint;
+                return;
+            }
+
+            throw new ArgumentException("A connection string or endpoint must be set!", nameof(options));
         }
 
         protected ServiceBusClient CreateClient() =>

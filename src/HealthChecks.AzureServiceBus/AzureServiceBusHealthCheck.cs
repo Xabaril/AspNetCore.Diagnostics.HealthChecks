@@ -23,7 +23,7 @@ namespace HealthChecks.AzureServiceBus
 
         private TokenCredential? TokenCredential { get; }
 
-        public AzureServiceBusHealthCheck(AzureServiceBusOptions options)
+        protected AzureServiceBusHealthCheck(AzureServiceBusOptions options)
         {
             if (!string.IsNullOrWhiteSpace(options.ConnectionString))
             {

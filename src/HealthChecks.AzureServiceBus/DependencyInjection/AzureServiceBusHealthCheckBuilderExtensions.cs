@@ -85,7 +85,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureEventHubOptions
                 {
-                    ConnectionString = connectionStringFactory(sp), EventHubName = eventHubNameFactory(sp)
+                    ConnectionString = connectionStringFactory(sp),
+                    EventHubName = eventHubNameFactory(sp)
                 };
 
                 configure?.Invoke(options);
@@ -212,7 +213,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZUREEVENTHUB_NAME,
             sp =>
             {
-                var options = new AzureEventHubOptions {Connection = eventHubConnectionFactory(sp)};
+                var options = new AzureEventHubOptions { Connection = eventHubConnectionFactory(sp) };
                 configure?.Invoke(options);
                 return new AzureEventHubHealthCheck(options);
             },
@@ -373,7 +374,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureServiceBusQueueOptions(queueNameFactory(sp))
                 {
-                    Endpoint = endpointFactory(sp), Credential = tokenCredentialFactory(sp)
+                    Endpoint = endpointFactory(sp),
+                    Credential = tokenCredentialFactory(sp)
                 };
 
                 configure?.Invoke(options);
@@ -535,7 +537,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureServiceBusTopicOptions(topicNameFactory(sp))
                 {
-                    Endpoint = endpointFactory(sp), Credential = tokenCredentialFactory(sp)
+                    Endpoint = endpointFactory(sp),
+                    Credential = tokenCredentialFactory(sp)
                 };
 
                 configure?.Invoke(options);
@@ -711,7 +714,8 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureServiceBusSubscriptionOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
                 {
-                    Endpoint = endpointFactory(sp), Credential = tokenCredentialFactory(sp)
+                    Endpoint = endpointFactory(sp),
+                    Credential = tokenCredentialFactory(sp)
                 };
 
                 configure?.Invoke(options);

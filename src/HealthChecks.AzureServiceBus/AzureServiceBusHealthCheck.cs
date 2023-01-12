@@ -8,12 +8,12 @@ namespace HealthChecks.AzureServiceBus
 {
     public abstract class AzureServiceBusHealthCheck
     {
-        protected static readonly ConcurrentDictionary<string, ServiceBusClient>
-            ClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, ServiceBusClient> ClientConnections = new();
+
         protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
             ManagementClientConnections = new();
-        protected static readonly ConcurrentDictionary<string, ServiceBusReceiver>
-            ServiceBusReceivers = new();
+
+        protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
 
         private string? ConnectionString { get; }
 
@@ -22,6 +22,8 @@ namespace HealthChecks.AzureServiceBus
         private string? Endpoint { get; }
 
         private TokenCredential? TokenCredential { get; }
+
+        protected abstract string ConnectionKey { get; }
 
         protected AzureServiceBusHealthCheck(AzureServiceBusOptions options)
         {
@@ -50,7 +52,5 @@ namespace HealthChecks.AzureServiceBus
             TokenCredential == null
                 ? new ServiceBusAdministrationClient(ConnectionString)
                 : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
-
-        protected abstract string ConnectionKey { get; }
     }
 }

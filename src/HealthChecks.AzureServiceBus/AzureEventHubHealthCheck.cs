@@ -18,8 +18,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
 
     private string? _connectionKey;
 
-    private string ConnectionKey =>
-        _connectionKey ??= _connectionString ?? $"{_endpoint}_{_eventHubName}";
+    private string ConnectionKey => _connectionKey ??= _connectionString ?? $"{_endpoint}_{_eventHubName}";
 
     public AzureEventHubHealthCheck(AzureEventHubOptions options)
     {
@@ -40,7 +39,6 @@ public class AzureEventHubHealthCheck : IHealthCheck
             _endpoint = Guard.ThrowIfNull(options.Endpoint, true);
             _eventHubName = Guard.ThrowIfNull(options.EventHubName, true);
             _tokenCredential = options.Credential;
-
             return;
         }
 
@@ -48,18 +46,19 @@ public class AzureEventHubHealthCheck : IHealthCheck
         {
             _connection = options.Connection;
             _connectionKey = $"{_connection.FullyQualifiedNamespace}_{_connection.EventHubName}";
-
             return;
         }
 
-        throw new ArgumentException("A connection string, TokenCredential or EventHubConnection must be set!", nameof(options));
+        throw new ArgumentException("A connection string, TokenCredential or EventHubConnection must be set!",
+            nameof(options));
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient())
+                .ConfigureAwait(false);
 
             _ = await client.GetEventHubPropertiesAsync(cancellationToken).ConfigureAwait(false);
 

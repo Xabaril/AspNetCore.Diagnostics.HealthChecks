@@ -3,8 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusTopicHealthCheck
-        : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
         private readonly AzureServiceBusTopicOptions _options;
         private string? _connectionKey;

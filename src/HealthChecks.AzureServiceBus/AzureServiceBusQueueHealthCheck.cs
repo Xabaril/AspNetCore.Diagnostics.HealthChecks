@@ -18,8 +18,7 @@ namespace HealthChecks.AzureServiceBus
             _options = options;
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-            CancellationToken cancellationToken = default)
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {

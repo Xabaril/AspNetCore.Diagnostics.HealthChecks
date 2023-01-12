@@ -30,6 +30,7 @@ public class azure_event_hub_registration_should
             _ => new EventHubConnection(
                 "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
                 "hubnameconnection");
+
         var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(factory);
@@ -70,6 +71,7 @@ public class azure_event_hub_registration_should
             _ => new EventHubConnection(
                 "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=",
                 "hubname");
+
         var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(factory, name: "azureeventhubcheck");
@@ -103,14 +105,14 @@ public class azure_event_hub_registration_should
     [Fact]
     public void add_health_check_using_connection_string_factory_and_event_hub_name_factory_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool connectionStringFactoryCalled = false, eventHubNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(_ =>
                 {
                     connectionStringFactoryCalled = true;
-                    return
-                        "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=";
+                    return "Endpoint=sb://dummynamespace.servicebus.windows.net/;SharedAccessKeyName=DummyAccessKeyName;SharedAccessKey=5dOntTRytoC24opYThisAsit3is2B+OGY1US/fuL3ly=";
                 },
                 _ =>
                 {

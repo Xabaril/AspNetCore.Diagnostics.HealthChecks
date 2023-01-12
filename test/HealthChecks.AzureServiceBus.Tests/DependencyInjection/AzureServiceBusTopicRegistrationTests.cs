@@ -24,8 +24,7 @@ public class azure_service_bus_topic_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusTopic("cnn", "topic",
-                name: "azuretopiccheck");
+            .AddAzureServiceBusTopic("cnn", "topic", name: "azuretopiccheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -56,8 +55,9 @@ public class azure_service_bus_topic_registration_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool connectionStringFactoryCalled = false, topicNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusTopic(_ =>
                 {

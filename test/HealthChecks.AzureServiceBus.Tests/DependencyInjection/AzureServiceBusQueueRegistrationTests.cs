@@ -24,10 +24,10 @@ public class azure_service_bus_queue_registration_should
     [Fact]
     public void add_health_check_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusQueueOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue("cnn", "queueName",
                 options =>
@@ -53,8 +53,7 @@ public class azure_service_bus_queue_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusQueue("cnn", "queueName",
-                name: "azureservicebusqueuecheck");
+            .AddAzureServiceBusQueue("cnn", "queueName", name: "azureservicebusqueuecheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -85,8 +84,9 @@ public class azure_service_bus_queue_registration_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool connectionStringFactoryCalled = false, queueNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ =>
                 {
@@ -114,10 +114,10 @@ public class azure_service_bus_queue_registration_should
     [Fact]
     public void add_health_check_using_factories_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusQueueOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ => "cnn", _ => "queueName",
                 options =>

@@ -10,7 +10,7 @@ public class azure_service_bus_queue_registration_with_token_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusQueue("endpoint://", "queueName", new AzureCliCredential());
+            .AddAzureServiceBusQueue("fullyQualifiedNamespace", "queueName", new AzureCliCredential());
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -25,12 +25,12 @@ public class azure_service_bus_queue_registration_with_token_should
     [Fact]
     public void add_health_check_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusQueueOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusQueue("endpoint://", "queueName", new AzureCliCredential(),
+            .AddAzureServiceBusQueue("fullyQualifiedNamespace", "queueName", new AzureCliCredential(),
                 options =>
                 {
                     configurationCalled = true;
@@ -52,13 +52,14 @@ public class azure_service_bus_queue_registration_with_token_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, queueNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ =>
                 {
                     endpointFactoryCalled = true;
-                    return "endpoint://";
+                    return "fullyQualifiedNamespace";
                 },
                 _ =>
                 {
@@ -87,12 +88,12 @@ public class azure_service_bus_queue_registration_with_token_should
     [Fact]
     public void add_health_check_using_factories_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusQueueOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusQueue(_ => "endpoint://", _ => "queueName", _ => new AzureCliCredential(),
+            .AddAzureServiceBusQueue(_ => "fullyQualifiedNamespace", _ => "queueName", _ => new AzureCliCredential(),
                 options =>
                 {
                     configurationCalled = true;
@@ -132,8 +133,9 @@ public class azure_service_bus_queue_registration_with_token_should
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, queueNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ =>
                 {

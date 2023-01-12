@@ -25,13 +25,13 @@ public class azure_service_bus_subscription_registration_with_token_should
     [Fact]
     public void add_health_check_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusSubscriptionOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(
-                "endpoint://",
+                "fullyQualifiedNamespace",
                 "topicName",
                 "subscriptionName",
                 new AzureCliCredential(),
@@ -57,11 +57,12 @@ public class azure_service_bus_subscription_registration_with_token_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false,
             topicNameFactoryCalled = false,
             subscriptionNameFactoryCalled = false,
             tokenCredentialsFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(_ =>
                 {
@@ -101,13 +102,13 @@ public class azure_service_bus_subscription_registration_with_token_should
     [Fact]
     public void add_health_check_using_factories_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusSubscriptionOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(
-                _ => "endpoint://",
+                _ => "fullyQualifiedNamespace",
                 _ => "topicName",
                 _ => "subscriptionName",
                 _ => new AzureCliCredential(),
@@ -151,11 +152,12 @@ public class azure_service_bus_subscription_registration_with_token_should
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false,
             topicNameFactoryCalled = false,
             subscriptionNameFactoryCalled = false,
             tokenCredentialsFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(_ =>
                 {

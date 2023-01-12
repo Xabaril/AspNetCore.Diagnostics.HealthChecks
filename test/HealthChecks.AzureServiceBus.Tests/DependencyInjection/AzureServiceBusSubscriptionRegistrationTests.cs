@@ -24,10 +24,10 @@ public class azure_service_bus_subscription_registration_should
     [Fact]
     public void add_health_check_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusSubscriptionOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName",
                 options =>
@@ -51,10 +51,11 @@ public class azure_service_bus_subscription_registration_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool connectionStringFactoryCalled = false,
             topicNameFactoryCalled = false,
             subscriptionNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(_ =>
                 {
@@ -88,10 +89,10 @@ public class azure_service_bus_subscription_registration_should
     [Fact]
     public void add_health_check_using_factories_with_options_when_properly_configured()
     {
-        var services = new ServiceCollection();
         AzureServiceBusSubscriptionOptions? configurationOptions = null;
         bool configurationCalled = false;
 
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(_ => "cnn", _ => "topicName", _ => "subscriptionName",
                 options =>
@@ -117,8 +118,7 @@ public class azure_service_bus_subscription_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName",
-                name: "azuresubscriptioncheck");
+            .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName", name: "azuresubscriptioncheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -133,10 +133,11 @@ public class azure_service_bus_subscription_registration_should
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool connectionStringFactoryCalled = false,
             topicNameFactoryCalled = false,
             subscriptionNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusSubscription(_ =>
                 {

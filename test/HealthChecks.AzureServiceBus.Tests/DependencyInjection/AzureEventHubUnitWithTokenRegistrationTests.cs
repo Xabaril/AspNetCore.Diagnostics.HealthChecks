@@ -24,8 +24,9 @@ public class azure_event_hub_registration_with_token_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, eventHubNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(_ =>
                 {
@@ -61,8 +62,7 @@ public class azure_event_hub_registration_with_token_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureEventHub("cnn", "eventHubName", new AzureCliCredential(),
-                name: "azureeventhubcheck");
+            .AddAzureEventHub("cnn", "eventHubName", new AzureCliCredential(), name: "azureeventhubcheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -77,8 +77,9 @@ public class azure_event_hub_registration_with_token_should
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, eventHubNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureEventHub(_ =>
                 {

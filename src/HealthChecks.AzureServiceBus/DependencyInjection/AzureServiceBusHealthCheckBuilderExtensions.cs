@@ -176,7 +176,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureEventHubHealthCheck(options);
             },
             failureStatus,
@@ -293,7 +292,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureServiceBusQueueHealthCheck(options);
             },
             failureStatus,
@@ -379,7 +377,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureServiceBusQueueHealthCheck(options);
             },
             failureStatus,
@@ -458,7 +455,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureServiceBusTopicHealthCheck(options);
             },
             failureStatus,
@@ -542,7 +538,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureServiceBusTopicHealthCheck(options);
             },
             failureStatus,
@@ -627,7 +622,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureServiceBusSubscriptionHealthCheck(options);
             },
             failureStatus,
@@ -719,7 +713,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-
                 return new AzureServiceBusSubscriptionHealthCheck(options);
             },
             failureStatus,

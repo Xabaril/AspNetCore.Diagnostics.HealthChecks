@@ -34,9 +34,11 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
     {
         Guard.ThrowIfNull(lifetime);
 
+        builder.Services.AddSingleton(_ => new ApplicationStatusHealthCheck(lifetime));
+
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new ApplicationStatusHealthCheck(lifetime),
+            sp => sp.GetRequiredService<ApplicationStatusHealthCheck>(),
             failureStatus,
             tags,
             timeout));
@@ -61,9 +63,11 @@ public static class ApplicationStatusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
+        builder.Services.AddSingleton(sp => new ApplicationStatusHealthCheck(sp.GetRequiredService<IHostApplicationLifetime>()));
+
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new ApplicationStatusHealthCheck(sp.GetRequiredService<IHostApplicationLifetime>()),
+            sp => sp.GetRequiredService<ApplicationStatusHealthCheck>(),
             failureStatus,
             tags,
             timeout));

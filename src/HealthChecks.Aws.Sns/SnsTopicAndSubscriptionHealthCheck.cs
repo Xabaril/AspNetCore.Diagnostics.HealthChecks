@@ -13,6 +13,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
         _snsOptions = Guard.ThrowIfNull(snsOptions);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
@@ -37,7 +38,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
                 var subscriptionsArn = subscriptionsFromAws.Subscriptions.Select(s => s.SubscriptionArn);
 
-                foreach (var subscription in subscriptions)
+                foreach (string? subscription in subscriptions)
                 {
                     if (!subscriptionsArn.Contains(subscription))
                     {
@@ -56,8 +57,8 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
     private AmazonSimpleNotificationServiceClient CreateSnsClient()
     {
-        var credentialsProvided = _snsOptions.Credentials is not null;
-        var regionProvided = _snsOptions.RegionEndpoint is not null;
+        bool credentialsProvided = _snsOptions.Credentials is not null;
+        bool regionProvided = _snsOptions.RegionEndpoint is not null;
         return (credentialsProvided, regionProvided) switch
         {
             (false, false) => new AmazonSimpleNotificationServiceClient(),

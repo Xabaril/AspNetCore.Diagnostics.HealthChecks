@@ -13,6 +13,7 @@ namespace HealthChecks.IdSvr
             _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

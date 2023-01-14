@@ -19,6 +19,7 @@ namespace HealthChecks.AzureServiceBus
             _queueName = Guard.ThrowIfNull(queueName, true);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

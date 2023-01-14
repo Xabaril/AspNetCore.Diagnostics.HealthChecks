@@ -21,6 +21,7 @@ namespace HealthChecks.EventStore
             _password = password;
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

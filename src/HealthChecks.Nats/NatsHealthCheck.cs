@@ -24,6 +24,7 @@ public sealed class NatsHealthCheck : IHealthCheck, IDisposable
         _options = Guard.ThrowIfNull(natsOptions);
     }
 
+    /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

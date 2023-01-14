@@ -43,6 +43,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
         _tokenCredential = Guard.ThrowIfNull(tokenCredential);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

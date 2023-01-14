@@ -17,6 +17,7 @@ public class IbmMQHealthCheck : IHealthCheck
         _connectionProperties = Guard.ThrowIfNull(connectionProperties);
     }
 
+    /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

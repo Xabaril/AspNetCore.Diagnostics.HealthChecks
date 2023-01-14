@@ -15,11 +15,12 @@ namespace HealthChecks.Solr
             _options = Guard.ThrowIfNull(options);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var url = $"{_options.Uri}/{_options.Core}";
+                string url = $"{_options.Uri}/{_options.Core}";
 
                 if (!_connections.TryGetValue(url, out var solrConnection))
                 {
@@ -46,7 +47,7 @@ namespace HealthChecks.Solr
 
                 var result = await server.PingAsync().ConfigureAwait(false);
 
-                var isSuccess = result.Status == 0;
+                bool isSuccess = result.Status == 0;
 
                 return isSuccess
                     ? HealthCheckResult.Healthy()

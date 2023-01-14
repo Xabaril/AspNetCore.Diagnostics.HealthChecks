@@ -14,6 +14,7 @@ namespace HealthChecks.Kubernetes
             _kubernetesChecksExecutor = Guard.ThrowIfNull(kubernetesChecksExecutor);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             List<Task<(bool result, string name)>> checks = new();

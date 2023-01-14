@@ -15,6 +15,7 @@ namespace HealthChecks.DocumentDb
             _documentDbOptions.PrimaryKey = Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

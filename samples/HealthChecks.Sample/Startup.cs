@@ -67,7 +67,6 @@ namespace HealthChecks.Sample
 
                 return Task.FromResult(HealthCheckResult.Unhealthy(description: "failed", exception: new InvalidCastException("Invalid cast from to to to")));
             }
-
         }
     }
 }

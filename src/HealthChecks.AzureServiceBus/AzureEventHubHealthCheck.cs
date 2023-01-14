@@ -53,6 +53,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
             nameof(options));
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

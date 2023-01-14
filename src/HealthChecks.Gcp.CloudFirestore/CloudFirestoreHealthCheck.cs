@@ -11,6 +11,7 @@ namespace HealthChecks.Gcp.CloudFirestore
             _cloudFirestoreOptions = Guard.ThrowIfNull(cloudFirestoreOptions);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

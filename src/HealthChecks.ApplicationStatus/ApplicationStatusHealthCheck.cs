@@ -26,6 +26,7 @@ public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
         Dispose();
     }
 
+    /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

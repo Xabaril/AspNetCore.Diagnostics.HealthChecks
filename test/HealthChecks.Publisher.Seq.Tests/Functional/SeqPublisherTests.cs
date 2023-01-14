@@ -38,7 +38,7 @@ public class seq_publisher_should
             Endpoint = null!
         };
 
-        HttpClient HttpClientFactory() => new();
+        static HttpClient HttpClientFactory() => new();
 
         var ex = Should.Throw<ArgumentNullException>(() => new SeqPublisher(HttpClientFactory, options));
         ex.ParamName.ShouldBe("options.Endpoint");

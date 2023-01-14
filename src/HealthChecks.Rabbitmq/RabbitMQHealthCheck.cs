@@ -33,6 +33,7 @@ public class RabbitMQHealthCheck : IHealthCheck, IDisposable
         _ownsConnection = true;
     }
 
+    /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

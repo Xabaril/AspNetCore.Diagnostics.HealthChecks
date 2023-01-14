@@ -17,6 +17,7 @@ public class GremlinHealthCheck : IHealthCheck
         _server = new GremlinServer(options.Hostname, options.Port, options.EnableSsl);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

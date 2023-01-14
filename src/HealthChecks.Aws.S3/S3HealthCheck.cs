@@ -16,6 +16,7 @@ namespace HealthChecks.Aws.S3
             _bucketOptions = bucketOptions;
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -34,7 +35,7 @@ namespace HealthChecks.Aws.S3
 #pragma warning restore CS0618 // Type or member is obsolete
                 }
 
-                AmazonS3Client client = credentials != null
+                var client = credentials != null
                     ? new AmazonS3Client(credentials, _bucketOptions.S3Config)
                     : new AmazonS3Client(_bucketOptions.S3Config);
 

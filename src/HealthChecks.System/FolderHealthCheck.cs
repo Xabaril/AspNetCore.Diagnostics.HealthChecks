@@ -11,12 +11,13 @@ namespace HealthChecks.System
             _folderOptions = Guard.ThrowIfNull(folderOptions);
         }
 
+        /// <inheritdoc />
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 List<string>? errorList = null;
-                foreach (var folder in _folderOptions.Folders)
+                foreach (string folder in _folderOptions.Folders)
                 {
                     if (!string.IsNullOrEmpty(folder))
                     {

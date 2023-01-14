@@ -29,7 +29,7 @@ namespace HealthChecks.Sqlite
 
                     using var command = connection.CreateCommand();
                     command.CommandText = _options.CommandText;
-                    var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+                    object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
                     return _options.HealthCheckResultBuilder == null
                         ? HealthCheckResult.Healthy()
                         : _options.HealthCheckResultBuilder(result);

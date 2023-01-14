@@ -13,12 +13,13 @@ namespace HealthChecks.Uris
             _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var defaultHttpMethod = _options.HttpMethod;
             var defaultExpectedStatusCodes = _options.ExpectedHttpCodes;
             var defaultTimeout = _options.Timeout;
-            var idx = 0;
+            int idx = 0;
 
             try
             {
@@ -30,7 +31,7 @@ namespace HealthChecks.Uris
                     }
 
                     var method = item.HttpMethod ?? defaultHttpMethod;
-                    var expectedStatusCodes = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
+                    var (Min, Max) = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
                     var timeout = item.Timeout != TimeSpan.Zero ? item.Timeout : defaultTimeout;
 
                     var httpClient = _httpClientFactory();
@@ -52,14 +53,14 @@ namespace HealthChecks.Uris
                     {
                         using var response = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, linkedSource.Token).ConfigureAwait(false);
 
-                        if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
+                        if (!((int)response.StatusCode >= Min && (int)response.StatusCode <= Max))
                         {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {Min}...{Max} range, the current status is {response.StatusCode}.");
                         }
 
                         if (item.ExpectedContent != null)
                         {
-                            var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                             if (responseBody != item.ExpectedContent)
                                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the response body.");
                         }

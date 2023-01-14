@@ -14,13 +14,14 @@ public class ArangoDbHealthCheck : IHealthCheck
         _options = Guard.ThrowIfNull(options);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
             using var transport = await GetTransportAsync(_options).ConfigureAwait(false);
             using var adb = new ArangoDBClient(transport);
-            var databases = await adb.Database.GetCurrentDatabaseInfoAsync().ConfigureAwait(false);
+            var databases = await adb.Database.GetCurrentDatabaseInfoAsync(cancellationToken).ConfigureAwait(false);
             return databases.Error
                 ? new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.")
                 : HealthCheckResult.Healthy();
@@ -42,11 +43,11 @@ public class ArangoDbHealthCheck : IHealthCheck
         {
             if (string.IsNullOrWhiteSpace(options.UserName))
             {
-                throw new ArgumentNullException(nameof(options.UserName));
+                throw new ArgumentNullException(nameof(options), $"{nameof(options.UserName)} must be set when {nameof(options.IsGenerateJwtTokenBasedOnUserNameAndPassword)} is enabled");
             }
             if (string.IsNullOrWhiteSpace(options.Password))
             {
-                throw new ArgumentNullException(nameof(options.Password));
+                throw new ArgumentNullException(nameof(options), $"{nameof(options.Password)} must be set when {nameof(options.IsGenerateJwtTokenBasedOnUserNameAndPassword)} is enabled");
             }
 
             var transport = HttpApiTransport.UsingNoAuth(new Uri(options.HostUri), options.Database);

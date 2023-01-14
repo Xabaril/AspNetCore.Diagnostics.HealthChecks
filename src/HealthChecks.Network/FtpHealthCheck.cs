@@ -13,6 +13,7 @@ namespace HealthChecks.Network
             _options = options ?? throw new ArgumentException(nameof(options));
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

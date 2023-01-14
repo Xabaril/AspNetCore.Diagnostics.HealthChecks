@@ -3,7 +3,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System
 {
-    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "TODO:")]
     public class WindowsServiceHealthCheck : IHealthCheck
     {
         private readonly string _serviceName;
@@ -17,6 +16,7 @@ namespace HealthChecks.System
             _machineName = machineName;
         }
 
+        /// <inheritdoc />
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

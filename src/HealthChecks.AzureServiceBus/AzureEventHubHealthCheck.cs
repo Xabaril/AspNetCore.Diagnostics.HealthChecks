@@ -47,13 +47,11 @@ public class AzureEventHubHealthCheck : IHealthCheck
     }
 
     /// <inheritdoc />
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-        CancellationToken cancellationToken = default)
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient())
-                .ConfigureAwait(false);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
 
             _ = await client.GetEventHubPropertiesAsync(cancellationToken).ConfigureAwait(false);
 

@@ -14,6 +14,7 @@ namespace HealthChecks.System
             _predicate = Guard.ThrowIfNull(predicate);
         }
 
+        /// <inheritdoc />
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

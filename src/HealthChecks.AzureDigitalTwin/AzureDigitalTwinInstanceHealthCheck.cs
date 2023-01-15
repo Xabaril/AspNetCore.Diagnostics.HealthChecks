@@ -24,6 +24,7 @@ public class AzureDigitalTwinInstanceHealthCheck
         _instanceName = Guard.ThrowIfNull(instanceName, true);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

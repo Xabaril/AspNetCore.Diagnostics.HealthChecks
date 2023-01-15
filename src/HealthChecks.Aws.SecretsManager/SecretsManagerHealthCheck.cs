@@ -13,6 +13,7 @@ public class SecretsManagerHealthCheck : IHealthCheck
         _secretsManagerOptions = Guard.ThrowIfNull(secretsManagerOptions);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

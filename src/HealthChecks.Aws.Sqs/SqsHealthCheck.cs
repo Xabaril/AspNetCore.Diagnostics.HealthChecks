@@ -12,6 +12,7 @@ public class SqsHealthCheck : IHealthCheck
         _sqsOptions = Guard.ThrowIfNull(sqsOptions);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

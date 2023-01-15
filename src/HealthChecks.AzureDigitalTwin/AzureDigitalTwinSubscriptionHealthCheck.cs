@@ -14,6 +14,7 @@ public class AzureDigitalTwinSubscriptionHealthCheck
         : base(serviceClientCredentials)
     { }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

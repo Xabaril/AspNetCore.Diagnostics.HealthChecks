@@ -35,6 +35,7 @@ public class RavenDBHealthCheck : IHealthCheck
         _options = options;
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

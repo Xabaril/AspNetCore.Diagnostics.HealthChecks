@@ -39,8 +39,7 @@ public static class NatsHealthCheckBuilderExtensions
         var options = new NatsOptions();
         setup?.Invoke(options);
 
-        builder.Services
-           .AddSingleton(sp => new NatsHealthCheck(options));
+        builder.Services.AddSingleton(_ => new NatsHealthCheck(options));
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,

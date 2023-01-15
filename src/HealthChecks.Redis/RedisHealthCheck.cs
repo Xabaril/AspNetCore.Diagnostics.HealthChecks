@@ -17,6 +17,7 @@ public class RedisHealthCheck : IHealthCheck
         _redisConnectionString = Guard.ThrowIfNull(redisConnectionString);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

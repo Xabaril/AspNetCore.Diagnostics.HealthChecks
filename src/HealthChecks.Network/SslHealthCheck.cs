@@ -17,6 +17,7 @@ namespace HealthChecks.Network
             _options = Guard.ThrowIfNull(options);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try

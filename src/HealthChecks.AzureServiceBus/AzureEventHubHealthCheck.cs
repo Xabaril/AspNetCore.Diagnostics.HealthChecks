@@ -1,5 +1,3 @@
-using Azure.Core;
-using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -9,43 +7,38 @@ namespace HealthChecks.AzureServiceBus;
 public class AzureEventHubHealthCheck : IHealthCheck
 {
     private const string ENTITY_PATH_SEGMENT = "EntityPath=";
-
-    private readonly string? _connectionString;
-    private readonly string? _endpoint;
-    private readonly string? _eventHubName;
-    private readonly TokenCredential? _tokenCredential;
-    private readonly EventHubConnection? _connection;
+    private readonly AzureEventHubHealthCheckOptions _options;
 
     private string? _connectionKey;
 
-    private string ConnectionKey => _connectionKey ??= _connectionString ?? $"{_endpoint}_{_eventHubName}";
+    private string ConnectionKey =>
+        _connectionKey ??= _options.ConnectionString ?? $"{_options.Endpoint}_{_options.EventHubName}";
 
     public AzureEventHubHealthCheck(AzureEventHubHealthCheckOptions options)
     {
+        _options = options;
+
         if (!string.IsNullOrWhiteSpace(options.ConnectionString))
         {
             Guard.ThrowIfNull(options.EventHubName, true);
 
             string connectionString = options.ConnectionString!;
-            _connectionString = connectionString.Contains(ENTITY_PATH_SEGMENT)
-                ? connectionString
-                : $"{connectionString};{ENTITY_PATH_SEGMENT}{options.EventHubName}";
+            if (!connectionString.Contains(ENTITY_PATH_SEGMENT))
+                options.ConnectionString = $"{connectionString};{ENTITY_PATH_SEGMENT}{options.EventHubName}";
 
             return;
         }
 
         if (options.Credential is not null)
         {
-            _endpoint = Guard.ThrowIfNull(options.Endpoint, true);
-            _eventHubName = Guard.ThrowIfNull(options.EventHubName, true);
-            _tokenCredential = options.Credential;
+            Guard.ThrowIfNull(options.Endpoint, true);
+            Guard.ThrowIfNull(options.EventHubName, true);
             return;
         }
 
         if (options.Connection is not null)
         {
-            _connection = options.Connection;
-            _connectionKey = $"{_connection.FullyQualifiedNamespace}_{_connection.EventHubName}";
+            _connectionKey = $"{options.Connection.FullyQualifiedNamespace}_{options.Connection.EventHubName}";
             return;
         }
 
@@ -54,7 +47,8 @@ public class AzureEventHubHealthCheck : IHealthCheck
     }
 
     /// <inheritdoc />
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -73,12 +67,12 @@ public class AzureEventHubHealthCheck : IHealthCheck
 
     private EventHubProducerClient CreateClient()
     {
-        if (_connectionString is not null)
-            return new EventHubProducerClient(_connectionString);
+        if (_options.ConnectionString is not null)
+            return new EventHubProducerClient(_options.ConnectionString);
 
-        if (_connection is not null)
-            return new EventHubProducerClient(_connection);
+        if (_options.Connection is not null)
+            return new EventHubProducerClient(_options.Connection);
 
-        return new EventHubProducerClient(_endpoint, _eventHubName, _tokenCredential);
+        return new EventHubProducerClient(_options.Endpoint, _options.EventHubName, _options.Credential);
     }
 }

@@ -5,12 +5,12 @@ namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private readonly AzureServiceBusQueueOptions _options;
+        private readonly AzureServiceBusQueueHealthCheckOptions _options;
         private string? _connectionKey;
 
         protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_options.QueueName}";
 
-        public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueOptions options)
+        public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options)
             : base(options)
         {
             Guard.ThrowIfNull(options.QueueName, true);

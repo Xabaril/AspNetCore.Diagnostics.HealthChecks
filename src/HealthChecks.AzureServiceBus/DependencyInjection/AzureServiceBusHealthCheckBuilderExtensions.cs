@@ -37,7 +37,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         string connectionString,
         string eventHubName,
-        Action<AzureEventHubOptions>? configure = default,
+        Action<AzureEventHubHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -70,7 +70,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, string> connectionStringFactory,
         Func<IServiceProvider, string> eventHubNameFactory,
-        Action<AzureEventHubOptions>? configure = default,
+        Action<AzureEventHubHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -83,7 +83,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZUREEVENTHUB_NAME,
             sp =>
             {
-                var options = new AzureEventHubOptions
+                var options = new AzureEventHubHealthCheckOptions
                 {
                     ConnectionString = connectionStringFactory(sp),
                     EventHubName = eventHubNameFactory(sp)
@@ -118,7 +118,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string endpoint,
         string eventHubName,
         TokenCredential tokenCredential,
-        Action<AzureEventHubOptions>? configure = default,
+        Action<AzureEventHubHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -154,7 +154,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Func<IServiceProvider, string> endpointFactory,
         Func<IServiceProvider, string> eventHubNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
-        Action<AzureEventHubOptions>? configure = default,
+        Action<AzureEventHubHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -168,7 +168,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZUREEVENTHUB_NAME,
             sp =>
             {
-                var options = new AzureEventHubOptions
+                var options = new AzureEventHubHealthCheckOptions
                 {
                     Endpoint = endpointFactory(sp),
                     EventHubName = eventHubNameFactory(sp),
@@ -200,7 +200,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     public static IHealthChecksBuilder AddAzureEventHub(
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, EventHubConnection> eventHubConnectionFactory,
-        Action<AzureEventHubOptions>? configure = default,
+        Action<AzureEventHubHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -212,7 +212,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZUREEVENTHUB_NAME,
             sp =>
             {
-                var options = new AzureEventHubOptions { Connection = eventHubConnectionFactory(sp) };
+                var options = new AzureEventHubHealthCheckOptions { Connection = eventHubConnectionFactory(sp) };
                 configure?.Invoke(options);
                 return new AzureEventHubHealthCheck(options);
             },
@@ -240,7 +240,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         string connectionString,
         string queueName,
-        Action<AzureServiceBusQueueOptions>? configure = default,
+        Action<AzureServiceBusQueueHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -273,7 +273,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, string> connectionStringFactory,
         Func<IServiceProvider, string> queueNameFactory,
-        Action<AzureServiceBusQueueOptions>? configure = default,
+        Action<AzureServiceBusQueueHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -286,7 +286,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZUREQUEUE_NAME,
             sp =>
             {
-                var options = new AzureServiceBusQueueOptions(queueNameFactory(sp))
+                var options = new AzureServiceBusQueueHealthCheckOptions(queueNameFactory(sp))
                 {
                     ConnectionString = connectionStringFactory(sp)
                 };
@@ -320,7 +320,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string endpoint,
         string queueName,
         TokenCredential tokenCredential,
-        Action<AzureServiceBusQueueOptions>? configure = default,
+        Action<AzureServiceBusQueueHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -356,7 +356,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Func<IServiceProvider, string> endpointFactory,
         Func<IServiceProvider, string> queueNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
-        Action<AzureServiceBusQueueOptions>? configure = default,
+        Action<AzureServiceBusQueueHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -370,7 +370,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZUREQUEUE_NAME,
             sp =>
             {
-                var options = new AzureServiceBusQueueOptions(queueNameFactory(sp))
+                var options = new AzureServiceBusQueueHealthCheckOptions(queueNameFactory(sp))
                 {
                     Endpoint = endpointFactory(sp),
                     Credential = tokenCredentialFactory(sp)
@@ -403,7 +403,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         string connectionString,
         string topicName,
-        Action<AzureServiceBusTopicOptions>? configure = default,
+        Action<AzureServiceBusTopicHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -436,7 +436,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, string> connectionStringFactory,
         Func<IServiceProvider, string> topicNameFactory,
-        Action<AzureServiceBusTopicOptions>? configure = default,
+        Action<AzureServiceBusTopicHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -449,7 +449,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURETOPIC_NAME,
             sp =>
             {
-                var options = new AzureServiceBusTopicOptions(topicNameFactory(sp))
+                var options = new AzureServiceBusTopicHealthCheckOptions(topicNameFactory(sp))
                 {
                     ConnectionString = connectionStringFactory(sp)
                 };
@@ -517,7 +517,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Func<IServiceProvider, string> endpointFactory,
         Func<IServiceProvider, string> topicNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
-        Action<AzureServiceBusTopicOptions>? configure = default,
+        Action<AzureServiceBusTopicHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -531,7 +531,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURETOPIC_NAME,
             sp =>
             {
-                var options = new AzureServiceBusTopicOptions(topicNameFactory(sp))
+                var options = new AzureServiceBusTopicHealthCheckOptions(topicNameFactory(sp))
                 {
                     Endpoint = endpointFactory(sp),
                     Credential = tokenCredentialFactory(sp)
@@ -566,7 +566,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string connectionString,
         string topicName,
         string subscriptionName,
-        Action<AzureServiceBusSubscriptionOptions>? configure = default,
+        Action<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -602,7 +602,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Func<IServiceProvider, string> connectionStringFactory,
         Func<IServiceProvider, string> topicNameFactory,
         Func<IServiceProvider, string> subscriptionNameFactory,
-        Action<AzureServiceBusSubscriptionOptions>? configure = default,
+        Action<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -616,7 +616,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURESUBSCRIPTION_NAME,
             sp =>
             {
-                var options = new AzureServiceBusSubscriptionOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
+                var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
                 {
                     ConnectionString = connectionStringFactory(sp)
                 };
@@ -652,7 +652,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string topicName,
         string subscriptionName,
         TokenCredential tokenCredential,
-        Action<AzureServiceBusSubscriptionOptions>? configure = default,
+        Action<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -691,7 +691,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Func<IServiceProvider, string> topicNameFactory,
         Func<IServiceProvider, string> subscriptionNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
-        Action<AzureServiceBusSubscriptionOptions>? configure = default,
+        Action<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>? configure = default,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -706,7 +706,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURESUBSCRIPTION_NAME,
             sp =>
             {
-                var options = new AzureServiceBusSubscriptionOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
+                var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
                 {
                     Endpoint = endpointFactory(sp),
                     Credential = tokenCredentialFactory(sp)

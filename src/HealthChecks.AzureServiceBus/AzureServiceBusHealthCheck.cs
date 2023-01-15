@@ -25,7 +25,7 @@ namespace HealthChecks.AzureServiceBus
 
         protected abstract string ConnectionKey { get; }
 
-        protected AzureServiceBusHealthCheck(AzureServiceBusOptions options)
+        protected AzureServiceBusHealthCheck(AzureServiceBusHealthCheckOptions options)
         {
             if (!string.IsNullOrWhiteSpace(options.ConnectionString))
             {

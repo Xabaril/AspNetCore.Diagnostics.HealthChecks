@@ -5,12 +5,12 @@ namespace HealthChecks.AzureServiceBus
 {
     public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
     {
-        private readonly AzureServiceBusTopicOptions _options;
+        private readonly AzureServiceBusTopicHealthCheckOptions _options;
         private string? _connectionKey;
 
         protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_options.TopicName}";
 
-        public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicOptions options)
+        public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
             : base(options)
         {
             Guard.ThrowIfNull(options.TopicName, true);

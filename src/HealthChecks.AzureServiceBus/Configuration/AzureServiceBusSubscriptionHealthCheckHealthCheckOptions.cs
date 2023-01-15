@@ -1,14 +1,14 @@
 namespace HealthChecks.AzureServiceBus.Configuration;
 
 /// <summary>
-/// Azure Service Bus Queue configuration options.
+/// Configuration options for <see cref="AzureServiceBusSubscriptionHealthCheck"/>.
 /// </summary>
-public class AzureServiceBusQueueOptions : AzureServiceBusOptions
+public class AzureServiceBusSubscriptionHealthCheckHealthCheckOptions : AzureServiceBusTopicHealthCheckOptions
 {
     /// <summary>
-    /// The name of the queue to check.
+    /// The subscription name of the topic subscription to check.
     /// </summary>
-    public string QueueName { get; set; }
+    public string SubscriptionName { get; set; }
 
     /// <summary>
     /// Will use <c>PeekMessageAsync</c> method to determine status if set to <see langword="true"/> (default),
@@ -21,8 +21,9 @@ public class AzureServiceBusQueueOptions : AzureServiceBusOptions
     /// </remarks>
     public bool UsePeekMode { get; set; } = true;
 
-    public AzureServiceBusQueueOptions(string queueName)
+    public AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(string topicName, string subscriptionName)
+        : base(topicName)
     {
-        QueueName = queueName;
+        SubscriptionName = subscriptionName;
     }
 }

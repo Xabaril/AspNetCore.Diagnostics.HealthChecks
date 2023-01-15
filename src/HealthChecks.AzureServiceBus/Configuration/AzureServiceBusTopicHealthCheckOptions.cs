@@ -1,16 +1,16 @@
 namespace HealthChecks.AzureServiceBus.Configuration;
 
 /// <summary>
-/// Azure Service Bus Topic configuration options.
+/// Configuration options for <see cref="AzureServiceBusTopicHealthCheck"/>.
 /// </summary>
-public class AzureServiceBusTopicOptions : AzureServiceBusOptions
+public class AzureServiceBusTopicHealthCheckOptions : AzureServiceBusHealthCheckOptions
 {
     /// <summary>
     /// The topic name of the topic to check.
     /// </summary>
     public string TopicName { get; set; }
 
-    public AzureServiceBusTopicOptions(string topicName)
+    public AzureServiceBusTopicHealthCheckOptions(string topicName)
     {
         TopicName = topicName;
     }

@@ -24,7 +24,7 @@ public class azure_service_bus_queue_registration_should
     [Fact]
     public void add_health_check_with_options_when_properly_configured()
     {
-        AzureServiceBusQueueOptions? configurationOptions = null;
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
         bool configurationCalled = false;
 
         var services = new ServiceCollection();
@@ -114,7 +114,7 @@ public class azure_service_bus_queue_registration_should
     [Fact]
     public void add_health_check_using_factories_with_options_when_properly_configured()
     {
-        AzureServiceBusQueueOptions? configurationOptions = null;
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
         bool configurationCalled = false;
 
         var services = new ServiceCollection();

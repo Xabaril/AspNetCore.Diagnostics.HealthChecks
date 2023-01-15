@@ -20,7 +20,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
 
     private string ConnectionKey => _connectionKey ??= _connectionString ?? $"{_endpoint}_{_eventHubName}";
 
-    public AzureEventHubHealthCheck(AzureEventHubOptions options)
+    public AzureEventHubHealthCheck(AzureEventHubHealthCheckOptions options)
     {
         if (!string.IsNullOrWhiteSpace(options.ConnectionString))
         {

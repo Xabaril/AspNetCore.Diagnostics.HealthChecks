@@ -1,16 +1,22 @@
 using Azure.Core;
+using Azure.Messaging.EventHubs;
 
 namespace HealthChecks.AzureServiceBus.Configuration;
 
 /// <summary>
-/// Azure Service Bus configuration options.
+/// Configuration options for <see cref="AzureEventHubHealthCheck"/>.
 /// </summary>
-public class AzureServiceBusOptions
+public class AzureEventHubHealthCheckOptions
 {
     /// <summary>
     /// The azure event hub connection string.
     /// </summary>
     public string? ConnectionString { get; set; }
+
+    /// <summary>
+    /// The azure event hub name.
+    /// </summary>
+    public string? EventHubName { get; set; }
 
     /// <summary>
     /// The azure event hub fully qualified namespace.
@@ -27,4 +33,9 @@ public class AzureServiceBusOptions
     /// Must be used in conjunction with the <see cref="Endpoint"/> property.
     /// </remarks>
     public TokenCredential? Credential { get; set; }
+
+    /// <summary>
+    /// The event hub connection to use for authenticating and connecting.
+    /// </summary>
+    public EventHubConnection? Connection { get; set; }
 }

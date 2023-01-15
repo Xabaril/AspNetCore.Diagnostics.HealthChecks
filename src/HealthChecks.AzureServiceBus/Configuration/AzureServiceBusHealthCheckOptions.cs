@@ -18,13 +18,13 @@ public class AzureServiceBusHealthCheckOptions
     /// <remarks>
     /// Must be used in conjunction with the <see cref="Credential"/> property.
     /// </remarks>
-    public string? Endpoint { get; set; }
+    public string? FullyQualifiedNamespace { get; set; }
 
     /// <summary>
     /// The token credential for authentication.
     /// </summary>
     /// <remarks>
-    /// Must be used in conjunction with the <see cref="Endpoint"/> property.
+    /// Must be used in conjunction with the <see cref="FullyQualifiedNamespace"/> property.
     /// </remarks>
     public TokenCredential? Credential { get; set; }
 }

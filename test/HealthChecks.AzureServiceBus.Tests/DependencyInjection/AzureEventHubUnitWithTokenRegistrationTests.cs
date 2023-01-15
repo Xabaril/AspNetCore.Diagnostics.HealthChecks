@@ -124,6 +124,6 @@ public class azure_event_hub_registration_with_token_should
         var registration = options.Value.Registrations.First();
 
         var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("options.Endpoint");
+        exception.ParamName.ShouldBe("options.FullyQualifiedNamespace");
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using Azure.Core;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
@@ -15,28 +14,22 @@ namespace HealthChecks.AzureServiceBus
 
         protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
 
-        private string? ConnectionString { get; }
+        private readonly AzureServiceBusHealthCheckOptions _options;
 
-        protected string Prefix => ConnectionString ?? Endpoint!;
-
-        private string? Endpoint { get; }
-
-        private TokenCredential? TokenCredential { get; }
+        protected string Prefix => _options.ConnectionString ?? _options.FullyQualifiedNamespace!;
 
         protected abstract string ConnectionKey { get; }
 
         protected AzureServiceBusHealthCheck(AzureServiceBusHealthCheckOptions options)
         {
-            if (!string.IsNullOrWhiteSpace(options.ConnectionString))
-            {
-                ConnectionString = options.ConnectionString;
-                return;
-            }
+            _options = options;
 
-            if (!string.IsNullOrWhiteSpace(options.Endpoint))
+            if (!string.IsNullOrWhiteSpace(options.ConnectionString))
+                return;
+
+            if (!string.IsNullOrWhiteSpace(options.FullyQualifiedNamespace))
             {
-                TokenCredential = Guard.ThrowIfNull(options.Credential);
-                Endpoint = options.Endpoint;
+                Guard.ThrowIfNull(options.Credential);
                 return;
             }
 
@@ -44,13 +37,13 @@ namespace HealthChecks.AzureServiceBus
         }
 
         protected ServiceBusClient CreateClient() =>
-            TokenCredential == null
-                ? new ServiceBusClient(ConnectionString)
-                : new ServiceBusClient(Endpoint, TokenCredential);
+            _options.Credential is null
+                ? new ServiceBusClient(_options.ConnectionString)
+                : new ServiceBusClient(_options.FullyQualifiedNamespace, _options.Credential);
 
         protected ServiceBusAdministrationClient CreateManagementClient() =>
-            TokenCredential == null
-                ? new ServiceBusAdministrationClient(ConnectionString)
-                : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
+            _options.Credential is null
+                ? new ServiceBusAdministrationClient(_options.ConnectionString)
+                : new ServiceBusAdministrationClient(_options.FullyQualifiedNamespace, _options.Credential);
     }
 }

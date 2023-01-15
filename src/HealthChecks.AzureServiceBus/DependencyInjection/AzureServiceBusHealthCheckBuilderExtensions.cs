@@ -101,7 +101,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for specified Azure Event Hub.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpoint">The azure event hub fully qualified namespace.</param>
+    /// <param name="fullyQualifiedNamespace">The azure event hub fully qualified namespace.</param>
     /// <param name="eventHubName">The azure event hub name.</param>
     /// <param name="tokenCredential">The token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Event Hub configuration.</param>
@@ -115,7 +115,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureEventHub(
         this IHealthChecksBuilder builder,
-        string endpoint,
+        string fullyQualifiedNamespace,
         string eventHubName,
         TokenCredential tokenCredential,
         Action<AzureEventHubHealthCheckOptions>? configure = default,
@@ -124,7 +124,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default) =>
         builder.AddAzureEventHub(
-            _ => endpoint,
+            _ => fullyQualifiedNamespace,
             _ => eventHubName,
             _ => tokenCredential,
             configure,
@@ -137,7 +137,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for specified Azure Event Hub.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpointFactory">A factory to build the azure event hub fully qualified namespace.</param>
+    /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure event hub fully qualified namespace.</param>
     /// <param name="eventHubNameFactory">A factory to build the azure event hub name.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Event Hub configuration.</param>
@@ -151,7 +151,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureEventHub(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, string> endpointFactory,
+        Func<IServiceProvider, string> fullyQualifiedNamespaceFactory,
         Func<IServiceProvider, string> eventHubNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
         Action<AzureEventHubHealthCheckOptions>? configure = default,
@@ -160,7 +160,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(endpointFactory);
+        Guard.ThrowIfNull(fullyQualifiedNamespaceFactory);
         Guard.ThrowIfNull(eventHubNameFactory);
         Guard.ThrowIfNull(tokenCredentialFactory);
 
@@ -170,7 +170,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureEventHubHealthCheckOptions
                 {
-                    Endpoint = endpointFactory(sp),
+                    FullyQualifiedNamespace = fullyQualifiedNamespaceFactory(sp),
                     EventHubName = eventHubNameFactory(sp),
                     Credential = tokenCredentialFactory(sp)
                 };
@@ -303,7 +303,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for specified Azure Service Bus Queue.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="queueName">The name of the queue to check.</param>
     /// <param name="tokenCredential">The token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
@@ -317,7 +317,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueue(
         this IHealthChecksBuilder builder,
-        string endpoint,
+        string fullyQualifiedNamespace,
         string queueName,
         TokenCredential tokenCredential,
         Action<AzureServiceBusQueueHealthCheckOptions>? configure = default,
@@ -326,7 +326,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default) =>
         builder.AddAzureServiceBusQueue(
-            _ => endpoint,
+            _ => fullyQualifiedNamespace,
             _ => queueName,
             _ => tokenCredential,
             configure,
@@ -339,7 +339,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for specified Azure Service Bus Queue.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpointFactory">A factory to build the azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="queueNameFactory">A factory to build the name of the queue to check.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
@@ -353,7 +353,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueue(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, string> endpointFactory,
+        Func<IServiceProvider, string> fullyQualifiedNamespaceFactory,
         Func<IServiceProvider, string> queueNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
         Action<AzureServiceBusQueueHealthCheckOptions>? configure = default,
@@ -362,7 +362,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(endpointFactory);
+        Guard.ThrowIfNull(fullyQualifiedNamespaceFactory);
         Guard.ThrowIfNull(queueNameFactory);
         Guard.ThrowIfNull(tokenCredentialFactory);
 
@@ -372,7 +372,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureServiceBusQueueHealthCheckOptions(queueNameFactory(sp))
                 {
-                    Endpoint = endpointFactory(sp),
+                    FullyQualifiedNamespace = fullyQualifiedNamespaceFactory(sp),
                     Credential = tokenCredentialFactory(sp)
                 };
 
@@ -466,7 +466,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for Azure Service Bus Topic.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="topicName">The topic name of the topic to check.</param>
     /// <param name="tokenCredential">The token credential for authentication.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
@@ -479,7 +479,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusTopic(
         this IHealthChecksBuilder builder,
-        string endpoint,
+        string fullyQualifiedNamespace,
         string topicName,
         TokenCredential tokenCredential,
         string? name = default,
@@ -487,7 +487,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default) =>
         builder.AddAzureServiceBusTopic(
-            _ => endpoint,
+            _ => fullyQualifiedNamespace,
             _ => topicName,
             _ => tokenCredential,
             configure: null,
@@ -500,7 +500,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for Azure Service Bus Topic.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpointFactory">A factory to build the azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
@@ -514,7 +514,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusTopic(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, string> endpointFactory,
+        Func<IServiceProvider, string> fullyQualifiedNamespaceFactory,
         Func<IServiceProvider, string> topicNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
         Action<AzureServiceBusTopicHealthCheckOptions>? configure = default,
@@ -523,7 +523,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(endpointFactory);
+        Guard.ThrowIfNull(fullyQualifiedNamespaceFactory);
         Guard.ThrowIfNull(topicNameFactory);
         Guard.ThrowIfNull(tokenCredentialFactory);
 
@@ -533,7 +533,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             {
                 var options = new AzureServiceBusTopicHealthCheckOptions(topicNameFactory(sp))
                 {
-                    Endpoint = endpointFactory(sp),
+                    FullyQualifiedNamespace = fullyQualifiedNamespaceFactory(sp),
                     Credential = tokenCredentialFactory(sp)
                 };
 
@@ -616,10 +616,10 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURESUBSCRIPTION_NAME,
             sp =>
             {
-                var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
-                {
-                    ConnectionString = connectionStringFactory(sp)
-                };
+                var options =
+                    new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp),
+                        subscriptionNameFactory(sp))
+                    { ConnectionString = connectionStringFactory(sp) };
 
                 configure?.Invoke(options);
                 return new AzureServiceBusSubscriptionHealthCheck(options);
@@ -633,7 +633,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for Azure Service Bus Subscription.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="topicName">The topic name of the topic to check.</param>
     /// <param name="subscriptionName">The subscription name of the topic subscription to check.</param>
     /// <param name="tokenCredential">The token credential for authentication.</param>
@@ -648,7 +648,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusSubscription(
         this IHealthChecksBuilder builder,
-        string endpoint,
+        string fullyQualifiedNamespace,
         string topicName,
         string subscriptionName,
         TokenCredential tokenCredential,
@@ -658,7 +658,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default) =>
         builder.AddAzureServiceBusSubscription(
-            _ => endpoint,
+            _ => fullyQualifiedNamespace,
             _ => topicName,
             _ => subscriptionName,
             _ => tokenCredential,
@@ -672,7 +672,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// Add a health check for Azure Service Bus Subscription.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="endpointFactory">A factory to build the azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
     /// <param name="subscriptionNameFactory">A factory to build The subscription name of the topic subscription to check.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
@@ -687,7 +687,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusSubscription(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, string> endpointFactory,
+        Func<IServiceProvider, string> fullyQualifiedNamespaceFactory,
         Func<IServiceProvider, string> topicNameFactory,
         Func<IServiceProvider, string> subscriptionNameFactory,
         Func<IServiceProvider, TokenCredential> tokenCredentialFactory,
@@ -697,7 +697,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(endpointFactory);
+        Guard.ThrowIfNull(fullyQualifiedNamespaceFactory);
         Guard.ThrowIfNull(topicNameFactory);
         Guard.ThrowIfNull(subscriptionNameFactory);
         Guard.ThrowIfNull(tokenCredentialFactory);
@@ -706,11 +706,13 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURESUBSCRIPTION_NAME,
             sp =>
             {
-                var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
-                {
-                    Endpoint = endpointFactory(sp),
-                    Credential = tokenCredentialFactory(sp)
-                };
+                var options =
+                    new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp),
+                        subscriptionNameFactory(sp))
+                    {
+                        FullyQualifiedNamespace = fullyQualifiedNamespaceFactory(sp),
+                        Credential = tokenCredentialFactory(sp)
+                    };
 
                 configure?.Invoke(options);
                 return new AzureServiceBusSubscriptionHealthCheck(options);

@@ -12,7 +12,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
     private string? _connectionKey;
 
     private string ConnectionKey =>
-        _connectionKey ??= _options.ConnectionString ?? $"{_options.Endpoint}_{_options.EventHubName}";
+        _connectionKey ??= _options.ConnectionString ?? $"{_options.FullyQualifiedNamespace}_{_options.EventHubName}";
 
     public AzureEventHubHealthCheck(AzureEventHubHealthCheckOptions options)
     {
@@ -31,7 +31,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
 
         if (options.Credential is not null)
         {
-            Guard.ThrowIfNull(options.Endpoint, true);
+            Guard.ThrowIfNull(options.FullyQualifiedNamespace, true);
             Guard.ThrowIfNull(options.EventHubName, true);
             return;
         }
@@ -73,6 +73,6 @@ public class AzureEventHubHealthCheck : IHealthCheck
         if (_options.Connection is not null)
             return new EventHubProducerClient(_options.Connection);
 
-        return new EventHubProducerClient(_options.Endpoint, _options.EventHubName, _options.Credential);
+        return new EventHubProducerClient(_options.FullyQualifiedNamespace, _options.EventHubName, _options.Credential);
     }
 }

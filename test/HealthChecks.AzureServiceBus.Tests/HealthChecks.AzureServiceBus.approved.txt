@@ -46,9 +46,9 @@ namespace HealthChecks.AzureServiceBus.Configuration
         public string? EventHubName { get; set; }
         public string? FullyQualifiedNamespace { get; set; }
     }
-    public class AzureServiceBusHealthCheckOptions
+    public abstract class AzureServiceBusHealthCheckOptions
     {
-        public AzureServiceBusHealthCheckOptions() { }
+        protected AzureServiceBusHealthCheckOptions() { }
         public string? ConnectionString { get; set; }
         public Azure.Core.TokenCredential? Credential { get; set; }
         public string? FullyQualifiedNamespace { get; set; }

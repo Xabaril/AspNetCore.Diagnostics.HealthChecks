@@ -389,7 +389,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionString">The Azure ServiceBus connection string to be used.</param>
-    /// <param name="topicName">The topic name of the topic to check.</param>
+    /// <param name="topicName">The name of the topic to check.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
     /// <param name="failureStatus">
@@ -422,7 +422,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionStringFactory">A factory to build the Azure ServiceBus connection string to be used.</param>
-    /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
+    /// <param name="topicNameFactory">A factory to build the name of the topic to check.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
     /// <param name="failureStatus">
@@ -467,7 +467,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
-    /// <param name="topicName">The topic name of the topic to check.</param>
+    /// <param name="topicName">The name of the topic to check.</param>
     /// <param name="tokenCredential">The token credential for authentication.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
     /// <param name="failureStatus">
@@ -501,7 +501,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
-    /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
+    /// <param name="topicNameFactory">A factory to build the name of the topic to check.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
@@ -550,7 +550,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionString">The Azure ServiceBus connection string to be used.</param>
-    /// <param name="topicName">The topic name of the topic to check.</param>
+    /// <param name="topicName">The name of the topic to check.</param>
     /// <param name="subscriptionName">The subscription name of the topic subscription to check.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
@@ -586,7 +586,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionStringFactory">A factory to build the Azure ServiceBus connection string to be used.</param>
-    /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
+    /// <param name="topicNameFactory">A factory to build the name of the topic to check.</param>
     /// <param name="subscriptionNameFactory">A factory to build The subscription name of the topic subscription to check.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
@@ -634,7 +634,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
-    /// <param name="topicName">The topic name of the topic to check.</param>
+    /// <param name="topicName">The name of the topic to check.</param>
     /// <param name="subscriptionName">The subscription name of the topic subscription to check.</param>
     /// <param name="tokenCredential">The token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
@@ -673,7 +673,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
-    /// <param name="topicNameFactory">A factory to build the topic name of the topic to check.</param>
+    /// <param name="topicNameFactory">A factory to build the name of the topic to check.</param>
     /// <param name="subscriptionNameFactory">A factory to build The subscription name of the topic subscription to check.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>

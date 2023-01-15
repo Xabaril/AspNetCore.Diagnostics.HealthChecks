@@ -6,7 +6,7 @@ namespace HealthChecks.AzureServiceBus.Configuration;
 public class AzureServiceBusTopicHealthCheckOptions : AzureServiceBusHealthCheckOptions
 {
     /// <summary>
-    /// The topic name of the topic to check.
+    /// The name of the topic to check.
     /// </summary>
     public string TopicName { get; set; }
 

@@ -5,15 +5,15 @@ namespace HealthChecks.AzureServiceBus.Configuration;
 /// <summary>
 /// Configuration options for <see cref="AzureServiceBusHealthCheck"/>.
 /// </summary>
-public class AzureServiceBusHealthCheckOptions
+public abstract class AzureServiceBusHealthCheckOptions
 {
     /// <summary>
-    /// The azure event hub connection string.
+    /// The azure service bus connection string.
     /// </summary>
     public string? ConnectionString { get; set; }
 
     /// <summary>
-    /// The azure event hub fully qualified namespace.
+    /// The azure service bus fully qualified namespace.
     /// </summary>
     /// <remarks>
     /// Must be used in conjunction with the <see cref="Credential"/> property.

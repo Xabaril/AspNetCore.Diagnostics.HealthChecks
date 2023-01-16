@@ -11,8 +11,9 @@ public class AzureEventHubHealthCheck : IHealthCheck
 
     private string? _connectionKey;
 
-    private string ConnectionKey =>
-        _connectionKey ??= _options.ConnectionString ?? $"{_options.FullyQualifiedNamespace}_{_options.EventHubName}";
+    private string ConnectionKey => _connectionKey ??= _options.ConnectionString is null
+        ? $"{_options.FullyQualifiedNamespace}_{_options.EventHubName}"
+        : GetFullConnectionString();
 
     public AzureEventHubHealthCheck(AzureEventHubHealthCheckOptions options)
     {
@@ -21,11 +22,6 @@ public class AzureEventHubHealthCheck : IHealthCheck
         if (!string.IsNullOrWhiteSpace(options.ConnectionString))
         {
             Guard.ThrowIfNull(options.EventHubName, true);
-
-            string connectionString = options.ConnectionString!;
-            if (!connectionString.Contains(ENTITY_PATH_SEGMENT))
-                options.ConnectionString = $"{connectionString};{ENTITY_PATH_SEGMENT}{options.EventHubName}";
-
             return;
         }
 
@@ -51,7 +47,8 @@ public class AzureEventHubHealthCheck : IHealthCheck
     {
         try
         {
-            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient())
+                .ConfigureAwait(false);
 
             _ = await client.GetEventHubPropertiesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -66,11 +63,20 @@ public class AzureEventHubHealthCheck : IHealthCheck
     private EventHubProducerClient CreateClient()
     {
         if (_options.ConnectionString is not null)
-            return new EventHubProducerClient(_options.ConnectionString);
+            return new EventHubProducerClient(GetFullConnectionString());
 
         if (_options.Connection is not null)
             return new EventHubProducerClient(_options.Connection);
 
         return new EventHubProducerClient(_options.FullyQualifiedNamespace, _options.EventHubName, _options.Credential);
+    }
+
+    private string GetFullConnectionString()
+    {
+        string connectionString = _options.ConnectionString!;
+
+        if (!connectionString.Contains(ENTITY_PATH_SEGMENT))
+            connectionString = $"{connectionString};{ENTITY_PATH_SEGMENT}{_options.EventHubName}";
+        return connectionString;
     }
 }

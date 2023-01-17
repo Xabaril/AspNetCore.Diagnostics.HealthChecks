@@ -7,6 +7,7 @@ namespace HealthChecks.MongoDb
 {
     public class MongoDbHealthCheck : IHealthCheck
     {
+        private static readonly BsonDocumentCommand<BsonDocument> _command = new(BsonDocument.Parse("{ping:1}"));
         private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new();
         private readonly MongoClientSettings _mongoClientSettings;
         private readonly string? _specifiedDatabase;
@@ -41,7 +42,7 @@ namespace HealthChecks.MongoDb
 
                     await mongoClient
                         .GetDatabase(_specifiedDatabase)
-                        .RunCommandAsync((Command<BsonDocument>)"{ping:1}", cancellationToken: cancellationToken)
+                        .RunCommandAsync(_command, cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
                 }
                 else

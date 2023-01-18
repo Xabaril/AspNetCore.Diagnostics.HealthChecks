@@ -53,6 +53,8 @@
 ![k8s version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui-k8s-operator?label=k8s%20Operator%20Version&logo=dsd&sort=date)
 ![k8s pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui-k8s-operator.svg?label=k8s%20Operator%20Pulls)
 
+[![codecov.io](https://codecov.io/github/Xabaril/AspNetCore.Diagnostics.HealthChecks/coverage.svg?branch=master)](https://codecov.io/github/Xabaril/AspNetCore.Diagnostics.HealthChecks?branch=master)
+
 # AspNetCore.Diagnostics.HealthChecks
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.

@@ -1,11 +1,13 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace HealthChecks.MongoDb
 {
     public class MongoDbHealthCheck : IHealthCheck
     {
+        private static readonly BsonDocumentCommand<BsonDocument> _command = new(BsonDocument.Parse("{ping:1}"));
         private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new();
         private readonly MongoClientSettings _mongoClientSettings;
         private readonly string? _specifiedDatabase;
@@ -35,14 +37,13 @@ namespace HealthChecks.MongoDb
                 if (!string.IsNullOrEmpty(_specifiedDatabase))
                 {
                     // some users can't list all databases depending on database privileges, with
-                    // this you can list only collections on specified database.
-                    // Related with issue #43
+                    // this you can check a specified database.
+                    // Related with issue #43 and #617
 
-                    using var cursor = await mongoClient
+                    await mongoClient
                         .GetDatabase(_specifiedDatabase)
-                        .ListCollectionNamesAsync(cancellationToken: cancellationToken)
+                        .RunCommandAsync(_command, cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
-                    await cursor.FirstAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {

@@ -81,8 +81,9 @@ namespace HealthChecks.MongoDb.Tests.Functional
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
         [Fact]
-        public async Task be_unhealthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist()
+        public async Task be_healthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_not_exist()
         {
+            // NOTE: with mongodb the database is created automatically the first time something is written to it
             var connectionString = "mongodb://localhost:27017/nonexisting";
 
             var webHostBuilder = new WebHostBuilder()
@@ -103,7 +104,7 @@ namespace HealthChecks.MongoDb.Tests.Functional
 
             var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]

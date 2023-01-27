@@ -60,12 +60,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
-
+        var rabbitMQHalthCheck = new Lazy<RabbitMQHealthCheck>(() => new(rabbitConnectionString, sslOption));
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            _ => rabbitMQHalthCheck.Value,
             failureStatus,
             tags,
             timeout));
@@ -139,12 +137,24 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactory(sp)));
-
+        object rabbitMQHealthCheckLock = new();
+        RabbitMQHealthCheck? rabbitMQHealthCheck = null;
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            sp =>
+            {
+                if (rabbitMQHealthCheck is null)
+                {
+                    lock (rabbitMQHealthCheckLock)
+                    {
+                        if (rabbitMQHealthCheck is null)
+                        {
+                            rabbitMQHealthCheck = new RabbitMQHealthCheck(connectionFactory(sp));
+                        }
+                    }
+                }
+                return rabbitMQHealthCheck;
+            },
             failureStatus,
             tags,
             timeout));
@@ -171,12 +181,24 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)));
-
+        object rabbitMQHealthCheckLock = new();
+        RabbitMQHealthCheck? rabbitMQHealthCheck = null;
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            sp =>
+            {
+                if (rabbitMQHealthCheck is null)
+                {
+                    lock (rabbitMQHealthCheckLock)
+                    {
+                        if (rabbitMQHealthCheck is null)
+                        {
+                            rabbitMQHealthCheck = new RabbitMQHealthCheck(connectionFactoryFactory(sp));
+                        }
+                    }
+                }
+                return rabbitMQHealthCheck;
+            },
             failureStatus,
             tags,
             timeout));
@@ -205,12 +227,24 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption));
-
+        object rabbitMQHealthCheckLock = new();
+        RabbitMQHealthCheck? rabbitMQHealthCheck = null;
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            sp =>
+            {
+                if (rabbitMQHealthCheck is null)
+                {
+                    lock (rabbitMQHealthCheckLock)
+                    {
+                        if (rabbitMQHealthCheck is null)
+                        {
+                            rabbitMQHealthCheck = new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption);
+                        }
+                    }
+                }
+                return rabbitMQHealthCheck;
+            },
             failureStatus,
             tags,
             timeout));

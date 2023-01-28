@@ -26,7 +26,6 @@ namespace HealthChecks.AzureServiceBus
             {
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-
                 _ = await managementClient.GetTopicRuntimePropertiesAsync(_options.TopicName, cancellationToken)
                     .ConfigureAwait(false);
 

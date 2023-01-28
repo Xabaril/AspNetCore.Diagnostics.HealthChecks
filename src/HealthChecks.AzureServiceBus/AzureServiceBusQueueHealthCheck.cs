@@ -49,7 +49,6 @@ namespace HealthChecks.AzureServiceBus
             {
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-
                 return managementClient.GetQueueRuntimePropertiesAsync(_options.QueueName, cancellationToken);
             }
         }

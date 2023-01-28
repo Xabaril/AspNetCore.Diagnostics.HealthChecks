@@ -674,7 +674,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="fullyQualifiedNamespaceFactory">A factory to build the azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="topicNameFactory">A factory to build the name of the topic to check.</param>
-    /// <param name="subscriptionNameFactory">A factory to build The subscription name of the topic subscription to check.</param>
+    /// <param name="subscriptionNameFactory">A factory to build the subscription name of the topic subscription to check.</param>
     /// <param name="tokenCredentialFactory">A factory to build the token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>

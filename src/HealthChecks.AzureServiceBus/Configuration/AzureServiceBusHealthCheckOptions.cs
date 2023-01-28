@@ -3,7 +3,7 @@ using Azure.Core;
 namespace HealthChecks.AzureServiceBus.Configuration;
 
 /// <summary>
-/// Base class for configuration options for descendants of the <see cref="AzureServiceBusHealthCheck"/>.
+/// Base class for configuration options for descendants of the <see cref="AzureServiceBusHealthCheck{TOptions}"/> class.
 /// </summary>
 public abstract class AzureServiceBusHealthCheckOptions
 {

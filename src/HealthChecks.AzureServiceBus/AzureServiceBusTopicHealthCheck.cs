@@ -3,19 +3,16 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusTopicHealthCheckOptions>, IHealthCheck
     {
-        private readonly AzureServiceBusTopicHealthCheckOptions _options;
         private string? _connectionKey;
 
-        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_options.TopicName}";
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.TopicName}";
 
         public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
             : base(options)
         {
             Guard.ThrowIfNull(options.TopicName, true);
-
-            _options = options;
         }
 
         /// <inheritdoc />
@@ -26,7 +23,7 @@ namespace HealthChecks.AzureServiceBus
             {
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-                _ = await managementClient.GetTopicRuntimePropertiesAsync(_options.TopicName, cancellationToken).ConfigureAwait(false);
+                _ = await managementClient.GetTopicRuntimePropertiesAsync(Options.TopicName, cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }

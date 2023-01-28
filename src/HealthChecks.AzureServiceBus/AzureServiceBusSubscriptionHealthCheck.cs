@@ -3,21 +3,18 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>, IHealthCheck
     {
-        private readonly AzureServiceBusSubscriptionHealthCheckHealthCheckOptions _options;
         private string? _connectionKey;
 
         protected override string ConnectionKey =>
-            _connectionKey ??= $"{Prefix}_{_options.TopicName}_{_options.SubscriptionName}";
+            _connectionKey ??= $"{Prefix}_{Options.TopicName}_{Options.SubscriptionName}";
 
         public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
             : base(options)
         {
             Guard.ThrowIfNull(options.TopicName, true);
             Guard.ThrowIfNull(options.SubscriptionName, true);
-
-            _options = options;
         }
 
         /// <inheritdoc />
@@ -25,7 +22,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (_options.UsePeekMode)
+                if (Options.UsePeekMode)
                     await CheckWithReceiver().ConfigureAwait(false);
                 else
                     await CheckWithManagement().ConfigureAwait(false);
@@ -42,7 +39,7 @@ namespace HealthChecks.AzureServiceBus
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
                 var receiver = ServiceBusReceivers.GetOrAdd(
                     $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
-                    client.CreateReceiver(_options.TopicName, _options.SubscriptionName));
+                    client.CreateReceiver(Options.TopicName, Options.SubscriptionName));
 
                 return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
             }
@@ -52,7 +49,7 @@ namespace HealthChecks.AzureServiceBus
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
                 return managementClient.GetSubscriptionRuntimePropertiesAsync(
-                    _options.TopicName, _options.SubscriptionName, cancellationToken);
+                    Options.TopicName, Options.SubscriptionName, cancellationToken);
             }
         }
     }

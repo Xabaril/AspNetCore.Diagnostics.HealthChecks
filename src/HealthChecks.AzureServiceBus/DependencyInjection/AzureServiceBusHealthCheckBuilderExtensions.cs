@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Extension methods to configure <see cref="AzureEventHubHealthCheck"/>,
-/// <see cref="AzureServiceBusHealthCheck"/>, <see cref="AzureServiceBusQueueHealthCheck"/>,
+/// <see cref="AzureServiceBusHealthCheck{TOptions}"/>, <see cref="AzureServiceBusQueueHealthCheck"/>,
 /// <see cref="AzureServiceBusSubscriptionHealthCheck"/>, <see cref="AzureServiceBusTopicHealthCheck"/>.
 /// </summary>
 public static class AzureServiceBusHealthCheckBuilderExtensions

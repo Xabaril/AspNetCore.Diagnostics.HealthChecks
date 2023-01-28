@@ -5,24 +5,23 @@ using HealthChecks.AzureServiceBus.Configuration;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public abstract class AzureServiceBusHealthCheck
+    public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : AzureServiceBusHealthCheckOptions
     {
         protected static readonly ConcurrentDictionary<string, ServiceBusClient> ClientConnections = new();
 
-        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
-            ManagementClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> ManagementClientConnections = new();
 
         protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
 
-        private readonly AzureServiceBusHealthCheckOptions _options;
+        protected TOptions Options { get; }
 
-        protected string Prefix => _options.ConnectionString ?? _options.FullyQualifiedNamespace!;
+        protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
 
         protected abstract string ConnectionKey { get; }
 
-        protected AzureServiceBusHealthCheck(AzureServiceBusHealthCheckOptions options)
+        protected AzureServiceBusHealthCheck(TOptions options)
         {
-            _options = options;
+            Options = options;
 
             if (!string.IsNullOrWhiteSpace(options.ConnectionString))
                 return;
@@ -37,13 +36,13 @@ namespace HealthChecks.AzureServiceBus
         }
 
         protected ServiceBusClient CreateClient() =>
-            _options.Credential is null
-                ? new ServiceBusClient(_options.ConnectionString)
-                : new ServiceBusClient(_options.FullyQualifiedNamespace, _options.Credential);
+            Options.Credential is null
+                ? new ServiceBusClient(Options.ConnectionString)
+                : new ServiceBusClient(Options.FullyQualifiedNamespace, Options.Credential);
 
         protected ServiceBusAdministrationClient CreateManagementClient() =>
-            _options.Credential is null
-                ? new ServiceBusAdministrationClient(_options.ConnectionString)
-                : new ServiceBusAdministrationClient(_options.FullyQualifiedNamespace, _options.Credential);
+            Options.Credential is null
+                ? new ServiceBusAdministrationClient(Options.ConnectionString)
+                : new ServiceBusAdministrationClient(Options.FullyQualifiedNamespace, Options.Credential);
     }
 }

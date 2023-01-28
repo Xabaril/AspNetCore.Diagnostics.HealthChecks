@@ -3,19 +3,16 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusQueueHealthCheckOptions>, IHealthCheck
     {
-        private readonly AzureServiceBusQueueHealthCheckOptions _options;
         private string? _connectionKey;
 
-        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_options.QueueName}";
+        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.QueueName}";
 
         public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options)
             : base(options)
         {
             Guard.ThrowIfNull(options.QueueName, true);
-
-            _options = options;
         }
 
         /// <inheritdoc />
@@ -23,7 +20,7 @@ namespace HealthChecks.AzureServiceBus
         {
             try
             {
-                if (_options.UsePeekMode)
+                if (Options.UsePeekMode)
                     await CheckWithReceiver().ConfigureAwait(false);
                 else
                     await CheckWithManagement().ConfigureAwait(false);
@@ -40,7 +37,7 @@ namespace HealthChecks.AzureServiceBus
                 var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
                 var receiver = ServiceBusReceivers.GetOrAdd(
                     $"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}",
-                    client.CreateReceiver(_options.QueueName));
+                    client.CreateReceiver(Options.QueueName));
 
                 return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
             }
@@ -49,7 +46,7 @@ namespace HealthChecks.AzureServiceBus
             {
                 var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-                return managementClient.GetQueueRuntimePropertiesAsync(_options.QueueName, cancellationToken);
+                return managementClient.GetQueueRuntimePropertiesAsync(Options.QueueName, cancellationToken);
             }
         }
     }

@@ -5,30 +5,32 @@ namespace HealthChecks.AzureServiceBus
         public AzureEventHubHealthCheck(HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
-    public abstract class AzureServiceBusHealthCheck
+    public abstract class AzureServiceBusHealthCheck<TOptions>
+        where TOptions : HealthChecks.AzureServiceBus.Configuration.AzureServiceBusHealthCheckOptions
     {
         protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.ServiceBusClient> ClientConnections;
         protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient> ManagementClientConnections;
         protected static readonly System.Collections.Concurrent.ConcurrentDictionary<string, Azure.Messaging.ServiceBus.ServiceBusReceiver> ServiceBusReceivers;
-        protected AzureServiceBusHealthCheck(HealthChecks.AzureServiceBus.Configuration.AzureServiceBusHealthCheckOptions options) { }
+        protected AzureServiceBusHealthCheck(TOptions options) { }
         protected abstract string ConnectionKey { get; }
+        protected TOptions Options { get; }
         protected string Prefix { get; }
         protected Azure.Messaging.ServiceBus.ServiceBusClient CreateClient() { }
         protected Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient CreateManagementClient() { }
     }
-    public class AzureServiceBusQueueHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class AzureServiceBusQueueHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck<HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueHealthCheckOptions>, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public AzureServiceBusQueueHealthCheck(HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueHealthCheckOptions options) { }
         protected override string ConnectionKey { get; }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
-    public class AzureServiceBusSubscriptionHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class AzureServiceBusSubscriptionHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck<HealthChecks.AzureServiceBus.Configuration.AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public AzureServiceBusSubscriptionHealthCheck(HealthChecks.AzureServiceBus.Configuration.AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options) { }
         protected override string ConnectionKey { get; }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
-    public class AzureServiceBusTopicHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class AzureServiceBusTopicHealthCheck : HealthChecks.AzureServiceBus.AzureServiceBusHealthCheck<HealthChecks.AzureServiceBus.Configuration.AzureServiceBusTopicHealthCheckOptions>, Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public AzureServiceBusTopicHealthCheck(HealthChecks.AzureServiceBus.Configuration.AzureServiceBusTopicHealthCheckOptions options) { }
         protected override string ConnectionKey { get; }

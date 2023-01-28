@@ -616,10 +616,10 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURESUBSCRIPTION_NAME,
             sp =>
             {
-                var options =
-                    new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp),
-                        subscriptionNameFactory(sp))
-                    { ConnectionString = connectionStringFactory(sp) };
+                var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
+                {
+                    ConnectionString = connectionStringFactory(sp)
+                };
 
                 configure?.Invoke(options);
                 return new AzureServiceBusSubscriptionHealthCheck(options);

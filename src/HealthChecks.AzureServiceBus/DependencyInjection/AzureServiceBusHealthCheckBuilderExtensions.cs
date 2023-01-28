@@ -706,13 +706,11 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             name ?? AZURESUBSCRIPTION_NAME,
             sp =>
             {
-                var options =
-                    new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp),
-                        subscriptionNameFactory(sp))
-                    {
-                        FullyQualifiedNamespace = fullyQualifiedNamespaceFactory(sp),
-                        Credential = tokenCredentialFactory(sp)
-                    };
+                var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicNameFactory(sp), subscriptionNameFactory(sp))
+                {
+                    FullyQualifiedNamespace = fullyQualifiedNamespaceFactory(sp),
+                    Credential = tokenCredentialFactory(sp)
+                };
 
                 configure?.Invoke(options);
                 return new AzureServiceBusSubscriptionHealthCheck(options);

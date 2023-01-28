@@ -49,8 +49,7 @@ namespace HealthChecks.AzureServiceBus
 
             Task CheckWithManagement()
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(
-                    ConnectionKey, _ => CreateManagementClient());
+                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
                 return managementClient.GetSubscriptionRuntimePropertiesAsync(
                     _options.TopicName, _options.SubscriptionName, cancellationToken);

@@ -6,8 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    internal class HealthCheckCollectorHostedService
-        : IHostedService
+    internal class HealthCheckCollectorHostedService : IHostedService
     {
         private readonly ILogger<HealthCheckCollectorHostedService> _logger;
         private readonly IHostApplicationLifetime _lifetime;
@@ -15,7 +14,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly IServiceProvider _serviceProvider;
         private readonly Settings _settings;
 
-        private Task _executingTask;
+        private Task? _executingTask;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
         public HealthCheckCollectorHostedService
@@ -25,10 +24,10 @@ namespace HealthChecks.UI.Core.HostedService
             ILogger<HealthCheckCollectorHostedService> logger,
             IHostApplicationLifetime lifetime)
         {
-            _serviceProvider = provider ?? throw new ArgumentNullException(nameof(provider));
-            _serverAddressesService = serverAddressesService ?? throw new ArgumentNullException(nameof(serverAddressesService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(provider));
-            _lifetime = lifetime ?? throw new ArgumentNullException(nameof(lifetime));
+            _serviceProvider = Guard.ThrowIfNull(provider);
+            _serverAddressesService = Guard.ThrowIfNull(serverAddressesService);
+            _logger = Guard.ThrowIfNull(logger);
+            _lifetime = Guard.ThrowIfNull(lifetime);
             _settings = settings.Value ?? new Settings();
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -46,7 +45,8 @@ namespace HealthChecks.UI.Core.HostedService
         {
             _cancellationTokenSource.Cancel();
 
-            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
+            if (_executingTask != null)
+                await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
 
         private Task ExecuteAsync(CancellationToken cancellationToken)

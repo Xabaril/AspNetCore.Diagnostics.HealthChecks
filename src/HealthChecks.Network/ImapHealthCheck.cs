@@ -10,12 +10,9 @@ namespace HealthChecks.Network
 
         public ImapHealthCheck(ImapHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
 
-            if (string.IsNullOrEmpty(_options.Host))
-            {
-                throw new ArgumentNullException(nameof(_options.Host));
-            }
+            Guard.ThrowIfNull(_options.Host, true);
 
             if (_options.Port == default)
             {
@@ -23,17 +20,18 @@ namespace HealthChecks.Network
             }
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 using (var imapConnection = new ImapConnection(_options))
                 {
-                    if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken))
+                    if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
                     {
                         if (_options.AccountOptions.Login)
                         {
-                            return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection);
+                            return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection).ConfigureAwait(false);
                         }
                     }
                     else
@@ -54,10 +52,10 @@ namespace HealthChecks.Network
         {
             var (User, Password) = _options.AccountOptions.Account;
 
-            if (await imapConnection.AuthenticateAsync(User, Password))
+            if (await imapConnection.AuthenticateAsync(User, Password).ConfigureAwait(false))
             {
                 if (_options.FolderOptions.CheckFolder
-                    && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName))
+                    && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName).ConfigureAwait(false))
                 {
                     return new HealthCheckResult(context.Registration.FailureStatus, description: $"Folder {_options.FolderOptions.FolderName} check failed.");
                 }

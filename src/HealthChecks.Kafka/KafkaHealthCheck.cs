@@ -1,36 +1,38 @@
 using Confluent.Kafka;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Kafka
 {
-    public class KafkaHealthCheck : IHealthCheck
+    /// <summary>
+    /// A health check for Kafka cluster.
+    /// </summary>
+    public class KafkaHealthCheck : IHealthCheck, IDisposable
     {
-        private readonly ProducerConfig _configuration;
-        private readonly string _topic;
+        private readonly KafkaHealthCheckOptions _options;
         private IProducer<string, string>? _producer;
 
-        public KafkaHealthCheck(ProducerConfig configuration, string? topic)
+        public KafkaHealthCheck(KafkaHealthCheckOptions options)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _topic = topic ?? "healthchecks-topic";
+            Guard.ThrowIfNull(options.Configuration);
+            _options = options;
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 if (_producer == null)
                 {
-                    _producer = new ProducerBuilder<string, string>(_configuration).Build();
+                    var builder = new ProducerBuilder<string, string>(_options.Configuration);
+                    _options.Configure?.Invoke(builder);
+                    _producer ??= builder.Build();
                 }
 
-                var message = new Message<string, string>
-                {
-                    Key = "healthcheck-key",
-                    Value = $"Check Kafka healthy on {DateTime.UtcNow}"
-                };
+                var message = _options.MessageBuilder(_options);
 
-                var result = await _producer.ProduceAsync(_topic, message, cancellationToken);
+                var result = await _producer.ProduceAsync(_options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC, message, cancellationToken).ConfigureAwait(false);
 
                 if (result.Status == PersistenceStatus.NotPersisted)
                 {
@@ -44,5 +46,7 @@ namespace HealthChecks.Kafka
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }
+
+        public void Dispose() => _producer?.Dispose();
     }
 }

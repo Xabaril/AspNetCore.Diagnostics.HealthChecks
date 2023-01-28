@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.ArangoDb.Tests.DependencyInjection
 {
     public class arangodb_registration_should
@@ -16,13 +10,13 @@ namespace HealthChecks.ArangoDb.Tests.DependencyInjection
                 .AddArangoDb(_ => new ArangoDbOptions());
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("arangodb");
-            check.GetType().Should().Be(typeof(ArangoDbHealthCheck));
+            registration.Name.ShouldBe("arangodb");
+            check.ShouldBeOfType<ArangoDbHealthCheck>();
         }
 
         [Fact]
@@ -33,13 +27,13 @@ namespace HealthChecks.ArangoDb.Tests.DependencyInjection
                 .AddArangoDb(_ => new ArangoDbOptions(), name: "my-arango");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-arango");
-            check.GetType().Should().Be(typeof(ArangoDbHealthCheck));
+            registration.Name.ShouldBe("my-arango");
+            check.ShouldBeOfType<ArangoDbHealthCheck>();
         }
     }
 }

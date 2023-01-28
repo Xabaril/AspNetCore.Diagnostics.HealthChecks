@@ -1,24 +1,29 @@
 name: HealthChecks Consul CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
       - src/HealthChecks.Consul/**
       - test/HealthChecks.Consul.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_consul_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Consul/**
-    - test/HealthChecks.Consul.Tests/**
-    - .github/workflows/healthchecks_consul_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Consul/**
+      - test/HealthChecks.Consul.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_consul_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -30,22 +35,37 @@ jobs:
           - 8500:8500
           - 8600:8600
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Consul
-      run: |
-        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
-        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj --verbosity normal
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj &&
+          dotnet restore ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Consul/HealthChecks.Consul.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Consul/HealthChecks.Consul.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Consul.Tests/HealthChecks.Consul.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Consul
+          directory: .coverage

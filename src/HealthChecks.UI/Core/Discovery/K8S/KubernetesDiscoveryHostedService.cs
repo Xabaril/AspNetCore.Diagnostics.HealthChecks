@@ -1,6 +1,6 @@
 using System.Net;
-using HealthChecks.UI.Core.Data;
 using HealthChecks.UI.Core.Discovery.K8S.Extensions;
+using HealthChecks.UI.Data;
 using k8s;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,11 +15,11 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
         private readonly IHostApplicationLifetime _hostLifetime;
         private readonly IServiceProvider _serviceProvider;
-        private IKubernetes _discoveryClient;
+        private IKubernetes? _discoveryClient;
         private readonly HttpClient _clusterServiceClient;
         private readonly KubernetesAddressFactory _addressFactory;
 
-        private Task _executingTask;
+        private Task? _executingTask;
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
@@ -28,13 +28,12 @@ namespace HealthChecks.UI.Core.Discovery.K8S
             ILogger<KubernetesDiscoveryHostedService> logger,
             IHostApplicationLifetime hostLifetime)
         {
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _discoveryOptions = discoveryOptions?.Value ?? throw new ArgumentNullException(nameof(discoveryOptions));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _hostLifetime = hostLifetime ?? throw new ArgumentNullException(nameof(hostLifetime));
-            _clusterServiceClient = httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME) ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _serviceProvider = Guard.ThrowIfNull(serviceProvider);
+            _discoveryOptions = Guard.ThrowIfNull(discoveryOptions?.Value);
+            _logger = Guard.ThrowIfNull(logger);
+            _hostLifetime = Guard.ThrowIfNull(hostLifetime);
+            _clusterServiceClient = Guard.ThrowIfNull(httpClientFactory?.CreateClient(Keys.K8S_CLUSTER_SERVICE_HTTP_CLIENT_NAME));
             _addressFactory = new KubernetesAddressFactory(_discoveryOptions);
-
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -70,7 +69,8 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
+            if (_executingTask != null)
+                await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
         }
 
         private async Task StartK8sServiceAsync(CancellationToken cancellationToken)
@@ -85,7 +85,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
                 try
                 {
-                    var services = await _discoveryClient.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
+                    var services = await _discoveryClient!.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
 
                     if (services != null)
                     {
@@ -140,7 +140,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         private Task<int> RegisterDiscoveredLiveness(HealthChecksDb livenessDb, string host, string name)
         {
-            livenessDb.Configurations.Add(new HealthCheckConfiguration()
+            livenessDb.Configurations.Add(new HealthCheckConfiguration
             {
                 Name = name,
                 Uri = host,

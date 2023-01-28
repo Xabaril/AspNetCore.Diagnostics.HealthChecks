@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.Network.Tests.DependencyInjection
 {
     public class network_registration_should
@@ -16,13 +10,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddPingHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ping");
-            check.GetType().Should().Be(typeof(PingHealthCheck));
+            registration.Name.ShouldBe("ping");
+            check.ShouldBeOfType<PingHealthCheck>();
         }
         [Fact]
         public void add_named_ping_health_check_when_properly_configured()
@@ -32,13 +26,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddPingHealthCheck(_ => { }, name: "my-ping-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-ping-1");
-            check.GetType().Should().Be(typeof(PingHealthCheck));
+            registration.Name.ShouldBe("my-ping-1");
+            check.ShouldBeOfType<PingHealthCheck>();
         }
         [Fact]
         public void add_sftp_check_when_properly_configured()
@@ -48,13 +42,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSftpHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("sftp");
-            check.GetType().Should().Be(typeof(SftpHealthCheck));
+            registration.Name.ShouldBe("sftp");
+            check.ShouldBeOfType<SftpHealthCheck>();
         }
         [Fact]
         public void add_named_sftp_health_check_when_properly_configured()
@@ -64,13 +58,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSftpHealthCheck(_ => { }, name: "my-sftp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-sftp-1");
-            check.GetType().Should().Be(typeof(SftpHealthCheck));
+            registration.Name.ShouldBe("my-sftp-1");
+            check.ShouldBeOfType<SftpHealthCheck>();
         }
         [Fact]
         public void add_ftp_check_when_properly_configured()
@@ -80,13 +74,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddFtpHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ftp");
-            check.GetType().Should().Be(typeof(FtpHealthCheck));
+            registration.Name.ShouldBe("ftp");
+            check.ShouldBeOfType<FtpHealthCheck>();
         }
         [Fact]
         public void add_named_ftp_health_check_when_properly_configured()
@@ -96,13 +90,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddFtpHealthCheck(_ => { }, name: "my-ftp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-ftp-1");
-            check.GetType().Should().Be(typeof(FtpHealthCheck));
+            registration.Name.ShouldBe("my-ftp-1");
+            check.ShouldBeOfType<FtpHealthCheck>();
         }
         [Fact]
         public void add_dns_check_when_properly_configured()
@@ -112,13 +106,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddDnsResolveHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("dns");
-            check.GetType().Should().Be(typeof(DnsResolveHealthCheck));
+            registration.Name.ShouldBe("dns");
+            check.ShouldBeOfType<DnsResolveHealthCheck>();
         }
         [Fact]
         public void add_named_dns_health_check_when_properly_configured()
@@ -128,13 +122,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddDnsResolveHealthCheck(_ => { }, name: "my-dns-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-dns-1");
-            check.GetType().Should().Be(typeof(DnsResolveHealthCheck));
+            registration.Name.ShouldBe("my-dns-1");
+            check.ShouldBeOfType<DnsResolveHealthCheck>();
         }
         [Fact]
         public void add_imap_check_when_properly_configured()
@@ -144,13 +138,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddImapHealthCheck(opt => { opt.Host = "the-host"; opt.Port = 111; });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("imap");
-            check.GetType().Should().Be(typeof(ImapHealthCheck));
+            registration.Name.ShouldBe("imap");
+            check.ShouldBeOfType<ImapHealthCheck>();
         }
         [Fact]
         public void add_named_imap_health_check_when_properly_configured()
@@ -160,13 +154,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddImapHealthCheck(opt => { opt.Host = "the-host"; opt.Port = 111; }, name: "my-imap-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-imap-1");
-            check.GetType().Should().Be(typeof(ImapHealthCheck));
+            registration.Name.ShouldBe("my-imap-1");
+            check.ShouldBeOfType<ImapHealthCheck>();
         }
         [Fact]
         public void add_smpt_check_when_properly_configured()
@@ -176,13 +170,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSmtpHealthCheck(_ => { });
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("smtp");
-            check.GetType().Should().Be(typeof(SmtpHealthCheck));
+            registration.Name.ShouldBe("smtp");
+            check.ShouldBeOfType<SmtpHealthCheck>();
         }
         [Fact]
         public void add_named_smtp_health_check_when_properly_configured()
@@ -192,13 +186,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSmtpHealthCheck(_ => { }, name: "my-smtp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-smtp-1");
-            check.GetType().Should().Be(typeof(SmtpHealthCheck));
+            registration.Name.ShouldBe("my-smtp-1");
+            check.ShouldBeOfType<SmtpHealthCheck>();
         }
 
         [Fact]
@@ -209,13 +203,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddTcpHealthCheck(_ => { }, name: "tcp-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("tcp-1");
-            check.GetType().Should().Be(typeof(TcpHealthCheck));
+            registration.Name.ShouldBe("tcp-1");
+            check.ShouldBeOfType<TcpHealthCheck>();
         }
 
         [Fact]
@@ -226,13 +220,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSslHealthCheck(options => options.AddHost("the-host"));
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ssl");
-            check.GetType().Should().Be(typeof(SslHealthCheck));
+            registration.Name.ShouldBe("ssl");
+            check.ShouldBeOfType<SslHealthCheck>();
         }
 
         [Fact]
@@ -243,13 +237,13 @@ namespace HealthChecks.Network.Tests.DependencyInjection
                 .AddSslHealthCheck(options => options.AddHost("the-host", port: 111, checkLeftDays: 120), name: "ssl-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("ssl-1");
-            check.GetType().Should().Be(typeof(SslHealthCheck));
+            registration.Name.ShouldBe("ssl-1");
+            check.ShouldBeOfType<SslHealthCheck>();
         }
     }
 }

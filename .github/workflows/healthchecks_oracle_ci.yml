@@ -1,53 +1,72 @@
 name: HealthChecks Oracle CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
       - src/HealthChecks.Oracle/**
       - test/HealthChecks.Oracle.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_oracle_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Oracle/**
-    - test/HealthChecks.Oracle.Tests/**
-    - .github/workflows/healthchecks_oracle_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Oracle/**
+      - test/HealthChecks.Oracle.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_oracle_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
       oracle:
-        image: oracleinanutshell/oracle-xe-11g
+        image: gvenzl/oracle-xe:18-slim
         ports:
           - 1521:1521
-          - 5500:5500
         env:
-          ORACLE_ALLOW_REMOTE: true
+          ORACLE_PASSWORD: oracle
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Oracle
-      run: |
-        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
-        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-    #- name: Test
-    #  run: dotnet test ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj --verbosity normal
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
+          dotnet restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Oracle.Tests/HealthChecks.Oracle.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Oracle
+          directory: .coverage

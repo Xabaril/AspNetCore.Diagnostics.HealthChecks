@@ -19,7 +19,7 @@ namespace HealthChecks.UI.Core
             TotalDuration = totalDuration;
         }
 
-        public static UIHealthReport CreateFrom(HealthReport report)
+        public static UIHealthReport CreateFrom(HealthReport report, Func<Exception, string>? exceptionMessage = null)
         {
             var uiReport = new UIHealthReport(new Dictionary<string, UIHealthReportEntry>(), report.TotalDuration)
             {
@@ -38,7 +38,7 @@ namespace HealthChecks.UI.Core
 
                 if (item.Value.Exception != null)
                 {
-                    var message = item.Value.Exception?.Message;
+                    var message = exceptionMessage == null ? item.Value.Exception?.Message : exceptionMessage(item.Value.Exception);
 
                     entry.Exception = message;
                     entry.Description = item.Value.Description ?? message;
@@ -80,11 +80,11 @@ namespace HealthChecks.UI.Core
 
     public class UIHealthReportEntry
     {
-        public IReadOnlyDictionary<string, object> Data { get; set; }
-        public string Description { get; set; }
+        public IReadOnlyDictionary<string, object> Data { get; set; } = null!;
+        public string? Description { get; set; }
         public TimeSpan Duration { get; set; }
-        public string Exception { get; set; }
+        public string? Exception { get; set; }
         public UIHealthStatus Status { get; set; }
-        public IEnumerable<string> Tags { get; set; }
+        public IEnumerable<string>? Tags { get; set; }
     }
 }

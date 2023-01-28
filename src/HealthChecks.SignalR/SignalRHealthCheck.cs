@@ -9,9 +9,10 @@ namespace HealthChecks.SignalR
 
         public SignalRHealthCheck(Func<HubConnection> hubConnectionBuilder)
         {
-            _hubConnectionBuilder = hubConnectionBuilder ?? throw new ArgumentNullException(nameof(hubConnectionBuilder));
+            _hubConnectionBuilder = Guard.ThrowIfNull(hubConnectionBuilder);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             HubConnection? connection = null;
@@ -20,7 +21,7 @@ namespace HealthChecks.SignalR
             {
                 connection = _hubConnectionBuilder();
 
-                await connection.StartAsync(cancellationToken);
+                await connection.StartAsync(cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy();
             }
@@ -31,7 +32,7 @@ namespace HealthChecks.SignalR
             finally
             {
                 if (connection != null)
-                    await connection.DisposeAsync();
+                    await connection.DisposeAsync().ConfigureAwait(false);
             }
         }
     }

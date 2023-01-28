@@ -1,9 +1,4 @@
-using FluentAssertions;
 using HealthChecks.NpgSql;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.Npgsql.Tests.DependencyInjection
 {
@@ -17,13 +12,13 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
                 .AddNpgSql("connectionstring");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("npgsql");
-            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
+            registration.Name.ShouldBe("npgsql");
+            check.ShouldBeOfType<NpgSqlHealthCheck>();
 
         }
 
@@ -35,13 +30,13 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
                 .AddNpgSql("connectionstring", name: "my-npg-1");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-npg-1");
-            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
+            registration.Name.ShouldBe("my-npg-1");
+            check.ShouldBeOfType<NpgSqlHealthCheck>();
         }
 
         [Fact]
@@ -58,14 +53,14 @@ namespace HealthChecks.Npgsql.Tests.DependencyInjection
 
             using var serviceProvider = services.BuildServiceProvider();
 
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-npg-1");
-            check.GetType().Should().Be(typeof(NpgSqlHealthCheck));
-            factoryCalled.Should().BeTrue();
+            registration.Name.ShouldBe("my-npg-1");
+            check.ShouldBeOfType<NpgSqlHealthCheck>();
+            factoryCalled.ShouldBeTrue();
         }
     }
 }

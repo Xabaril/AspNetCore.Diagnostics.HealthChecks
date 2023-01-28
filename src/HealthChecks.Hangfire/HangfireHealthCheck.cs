@@ -8,9 +8,10 @@ namespace HealthChecks.Hangfire
 
         public HangfireHealthCheck(HangfireOptions hangfireOptions)
         {
-            _hangfireOptions = hangfireOptions ?? throw new ArgumentNullException(nameof(hangfireOptions));
+            _hangfireOptions = Guard.ThrowIfNull(hangfireOptions);
         }
 
+        /// <inheritdoc />
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -20,7 +21,7 @@ namespace HealthChecks.Hangfire
 
                 if (_hangfireOptions.MaximumJobsFailed.HasValue)
                 {
-                    var failedJobsCount = hangfireMonitoringApi.FailedCount();
+                    long failedJobsCount = hangfireMonitoringApi.FailedCount();
                     if (failedJobsCount >= _hangfireOptions.MaximumJobsFailed)
                     {
                         (errorList ??= new()).Add($"Hangfire has #{failedJobsCount} failed jobs and the maximum available is {_hangfireOptions.MaximumJobsFailed}.");
@@ -29,7 +30,7 @@ namespace HealthChecks.Hangfire
 
                 if (_hangfireOptions.MinimumAvailableServers.HasValue)
                 {
-                    var serversCount = hangfireMonitoringApi.Servers().Count;
+                    int serversCount = hangfireMonitoringApi.Servers().Count;
                     if (serversCount < _hangfireOptions.MinimumAvailableServers)
                     {
                         (errorList ??= new()).Add($"{serversCount} server registered. Expected minimum {_hangfireOptions.MinimumAvailableServers}.");

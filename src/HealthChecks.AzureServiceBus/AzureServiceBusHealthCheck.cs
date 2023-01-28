@@ -1,50 +1,48 @@
 using System.Collections.Concurrent;
-using Azure.Core;
+using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
+using HealthChecks.AzureServiceBus.Configuration;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public abstract class AzureServiceBusHealthCheck
+    public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : AzureServiceBusHealthCheckOptions
     {
-        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient>
-            ManagementClientConnections = new();
+        protected static readonly ConcurrentDictionary<string, ServiceBusClient> ClientConnections = new();
 
-        private string? ConnectionString { get; }
+        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> ManagementClientConnections = new();
 
-        protected string Prefix => ConnectionString ?? Endpoint!;
+        protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
 
-        private string? Endpoint { get; }
+        protected TOptions Options { get; }
 
-        private TokenCredential? TokenCredential { get; }
-
-        protected AzureServiceBusHealthCheck(string connectionString)
-        {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            ConnectionString = connectionString;
-        }
-
-        protected AzureServiceBusHealthCheck(string endpoint, TokenCredential tokenCredential)
-        {
-            if (string.IsNullOrEmpty(endpoint))
-            {
-                throw new ArgumentNullException(nameof(endpoint));
-            }
-
-            Endpoint = endpoint;
-            TokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
-        }
-
-        protected ServiceBusAdministrationClient CreateManagementClient()
-        {
-            return TokenCredential == null
-                ? new ServiceBusAdministrationClient(ConnectionString)
-                : new ServiceBusAdministrationClient(Endpoint, TokenCredential);
-        }
+        protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
 
         protected abstract string ConnectionKey { get; }
+
+        protected AzureServiceBusHealthCheck(TOptions options)
+        {
+            Options = options;
+
+            if (!string.IsNullOrWhiteSpace(options.ConnectionString))
+                return;
+
+            if (!string.IsNullOrWhiteSpace(options.FullyQualifiedNamespace))
+            {
+                Guard.ThrowIfNull(options.Credential);
+                return;
+            }
+
+            throw new ArgumentException("A connection string or endpoint must be set!", nameof(options));
+        }
+
+        protected ServiceBusClient CreateClient() =>
+            Options.Credential is null
+                ? new ServiceBusClient(Options.ConnectionString)
+                : new ServiceBusClient(Options.FullyQualifiedNamespace, Options.Credential);
+
+        protected ServiceBusAdministrationClient CreateManagementClient() =>
+            Options.Credential is null
+                ? new ServiceBusAdministrationClient(Options.ConnectionString)
+                : new ServiceBusAdministrationClient(Options.FullyQualifiedNamespace, Options.Credential);
     }
 }

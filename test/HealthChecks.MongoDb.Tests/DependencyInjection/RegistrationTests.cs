@@ -1,9 +1,4 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using Xunit;
 
 namespace HealthChecks.MongoDb.Tests.DependencyInjection
 {
@@ -17,13 +12,13 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
                 .AddMongoDb("mongodb://connectionstring");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("mongodb");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("mongodb");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
         [Fact]
         public void add_health_check_when_properly_configured_mongoClientSettings()
@@ -33,13 +28,13 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
                 .AddMongoDb(MongoClientSettings.FromUrl(MongoUrl.Create("mongodb://connectionstring")));
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("mongodb");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("mongodb");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_connectionString()
@@ -49,13 +44,13 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
                 .AddMongoDb("mongodb://connectionstring", name: "my-mongodb-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-mongodb-group");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("my-mongodb-group");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
         [Fact]
         public void add_named_health_check_when_properly_configured_mongoClientSettings()
@@ -65,13 +60,13 @@ namespace HealthChecks.MongoDb.Tests.DependencyInjection
                 .AddMongoDb(MongoClientSettings.FromUrl(MongoUrl.Create("mongodb://connectionstring")), name: "my-mongodb-group");
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-mongodb-group");
-            check.GetType().Should().Be(typeof(MongoDbHealthCheck));
+            registration.Name.ShouldBe("my-mongodb-group");
+            check.ShouldBeOfType<MongoDbHealthCheck>();
         }
     }
 }

@@ -1,7 +1,9 @@
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+#if !NET5_0_OR_GREATER
 using HealthChecks.Network.Extensions;
+#endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
@@ -12,9 +14,10 @@ namespace HealthChecks.Network
 
         public SslHealthCheck(SslHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -23,14 +26,18 @@ namespace HealthChecks.Network
                 {
                     using (var tcpClient = new TcpClient(_options.AddressFamily))
                     {
-                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken);
+#if NET5_0_OR_GREATER
+                        await tcpClient.ConnectAsync(host, port, cancellationToken);
+#else
+                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+#endif
 
                         if (!tcpClient.Connected)
                         {
                             return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
                         }
 
-                        var certificate = await GetSslCertificateAsync(tcpClient, host);
+                        var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
 
                         if (certificate is null || !certificate.Verify())
                         {
@@ -60,7 +67,7 @@ namespace HealthChecks.Network
 
             try
             {
-                await ssl.AuthenticateAsClientAsync(host);
+                await ssl.AuthenticateAsClientAsync(host).ConfigureAwait(false);
                 var cert = ssl.RemoteCertificate;
                 return cert == null ? null : new X509Certificate2(cert);
             }

@@ -1,11 +1,4 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Prometheus.Metrics.Tests.Functional
 {
@@ -22,12 +15,11 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
                 })
                 .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
-            var response = await sut.CreateRequest("/health")
-                .GetAsync();
+            var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Healthy);
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Healthy);
         }
 
         [Fact]
@@ -41,12 +33,11 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
                 })
                 .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
-            var response = await sut.CreateRequest("/health")
-                .GetAsync();
+            var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Unhealthy);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
 
         [Fact]
@@ -60,12 +51,11 @@ namespace HealthChecks.Prometheus.Metrics.Tests.Functional
                 })
                 .Configure(app => app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)));
 
-            var response = await sut.CreateRequest("/health")
-                .GetAsync();
+            var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
-            resultAsString.Should().ContainCheckAndResult("fake", HealthStatus.Unhealthy);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
         }
     }
 }

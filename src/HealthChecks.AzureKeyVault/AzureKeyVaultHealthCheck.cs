@@ -13,37 +13,38 @@ namespace HealthChecks.AzureKeyVault
         private readonly Uri _keyVaultUri;
         private readonly TokenCredential _azureCredential;
 
-        private static readonly ConcurrentDictionary<Uri, SecretClient> _secretClientsHolder = new ConcurrentDictionary<Uri, SecretClient>();
-        private static readonly ConcurrentDictionary<Uri, KeyClient> _keyClientsHolder = new ConcurrentDictionary<Uri, KeyClient>();
-        private static readonly ConcurrentDictionary<Uri, CertificateClient> _certificateClientsHolder = new ConcurrentDictionary<Uri, CertificateClient>();
+        private static readonly ConcurrentDictionary<Uri, SecretClient> _secretClientsHolder = new();
+        private static readonly ConcurrentDictionary<Uri, KeyClient> _keyClientsHolder = new();
+        private static readonly ConcurrentDictionary<Uri, CertificateClient> _certificateClientsHolder = new();
 
         public AzureKeyVaultHealthCheck(Uri keyVaultUri, TokenCredential credential, AzureKeyVaultOptions options)
         {
-            _keyVaultUri = keyVaultUri ?? throw new ArgumentNullException(nameof(keyVaultUri));
-            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _keyVaultUri = Guard.ThrowIfNull(keyVaultUri);
+            _azureCredential = Guard.ThrowIfNull(credential);
+            _options = Guard.ThrowIfNull(options);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                foreach (var secret in _options.Secrets)
+                foreach (string secret in _options.Secrets)
                 {
                     var secretClient = CreateSecretClient();
-                    await secretClient.GetSecretAsync(secret, cancellationToken: cancellationToken);
+                    await secretClient.GetSecretAsync(secret, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 
-                foreach (var key in _options.Keys)
+                foreach (string key in _options.Keys)
                 {
                     var keyClient = CreateKeyClient();
-                    await keyClient.GetKeyAsync(key, cancellationToken: cancellationToken);
+                    await keyClient.GetKeyAsync(key, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 
                 foreach (var (key, checkExpired) in _options.Certificates)
                 {
                     var certificateClient = CreateCertificateClient();
-                    var certificate = await certificateClient.GetCertificateAsync(key, cancellationToken: cancellationToken);
+                    var certificate = await certificateClient.GetCertificateAsync(key, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                     if (checkExpired && certificate.Value.Properties.ExpiresOn.HasValue)
                     {

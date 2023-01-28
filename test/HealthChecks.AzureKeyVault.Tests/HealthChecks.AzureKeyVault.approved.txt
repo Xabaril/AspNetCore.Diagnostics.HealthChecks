@@ -1,0 +1,24 @@
+namespace HealthChecks.AzureKeyVault
+{
+    public class AzureKeyVaultHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureKeyVaultHealthCheck(System.Uri keyVaultUri, Azure.Core.TokenCredential credential, HealthChecks.AzureKeyVault.AzureKeyVaultOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class AzureKeyVaultOptions
+    {
+        public AzureKeyVaultOptions() { }
+        public HealthChecks.AzureKeyVault.AzureKeyVaultOptions AddCertificate(string certificateName, bool checkExpired = false) { }
+        public HealthChecks.AzureKeyVault.AzureKeyVaultOptions AddKey(string keyName) { }
+        public HealthChecks.AzureKeyVault.AzureKeyVaultOptions AddSecret(string secretName) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class AzureKeyVaultHealthChecksBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureKeyVault(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, System.Uri> keyVaultServiceUriFactory, Azure.Core.TokenCredential credential, System.Action<System.IServiceProvider, HealthChecks.AzureKeyVault.AzureKeyVaultOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureKeyVault(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri keyVaultServiceUri, Azure.Core.TokenCredential credential, System.Action<HealthChecks.AzureKeyVault.AzureKeyVaultOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureKeyVault(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri keyVaultServiceUri, Azure.Core.TokenCredential credential, System.Action<System.IServiceProvider, HealthChecks.AzureKeyVault.AzureKeyVaultOptions> setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

@@ -1,5 +1,7 @@
 using System.Net;
+#if !NET5_0_OR_GREATER
 using HealthChecks.Network.Extensions;
+#endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network
@@ -7,17 +9,24 @@ namespace HealthChecks.Network
     public class DnsResolveHealthCheck : IHealthCheck
     {
         private readonly DnsResolveOptions _options;
+
         public DnsResolveHealthCheck(DnsResolveOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
+
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
                 foreach (var item in _options.ConfigureHosts.Values)
                 {
-                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken);
+#if NET5_0_OR_GREATER
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host, cancellationToken).ConfigureAwait(false);
+#else
+                    var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+#endif
 
                     foreach (var ipAddress in ipAddresses)
                     {

@@ -1,0 +1,31 @@
+namespace HealthChecks.Publisher.Seq
+{
+    public enum SeqInputLevel
+    {
+        Information = 0,
+        Debug = 1,
+        Verbose = 2,
+        Warning = 3,
+        Error = 4,
+        Fatal = 5,
+    }
+    public class SeqPublisher : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheckPublisher
+    {
+        public SeqPublisher(System.Func<System.Net.Http.HttpClient> httpClientFactory, Microsoft.Extensions.DependencyInjection.SeqOptions options) { }
+        public System.Threading.Tasks.Task PublishAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report, System.Threading.CancellationToken cancellationToken) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class SeqHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSeqPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<Microsoft.Extensions.DependencyInjection.SeqOptions>? setup, string? name = null) { }
+    }
+    public class SeqOptions
+    {
+        public SeqOptions() { }
+        public string? ApiKey { get; set; }
+        public HealthChecks.Publisher.Seq.SeqInputLevel DefaultInputLevel { get; set; }
+        public string Endpoint { get; set; }
+    }
+}

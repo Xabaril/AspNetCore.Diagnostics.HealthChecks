@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Elasticsearch.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Nest;
 
@@ -12,9 +13,10 @@ namespace HealthChecks.Elasticsearch
 
         public ElasticsearchHealthCheck(ElasticsearchOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -36,6 +38,10 @@ namespace HealthChecks.Elasticsearch
                     {
                         settings = settings.ClientCertificate(_options.Certificate);
                     }
+                    else if (_options.AuthenticateWithApiKey)
+                    {
+                        settings = settings.ApiKeyAuthentication(_options.ApiKeyAuthenticationCredentials);
+                    }
 
                     if (_options.CertificateValidationCallback != null)
                     {
@@ -50,8 +56,25 @@ namespace HealthChecks.Elasticsearch
                     }
                 }
 
-                var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken);
-                var isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
+                if (_options.UseClusterHealthApi)
+                {
+                    var healthResponse = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken).ConfigureAwait(false);
+
+                    if (healthResponse.ApiCall.HttpStatusCode != 200)
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus);
+                    }
+
+                    return healthResponse.Status switch
+                    {
+                        Health.Green => HealthCheckResult.Healthy(),
+                        Health.Yellow => HealthCheckResult.Degraded(),
+                        _ => new HealthCheckResult(context.Registration.FailureStatus)
+                    };
+                }
+
+                var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken).ConfigureAwait(false);
+                bool isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
                 return isSuccess
                     ? HealthCheckResult.Healthy()

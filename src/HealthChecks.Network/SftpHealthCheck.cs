@@ -10,9 +10,10 @@ namespace HealthChecks.Network
 
         public SftpHealthCheck(SftpHealthCheckOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = Guard.ThrowIfNull(options);
         }
 
+        /// <inheritdoc />
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
@@ -30,21 +31,18 @@ namespace HealthChecks.Network
                     {
                         sftpClient.Connect();
 
-                        var connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
+                        bool connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
                         if (connectionSuccess)
                         {
                             if (item.FileCreationOptions.createFile)
                             {
-                                using (var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1))
-                                {
-                                    sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
-                                }
+                                using var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1);
+                                sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
                             }
                         }
                         else
                         {
-                            return Task.FromResult(
-                                new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
+                            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
                         }
                     }
                 }
@@ -53,8 +51,7 @@ namespace HealthChecks.Network
             }
             catch (Exception ex)
             {
-                return Task.FromResult(
-                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
             }
         }
     }

@@ -1,24 +1,29 @@
 name: HealthChecks Elastic Search CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
       - src/HealthChecks.Elasticsearch/**
       - test/HealthChecks.Elasticsearch.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_elasticsearch_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Elasticsearch/**
-    - test/HealthChecks.Elasticsearch.Tests/**
-    - .github/workflows/healthchecks_elasticsearch_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Elasticsearch/**
+      - test/HealthChecks.Elasticsearch.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_elasticsearch_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -30,22 +35,37 @@ jobs:
           - 9300:9300
           - 9200:9200
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-        include-prerelease: false
-    - name: Restore dependencies
-      run: dotnet restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
-    - name: Check formatting
-      working-directory: ./src/HealthChecks.Elasticsearch
-      run: |
-        dotnet tool install -g dotnet-format --version 6.0.243104 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
-        dotnet format --no-restore --verify-no-changes --severity warn whitespace || (echo "Run 'dotnet format' to fix whitespace issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn analyzers || (echo "Run 'dotnet format' to fix analyzers issues" && exit 1)
-        dotnet format --no-restore --verify-no-changes --severity warn style || (echo "Run 'dotnet format' to fix style issues" && exit 1)
-    - name: Build
-      run: dotnet build --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
-    - name: Test
-      run: dotnet test ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj --verbosity normal
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj &&
+          dotnet restore ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Elasticsearch.Tests/HealthChecks.Elasticsearch.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Elasticsearch
+          directory: .coverage

@@ -22,16 +22,16 @@ namespace HealthChecks.UI.K8s.Operator
             NotificationHandler notificationHandler,
             IHttpClientFactory httpClientFactory)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
+            _diagnostics = Guard.ThrowIfNull(diagnostics);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+            _notificationHandler = Guard.ThrowIfNull(notificationHandler);
         }
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)
         {
-            Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
+            Func<HealthCheckResource, bool> filter = k => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
 
             if (!_watchers.Keys.Any(filter))
             {
@@ -86,9 +86,9 @@ namespace HealthChecks.UI.K8s.Operator
             await HealthChecksPushService.PushNotification(
                 type,
                 resource,
-                uiService,
+                uiService!, // TODO: check
                 service,
-                secret,
+                secret!, // TODO: check
                 _logger,
                 _httpClientFactory);
         }

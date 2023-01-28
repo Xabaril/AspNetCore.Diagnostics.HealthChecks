@@ -18,14 +18,14 @@ namespace HealthChecks.Publisher.Prometheus
                 context.Response.StatusCode = StatusCodes.Status200OK;
             }
 
-            await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
+            await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted).ConfigureAwait(false);
         }
 
 #pragma warning disable IDE1006 // Naming Styles
         public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) //TODO: change public API
 #pragma warning restore IDE1006 // Naming Styles
         {
-            await WritePrometheusResultText(context, report, false);
+            await WritePrometheusResultText(context, report, false).ConfigureAwait(false);
         }
     }
 }

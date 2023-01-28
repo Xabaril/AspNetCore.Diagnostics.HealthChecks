@@ -18,5 +18,4 @@ const AlertPanel: FunctionComponent<AlertPanelProps> = ({ message }) =>
         </div>
     );
 
-
 export { AlertPanel };

@@ -168,7 +168,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new DnsResolveCountOptions();
             setup?.Invoke(options);
 
-            if (!options.HostRegistrations.Any())
+            if (options.HostRegistrations.Count == 0)
                 throw new ArgumentNullException(nameof(options), "No dns hosts have been registered");
 
             return builder.Add(new HealthCheckRegistration(

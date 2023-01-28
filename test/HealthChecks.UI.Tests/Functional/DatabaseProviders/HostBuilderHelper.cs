@@ -1,17 +1,12 @@
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.UI.Tests
 {
     public class HostBuilderHelper
     {
-        public static IWebHostBuilder Create(ManualResetEventSlim hostReset, ManualResetEventSlim collectorReset = null, Action<HealthChecksUIBuilder> configureUI = null)
+        public static IWebHostBuilder Create(ManualResetEventSlim hostReset, ManualResetEventSlim? collectorReset = null, Action<HealthChecksUIBuilder>? configureUI = null)
         {
             return new WebHostBuilder()
                .ConfigureServices(services =>
@@ -29,7 +24,6 @@ namespace HealthChecks.UI.Tests
                    {
                        services.AddTransient<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(collectorReset));
                    }
-
                }).Configure(app =>
                {
                    app

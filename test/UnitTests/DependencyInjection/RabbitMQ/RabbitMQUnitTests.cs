@@ -1,9 +1,4 @@
-using FluentAssertions;
 using HealthChecks.RabbitMQ;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
 {
@@ -20,13 +15,13 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
                 .AddRabbitMQ(rabbitConnectionString: _fakeConnectionString);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(_defaultCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(_defaultCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
         }
 
         [Fact]
@@ -39,13 +34,13 @@ namespace UnitTests.HealthChecks.DependencyInjection.RabbitMQ
                 .AddRabbitMQ(_fakeConnectionString, name: customCheckName);
 
             using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be(customCheckName);
-            check.GetType().Should().Be(typeof(RabbitMQHealthCheck));
+            registration.Name.ShouldBe(customCheckName);
+            check.ShouldBeOfType<RabbitMQHealthCheck>();
         }
     }
 }

@@ -1,12 +1,6 @@
 using System.Net;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.Network.Tests.Functional
 {
@@ -18,8 +12,8 @@ namespace HealthChecks.Network.Tests.Functional
         [Fact]
         public async Task be_healthy_when_the_configured_number_of_resolved_addresses_is_within_the_threshold()
         {
-            var addresses = (await Dns.GetHostAddressesAsync(hostName)).Count();
-            var addresses2 = (await Dns.GetHostAddressesAsync(hostName2)).Count();
+            int addresses = (await Dns.GetHostAddressesAsync(hostName).ConfigureAwait(false)).Length;
+            int addresses2 = (await Dns.GetHostAddressesAsync(hostName2).ConfigureAwait(false)).Length;
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -38,7 +32,7 @@ namespace HealthChecks.Network.Tests.Functional
                     app.UseRouting();
                     app.UseEndpoints(config =>
                     {
-                        config.MapHealthChecks("/health", new HealthCheckOptions()
+                        config.MapHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => true
                         });
@@ -47,8 +41,7 @@ namespace HealthChecks.Network.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
         }
@@ -56,8 +49,8 @@ namespace HealthChecks.Network.Tests.Functional
         [Fact]
         public async Task be_unhealthy_when_the_configured_number_of_resolved_is_out_of_range()
         {
-            var addresses = (await Dns.GetHostAddressesAsync(hostName)).Count();
-            var addresses2 = (await Dns.GetHostAddressesAsync(hostName2)).Count();
+            int addresses = (await Dns.GetHostAddressesAsync(hostName).ConfigureAwait(false)).Length;
+            int addresses2 = (await Dns.GetHostAddressesAsync(hostName2).ConfigureAwait(false)).Length;
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -76,7 +69,7 @@ namespace HealthChecks.Network.Tests.Functional
                     app.UseRouting();
                     app.UseEndpoints(config =>
                     {
-                        config.MapHealthChecks("/health", new HealthCheckOptions()
+                        config.MapHealthChecks("/health", new HealthCheckOptions
                         {
                             Predicate = r => true,
                             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -86,7 +79,8 @@ namespace HealthChecks.Network.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateClient().GetAsJson<UIHealthReport>("/health");
+            var response = await server.CreateClient().GetAsJson<UIHealthReport>("/health").ConfigureAwait(false);
+            response.ShouldNotBeNull();
         }
     }
 }

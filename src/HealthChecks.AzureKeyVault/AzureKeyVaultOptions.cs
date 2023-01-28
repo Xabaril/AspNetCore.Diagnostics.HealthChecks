@@ -5,15 +5,15 @@ namespace HealthChecks.AzureKeyVault
     /// </summary>
     public class AzureKeyVaultOptions
     {
-        internal HashSet<string> _secrets = new HashSet<string>();
+        internal HashSet<string> _secrets = new();
 
         internal IEnumerable<string> Secrets => _secrets;
 
-        internal HashSet<string> _keys = new HashSet<string>();
+        internal HashSet<string> _keys = new();
 
         internal IEnumerable<string> Keys => _keys;
 
-        internal List<(string, bool)> _certificates = new List<(string key, bool checkExpired)>();
+        internal List<(string, bool)> _certificates = new();
 
         internal List<(string, bool)> Certificates => _certificates;
 

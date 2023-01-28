@@ -1,10 +1,5 @@
 using HealthChecks.UI.Core;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using Xunit;
 
 namespace HealthChecks.UI.Tests
 {
@@ -48,7 +43,7 @@ namespace HealthChecks.UI.Tests
         }
 
         [Fact]
-        public Task configure_custom_delegating_handlers()
+        public Task configure_api_endpoint_custom_delegating_handlers()
         {
             var hostReset = new ManualResetEventSlim(false);
             var tracer = Substitute.For<MessageHandlerTracer>();
@@ -85,14 +80,53 @@ namespace HealthChecks.UI.Tests
             return Task.CompletedTask;
         }
 
+        [Fact]
+        public Task configure_webhooks_endpoint_custom_delegating_handlers()
+        {
+            var hostReset = new ManualResetEventSlim(false);
+            var tracer = Substitute.For<MessageHandlerTracer>();
+
+            var builder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services
+                    .AddRouting()
+                    .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
+                    .AddTransient(sp => new CustomDelegatingHandler(tracer))
+                    .AddTransient(sp => new CustomDelegatingHandler2(tracer))
+                    .AddHealthChecksUI(setup =>
+                    {
+                        setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
+                        setup.AddWebhookNotification("webhook1", "https://httpstat.us/200", "test payload");
+                        setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler>();
+                        setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
+
+                    }).AddInMemoryStorage();
+                })
+                .Configure(app =>
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
+                });
+
+            var server = new TestServer(builder);
+
+            hostReset.Wait(3000);
+
+            tracer.Received().Log(nameof(CustomDelegatingHandler), "SendAsync");
+            tracer.Received().Log(nameof(CustomDelegatingHandler2), "SendAsync");
+
+            return Task.CompletedTask;
+        }
+
         public class ClientHandler : HttpClientHandler
         {
             private readonly MessageHandlerTracer _tracer;
 
             public ClientHandler(MessageHandlerTracer tracer, IDictionary<string, string> properties)
             {
-                _tracer = tracer ?? throw new ArgumentNullException(nameof(tracer));
-                _ = properties ?? throw new ArgumentNullException(nameof(properties));
+                _tracer = Guard.ThrowIfNull(tracer);
+                _ = Guard.ThrowIfNull(properties);
 
                 foreach (var kv in properties)
                 {
@@ -103,7 +137,7 @@ namespace HealthChecks.UI.Tests
             {
                 foreach (var prop in Properties)
                 {
-                    _tracer.Log(prop.Key, prop.Value.ToString());
+                    _tracer.Log(prop.Key, prop.Value?.ToString());
                 }
 
                 return base.SendAsync(request, cancellationToken);
@@ -116,7 +150,7 @@ namespace HealthChecks.UI.Tests
 
             public CustomDelegatingHandler(MessageHandlerTracer tracer)
             {
-                _tracer = tracer ?? throw new ArgumentNullException(nameof(tracer));
+                _tracer = Guard.ThrowIfNull(tracer);
             }
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
@@ -131,7 +165,7 @@ namespace HealthChecks.UI.Tests
 
             public CustomDelegatingHandler2(MessageHandlerTracer tracer)
             {
-                _tracer = tracer ?? throw new ArgumentNullException(nameof(tracer));
+                _tracer = Guard.ThrowIfNull(tracer);
             }
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
@@ -142,7 +176,7 @@ namespace HealthChecks.UI.Tests
 
         public abstract class MessageHandlerTracer
         {
-            public abstract void Log(string key, string value);
+            public abstract void Log(string key, string? value);
         }
     }
 }

@@ -1,60 +1,56 @@
-using Azure.Core;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>, IHealthCheck
     {
-        private readonly string _topicName;
-        private readonly string _subscriptionName;
         private string? _connectionKey;
 
-        public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName) : base(connectionString)
+        protected override string ConnectionKey =>
+            _connectionKey ??= $"{Prefix}_{Options.TopicName}_{Options.SubscriptionName}";
+
+        public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
+            : base(options)
         {
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
-
-            if (string.IsNullOrEmpty(subscriptionName))
-            {
-                throw new ArgumentNullException(nameof(subscriptionName));
-            }
-
-            _topicName = topicName;
-            _subscriptionName = subscriptionName;
+            Guard.ThrowIfNull(options.TopicName, true);
+            Guard.ThrowIfNull(options.SubscriptionName, true);
         }
 
-        public AzureServiceBusSubscriptionHealthCheck(string endPoint, string topicName, string subscriptionName, TokenCredential tokenCredential) : base(endPoint, tokenCredential)
-        {
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
-
-            if (string.IsNullOrEmpty(subscriptionName))
-            {
-                throw new ArgumentNullException(nameof(subscriptionName));
-            }
-
-            _topicName = topicName;
-            _subscriptionName = subscriptionName;
-        }
-
+        /// <inheritdoc />
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
-                _ = await managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
+                if (Options.UsePeekMode)
+                    await CheckWithReceiver().ConfigureAwait(false);
+                else
+                    await CheckWithManagement().ConfigureAwait(false);
+
                 return HealthCheckResult.Healthy();
             }
             catch (Exception ex)
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
-        }
 
-        protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{_topicName}_{_subscriptionName}";
+            Task CheckWithReceiver()
+            {
+                var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
+                var receiver = ServiceBusReceivers.GetOrAdd(
+                    $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
+                    client.CreateReceiver(Options.TopicName, Options.SubscriptionName));
+
+                return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
+            }
+
+            Task CheckWithManagement()
+            {
+                var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
+
+                return managementClient.GetSubscriptionRuntimePropertiesAsync(
+                    Options.TopicName, Options.SubscriptionName, cancellationToken);
+            }
+        }
     }
 }

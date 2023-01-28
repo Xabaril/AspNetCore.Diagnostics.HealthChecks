@@ -1,7 +1,4 @@
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Xunit;
 
 namespace HealthChecks.Publisher.ApplicationInsights.Tests.DependencyInjection
 {
@@ -13,7 +10,21 @@ namespace HealthChecks.Publisher.ApplicationInsights.Tests.DependencyInjection
             var services = new ServiceCollection();
             services
                 .AddHealthChecks()
-                .AddApplicationInsightsPublisher("telemetrykey");
+                .AddApplicationInsightsPublisher(instrumentationKey: "telemetrykey");
+
+            using var serviceProvider = services.BuildServiceProvider();
+            var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
+
+            Assert.NotNull(publisher);
+        }
+
+        [Fact]
+        public void add_healthcheck_when_properly_configured_with_connection_string_parameter()
+        {
+            var services = new ServiceCollection();
+            services
+                .AddHealthChecks()
+                .AddApplicationInsightsPublisher(connectionString: "InstrumentationKey=telemetrykey;EndpointSuffix=example.com;");
 
             using var serviceProvider = services.BuildServiceProvider();
             var publisher = serviceProvider.GetService<IHealthCheckPublisher>();

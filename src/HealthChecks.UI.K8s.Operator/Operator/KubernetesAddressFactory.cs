@@ -48,8 +48,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
                 healthPath = Constants.DEFAULT_HEALTH_PATH;
             }
 
-            return $"{address}/{ healthPath.TrimStart('/')}";
-
+            return $"{address}/{healthPath.TrimStart('/')}";
         }
 
         private static string GetLoadBalancerAddress(V1Service service)
@@ -63,7 +62,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
             return service.Spec.ClusterIP;
         }
 
-        private static V1ServicePort GetServicePort(V1Service service)
+        private static V1ServicePort? GetServicePort(V1Service service)
         {
             return service.Spec.Ports.FirstOrDefault();
         }

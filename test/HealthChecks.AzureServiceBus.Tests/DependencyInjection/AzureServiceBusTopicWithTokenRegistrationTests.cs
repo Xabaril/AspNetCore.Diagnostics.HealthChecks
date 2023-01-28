@@ -24,8 +24,9 @@ public class azure_service_bus_topic_registration_with_token_should
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, topicNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusTopic(_ =>
                 {
@@ -61,8 +62,7 @@ public class azure_service_bus_topic_registration_with_token_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusTopic("cnn", "topic", new AzureCliCredential(),
-                "azuretopiccheck");
+            .AddAzureServiceBusTopic("cnn", "topic", new AzureCliCredential(), "azuretopiccheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -77,8 +77,9 @@ public class azure_service_bus_topic_registration_with_token_should
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, topicNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusTopic(_ =>
                 {
@@ -95,7 +96,7 @@ public class azure_service_bus_topic_registration_with_token_should
                     tokenCredentialFactoryCalled = true;
                     return new AzureCliCredential();
                 },
-                "azuretopiccheck");
+                name: "azuretopiccheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -122,7 +123,7 @@ public class azure_service_bus_topic_registration_with_token_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("endpoint");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 }

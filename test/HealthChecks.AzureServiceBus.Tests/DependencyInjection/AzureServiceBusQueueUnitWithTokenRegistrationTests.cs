@@ -1,4 +1,5 @@
 using Azure.Identity;
+using HealthChecks.AzureServiceBus.Configuration;
 
 namespace HealthChecks.AzureServiceBus.Tests;
 
@@ -9,7 +10,7 @@ public class azure_service_bus_queue_registration_with_token_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusQueue("cnn", "queueName", new AzureCliCredential());
+            .AddAzureServiceBusQueue("fullyQualifiedNamespace", "queueName", new AzureCliCredential());
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -22,15 +23,43 @@ public class azure_service_bus_queue_registration_with_token_should
     }
 
     [Fact]
+    public void add_health_check_with_options_when_properly_configured()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue("fullyQualifiedNamespace", "queueName", new AzureCliCredential(),
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+    }
+
+    [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, queueNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ =>
                 {
                     endpointFactoryCalled = true;
-                    return "cnn";
+                    return "fullyQualifiedNamespace";
                 },
                 _ =>
                 {
@@ -57,6 +86,33 @@ public class azure_service_bus_queue_registration_with_token_should
     }
 
     [Fact]
+    public void add_health_check_using_factories_with_options_when_properly_configured()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(_ => "fullyQualifiedNamespace", _ => "queueName", _ => new AzureCliCredential(),
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+    }
+
+    [Fact]
     public void add_named_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
@@ -77,8 +133,9 @@ public class azure_service_bus_queue_registration_with_token_should
     [Fact]
     public void add_named_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool endpointFactoryCalled = false, queueNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ =>
                 {
@@ -95,7 +152,7 @@ public class azure_service_bus_queue_registration_with_token_should
                     tokenCredentialFactoryCalled = true;
                     return new AzureCliCredential();
                 },
-                "azureservicebusqueuecheck");
+                name: "azureservicebusqueuecheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -122,7 +179,7 @@ public class azure_service_bus_queue_registration_with_token_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("endpoint");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 }

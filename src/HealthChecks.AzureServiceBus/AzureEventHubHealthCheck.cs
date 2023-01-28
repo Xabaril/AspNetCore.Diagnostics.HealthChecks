@@ -47,8 +47,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
     {
         try
         {
-            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient())
-                .ConfigureAwait(false);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
 
             _ = await client.GetEventHubPropertiesAsync(cancellationToken).ConfigureAwait(false);
 

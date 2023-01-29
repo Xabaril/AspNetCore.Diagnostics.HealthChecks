@@ -103,6 +103,7 @@ namespace HealthChecks.Redis.Tests.Functional
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+            (await response.Content.ReadAsStringAsync().ConfigureAwait(false)).ShouldContain("Healthcheck timed out");
         }
     }
 }

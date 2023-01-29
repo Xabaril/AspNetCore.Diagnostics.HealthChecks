@@ -89,7 +89,6 @@ namespace HealthChecks.Redis.Tests.Functional
                 {
                     services.AddHealthChecks()
                         .AddRedis("nonexistinghost:6379,allowAdmin=true,connectRetry=2147483647", tags: new string[] { "redis" }, timeout: TimeSpan.FromSeconds(2));
-
                 })
                 .Configure(app =>
                 {

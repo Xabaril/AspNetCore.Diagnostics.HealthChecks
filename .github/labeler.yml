@@ -29,6 +29,9 @@ aws:
 azure:
   - src/HealthChecks.Azure*/**/*
 
+clickhouse:
+  - src/HealthChecks.ClickHouse/**/*
+
 consul:
   - src/HealthChecks.Consul/**/*
 

@@ -94,7 +94,8 @@ namespace HealthChecks.Redis.Tests.Functional
                 {
                     app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => r.Tags.Contains("redis")
+                        Predicate = r => r.Tags.Contains("redis"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
                     });
                 });
 

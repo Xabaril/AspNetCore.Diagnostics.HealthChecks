@@ -81,6 +81,7 @@ public class RedisHealthCheck : IHealthCheck
         }
     }
 
+    // Remove when https://github.com/StackExchange/StackExchange.Redis/issues/1039 is done
     private static async Task<ConnectionMultiplexer> TimeoutAsync(Task<ConnectionMultiplexer> task, CancellationToken cancellationToken)
     {
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

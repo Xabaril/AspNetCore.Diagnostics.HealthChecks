@@ -24,16 +24,15 @@ public class RedisHealthCheck : IHealthCheck
         {
             if (!_connections.TryGetValue(_redisConnectionString, out var connection))
             {
-                var timeoutTask = Task.Delay(Timeout.Infinite, cancellationToken);
-                var connectionMultiplexerTask = ConnectionMultiplexer.ConnectAsync(_redisConnectionString);
-
-                var firstResolved = await Task.WhenAny(timeoutTask, connectionMultiplexerTask).ConfigureAwait(false);
-                if (firstResolved == timeoutTask)
+                try
+                {
+                    var connectionMultiplexerTask = ConnectionMultiplexer.ConnectAsync(_redisConnectionString);
+                    connection = await TimeoutAsync(connectionMultiplexerTask, cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
                 {
                     return new HealthCheckResult(context.Registration.FailureStatus, description: "Healthcheck timed out");
                 }
-
-                connection = await connectionMultiplexerTask.ConfigureAwait(false);
 
                 if (!_connections.TryAdd(_redisConnectionString, connection))
                 {
@@ -80,5 +79,22 @@ public class RedisHealthCheck : IHealthCheck
             connection?.Dispose();
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
+    }
+
+    private static async Task<ConnectionMultiplexer> TimeoutAsync(Task<ConnectionMultiplexer> task, CancellationToken cancellationToken)
+    {
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        var completedTask = await Task.
+            WhenAny(task, Task.Delay(Timeout.Infinite, timeoutCts.Token))
+            .ConfigureAwait(false);
+
+        if (completedTask == task)
+        {
+            timeoutCts.Cancel();
+            return await task.ConfigureAwait(false);
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        throw new OperationCanceledException();
     }
 }

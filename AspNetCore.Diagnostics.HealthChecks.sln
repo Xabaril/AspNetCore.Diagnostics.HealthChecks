@@ -271,6 +271,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\healthchecks_azure_iothub_cd .yml = .github\workflows\healthchecks_azure_iothub_cd .yml
 		.github\workflows\healthchecks_azure_iothub_cd_preview.yml = .github\workflows\healthchecks_azure_iothub_cd_preview.yml
 		.github\workflows\healthchecks_azure_iothub_ci.yml = .github\workflows\healthchecks_azure_iothub_ci.yml
+		.github\workflows\healthchecks_clickhouse_cd.yml = .github\workflows\healthchecks_clickhouse_cd.yml
+		.github\workflows\healthchecks_clickhouse_cd_preview.yml = .github\workflows\healthchecks_clickhouse_cd_preview.yml
+		.github\workflows\healthchecks_clickhouse_ci.yml = .github\workflows\healthchecks_clickhouse_ci.yml
 		.github\workflows\healthchecks_consul_cd.yml = .github\workflows\healthchecks_consul_cd.yml
 		.github\workflows\healthchecks_consul_cd_preview.yml = .github\workflows\healthchecks_consul_cd_preview.yml
 		.github\workflows\healthchecks_consul_ci.yml = .github\workflows\healthchecks_consul_ci.yml
@@ -422,6 +425,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Client.Tests", "test\HealthChecks.UI.Client.Tests\HealthChecks.UI.Client.Tests.csproj", "{711762D3-0A1E-4859-81F1-94C8E8E82610}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Data", "src\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj", "{51F0A996-9C63-4C59-85E0-D91B6A58C653}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse", "src\HealthChecks.ClickHouse\HealthChecks.ClickHouse.csproj", "{5707DD45-3631-44FB-9E6C-38FAE0FF7BDA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.ClickHouse.Tests", "test\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{0D73CE92-EBE0-4259-A3AB-3E10194682D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -905,6 +912,14 @@ Global
 		{51F0A996-9C63-4C59-85E0-D91B6A58C653}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51F0A996-9C63-4C59-85E0-D91B6A58C653}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51F0A996-9C63-4C59-85E0-D91B6A58C653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5707DD45-3631-44FB-9E6C-38FAE0FF7BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5707DD45-3631-44FB-9E6C-38FAE0FF7BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5707DD45-3631-44FB-9E6C-38FAE0FF7BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5707DD45-3631-44FB-9E6C-38FAE0FF7BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D73CE92-EBE0-4259-A3AB-3E10194682D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D73CE92-EBE0-4259-A3AB-3E10194682D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D73CE92-EBE0-4259-A3AB-3E10194682D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D73CE92-EBE0-4259-A3AB-3E10194682D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1030,6 +1045,8 @@ Global
 		{3B32DF1F-03AA-4625-8694-E427C51E2398} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{711762D3-0A1E-4859-81F1-94C8E8E82610} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{51F0A996-9C63-4C59-85E0-D91B6A58C653} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{5707DD45-3631-44FB-9E6C-38FAE0FF7BDA} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{0D73CE92-EBE0-4259-A3AB-3E10194682D4} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

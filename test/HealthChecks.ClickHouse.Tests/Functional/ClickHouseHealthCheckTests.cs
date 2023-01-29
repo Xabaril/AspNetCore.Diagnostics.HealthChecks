@@ -1,19 +1,6 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-
-using Xunit;
 
 namespace HealthChecks.ClickHouse.Tests.Functional;
-
-public class DBConfigSetting
-{
-    public string ConnectionString { get; set; }
-}
 
 public class clickHouse_healthcheck_should
 {
@@ -38,11 +25,9 @@ public class clickHouse_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-            .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-        response.StatusCode
-          .Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -66,11 +51,9 @@ public class clickHouse_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-            .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-        response.StatusCode
-            .Should().Be(HttpStatusCode.ServiceUnavailable);
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
     [Fact]
@@ -94,11 +77,9 @@ public class clickHouse_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-            .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-        response.StatusCode
-            .Should().Be(HttpStatusCode.ServiceUnavailable);
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
     [Fact]
@@ -126,11 +107,9 @@ public class clickHouse_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-                                   .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-        response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -157,10 +136,13 @@ public class clickHouse_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-                                   .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-        response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
+}
+
+public class DBConfigSetting
+{
+    public string ConnectionString { get; set; } = null!;
 }

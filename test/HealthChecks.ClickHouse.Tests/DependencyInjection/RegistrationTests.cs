@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.ClickHouse.Tests.DependencyInjection;
 
 public class clickHouse_registration_should
@@ -16,13 +10,13 @@ public class clickHouse_registration_should
             .AddClickHouse("connectionstring");
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("clickHouse");
-        check.GetType().Should().Be(typeof(ClickHouseHealthCheck));
+        registration.Name.ShouldBe("clickHouse");
+        check.GetType().ShouldBe(typeof(ClickHouseHealthCheck));
     }
 
     [Fact]
@@ -33,13 +27,13 @@ public class clickHouse_registration_should
             .AddClickHouse("connectionstring", name: "my-click-1");
 
         using var serviceProvider = services.BuildServiceProvider();
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("my-click-1");
-        check.GetType().Should().Be(typeof(ClickHouseHealthCheck));
+        registration.Name.ShouldBe("my-click-1");
+        check.GetType().ShouldBe(typeof(ClickHouseHealthCheck));
     }
 
     [Fact]
@@ -56,13 +50,13 @@ public class clickHouse_registration_should
 
         using var serviceProvider = services.BuildServiceProvider();
 
-        var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.Should().Be("my-click-1");
-        check.GetType().Should().Be(typeof(ClickHouseHealthCheck));
-        factoryCalled.Should().BeTrue();
+        registration.Name.ShouldBe("my-click-1");
+        check.GetType().ShouldBe(typeof(ClickHouseHealthCheck));
+        factoryCalled.ShouldBeTrue();
     }
 }

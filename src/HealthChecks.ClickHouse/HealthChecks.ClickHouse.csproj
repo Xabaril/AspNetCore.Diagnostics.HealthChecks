@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Beat;Health;ClickHouse</PackageTags>
-    <Description>HealthChecks.ClickHouse is a health check for ClickHouse DataBase.</Description>
-    <Version>$(HealthCheckClickHouse)</Version>
-    <Nullable>enable</Nullable>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageTags>$(PackageTags);ClickHouse</PackageTags>
+    <Description>HealthChecks.ClickHouse is the health check for ClickHouse DataBase.</Description>
+    <VersionPrefix>$(HealthCheckClickHouse)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ClickHouse.Client" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

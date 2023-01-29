@@ -23,6 +23,8 @@ flags:
     carryforward: true
   AzureStorage:
     carryforward: true
+  ClickHouse:
+    carryforward: true
   Consul:
     carryforward: true
   CosmosDb:

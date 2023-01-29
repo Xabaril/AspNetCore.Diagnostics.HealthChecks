@@ -85,19 +85,19 @@ namespace HealthChecks.Redis.Tests.Functional
         public async Task be_unhealthy_if_redis_is_not_available_within_specified_timeout()
         {
             var webHostBuilder = new WebHostBuilder()
-             .ConfigureServices(services =>
-             {
-                 services.AddHealthChecks()
-                     .AddRedis("nonexistinghost:6379,allowAdmin=true,connectRetry=2147483647", tags: new string[] { "redis" }, timeout: TimeSpan.FromSeconds(2));
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecks()
+                        .AddRedis("nonexistinghost:6379,allowAdmin=true,connectRetry=2147483647", tags: new string[] { "redis" }, timeout: TimeSpan.FromSeconds(2));
 
-             })
-             .Configure(app =>
-             {
-                 app.UseHealthChecks("/health", new HealthCheckOptions
-                 {
-                     Predicate = r => r.Tags.Contains("redis")
-                 });
-             });
+                })
+                .Configure(app =>
+                {
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("redis")
+                    });
+                });
 
             using var server = new TestServer(webHostBuilder);
 

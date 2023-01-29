@@ -1,0 +1,24 @@
+namespace HealthChecks.ClickHouse
+{
+    public class ClickHouseHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public ClickHouseHealthCheck(HealthChecks.ClickHouse.ClickHouseHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class ClickHouseHealthCheckOptions
+    {
+        public ClickHouseHealthCheckOptions() { }
+        public string CommandText { get; set; }
+        public System.Action<ClickHouse.Client.ADO.ClickHouseConnection>? Configure { get; set; }
+        public string ConnectionString { get; set; }
+        public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class ClickHouseHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddClickHouse(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string healthQuery = "select 1;", System.Action<ClickHouse.Client.ADO.ClickHouseConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddClickHouse(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string healthQuery = "select 1;", System.Action<ClickHouse.Client.ADO.ClickHouseConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

@@ -10,14 +10,15 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ClickHouseHealthCheckBuilderExtensions
 {
     private const string NAME = "clickHouse";
+    internal const string HEALTH_QUERY = "select 1;";
 
     /// <summary>
     /// Add a health check for ClickHouse DataBase.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="clickHouseConnectionString">The ClickHouse connection string to be used.</param>
-    /// <param name="healthQuery">The query to be used in check. Optional. If <c>null</c> SELECT 1 is used.</param>
-    /// <param name="setup">An optional action to allow additional ClickHouse-specific configuration.</param>
+    /// <param name="connectionString">The ClickHouse connection string to be used.</param>
+    /// <param name="healthQuery">The query to be used in check.</param>
+    /// <param name="configure">An optional action to allow additional ClickHouse specific configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'clickHouse' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -28,24 +29,24 @@ public static class ClickHouseHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddClickHouse(
         this IHealthChecksBuilder builder,
-        string clickHouseConnectionString,
-        string healthQuery = "SELECT 1;",
-        Action<ClickHouseConnection>? setup = null,
+        string connectionString,
+        string healthQuery = HEALTH_QUERY,
+        Action<ClickHouseConnection>? configure = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddClickHouse(_ => clickHouseConnectionString, healthQuery, setup, name, failureStatus, tags, timeout);
+        return builder.AddClickHouse(_ => connectionString, healthQuery, configure, name, failureStatus, tags, timeout);
     }
 
     /// <summary>
     /// Add a health check for ClickHouse DataBase.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionStringFactory">A factory to build the ClickHouse connection string to use.</param>
-    /// <param name="healthQuery">The query to be used in check. Optional. If <c>null</c> SELECT 1 is used.</param>
-    /// <param name="setup">An optional action to allow additional ClickHouse-specific configuration.</param>
+    /// <param name="connectionStringFactory">A factory to build the ClickHouse connection string to be used.</param>
+    /// <param name="healthQuery">The query to be used in check.</param>
+    /// <param name="configure">An optional action to allow additional ClickHouse specific configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'clickHouse' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -57,23 +58,23 @@ public static class ClickHouseHealthCheckBuilderExtensions
     public static IHealthChecksBuilder AddClickHouse(
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, string> connectionStringFactory,
-        string healthQuery = "SELECT 1;",
-        Action<ClickHouseConnection>? setup = null,
+        string healthQuery = HEALTH_QUERY,
+        Action<ClickHouseConnection>? configure = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        if (connectionStringFactory == null)
-        {
-            throw new ArgumentNullException(nameof(connectionStringFactory));
-        }
-
-        builder.Services.AddSingleton(sp => new ClickHouseHealthCheck(connectionStringFactory(sp), healthQuery, setup));
+        Guard.ThrowIfNull(connectionStringFactory);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<ClickHouseHealthCheck>(),
+            sp => new ClickHouseHealthCheck(new ClickHouseHealthCheckOptions
+            {
+                ConnectionString = connectionStringFactory(sp),
+                CommandText = healthQuery,
+                Configure = configure,
+            }),
             failureStatus,
             tags,
             timeout));

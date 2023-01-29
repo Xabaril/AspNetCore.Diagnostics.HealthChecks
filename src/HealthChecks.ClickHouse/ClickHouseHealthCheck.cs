@@ -3,43 +3,37 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ClickHouse;
 
+/// <summary>
+/// A health check for ClickHouse databases.
+/// </summary>
 public class ClickHouseHealthCheck : IHealthCheck
 {
-    private readonly string _connectionString;
-    private readonly string _sql;
-    private readonly Action<ClickHouseConnection>? _setup;
+    private readonly ClickHouseHealthCheckOptions _options;
 
-    /// <summary>
-    /// Check the ability to connect to the ClickHouse DataBase
-    /// </summary>
-    /// <param name="clickHouseConnectionString">ClickHouse DataBase connection string</param>
-    /// <param name="sql">Custom sql-query</param>
-    /// <param name="setup">The action to configure the connection</param>
-    public ClickHouseHealthCheck(string clickHouseConnectionString, string sql, Action<ClickHouseConnection>? setup = null)
+    public ClickHouseHealthCheck(ClickHouseHealthCheckOptions options)
     {
-        _connectionString = clickHouseConnectionString ?? throw new ArgumentNullException(nameof(clickHouseConnectionString));
-        _sql = sql ?? throw new ArgumentNullException(nameof(sql));
-        _setup = setup;
+        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.CommandText, true);
+        _options = options;
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            using (var connection = new ClickHouseConnection(_connectionString))
-            {
-                _setup?.Invoke(connection);
+            using var connection = new ClickHouseConnection(_options.ConnectionString);
 
-                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            _options.Configure?.Invoke(connection);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = _sql;
-                    await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
-                }
-            }
+            using var command = connection.CreateCommand();
+            command.CommandText = _options.CommandText;
+            object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
-            return HealthCheckResult.Healthy();
+            return _options.HealthCheckResultBuilder == null
+                ? HealthCheckResult.Healthy()
+                : _options.HealthCheckResultBuilder(result);
         }
         catch (Exception ex)
         {

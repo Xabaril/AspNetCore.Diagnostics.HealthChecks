@@ -6,8 +6,7 @@ public class clickHouse_registration_should
     public void add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-        services.AddHealthChecks()
-            .AddClickHouse("connectionstring");
+        services.AddHealthChecks().AddClickHouse("connectionstring");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -23,8 +22,7 @@ public class clickHouse_registration_should
     public void add_named_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-        services.AddHealthChecks()
-            .AddClickHouse("connectionstring", name: "my-click-1");
+        services.AddHealthChecks().AddClickHouse("connectionstring", name: "my-click-1");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

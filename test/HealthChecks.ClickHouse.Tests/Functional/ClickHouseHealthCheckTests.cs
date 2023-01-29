@@ -17,7 +17,7 @@ public class clickHouse_healthcheck_should
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("clickHouse")
                 });
@@ -43,7 +43,7 @@ public class clickHouse_healthcheck_should
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("clickHouse")
                 });
@@ -69,7 +69,7 @@ public class clickHouse_healthcheck_should
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("clickHouse")
                 });
@@ -88,7 +88,7 @@ public class clickHouse_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddSingleton(new DBConfigSetting()
+                services.AddSingleton(new DBConfigSetting
                 {
                     ConnectionString = "Host=127.0.0.1;Port=8123;Username=default;Password=;Database=default"
                 });
@@ -98,7 +98,7 @@ public class clickHouse_healthcheck_should
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("clickHouse")
                 });
@@ -118,7 +118,7 @@ public class clickHouse_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddSingleton(new DBConfigSetting()
+                services.AddSingleton(new DBConfigSetting
                 {
                     ConnectionString = "Host=200.0.0.1;Port=8123;Username=default;Password=;Database=default"
                 });
@@ -128,7 +128,7 @@ public class clickHouse_healthcheck_should
             })
             .Configure(app =>
             {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = r => r.Tags.Contains("clickHouse")
                 });

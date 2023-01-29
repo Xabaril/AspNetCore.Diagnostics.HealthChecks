@@ -24,7 +24,16 @@ public class RedisHealthCheck : IHealthCheck
         {
             if (!_connections.TryGetValue(_redisConnectionString, out var connection))
             {
-                connection = await ConnectionMultiplexer.ConnectAsync(_redisConnectionString).ConfigureAwait(false);
+                var timeoutTask = Task.Delay(Timeout.Infinite, cancellationToken);
+                var connectionMultiplexerTask = ConnectionMultiplexer.ConnectAsync(_redisConnectionString);
+
+                var firstResolved = await Task.WhenAny(timeoutTask, connectionMultiplexerTask).ConfigureAwait(false);
+                if (firstResolved == timeoutTask)
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: "Healthcheck timed out");
+                }
+
+                connection = await connectionMultiplexerTask.ConfigureAwait(false);
 
                 if (!_connections.TryAdd(_redisConnectionString, connection))
                 {

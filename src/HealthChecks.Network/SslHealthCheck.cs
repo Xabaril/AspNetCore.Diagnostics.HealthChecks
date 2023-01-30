@@ -24,33 +24,24 @@ namespace HealthChecks.Network
             {
                 foreach (var (host, port, checkLeftDays) in _options.ConfiguredHosts)
                 {
-                    using (var tcpClient = new TcpClient(_options.AddressFamily))
-                    {
+                    using var tcpClient = new TcpClient(_options.AddressFamily);
 #if NET5_0_OR_GREATER
-                        await tcpClient.ConnectAsync(host, port, cancellationToken);
+                    await tcpClient.ConnectAsync(host, port, cancellationToken);
 #else
-                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+                    await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
+                    if (!tcpClient.Connected)
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
 
-                        if (!tcpClient.Connected)
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
-                        }
+                    var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
 
-                        var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
+                    if (certificate is null || !certificate.Verify())
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ssl certificate not present or not valid for {host}:{port}");
 
-                        if (certificate is null || !certificate.Verify())
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ssl certificate not present or not valid for {host}:{port}");
-                        }
+                    if (certificate.NotAfter.Subtract(DateTime.Now).TotalDays <= checkLeftDays)
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
 
-                        if (certificate.NotAfter.Subtract(DateTime.Now).TotalDays <= checkLeftDays)
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
-                        }
-
-                        return HealthCheckResult.Healthy();
-                    }
+                    return HealthCheckResult.Healthy();
                 }
 
                 return HealthCheckResult.Healthy();

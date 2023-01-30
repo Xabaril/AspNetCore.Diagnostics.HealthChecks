@@ -25,19 +25,18 @@ namespace HealthChecks.Network
         {
             try
             {
-                using (var imapConnection = new ImapConnection(_options))
+                using var imapConnection = new ImapConnection(_options);
+
+                if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
+                    if (_options.AccountOptions.Login)
                     {
-                        if (_options.AccountOptions.Login)
-                        {
-                            return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection).ConfigureAwait(false);
-                        }
+                        return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection).ConfigureAwait(false);
                     }
-                    else
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to server {_options.Host} has failed - SSL Enabled : {_options.ConnectionType}");
-                    }
+                }
+                else
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to server {_options.Host} has failed - SSL Enabled : {_options.ConnectionType}");
                 }
 
                 return HealthCheckResult.Healthy();

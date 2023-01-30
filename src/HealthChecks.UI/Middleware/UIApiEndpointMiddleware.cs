@@ -31,38 +31,37 @@ namespace HealthChecks.UI.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            using (var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>())
+            using var scope = _serviceScopeFactory.CreateScope();
+            using var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
+
+            var healthChecks = await db.Configurations.ToListAsync();
+
+            var healthChecksExecutions = new List<HealthCheckExecution>();
+
+            foreach (var item in healthChecks.OrderBy(h => h.Id))
             {
-                var healthChecks = await db.Configurations.ToListAsync();
+                var execution = await db.Executions
+                            .Include(le => le.Entries)
+                            .Where(le => le.Name == item.Name)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
 
-                var healthChecksExecutions = new List<HealthCheckExecution>();
-
-                foreach (var item in healthChecks.OrderBy(h => h.Id))
+                if (execution != null)
                 {
-                    var execution = await db.Executions
-                                .Include(le => le.Entries)
-                                .Where(le => le.Name == item.Name)
-                                .AsNoTracking()
-                                .SingleOrDefaultAsync();
+                    execution.History = await db.HealthCheckExecutionHistories
+                        .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
+                        .OrderByDescending(eh => eh.On)
+                        .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
+                        .ToListAsync();
 
-                    if (execution != null)
-                    {
-                        execution.History = await db.HealthCheckExecutionHistories
-                            .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
-                            .OrderByDescending(eh => eh.On)
-                            .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                            .ToListAsync();
-
-                        healthChecksExecutions.Add(execution);
-                    }
+                    healthChecksExecutions.Add(execution);
                 }
-
-                var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
-                context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
-
-                await context.Response.WriteAsync(responseContent);
             }
+
+            var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
+            context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
+
+            await context.Response.WriteAsync(responseContent);
         }
     }
 }

@@ -40,40 +40,35 @@ namespace HealthChecks.Azure.IoTHub
 
         private async Task ExecuteServiceConnectionCheckAsync(CancellationToken cancellationToken)
         {
-            using (var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, _options.ServiceConnectionTransport))
-            {
-                await client.GetServiceStatisticsAsync(cancellationToken).ConfigureAwait(false);
-            }
+            using var client = ServiceClient.CreateFromConnectionString(_options.ConnectionString, _options.ServiceConnectionTransport);
+            await client.GetServiceStatisticsAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private async Task ExecuteRegistryReadCheckAsync()
         {
-            using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
-            {
-                var query = client.CreateQuery(_options.RegistryReadQuery, 1);
-                await query.GetNextAsJsonAsync().ConfigureAwait(false);
-            }
+            using var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString);
+            var query = client.CreateQuery(_options.RegistryReadQuery, 1);
+            await query.GetNextAsJsonAsync().ConfigureAwait(false);
         }
 
         private async Task ExecuteRegistryWriteCheckAsync(CancellationToken cancellationToken)
         {
-            using (var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString))
-            {
-                var deviceId = _options.RegistryWriteDeviceIdFactory();
-                var device = await client.GetDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
+            using var client = RegistryManager.CreateFromConnectionString(_options.ConnectionString);
 
-                // in default implementation of configuration deviceId equals "health-check-registry-write-device-id"
-                // if in previous health check device were not removed -- try remove it
-                // if in previous health check device were added and removed -- try create and remove it
-                if (device != null)
-                {
-                    await client.RemoveDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
-                }
-                else
-                {
-                    await client.AddDeviceAsync(new Device(deviceId), cancellationToken).ConfigureAwait(false);
-                    await client.RemoveDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
-                }
+            var deviceId = _options.RegistryWriteDeviceIdFactory();
+            var device = await client.GetDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
+
+            // in default implementation of configuration deviceId equals "health-check-registry-write-device-id"
+            // if in previous health check device were not removed -- try remove it
+            // if in previous health check device were added and removed -- try create and remove it
+            if (device != null)
+            {
+                await client.RemoveDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                await client.AddDeviceAsync(new Device(deviceId), cancellationToken).ConfigureAwait(false);
+                await client.RemoveDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
             }
         }
     }

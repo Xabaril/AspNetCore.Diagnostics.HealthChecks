@@ -39,22 +39,21 @@ namespace HealthChecks.Publisher.Prometheus
         {
             try
             {
-                using (var outStream = new MemoryStream())
+                using var outStream = new MemoryStream();
+
+                await Registry.CollectAndExportAsTextAsync(outStream).ConfigureAwait(false);
+                outStream.Position = 0;
+
+                using var request = new HttpRequestMessage(HttpMethod.Post, _targetUrl)
                 {
-                    await Registry.CollectAndExportAsTextAsync(outStream).ConfigureAwait(false);
-                    outStream.Position = 0;
+                    Content = new StreamContent(outStream)
+                };
 
-                    using var request = new HttpRequestMessage(HttpMethod.Post, _targetUrl)
-                    {
-                        Content = new StreamContent(outStream)
-                    };
+                using var response = await _httpClientFactory()
+                    .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
+                    .ConfigureAwait(false);
 
-                    using var response = await _httpClientFactory()
-                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
-                        .ConfigureAwait(false);
-
-                    response.EnsureSuccessStatusCode();
-                }
+                response.EnsureSuccessStatusCode();
             }
             catch (ScrapeFailedException ex)
             {

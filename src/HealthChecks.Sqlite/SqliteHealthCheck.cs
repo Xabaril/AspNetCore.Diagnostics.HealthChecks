@@ -1,44 +1,43 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Sqlite
+namespace HealthChecks.Sqlite;
+
+/// <summary>
+/// A health check for Sqlite services.
+/// </summary>
+public class SqliteHealthCheck : IHealthCheck
 {
-    /// <summary>
-    /// A health check for Sqlite services.
-    /// </summary>
-    public class SqliteHealthCheck : IHealthCheck
+    private readonly SqliteHealthCheckOptions _options;
+
+    public SqliteHealthCheck(SqliteHealthCheckOptions options)
     {
-        private readonly SqliteHealthCheckOptions _options;
+        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.CommandText, true);
+        _options = options;
+    }
 
-        public SqliteHealthCheck(SqliteHealthCheckOptions options)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            Guard.ThrowIfNull(options.ConnectionString, true);
-            Guard.ThrowIfNull(options.CommandText, true);
-            _options = options;
+            using var connection = new SqliteConnection(_options.ConnectionString);
+
+            _options.Configure?.Invoke(connection);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+            using var command = connection.CreateCommand();
+            command.CommandText = _options.CommandText;
+            object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+            return _options.HealthCheckResultBuilder == null
+                ? HealthCheckResult.Healthy()
+                : _options.HealthCheckResultBuilder(result);
         }
-
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                using var connection = new SqliteConnection(_options.ConnectionString);
-
-                _options.Configure?.Invoke(connection);
-                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-
-                using var command = connection.CreateCommand();
-                command.CommandText = _options.CommandText;
-                object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
-
-                return _options.HealthCheckResultBuilder == null
-                    ? HealthCheckResult.Healthy()
-                    : _options.HealthCheckResultBuilder(result);
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

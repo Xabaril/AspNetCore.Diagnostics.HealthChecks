@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace HealthChecks.UIAndApi.Controllers
+namespace HealthChecks.UIAndApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ValuesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ValuesController : ControllerBase
+    // GET api/values
+    [HttpGet]
+    public ActionResult<IEnumerable<string>> Get()
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        return new string[] { "value1", "value2" };
     }
 }

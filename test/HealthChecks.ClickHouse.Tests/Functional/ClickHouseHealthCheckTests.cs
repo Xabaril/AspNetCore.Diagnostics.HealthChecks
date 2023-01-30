@@ -13,7 +13,7 @@ public class clickHouse_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddClickHouse(connectionString, tags: new string[] { "clickHouse" });
+                    .AddClickHouse(connectionString, tags: new string[] { "clickHouse" });
             })
             .Configure(app =>
             {
@@ -39,7 +39,7 @@ public class clickHouse_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddClickHouse(connectionString, "SELECT 1 FROM InvalidDB", tags: new string[] { "clickHouse" });
+                    .AddClickHouse(connectionString, "SELECT 1 FROM InvalidDB", tags: new string[] { "clickHouse" });
             })
             .Configure(app =>
             {
@@ -65,7 +65,7 @@ public class clickHouse_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddClickHouse(connectionString, tags: new string[] { "clickHouse" });
+                    .AddClickHouse(connectionString, tags: new string[] { "clickHouse" });
             })
             .Configure(app =>
             {
@@ -94,7 +94,7 @@ public class clickHouse_healthcheck_should
                 });
 
                 services.AddHealthChecks()
-                        .AddClickHouse(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: new string[] { "clickHouse" });
+                    .AddClickHouse(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: new string[] { "clickHouse" });
             })
             .Configure(app =>
             {
@@ -124,7 +124,7 @@ public class clickHouse_healthcheck_should
                 });
 
                 services.AddHealthChecks()
-                        .AddClickHouse(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: new string[] { "clickHouse" });
+                    .AddClickHouse(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: new string[] { "clickHouse" });
             })
             .Configure(app =>
             {

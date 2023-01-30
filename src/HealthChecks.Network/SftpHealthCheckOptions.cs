@@ -1,12 +1,11 @@
-namespace HealthChecks.Network
+namespace HealthChecks.Network;
+
+public class SftpHealthCheckOptions
 {
-    public class SftpHealthCheckOptions
+    internal Dictionary<string, SftpConfiguration> ConfiguredHosts { get; } = new();
+    public SftpHealthCheckOptions AddHost(SftpConfiguration sftpConfiguration)
     {
-        internal Dictionary<string, SftpConfiguration> ConfiguredHosts { get; } = new();
-        public SftpHealthCheckOptions AddHost(SftpConfiguration sftpConfiguration)
-        {
-            ConfiguredHosts.Add(sftpConfiguration.Host, sftpConfiguration);
-            return this;
-        }
+        ConfiguredHosts.Add(sftpConfiguration.Host, sftpConfiguration);
+        return this;
     }
 }

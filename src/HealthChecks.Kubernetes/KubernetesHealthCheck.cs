@@ -1,50 +1,49 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Kubernetes
+namespace HealthChecks.Kubernetes;
+
+public class KubernetesHealthCheck : IHealthCheck
 {
-    public class KubernetesHealthCheck : IHealthCheck
+    private readonly KubernetesHealthCheckBuilder _builder;
+    private readonly KubernetesChecksExecutor _kubernetesChecksExecutor;
+
+    public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder,
+        KubernetesChecksExecutor kubernetesChecksExecutor)
     {
-        private readonly KubernetesHealthCheckBuilder _builder;
-        private readonly KubernetesChecksExecutor _kubernetesChecksExecutor;
+        _builder = Guard.ThrowIfNull(builder);
+        _kubernetesChecksExecutor = Guard.ThrowIfNull(kubernetesChecksExecutor);
+    }
 
-        public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder,
-            KubernetesChecksExecutor kubernetesChecksExecutor)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        List<Task<(bool result, string name)>> checks = new();
+
+        try
         {
-            _builder = Guard.ThrowIfNull(builder);
-            _kubernetesChecksExecutor = Guard.ThrowIfNull(kubernetesChecksExecutor);
+            foreach (var item in _builder.Options.Registrations)
+            {
+                checks.Add(_kubernetesChecksExecutor.CheckAsync(item, cancellationToken));
+            }
+
+            var results = await Task.WhenAll(checks).PreserveMultipleExceptions().ConfigureAwait(false);
+
+            if (results.Any(r => !r.result))
+            {
+                var resultsNotMeetingConditions = results.Where(r => !r.result).Select(r => r.name);
+                return new HealthCheckResult(context.Registration.FailureStatus,
+                    $"Kubernetes resources with failed conditions: {string.Join(",", resultsNotMeetingConditions)}");
+            }
+
+            return HealthCheckResult.Healthy();
         }
-
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (AggregateException ex)
         {
-            List<Task<(bool result, string name)>> checks = new();
-
-            try
-            {
-                foreach (var item in _builder.Options.Registrations)
-                {
-                    checks.Add(_kubernetesChecksExecutor.CheckAsync(item, cancellationToken));
-                }
-
-                var results = await Task.WhenAll(checks).PreserveMultipleExceptions().ConfigureAwait(false);
-
-                if (results.Any(r => !r.result))
-                {
-                    var resultsNotMeetingConditions = results.Where(r => !r.result).Select(r => r.name);
-                    return new HealthCheckResult(context.Registration.FailureStatus,
-                        $"Kubernetes resources with failed conditions: {string.Join(",", resultsNotMeetingConditions)}");
-                }
-
-                return HealthCheckResult.Healthy();
-            }
-            catch (AggregateException ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, string.Join(",", ex.InnerExceptions.Select(s => s.Message)));
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, ex.Message);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, string.Join(",", ex.InnerExceptions.Select(s => s.Message)));
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, ex.Message);
         }
     }
 }

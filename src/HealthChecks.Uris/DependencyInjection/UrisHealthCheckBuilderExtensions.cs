@@ -1,288 +1,287 @@
 using HealthChecks.Uris;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+/// <summary>
+/// Extension methods to configure <see cref="UriHealthCheck"/>.
+/// </summary>
+public static class UrisHealthCheckBuilderExtensions
 {
+    private const string NAME = "uri-group";
+
     /// <summary>
-    /// Extension methods to configure <see cref="UriHealthCheck"/>.
+    /// Add a health check for single uri.
     /// </summary>
-    public static class UrisHealthCheckBuilderExtensions
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="uri">The uri to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddUrlGroup(
+        this IHealthChecksBuilder builder,
+        Uri uri,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default,
+        Action<IServiceProvider, HttpClient>? configureClient = null,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
     {
-        private const string NAME = "uri-group";
+        var registrationName = name ?? NAME;
+        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
 
-        /// <summary>
-        /// Add a health check for single uri.
-        /// </summary>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="uri">The uri to check.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
-        /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// </param>
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(
-            this IHealthChecksBuilder builder,
-            Uri uri,
-            string? name = default,
-            HealthStatus? failureStatus = default,
-            IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            Action<IServiceProvider, HttpClient>? configureClient = null,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
-        {
-            var registrationName = name ?? NAME;
-            ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        return builder.Add(new HealthCheckRegistration(
+            registrationName,
+            sp =>
+            {
+                var options = new UriHealthCheckOptions()
+                    .AddUri(uri);
 
-            return builder.Add(new HealthCheckRegistration(
+                return CreateHealthCheck(sp, registrationName, options);
+            },
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for single uri.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="uri">The uri to check.</param>
+    /// <param name="httpMethod">The http method to use on check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddUrlGroup(
+        this IHealthChecksBuilder builder,
+        Uri uri,
+        HttpMethod httpMethod,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default,
+        Action<IServiceProvider, HttpClient>? configureClient = null,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+    {
+        var registrationName = name ?? NAME;
+        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+
+        return builder.Add(new HealthCheckRegistration(
+            registrationName,
+            sp =>
+            {
+                var options = new UriHealthCheckOptions()
+                    .AddUri(uri)
+                    .UseHttpMethod(httpMethod);
+
+                return CreateHealthCheck(sp, registrationName, options);
+            },
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for multiple uri's.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="uris">The collection of uri's to be checked.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddUrlGroup(
+        this IHealthChecksBuilder builder, IEnumerable<Uri> uris,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default,
+        Action<IServiceProvider, HttpClient>? configureClient = null,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+    {
+        var registrationName = name ?? NAME;
+        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+
+        return builder.Add(new HealthCheckRegistration(
+            registrationName,
+            sp => CreateHealthCheck(sp, registrationName, UriHealthCheckOptions.CreateFromUris(uris)),
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for multiple uri's.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="uris">The collection of uri's to be checked.</param>
+    /// <param name="httpMethod">The http method to be used.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddUrlGroup(
+        this IHealthChecksBuilder builder,
+        IEnumerable<Uri> uris,
+        HttpMethod httpMethod,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default,
+        Action<IServiceProvider, HttpClient>? configureClient = null,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+    {
+        var registrationName = name ?? NAME;
+        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+
+        return builder.Add(new HealthCheckRegistration(
+            registrationName,
+            sp =>
+            {
+                var options = UriHealthCheckOptions
+                    .CreateFromUris(uris)
+                    .UseHttpMethod(httpMethod);
+
+                return CreateHealthCheck(sp, registrationName, options);
+            },
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for multiple uri's.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="uriOptions">The action used to configured uri values and specified http methods to be checked.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddUrlGroup(
+        this IHealthChecksBuilder builder,
+        Action<UriHealthCheckOptions>? uriOptions,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default,
+        Action<IServiceProvider, HttpClient>? configureClient = null,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+    {
+        var registrationName = name ?? NAME;
+        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+
+        return builder.Add(new HealthCheckRegistration(
+            registrationName,
+            sp =>
+            {
+                var options = new UriHealthCheckOptions();
+                uriOptions?.Invoke(options);
+
+                return CreateHealthCheck(sp, registrationName, options);
+            },
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for single uri.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="uriProvider">Factory for providing the uri to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
+    /// <param name="failureStatus"></param>
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddUrlGroup(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, Uri> uriProvider,
+        string? name = null,
+        HealthStatus? failureStatus = null,
+        IEnumerable<string>? tags = null,
+        TimeSpan? timeout = null,
+        Action<IServiceProvider, HttpClient>? configureClient = null,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+    {
+        var registrationName = name ?? NAME;
+        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+
+        return builder.Add(
+            new HealthCheckRegistration(
                 registrationName,
                 sp =>
                 {
-                    var options = new UriHealthCheckOptions()
-                        .AddUri(uri);
+                    var uri = uriProvider(sp);
+                    var uriHealthCheckOptions = new UriHealthCheckOptions().AddUri(uri, null);
 
-                    return CreateHealthCheck(sp, registrationName, options);
+                    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+
+                    return new UriHealthCheck(
+                        uriHealthCheckOptions,
+                        () => httpClientFactory.CreateClient(registrationName));
                 },
                 failureStatus,
                 tags,
                 timeout));
-        }
+    }
 
-        /// <summary>
-        /// Add a health check for single uri.
-        /// </summary>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="uri">The uri to check.</param>
-        /// <param name="httpMethod">The http method to use on check.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
-        /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// </param>
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(
-            this IHealthChecksBuilder builder,
-            Uri uri,
-            HttpMethod httpMethod,
-            string? name = default,
-            HealthStatus? failureStatus = default,
-            IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            Action<IServiceProvider, HttpClient>? configureClient = null,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
-        {
-            var registrationName = name ?? NAME;
-            ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+    private static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
+    {
+        var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+        return new UriHealthCheck(options, () => httpClientFactory.CreateClient(name));
+    }
 
-            return builder.Add(new HealthCheckRegistration(
-                registrationName,
-                sp =>
-                {
-                    var options = new UriHealthCheckOptions()
-                        .AddUri(uri)
-                        .UseHttpMethod(httpMethod);
+    private static readonly Action<IServiceProvider, HttpClient> _emptyHttpClientCallback = (_, _) => { };
+    private static readonly Func<IServiceProvider, HttpMessageHandler> _defaultHttpMessageHandlerCallback = _ => new HttpClientHandler();
 
-                    return CreateHealthCheck(sp, registrationName, options);
-                },
-                failureStatus,
-                tags,
-                timeout));
-        }
-
-        /// <summary>
-        /// Add a health check for multiple uri's.
-        /// </summary>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="uris">The collection of uri's to be checked.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
-        /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// </param>
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(
-            this IHealthChecksBuilder builder, IEnumerable<Uri> uris,
-            string? name = default,
-            HealthStatus? failureStatus = default,
-            IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            Action<IServiceProvider, HttpClient>? configureClient = null,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
-        {
-            var registrationName = name ?? NAME;
-            ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
-
-            return builder.Add(new HealthCheckRegistration(
-                registrationName,
-                sp => CreateHealthCheck(sp, registrationName, UriHealthCheckOptions.CreateFromUris(uris)),
-                failureStatus,
-                tags,
-                timeout));
-        }
-
-        /// <summary>
-        /// Add a health check for multiple uri's.
-        /// </summary>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="uris">The collection of uri's to be checked.</param>
-        /// <param name="httpMethod">The http method to be used.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
-        /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// </param>
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(
-            this IHealthChecksBuilder builder,
-            IEnumerable<Uri> uris,
-            HttpMethod httpMethod,
-            string? name = default,
-            HealthStatus? failureStatus = default,
-            IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            Action<IServiceProvider, HttpClient>? configureClient = null,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
-        {
-            var registrationName = name ?? NAME;
-            ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
-
-            return builder.Add(new HealthCheckRegistration(
-                registrationName,
-                sp =>
-                {
-                    var options = UriHealthCheckOptions
-                        .CreateFromUris(uris)
-                        .UseHttpMethod(httpMethod);
-
-                    return CreateHealthCheck(sp, registrationName, options);
-                },
-                failureStatus,
-                tags,
-                timeout));
-        }
-
-        /// <summary>
-        /// Add a health check for multiple uri's.
-        /// </summary>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="uriOptions">The action used to configured uri values and specified http methods to be checked.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
-        /// <param name="failureStatus">
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// </param>
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(
-            this IHealthChecksBuilder builder,
-            Action<UriHealthCheckOptions>? uriOptions,
-            string? name = default,
-            HealthStatus? failureStatus = default,
-            IEnumerable<string>? tags = default,
-            TimeSpan? timeout = default,
-            Action<IServiceProvider, HttpClient>? configureClient = null,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
-        {
-            var registrationName = name ?? NAME;
-            ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
-
-            return builder.Add(new HealthCheckRegistration(
-                registrationName,
-                sp =>
-                {
-                    var options = new UriHealthCheckOptions();
-                    uriOptions?.Invoke(options);
-
-                    return CreateHealthCheck(sp, registrationName, options);
-                },
-                failureStatus,
-                tags,
-                timeout));
-        }
-
-        /// <summary>
-        /// Add a health check for single uri.
-        /// </summary>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="uriProvider">Factory for providing the uri to check.</param>
-        /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'uri-group' will be used for the name.</param>
-        /// <param name="failureStatus"></param>
-        /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-        /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-        /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-        /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
-        /// <returns>The specified <paramref name="builder"/>.</returns>
-        public static IHealthChecksBuilder AddUrlGroup(
-            this IHealthChecksBuilder builder,
-            Func<IServiceProvider, Uri> uriProvider,
-            string? name = null,
-            HealthStatus? failureStatus = null,
-            IEnumerable<string>? tags = null,
-            TimeSpan? timeout = null,
-            Action<IServiceProvider, HttpClient>? configureClient = null,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
-        {
-            var registrationName = name ?? NAME;
-            ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
-
-            return builder.Add(
-                new HealthCheckRegistration(
-                    registrationName,
-                    sp =>
-                    {
-                        var uri = uriProvider(sp);
-                        var uriHealthCheckOptions = new UriHealthCheckOptions().AddUri(uri, null);
-
-                        var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-
-                        return new UriHealthCheck(
-                            uriHealthCheckOptions,
-                            () => httpClientFactory.CreateClient(registrationName));
-                    },
-                    failureStatus,
-                    tags,
-                    timeout));
-        }
-
-        private static UriHealthCheck CreateHealthCheck(IServiceProvider sp, string name, UriHealthCheckOptions options)
-        {
-            var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-            return new UriHealthCheck(options, () => httpClientFactory.CreateClient(name));
-        }
-
-        private static readonly Action<IServiceProvider, HttpClient> _emptyHttpClientCallback = (_, _) => { };
-        private static readonly Func<IServiceProvider, HttpMessageHandler> _defaultHttpMessageHandlerCallback = _ => new HttpClientHandler();
-
-        private static void ConfigureUrisClient(
-            IHealthChecksBuilder builder,
-            Action<IServiceProvider, HttpClient>? configureHttpclient,
-            Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler,
-            string registrationName)
-        {
-            builder.Services.AddHttpClient(registrationName)
-                .ConfigureHttpClient(configureHttpclient ?? _emptyHttpClientCallback)
-                .ConfigurePrimaryHttpMessageHandler(configureHttpMessageHandler ?? _defaultHttpMessageHandlerCallback);
-        }
+    private static void ConfigureUrisClient(
+        IHealthChecksBuilder builder,
+        Action<IServiceProvider, HttpClient>? configureHttpclient,
+        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler,
+        string registrationName)
+    {
+        builder.Services.AddHttpClient(registrationName)
+            .ConfigureHttpClient(configureHttpclient ?? _emptyHttpClientCallback)
+            .ConfigurePrimaryHttpMessageHandler(configureHttpMessageHandler ?? _defaultHttpMessageHandlerCallback);
     }
 }

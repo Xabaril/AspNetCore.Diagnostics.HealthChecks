@@ -14,7 +14,6 @@ public class SnsOptions
 
     internal Dictionary<string, List<string>> TopicsAndSubscriptions { get; } = new();
 
-
     /// <summary>
     /// Add an AWS SNS topic and its optional subscriptions to be checked
     /// </summary>

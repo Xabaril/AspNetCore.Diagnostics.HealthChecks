@@ -1,34 +1,33 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.IdSvr
+namespace HealthChecks.IdSvr;
+
+public class IdSvrHealthCheck : IHealthCheck
 {
-    public class IdSvrHealthCheck : IHealthCheck
+    private const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
+
+    private readonly Func<HttpClient> _httpClientFactory;
+
+    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
     {
-        private const string IDSVR_DISCOVER_CONFIGURATION_SEGMENT = ".well-known/openid-configuration";
+        _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+    }
 
-        private readonly Func<HttpClient> _httpClientFactory;
-
-        public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+            var httpClient = _httpClientFactory();
+            using var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+
+            return response.IsSuccessStatusCode
+                ? HealthCheckResult.Healthy()
+                : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
         }
-
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                var httpClient = _httpClientFactory();
-                using var response = await httpClient.GetAsync(IDSVR_DISCOVER_CONFIGURATION_SEGMENT, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-
-                return response.IsSuccessStatusCode
-                    ? HealthCheckResult.Healthy()
-                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

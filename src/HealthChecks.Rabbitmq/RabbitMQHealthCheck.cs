@@ -28,7 +28,9 @@ public class RabbitMQHealthCheck : IHealthCheck
     {
         _factory = new ConnectionFactory()
         {
-            Uri = rabbitConnectionString, AutomaticRecoveryEnabled = true, UseBackgroundThreadsForIO = true,
+            Uri = rabbitConnectionString,
+            AutomaticRecoveryEnabled = true,
+            UseBackgroundThreadsForIO = true,
         };
 
         if (ssl!= null)

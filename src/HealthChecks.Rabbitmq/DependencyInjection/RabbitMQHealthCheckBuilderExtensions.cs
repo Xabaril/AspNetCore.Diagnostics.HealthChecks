@@ -122,6 +122,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <summary>
     /// Add a health check for RabbitMQ services using <see cref="IConnection"/> factory function.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="connectionFactory"/> will be called each time the healthcheck route is requested. However the
+    /// created <see cref="IConnection"/> will be reused.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionFactory"> A factory function to provide the rabbitMQ connection </param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
@@ -151,6 +155,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <summary>
     /// Add a health check for RabbitMQ services using <see cref="IConnectionFactory"/> factory function.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="connectionFactoryFactory"/> will be called each time the healthcheck route is requested. However
+    /// the created <see cref="IConnection"/> will be reused.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionFactoryFactory"> A factory function to provide the rabbitMQ connection factory</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
@@ -180,6 +188,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <summary>
     /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="connectionStringFactory"/> will be called each time the healthcheck route is requested. However
+    /// the created <see cref="IConnection"/> will be reused.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionStringFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
     /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
@@ -211,6 +223,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <summary>
     /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="connectionStringFactory"/> will be called each time the healthcheck route is requested. However
+    /// the created <see cref="IConnection"/> will be reused.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionStringFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
     /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>

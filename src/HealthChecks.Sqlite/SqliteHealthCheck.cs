@@ -22,18 +22,18 @@ namespace HealthChecks.Sqlite
         {
             try
             {
-                using (var connection = new SqliteConnection(_options.ConnectionString))
-                {
-                    _options.Configure?.Invoke(connection);
-                    await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+                using var connection = new SqliteConnection(_options.ConnectionString);
 
-                    using var command = connection.CreateCommand();
-                    command.CommandText = _options.CommandText;
-                    object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
-                    return _options.HealthCheckResultBuilder == null
-                        ? HealthCheckResult.Healthy()
-                        : _options.HealthCheckResultBuilder(result);
-                }
+                _options.Configure?.Invoke(connection);
+                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+                using var command = connection.CreateCommand();
+                command.CommandText = _options.CommandText;
+                object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+                return _options.HealthCheckResultBuilder == null
+                    ? HealthCheckResult.Healthy()
+                    : _options.HealthCheckResultBuilder(result);
             }
             catch (Exception ex)
             {

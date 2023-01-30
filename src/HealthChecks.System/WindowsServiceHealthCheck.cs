@@ -21,13 +21,9 @@ namespace HealthChecks.System
         {
             try
             {
-                using (var sc = GetServiceController())
-                {
-                    if (_predicate(sc))
-                    {
-                        return HealthCheckResultTask.Healthy;
-                    }
-                }
+                using var sc = GetServiceController();
+                if (_predicate(sc))
+                    return HealthCheckResultTask.Healthy;
             }
             catch (Exception ex)
             {

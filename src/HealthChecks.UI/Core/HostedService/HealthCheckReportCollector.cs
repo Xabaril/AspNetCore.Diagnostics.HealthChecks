@@ -47,8 +47,7 @@ namespace HealthChecks.UI.Core.HostedService
         {
             using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
             {
-                var healthChecks = await _db.Configurations
-                   .ToListAsync(cancellationToken);
+                var healthChecks = await _db.Configurations.ToListAsync(cancellationToken);
 
                 foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {

@@ -27,23 +27,22 @@ namespace HealthChecks.Network
                         connectionInfo.Timeout = context.Registration.Timeout;
                     }
 
-                    using (var sftpClient = new SftpClient(connectionInfo))
-                    {
-                        sftpClient.Connect();
+                    using var sftpClient = new SftpClient(connectionInfo);
 
-                        bool connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
-                        if (connectionSuccess)
+                    sftpClient.Connect();
+
+                    bool connectionSuccess = sftpClient.IsConnected && sftpClient.ConnectionInfo.IsAuthenticated;
+                    if (connectionSuccess)
+                    {
+                        if (item.FileCreationOptions.createFile)
                         {
-                            if (item.FileCreationOptions.createFile)
-                            {
-                                using var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1);
-                                sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
-                            }
+                            using var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1);
+                            sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
                         }
-                        else
-                        {
-                            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
-                        }
+                    }
+                    else
+                    {
+                        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
                     }
                 }
 

@@ -33,15 +33,14 @@ namespace HealthChecks.Network
 
             var keyBytes = Encoding.UTF8.GetBytes(privateKey);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                memoryStream.Write(keyBytes, 0, keyBytes.Length);
-                memoryStream.Seek(0, SeekOrigin.Begin);
+            using var memoryStream = new MemoryStream();
 
-                var privateKeyFile = new PrivateKeyFile(memoryStream, passphrase);
+            memoryStream.Write(keyBytes, 0, keyBytes.Length);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
-                AuthenticationMethods.Add(new PrivateKeyAuthenticationMethod(_userName, privateKeyFile));
-            }
+            var privateKeyFile = new PrivateKeyFile(memoryStream, passphrase);
+
+            AuthenticationMethods.Add(new PrivateKeyAuthenticationMethod(_userName, privateKeyFile));
 
             return this;
         }

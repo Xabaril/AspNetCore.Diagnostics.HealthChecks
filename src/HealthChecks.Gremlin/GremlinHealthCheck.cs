@@ -22,12 +22,10 @@ public class GremlinHealthCheck : IHealthCheck
     {
         try
         {
-            using (var client = new GremlinClient(_server))
-            using (var conn = new DriverRemoteConnection(client))
-            {
-                var g = Traversal().WithRemote(conn);
-                await g.Inject(0).Promise(t => t.Next()).ConfigureAwait(false);
-            }
+            using var client = new GremlinClient(_server);
+            using var conn = new DriverRemoteConnection(client);
+            var g = Traversal().WithRemote(conn);
+            await g.Inject(0).Promise(t => t.Next()).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

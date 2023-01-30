@@ -14,17 +14,14 @@ namespace HealthChecks.RavenDb.Tests.Functional
         {
             try
             {
-                using (var store = new DocumentStore
+                using var store = new DocumentStore
                 {
                     Urls = _urls,
-                })
-                {
-                    store.Initialize();
+                };
 
-                    store.Maintenance.Server.Send(
-                        new CreateDatabaseOperation(new DatabaseRecord("Demo")));
-                }
+                store.Initialize();
 
+                store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord("Demo")));
             }
             catch { }
         }

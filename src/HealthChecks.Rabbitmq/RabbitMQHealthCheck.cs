@@ -33,7 +33,7 @@ public class RabbitMQHealthCheck : IHealthCheck
             UseBackgroundThreadsForIO = true,
         };
 
-        if (ssl!= null)
+        if (ssl != null)
             ((ConnectionFactory)_factory).Ssl = ssl;
     }
 

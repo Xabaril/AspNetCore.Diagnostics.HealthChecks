@@ -266,8 +266,8 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
 
             using var server = new TestServer(webHostBuilder);
 
-            var response1 = await server.CreateRequest($"/health1").GetAsync().ConfigureAwait(false);
-            var response2 = await server.CreateRequest($"/health2").GetAsync().ConfigureAwait(false);
+            var response1 = await server.CreateRequest("/health1").GetAsync().ConfigureAwait(false);
+            var response2 = await server.CreateRequest("/health2").GetAsync().ConfigureAwait(false);
 
             response1.StatusCode.ShouldBe(HttpStatusCode.OK);
             response2.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);

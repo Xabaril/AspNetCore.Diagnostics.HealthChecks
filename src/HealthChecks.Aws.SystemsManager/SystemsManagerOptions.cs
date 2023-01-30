@@ -12,9 +12,9 @@ public class SystemsManagerOptions
     internal HashSet<string> Parameters { get; } = new HashSet<string>();
 
     /// <summary>
-    /// Add a Parameter to be checked
+    /// Add a Parameter to be checked.
     /// </summary>
-    /// <param name="parameter">The parameter to be checked</param>
+    /// <param name="parameter">The parameter to be checked.</param>
     /// <returns>Reference to the same <see cref="SystemsManagerOptions"/> to allow further configuration.</returns>
     public SystemsManagerOptions AddParameter(string parameter)
     {

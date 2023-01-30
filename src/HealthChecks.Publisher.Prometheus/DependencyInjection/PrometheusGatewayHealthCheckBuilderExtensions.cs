@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
         /// <param name="endpoint">Endpoint url e.g. http://myendpoint:9091</param>
-        /// <param name="job"> The job name the series can be filtered on (typically the application name).</param>
+        /// <param name="job">The job name the series can be filtered on (typically the application name).</param>
         /// <param name="instance">If there are multiple instances.</param>
         /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
         [Obsolete("This package is deprecated! We recommend using the pull model instead of Gateway. Try to use the package AspNetCore.HealthChecks.Prometheus.Metrics instead of.")]

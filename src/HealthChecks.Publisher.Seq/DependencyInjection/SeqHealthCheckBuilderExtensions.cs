@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </remarks>
         /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
         /// <param name="setup">The Seq configuration options.</param>
-        /// <param name="name"> The registration name. This is also the associated http client name if you use AddHttpClient </param>
+        /// <param name="name">The registration name. This is also the associated http client name if you use AddHttpClient.</param>
         /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
         public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions>? setup, string? name = default)
         {

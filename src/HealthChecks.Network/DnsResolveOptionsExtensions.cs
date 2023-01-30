@@ -5,12 +5,11 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class DnsResolveOptionsExtensions
     {
         /// <summary>
-        /// Add a host for dns resolution
+        /// Add a host for DNS resolution.
         /// </summary>
         /// <remarks>Usage: ResolveHost(host).To(registrations);</remarks>
-        /// <param name="options">DNS Resolve options</param>
-        /// <param name="host">Target host</param>
-
+        /// <param name="options">DNS Resolve options.</param>
+        /// <param name="host">Target host.</param>
         public static Func<(DnsResolveOptions, DnsRegistration)> ResolveHost(this DnsResolveOptions options, string host)
         {
             return () => (options, new DnsRegistration(host));

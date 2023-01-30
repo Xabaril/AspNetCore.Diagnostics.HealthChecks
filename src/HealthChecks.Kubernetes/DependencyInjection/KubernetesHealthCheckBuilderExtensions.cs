@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add the Kubernetes Health Check
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="setup">Action to configure Kubernetes cluster and registrations</param>
+        /// <param name="setup">Action to configure Kubernetes cluster and registrations.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'k8s' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

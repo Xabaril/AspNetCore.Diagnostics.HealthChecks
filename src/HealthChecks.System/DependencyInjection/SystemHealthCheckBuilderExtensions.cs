@@ -140,8 +140,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a healthcheck that allows to check a predicate against the configured process name.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="processName">The name of the process</param>
-        /// <param name="predicate">Process[] predicate to configure checks</param>
+        /// <param name="processName">The name of the process.</param>
+        /// <param name="predicate">Process[] predicate to configure checks.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'process' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -174,7 +174,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Adds a healthcheck that allows to check the allocated bytes in memory and configure a threshold
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="maximumMegabytesAllocated">The maximum megabytes allowed to be allocated by the process</param>
+        /// <param name="maximumMegabytesAllocated">The maximum megabytes allowed to be allocated by the process.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'process' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -206,9 +206,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a healthcheck that allows to check a predicate against the configured windows service.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="serviceName">The name of the service</param>
+        /// <param name="serviceName">The name of the service.</param>
         /// <param name="predicate">Process[] predicate to configure checks.</param>
-        /// <param name="machineName">Machine where the service resides in. Optional</param>
+        /// <param name="machineName">Machine where the service resides in. Optional.</param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'windowsservice' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

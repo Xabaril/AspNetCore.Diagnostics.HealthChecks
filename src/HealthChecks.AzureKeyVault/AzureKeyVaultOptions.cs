@@ -18,9 +18,9 @@ namespace HealthChecks.AzureKeyVault
         internal List<(string, bool)> Certificates => _certificates;
 
         /// <summary>
-        /// Add a Azure Key Vault secret to be checked
+        /// Add a Azure Key Vault secret to be checked.
         /// </summary>
-        /// <param name="secretName">The secret to be checked</param>
+        /// <param name="secretName">The secret to be checked.</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureKeyVaultOptions AddSecret(string secretName)
         {
@@ -30,9 +30,9 @@ namespace HealthChecks.AzureKeyVault
         }
 
         /// <summary>
-        /// Add a Azure Key Vault cryptographic key to be checked
+        /// Add a Azure Key Vault cryptographic key to be checked.
         /// </summary>
-        /// <param name="keyName">The cryptographic key to be checked</param>
+        /// <param name="keyName">The cryptographic key to be checked.</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureKeyVaultOptions AddKey(string keyName)
         {
@@ -42,9 +42,9 @@ namespace HealthChecks.AzureKeyVault
         }
 
         /// <summary>
-        /// Add a Azure Key Vault certificate key to be checked
+        /// Add a Azure Key Vault certificate key to be checked.
         /// </summary>
-        /// <param name="certificateName">The certificate key to be checked</param>
+        /// <param name="certificateName">The certificate key to be checked.</param>
         /// /// <param name="checkExpired">Certificate expiration date should be checked. It the certificate is expired a exception will be thrown</param>
         /// <returns><see cref="AzureKeyVaultOptions"/></returns>
         public AzureKeyVaultOptions AddCertificate(string certificateName, bool checkExpired = false)

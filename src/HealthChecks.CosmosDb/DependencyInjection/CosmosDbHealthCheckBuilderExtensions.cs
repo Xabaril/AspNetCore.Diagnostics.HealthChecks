@@ -49,8 +49,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb database.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="accountEndpoint">Uri to the CosmosDb account</param>
-        /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication</param>
+        /// <param name="accountEndpoint">Uri to the CosmosDb account.</param>
+        /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication.</param>
         /// <param name="database">Database to check for existence.</param>
         /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">
@@ -290,8 +290,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Azure CosmosDb database and specified collections using Managed identity.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="accountEndpoint">Uri to the CosmosDb account</param>
-        /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication</param>
+        /// <param name="accountEndpoint">Uri to the CosmosDb account.</param>
+        /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication.</param>
         /// <param name="database">Database to check for existence.</param>
         /// <param name="collections">Cosmos DB collections to check for existence.</param>
         /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
@@ -390,7 +390,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
         /// <param name="endpoint">The CosmosDB Table or Azure Storage Table uri endpoint.</param>
-        /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication</param>
+        /// <param name="tokenCredential">An instance of <see cref="TokenCredential"/> to be used for authentication.</param>
         /// <param name="tableName">Table name to check for existence.</param>
         /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'cosmosdb' will be used for the name.</param>
         /// <param name="failureStatus">

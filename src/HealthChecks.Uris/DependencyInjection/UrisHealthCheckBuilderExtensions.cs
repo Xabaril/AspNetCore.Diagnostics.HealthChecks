@@ -22,8 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler</param>
+        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder,
@@ -65,8 +65,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler</param>
+        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder,
@@ -109,8 +109,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler</param>
+        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder, IEnumerable<Uri> uris,
@@ -145,8 +145,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler</param>
+        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder,
@@ -189,8 +189,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler</param>
+        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder,
@@ -230,8 +230,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
         /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
         /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client</param>
-        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler</param>
+        /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
+        /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
         /// <returns>The specified <paramref name="builder"/>.</returns>
         public static IHealthChecksBuilder AddUrlGroup(
             this IHealthChecksBuilder builder,

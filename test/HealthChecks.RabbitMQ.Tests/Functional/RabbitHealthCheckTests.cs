@@ -249,8 +249,8 @@ namespace HealthChecks.RabbitMQ.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                     .AddRabbitMQ(rabbitConnectionString: connectionString1, name: "rabbitmq1")
-                     .AddRabbitMQ(rabbitConnectionString: connectionString2, name: "rabbitmq2");
+                        .AddRabbitMQ(rabbitConnectionString: connectionString1, name: "rabbitmq1")
+                        .AddRabbitMQ(rabbitConnectionString: connectionString2, name: "rabbitmq2");
                 })
                 .Configure(app =>
                 {

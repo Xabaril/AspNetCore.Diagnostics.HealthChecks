@@ -123,8 +123,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// Add a health check for RabbitMQ services using <see cref="IConnection"/> factory function.
     /// </summary>
     /// <remarks>
-    /// <paramref name="connectionFactory"/> will be called each time the healthcheck route is requested. However the
-    /// created <see cref="IConnection"/> will be reused.
+    /// <paramref name="connectionFactory"/> will be called each time the healthcheck route is requested.
+    /// Since RabbitMQ does not like frequent short connections, it is wise to not create a new connection
+    /// in this factory, but to retrive an existing connection.
+    /// If you don't have a connection to retrive consider using <see cref="AddRabbitMQ(IHealthChecksBuilder, Func{IServiceProvider, IConnectionFactory}, string?, HealthStatus?, IEnumerable{string}?, TimeSpan?)"/>
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionFactory"> A factory function to provide the rabbitMQ connection </param>

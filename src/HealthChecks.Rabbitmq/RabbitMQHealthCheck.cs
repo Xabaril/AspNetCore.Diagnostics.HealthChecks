@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 
@@ -6,14 +7,12 @@ namespace HealthChecks.RabbitMQ;
 /// <summary>
 /// A health check for RabbitMQ services.
 /// </summary>
-public class RabbitMQHealthCheck : IHealthCheck, IDisposable
+public class RabbitMQHealthCheck : IHealthCheck
 {
+    private static readonly ConcurrentDictionary<string, IConnection> _connections = new();
+
     private IConnection? _connection;
-    private IConnectionFactory? _factory;
-    private readonly Uri? _rabbitConnectionString;
-    private readonly SslOption? _sslOption;
-    private readonly bool _ownsConnection;
-    private bool _disposed;
+    private readonly IConnectionFactory? _factory;
 
     public RabbitMQHealthCheck(IConnection connection)
     {
@@ -23,14 +22,17 @@ public class RabbitMQHealthCheck : IHealthCheck, IDisposable
     public RabbitMQHealthCheck(IConnectionFactory factory)
     {
         _factory = Guard.ThrowIfNull(factory);
-        _ownsConnection = true;
     }
 
     public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl)
     {
-        _rabbitConnectionString = rabbitConnectionString;
-        _sslOption = ssl;
-        _ownsConnection = true;
+        _factory = new ConnectionFactory()
+        {
+            Uri = rabbitConnectionString, AutomaticRecoveryEnabled = true, UseBackgroundThreadsForIO = true,
+        };
+
+        if (ssl!= null)
+            ((ConnectionFactory)_factory).Ssl = ssl;
     }
 
     /// <inheritdoc />
@@ -49,47 +51,12 @@ public class RabbitMQHealthCheck : IHealthCheck, IDisposable
 
     private IConnection EnsureConnection()
     {
-        if (_disposed)
-            throw new ObjectDisposedException(nameof(RabbitMQHealthCheck));
-
         if (_connection == null)
         {
-            if (_factory == null)
-            {
-                _factory = new ConnectionFactory()
-                {
-                    Uri = _rabbitConnectionString,
-                    AutomaticRecoveryEnabled = true,
-                    UseBackgroundThreadsForIO = true,
-                };
-
-                if (_sslOption != null)
-                    ((ConnectionFactory)_factory).Ssl = _sslOption;
-            }
-
-            _connection = _factory.CreateConnection();
+            Guard.ThrowIfNull(_factory);
+            _connection = _connections.GetOrAdd(_factory.Uri.ToString(), _ => _factory.CreateConnection());
         }
 
         return _connection;
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            // dispose connection only if RabbitMQHealthCheck owns it
-            if (!_disposed && _connection != null && _ownsConnection)
-            {
-                _connection.Dispose();
-                _connection = null;
-            }
-            _disposed = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
     }
 }

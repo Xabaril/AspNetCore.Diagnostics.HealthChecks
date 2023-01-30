@@ -1,13 +1,11 @@
 namespace HealthChecks.RabbitMQ
 {
-    public class RabbitMQHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck, System.IDisposable
+    public class RabbitMQHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public RabbitMQHealthCheck(RabbitMQ.Client.IConnection connection) { }
         public RabbitMQHealthCheck(RabbitMQ.Client.IConnectionFactory factory) { }
         public RabbitMQHealthCheck(System.Uri rabbitConnectionString, RabbitMQ.Client.SslOption? ssl) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
-        public void Dispose() { }
-        protected virtual void Dispose(bool disposing) { }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection

@@ -60,10 +60,9 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        var rabbitMQHalthCheck = new Lazy<RabbitMQHealthCheck>(() => new(rabbitConnectionString, sslOption));
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            _ => rabbitMQHalthCheck.Value,
+            _ => new RabbitMQHealthCheck(rabbitConnectionString, sslOption),
             failureStatus,
             tags,
             timeout));
@@ -73,6 +72,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// Add a health check for RabbitMQ services using <see cref="IConnection"/> from service provider
     /// or <see cref="IConnectionFactory"/> from service provider if none is found. At least one must be configured.
     /// </summary>
+    /// <remarks>
+    /// This method shouldn't be called more than once.
+    /// Each subsequent call will create a new connection, which overrides the previous ones.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
@@ -137,24 +140,9 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        object rabbitMQHealthCheckLock = new();
-        RabbitMQHealthCheck? rabbitMQHealthCheck = null;
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
-            {
-                if (rabbitMQHealthCheck is null)
-                {
-                    lock (rabbitMQHealthCheckLock)
-                    {
-                        if (rabbitMQHealthCheck is null)
-                        {
-                            rabbitMQHealthCheck = new RabbitMQHealthCheck(connectionFactory(sp));
-                        }
-                    }
-                }
-                return rabbitMQHealthCheck;
-            },
+            sp => new RabbitMQHealthCheck(connectionFactory(sp)),
             failureStatus,
             tags,
             timeout));
@@ -181,24 +169,9 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        object rabbitMQHealthCheckLock = new();
-        RabbitMQHealthCheck? rabbitMQHealthCheck = null;
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
-            {
-                if (rabbitMQHealthCheck is null)
-                {
-                    lock (rabbitMQHealthCheckLock)
-                    {
-                        if (rabbitMQHealthCheck is null)
-                        {
-                            rabbitMQHealthCheck = new RabbitMQHealthCheck(connectionFactoryFactory(sp));
-                        }
-                    }
-                }
-                return rabbitMQHealthCheck;
-            },
+            sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)),
             failureStatus,
             tags,
             timeout));
@@ -227,24 +200,9 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        object rabbitMQHealthCheckLock = new();
-        RabbitMQHealthCheck? rabbitMQHealthCheck = null;
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
-            {
-                if (rabbitMQHealthCheck is null)
-                {
-                    lock (rabbitMQHealthCheckLock)
-                    {
-                        if (rabbitMQHealthCheck is null)
-                        {
-                            rabbitMQHealthCheck = new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption);
-                        }
-                    }
-                }
-                return rabbitMQHealthCheck;
-            },
+            sp => new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption),
             failureStatus,
             tags,
             timeout));

@@ -7,6 +7,12 @@ namespace HealthChecks.RabbitMQ
         public RabbitMQHealthCheck(System.Uri rabbitConnectionString, RabbitMQ.Client.SslOption? ssl) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
+    public class RabbitMQOptions
+    {
+        public RabbitMQOptions(System.Uri uri) { }
+        public RabbitMQ.Client.SslOption? Ssl { get; set; }
+        public System.Uri Uri { get; set; }
+    }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {

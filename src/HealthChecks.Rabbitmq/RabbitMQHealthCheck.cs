@@ -9,19 +9,22 @@ namespace HealthChecks.RabbitMQ;
 /// </summary>
 public class RabbitMQHealthCheck : IHealthCheck
 {
-    private static readonly ConcurrentDictionary<string, IConnection> _connections = new();
+    private static readonly ConcurrentDictionary<RabbitMQOptions, IConnection> _connections = new();
 
     private IConnection? _connection;
     private readonly IConnectionFactory? _factory;
+    private readonly RabbitMQOptions _options;
 
     public RabbitMQHealthCheck(IConnection connection)
     {
         _connection = Guard.ThrowIfNull(connection);
+        _options = new RabbitMQOptions(new Uri(connection.Endpoint.ToString()));
     }
 
     public RabbitMQHealthCheck(IConnectionFactory factory)
     {
         _factory = Guard.ThrowIfNull(factory);
+        _options = new RabbitMQOptions(factory.Uri);
     }
 
     public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl)
@@ -32,9 +35,13 @@ public class RabbitMQHealthCheck : IHealthCheck
             AutomaticRecoveryEnabled = true,
             UseBackgroundThreadsForIO = true,
         };
+        _options = new RabbitMQOptions(rabbitConnectionString);
 
         if (ssl != null)
+        {
             ((ConnectionFactory)_factory).Ssl = ssl;
+            _options.Ssl = ssl;
+        }
     }
 
     /// <inheritdoc />
@@ -56,7 +63,7 @@ public class RabbitMQHealthCheck : IHealthCheck
         if (_connection == null)
         {
             Guard.ThrowIfNull(_factory);
-            _connection = _connections.GetOrAdd(_factory.Uri.ToString(), _ => _factory.CreateConnection());
+            _connection = _connections.GetOrAdd(_options, _ => _factory.CreateConnection());
         }
 
         return _connection;

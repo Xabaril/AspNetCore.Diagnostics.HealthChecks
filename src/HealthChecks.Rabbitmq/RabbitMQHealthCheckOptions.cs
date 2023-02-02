@@ -7,11 +7,29 @@ namespace HealthChecks.RabbitMQ;
 /// </summary>
 public class RabbitMQHealthCheckOptions
 {
-    public Uri Uri { get; set; }
-    public SslOption? Ssl { get; set; }
+    /// <summary>
+    /// An already created connection to RabbitMQ.
+    /// </summary>
+    public IConnection? Connection { get; set; }
 
-    public RabbitMQHealthCheckOptions(Uri uri)
-    {
-        Uri = uri;
-    }
+    /// <summary>
+    /// A connection factory for RabbitMQ.
+    /// </summary>
+    public IConnectionFactory? ConnectionFactory { get; set; }
+
+    /// <summary>
+    /// An Uri representing a  connection string for RabbitMQ.
+    /// </summary>
+    /// <remarks>
+    /// Can be used in conjunction with the <see cref="SslOption"/> property.
+    /// </remarks>
+    public Uri? ConnectionUri { get; set; }
+
+    /// <summary>
+    /// The SSL options for a connection string.
+    /// </summary>
+    /// <remarks>
+    /// Must be used in conjunction with the <see cref="ConnectionUri"/> property.
+    /// </remarks>
+    public SslOption? Ssl { get; set; }
 }

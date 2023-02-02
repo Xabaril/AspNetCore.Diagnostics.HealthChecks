@@ -12,37 +12,30 @@ public class RabbitMQHealthCheck : IHealthCheck
     private static readonly ConcurrentDictionary<RabbitMQHealthCheckOptions, IConnection> _connections = new();
 
     private IConnection? _connection;
-    private readonly IConnectionFactory? _factory;
     private readonly RabbitMQHealthCheckOptions _options;
 
-    public RabbitMQHealthCheck(IConnection connection)
+    public RabbitMQHealthCheck(RabbitMQHealthCheckOptions options)
     {
-        _connection = Guard.ThrowIfNull(connection);
-        _options = new RabbitMQHealthCheckOptions(new Uri(connection.Endpoint.ToString()));
-    }
+        _options = options;
+        _connection = options.Connection;
 
-    public RabbitMQHealthCheck(IConnectionFactory factory)
-    {
-        _factory = Guard.ThrowIfNull(factory);
-        _options = new RabbitMQHealthCheckOptions(factory.Uri);
-    }
-
-    public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl)
-    {
-        _factory = new ConnectionFactory
+        if (_connection is null && _options.ConnectionFactory is null && _options.ConnectionUri is null)
         {
-            Uri = rabbitConnectionString,
-            AutomaticRecoveryEnabled = true,
-            UseBackgroundThreadsForIO = true,
-        };
-        _options = new RabbitMQHealthCheckOptions(rabbitConnectionString);
-
-        if (ssl != null)
-        {
-            ((ConnectionFactory)_factory).Ssl = ssl;
-            _options.Ssl = ssl;
+            throw new ArgumentException("A connection, connnection factory, or connection string must be set!", nameof(options));
         }
     }
+
+    [Obsolete("Please provide RabbitMQHealthCheckOptions")]
+    public RabbitMQHealthCheck(IConnection connection) : this(new RabbitMQHealthCheckOptions { Connection = connection })
+    { }
+
+    [Obsolete("Please provide RabbitMQHealthCheckOptions")]
+    public RabbitMQHealthCheck(IConnectionFactory factory) : this(new RabbitMQHealthCheckOptions { ConnectionFactory = factory })
+    { }
+
+    [Obsolete("Please provide RabbitMQHealthCheckOptions")]
+    public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl) : this(new RabbitMQHealthCheckOptions { ConnectionUri = rabbitConnectionString, Ssl = ssl })
+    { }
 
     /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -60,10 +53,30 @@ public class RabbitMQHealthCheck : IHealthCheck
 
     private IConnection EnsureConnection()
     {
-        if (_connection == null)
+        if (_connection is null)
         {
-            Guard.ThrowIfNull(_factory);
-            _connection = _connections.GetOrAdd(_options, _ => _factory.CreateConnection());
+            _connection = _connections.GetOrAdd(_options, _ =>
+            {
+                var factory = _options.ConnectionFactory;
+
+                if (factory is null)
+                {
+                    Guard.ThrowIfNull(_options.ConnectionUri);
+                    factory = new ConnectionFactory
+                    {
+                        Uri = _options.ConnectionUri,
+                        AutomaticRecoveryEnabled = true,
+                        UseBackgroundThreadsForIO = true,
+                    };
+
+                    if (_options.Ssl is not null)
+                    {
+                        ((ConnectionFactory)factory).Ssl = _options.Ssl;
+                    }
+                }
+
+                return factory.CreateConnection();
+            });
         }
 
         return _connection;

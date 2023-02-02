@@ -62,7 +62,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            _ => new RabbitMQHealthCheck(rabbitConnectionString, sslOption),
+            _ => new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { ConnectionUri = rabbitConnectionString, Ssl = sslOption }),
             failureStatus,
             tags,
             timeout));
@@ -99,11 +99,11 @@ public static class RabbitMQHealthCheckBuilderExtensions
 
             if (connection != null)
             {
-                return new RabbitMQHealthCheck(connection);
+                return new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { Connection = connection });
             }
             else if (connectionFactory != null)
             {
-                return new RabbitMQHealthCheck(connectionFactory);
+                return new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { ConnectionFactory = connectionFactory });
             }
             else
             {
@@ -148,7 +148,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new RabbitMQHealthCheck(connectionFactory(sp)),
+            sp => new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { Connection = connectionFactory(sp) }),
             failureStatus,
             tags,
             timeout));
@@ -181,7 +181,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)),
+            sp => new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { ConnectionFactory = connectionFactoryFactory(sp) }),
             failureStatus,
             tags,
             timeout));
@@ -216,7 +216,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption),
+            sp => new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { ConnectionUri = connectionStringFactory(sp), Ssl = sslOption }),
             failureStatus,
             tags,
             timeout));

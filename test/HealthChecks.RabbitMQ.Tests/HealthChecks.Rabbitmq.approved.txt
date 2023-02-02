@@ -2,16 +2,22 @@ namespace HealthChecks.RabbitMQ
 {
     public class RabbitMQHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
+        public RabbitMQHealthCheck(HealthChecks.RabbitMQ.RabbitMQHealthCheckOptions options) { }
+        [System.Obsolete("Please provide RabbitMQHealthCheckOptions")]
         public RabbitMQHealthCheck(RabbitMQ.Client.IConnection connection) { }
+        [System.Obsolete("Please provide RabbitMQHealthCheckOptions")]
         public RabbitMQHealthCheck(RabbitMQ.Client.IConnectionFactory factory) { }
+        [System.Obsolete("Please provide RabbitMQHealthCheckOptions")]
         public RabbitMQHealthCheck(System.Uri rabbitConnectionString, RabbitMQ.Client.SslOption? ssl) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public class RabbitMQHealthCheckOptions
     {
-        public RabbitMQOptions(System.Uri uri) { }
+        public RabbitMQHealthCheckOptions() { }
+        public RabbitMQ.Client.IConnection? Connection { get; set; }
+        public RabbitMQ.Client.IConnectionFactory? ConnectionFactory { get; set; }
+        public System.Uri? ConnectionUri { get; set; }
         public RabbitMQ.Client.SslOption? Ssl { get; set; }
-        public System.Uri Uri { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection

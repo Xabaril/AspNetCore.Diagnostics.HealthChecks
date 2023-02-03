@@ -3,12 +3,6 @@ namespace HealthChecks.RabbitMQ
     public class RabbitMQHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public RabbitMQHealthCheck(HealthChecks.RabbitMQ.RabbitMQHealthCheckOptions options) { }
-        [System.Obsolete("Please provide RabbitMQHealthCheckOptions")]
-        public RabbitMQHealthCheck(RabbitMQ.Client.IConnection connection) { }
-        [System.Obsolete("Please provide RabbitMQHealthCheckOptions")]
-        public RabbitMQHealthCheck(RabbitMQ.Client.IConnectionFactory factory) { }
-        [System.Obsolete("Please provide RabbitMQHealthCheckOptions")]
-        public RabbitMQHealthCheck(System.Uri rabbitConnectionString, RabbitMQ.Client.SslOption? ssl) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public class RabbitMQHealthCheckOptions

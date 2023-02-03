@@ -25,18 +25,6 @@ public class RabbitMQHealthCheck : IHealthCheck
         }
     }
 
-    [Obsolete("Please provide RabbitMQHealthCheckOptions")]
-    public RabbitMQHealthCheck(IConnection connection) : this(new RabbitMQHealthCheckOptions { Connection = connection })
-    { }
-
-    [Obsolete("Please provide RabbitMQHealthCheckOptions")]
-    public RabbitMQHealthCheck(IConnectionFactory factory) : this(new RabbitMQHealthCheckOptions { ConnectionFactory = factory })
-    { }
-
-    [Obsolete("Please provide RabbitMQHealthCheckOptions")]
-    public RabbitMQHealthCheck(Uri rabbitConnectionString, SslOption? ssl) : this(new RabbitMQHealthCheckOptions { ConnectionUri = rabbitConnectionString, Ssl = ssl })
-    { }
-
     /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {

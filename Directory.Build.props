@@ -36,7 +36,8 @@
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName) == 'UnitTests'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" Condition="'$(TargetFramework)' != 'net7.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.3" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.12" Condition="'$(TargetFramework)' == 'net6.0'" />
+
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.3" Condition="'$(TargetFramework)' == 'net7.0'" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Shouldly" Version="4.1.0" />

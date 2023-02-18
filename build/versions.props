@@ -17,7 +17,7 @@
     <HealthCheckDocumentDb>7.0.0</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>7.0.0</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>7.0.0</HealthCheckElasticsearch>
-    <HealthCheckEventStoregRPC>7.0.1</HealthCheckEventStoregRPC>
+    <HealthCheckEventStoregRPC>7.0.0</HealthCheckEventStoregRPC>
     <HealthCheckEventStore>7.0.0</HealthCheckEventStore>
     <HealthCheckGremlin>7.0.0</HealthCheckGremlin>
     <HealthCheckHangfire>7.0.0</HealthCheckHangfire>

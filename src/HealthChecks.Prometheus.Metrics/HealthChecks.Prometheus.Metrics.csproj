@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="prometheus-net" Version="7.0.0" />
+    <PackageReference Include="prometheus-net" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

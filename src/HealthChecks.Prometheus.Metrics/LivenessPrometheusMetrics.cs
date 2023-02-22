@@ -5,7 +5,7 @@ namespace HealthChecks.Prometheus.Metrics;
 
 public abstract class LivenessPrometheusMetrics
 {
-    protected const string CONTENT_TYPE = PrometheusConstants.ExporterContentType;
+    protected const string CONTENT_TYPE = PrometheusConstants.TextContentTypeWithVersionAndEncoding;
     private const string HEALTH_CHECK_LABEL_NAME = "healthcheck";
     private readonly Gauge _healthChecksDuration;
     private readonly Gauge _healthChecksResult;

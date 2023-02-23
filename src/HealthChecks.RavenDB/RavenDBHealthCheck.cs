@@ -51,6 +51,10 @@ public class RavenDBHealthCheck : IHealthCheck
                 try
                 {
                     store.Initialize();
+                    if (_options.RequestTimeout.HasValue)
+                    {
+                        store.SetRequestTimeout(_options.RequestTimeout.Value, _options.Database);
+                    }
                     return new DocumentStoreHolder
                     {
                         Store = store,
@@ -113,7 +117,7 @@ public class RavenDBHealthCheck : IHealthCheck
             .SendAsync(_serverHealthCheck, cancellationToken);
     }
 
-    private static async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
+    private async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
     {
         var executor = store.Maintenance.ForDatabase(database);
 
@@ -129,17 +133,10 @@ public class RavenDBHealthCheck : IHealthCheck
     private class DatabaseHealthCheckOperation : IMaintenanceOperation
     {
         public RavenCommand GetCommand(DocumentConventions conventions, JsonOperationContext context)
-        {
-            return new DatabaseHealthCheckCommand();
-        }
+            => new DatabaseHealthCheckCommand();
 
         private class DatabaseHealthCheckCommand : RavenCommand
         {
-            public DatabaseHealthCheckCommand()
-            {
-                Timeout = TimeSpan.FromSeconds(15); // maybe even less?
-            }
-
             public override HttpRequestMessage CreateRequest(JsonOperationContext ctx, ServerNode node, out string url)
             {
                 url = $"{node.Url}/databases/{node.Database}/healthcheck";

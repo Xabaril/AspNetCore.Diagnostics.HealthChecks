@@ -24,6 +24,10 @@ public class FolderHealthCheck : IHealthCheck
                     if (!Directory.Exists(folder))
                     {
                         (errorList ??= new()).Add($"Folder {folder} does not exist.");
+                        if (!_folderOptions.CheckAllFolders)
+                        {
+                            break;
+                        }
                     }
                 }
             }

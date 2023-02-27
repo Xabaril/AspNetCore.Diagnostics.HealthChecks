@@ -18,6 +18,8 @@ public class TcpHealthCheckOptions
         return this;
     }
 
+    public bool CheckAllHosts { get; set; }
+
     /// <summary>
     /// Configure the address family.
     /// </summary>

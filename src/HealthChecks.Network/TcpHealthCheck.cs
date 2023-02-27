@@ -32,6 +32,10 @@ public class TcpHealthCheck : IHealthCheck
                 if (!tcpClient.Connected)
                 {
                     (errorList ??= new()).Add($"Connection to host {host}:{port} failed");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
+                    }
                 }
             }
 

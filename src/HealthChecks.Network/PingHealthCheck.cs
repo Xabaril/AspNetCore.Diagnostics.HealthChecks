@@ -28,6 +28,10 @@ public class PingHealthCheck : IHealthCheck
                 if (pingReply.Status != IPStatus.Success)
                 {
                     (errorList ??= new()).Add($"Ping check for host {host} is failed with status reply:{pingReply.Status}");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
+                    }
                 }
             }
 

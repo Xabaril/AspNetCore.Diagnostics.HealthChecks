@@ -34,6 +34,10 @@ public class SslHealthCheck : IHealthCheck
                 if (!tcpClient.Connected)
                 {
                     (errorList ??= new()).Add($"Connection to host {host}:{port} failed");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
+                    }
                     continue;
                 }
 
@@ -42,12 +46,20 @@ public class SslHealthCheck : IHealthCheck
                 if (certificate is null || !certificate.Verify())
                 {
                     (errorList ??= new()).Add($"Ssl certificate not present or not valid for {host}:{port}");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
+                    }
                     continue;
                 }
 
                 if (certificate.NotAfter.Subtract(DateTime.Now).TotalDays <= checkLeftDays)
                 {
                     (errorList ??= new()).Add($"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
+                    }
                 }
             }
 

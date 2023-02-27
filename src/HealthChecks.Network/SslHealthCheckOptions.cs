@@ -23,4 +23,6 @@ public class SslHealthCheckOptions
     /// Configure the address family.
     /// </summary>
     public AddressFamily AddressFamily { get; set; } = AddressFamily.InterNetwork;
+
+    public bool CheckAllHosts { get; set; }
 }

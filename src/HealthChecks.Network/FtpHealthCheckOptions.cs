@@ -12,4 +12,12 @@ public class FtpHealthCheckOptions
 
         return this;
     }
+
+    public FtpHealthCheckOptions WithCheckAllFolders()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
+
+    public bool CheckAllHosts { get; set; }
 }

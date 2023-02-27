@@ -117,7 +117,7 @@ public class RavenDBHealthCheck : IHealthCheck
             .SendAsync(_serverHealthCheck, cancellationToken);
     }
 
-    private async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
+    private static async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
     {
         var executor = store.Maintenance.ForDatabase(database);
 

@@ -11,4 +11,10 @@ public class PingHealthCheckOptions
         ConfiguredHosts.Add(host, (host, timeout));
         return this;
     }
+
+    public PingHealthCheckOptions WithCheckAllFolders()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
 }

@@ -18,6 +18,12 @@ public class TcpHealthCheckOptions
         return this;
     }
 
+    public TcpHealthCheckOptions WithCheckAllFolders()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
+
     public bool CheckAllHosts { get; set; }
 
     /// <summary>

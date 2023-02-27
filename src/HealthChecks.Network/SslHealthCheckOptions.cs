@@ -19,6 +19,12 @@ public class SslHealthCheckOptions
         return this;
     }
 
+    public SslHealthCheckOptions WithCheckAllFolders()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
+
     /// <summary>
     /// Configure the address family.
     /// </summary>

@@ -13,4 +13,10 @@ public class FolderHealthCheckOptions
         Folders.Add(folder);
         return this;
     }
+
+    public FolderHealthCheckOptions WithCheckAllFolders()
+    {
+        CheckAllFolders = true;
+        return this;
+    }
 }

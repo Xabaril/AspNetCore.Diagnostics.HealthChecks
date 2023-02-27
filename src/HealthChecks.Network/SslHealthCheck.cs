@@ -22,6 +22,7 @@ public class SslHealthCheck : IHealthCheck
     {
         try
         {
+            HealthCheckErrorList? errorList = null;
             foreach (var (host, port, checkLeftDays) in _options.ConfiguredHosts)
             {
                 using var tcpClient = new TcpClient(_options.AddressFamily);
@@ -31,20 +32,26 @@ public class SslHealthCheck : IHealthCheck
                 await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
                 if (!tcpClient.Connected)
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
+                {
+                    (errorList ??= new()).Add($"Connection to host {host}:{port} failed");
+                    continue;
+                }
 
                 var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
 
                 if (certificate is null || !certificate.Verify())
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ssl certificate not present or not valid for {host}:{port}");
+                {
+                    (errorList ??= new()).Add($"Ssl certificate not present or not valid for {host}:{port}");
+                    continue;
+                }
 
                 if (certificate.NotAfter.Subtract(DateTime.Now).TotalDays <= checkLeftDays)
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
-
-                return HealthCheckResult.Healthy();
+                {
+                    (errorList ??= new()).Add($"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
+                }
             }
 
-            return HealthCheckResult.Healthy();
+            return errorList?.GetHealthState(context) ?? HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

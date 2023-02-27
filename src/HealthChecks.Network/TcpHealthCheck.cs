@@ -20,6 +20,7 @@ public class TcpHealthCheck : IHealthCheck
     {
         try
         {
+            HealthCheckErrorList? errorList = null;
             foreach (var (host, port) in _options.ConfiguredHosts)
             {
                 using var tcpClient = new TcpClient(_options.AddressFamily);
@@ -29,10 +30,12 @@ public class TcpHealthCheck : IHealthCheck
                 await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
                 if (!tcpClient.Connected)
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
+                {
+                    (errorList ??= new()).Add($"Connection to host {host}:{port} failed");
+                }
             }
 
-            return HealthCheckResult.Healthy();
+            return errorList?.GetHealthState(context) ?? HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

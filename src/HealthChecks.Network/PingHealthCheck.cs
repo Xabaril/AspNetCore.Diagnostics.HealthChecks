@@ -19,16 +19,19 @@ public class PingHealthCheck : IHealthCheck
 
         try
         {
+            HealthCheckErrorList? errorList = null;
             foreach (var (host, timeout) in configuredHosts)
             {
                 using var ping = new Ping();
 
                 var pingReply = await ping.SendPingAsync(host, timeout).ConfigureAwait(false);
                 if (pingReply.Status != IPStatus.Success)
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ping check for host {host} is failed with status reply:{pingReply.Status}");
+                {
+                    (errorList ??= new()).Add($"Ping check for host {host} is failed with status reply:{pingReply.Status}");
+                }
             }
 
-            return HealthCheckResult.Healthy();
+            return errorList?.GetHealthState(context) ?? HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

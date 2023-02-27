@@ -16,7 +16,7 @@ public class FolderHealthCheck : IHealthCheck
     {
         try
         {
-            List<string>? errorList = null;
+            HealthCheckErrorList? errorList = null;
             foreach (string folder in _folderOptions.Folders)
             {
                 if (!string.IsNullOrEmpty(folder))
@@ -28,12 +28,7 @@ public class FolderHealthCheck : IHealthCheck
                 }
             }
 
-            if (errorList?.Count > 0)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errorList)));
-            }
-
-            return HealthCheckResultTask.Healthy;
+            return errorList?.GetHealthStateAsync(context) ?? HealthCheckResultTask.Healthy;
         }
         catch (Exception ex)
         {

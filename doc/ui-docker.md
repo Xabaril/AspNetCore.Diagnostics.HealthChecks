@@ -113,7 +113,8 @@ services:
   healthchecks:
     image: xabarilcoding/healthchecksui
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
     environment:
       - storage_provider=SqlServer
       - storage_connection=Server=sqlserver,1433;User Id=sa;Password=Password12!;Initial Catalog=DockerUI
@@ -129,4 +130,10 @@ services:
       - SA_PASSWORD=Password12!
     ports:
       - 1433:1433
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 ```

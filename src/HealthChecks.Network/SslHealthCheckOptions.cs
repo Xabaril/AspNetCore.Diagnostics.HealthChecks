@@ -19,7 +19,7 @@ public class SslHealthCheckOptions
         return this;
     }
 
-    public SslHealthCheckOptions WithCheckAllFolders()
+    public SslHealthCheckOptions WithCheckAllHosts()
     {
         CheckAllHosts = true;
         return this;

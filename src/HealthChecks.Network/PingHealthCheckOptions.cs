@@ -12,7 +12,7 @@ public class PingHealthCheckOptions
         return this;
     }
 
-    public PingHealthCheckOptions WithCheckAllFolders()
+    public PingHealthCheckOptions WithCheckAllHosts()
     {
         CheckAllHosts = true;
         return this;

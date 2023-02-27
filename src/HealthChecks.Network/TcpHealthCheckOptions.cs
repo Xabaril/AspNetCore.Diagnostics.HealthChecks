@@ -18,7 +18,7 @@ public class TcpHealthCheckOptions
         return this;
     }
 
-    public TcpHealthCheckOptions WithCheckAllFolders()
+    public TcpHealthCheckOptions WithCheckAllHosts()
     {
         CheckAllHosts = true;
         return this;

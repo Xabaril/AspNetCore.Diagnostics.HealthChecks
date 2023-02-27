@@ -123,7 +123,7 @@ services:
     ports:
       - 5000:80
   sqlserver:
-    image: microsoft/mssql-server-linux
+    image: mcr.microsoft.com/mssql/server
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Password12!

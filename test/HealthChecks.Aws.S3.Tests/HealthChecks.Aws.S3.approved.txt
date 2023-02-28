@@ -13,6 +13,7 @@ namespace HealthChecks.Aws.S3
         [System.Obsolete("Specify access key and secret as a BasicCredential to Credentials property instea" +
             "d")]
         public string? SecretKey { get; set; }
+        public int MaxKeys { get; set; } = 1;
     }
     public class S3HealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {

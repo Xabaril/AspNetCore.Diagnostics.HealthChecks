@@ -1,7 +1,7 @@
 <Project>
   <Import Project="build/versions.props" />
 
-  <PropertyGroup Label="Package information">
+  <PropertyGroup>
     <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

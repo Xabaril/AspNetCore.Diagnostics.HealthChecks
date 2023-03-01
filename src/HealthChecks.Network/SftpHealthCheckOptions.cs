@@ -8,4 +8,12 @@ public class SftpHealthCheckOptions
         ConfiguredHosts.Add(sftpConfiguration.Host, sftpConfiguration);
         return this;
     }
+
+    public SftpHealthCheckOptions WithCheckAllHosts()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
+
+    public bool CheckAllHosts { get; set; }
 }

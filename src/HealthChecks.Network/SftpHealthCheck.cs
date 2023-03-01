@@ -18,6 +18,7 @@ public class SftpHealthCheck : IHealthCheck
     {
         try
         {
+            List<string> errorList = new();
             foreach (var item in _options.ConfiguredHosts.Values)
             {
                 var connectionInfo = new ConnectionInfo(item.Host, item.Port, item.UserName, item.AuthenticationMethods.ToArray());
@@ -42,11 +43,15 @@ public class SftpHealthCheck : IHealthCheck
                 }
                 else
                 {
-                    return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection with sftp host {item.Host}:{item.Port} failed."));
+                    errorList.Add($"Connection with sftp host {item.Host}:{item.Port} failed.");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
+                    }
                 }
             }
 
-            return HealthCheckResultTask.Healthy;
+            return Task.FromResult(errorList.GetHealthState(context));
         }
         catch (Exception ex)
         {

@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Net;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

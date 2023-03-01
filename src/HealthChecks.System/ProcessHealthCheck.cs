@@ -31,6 +31,6 @@ public class ProcessHealthCheck : IHealthCheck
             return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
         }
 
-        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus));
     }
 }

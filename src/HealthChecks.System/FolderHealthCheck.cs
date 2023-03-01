@@ -16,14 +16,14 @@ public class FolderHealthCheck : IHealthCheck
     {
         try
         {
-            List<string>? errorList = null;
+            List<string> errorList = new();
             foreach (string folder in _folderOptions.Folders)
             {
                 if (!string.IsNullOrEmpty(folder))
                 {
                     if (!Directory.Exists(folder))
                     {
-                        (errorList ??= new()).Add($"Folder {folder} does not exist.");
+                        errorList.Add($"Folder {folder} does not exist.");
                         if (!_folderOptions.CheckAllFolders)
                         {
                             break;
@@ -32,7 +32,7 @@ public class FolderHealthCheck : IHealthCheck
                 }
             }
 
-            return Task.FromResult(errorList?.GetHealthState(context) ?? HealthCheckResult.Healthy());
+            return Task.FromResult(errorList.GetHealthState(context));
         }
         catch (Exception ex)
         {

@@ -15,11 +15,10 @@ internal static class StringListExtensions
 {
     public static HealthCheckResult GetHealthState(this List<string> instance, HealthCheckContext context)
     {
-        if (instance.Count > 0)
+        if (instance.Count == 0)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", instance));
+            return HealthCheckResult.Healthy();
         }
-
-        return HealthCheckResult.Healthy();
+        return new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", instance));
     }
 }

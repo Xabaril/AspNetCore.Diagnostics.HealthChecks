@@ -11,23 +11,13 @@ internal static class HealthCheckResultTask
     public static readonly Task<HealthCheckResult> Healthy = Task.FromResult(HealthCheckResult.Healthy());
 }
 
-internal class HealthCheckErrorList : List<string>
+internal static class StringListExtensions
 {
-    public Task<HealthCheckResult> GetHealthStateAsync(HealthCheckContext context)
+    public static HealthCheckResult GetHealthState(this List<string> instance, HealthCheckContext context)
     {
-        if (Count > 0)
+        if (instance.Count > 0)
         {
-            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", this)));
-        }
-
-        return HealthCheckResultTask.Healthy;
-    }
-
-    public HealthCheckResult GetHealthState(HealthCheckContext context)
-    {
-        if (Count > 0)
-        {
-            return new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", this));
+            return new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", instance));
         }
 
         return HealthCheckResult.Healthy();

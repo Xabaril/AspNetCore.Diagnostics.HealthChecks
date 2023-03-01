@@ -20,7 +20,7 @@ public class TcpHealthCheck : IHealthCheck
     {
         try
         {
-            HealthCheckErrorList? errorList = null;
+            List<string>? errorList = null;
             foreach (var (host, port) in _options.ConfiguredHosts)
             {
                 using var tcpClient = new TcpClient(_options.AddressFamily);

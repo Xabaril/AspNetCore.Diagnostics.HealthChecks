@@ -19,7 +19,7 @@ public class PingHealthCheck : IHealthCheck
 
         try
         {
-            HealthCheckErrorList? errorList = null;
+            List<string>? errorList = null;
             foreach (var (host, timeout) in configuredHosts)
             {
                 using var ping = new Ping();

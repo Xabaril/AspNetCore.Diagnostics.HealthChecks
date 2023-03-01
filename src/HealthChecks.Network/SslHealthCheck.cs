@@ -22,7 +22,7 @@ public class SslHealthCheck : IHealthCheck
     {
         try
         {
-            HealthCheckErrorList? errorList = null;
+            List<string>? errorList = null;
             foreach (var (host, port, checkLeftDays) in _options.ConfiguredHosts)
             {
                 using var tcpClient = new TcpClient(_options.AddressFamily);

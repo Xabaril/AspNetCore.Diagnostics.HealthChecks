@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Net;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -18,7 +19,7 @@ public class FtpHealthCheck : IHealthCheck
     {
         try
         {
-            HealthCheckErrorList? errorList = null;
+            List<string>? errorList = null;
             foreach (var (host, createFile, credentials) in _options.Hosts.Values)
             {
                 var ftpRequest = CreateFtpWebRequest(host, createFile, credentials);

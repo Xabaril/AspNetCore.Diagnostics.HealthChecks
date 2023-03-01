@@ -47,6 +47,34 @@ public class azure_service_bus_queue_registration_with_token_should
         configurationCalled.ShouldBeTrue();
         configurationOptions.ShouldNotBeNull();
         configurationOptions.UsePeekMode.ShouldBeTrue();
+        configurationOptions.IsExceptionDetailsRequired.ShouldBeTrue();
+    }
+    [Fact]
+    public void add_health_check_without_giving_exception_in_result_for_unhealthy_queues()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue("fullyQualifiedNamespace", "queueName", new AzureCliCredential(),
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                }, isExceptionDetailsRequired: false);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+        configurationOptions.IsExceptionDetailsRequired.ShouldBeFalse();
     }
 
     [Fact]
@@ -110,6 +138,34 @@ public class azure_service_bus_queue_registration_with_token_should
         configurationCalled.ShouldBeTrue();
         configurationOptions.ShouldNotBeNull();
         configurationOptions.UsePeekMode.ShouldBeTrue();
+        configurationOptions.IsExceptionDetailsRequired.ShouldBeTrue();
+    }
+    [Fact]
+    public void add_health_check_using_factories_without_giving_exception_in_result_for_unhealthy_queues()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(_ => "fullyQualifiedNamespace", _ => "queueName", _ => new AzureCliCredential(),
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                }, isExceptionDetailsRequired: false);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+        configurationOptions.IsExceptionDetailsRequired.ShouldBeFalse();
     }
 
     [Fact]

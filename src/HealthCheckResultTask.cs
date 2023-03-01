@@ -11,7 +11,6 @@ internal static class HealthCheckResultTask
     public static readonly Task<HealthCheckResult> Healthy = Task.FromResult(HealthCheckResult.Healthy());
 }
 
-
 internal class HealthCheckErrorList : List<string>
 {
     public Task<HealthCheckResult> GetHealthStateAsync(HealthCheckContext context)

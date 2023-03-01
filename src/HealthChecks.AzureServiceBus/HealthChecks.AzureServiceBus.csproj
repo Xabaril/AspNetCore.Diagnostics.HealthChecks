@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);Azure;ServiceBus;EventHub</PackageTags>
     <Description>HealthChecks.AzureServiceBus is the health check package for Azure EventHub, and Azure Service Bus Queues and Topics.</Description>
     <VersionPrefix>$(HealthCheckAzureServiceBus)</VersionPrefix>
+    <Version>7.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>

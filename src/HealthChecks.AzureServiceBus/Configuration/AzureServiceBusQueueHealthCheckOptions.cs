@@ -20,6 +20,7 @@ public class AzureServiceBusQueueHealthCheckOptions : AzureServiceBusHealthCheck
     /// is used set this to <see langword="false"/>. By default <see langword="true"/>.
     /// </remarks>
     public bool UsePeekMode { get; set; } = true;
+    public bool IsExceptionDetailsRequired { get; set; } = true;
 
     public AzureServiceBusQueueHealthCheckOptions(string queueName)
     {

@@ -29,7 +29,10 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return Options.IsExceptionDetailsRequired
+                ? new HealthCheckResult(context.Registration.FailureStatus, exception: ex)
+                : new HealthCheckResult(context.Registration.FailureStatus);
+
         }
 
         Task CheckWithReceiver()

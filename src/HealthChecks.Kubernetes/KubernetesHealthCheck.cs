@@ -43,7 +43,7 @@ public class KubernetesHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, ex.Message);
+            return new HealthCheckResult(context.Registration.FailureStatus, ex.Message, ex);
         }
     }
 }

@@ -19,4 +19,6 @@ public class S3BucketOptions
     public string BucketName { get; set; } = null!;
 
     public Func<ListObjectsResponse, bool>? CustomResponseCheck { get; set; }
+
+    public int MaxKeys { get; set; } = 1;
 }

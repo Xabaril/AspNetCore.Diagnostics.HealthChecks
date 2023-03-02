@@ -1,6 +1,5 @@
 using Amazon.Runtime;
 using Amazon.S3;
-using Amazon.S3.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Aws.S3;
@@ -42,12 +41,7 @@ public class S3HealthCheck : IHealthCheck
 
             using (client)
             {
-                var listRequest = new ListObjectsRequest
-                {
-                    BucketName = _bucketOptions.BucketName,
-                    MaxKeys = _bucketOptions.MaxKeys
-                };
-                var response = await client.ListObjectsAsync(listRequest, cancellationToken).ConfigureAwait(false);
+                var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken).ConfigureAwait(false);
 
                 if (_bucketOptions.CustomResponseCheck != null)
                 {

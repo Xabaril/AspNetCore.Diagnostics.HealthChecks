@@ -46,7 +46,7 @@ public class S3HealthCheck : IHealthCheck
                 {
                     BucketName = _bucketOptions.BucketName, MaxKeys = _bucketOptions.MaxKeys
                 };
-                var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken).ConfigureAwait(false);
+                var response = await client.ListObjectsAsync(listRequest, cancellationToken).ConfigureAwait(false);
 
                 if (_bucketOptions.CustomResponseCheck != null)
                 {

@@ -4,6 +4,12 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.IbmMQ;
 
+/// <summary>
+/// A health check for IBM MQ services.
+/// </summary>
+#if NETSTANDARD2_0
+[Obsolete("Use .NET6 based MQ Client libraries", false)]
+#endif
 public class IbmMQHealthCheck : IHealthCheck
 {
     private readonly Hashtable _connectionProperties;

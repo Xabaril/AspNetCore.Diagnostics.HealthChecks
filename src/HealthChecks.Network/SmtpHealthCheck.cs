@@ -2,48 +2,44 @@ using HealthChecks.Network.Core;
 using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Network
+namespace HealthChecks.Network;
+
+public class SmtpHealthCheck : IHealthCheck
 {
-    public class SmtpHealthCheck : IHealthCheck
+    private readonly SmtpHealthCheckOptions _options;
+
+    public SmtpHealthCheck(SmtpHealthCheckOptions options)
     {
-        private readonly SmtpHealthCheckOptions _options;
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        public SmtpHealthCheck(SmtpHealthCheckOptions options)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _options = Guard.ThrowIfNull(options);
-        }
+            using var smtpConnection = new SmtpConnection(_options);
 
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            if (await smtpConnection.ConnectAsync().ConfigureAwait(false))
             {
-                using (var smtpConnection = new SmtpConnection(_options))
+                if (_options.AccountOptions.Login)
                 {
-                    if (await smtpConnection.ConnectAsync().ConfigureAwait(false))
-                    {
-                        if (_options.AccountOptions.Login)
-                        {
-                            var (user, password) = _options.AccountOptions.Account;
+                    var (user, password) = _options.AccountOptions.Account;
 
-                            if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
-                            {
-                                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
-                            }
-                        }
-
-                        return HealthCheckResult.Healthy();
-                    }
-                    else
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not connect to smtp server {_options.Host}:{_options.Port} - SSL : {_options.ConnectionType}");
-                    }
+                    if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
                 }
+
+                return HealthCheckResult.Healthy();
             }
-            catch (Exception ex)
+            else
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Could not connect to smtp server {_options.Host}:{_options.Port} - SSL : {_options.ConnectionType}");
             }
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

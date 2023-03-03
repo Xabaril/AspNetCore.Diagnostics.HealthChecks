@@ -1,37 +1,36 @@
 using System.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.System
+namespace HealthChecks.System;
+
+public class ProcessHealthCheck : IHealthCheck
 {
-    public class ProcessHealthCheck : IHealthCheck
+    private readonly string _processName;
+    private readonly Func<Process[], bool> _predicate;
+
+    public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
     {
-        private readonly string _processName;
-        private readonly Func<Process[], bool> _predicate;
+        _processName = Guard.ThrowIfNull(processName);
+        _predicate = Guard.ThrowIfNull(predicate);
+    }
 
-        public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
+    /// <inheritdoc />
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _processName = Guard.ThrowIfNull(processName);
-            _predicate = Guard.ThrowIfNull(predicate);
+            var processes = Process.GetProcessesByName(_processName);
+
+            if (_predicate(processes))
+            {
+                return HealthCheckResultTask.Healthy;
+            }
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
         }
 
-        /// <inheritdoc />
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var processes = Process.GetProcessesByName(_processName);
-
-                if (_predicate(processes))
-                {
-                    return HealthCheckResultTask.Healthy;
-                }
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
-            }
-
-            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
-        }
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus));
     }
 }

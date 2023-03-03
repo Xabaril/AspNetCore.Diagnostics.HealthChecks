@@ -8,6 +8,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Extension methods to configure <see cref="IbmMQHealthCheck"/>.
 /// </summary>
+#if NETSTANDARD2_0
+[Obsolete("Use .NET6 based MQ Client libraries", false)]
+#endif
 public static class IbmMQHealthCheckBuilderExtensions
 {
     private const string NAME = "ibmmq";
@@ -51,7 +54,7 @@ public static class IbmMQHealthCheckBuilderExtensions
     /// <param name="channel">The name of the channel.</param>
     /// <param name="connectionInfo">The connection information in the following format HOSTNAME(PORT).</param>
     /// <param name="userName">The user name. Optional.</param>
-    /// <param name="password">The password. Optional</param>
+    /// <param name="password">The password. Optional.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'ibmmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

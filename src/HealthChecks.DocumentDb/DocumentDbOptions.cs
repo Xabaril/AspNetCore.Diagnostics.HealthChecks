@@ -1,12 +1,11 @@
-namespace HealthChecks.DocumentDb
-{
-    /// <summary>
-    /// Options for <see cref="DocumentDbHealthCheck"/>.
-    /// </summary>
-    public class DocumentDbOptions
-    {
-        public string UriEndpoint { get; set; } = null!;
+namespace HealthChecks.DocumentDb;
 
-        public string PrimaryKey { get; set; } = null!;
-    }
+/// <summary>
+/// Options for <see cref="DocumentDbHealthCheck"/>.
+/// </summary>
+public class DocumentDbOptions
+{
+    public string UriEndpoint { get; set; } = null!;
+
+    public string PrimaryKey { get; set; } = null!;
 }

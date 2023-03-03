@@ -1,9 +1,8 @@
-namespace HealthChecks.Network.Core
+namespace HealthChecks.Network.Core;
+
+public enum ImapConnectionType
 {
-    public enum ImapConnectionType
-    {
-        AUTO,
-        SSL_TLS,
-        STARTTLS
-    }
+    AUTO,
+    SSL_TLS,
+    STARTTLS
 }

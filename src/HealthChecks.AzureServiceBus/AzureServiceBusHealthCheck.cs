@@ -3,46 +3,45 @@ using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
 
-namespace HealthChecks.AzureServiceBus
+namespace HealthChecks.AzureServiceBus;
+
+public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : AzureServiceBusHealthCheckOptions
 {
-    public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : AzureServiceBusHealthCheckOptions
+    protected static readonly ConcurrentDictionary<string, ServiceBusClient> ClientConnections = new();
+
+    protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> ManagementClientConnections = new();
+
+    protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
+
+    protected TOptions Options { get; }
+
+    protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
+
+    protected abstract string ConnectionKey { get; }
+
+    protected AzureServiceBusHealthCheck(TOptions options)
     {
-        protected static readonly ConcurrentDictionary<string, ServiceBusClient> ClientConnections = new();
+        Options = options;
 
-        protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> ManagementClientConnections = new();
+        if (!string.IsNullOrWhiteSpace(options.ConnectionString))
+            return;
 
-        protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
-
-        protected TOptions Options { get; }
-
-        protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
-
-        protected abstract string ConnectionKey { get; }
-
-        protected AzureServiceBusHealthCheck(TOptions options)
+        if (!string.IsNullOrWhiteSpace(options.FullyQualifiedNamespace))
         {
-            Options = options;
-
-            if (!string.IsNullOrWhiteSpace(options.ConnectionString))
-                return;
-
-            if (!string.IsNullOrWhiteSpace(options.FullyQualifiedNamespace))
-            {
-                Guard.ThrowIfNull(options.Credential);
-                return;
-            }
-
-            throw new ArgumentException("A connection string or endpoint must be set!", nameof(options));
+            Guard.ThrowIfNull(options.Credential);
+            return;
         }
 
-        protected ServiceBusClient CreateClient() =>
-            Options.Credential is null
-                ? new ServiceBusClient(Options.ConnectionString)
-                : new ServiceBusClient(Options.FullyQualifiedNamespace, Options.Credential);
-
-        protected ServiceBusAdministrationClient CreateManagementClient() =>
-            Options.Credential is null
-                ? new ServiceBusAdministrationClient(Options.ConnectionString)
-                : new ServiceBusAdministrationClient(Options.FullyQualifiedNamespace, Options.Credential);
+        throw new ArgumentException("A connection string or endpoint must be set!", nameof(options));
     }
+
+    protected ServiceBusClient CreateClient() =>
+        Options.Credential is null
+            ? new ServiceBusClient(Options.ConnectionString)
+            : new ServiceBusClient(Options.FullyQualifiedNamespace, Options.Credential);
+
+    protected ServiceBusAdministrationClient CreateManagementClient() =>
+        Options.Credential is null
+            ? new ServiceBusAdministrationClient(Options.ConnectionString)
+            : new ServiceBusAdministrationClient(Options.FullyQualifiedNamespace, Options.Credential);
 }

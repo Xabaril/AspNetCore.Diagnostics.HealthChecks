@@ -2,61 +2,60 @@ using System.Collections.Concurrent;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SolrNet.Impl;
 
-namespace HealthChecks.Solr
+namespace HealthChecks.Solr;
+
+public class SolrHealthCheck : IHealthCheck
 {
-    public class SolrHealthCheck : IHealthCheck
+    private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new();
+
+    private readonly SolrOptions _options;
+
+    public SolrHealthCheck(SolrOptions options)
     {
-        private static readonly ConcurrentDictionary<string, SolrConnection> _connections = new();
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        private readonly SolrOptions _options;
-
-        public SolrHealthCheck(SolrOptions options)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _options = Guard.ThrowIfNull(options);
-        }
+            string url = $"{_options.Uri}/{_options.Core}";
 
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            if (!_connections.TryGetValue(url, out var solrConnection))
             {
-                string url = $"{_options.Uri}/{_options.Core}";
-
-                if (!_connections.TryGetValue(url, out var solrConnection))
+                solrConnection = new SolrConnection(url)
                 {
-                    solrConnection = new SolrConnection(url)
-                    {
-                        Timeout = (int)_options.Timeout.TotalMilliseconds
-                    };
+                    Timeout = (int)_options.Timeout.TotalMilliseconds
+                };
 
-                    if (!_connections.TryAdd(url, solrConnection))
-                    {
-                        solrConnection = _connections[url];
-                    }
+                if (!_connections.TryAdd(url, solrConnection))
+                {
+                    solrConnection = _connections[url];
                 }
-
-                var server = new SolrBasicServer<string>(
-                    solrConnection,
-                    queryExecuter: null,
-                    documentSerializer: null,
-                    schemaParser: null,
-                    headerParser: null,
-                    querySerializer: null,
-                    dihStatusParser: null,
-                    extractResponseParser: null);
-
-                var result = await server.PingAsync().ConfigureAwait(false);
-
-                bool isSuccess = result.Status == 0;
-
-                return isSuccess
-                    ? HealthCheckResult.Healthy()
-                    : new HealthCheckResult(context.Registration.FailureStatus);
             }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+
+            var server = new SolrBasicServer<string>(
+                solrConnection,
+                queryExecuter: null,
+                documentSerializer: null,
+                schemaParser: null,
+                headerParser: null,
+                querySerializer: null,
+                dihStatusParser: null,
+                extractResponseParser: null);
+
+            var result = await server.PingAsync().ConfigureAwait(false);
+
+            bool isSuccess = result.Status == 0;
+
+            return isSuccess
+                ? HealthCheckResult.Healthy()
+                : new HealthCheckResult(context.Registration.FailureStatus);
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

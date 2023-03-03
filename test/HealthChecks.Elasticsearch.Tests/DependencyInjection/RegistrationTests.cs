@@ -1,39 +1,38 @@
-namespace HealthChecks.Elasticsearch.Tests.DependencyInjection
+namespace HealthChecks.Elasticsearch.Tests.DependencyInjection;
+
+public class elasticsearch_registration_should
 {
-    public class elasticsearch_registration_should
+    [Fact]
+    public void add_health_check_when_properly_configured()
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddElasticsearch("uri");
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddElasticsearch("uri");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.ShouldBe("elasticsearch");
-            check.ShouldBeOfType<ElasticsearchHealthCheck>();
-        }
+        registration.Name.ShouldBe("elasticsearch");
+        check.ShouldBeOfType<ElasticsearchHealthCheck>();
+    }
 
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddElasticsearch("uri", name: "my-elasticsearch");
+    [Fact]
+    public void add_named_health_check_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddElasticsearch("uri", name: "my-elasticsearch");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.ShouldBe("my-elasticsearch");
-            check.ShouldBeOfType<ElasticsearchHealthCheck>();
-        }
+        registration.Name.ShouldBe("my-elasticsearch");
+        check.ShouldBeOfType<ElasticsearchHealthCheck>();
     }
 }

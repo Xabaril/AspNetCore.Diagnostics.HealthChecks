@@ -122,7 +122,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// Add a health check for RabbitMQ services using <see cref="IConnection"/> factory function.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionFactory"> A factory function to provide the rabbitMQ connection </param>
+    /// <param name="connectionFactory">A factory function to provide the rabbitMQ connection.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -154,7 +154,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// Add a health check for RabbitMQ services using <see cref="IConnectionFactory"/> factory function.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionFactoryFactory"> A factory function to provide the rabbitMQ connection factory</param>
+    /// <param name="connectionFactoryFactory">A factory function to provide the rabbitMQ connection factory.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

@@ -14,5 +14,9 @@ namespace HealthChecks.Prometheus.Metrics
 }
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class PrometheusHealthCheckMiddleware { }
+    public static class PrometheusHealthCheckMiddleware
+    {
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksPrometheusExporter(this Microsoft.AspNetCore.Builder.IApplicationBuilder applicationBuilder, Microsoft.AspNetCore.Http.PathString endpoint) { }
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksPrometheusExporter(this Microsoft.AspNetCore.Builder.IApplicationBuilder applicationBuilder, Microsoft.AspNetCore.Http.PathString endpoint, System.Action<Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions>? configure) { }
+    }
 }

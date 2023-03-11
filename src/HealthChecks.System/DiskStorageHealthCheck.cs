@@ -18,7 +18,7 @@ public class DiskStorageHealthCheck : IHealthCheck
         {
             var configuredDrives = _options.ConfiguredDrives;
 
-            List<string> errorList = new();
+            List<string>? errorList = null;
             if (configuredDrives.Count > 0)
             {
                 var drives = DriveInfo.GetDrives();
@@ -32,16 +32,20 @@ public class DiskStorageHealthCheck : IHealthCheck
                         long actualFreeMegabytes = driveInfo.AvailableFreeSpace / 1024 / 1024;
                         if (actualFreeMegabytes < MinimumFreeMegabytes)
                         {
-                            errorList.Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, actualFreeMegabytes));
+                            (errorList ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, actualFreeMegabytes));
                             if (!_options.CheckAllDrives)
+                            {
                                 break;
+                            }
                         }
                     }
                     else
                     {
-                        errorList.Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, null));
+                        (errorList ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, null));
                         if (!_options.CheckAllDrives)
+                        {
                             break;
+                        }
                     }
                 }
             }

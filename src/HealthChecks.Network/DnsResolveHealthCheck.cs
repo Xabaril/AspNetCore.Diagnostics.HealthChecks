@@ -20,7 +20,7 @@ public class DnsResolveHealthCheck : IHealthCheck
     {
         try
         {
-            List<string> errorList = new();
+            List<string>? errorList = null;
             foreach (var item in _options.ConfigureHosts.Values)
             {
 #if NET5_0_OR_GREATER
@@ -33,7 +33,7 @@ public class DnsResolveHealthCheck : IHealthCheck
                 {
                     if (item.Resolutions == null || !item.Resolutions.Contains(ipAddress.ToString()))
                     {
-                        errorList.Add($"Ip Address {ipAddress} was not resolved from host {item.Host}");
+                        (errorList ??= new()).Add($"Ip Address {ipAddress} was not resolved from host {item.Host}");
                         if (!_options.CheckAllHosts)
                         {
                             break;

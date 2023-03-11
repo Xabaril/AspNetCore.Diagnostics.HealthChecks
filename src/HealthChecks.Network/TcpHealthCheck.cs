@@ -20,7 +20,7 @@ public class TcpHealthCheck : IHealthCheck
     {
         try
         {
-            List<string> errorList = new();
+            List<string>? errorList = null;
             foreach (var (host, port) in _options.ConfiguredHosts)
             {
                 using var tcpClient = new TcpClient(_options.AddressFamily);
@@ -31,7 +31,7 @@ public class TcpHealthCheck : IHealthCheck
 #endif
                 if (!tcpClient.Connected)
                 {
-                    errorList.Add($"Connection to host {host}:{port} failed");
+                    (errorList ??= new()).Add($"Connection to host {host}:{port} failed");
                     if (!_options.CheckAllHosts)
                     {
                         break;

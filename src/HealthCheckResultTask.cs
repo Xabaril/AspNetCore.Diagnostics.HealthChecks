@@ -13,9 +13,9 @@ internal static class HealthCheckResultTask
 
 internal static class StringListExtensions
 {
-    public static HealthCheckResult GetHealthState(this List<string> instance, HealthCheckContext context)
+    public static HealthCheckResult GetHealthState(this List<string>? instance, HealthCheckContext context)
     {
-        if (instance.Count == 0)
+        if (instance is null || instance.Count == 0)
         {
             return HealthCheckResult.Healthy();
         }

@@ -22,7 +22,7 @@ public class SslHealthCheck : IHealthCheck
     {
         try
         {
-            List<string> errorList = new();
+            List<string>? errorList = null;
             foreach (var (host, port, checkLeftDays) in _options.ConfiguredHosts)
             {
                 using var tcpClient = new TcpClient(_options.AddressFamily);
@@ -45,7 +45,7 @@ public class SslHealthCheck : IHealthCheck
 
                 if (certificate is null || !certificate.Verify())
                 {
-                    errorList.Add($"Ssl certificate not present or not valid for {host}:{port}");
+                    (errorList ??= new()).Add($"Ssl certificate not present or not valid for {host}:{port}");
                     if (!_options.CheckAllHosts)
                     {
                         break;
@@ -55,7 +55,7 @@ public class SslHealthCheck : IHealthCheck
 
                 if (certificate.NotAfter.Subtract(DateTime.Now).TotalDays <= checkLeftDays)
                 {
-                    errorList.Add($"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
+                    (errorList ??= new()).Add($"Ssl certificate for {host}:{port} is about to expire in {checkLeftDays} days");
                     if (!_options.CheckAllHosts)
                     {
                         break;

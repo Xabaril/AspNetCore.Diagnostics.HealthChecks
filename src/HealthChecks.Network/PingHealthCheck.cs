@@ -19,7 +19,7 @@ public class PingHealthCheck : IHealthCheck
 
         try
         {
-            List<string> errorList = new();
+            List<string>? errorList = null;
             foreach (var (host, timeout) in configuredHosts)
             {
                 using var ping = new Ping();
@@ -27,7 +27,7 @@ public class PingHealthCheck : IHealthCheck
                 var pingReply = await ping.SendPingAsync(host, timeout).ConfigureAwait(false);
                 if (pingReply.Status != IPStatus.Success)
                 {
-                    errorList.Add($"Ping check for host {host} is failed with status reply:{pingReply.Status}");
+                    (errorList ??= new()).Add($"Ping check for host {host} is failed with status reply:{pingReply.Status}");
                     if (!_options.CheckAllHosts)
                     {
                         break;

@@ -16,14 +16,14 @@ public class FolderHealthCheck : IHealthCheck
     {
         try
         {
-            List<string> errorList = new();
+            List<string>? errorList = null;
             foreach (string folder in _folderOptions.Folders)
             {
                 if (!string.IsNullOrEmpty(folder))
                 {
                     if (!Directory.Exists(folder))
                     {
-                        errorList.Add($"Folder {folder} does not exist.");
+                        (errorList ??= new()).Add($"Folder {folder} does not exist.");
                         if (!_folderOptions.CheckAllFolders)
                         {
                             break;

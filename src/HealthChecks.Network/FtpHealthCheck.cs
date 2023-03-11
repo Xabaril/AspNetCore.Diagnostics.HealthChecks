@@ -18,7 +18,7 @@ public class FtpHealthCheck : IHealthCheck
     {
         try
         {
-            List<string> errorList = new();
+            List<string>? errorList = null;
             foreach (var (host, createFile, credentials) in _options.Hosts.Values)
             {
                 var ftpRequest = CreateFtpWebRequest(host, createFile, credentials);
@@ -27,7 +27,7 @@ public class FtpHealthCheck : IHealthCheck
 
                 if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated && ftpResponse.StatusCode != FtpStatusCode.ClosingData)
                 {
-                    errorList.Add($"Error connecting to ftp host {host} with exit code {ftpResponse.StatusCode}");
+                    (errorList ??= new()).Add($"Error connecting to ftp host {host} with exit code {ftpResponse.StatusCode}");
                     if (!_options.CheckAllHosts)
                     {
                         break;

@@ -250,4 +250,25 @@ public class smtp_healthcheck_should
         response.EnsureSuccessStatusCode();
 
     }
+
+    [Fact]
+    public async Task respect_configured_timeout_and_throw_operation_cancelled_exception()
+    {
+        var options = new SmtpHealthCheckOptions() { Host = "invalid", Port = 25 };
+        options.LoginWith("user", "pass");
+
+        var smtpHealthCheck = new SmtpHealthCheck(options);
+
+        var result = await smtpHealthCheck.CheckHealthAsync(new HealthCheckContext
+        {
+            Registration = new HealthCheckRegistration(
+                "smtp",
+                instance: smtpHealthCheck,
+                failureStatus: HealthStatus.Degraded,
+                null,
+                timeout: null)
+        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
+
+        result.Exception.ShouldBeOfType<OperationCanceledException>();
+    }
 }

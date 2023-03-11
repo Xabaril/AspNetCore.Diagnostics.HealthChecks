@@ -20,7 +20,7 @@ public class SmtpHealthCheck : IHealthCheck
         {
             using var smtpConnection = new SmtpConnection(_options);
 
-            if (await smtpConnection.ConnectAsync().ConfigureAwait(false))
+            if (await smtpConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (_options.AccountOptions.Login)
                 {

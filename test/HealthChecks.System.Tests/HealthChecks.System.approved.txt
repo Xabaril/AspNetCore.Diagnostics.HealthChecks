@@ -21,8 +21,10 @@ namespace HealthChecks.System
     public class FolderHealthCheckOptions
     {
         public FolderHealthCheckOptions() { }
+        public bool CheckAllFolders { get; set; }
         public System.Collections.Generic.IList<string> Folders { get; set; }
         public HealthChecks.System.FolderHealthCheckOptions AddFolder(string folder) { }
+        public HealthChecks.System.FolderHealthCheckOptions WithCheckAllFolders() { }
     }
     public class MaximumValueHealthCheck<T> : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
         where T : System.IComparable<T>

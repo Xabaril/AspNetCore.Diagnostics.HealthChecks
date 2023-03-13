@@ -31,7 +31,7 @@ public class ApiApprovalTests
         string publicApi = asmForTest.GeneratePublicApi(new ApiGeneratorOptions
         {
             IncludeAssemblyAttributes = false,
-            WhitelistedNamespacePrefixes = new[] { "Microsoft.Extensions.DependencyInjection" }
+            AllowNamespacePrefixes = new[] { "Microsoft" }
         });
 
         var location = Assembly.GetExecutingAssembly().Location;

@@ -30,7 +30,7 @@ public class WindowsServiceHealthCheck : IHealthCheck
             return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
 
-        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus));
     }
 
     private ServiceController GetServiceController() =>

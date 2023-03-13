@@ -8,6 +8,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Extension methods to configure <see cref="IbmMQHealthCheck"/>.
 /// </summary>
+#if NETSTANDARD2_0
+[Obsolete("Use .NET6 based MQ Client libraries", false)]
+#endif
 public static class IbmMQHealthCheckBuilderExtensions
 {
     private const string NAME = "ibmmq";

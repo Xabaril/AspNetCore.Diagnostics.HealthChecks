@@ -11,6 +11,7 @@ namespace HealthChecks.System
         public DiskStorageOptions() { }
         public bool CheckAllDrives { get; set; }
         public HealthChecks.System.DiskStorageOptions AddDrive(string driveName, long minimumFreeMegabytes = 1) { }
+        public HealthChecks.System.DiskStorageOptions WithCheckAllDrives() { }
         public delegate string ErrorDescription(string driveName, long minimumFreeMegabytes, long? actualFreeMegabytes);
     }
     public class FolderHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck

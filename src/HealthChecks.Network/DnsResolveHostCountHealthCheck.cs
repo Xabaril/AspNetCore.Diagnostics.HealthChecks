@@ -1,5 +1,5 @@
 using System.Net;
-#if !NET5_0_OR_GREATER
+#if !NET6_0_OR_GREATER
 using HealthChecks.Network.Extensions;
 #endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -26,8 +26,8 @@ public class DnsResolveHostCountHealthCheck : IHealthCheck
             {
                 var (minHosts, maxHosts) = entry.Value;
 
-#if NET5_0_OR_GREATER
-                var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key, cancellationToken);
+#if NET6_0_OR_GREATER
+                var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key, cancellationToken).ConfigureAwait(false);
 #else
                 var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif

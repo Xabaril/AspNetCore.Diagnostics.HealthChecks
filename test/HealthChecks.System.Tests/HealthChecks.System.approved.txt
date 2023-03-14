@@ -11,6 +11,7 @@ namespace HealthChecks.System
         public DiskStorageOptions() { }
         public bool CheckAllDrives { get; set; }
         public HealthChecks.System.DiskStorageOptions AddDrive(string driveName, long minimumFreeMegabytes = 1) { }
+        public HealthChecks.System.DiskStorageOptions WithCheckAllDrives() { }
         public delegate string ErrorDescription(string driveName, long minimumFreeMegabytes, long? actualFreeMegabytes);
     }
     public class FolderHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
@@ -21,8 +22,10 @@ namespace HealthChecks.System
     public class FolderHealthCheckOptions
     {
         public FolderHealthCheckOptions() { }
+        public bool CheckAllFolders { get; set; }
         public System.Collections.Generic.IList<string> Folders { get; set; }
         public HealthChecks.System.FolderHealthCheckOptions AddFolder(string folder) { }
+        public HealthChecks.System.FolderHealthCheckOptions WithCheckAllFolders() { }
     }
     public class MaximumValueHealthCheck<T> : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
         where T : System.IComparable<T>

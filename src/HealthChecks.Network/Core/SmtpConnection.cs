@@ -26,9 +26,9 @@ internal class SmtpConnection : MailConnection
         ComputeDefaultValues();
     }
 
-    public new async Task<bool> ConnectAsync()
+    public new async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
     {
-        await base.ConnectAsync().ConfigureAwait(false);
+        await base.ConnectAsync(cancellationToken).ConfigureAwait(false);
         var result = await ExecuteCommand(SmtpCommands.EHLO(Host)).ConfigureAwait(false);
         return result.Contains(SmtpResponse.ACTION_OK);
     }

@@ -12,6 +12,12 @@ public class DiskStorageOptions
 
     public bool CheckAllDrives { get; set; }
 
+    public DiskStorageOptions WithCheckAllDrives()
+    {
+        CheckAllDrives = true;
+        return this;
+    }
+
     /// <summary>
     /// Allows to set custom description of the failed disk check.
     /// </summary>

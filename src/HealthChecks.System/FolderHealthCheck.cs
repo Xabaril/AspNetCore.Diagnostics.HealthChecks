@@ -24,16 +24,15 @@ public class FolderHealthCheck : IHealthCheck
                     if (!Directory.Exists(folder))
                     {
                         (errorList ??= new()).Add($"Folder {folder} does not exist.");
+                        if (!_folderOptions.CheckAllFolders)
+                        {
+                            break;
+                        }
                     }
                 }
             }
 
-            if (errorList?.Count > 0)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errorList)));
-            }
-
-            return HealthCheckResultTask.Healthy;
+            return Task.FromResult(errorList.GetHealthState(context));
         }
         catch (Exception ex)
         {

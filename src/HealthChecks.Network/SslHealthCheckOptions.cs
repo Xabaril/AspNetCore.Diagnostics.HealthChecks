@@ -19,8 +19,16 @@ public class SslHealthCheckOptions
         return this;
     }
 
+    public SslHealthCheckOptions WithCheckAllHosts()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
+
     /// <summary>
     /// Configure the address family.
     /// </summary>
     public AddressFamily AddressFamily { get; set; } = AddressFamily.InterNetwork;
+
+    public bool CheckAllHosts { get; set; }
 }

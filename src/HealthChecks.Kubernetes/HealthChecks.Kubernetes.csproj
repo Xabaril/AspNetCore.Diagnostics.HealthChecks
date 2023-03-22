@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="4.0.26" />
+    <PackageReference Include="KubernetesClient" Version="10.1.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
 

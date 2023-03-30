@@ -1,4 +1,4 @@
-using Moq;
+using NSubstitute;
 using StackExchange.Redis;
 
 namespace HealthChecks.Redis.Tests.DependencyInjection;
@@ -65,12 +65,12 @@ public class redis_registration_should
     [Fact]
     public void add_named_health_check_with_connection_multiplexer_when_properly_configured()
     {
-        var connectionMultiplexerMock = new Mock<IConnectionMultiplexer>();
+        var connectionMultiplexer = Substitute.For<IConnectionMultiplexer>();
 
         var services = new ServiceCollection();
 
         services.AddHealthChecks()
-            .AddRedis(connectionMultiplexerMock.Object, name: "my-redis");
+            .AddRedis(connectionMultiplexer, name: "my-redis");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -85,10 +85,10 @@ public class redis_registration_should
     [Fact]
     public void add_health_check_with_connection_multiplexer_when_properly_configured()
     {
-        var connectionMultiplexerMock = new Mock<IConnectionMultiplexer>();
+        var connectionMultiplexer = Substitute.For<IConnectionMultiplexer>();
         var services = new ServiceCollection();
 
-        services.AddSingleton(connectionMultiplexerMock.Object);
+        services.AddSingleton(connectionMultiplexer);
         var factoryCalled = false;
 
         services.AddHealthChecks()

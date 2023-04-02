@@ -28,12 +28,11 @@ namespace Microsoft.AspNetCore.Builder
             {
                 appBuilder
                 .UseMiddleware<UIApiRequestLimitingMidleware>()
+                .Map($"/{Keys.HEALTHCHECKSUI_SETTINGS_PATH}", appBuilder => appBuilder.UseMiddleware<UISettingsMiddleware>())
                 .UseMiddleware<UIApiEndpointMiddleware>();
             });
 
             app.Map(options.WebhookPath, appBuilder => appBuilder.UseMiddleware<UIWebHooksApiMiddleware>());
-
-            app.Map($"{options.ApiPath}/{Keys.HEALTHCHECKSUI_SETTINGS_PATH}", appBuilder => appBuilder.UseMiddleware<UISettingsMiddleware>());
 
             new UIResourcesMapper(
                 new UIEmbeddedResourcesReader(embeddedResourcesAssembly))

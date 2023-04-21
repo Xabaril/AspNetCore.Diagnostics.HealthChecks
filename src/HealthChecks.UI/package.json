@@ -8,7 +8,7 @@
     "buildcss:prod": "uglifycss ./assets/healthchecksui.css --output ./assets/healthchecksui-min.css",
     "build:prod": "webpack-cli --mode production --config ./build/webpack.config.js",
     "build:dev": "webpack-cli --mode development --devtool eval-source-map --config ./build/webpack.config.js",
-    "build": "npm run build:dll && npm run build:prod"
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && npm run build:dll && npm run build:prod"
   },
   "author": "Xabaril Team",
   "license": "ISC",

@@ -103,6 +103,8 @@ jobs:
 
       - name: Build UI
         run: dotnet build --no-restore ./src/HealthChecks.UI/HealthChecks.UI.csproj
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
       - name: Build UI.Client
         run: dotnet build --no-restore ./src/HealthChecks.UI.Client/HealthChecks.UI.Client.csproj
       - name: Build UI.Core

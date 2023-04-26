@@ -1,11 +1,11 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0.1-bullseye-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0.101-bullseye-slim AS sdk-with-node
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS sdk-with-node
 
-ENV NODE_VERSION 8.11.1
-ENV NODE_DOWNLOAD_SHA 0e20787e2eda4cc31336d8327556ebc7417e8ee0a6ba0de96a09b0ec2b841f60
+ENV NODE_VERSION 18.16.0
+ENV NODE_DOWNLOAD_SHA fc83046a93d2189d919005a348db3b2372b598a145d84eb9781a3a4b0f032e95
 RUN curl -SL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz" --output nodejs.tar.gz \
     && echo "$NODE_DOWNLOAD_SHA nodejs.tar.gz" | sha256sum -c - \
     && tar -xzf "nodejs.tar.gz" -C /usr/local --strip-components=1 \
@@ -13,7 +13,7 @@ RUN curl -SL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-lin
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
 FROM sdk-with-node AS updated-npm
-RUN npm i -g npm@5
+RUN npm i -g npm@9
 
 FROM updated-npm AS build
 WORKDIR /src

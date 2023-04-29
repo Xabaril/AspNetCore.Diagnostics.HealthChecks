@@ -1,0 +1,8 @@
+﻿namespace HealthChecks.UI.Client
+{
+    public static class UIResponseWriter
+    {
+        public static System.Threading.Tasks.Task WriteHealthCheckUIResponse(Microsoft.AspNetCore.Http.HttpContext httpContext, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
+        public static System.Threading.Tasks.Task WriteHealthCheckUIResponseNoExceptionDetails(Microsoft.AspNetCore.Http.HttpContext httpContext, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
+    }
+}

@@ -59,7 +59,7 @@ jobs:
           dotnet-version: |
             6.0.x
             7.0.x
-      - name: Restore UI
+      - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.UI/HealthChecks.UI.csproj &&
           dotnet restore ./test/HealthChecks.UI.Tests/HealthChecks.UI.Tests.csproj &&

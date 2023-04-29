@@ -80,7 +80,7 @@ namespace HealthChecks.UI.Tests
             return Task.CompletedTask;
         }
 
-        [Fact(Skip = "Temporarily skipping")]
+        [Fact(Skip = "Temporarily skipping in https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1807")]
         public Task configure_webhooks_endpoint_custom_delegating_handlers()
         {
             var hostReset = new ManualResetEventSlim(false);

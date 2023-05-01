@@ -311,7 +311,8 @@ namespace HealthChecks.UI.Tests
                 {
                     services
                         .AddRouting()
-                        .AddHealthChecksUI();
+                        .AddHealthChecksUI()
+                        .AddInMemoryStorage();
                 })
                 .Configure(app =>
                 {

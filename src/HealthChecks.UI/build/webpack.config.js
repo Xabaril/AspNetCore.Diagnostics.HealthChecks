@@ -2,22 +2,27 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-    devtool: 'none',
+    mode: "development",
+    devtool: "hidden-source-map",
     entry: path.resolve(__dirname, "../client/index.tsx"),
-    resolve: {
-        extensions: [".tsx", ".ts", ".js", ".json"]
-    },
     output: {
         path: path.join(__dirname, "../assets"),
         filename: 'healthchecks-bundle.js'
     },
+    resolve: {
+        // Add `.ts` and `.tsx` as a resolvable extension.
+        extensions: [".tsx", ".ts", ".js", ".json"],
+        // Add support for TypeScripts fully qualified ESM imports.
+        extensionAlias: {
+            ".js": [".js", ".ts"],
+            ".cjs": [".cjs", ".cts"],
+            ".mjs": [".mjs", ".mts"]
+        }
+    },
     module: {
         rules: [
-            {
-                test: /\.tsx?$/,
-                loader: "awesome-typescript-loader",
-                exclude: [/(node_modules)/]
-            },
+            // all files with a `.ts`, `.cts`, `.mts` or `.tsx` extension will be handled by `ts-loader`
+            { test: /\.tsx?$/, loader: "ts-loader" },
             {
                 loader: 'url-loader',
                 test: /\.(png|jpg|gif|svg|woff2)$/
@@ -25,13 +30,7 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
-            }           
+            }
         ]
-    },
-    plugins: [
-        new webpack.DllReferencePlugin({
-            context: ".",
-            manifest: require("../assets/vendors-manifest.json")
-        })
-    ]
+    }
 };

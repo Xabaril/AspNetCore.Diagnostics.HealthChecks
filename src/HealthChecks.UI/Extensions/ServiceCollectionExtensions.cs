@@ -23,7 +23,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     setupSettings?.Invoke(settings);
                 });
 
-            services.AddOptions<KubernetesDiscoverySettings>()
+            services
+                .AddOptions<KubernetesDiscoverySettings>()
                 .Configure<IConfiguration>((settings, configuration) => configuration.Bind(Keys.HEALTHCHECKSUI_KUBERNETES_DISCOVERY_SETTING_KEY, settings));
 
             services.TryAddSingleton<ServerAddressesService>();

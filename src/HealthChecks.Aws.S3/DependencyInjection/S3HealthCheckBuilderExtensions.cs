@@ -14,7 +14,7 @@ public static class S3HealthCheckBuilderExtensions
     /// Add a health check for AWS S3.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="setup">The action to configure the S3 Configuration e.g. bucket, region etc. </param>
+    /// <param name="setup">The action to configure the S3 Configuration e.g. bucket, region etc.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'aws s3' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

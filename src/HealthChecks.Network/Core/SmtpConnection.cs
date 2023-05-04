@@ -33,11 +33,11 @@ internal class SmtpConnection : MailConnection
         return result.Contains(SmtpResponse.ACTION_OK);
     }
 
-    public async Task<bool> AuthenticateAsync(string userName, string password)
+    public async Task<bool> AuthenticateAsync(string userName, string password, CancellationToken cancellationToken = default)
     {
         if (ShouldUpgradeConnection)
         {
-            await UpgradeToSecureConnectionAsync().ConfigureAwait(false);
+            await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
         await ExecuteCommand(SmtpCommands.EHLO(Host)).ConfigureAwait(false);
         await ExecuteCommand(SmtpCommands.AUTHLOGIN()).ConfigureAwait(false);
@@ -72,13 +72,13 @@ internal class SmtpConnection : MailConnection
         }
     }
 
-    private async Task<bool> UpgradeToSecureConnectionAsync()
+    private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
     {
         var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS()).ConfigureAwait(false);
         if (upgradeResult.Contains(SmtpResponse.SERVICE_READY))
         {
             UseSSL = true;
-            _stream = await GetStreamAsync().ConfigureAwait(false);
+            _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
             return true;
         }
         else

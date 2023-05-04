@@ -46,11 +46,11 @@ internal class ImapConnection : MailConnection
         }
     }
 
-    public async Task<bool> AuthenticateAsync(string user, string password)
+    public async Task<bool> AuthenticateAsync(string user, string password, CancellationToken cancellationToken = default)
     {
         if (ConnectionType == ImapConnectionType.STARTTLS)
         {
-            await UpgradeToSecureConnectionAsync().ConfigureAwait(false);
+            await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
 
         var result = await ExecuteCommand(ImapCommands.Login(user, password)).ConfigureAwait(false);
@@ -58,14 +58,14 @@ internal class ImapConnection : MailConnection
         return IsAuthenticated;
     }
 
-    private async Task<bool> UpgradeToSecureConnectionAsync()
+    private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
     {
         var commandResult = await ExecuteCommand(ImapCommands.StartTLS()).ConfigureAwait(false);
         var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
         if (upgradeSuccess)
         {
             ConnectionType = ImapConnectionType.SSL_TLS;
-            _stream = await GetStreamAsync().ConfigureAwait(false);
+            _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
             return true;
         }
         else

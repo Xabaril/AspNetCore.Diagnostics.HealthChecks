@@ -65,7 +65,7 @@ internal class ImapConnection : MailConnection
         if (upgradeSuccess)
         {
             ConnectionType = ImapConnectionType.SSL_TLS;
-            _stream = GetStream();
+            _stream = await GetStreamAsync().ConfigureAwait(false);
             return true;
         }
         else

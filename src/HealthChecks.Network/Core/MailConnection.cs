@@ -40,13 +40,13 @@ public class MailConnection : IDisposable
         await _tcpClient.ConnectAsync(Host, Port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
 
-        _stream = GetStream();
+        _stream = await GetStreamAsync().ConfigureAwait(false);
         await ExecuteCommand(string.Empty).ConfigureAwait(false);
 
         return _tcpClient.Connected;
     }
 
-    protected Stream GetStream()
+    protected async Task<Stream> GetStreamAsync()
     {
         if (_tcpClient == null)
             throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
@@ -56,7 +56,7 @@ public class MailConnection : IDisposable
         if (UseSSL)
         {
             var sslStream = GetSSLStream(stream);
-            sslStream.AuthenticateAsClient(Host);
+            await sslStream.AuthenticateAsClientAsync(Host).ConfigureAwait(false);
             return sslStream;
         }
         else

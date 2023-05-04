@@ -78,7 +78,7 @@ internal class SmtpConnection : MailConnection
         if (upgradeResult.Contains(SmtpResponse.SERVICE_READY))
         {
             UseSSL = true;
-            _stream = GetStream();
+            _stream = await GetStreamAsync().ConfigureAwait(false);
             return true;
         }
         else

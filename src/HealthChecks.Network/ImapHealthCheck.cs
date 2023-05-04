@@ -1,5 +1,4 @@
 using HealthChecks.Network.Core;
-using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network;
@@ -27,7 +26,7 @@ public class ImapHealthCheck : IHealthCheck
         {
             using var imapConnection = new ImapConnection(_options);
 
-            if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
+            if (await imapConnection.ConnectAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (_options.AccountOptions.Login)
                 {

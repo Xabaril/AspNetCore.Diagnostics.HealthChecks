@@ -41,7 +41,7 @@ public class MailConnection : IDisposable
 #endif
 
         _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
-        await ExecuteCommand(string.Empty).ConfigureAwait(false);
+        await ExecuteCommandAsync(string.Empty, cancellationToken).ConfigureAwait(false);
 
         return _tcpClient.Connected;
     }
@@ -86,23 +86,35 @@ public class MailConnection : IDisposable
         }
     }
 
-#pragma warning disable IDE1006 // Naming Styles
-    protected async Task<string> ExecuteCommand(string command) //TODO: rename public API
-#pragma warning restore IDE1006 // Naming Styles
+    protected async Task<string> ExecuteCommandAsync(string command, CancellationToken cancellationToken) //TODO: rename public API
     {
         if (_stream == null)
             throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
 
         var buffer = Encoding.ASCII.GetBytes(command);
-        await _stream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+
+#if NET5_0_OR_GREATER
+        await _stream.WriteAsync(buffer, cancellationToken).ConfigureAwait(false);
+#else
+        await _stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
+#endif
 
         var readBuffer = ArrayPool<byte>.Shared.Rent(512);
-        int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false);
-        var output = Encoding.UTF8.GetString(readBuffer);
+        try
+        {
 
-        ArrayPool<byte>.Shared.Return(readBuffer);
+#if NET5_0_OR_GREATER
+            int read = await _stream.ReadAsync(readBuffer, cancellationToken).ConfigureAwait(false);
+#else
+            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length, cancellationToken).ConfigureAwait(false);
+#endif
 
-        return output;
+            return Encoding.UTF8.GetString(readBuffer);
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(readBuffer);
+        }
     }
 
     public void Dispose()

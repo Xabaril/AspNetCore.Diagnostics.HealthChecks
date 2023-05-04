@@ -54,7 +54,7 @@ public class ImapHealthCheck : IHealthCheck
         if (await imapConnection.AuthenticateAsync(User, Password, cancellationToken).ConfigureAwait(false))
         {
             if (_options.FolderOptions.CheckFolder
-                && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName).ConfigureAwait(false))
+                && !await imapConnection.SelectFolderAsync(_options.FolderOptions.FolderName, cancellationToken).ConfigureAwait(false))
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"Folder {_options.FolderOptions.FolderName} check failed.");
             }

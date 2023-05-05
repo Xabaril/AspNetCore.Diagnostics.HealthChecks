@@ -1,5 +1,4 @@
 using HealthChecks.Network.Core;
-using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network;
@@ -20,13 +19,13 @@ public class SmtpHealthCheck : IHealthCheck
         {
             using var smtpConnection = new SmtpConnection(_options);
 
-            if (await smtpConnection.ConnectAsync().ConfigureAwait(false))
+            if (await smtpConnection.ConnectAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (_options.AccountOptions.Login)
                 {
                     var (user, password) = _options.AccountOptions.Account;
 
-                    if (!await smtpConnection.AuthenticateAsync(user, password).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
+                    if (!await smtpConnection.AuthenticateAsync(user, password).ConfigureAwait(false))
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
                 }
 

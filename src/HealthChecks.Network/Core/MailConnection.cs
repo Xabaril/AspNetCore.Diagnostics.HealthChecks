@@ -3,6 +3,9 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+#if !NET5_0_OR_GREATER
+using HealthChecks.Network.Extensions;
+#endif
 
 namespace HealthChecks.Network.Core;
 
@@ -28,10 +31,14 @@ public class MailConnection : IDisposable
         _allowInvalidCertificates = allowInvalidCertificates;
     }
 
-    public async Task<bool> ConnectAsync()
+    public async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
     {
         _tcpClient = new TcpClient();
-        await _tcpClient.ConnectAsync(Host, Port).ConfigureAwait(false);
+#if NET5_0_OR_GREATER
+        await _tcpClient.ConnectAsync(Host, Port, cancellationToken).ConfigureAwait(false);
+#else
+        await _tcpClient.ConnectAsync(Host, Port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+#endif
 
         _stream = GetStream();
         await ExecuteCommand(string.Empty).ConfigureAwait(false);

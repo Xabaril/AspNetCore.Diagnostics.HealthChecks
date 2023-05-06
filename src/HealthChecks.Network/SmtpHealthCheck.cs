@@ -25,7 +25,7 @@ public class SmtpHealthCheck : IHealthCheck
                 {
                     var (user, password) = _options.AccountOptions.Account;
 
-                    if (!await smtpConnection.AuthenticateAsync(user, password).ConfigureAwait(false))
+                    if (!await smtpConnection.AuthenticateAsync(user, password, cancellationToken).ConfigureAwait(false))
                         return new HealthCheckResult(context.Registration.FailureStatus, description: $"Error login to smtp server {_options.Host}:{_options.Port} with configured credentials");
                 }
 

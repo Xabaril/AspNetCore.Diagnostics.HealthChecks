@@ -74,7 +74,7 @@ internal class ImapConnection : MailConnection
         }
     }
 
-    public async Task<bool> SelectFolderAsync(string folder, CancellationToken cancellationToken = default) //TODO: public API change
+    public async Task<bool> SelectFolderAsync(string folder, CancellationToken cancellationToken = default)
     {
         var result = await ExecuteCommandAsync(ImapCommands.SelectFolder(folder), cancellationToken).ConfigureAwait(false);
 

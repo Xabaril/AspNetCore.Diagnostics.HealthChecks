@@ -82,7 +82,7 @@ internal class ImapConnection : MailConnection
         return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
     }
 
-    public async Task<string> GetFoldersAsync(CancellationToken cancellationToken = default) //TODO: public API change
+    public async Task<string> GetFoldersAsync(CancellationToken cancellationToken = default)
     {
         return await ExecuteCommandAsync(ImapCommands.ListFolders(), cancellationToken).ConfigureAwait(false);
     }

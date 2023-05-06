@@ -1,3 +1,5 @@
+using HealthChecks.Network.Extensions;
+
 namespace HealthChecks.Network.Core;
 
 internal class ImapConnection : MailConnection
@@ -53,15 +55,27 @@ internal class ImapConnection : MailConnection
             await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        var result = await ExecuteCommandAsync(ImapCommands.Login(user, password), cancellationToken).ConfigureAwait(false);
-        IsAuthenticated = !result.Contains(ImapResponse.AUTHFAILED);
+        IsAuthenticated = await ExecuteCommandAsync(
+            ImapCommands.Login(user, password),
+            result =>
+            {
+                var AUTHFAILED = "AUTHENTICATIONFAILED"u8;
+                return !result.ContainsArray(AUTHFAILED);
+            },
+            cancellationToken).ConfigureAwait(false);
         return IsAuthenticated;
     }
 
     private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
     {
-        var commandResult = await ExecuteCommandAsync(ImapCommands.StartTLS(), cancellationToken).ConfigureAwait(false);
-        var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
+        var upgradeSuccess = await ExecuteCommandAsync(
+            ImapCommands.StartTLS(),
+            result =>
+            {
+                var OK_TLS_NEGOTIATION = "OK Begin TLS"u8;
+                return result.ContainsArray(OK_TLS_NEGOTIATION);
+            },
+            cancellationToken).ConfigureAwait(false);
         if (upgradeSuccess)
         {
             ConnectionType = ImapConnectionType.SSL_TLS;
@@ -76,14 +90,20 @@ internal class ImapConnection : MailConnection
 
     public async Task<bool> SelectFolderAsync(string folder, CancellationToken cancellationToken = default)
     {
-        var result = await ExecuteCommandAsync(ImapCommands.SelectFolder(folder), cancellationToken).ConfigureAwait(false);
-
-        //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
-        return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
+        return await ExecuteCommandAsync(
+            ImapCommands.SelectFolder(folder),
+            result =>
+            {
+                var OK = "& OK"u8;
+                var ERROR = "& NO"u8;
+                //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
+                return result.ContainsArray(OK) && !result.ContainsArray(ERROR);
+            },
+            cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<string> GetFoldersAsync(CancellationToken cancellationToken = default)
-    {
-        return await ExecuteCommandAsync(ImapCommands.ListFolders(), cancellationToken).ConfigureAwait(false);
-    }
+    //public async Task<string> GetFoldersAsync(CancellationToken cancellationToken = default)
+    //{
+    //    return await ExecuteCommandAsync(ImapCommands.ListFolders(), cancellationToken).ConfigureAwait(false);
+    //}
 }

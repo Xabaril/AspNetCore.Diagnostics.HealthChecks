@@ -7,11 +7,3 @@ public class ImapCommands
     public static string ListFolders() => "& LIST " + "\"\"" + " \"*\"" + "\r\n";
     public static string StartTLS() => "& STARTTLS\r\n";
 }
-
-public class ImapResponse
-{
-    public static string OK = "& OK";
-    public static string ERROR = "& NO";
-    public static string AUTHFAILED = "AUTHENTICATIONFAILED";
-    public static string OK_TLS_NEGOTIATION = "OK Begin TLS";
-}

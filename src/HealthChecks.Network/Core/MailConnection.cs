@@ -86,7 +86,7 @@ public class MailConnection : IDisposable
         }
     }
 
-    protected async Task<string> ExecuteCommandAsync(string command, CancellationToken cancellationToken) //TODO: rename public API
+    protected async Task<string> ExecuteCommandAsync(string command, CancellationToken cancellationToken)
     {
         if (_stream == null)
             throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");

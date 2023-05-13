@@ -1,11 +1,10 @@
 using System.Net;
-using HealthChecks.Uris;
 using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 
-namespace UnitTests.Uris
+namespace HealthChecks.Uris.Tests.Functional
 {
-    public class uris_healthcheck_should
+    public class uris_healthcheck_should2
     {
         private const string RequestUri = "http://localhost/mock";
         private const string hcname = "uri-healthcheck";

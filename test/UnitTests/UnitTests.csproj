@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DependencyInjection\AzureServiceBus\**" />
-    <EmbeddedResource Remove="DependencyInjection\AzureServiceBus\**" />
-    <None Remove="DependencyInjection\AzureServiceBus\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\build\docker-images\HealthChecks.UI.Image\HealthChecks.UI.Image.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />
@@ -26,7 +20,6 @@
     <ProjectReference Include="..\..\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Nats\HealthChecks.Nats.csproj" />
@@ -51,14 +44,4 @@
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="UI\Kubernetes\SampleData\local-cluster-discovery-sample.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="UI\Kubernetes\SampleData\remote-cluster-discovery-sample.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

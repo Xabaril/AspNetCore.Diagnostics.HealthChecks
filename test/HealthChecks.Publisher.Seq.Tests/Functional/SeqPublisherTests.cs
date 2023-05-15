@@ -44,20 +44,59 @@ public class seq_publisher_should
         ex.ParamName.ShouldBe("options.Endpoint");
     }
 
+    [Fact]
+    public async Task apply_configure_action_on_raw_events()
+    {
+        var options = new SeqOptions
+        {
+            ApiKey = "test-key",
+            Endpoint = "http://localhost:5341/",
+            Configure = rawEvents =>
+            {
+                foreach (var rawEvent in rawEvents.Events)
+                {
+                    rawEvent.Properties.Add("Application", "MyApplication");
+                }
+            }
+        };
+
+        // Setup mocks
+        using var handler = new MockClientHandler();
+        HttpClient HttpClientFactory() => new(handler);
+
+        var testReport = new HealthReport(new Dictionary<string, HealthReportEntry>(), TimeSpan.Zero);
+
+        // Create publisher and publish
+        var publisher = new SeqPublisher(HttpClientFactory, options);
+        await publisher.PublishAsync(testReport, CancellationToken.None).ConfigureAwait(false);
+
+        handler.Request.ShouldNotBeNull();
+        handler.Request.Content.ShouldNotBeNull();
+
+        if (handler.StringContent != null)
+        {
+            string content = handler.StringContent;
+            content.ShouldContain("\"Application\":\"MyApplication\"");
+        }
+    }
+
     private class MockClientHandler : HttpClientHandler
     {
         public HttpRequestMessage? Request;
+        public string? StringContent;
 
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Request = request;
+            if (request.Content != null)
+                StringContent = await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             var response = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK
             };
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }

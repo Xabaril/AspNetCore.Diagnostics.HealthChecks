@@ -1,9 +1,8 @@
-using HealthChecks.UI;
 using HealthChecks.UI.Core.Discovery.K8S;
 using k8s.Models;
 using Newtonsoft.Json;
 
-namespace UnitTests.UI.Kubernetes
+namespace HealthChecks.UI.Tests
 {
     public class kubernetes_address_factory_should
     {
@@ -11,7 +10,7 @@ namespace UnitTests.UI.Kubernetes
         public void parse_properly_the_k8s_api_discovered_services_for_a_local_cluster()
         {
             var healthPath = "healthz";
-            var apiResponse = File.ReadAllText("UI/Kubernetes/SampleData/local-cluster-discovery-sample.json");
+            var apiResponse = File.ReadAllText("SampleData/local-cluster-discovery-sample.json");
 
             var services = JsonConvert.DeserializeObject<V1ServiceList>(apiResponse);
 
@@ -37,7 +36,7 @@ namespace UnitTests.UI.Kubernetes
         public void parse_properly_the_k8s_api_discovered_services_for_a_remote_cluster()
         {
             var healthPath = "healthz";
-            var apiResponse = File.ReadAllText("UI/Kubernetes/SampleData/remote-cluster-discovery-sample.json");
+            var apiResponse = File.ReadAllText("SampleData/remote-cluster-discovery-sample.json");
 
             var services = JsonConvert.DeserializeObject<V1ServiceList>(apiResponse);
 

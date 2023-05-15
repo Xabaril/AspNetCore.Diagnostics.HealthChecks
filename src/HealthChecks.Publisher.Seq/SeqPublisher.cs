@@ -57,6 +57,8 @@ public class SeqPublisher : IHealthCheckPublisher
             }
         };
 
+        _options.Configure?.Invoke(events);
+
         await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken).ConfigureAwait(false);
     }
 

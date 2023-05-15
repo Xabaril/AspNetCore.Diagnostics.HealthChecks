@@ -1,6 +1,6 @@
+using HealthChecks.UI.Core.Discovery.K8S;
 using k8s.Models;
 using Newtonsoft.Json;
-using HealthChecks.UI.Core.Discovery.K8S;
 
 namespace HealthChecks.UI.Tests
 {

@@ -27,16 +27,6 @@ on:
       - Directory.Build.props
       - Directory.Build.targets
 
-# TODO: error : 0308010C:digital envelope routines::unsupported
-#{
-#    opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization error' ],
-#    library: 'digital envelope routines',
-#    reason: 'unsupported',
-#    code: 'ERR_OSSL_EVP_UNSUPPORTED'
-#}
-env:
-  NODE_OPTIONS: --openssl-legacy-provider
-
 jobs:
   build:
     runs-on: ubuntu-latest

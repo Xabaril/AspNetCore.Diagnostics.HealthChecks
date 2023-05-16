@@ -1,0 +1,36 @@
+namespace HealthChecks.UI.Core
+{
+    public class UIHealthReport
+    {
+        public UIHealthReport(System.Collections.Generic.Dictionary<string, HealthChecks.UI.Core.UIHealthReportEntry> entries, System.TimeSpan totalDuration) { }
+        public System.Collections.Generic.Dictionary<string, HealthChecks.UI.Core.UIHealthReportEntry> Entries { get; }
+        public HealthChecks.UI.Core.UIHealthStatus Status { get; set; }
+        public System.TimeSpan TotalDuration { get; set; }
+        public static HealthChecks.UI.Core.UIHealthReport CreateFrom(Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report, System.Func<System.Exception, string>? exceptionMessage = null) { }
+        public static HealthChecks.UI.Core.UIHealthReport CreateFrom(System.Exception exception, string entryName = "Endpoint") { }
+    }
+    public class UIHealthReportEntry
+    {
+        public UIHealthReportEntry() { }
+        public System.Collections.Generic.IReadOnlyDictionary<string, object> Data { get; set; }
+        public string? Description { get; set; }
+        public System.TimeSpan Duration { get; set; }
+        public string? Exception { get; set; }
+        public HealthChecks.UI.Core.UIHealthStatus Status { get; set; }
+        public System.Collections.Generic.IEnumerable<string>? Tags { get; set; }
+    }
+    public enum UIHealthStatus
+    {
+        Unhealthy = 0,
+        Degraded = 1,
+        Healthy = 2,
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public class HealthChecksUIBuilder
+    {
+        public HealthChecksUIBuilder(Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+        public Microsoft.Extensions.DependencyInjection.IServiceCollection Services { get; }
+    }
+}

@@ -7,4 +7,12 @@ public class DnsResolveOptions
     {
         ConfigureHosts.Add(host, registration);
     }
+
+    public DnsResolveOptions WithCheckAllHosts()
+    {
+        CheckAllHosts = true;
+        return this;
+    }
+
+    public bool CheckAllHosts { get; set; }
 }

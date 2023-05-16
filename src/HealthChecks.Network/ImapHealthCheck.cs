@@ -1,5 +1,4 @@
 using HealthChecks.Network.Core;
-using HealthChecks.Network.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Network;
@@ -27,11 +26,11 @@ public class ImapHealthCheck : IHealthCheck
         {
             using var imapConnection = new ImapConnection(_options);
 
-            if (await imapConnection.ConnectAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false))
+            if (await imapConnection.ConnectAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (_options.AccountOptions.Login)
                 {
-                    return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection).ConfigureAwait(false);
+                    return await ExecuteAuthenticatedUserActionsAsync(context, imapConnection, cancellationToken).ConfigureAwait(false);
                 }
             }
             else
@@ -47,14 +46,14 @@ public class ImapHealthCheck : IHealthCheck
         }
     }
 
-    private async Task<HealthCheckResult> ExecuteAuthenticatedUserActionsAsync(HealthCheckContext context, ImapConnection imapConnection)
+    private async Task<HealthCheckResult> ExecuteAuthenticatedUserActionsAsync(HealthCheckContext context, ImapConnection imapConnection, CancellationToken cancellationToken)
     {
         var (User, Password) = _options.AccountOptions.Account;
 
-        if (await imapConnection.AuthenticateAsync(User, Password).ConfigureAwait(false))
+        if (await imapConnection.AuthenticateAsync(User, Password, cancellationToken).ConfigureAwait(false))
         {
             if (_options.FolderOptions.CheckFolder
-                && !await imapConnection.SelectFolder(_options.FolderOptions.FolderName).ConfigureAwait(false))
+                && !await imapConnection.SelectFolderAsync(_options.FolderOptions.FolderName, cancellationToken).ConfigureAwait(false))
             {
                 return new HealthCheckResult(context.Registration.FailureStatus, description: $"Folder {_options.FolderOptions.FolderName} check failed.");
             }

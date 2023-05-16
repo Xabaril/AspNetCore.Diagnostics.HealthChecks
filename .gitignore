@@ -341,3 +341,6 @@ AzureDevOpsTasks/**/*.vsix
 *.received.txt
 
 .DS_Store
+src/HealthChecks.UI/assets/healthchecks-bundle.js.LICENSE.txt
+src/HealthChecks.UI/assets/healthchecks-bundle.js.map
+src/HealthChecks.UI/assets/vendors-dll.js.LICENSE.txt

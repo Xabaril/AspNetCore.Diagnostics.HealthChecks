@@ -29,6 +29,10 @@
     <ProjectReference Include="..\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="HealthChecks.UI.Tests" />
+  </ItemGroup>
+
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">
     <Message Importance="high" Text="*** Installing npm packages ***" />
     <Exec Command="npm install" ContinueOnError="false" />

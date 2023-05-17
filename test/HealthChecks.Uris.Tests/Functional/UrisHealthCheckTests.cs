@@ -5,10 +5,24 @@ namespace HealthChecks.Uris.Tests.Functional
 {
     public class uris_healthcheck_should
     {
+        // httpbin.org is unstable
+        private async Task Try5Times(TestServer server)
+        {
+            for (int i = 0; i < 5; ++i)
+            {
+                using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+                if (i == 4)
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                if (response.StatusCode == HttpStatusCode.OK)
+                    break;
+                await Task.Delay(1000).ConfigureAwait(false);
+            }
+        }
+
         [Fact]
         public async Task be_healthy_if_uri_is_available()
         {
-            var uri = new Uri("http://httpbin.org/get");
+            var uri = new Uri("https://httpbin.org/get");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -26,14 +40,13 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Try5Times(server).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task be_healthy_if_method_is_available()
         {
-            var uri = new Uri("http://httpbin.org/post");
+            var uri = new Uri("https://httpbin.org/post");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -51,8 +64,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Try5Times(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -75,9 +87,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
@@ -103,9 +113,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
@@ -129,11 +137,8 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
-            response.StatusCode
-                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
@@ -160,16 +165,14 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]
         public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
         {
-            var uri = new Uri($"http://httpbin.org/delay/2");
+            var uri = new Uri($"https://httpbin.org/delay/2");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -177,7 +180,7 @@ namespace HealthChecks.Uris.Tests.Functional
                     services.AddHealthChecks()
                     .AddUrlGroup(setup =>
                     {
-                        setup.UseTimeout(TimeSpan.FromSeconds(3));
+                        setup.UseTimeout(TimeSpan.FromSeconds(4));
                         setup.AddUri(uri);
                     }, tags: new string[] { "uris" });
                 })
@@ -191,20 +194,19 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Try5Times(server).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task be_healthy_if_request_success_and_timeout_is_configured()
         {
-            var uri = new Uri($"http://httpbin.org/delay/2");
+            var uri = new Uri($"https://httpbin.org/delay/2");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))), tags: new string[] { "uris" });
+                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(4))), tags: new string[] { "uris" });
                 })
                 .Configure(app =>
                 {
@@ -216,14 +218,13 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Try5Times(server).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task be_healthy_if_request_succeeds_and_expected_response_matches()
         {
-            var uri = new Uri("http://httpbin.org/robots.txt");
+            var uri = new Uri("https://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -243,10 +244,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            await Try5Times(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -275,9 +273,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }

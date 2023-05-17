@@ -6,16 +6,16 @@ namespace HealthChecks.Uris.Tests.Functional
     public class uris_healthcheck_should
     {
         // httpbin.org is unstable
-        private async Task Try5Times(TestServer server)
+        private async Task Retry(TestServer server, int times = 6)
         {
-            for (int i = 0; i < 5; ++i)
+            for (int i = 0; i < times; ++i)
             {
                 using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-                if (i == 4)
+                if (i == times - 1)
                     response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                 if (response.StatusCode == HttpStatusCode.OK)
                     break;
-                await Task.Delay(1000).ConfigureAwait(false);
+                await Task.Delay(1000 + Random.Shared.Next(100)).ConfigureAwait(false);
             }
         }
 
@@ -40,7 +40,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Try5Times(server).ConfigureAwait(false);
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Try5Times(server).ConfigureAwait(false);
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -194,7 +194,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Try5Times(server).ConfigureAwait(false);
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Try5Times(server).ConfigureAwait(false);
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -244,7 +244,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             var server = new TestServer(webHostBuilder);
-            await Try5Times(server).ConfigureAwait(false);
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]

@@ -8,7 +8,7 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_healthy_if_uri_is_available()
         {
-            var uri = new Uri("https://httpbin.org/get");
+            var uri = new Uri("http://httpbin.org/get");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -33,7 +33,7 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_healthy_if_method_is_available()
         {
-            var uri = new Uri("https://httpbin.org/post");
+            var uri = new Uri("http://httpbin.org/post");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -135,6 +135,7 @@ namespace HealthChecks.Uris.Tests.Functional
             response.StatusCode
                     .ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
+
         [Fact]
         public async Task be_unhealthy_if_request_is_timeout_using_default_timeout()
         {
@@ -164,10 +165,11 @@ namespace HealthChecks.Uris.Tests.Functional
 
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
+
         [Fact]
         public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
         {
-            var uri = new Uri($"https://httpbin.org/delay/2");
+            var uri = new Uri($"http://httpbin.org/delay/2");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -196,7 +198,7 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_healthy_if_request_success_and_timeout_is_configured()
         {
-            var uri = new Uri($"https://httpbin.org/delay/2");
+            var uri = new Uri($"http://httpbin.org/delay/2");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -221,7 +223,7 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_healthy_if_request_succeeds_and_expected_response_matches()
         {
-            var uri = new Uri("https://httpbin.org/robots.txt");
+            var uri = new Uri("http://httpbin.org/robots.txt");
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>

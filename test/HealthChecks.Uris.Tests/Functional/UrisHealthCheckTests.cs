@@ -6,7 +6,7 @@ namespace HealthChecks.Uris.Tests.Functional
     public class uris_healthcheck_should
     {
         // httpbin.org is unstable
-        private async Task Retry(TestServer server, int times = 6)
+        private async Task Retry(TestServer server, int times = 10)
         {
             for (int i = 0; i < times; ++i)
             {

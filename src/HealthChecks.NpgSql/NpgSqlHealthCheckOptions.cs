@@ -10,9 +10,19 @@ namespace HealthChecks.NpgSql;
 public class NpgSqlHealthCheckOptions
 {
     /// <summary>
+    /// The Postgres connection string to be used.
     /// The Postgres data source to be used.
     /// </summary>
-    public NpgsqlDataSource DataSource { get; set; } = null!;
+    public string? ConnectionString
+    {
+        get => DataSource?.ConnectionString;
+        set => DataSource = NpgsqlDataSource.Create(value);
+    }
+
+    /// <summary>
+    /// The Postgres data source to be used.
+    /// </summary>
+    public NpgsqlDataSource? DataSource { get; set; }
 
     /// <summary>
     /// The query to be executed.

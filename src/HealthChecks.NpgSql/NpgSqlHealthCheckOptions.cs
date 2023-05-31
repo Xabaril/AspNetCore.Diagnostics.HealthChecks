@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
@@ -10,9 +11,9 @@ namespace HealthChecks.NpgSql;
 public class NpgSqlHealthCheckOptions
 {
     /// <summary>
-    /// The Postgres connection string to be used.
+    /// The Postgres data source to be used.
     /// </summary>
-    public string ConnectionString { get; set; } = null!;
+    public NpgsqlDataSource DataSource { get; set; } = null!;
 
     /// <summary>
     /// The query to be executed.

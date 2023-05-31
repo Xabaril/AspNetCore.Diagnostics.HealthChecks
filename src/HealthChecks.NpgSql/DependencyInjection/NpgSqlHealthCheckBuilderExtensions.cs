@@ -1,3 +1,5 @@
+using System.Data.Common;
+using System.Runtime.CompilerServices;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
@@ -65,7 +67,20 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(connectionStringFactory);
+        return builder.AddNpgSql(e => new NpgsqlDataSourceBuilder(connectionStringFactory(e)).Build(), healthQuery, configure, name, failureStatus, tags, timeout);
+    }
+    
+    public static IHealthChecksBuilder AddNpgSql(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, NpgsqlDataSource> dbDataSourceFactory,
+        string healthQuery = HEALTH_QUERY,
+        Action<NpgsqlConnection>? configure = null,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        Guard.ThrowIfNull(dbDataSourceFactory);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
@@ -73,7 +88,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
             {
                 var options = new NpgSqlHealthCheckOptions
                 {
-                    ConnectionString = connectionStringFactory(sp),
+                    DataSource = dbDataSourceFactory(sp),
                     CommandText = healthQuery,
                     Configure = configure,
                 };

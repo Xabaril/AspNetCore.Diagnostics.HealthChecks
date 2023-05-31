@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Npgsql;
 
 namespace HealthChecks.NpgSql;
 

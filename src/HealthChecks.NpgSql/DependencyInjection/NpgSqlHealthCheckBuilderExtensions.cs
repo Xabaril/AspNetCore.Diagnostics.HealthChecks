@@ -1,5 +1,3 @@
-using System.Data.Common;
-using System.Runtime.CompilerServices;
 using HealthChecks.NpgSql;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
@@ -69,7 +67,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
     {
         return builder.AddNpgSql(e => new NpgsqlDataSourceBuilder(connectionStringFactory(e)).Build(), healthQuery, configure, name, failureStatus, tags, timeout);
     }
-    
+
     public static IHealthChecksBuilder AddNpgSql(
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, NpgsqlDataSource> dbDataSourceFactory,

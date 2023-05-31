@@ -16,7 +16,7 @@ public class NpgSqlHealthCheckOptions
     public string? ConnectionString
     {
         get => DataSource?.ConnectionString;
-        set => DataSource = NpgsqlDataSource.Create(value);
+        set => DataSource = value is not null ? NpgsqlDataSource.Create(value) : null;
     }
 
     /// <summary>

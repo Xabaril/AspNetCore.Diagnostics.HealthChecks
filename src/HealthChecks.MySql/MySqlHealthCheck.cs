@@ -22,11 +22,11 @@ public class MySqlHealthCheck : IHealthCheck
     {
         try
         {
-            await using var connection = new MySqlConnection(_options.ConnectionString);
+            using var connection = new MySqlConnection(_options.ConnectionString);
 
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            await using var command = connection.CreateCommand();
+            using var command = connection.CreateCommand();
 
             command.CommandText = _options.CommandText;
 

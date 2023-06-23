@@ -2,7 +2,7 @@ using HealthChecks.AzureSearch.DependencyInjection;
 
 namespace HealthChecks.AzureSearch.Tests.DependencyInjection;
 
-public class documentdb_registration_should
+public class azuresearch_registration_should
 {
     [Fact]
     public void add_health_check_when_properly_configured()
@@ -20,6 +20,7 @@ public class documentdb_registration_should
         registration.Name.ShouldBe("azuresearch");
         check.ShouldBeOfType<AzureSearchHealthCheck>();
     }
+
     [Fact]
     public void add_named_health_check_when_properly_configured()
     {

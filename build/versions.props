@@ -11,6 +11,7 @@
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureServiceBus>7.0.0</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorage>7.0.0</HealthCheckAzureStorage>
+    <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
     <HealthCheckCloudFirestore>7.0.0</HealthCheckCloudFirestore>
     <HealthCheckConsul>7.0.0</HealthCheckConsul>
     <HealthCheckCosmosDb>7.0.0</HealthCheckCosmosDb>

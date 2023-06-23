@@ -12,18 +12,16 @@ public class AzureSearchHealthCheck : IHealthCheck
 
     public AzureSearchHealthCheck(AzureSearchOptions searchOptions)
     {
-        _searchOptions.Endpoint = searchOptions.Endpoint;
-        _searchOptions.IndexName = searchOptions.IndexName;
-        _searchOptions.AuthKey = searchOptions.AuthKey;
+        _searchOptions.Endpoint = Guard.ThrowIfNull(searchOptions.Endpoint);
+        _searchOptions.IndexName = Guard.ThrowIfNull(searchOptions.IndexName);
+        _searchOptions.AuthKey = Guard.ThrowIfNull(searchOptions.AuthKey);
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            var cacheKey = $"{_searchOptions.Endpoint}_{_searchOptions.IndexName}";
-
-            var searchClient = _connections.GetOrAdd(cacheKey, CreateSearchClient());
+            var searchClient = _connections.GetOrAdd(GetCacheKey(), CreateSearchClient());
 
             _ = await searchClient.GetDocumentCountAsync(cancellationToken).ConfigureAwait(false);
 
@@ -42,4 +40,6 @@ public class AzureSearchHealthCheck : IHealthCheck
 
         return new SearchClient(uri, _searchOptions.IndexName, credential);
     }
+
+    private string GetCacheKey() => $"{_searchOptions.Endpoint}_{_searchOptions.IndexName}";
 }

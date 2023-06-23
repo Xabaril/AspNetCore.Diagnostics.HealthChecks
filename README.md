@@ -161,6 +161,7 @@ Install-Package AspNetCore.HealthChecks.Azure.IoTHub
 Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
+Install-Package AspNetCore.HealthChecks.AzureSearch
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.Consul
 Install-Package AspNetCore.HealthChecks.CosmosDb

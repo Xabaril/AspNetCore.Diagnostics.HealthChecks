@@ -121,12 +121,48 @@ public static class AzureStorageHealthCheckBuilderExtensions
            tags,
            timeout));
     }
+    
+    /// <summary>
+    /// Add a health check for Azure Blob Storage.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="clientFactory">Delegate for creating a <see cref="BlobServiceClient"/>.</param>
+    /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
+    /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azureblob' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddAzureBlobStorage(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider,BlobServiceClient> clientFactory,
+        Action<AzureBlobStorageHealthCheckOptions>? configureOptions = default,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? AZUREBLOB_NAME,
+            sp =>
+            {
+                var options = new AzureBlobStorageHealthCheckOptions();
+                configureOptions?.Invoke(options);
+                return new AzureBlobStorageHealthCheck(clientFactory(sp), options);
+            },
+            failureStatus,
+            tags,
+            timeout));
+    }
 
     /// <summary>
     /// Add a health check for Azure Blob Storage.
     /// </summary>
     /// <remarks>
-    /// A <see cref="BlobServiceClient"/> service must be registered in the service container.
+    /// A <see cref="BlobServiceClient"/> service must be registered in the service container if clientFactory is not set.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
@@ -157,6 +193,45 @@ public static class AzureStorageHealthCheckBuilderExtensions
            failureStatus,
            tags,
            timeout));
+    }
+    
+    /// <summary>
+    /// Add a health check for Azure Blob Storage.
+    /// </summary>
+    /// <remarks>
+    /// A <see cref="BlobServiceClient"/> service must be registered in the service container if clientFactory is not set.
+    /// </remarks>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="clientFactory">Delegate for creating a <see cref="BlobServiceClient"/>. Optional.</param>
+    /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
+    /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azureblob' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <see langword="null"/> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddAzureBlobStorage(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider,BlobServiceClient> clientFactory,
+        Action<IServiceProvider, AzureBlobStorageHealthCheckOptions>? configureOptions = default,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? AZUREBLOB_NAME,
+            sp =>
+            {
+                var options = new AzureBlobStorageHealthCheckOptions();
+                configureOptions?.Invoke(sp, options);
+                return new AzureBlobStorageHealthCheck(clientFactory(sp), options);
+            },
+            failureStatus,
+            tags,
+            timeout));
     }
 
     /// <summary>

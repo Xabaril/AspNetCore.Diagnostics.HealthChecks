@@ -125,7 +125,11 @@ public class oracle_healthcheck_should
                 services
                     .AddHealthChecks()
                     .AddOracle(connectionString, tags: new string[] { "oracle" },
-                        configure: options => options.Credential = credential
+                        configure: options =>
+                        {
+                            factoryCalled = true;
+                            options.Credential = credential;
+                        }
                     );
             })
             .Configure(app =>

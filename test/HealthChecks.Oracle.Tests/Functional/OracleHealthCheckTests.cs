@@ -115,7 +115,7 @@ public class oracle_healthcheck_should
     {
         bool factoryCalled = false;
         string connectionString = "Data Source=localhost:1521/XEPDB1";
-        var password = new NetworkCredential("oracle", "system").SecurePassword;
+        var password = new NetworkCredential("system", "oracle").SecurePassword;
         password.MakeReadOnly();
         var credential = new OracleCredential("system", password);
 

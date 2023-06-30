@@ -121,7 +121,7 @@ public static class AzureStorageHealthCheckBuilderExtensions
            tags,
            timeout));
     }
-    
+
     /// <summary>
     /// Add a health check for Azure Blob Storage.
     /// </summary>
@@ -138,7 +138,7 @@ public static class AzureStorageHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureBlobStorage(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider,BlobServiceClient> clientFactory,
+        Func<IServiceProvider, BlobServiceClient> clientFactory,
         Action<AzureBlobStorageHealthCheckOptions>? configureOptions = default,
         string? name = default,
         HealthStatus? failureStatus = default,
@@ -194,7 +194,7 @@ public static class AzureStorageHealthCheckBuilderExtensions
            tags,
            timeout));
     }
-    
+
     /// <summary>
     /// Add a health check for Azure Blob Storage.
     /// </summary>
@@ -214,7 +214,7 @@ public static class AzureStorageHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureBlobStorage(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider,BlobServiceClient> clientFactory,
+        Func<IServiceProvider, BlobServiceClient> clientFactory,
         Action<IServiceProvider, AzureBlobStorageHealthCheckOptions>? configureOptions = default,
         string? name = default,
         HealthStatus? failureStatus = default,

@@ -65,7 +65,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddNpgSql(e => new NpgsqlDataSourceBuilder(connectionStringFactory(e)).Build(), healthQuery, configure, name, failureStatus, tags, timeout);
+        return builder.AddNpgSql(sp => new NpgsqlDataSourceBuilder(connectionStringFactory(sp)).Build(), healthQuery, configure, name, failureStatus, tags, timeout);
     }
 
     public static IHealthChecksBuilder AddNpgSql(

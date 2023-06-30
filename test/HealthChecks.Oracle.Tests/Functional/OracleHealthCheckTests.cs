@@ -1,5 +1,4 @@
 using System.Net;
-using System.Security;
 using HealthChecks.UI.Client;
 using Oracle.ManagedDataAccess.Client;
 

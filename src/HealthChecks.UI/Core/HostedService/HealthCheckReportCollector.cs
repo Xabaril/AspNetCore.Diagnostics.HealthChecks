@@ -123,10 +123,8 @@ namespace HealthChecks.UI.Core.HostedService
 
                 using (response)
                 {
-                    var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
-                    if (report == null)
-                        throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
-                    return report;
+                    return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options)
+                        ?? throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
                 }
             }
             catch (Exception exception)

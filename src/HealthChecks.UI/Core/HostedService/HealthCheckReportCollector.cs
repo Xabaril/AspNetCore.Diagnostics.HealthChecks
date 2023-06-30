@@ -23,7 +23,8 @@ namespace HealthChecks.UI.Core.HostedService
         {
             Converters =
             {
-                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
+                // allowIntegerValues: true https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1422
+                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: true)
             }
         };
 

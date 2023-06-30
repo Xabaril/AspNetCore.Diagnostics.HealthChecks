@@ -11,7 +11,6 @@ public class NpgSqlHealthCheckOptions
 {
     /// <summary>
     /// The Postgres connection string to be used.
-    /// The Postgres data source to be used.
     /// </summary>
     public string? ConnectionString
     {

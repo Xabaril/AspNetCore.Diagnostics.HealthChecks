@@ -72,12 +72,7 @@ public class seq_publisher_should
 
         handler.Request.ShouldNotBeNull();
         handler.Request.Content.ShouldNotBeNull();
-
-        if (handler.StringContent != null)
-        {
-            string content = handler.StringContent;
-            content.ShouldContain("\"Application\":\"MyApplication\"");
-        }
+        handler.StringContent.ShouldNotBeNull().ShouldContain("\"Application\":\"MyApplication\"");
     }
 
     private class MockClientHandler : HttpClientHandler

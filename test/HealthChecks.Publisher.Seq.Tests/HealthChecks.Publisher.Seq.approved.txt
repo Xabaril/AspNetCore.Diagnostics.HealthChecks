@@ -1,5 +1,19 @@
 namespace HealthChecks.Publisher.Seq
 {
+    public class RawEvent
+    {
+        public RawEvent() { }
+        public string Level { get; set; }
+        public string MessageTemplate { get; set; }
+        public System.Collections.Generic.Dictionary<string, object?> Properties { get; set; }
+        public string RawReport { get; set; }
+        public System.DateTimeOffset Timestamp { get; set; }
+    }
+    public class RawEvents
+    {
+        public RawEvents() { }
+        public HealthChecks.Publisher.Seq.RawEvent[] Events { get; set; }
+    }
     public enum SeqInputLevel
     {
         Information = 0,
@@ -25,6 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public SeqOptions() { }
         public string? ApiKey { get; set; }
+        public System.Action<HealthChecks.Publisher.Seq.RawEvents>? Configure { get; set; }
         public HealthChecks.Publisher.Seq.SeqInputLevel DefaultInputLevel { get; set; }
         public string Endpoint { get; set; }
     }

@@ -15,7 +15,7 @@ public class OracleHealthCheckOptions
     public string ConnectionString { get; set; } = null!;
 
     /// <summary>
-    /// Optional credential to use when connecting to the database.
+    /// Optional credential to use when connecting to the Oracle database.
     /// </summary>
     public OracleCredential? Credential { get; set; }
 

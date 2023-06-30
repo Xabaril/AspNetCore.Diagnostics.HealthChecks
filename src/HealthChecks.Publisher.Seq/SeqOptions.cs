@@ -11,8 +11,8 @@ public class SeqOptions
     public SeqInputLevel DefaultInputLevel { get; set; }
 
     /// <summary>
-    /// An optional action executed before the metrics are pushed to seq.
-    /// Useful to push additional static properties to seq.
+    /// An optional action executed before the metrics are pushed to Seq.
+    /// Useful to push additional static properties to Seq.
     /// </summary>
     public Action<RawEvents>? Configure { get; set; } = null;
 }

@@ -5,6 +5,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureSearch;
 
+/// <summary>
+/// Represents a health check, which can be used to check the status of Azure Search.
+/// </summary>
 public class AzureSearchHealthCheck : IHealthCheck
 {
     private readonly ConcurrentDictionary<string, SearchClient> _connections = new();

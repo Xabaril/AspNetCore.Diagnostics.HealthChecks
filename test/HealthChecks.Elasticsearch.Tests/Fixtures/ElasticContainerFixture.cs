@@ -2,9 +2,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Ductus.FluentDocker.Builders;
-using Ductus.FluentDocker.Services;
-using Ductus.FluentDocker.Services.Extensions;
 
 namespace HealthChecks.Elasticsearch.Tests.Fixtures;
 
@@ -17,25 +14,7 @@ public class ElasticContainerFixture : IAsyncLifetime
 
     public const string ELASTIC_PASSWORD = "abcDEF123!";
     private readonly string _composeFilePath = $"{Directory.GetCurrentDirectory()}/Resources/docker-compose.yml";
-    private readonly ICompositeService _compositeService;
     public string? ApiKey;
-
-    public ElasticContainerFixture()
-    {
-        _compositeService = new Builder()
-            .UseContainer()
-            .UseCompose()
-            .FromFile(_composeFilePath)
-            .ForceRecreate()
-            .Build()
-            .Start();
-
-        var elasticContainer =
-            _compositeService.Containers.First(container => container.Name == ELASTIC_CONTAINER_NAME);
-        var setupContainer = _compositeService.Containers.First(container => container != elasticContainer);
-        setupContainer.WaitForMessageInLogs(SETUP_DONE_MESSAGE, TIME_OUT_IN_MILLIS);
-        elasticContainer.CopyFrom(CONTAINER_CERTIFICATE_PATH, ".", true);
-    }
 
     public async Task InitializeAsync() => ApiKey = await SetApiKeyInElasticSearchAsync().ConfigureAwait(false);
 
@@ -47,10 +26,6 @@ public class ElasticContainerFixture : IAsyncLifetime
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            _compositeService.Dispose();
-        }
     }
 
     public void Dispose()

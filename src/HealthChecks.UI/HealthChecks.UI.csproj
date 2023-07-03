@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="KubernetesClient" Version="4.0.26" />
+    <PackageReference Include="KubernetesClient" Version="11.0.36" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ public class ElasticsearchOptions
 
     public X509Certificate? Certificate { get; private set; }
 
-        public ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; private set; }
+    public ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; private set; }
 
     public bool AuthenticateWithBasicCredentials { get; private set; }
 

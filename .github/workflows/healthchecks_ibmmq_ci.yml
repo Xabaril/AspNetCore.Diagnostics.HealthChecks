@@ -7,19 +7,23 @@ on:
     paths:
       - src/HealthChecks.IbmMQ/**
       - test/HealthChecks.IbmMQ.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_ibmmq_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.IbmMQ/**
-    - test/HealthChecks.IbmMQ.Tests/**
-    - .github/workflows/healthchecks_ibmmq_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.IbmMQ/**
+      - test/HealthChecks.IbmMQ.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_ibmmq_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -36,23 +40,37 @@ jobs:
           MQ_APP_PASSWORD: 12345678
           MQ_ENABLE_METRICS: true
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.202
-        include-prerelease: false
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj &&
-        dotnet restore ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj &&
+          dotnet restore ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.IbmMQ/HealthChecks.IbmMQ.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.IbmMQ.Tests/HealthChecks.IbmMQ.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: IbmMQ
+          directory: .coverage

@@ -1,77 +1,64 @@
 using System.Net;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
+namespace HealthChecks.Consul.Tests.Functional;
 
-namespace HealthChecks.Consul.Tests.Functional
+public class consul_healthcheck_should
 {
-    public class consul_healthcheck_should
+    [Fact]
+    public async Task be_healthy_if_consul_is_available()
     {
-        [Fact]
-        public async Task be_healthy_if_consul_is_available()
-        {
-            var webHostBuilder = new WebHostBuilder()
-               .ConfigureServices(services =>
-               {
-                   services.AddHealthChecks()
-                       .AddConsul(setup =>
-                       {
-                           setup.HostName = "localhost";
-                           setup.Port = 8500;
-                           setup.RequireHttps = false;
-                       }, tags: new string[] { "consul" });
-               })
-               .Configure(app =>
-               {
-                   app.UseHealthChecks("/health", new HealthCheckOptions
+        var webHostBuilder = new WebHostBuilder()
+           .ConfigureServices(services =>
+           {
+               services.AddHealthChecks()
+                   .AddConsul(setup =>
                    {
-                       Predicate = r => r.Tags.Contains("consul")
-                   });
+                       setup.HostName = "localhost";
+                       setup.Port = 8500;
+                       setup.RequireHttps = false;
+                   }, tags: new string[] { "consul" });
+           })
+           .Configure(app =>
+           {
+               app.UseHealthChecks("/health", new HealthCheckOptions
+               {
+                   Predicate = r => r.Tags.Contains("consul")
                });
+           });
 
-            using var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    }
 
-        [Fact]
-        public async Task be_unhealthy_if_consul_is_not_available()
-        {
-            var webHostBuilder = new WebHostBuilder()
-                .ConfigureServices(services =>
-                {
-                    services.AddHealthChecks()
-                        .AddConsul(setup =>
-                        {
-                            setup.HostName = "non-existing-host";
-                            setup.Port = 8500;
-                            setup.RequireHttps = false;
-                        }, tags: new string[] { "consul" });
-                })
-                .Configure(app =>
-                {
-                    app.UseHealthChecks("/health", new HealthCheckOptions
+    [Fact]
+    public async Task be_unhealthy_if_consul_is_not_available()
+    {
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
+            {
+                services.AddHealthChecks()
+                    .AddConsul(setup =>
                     {
-                        Predicate = r => r.Tags.Contains("consul")
-                    });
+                        setup.HostName = "non-existing-host";
+                        setup.Port = 8500;
+                        setup.RequireHttps = false;
+                    }, tags: new string[] { "consul" });
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions
+                {
+                    Predicate = r => r.Tags.Contains("consul")
                 });
+            });
 
-            using var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest($"/health")
-                .GetAsync();
+        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

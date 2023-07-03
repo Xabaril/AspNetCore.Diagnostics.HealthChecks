@@ -1,90 +1,140 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
+using HealthChecks.AzureServiceBus.Configuration;
 
-namespace HealthChecks.AzureServiceBus.Tests
+namespace HealthChecks.AzureServiceBus.Tests;
+
+public class azure_service_bus_queue_registration_should
 {
-    public class azure_service_bus_queue_registration_should
+    [Fact]
+    public void add_health_check_when_properly_configured()
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusQueue("cnn", "queueName");
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue("cnn", "queueName");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azurequeue");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-        }
+        registration.Name.ShouldBe("azurequeue");
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+    }
 
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusQueue("cnn", "queueName",
-                name: "azureservicebusqueuecheck");
+    [Fact]
+    public void add_health_check_with_options_when_properly_configured()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue("cnn", "queueName",
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            registration.Name.Should().Be("azureservicebusqueuecheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-        }
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-        [Fact]
-        public void fail_when_no_health_check_configuration_provided()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusQueue(string.Empty, string.Empty);
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+    }
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+    [Fact]
+    public void add_named_health_check_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue("cnn", "queueName", name: "azureservicebusqueuecheck");
 
-            var registration = options.Value.Registrations.First();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        }
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-        [Fact]
-        public void add_health_check_using_factories_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            bool connectionStringFactoryCalled = false, queueNameFactoryCalled = false;
-            services.AddHealthChecks()
-                .AddAzureServiceBusQueue(_ =>
-                    {
-                        connectionStringFactoryCalled = true;
-                        return "cnn";
-                    },
-                    _ =>
-                    {
-                        queueNameFactoryCalled = true;
-                        return "queueName";
-                    });
+        registration.Name.ShouldBe("azureservicebusqueuecheck");
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+    }
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+    [Fact]
+    public void fail_when_no_health_check_configuration_provided()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(string.Empty, string.Empty);
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            registration.Name.Should().Be("azurequeue");
-            check.GetType().Should().Be(typeof(AzureServiceBusQueueHealthCheck));
-            connectionStringFactoryCalled.Should().BeTrue();
-            queueNameFactoryCalled.Should().BeTrue();
-        }
+        var registration = options.Value.Registrations.First();
+
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
+    }
+
+    [Fact]
+    public void add_health_check_using_factories_when_properly_configured()
+    {
+        bool connectionStringFactoryCalled = false, queueNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(_ =>
+                {
+                    connectionStringFactoryCalled = true;
+                    return "cnn";
+                },
+                _ =>
+                {
+                    queueNameFactoryCalled = true;
+                    return "queueName";
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("azurequeue");
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        connectionStringFactoryCalled.ShouldBeTrue();
+        queueNameFactoryCalled.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void add_health_check_using_factories_with_options_when_properly_configured()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(_ => "cnn", _ => "queueName",
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
     }
 }

@@ -1,43 +1,42 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.System
+namespace HealthChecks.System;
+
+public class FolderHealthCheck : IHealthCheck
 {
-    public class FolderHealthCheck : IHealthCheck
+    private readonly FolderHealthCheckOptions _folderOptions;
+
+    public FolderHealthCheck(FolderHealthCheckOptions folderOptions)
     {
-        private readonly FolderHealthCheckOptions _folderOptions;
+        _folderOptions = Guard.ThrowIfNull(folderOptions);
+    }
 
-        public FolderHealthCheck(FolderHealthCheckOptions folderOptions)
+    /// <inheritdoc />
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _folderOptions = folderOptions ?? throw new ArgumentNullException(nameof(folderOptions));
-        }
-
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            List<string>? errorList = null;
+            foreach (string folder in _folderOptions.Folders)
             {
-                List<string>? errorList = null;
-                foreach (var folder in _folderOptions.Folders)
+                if (!string.IsNullOrEmpty(folder))
                 {
-                    if (!string.IsNullOrEmpty(folder))
+                    if (!Directory.Exists(folder))
                     {
-                        if (!Directory.Exists(folder))
+                        (errorList ??= new()).Add($"Folder {folder} does not exist.");
+                        if (!_folderOptions.CheckAllFolders)
                         {
-                            (errorList ??= new()).Add($"Folder {folder} does not exist.");
+                            break;
                         }
                     }
                 }
-
-                if (errorList?.Count > 0)
-                {
-                    return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errorList)));
-                }
-
-                return HealthCheckResultTask.Healthy;
             }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
-            }
+
+            return Task.FromResult(errorList.GetHealthState(context));
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
     }
 }

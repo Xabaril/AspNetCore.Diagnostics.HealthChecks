@@ -1,36 +1,35 @@
 using HealthChecks.Publisher.Prometheus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class PrometheusGatewayHealthCheckBuilderExtensions
 {
-    public static class PrometheusGatewayHealthCheckBuilderExtensions
+    /// <summary>
+    /// Add a health check publisher for Prometheus Gateway.
+    /// </summary>
+    /// <remarks>
+    /// For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
+    /// Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
+    /// </remarks>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
+    /// <param name="endpoint">Endpoint url e.g. http://myendpoint:9091</param>
+    /// <param name="job">The job name the series can be filtered on (typically the application name).</param>
+    /// <param name="instance">If there are multiple instances.</param>
+    /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
+    [Obsolete("This package is deprecated! We recommend using the pull model instead of Gateway. Try to use the package AspNetCore.HealthChecks.Prometheus.Metrics instead of.")]
+    public static IHealthChecksBuilder AddPrometheusGatewayPublisher(
+        this IHealthChecksBuilder builder,
+        string endpoint,
+        string job,
+        string? instance = null)
     {
-        /// <summary>
-        /// Add a health check publisher for Prometheus Gateway.
-        /// </summary>
-        /// <remarks>
-        /// For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
-        /// Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
-        /// </remarks>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
-        /// <param name="endpoint">Endpoint url e.g. http://myendpoint:9091</param>
-        /// <param name="job"> The job name the series can be filtered on (typically the application name).</param>
-        /// <param name="instance">If there are multiple instances.</param>
-        /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
-        [Obsolete("This package is deprecated! We recommend using the pull model instead of Gateway. Try to use the package AspNetCore.HealthChecks.Prometheus.Metrics instead of.")]
-        public static IHealthChecksBuilder AddPrometheusGatewayPublisher(
-            this IHealthChecksBuilder builder,
-            string endpoint,
-            string job,
-            string? instance = null)
-        {
-            builder.Services
-                .AddHttpClient();
+        builder.Services
+            .AddHttpClient();
 
-            builder.Services
-                .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(), endpoint, job, instance));
+        builder.Services
+            .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(), endpoint, job, instance));
 
-            return builder;
-        }
+        return builder;
     }
 }

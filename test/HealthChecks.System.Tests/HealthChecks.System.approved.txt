@@ -1,0 +1,65 @@
+namespace HealthChecks.System
+{
+    public class DiskStorageHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public DiskStorageHealthCheck(HealthChecks.System.DiskStorageOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class DiskStorageOptions
+    {
+        public HealthChecks.System.DiskStorageOptions.ErrorDescription FailedDescription;
+        public DiskStorageOptions() { }
+        public bool CheckAllDrives { get; set; }
+        public HealthChecks.System.DiskStorageOptions AddDrive(string driveName, long minimumFreeMegabytes = 1) { }
+        public HealthChecks.System.DiskStorageOptions WithCheckAllDrives() { }
+        public delegate string ErrorDescription(string driveName, long minimumFreeMegabytes, long? actualFreeMegabytes);
+    }
+    public class FolderHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public FolderHealthCheck(HealthChecks.System.FolderHealthCheckOptions folderOptions) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class FolderHealthCheckOptions
+    {
+        public FolderHealthCheckOptions() { }
+        public bool CheckAllFolders { get; set; }
+        public System.Collections.Generic.IList<string> Folders { get; set; }
+        public HealthChecks.System.FolderHealthCheckOptions AddFolder(string folder) { }
+        public HealthChecks.System.FolderHealthCheckOptions WithCheckAllFolders() { }
+    }
+    public class MaximumValueHealthCheck<T> : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+        where T : System.IComparable<T>
+    {
+        public MaximumValueHealthCheck(T maximumValue, System.Func<T> currentValueFunc) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class ProcessAllocatedMemoryHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public ProcessAllocatedMemoryHealthCheck(int maximumMegabytesAllocated) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class ProcessHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public ProcessHealthCheck(string processName, System.Func<System.Diagnostics.Process[], bool> predicate) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class WindowsServiceHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public WindowsServiceHealthCheck(string serviceName, System.Func<System.ServiceProcess.ServiceController, bool> predicate, string? machineName = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class SystemHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDiskStorageHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.System.DiskStorageOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddFolder(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.System.FolderHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddPrivateMemoryHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, long maximumMemoryBytes, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddProcessAllocatedMemoryHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, int maximumMegabytesAllocated, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddProcessHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string processName, System.Func<System.Diagnostics.Process[], bool> predicate, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddVirtualMemorySizeHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, long maximumMemoryBytes, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddWindowsServiceHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceName, System.Func<System.ServiceProcess.ServiceController, bool> predicate, string? machineName = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddWorkingSetHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, long maximumMemoryBytes, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

@@ -2,82 +2,83 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using Elasticsearch.Net;
 
-namespace HealthChecks.Elasticsearch
+namespace HealthChecks.Elasticsearch;
+
+/// <summary>
+/// Options for <see cref="ElasticsearchHealthCheck"/>.
+/// </summary>
+public class ElasticsearchOptions
 {
-    /// <summary>
-    /// Options for <see cref="ElasticsearchHealthCheck"/>.
-    /// </summary>
-    public class ElasticsearchOptions
-    {
-        public string Uri { get; private set; } = null!;
+    public string Uri { get; private set; } = null!;
 
-        public string? UserName { get; private set; }
+    public string? UserName { get; private set; }
 
-        public string? Password { get; private set; }
+    public string? Password { get; private set; }
 
-        public X509Certificate? Certificate { get; private set; }
+    public X509Certificate? Certificate { get; private set; }
 
         public ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; private set; }
 
-        public bool AuthenticateWithBasicCredentials { get; private set; }
+    public bool AuthenticateWithBasicCredentials { get; private set; }
 
-        public bool AuthenticateWithCertificate { get; private set; }
+    public bool AuthenticateWithCertificate { get; private set; }
 
-        public bool AuthenticateWithApiKey { get; private set; }
+    public bool AuthenticateWithApiKey { get; private set; }
 
-        public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool>? CertificateValidationCallback { get; private set; }
+    public bool UseClusterHealthApi { get; set; }
 
-        public TimeSpan? RequestTimeout { get; set; }
+    public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool>? CertificateValidationCallback { get; private set; }
 
-        public ElasticsearchOptions UseBasicAuthentication(string name, string password)
-        {
-            UserName = name ?? throw new ArgumentNullException(nameof(name));
-            Password = password ?? throw new ArgumentNullException(nameof(password));
+    public TimeSpan? RequestTimeout { get; set; }
 
-            Certificate = null;
-            AuthenticateWithApiKey = false;
-            AuthenticateWithCertificate = false;
-            AuthenticateWithBasicCredentials = true;
-            return this;
-        }
+    public ElasticsearchOptions UseBasicAuthentication(string name, string password)
+    {
+        UserName = Guard.ThrowIfNull(name);
+        Password = Guard.ThrowIfNull(password);
 
-        public ElasticsearchOptions UseCertificate(X509Certificate certificate)
-        {
-            Certificate = certificate ?? throw new ArgumentNullException(nameof(certificate));
+        Certificate = null;
+        AuthenticateWithApiKey = false;
+        AuthenticateWithCertificate = false;
+        AuthenticateWithBasicCredentials = true;
+        return this;
+    }
 
-            UserName = string.Empty;
-            Password = string.Empty;
-            AuthenticateWithApiKey = false;
-            AuthenticateWithBasicCredentials = false;
-            AuthenticateWithCertificate = true;
-            return this;
-        }
+    public ElasticsearchOptions UseCertificate(X509Certificate certificate)
+    {
+        Certificate = Guard.ThrowIfNull(certificate);
 
-        public ElasticsearchOptions UseApiKey(ApiKeyAuthenticationCredentials apiKey)
-        {
-            ApiKeyAuthenticationCredentials = apiKey ?? throw new ArgumentNullException(nameof(apiKey));
+        UserName = string.Empty;
+        Password = string.Empty;
+        AuthenticateWithApiKey = false;
+        AuthenticateWithBasicCredentials = false;
+        AuthenticateWithCertificate = true;
+        return this;
+    }
 
-            UserName = string.Empty;
-            Password = string.Empty;
-            Certificate = null;
-            AuthenticateWithBasicCredentials = false;
-            AuthenticateWithCertificate = false;
-            AuthenticateWithApiKey = true;
+    public ElasticsearchOptions UseApiKey(ApiKeyAuthenticationCredentials apiKey)
+    {
+        ApiKeyAuthenticationCredentials = Guard.ThrowIfNull(apiKey);
 
-            return this;
-        }
+        UserName = string.Empty;
+        Password = string.Empty;
+        Certificate = null;
+        AuthenticateWithBasicCredentials = false;
+        AuthenticateWithCertificate = false;
+        AuthenticateWithApiKey = true;
 
-        public ElasticsearchOptions UseServer(string uri)
-        {
-            Uri = uri ?? throw new ArgumentNullException(nameof(uri));
+        return this;
+    }
 
-            return this;
-        }
+    public ElasticsearchOptions UseServer(string uri)
+    {
+        Uri = Guard.ThrowIfNull(uri);
 
-        public ElasticsearchOptions UseCertificateValidationCallback(Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> callback)
-        {
-            CertificateValidationCallback = callback;
-            return this;
-        }
+        return this;
+    }
+
+    public ElasticsearchOptions UseCertificateValidationCallback(Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool> callback)
+    {
+        CertificateValidationCallback = callback;
+        return this;
     }
 }

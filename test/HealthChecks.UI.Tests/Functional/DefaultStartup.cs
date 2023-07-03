@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace HealthChecks.UI.Tests
 {
     public class DefaultStartup

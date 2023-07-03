@@ -8,7 +8,7 @@ namespace HealthChecks.UI
 
         public HealthCheckUIConventionBuilder(IEnumerable<IEndpointConventionBuilder> endpoints)
         {
-            _endpoints = endpoints ?? throw new ArgumentNullException(nameof(endpoints));
+            _endpoints = Guard.ThrowIfNull(endpoints);
         }
 
         public void Add(Action<EndpointBuilder> convention)

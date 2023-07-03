@@ -1,59 +1,60 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.System
+namespace HealthChecks.System;
+
+public class DiskStorageHealthCheck : IHealthCheck
 {
-    public class DiskStorageHealthCheck : IHealthCheck
+    private readonly DiskStorageOptions _options;
+
+    public DiskStorageHealthCheck(DiskStorageOptions options)
     {
-        private readonly DiskStorageOptions _options;
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        public DiskStorageHealthCheck(DiskStorageOptions options)
+    /// <inheritdoc/>
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-        }
+            var configuredDrives = _options.ConfiguredDrives;
 
-        /// <inheritdoc/>
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            List<string>? errorList = null;
+            if (configuredDrives.Count > 0)
             {
-                var configuredDrives = _options.ConfiguredDrives;
-                List<string>? errors = null;
+                var drives = DriveInfo.GetDrives();
 
-                if (configuredDrives.Count > 0)
+                foreach (var (DriveName, MinimumFreeMegabytes) in configuredDrives.Values)
                 {
-                    var drives = DriveInfo.GetDrives();
+                    var driveInfo = drives.FirstOrDefault(drive => string.Equals(drive.Name, DriveName, StringComparison.InvariantCultureIgnoreCase));
 
-                    foreach (var (DriveName, MinimumFreeMegabytes) in configuredDrives.Values)
+                    if (driveInfo != null)
                     {
-                        var driveInfo = drives.FirstOrDefault(drive => string.Equals(drive.Name, DriveName, StringComparison.InvariantCultureIgnoreCase));
-
-                        if (driveInfo != null)
+                        long actualFreeMegabytes = driveInfo.AvailableFreeSpace / 1024 / 1024;
+                        if (actualFreeMegabytes < MinimumFreeMegabytes)
                         {
-                            long actualFreeMegabytes = driveInfo.AvailableFreeSpace / 1024 / 1024;
-                            if (actualFreeMegabytes < MinimumFreeMegabytes)
+                            (errorList ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, actualFreeMegabytes));
+                            if (!_options.CheckAllDrives)
                             {
-                                (errors ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, actualFreeMegabytes));
-                                if (!_options.CheckAllDrives)
-                                    break;
+                                break;
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        (errorList ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, null));
+                        if (!_options.CheckAllDrives)
                         {
-                            (errors ??= new()).Add(_options.FailedDescription(DriveName, MinimumFreeMegabytes, null));
-                            if (!_options.CheckAllDrives)
-                                break;
+                            break;
                         }
                     }
                 }
+            }
 
-                return errors?.Count > 0
-                    ? Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join("; ", errors)))
-                    : HealthCheckResultTask.Healthy;
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
-            }
+            return Task.FromResult(errorList.GetHealthState(context));
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
     }
 }

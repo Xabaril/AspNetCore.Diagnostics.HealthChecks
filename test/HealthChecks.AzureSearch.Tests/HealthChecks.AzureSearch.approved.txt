@@ -1,0 +1,22 @@
+namespace HealthChecks.AzureSearch
+{
+    public class AzureSearchHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureSearchHealthCheck(HealthChecks.AzureSearch.AzureSearchOptions searchOptions) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class AzureSearchOptions
+    {
+        public AzureSearchOptions() { }
+        public string AuthKey { get; set; }
+        public string Endpoint { get; set; }
+        public string IndexName { get; set; }
+    }
+}
+namespace HealthChecks.AzureSearch.DependencyInjection
+{
+    public static class AzureSearchHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureSearch(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.AzureSearch.AzureSearchOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

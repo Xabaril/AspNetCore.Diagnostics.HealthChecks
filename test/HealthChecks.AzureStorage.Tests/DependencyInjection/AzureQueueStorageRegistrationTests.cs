@@ -1,98 +1,121 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
+using Azure.Core;
+using Azure.Storage.Queues;
+using NSubstitute;
 
-namespace HealthChecks.AzureStorage.Tests.DependencyInjection
+namespace HealthChecks.AzureStorage.Tests.DependencyInjection;
+
+public class azurequeuestorage_registration_should
 {
-    public class azurequeuestorage_registration_should
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("queue", null, null)]
+    [InlineData(null, "my-azurequeue-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("queue", "my-azurequeue-group", HealthStatus.Degraded)]
+    public void add_health_check_when_properly_configured(string? queueName, string? registrationName, HealthStatus? failureStatus)
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string");
+        using var serviceProvider = new ServiceCollection()
+            .AddHealthChecks()
+            .AddAzureQueueStorage(
+                "QueueEndpoint=https://unit-test.queue.core.windows.net",
+                queueName: queueName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azurequeue");
-            check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
-        }
+        registration.Name.ShouldBe(registrationName ?? "azurequeue");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureQueueStorageHealthCheck>();
+    }
 
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group");
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("queue", null, null)]
+    [InlineData(null, "my-azurequeue-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("queue", "my-azurequeue-group", HealthStatus.Degraded)]
+    public void add_health_check_with_uri_when_properly_configured(string? queueName, string? registrationName, HealthStatus? failureStatus)
+    {
+        using var serviceProvider = new ServiceCollection()
+            .AddHealthChecks()
+            .AddAzureQueueStorage(
+                new Uri("https://unit-test.queue.core.windows.net"),
+                Substitute.For<TokenCredential>(),
+                queueName: queueName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-azurequeue-group");
-            check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
-        }
+        registration.Name.ShouldBe(registrationName ?? "azurequeue");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureQueueStorageHealthCheck>();
+    }
 
-        [Fact]
-        public void add_custom_tagged_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group", tags: new[] { "custom-tag" });
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("queue", null, null)]
+    [InlineData(null, "my-azurequeue-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("queue", "my-azurequeue-group", HealthStatus.Degraded)]
+    public void add_health_check_with_client_from_service_provider(string? queueName, string? registrationName, HealthStatus? failureStatus)
+    {
+        using var serviceProvider = new ServiceCollection()
+            .AddSingleton(Substitute.For<QueueServiceClient>())
+            .AddHealthChecks()
+            .AddAzureQueueStorage(
+                o => o.QueueName = queueName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-azurequeue-group");
-            registration.Tags.Should().Contain("custom-tag");
-            check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
-        }
+        registration.Name.ShouldBe(registrationName ?? "azurequeue");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureQueueStorageHealthCheck>();
+    }
 
-        [Fact]
-        public void add_health_check_with_custom_failure_status_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", name: "my-azurequeue-group", failureStatus: HealthStatus.Degraded);
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("queue", null, null)]
+    [InlineData(null, "my-azurequeue-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("queue", "my-azurequeue-group", HealthStatus.Degraded)]
+    public void add_health_check_with_client_from_service_provider_and_advanced_delegate(string? queueName, string? registrationName, HealthStatus? failureStatus)
+    {
+        using var serviceProvider = new ServiceCollection()
+            .AddSingleton(Substitute.For<QueueServiceClient>())
+            .AddHealthChecks()
+            .AddAzureQueueStorage(
+                (sp, o) => o.QueueName = queueName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-azurequeue-group");
-            registration.FailureStatus.Should().Be(HealthStatus.Degraded);
-            check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
-        }
-
-        [Fact]
-        public void add_named_queue_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureQueueStorage("the-connection-string", queueName: "queue");
-
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
-
-            registration.Name.Should().Be("azurequeue");
-            check.GetType().Should().Be(typeof(AzureQueueStorageHealthCheck));
-        }
+        registration.Name.ShouldBe(registrationName ?? "azurequeue");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureQueueStorageHealthCheck>();
     }
 }

@@ -200,7 +200,7 @@ public static class AzureStorageHealthCheckBuilderExtensions
     /// Add a health check for Azure Blob Storage.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="clientFactory">Delegate for creating a <see cref="BlobServiceClient"/>. Optional.</param>
+    /// <param name="clientFactory">Delegate for creating a <see cref="BlobServiceClient"/>.</param>
     /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>
     /// <param name="name">The health check name. Optional. If <see langword="null"/> the type name 'azureblob' will be used for the name.</param>
     /// <param name="failureStatus">

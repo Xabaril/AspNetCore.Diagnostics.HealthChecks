@@ -3,6 +3,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureSearch.DependencyInjection;
 
+/// <summary>
+/// Extension methods to configure <see cref="AzureSearchHealthCheck"/>.
+/// </summary>
 public static class AzureSearchHealthCheckBuilderExtensions
 {
     private const string NAME = "azuresearch";

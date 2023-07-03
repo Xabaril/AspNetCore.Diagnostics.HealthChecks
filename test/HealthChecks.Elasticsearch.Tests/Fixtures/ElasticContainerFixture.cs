@@ -5,7 +5,6 @@ using System.Text.Json;
 using Ductus.FluentDocker.Builders;
 using Ductus.FluentDocker.Services;
 using Ductus.FluentDocker.Services.Extensions;
-using Xunit;
 
 namespace HealthChecks.Elasticsearch.Tests.Fixtures;
 
@@ -38,7 +37,7 @@ public class ElasticContainerFixture : IAsyncLifetime
         elasticContainer.CopyFrom(CONTAINER_CERTIFICATE_PATH, ".", true);
     }
 
-    public async Task InitializeAsync() => ApiKey = await SetApiKeyInElasticSearchAsync();
+    public async Task InitializeAsync() => ApiKey = await SetApiKeyInElasticSearchAsync().ConfigureAwait(false);
 
     public Task DisposeAsync()
     {
@@ -73,8 +72,8 @@ public class ElasticContainerFixture : IAsyncLifetime
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
             Encoding.ASCII.GetBytes($"elastic:{ELASTIC_PASSWORD}")));
         using var response = await httpClient.PostAsJsonAsync("https://localhost:9200/_security/api_key?pretty",
-            new { name = "new-api-key", role_descriptors = new { } });
-        var apiKeyResponse = await response.Content.ReadFromJsonAsync<ApiKeyResponse>() ?? throw new JsonException();
+            new { name = "new-api-key", role_descriptors = new { } }).ConfigureAwait(false);
+        var apiKeyResponse = await response.Content.ReadFromJsonAsync<ApiKeyResponse>().ConfigureAwait(false) ?? throw new JsonException();
 
         return apiKeyResponse.Encoded;
     }

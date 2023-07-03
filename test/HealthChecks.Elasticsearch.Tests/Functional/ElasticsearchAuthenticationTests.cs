@@ -1,13 +1,6 @@
 using System.Net;
 using Elasticsearch.Net;
-using FluentAssertions;
 using HealthChecks.Elasticsearch.Tests.Fixtures;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace HealthChecks.Elasticsearch.Tests.Functional;
 
@@ -49,10 +42,11 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
         using var server = new TestServer(webHostBuilder);
 
         var response = await server.CreateRequest($"/health")
-            .GetAsync();
+            .GetAsync()
+            .ConfigureAwait(false);
 
         response.StatusCode
-            .Should().Be(HttpStatusCode.OK);
+            .ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -84,9 +78,10 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
         using var server = new TestServer(webHostBuilder);
 
         var response = await server.CreateRequest($"/health")
-            .GetAsync();
+            .GetAsync()
+            .ConfigureAwait(false);
 
         response.StatusCode
-            .Should().Be(HttpStatusCode.OK);
+            .ShouldBe(HttpStatusCode.OK);
     }
 }

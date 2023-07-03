@@ -9,12 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\docker-compose.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ductus.FluentDocker" Version="2.10.45" />
   </ItemGroup>
 

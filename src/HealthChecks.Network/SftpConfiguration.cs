@@ -48,7 +48,7 @@ public class SftpConfigurationBuilder
     public SftpConfigurationBuilder AddPrivateKeyAuthentication(PrivateKeyFile privateKey)
     {
         AuthenticationMethods.Add(new PrivateKeyAuthenticationMethod(_userName, privateKey));
-        
+
         return this;
     }
 

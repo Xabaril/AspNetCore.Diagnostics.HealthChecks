@@ -51,7 +51,7 @@ jobs:
       - name: Test
         run: >
           dotnet test
-          ./test/HealthChecks.DocumentDb.Tests/HealthChecks.AzureSearch.Tests.csproj
+          ./test/HealthChecks.AzureSearch.Tests/HealthChecks.AzureSearch.Tests.csproj
           --no-restore
           --no-build
           --collect "XPlat Code Coverage"
@@ -61,5 +61,5 @@ jobs:
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:
-          flags: DocumentDb
+          flags: AzureSearch
           directory: .coverage

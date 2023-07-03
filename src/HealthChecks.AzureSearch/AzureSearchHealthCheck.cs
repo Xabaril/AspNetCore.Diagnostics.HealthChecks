@@ -17,6 +17,7 @@ public class AzureSearchHealthCheck : IHealthCheck
         _searchOptions.AuthKey = Guard.ThrowIfNull(searchOptions.AuthKey);
     }
 
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

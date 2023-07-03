@@ -10,7 +10,7 @@ namespace HealthChecks.MySql;
 public class MySqlHealthCheckOptions
 {
     /// <summary>
-    /// The MySQL Server connection string to be used.
+    /// The MySQL connection string to be used.
     /// </summary>
     public string ConnectionString { get; set; } = null!;
 

@@ -199,9 +199,6 @@ public static class AzureStorageHealthCheckBuilderExtensions
     /// <summary>
     /// Add a health check for Azure Blob Storage.
     /// </summary>
-    /// <remarks>
-    /// A <see cref="BlobServiceClient"/> service must be registered in the service container if clientFactory is not set.
-    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="clientFactory">Delegate for creating a <see cref="BlobServiceClient"/>. Optional.</param>
     /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>

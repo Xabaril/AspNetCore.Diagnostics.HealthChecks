@@ -164,7 +164,6 @@ public static class AzureStorageHealthCheckBuilderExtensions
     /// <remarks>
     /// A <see cref="BlobServiceClient"/> service must be registered in the service container. For named instances
     /// you may use other overload with <see cref="Func<IServiceProvider, BlobServiceClient>"/> argument.
-
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="configureOptions">Delegate for configuring the health check. Optional.</param>

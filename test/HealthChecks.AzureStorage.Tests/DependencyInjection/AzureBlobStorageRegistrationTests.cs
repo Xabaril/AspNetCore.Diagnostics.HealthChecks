@@ -145,7 +145,6 @@ public class azureblobstorage_registration_should
         registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
         check.ShouldBeOfType<AzureBlobStorageHealthCheck>();
     }
-    
     [Theory]
     [InlineData(null, null, null)]
     [InlineData("container", null, null)]

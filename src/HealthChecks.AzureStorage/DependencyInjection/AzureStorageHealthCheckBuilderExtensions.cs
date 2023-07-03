@@ -145,7 +145,7 @@ public static class AzureStorageHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-    return builder.Add(new HealthCheckRegistration(
+        return builder.Add(new HealthCheckRegistration(
             name ?? AZUREBLOB_NAME,
             sp =>
             {

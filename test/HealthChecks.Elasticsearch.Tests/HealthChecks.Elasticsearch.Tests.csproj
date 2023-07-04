@@ -8,4 +8,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Ductus.FluentDocker" Version="2.10.45" />
+  </ItemGroup>
+
 </Project>

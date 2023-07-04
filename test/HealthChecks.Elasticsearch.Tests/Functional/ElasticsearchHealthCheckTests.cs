@@ -7,7 +7,7 @@ public class elasticsearch_healthcheck_should
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_available()
     {
-        var connectionString = @"https://localhost:9200";
+        var connectionString = @"http://localhost:9200";
 
         var webHostBuilder = new WebHostBuilder()
         .ConfigureServices(services =>

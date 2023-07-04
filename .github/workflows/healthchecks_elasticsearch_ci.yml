@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.1.3
         ports:
           - 9300:9300
           - 9200:9200

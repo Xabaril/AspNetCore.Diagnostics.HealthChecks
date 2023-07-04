@@ -32,7 +32,6 @@ jobs:
       elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.1.3
         ports:
-          - 9300:9300
           - 9200:9200
         env:
           ELASTIC_PASSWORD: abcDEF123!

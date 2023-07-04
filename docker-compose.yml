@@ -13,7 +13,7 @@ services:
         ports:
             - ${REDIS_PORT}:6379
     elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.1.3
         ports:
           - "9300:9300"
           - ${ELASTICSEARCH_PORT}:9200

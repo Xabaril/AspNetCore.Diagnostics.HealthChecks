@@ -35,7 +35,7 @@ namespace HealthChecks.UI.K8s.Operator
 
             if (!_watchers.Keys.Any(filter))
             {
-                var response = _client.ListNamespacedServiceWithHttpMessagesAsync(
+                var response = _client.CoreV1.ListNamespacedServiceWithHttpMessagesAsync(
                     namespaceParameter: resource.Metadata.NamespaceProperty,
                     labelSelector: $"{resource.Spec.ServicesLabel}",
                     watch: true,

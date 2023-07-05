@@ -31,7 +31,7 @@ public class ElasticContainerFixture : IAsyncLifetime
             .Start();
 
         var elasticContainer =
-            _compositeService.Containers.First(container => container.Name == ELASTIC_CONTAINER_NAME);
+            _compositeService.Containers.First(container => container.Name.Contains(ELASTIC_CONTAINER_NAME));
         var setupContainer = _compositeService.Containers.First(container => container != elasticContainer);
         setupContainer.WaitForMessageInLogs(SETUP_DONE_MESSAGE, TIME_OUT_IN_MILLIS);
         elasticContainer.CopyFrom(CONTAINER_CERTIFICATE_PATH, ".", true);
@@ -71,7 +71,7 @@ public class ElasticContainerFixture : IAsyncLifetime
         using var httpClient = new HttpClient(handler);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
             Encoding.ASCII.GetBytes($"elastic:{ELASTIC_PASSWORD}")));
-        using var response = await httpClient.PostAsJsonAsync("https://localhost:9201/_security/api_key?pretty",
+        using var response = await httpClient.PostAsJsonAsync("https://localhost:9200/_security/api_key?pretty",
             new { name = "new-api-key", role_descriptors = new { } }).ConfigureAwait(false);
         var apiKeyResponse = await response.Content.ReadFromJsonAsync<ApiKeyResponse>().ConfigureAwait(false) ?? throw new JsonException();
 

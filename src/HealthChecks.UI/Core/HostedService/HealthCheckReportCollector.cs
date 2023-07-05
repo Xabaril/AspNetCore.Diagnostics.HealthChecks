@@ -23,7 +23,8 @@ namespace HealthChecks.UI.Core.HostedService
         {
             Converters =
             {
-                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
+                // allowIntegerValues: true https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1422
+                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: true)
             }
         };
 
@@ -122,10 +123,8 @@ namespace HealthChecks.UI.Core.HostedService
 
                 using (response)
                 {
-                    var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
-                    if (report == null)
-                        throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
-                    return report;
+                    return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options)
+                        ?? throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
                 }
             }
             catch (Exception exception)

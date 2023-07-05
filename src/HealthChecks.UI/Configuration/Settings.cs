@@ -50,6 +50,7 @@ namespace HealthChecks.UI.Configuration
             DisableMigrations = true;
             return this;
         }
+
         public Settings SetEvaluationTimeInSeconds(int seconds)
         {
             EvaluationTimeInSeconds = seconds;

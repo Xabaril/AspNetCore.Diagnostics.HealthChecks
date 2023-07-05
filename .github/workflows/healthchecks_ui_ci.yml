@@ -9,9 +9,11 @@ on:
       - src/HealthChecks.UI.*/**
       - test/HealthChecks.UI.*/**
       - test/_SHARED/**
+      - samples/HealthChecks.UI*/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - build/docker-images/HealthChecks.UI.Image/**
     tags-ignore:
       - release-*
       - preview-*
@@ -23,9 +25,11 @@ on:
       - src/HealthChecks.UI.*/**
       - test/HealthChecks.UI.*/**
       - test/_SHARED/**
+      - samples/HealthChecks.UI*/**
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - build/docker-images/HealthChecks.UI.Image/**
 
 jobs:
   build:

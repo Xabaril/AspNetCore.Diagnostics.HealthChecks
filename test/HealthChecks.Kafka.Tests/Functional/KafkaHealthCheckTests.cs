@@ -1,82 +1,70 @@
 using System.Net;
 using Confluent.Kafka;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
-namespace HealthChecks.Kafka.Tests.Functional
+namespace HealthChecks.Kafka.Tests.Functional;
+
+public class kafka_healthcheck_should
 {
-    public class kafka_healthcheck_should
+    [Fact]
+    public async Task be_unhealthy_if_kafka_is_unavailable()
     {
-        [Fact]
-        public async Task be_unhealthy_if_kafka_is_unavailable()
+        var configuration = new ProducerConfig()
         {
-            var configuration = new ProducerConfig()
+            BootstrapServers = "localhost:0000",
+            MessageSendMaxRetries = 0,
+            MessageTimeoutMs = 1500,
+            RequestTimeoutMs = 1500,
+            SocketTimeoutMs = 1500
+        };
+
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
             {
-                BootstrapServers = "localhost:0000",
-                MessageSendMaxRetries = 0,
-                MessageTimeoutMs = 1500,
-                RequestTimeoutMs = 1500,
-                SocketTimeoutMs = 1500
-            };
-
-            var webHostBuilder = new WebHostBuilder()
-                .ConfigureServices(services =>
+                services.AddHealthChecks()
+                .AddKafka(configuration, tags: new string[] { "kafka" });
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
-                    services.AddHealthChecks()
-                    .AddKafka(configuration, tags: new string[] { "kafka" });
-                })
-                .Configure(app =>
-                {
-                    app.UseHealthChecks("/health", new HealthCheckOptions
-                    {
-                        Predicate = r => r.Tags.Contains("kafka")
-                    });
+                    Predicate = r => r.Tags.Contains("kafka")
                 });
+            });
 
-            using var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.ServiceUnavailable);
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+    }
 
-        [Fact]
-        public async Task be_healthy_if_kafka_is_available()
+    [Fact]
+    public async Task be_healthy_if_kafka_is_available()
+    {
+        var configuration = new ProducerConfig()
         {
-            var configuration = new ProducerConfig()
+            BootstrapServers = "localhost:9092",
+            MessageSendMaxRetries = 0
+        };
+
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
             {
-                BootstrapServers = "localhost:9092",
-                MessageSendMaxRetries = 0
-            };
-
-            var webHostBuilder = new WebHostBuilder()
-                .ConfigureServices(services =>
+                services.AddHealthChecks()
+                .AddKafka(configuration, tags: new string[] { "kafka" });
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions
                 {
-                    services.AddHealthChecks()
-                    .AddKafka(configuration, tags: new string[] { "kafka" });
-                })
-                .Configure(app =>
-                {
-                    app.UseHealthChecks("/health", new HealthCheckOptions
-                    {
-                        Predicate = r => r.Tags.Contains("kafka")
-                    });
+                    Predicate = r => r.Tags.Contains("kafka")
                 });
+            });
 
-            using var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
-            var response = await server.CreateRequest("/health")
-                .GetAsync();
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
-            response.StatusCode
-                .Should().Be(HttpStatusCode.OK);
-        }
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

@@ -1,8 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.8.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj" />

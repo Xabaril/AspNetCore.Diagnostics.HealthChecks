@@ -12,9 +12,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public NotificationHandler(IKubernetes client, IHttpClientFactory httpClientFactory, ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+            _logger = Guard.ThrowIfNull(logger);
         }
         public async Task NotifyDiscoveredServiceAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
         {

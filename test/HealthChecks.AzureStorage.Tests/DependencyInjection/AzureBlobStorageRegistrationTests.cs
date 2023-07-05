@@ -1,60 +1,121 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
+using Azure.Core;
+using Azure.Storage.Blobs;
+using NSubstitute;
 
-namespace HealthChecks.AzureStorage.Tests.DependencyInjection
+namespace HealthChecks.AzureStorage.Tests.DependencyInjection;
+
+public class azureblobstorage_registration_should
 {
-    public class azureblobstorage_registration_should
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("container", null, null)]
+    [InlineData(null, "my-azureblob-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("container", "my-azureblob-group", HealthStatus.Degraded)]
+    public void add_health_check_when_properly_configured(string? containerName, string? registrationName, HealthStatus? failureStatus)
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string");
+        using var serviceProvider = new ServiceCollection()
+            .AddHealthChecks()
+            .AddAzureBlobStorage(
+                "BlobEndpoint=https://unit-test.blob.core.windows.net",
+                containerName: containerName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azureblob");
-            check.GetType().Should().Be(typeof(AzureBlobStorageHealthCheck));
-        }
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string", name: "my-azureblob-group");
+        registration.Name.ShouldBe(registrationName ?? "azureblob");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureBlobStorageHealthCheck>();
+    }
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("container", null, null)]
+    [InlineData(null, "my-azureblob-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("container", "my-azureblob-group", HealthStatus.Degraded)]
+    public void add_health_check_with_uri_when_properly_configured(string? containerName, string? registrationName, HealthStatus? failureStatus)
+    {
+        using var serviceProvider = new ServiceCollection()
+            .AddHealthChecks()
+            .AddAzureBlobStorage(
+                new Uri("https://unit-test.blob.core.windows.net"),
+                Substitute.For<TokenCredential>(),
+                containerName: containerName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            registration.Name.Should().Be("my-azureblob-group");
-            check.GetType().Should().Be(typeof(AzureBlobStorageHealthCheck));
-        }
-        [Fact]
-        public void add_named_container_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureBlobStorage("the-connection-string", containerName: "container");
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        registration.Name.ShouldBe(registrationName ?? "azureblob");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureBlobStorageHealthCheck>();
+    }
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("container", null, null)]
+    [InlineData(null, "my-azureblob-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("container", "my-azureblob-group", HealthStatus.Degraded)]
+    public void add_health_check_with_client_from_service_provider(string? containerName, string? registrationName, HealthStatus? failureStatus)
+    {
+        using var serviceProvider = new ServiceCollection()
+            .AddSingleton(Substitute.For<BlobServiceClient>())
+            .AddHealthChecks()
+            .AddAzureBlobStorage(
+                o => o.ContainerName = containerName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
 
-            registration.Name.Should().Be("azureblob");
-            check.GetType().Should().Be(typeof(AzureBlobStorageHealthCheck));
-        }
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe(registrationName ?? "azureblob");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureBlobStorageHealthCheck>();
+    }
+
+    [Theory]
+    [InlineData(null, null, null)]
+    [InlineData("container", null, null)]
+    [InlineData(null, "my-azureblob-group", null)]
+    [InlineData(null, null, HealthStatus.Degraded)]
+    [InlineData("container", "my-azureblob-group", HealthStatus.Degraded)]
+    public void add_health_check_with_client_from_service_provider_and_advanced_delegate(string? containerName, string? registrationName, HealthStatus? failureStatus)
+    {
+        using var serviceProvider = new ServiceCollection()
+            .AddSingleton(Substitute.For<BlobServiceClient>())
+            .AddHealthChecks()
+            .AddAzureBlobStorage(
+                (sp, o) => o.ContainerName = containerName,
+                name: registrationName,
+                failureStatus: failureStatus)
+            .Services
+            .BuildServiceProvider();
+
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe(registrationName ?? "azureblob");
+        registration.FailureStatus.ShouldBe(failureStatus ?? HealthStatus.Unhealthy);
+        check.ShouldBeOfType<AzureBlobStorageHealthCheck>();
     }
 }

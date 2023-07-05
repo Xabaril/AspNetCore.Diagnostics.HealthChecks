@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.System.Tests.DependencyInjection
 {
     public class system_registration_should
@@ -19,7 +13,7 @@ namespace HealthChecks.System.Tests.DependencyInjection
                     .AddProcessHealthCheck("dotnet", null!);
             });
 
-            ex.Message.Should().Be("Value cannot be null. (Parameter 'predicate')");
+            ex.Message.ShouldBe("Value cannot be null. (Parameter 'predicate')");
         }
 
         [Fact]
@@ -27,13 +21,9 @@ namespace HealthChecks.System.Tests.DependencyInjection
         {
             var services = new ServiceCollection();
 
-            var ex = Assert.Throws<ArgumentNullException>(() =>
-            {
-                services.AddHealthChecks()
-                    .AddProcessHealthCheck("", p => p.Any());
-            });
+            var ex = Assert.Throws<ArgumentNullException>(() => services.AddHealthChecks().AddProcessHealthCheck("", p => p.Length > 0));
 
-            ex.Message.Should().Be("Value cannot be null. (Parameter 'processName')");
+            ex.Message.ShouldBe("Value cannot be null. (Parameter 'processName')");
         }
 
         [Fact]
@@ -50,8 +40,8 @@ namespace HealthChecks.System.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("process");
-            check.GetType().Should().Be(typeof(ProcessHealthCheck));
+            registration.Name.ShouldBe("process");
+            check.ShouldBeOfType<ProcessHealthCheck>();
         }
     }
 }

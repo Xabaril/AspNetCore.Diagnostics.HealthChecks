@@ -7,19 +7,23 @@ on:
     paths:
       - src/HealthChecks.Redis/**
       - test/HealthChecks.Redis.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_redis_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.Redis/**
-    - test/HealthChecks.Redis.Tests/**
-    - .github/workflows/healthchecks_redis_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.Redis/**
+      - test/HealthChecks.Redis.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_redis_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -30,23 +34,37 @@ jobs:
         ports:
           - 6379:6379
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.202
-        include-prerelease: false
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj &&
-        dotnet restore ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Redis/HealthChecks.Redis.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj &&
+          dotnet restore ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Redis/HealthChecks.Redis.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Redis/HealthChecks.Redis.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Redis.Tests/HealthChecks.Redis.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Redis
+          directory: .coverage

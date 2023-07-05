@@ -1,132 +1,187 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
+using HealthChecks.AzureServiceBus.Configuration;
 
-namespace HealthChecks.AzureServiceBus.Tests
+namespace HealthChecks.AzureServiceBus.Tests;
+
+public class azure_service_bus_subscription_registration_should
 {
-    public class azure_service_bus_subscription_registration_should
+    [Fact]
+    public void add_health_check_when_properly_configured()
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName");
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscription");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
-        }
+        registration.Name.ShouldBe("azuresubscription");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+    }
 
-        [Fact]
-        public void add_health_check_using_factories_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            bool connectionStringFactoryCalled = false, topicNameFactoryCalled = false, subscriptionNameFactoryCalled = false;
-            services.AddHealthChecks()
-                .AddAzureServiceBusSubscription(_ =>
-                    {
-                        connectionStringFactoryCalled = true;
-                        return "cnn";
-                    },
-                    _ =>
-                    {
-                        topicNameFactoryCalled = true;
-                        return "topicName";
-                    },
-                    _ =>
-                    {
-                        subscriptionNameFactoryCalled = true;
-                        return "subscriptionName";
-                    });
+    [Fact]
+    public void add_health_check_with_options_when_properly_configured()
+    {
+        AzureServiceBusSubscriptionHealthCheckHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription("cnn", "topicName", "subscriptionName",
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            registration.Name.Should().Be("azuresubscription");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
-            connectionStringFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
-            subscriptionNameFactoryCalled.Should().BeTrue();
-        }
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName",
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void add_health_check_using_factories_when_properly_configured()
+    {
+        bool connectionStringFactoryCalled = false,
+            topicNameFactoryCalled = false,
+            subscriptionNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription(_ =>
+                {
+                    connectionStringFactoryCalled = true;
+                    return "cnn";
+                },
+                _ =>
+                {
+                    topicNameFactoryCalled = true;
+                    return "topicName";
+                },
+                _ =>
+                {
+                    subscriptionNameFactoryCalled = true;
+                    return "subscriptionName";
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("azuresubscription");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        connectionStringFactoryCalled.ShouldBeTrue();
+        topicNameFactoryCalled.ShouldBeTrue();
+        subscriptionNameFactoryCalled.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void add_health_check_using_factories_with_options_when_properly_configured()
+    {
+        AzureServiceBusSubscriptionHealthCheckHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription(_ => "cnn", _ => "topicName", _ => "subscriptionName",
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void add_named_health_check_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription("cnn", "topic", "subscriptionName", name: "azuresubscriptioncheck");
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("azuresubscriptioncheck");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+    }
+
+    [Fact]
+    public void add_named_health_check_using_factories_when_properly_configured()
+    {
+        bool connectionStringFactoryCalled = false,
+            topicNameFactoryCalled = false,
+            subscriptionNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription(_ =>
+                {
+                    connectionStringFactoryCalled = true;
+                    return "cnn";
+                },
+                _ =>
+                {
+                    topicNameFactoryCalled = true;
+                    return "topicName";
+                },
+                _ =>
+                {
+                    subscriptionNameFactoryCalled = true;
+                    return "subscriptionName";
+                },
                 name: "azuresubscriptioncheck");
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuresubscriptioncheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
-        }
+        registration.Name.ShouldBe("azuresubscriptioncheck");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+        connectionStringFactoryCalled.ShouldBeTrue();
+        topicNameFactoryCalled.ShouldBeTrue();
+        subscriptionNameFactoryCalled.ShouldBeTrue();
+    }
 
-        [Fact]
-        public void add_named_health_check_using_factories_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            bool connectionStringFactoryCalled = false, topicNameFactoryCalled = false, subscriptionNameFactoryCalled = false;
-            services.AddHealthChecks()
-                .AddAzureServiceBusSubscription(_ =>
-                    {
-                        connectionStringFactoryCalled = true;
-                        return "cnn";
-                    },
-                    _ =>
-                    {
-                        topicNameFactoryCalled = true;
-                        return "topicName";
-                    },
-                    _ =>
-                    {
-                        subscriptionNameFactoryCalled = true;
-                        return "subscriptionName";
-                    },
-                    "azuresubscriptioncheck");
+    [Fact]
+    public void fail_when_no_health_check_configuration_provided()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscription(string.Empty, string.Empty, string.Empty);
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
 
-            registration.Name.Should().Be("azuresubscriptioncheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusSubscriptionHealthCheck));
-            connectionStringFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
-            subscriptionNameFactoryCalled.Should().BeTrue();
-        }
-
-        [Fact]
-        public void fail_when_no_health_check_configuration_provided()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusSubscription(string.Empty, string.Empty, string.Empty);
-
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
-
-            var registration = options.Value.Registrations.First();
-
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        }
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 }

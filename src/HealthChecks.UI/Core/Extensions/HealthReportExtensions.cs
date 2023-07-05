@@ -1,5 +1,5 @@
 using HealthChecks.UI.Core;
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 
 namespace Microsoft.Extensions.Diagnostics.HealthChecks
 {

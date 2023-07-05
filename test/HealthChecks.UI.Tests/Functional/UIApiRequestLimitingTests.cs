@@ -1,15 +1,6 @@
 using System.Net;
-using FluentAssertions;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace HealthChecks.UI.Tests
 {
@@ -61,8 +52,8 @@ namespace HealthChecks.UI.Tests
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
-            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().Should().Be(requests.Count() - maxActiveRequests);
-            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().Should().Be(maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count() - maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
 
         [Fact]
@@ -76,7 +67,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecks()
                         .AddAsyncCheck("Delayed", async () =>
                         {
-                            await Task.Delay(200);
+                            await Task.Delay(200).ConfigureAwait(false);
                             return HealthCheckResult.Healthy();
                         })
                         .Services
@@ -106,14 +97,14 @@ namespace HealthChecks.UI.Tests
             var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests)
                 .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
 
-            var results = await Task.WhenAll(requests);
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests)
                 .Count()
-                .Should().Be(requests.Count() - serverSettings.ApiMaxActiveRequests);
+                .ShouldBe(requests.Count() - serverSettings.ApiMaxActiveRequests);
 
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count()
-                .Should().Be(serverSettings.ApiMaxActiveRequests);
+                .ShouldBe(serverSettings.ApiMaxActiveRequests);
         }
     }
 }

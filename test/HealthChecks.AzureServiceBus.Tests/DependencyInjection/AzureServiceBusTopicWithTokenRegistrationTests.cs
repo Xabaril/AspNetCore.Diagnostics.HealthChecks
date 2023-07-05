@@ -1,133 +1,129 @@
-using FluentAssertions;
-using global::Azure.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
+using Azure.Identity;
 
-namespace HealthChecks.AzureServiceBus.Tests
+namespace HealthChecks.AzureServiceBus.Tests;
+
+public class azure_service_bus_topic_registration_with_token_should
 {
-    public class azure_service_bus_topic_registration_with_token_should
+    [Fact]
+    public void add_health_check_when_properly_configured()
     {
-        [Fact]
-        public void add_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusTopic("cnn", "topicName", new AzureCliCredential());
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusTopic("cnn", "topicName", new AzureCliCredential());
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("azuretopic");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
-        }
+        registration.Name.ShouldBe("azuretopic");
+        check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
+    }
 
-        [Fact]
-        public void add_health_check_using_factories_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            bool endpointFactoryCalled = false, topicNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
-            services.AddHealthChecks()
-                .AddAzureServiceBusTopic(_ =>
-                    {
-                        endpointFactoryCalled = true;
-                        return "cnn";
-                    },
-                    _ =>
-                    {
-                        topicNameFactoryCalled = true;
-                        return "topicName";
-                    },
-                    _ =>
-                    {
-                        tokenCredentialFactoryCalled = true;
-                        return new AzureCliCredential();
-                    });
+    [Fact]
+    public void add_health_check_using_factories_when_properly_configured()
+    {
+        bool endpointFactoryCalled = false, topicNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusTopic(_ =>
+                {
+                    endpointFactoryCalled = true;
+                    return "cnn";
+                },
+                _ =>
+                {
+                    topicNameFactoryCalled = true;
+                    return "topicName";
+                },
+                _ =>
+                {
+                    tokenCredentialFactoryCalled = true;
+                    return new AzureCliCredential();
+                });
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            registration.Name.Should().Be("azuretopic");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
-            endpointFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
-            tokenCredentialFactoryCalled.Should().BeTrue();
-        }
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-        [Fact]
-        public void add_named_health_check_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusTopic("cnn", "topic", new AzureCliCredential(),
-                    "azuretopiccheck");
+        registration.Name.ShouldBe("azuretopic");
+        check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
+        endpointFactoryCalled.ShouldBeTrue();
+        topicNameFactoryCalled.ShouldBeTrue();
+        tokenCredentialFactoryCalled.ShouldBeTrue();
+    }
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+    [Fact]
+    public void add_named_health_check_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusTopic("cnn", "topic", new AzureCliCredential(), "azuretopiccheck");
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-            registration.Name.Should().Be("azuretopiccheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
-        }
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-        [Fact]
-        public void add_named_health_check_using_factories_when_properly_configured()
-        {
-            var services = new ServiceCollection();
-            bool endpointFactoryCalled = false, topicNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
-            services.AddHealthChecks()
-                .AddAzureServiceBusTopic(_ =>
-                    {
-                        endpointFactoryCalled = true;
-                        return "cnn";
-                    },
-                    _ =>
-                    {
-                        topicNameFactoryCalled = true;
-                        return "topicName";
-                    },
-                    _ =>
-                    {
-                        tokenCredentialFactoryCalled = true;
-                        return new AzureCliCredential();
-                    },
-                    "azuretopiccheck");
+        registration.Name.ShouldBe("azuretopiccheck");
+        check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
+    }
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+    [Fact]
+    public void add_named_health_check_using_factories_when_properly_configured()
+    {
+        bool endpointFactoryCalled = false, topicNameFactoryCalled = false, tokenCredentialFactoryCalled = false;
 
-            var registration = options.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusTopic(_ =>
+                {
+                    endpointFactoryCalled = true;
+                    return "cnn";
+                },
+                _ =>
+                {
+                    topicNameFactoryCalled = true;
+                    return "topicName";
+                },
+                _ =>
+                {
+                    tokenCredentialFactoryCalled = true;
+                    return new AzureCliCredential();
+                },
+                name: "azuretopiccheck");
 
-            registration.Name.Should().Be("azuretopiccheck");
-            check.GetType().Should().Be(typeof(AzureServiceBusTopicHealthCheck));
-            endpointFactoryCalled.Should().BeTrue();
-            topicNameFactoryCalled.Should().BeTrue();
-            tokenCredentialFactoryCalled.Should().BeTrue();
-        }
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        [Fact]
-        public void fail_when_no_health_check_configuration_provided()
-        {
-            var services = new ServiceCollection();
-            services.AddHealthChecks()
-                .AddAzureServiceBusTopic(string.Empty, string.Empty, new AzureCliCredential());
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            using var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        registration.Name.ShouldBe("azuretopiccheck");
+        check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
+        endpointFactoryCalled.ShouldBeTrue();
+        topicNameFactoryCalled.ShouldBeTrue();
+        tokenCredentialFactoryCalled.ShouldBeTrue();
+    }
 
-            var registration = options.Value.Registrations.First();
+    [Fact]
+    public void fail_when_no_health_check_configuration_provided()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusTopic(string.Empty, string.Empty, new AzureCliCredential());
 
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        }
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 }

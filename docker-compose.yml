@@ -34,7 +34,7 @@ services:
     eventstore:
         image: eventstore/eventstore
         ports:
-          - "2113:2113"
+          - ${EVENTSTORE_GRPC_PORT}:2113
           - ${EVENTSTORE_PORT}:1113
         environment:
             - EVENTSTORE_INSECURE=true
@@ -174,3 +174,15 @@ services:
         - "4222:4222"
         - "8222:8222"
         - "6222:6222"
+    influx:
+        image: influxdb:2.6.0
+        restart: always
+        ports:
+         - "8086:8086"
+        environment:
+          DOCKER_INFLUXDB_INIT_MODE: setup 
+          DOCKER_INFLUXDB_INIT_USERNAME: ci_user
+          DOCKER_INFLUXDB_INIT_PASSWORD: password
+          DOCKER_INFLUXDB_INIT_ORG: influxdata
+          DOCKER_INFLUXDB_INIT_BUCKET: dummy
+

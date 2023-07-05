@@ -31,12 +31,12 @@ namespace HealthChecks.UI.K8s.Operator
             OperatorDiagnostics diagnostics,
             ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _controller = controller ?? throw new ArgumentNullException(nameof(controller));
-            _serviceWatcher = serviceWatcher ?? throw new ArgumentNullException(nameof(serviceWatcher));
-            _clusterServiceWatcher = clusterServiceWatcher ?? throw new ArgumentNullException(nameof(clusterServiceWatcher));
-            _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _controller = Guard.ThrowIfNull(controller);
+            _serviceWatcher = Guard.ThrowIfNull(serviceWatcher);
+            _clusterServiceWatcher = Guard.ThrowIfNull(clusterServiceWatcher);
+            _diagnostics = Guard.ThrowIfNull(diagnostics);
+            _logger = Guard.ThrowIfNull(logger);
 
             _channel = Channel.CreateUnbounded<ResourceWatch>(new UnboundedChannelOptions
             {
@@ -72,7 +72,7 @@ namespace HealthChecks.UI.K8s.Operator
 
         private async Task StartWatcherAsync(CancellationToken token)
         {
-            var response = await _client.ListClusterCustomObjectWithHttpMessagesAsync(
+            var response = await _client.CustomObjects.ListClusterCustomObjectWithHttpMessagesAsync(
                 group: Constants.GROUP,
                 version: Constants.VERSION,
                 plural: Constants.PLURAL,

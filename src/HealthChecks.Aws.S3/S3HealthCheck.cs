@@ -1,53 +1,66 @@
+using Amazon.Runtime;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Aws.S3
+namespace HealthChecks.Aws.S3;
+
+public class S3HealthCheck : IHealthCheck
 {
-    public class S3HealthCheck : IHealthCheck
+    private readonly S3BucketOptions _bucketOptions;
+
+    public S3HealthCheck(S3BucketOptions bucketOptions)
     {
-        private readonly S3BucketOptions _bucketOptions;
+        Guard.ThrowIfNull(bucketOptions);
+        Guard.ThrowIfNull(bucketOptions.S3Config);
 
-        public S3HealthCheck(S3BucketOptions bucketOptions)
+        _bucketOptions = bucketOptions;
+    }
+
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            if (bucketOptions == null)
-            {
-                throw new ArgumentNullException(nameof(bucketOptions));
-            }
-            if (bucketOptions.S3Config == null)
-            {
-                throw new ArgumentNullException(nameof(S3BucketOptions.S3Config));
-            }
-            _bucketOptions = bucketOptions;
-        }
+            AWSCredentials? credentials = _bucketOptions.Credentials;
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            if (credentials == null)
             {
-                bool keysProvided = !string.IsNullOrEmpty(_bucketOptions.AccessKey) &&
-                                    !string.IsNullOrEmpty(_bucketOptions.SecretKey);
-
-                var client = keysProvided
-                    ? new AmazonS3Client(_bucketOptions.AccessKey, _bucketOptions.SecretKey, _bucketOptions.S3Config)
-                    : new AmazonS3Client(_bucketOptions.S3Config);
-
-                using (client)
+#pragma warning disable CS0618 // Type or member is obsolete
+                if (!string.IsNullOrEmpty(_bucketOptions.AccessKey) && !string.IsNullOrEmpty(_bucketOptions.SecretKey))
                 {
-                    var response = await client.ListObjectsAsync(_bucketOptions.BucketName, cancellationToken);
-
-                    if (_bucketOptions.CustomResponseCheck != null)
-                    {
-                        return _bucketOptions.CustomResponseCheck.Invoke(response)
-                            ? HealthCheckResult.Healthy()
-                            : new HealthCheckResult(context.Registration.FailureStatus, description: "Custom response check is not satisfied.");
-                    }
+                    // for backwards compatibility we create the basic credentials if the old fields are used
+                    // but if they are not specified we fallback to using the default profile
+                    credentials = new BasicAWSCredentials(_bucketOptions.AccessKey, _bucketOptions.SecretKey);
                 }
-                return HealthCheckResult.Healthy();
+#pragma warning restore CS0618 // Type or member is obsolete
             }
-            catch (Exception ex)
+
+            var client = credentials != null
+                ? new AmazonS3Client(credentials, _bucketOptions.S3Config)
+                : new AmazonS3Client(_bucketOptions.S3Config);
+
+            using (client)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                var listRequest = new ListObjectsRequest
+                {
+                    BucketName = _bucketOptions.BucketName,
+                    MaxKeys = _bucketOptions.MaxKeys
+                };
+                var response = await client.ListObjectsAsync(listRequest, cancellationToken).ConfigureAwait(false);
+
+                if (_bucketOptions.CustomResponseCheck != null)
+                {
+                    return _bucketOptions.CustomResponseCheck.Invoke(response)
+                        ? HealthCheckResult.Healthy()
+                        : new HealthCheckResult(context.Registration.FailureStatus, description: "Custom response check is not satisfied.");
+                }
             }
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

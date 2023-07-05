@@ -7,19 +7,23 @@ on:
     paths:
       - src/HealthChecks.SqlServer/**
       - test/HealthChecks.SqlServer.Tests/**
+      - test/_SHARED/**
       - .github/workflows/healthchecks_sqlserver_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
       - release-*
+      - preview-*
+
   pull_request:
     branches: [ master ]
     paths:
-    - src/HealthChecks.SqlServer/**
-    - test/HealthChecks.SqlServer.Tests/**
-    - .github/workflows/healthchecks_sqlserver_ci.yml
-    - Directory.Build.props
-    - Directory.Build.targets
+      - src/HealthChecks.SqlServer/**
+      - test/HealthChecks.SqlServer.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_sqlserver_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
 
 jobs:
   build:
@@ -33,23 +37,37 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: Password12!
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.202
-        include-prerelease: false
-    - name: Restore
-      run: |
-        dotnet restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj &&
-        dotnet restore ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj
-    - name: Check formatting
-      run: |
-        dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-        dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-    - name: Build
-      run: |
-        dotnet build --no-restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj &&
-        dotnet build --no-restore ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj
-    - name: Test
-      run: dotnet test --no-restore --no-build ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj &&
+          dotnet restore ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.SqlServer/HealthChecks.SqlServer.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.SqlServer.Tests/HealthChecks.SqlServer.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: SqlServer
+          directory: .coverage

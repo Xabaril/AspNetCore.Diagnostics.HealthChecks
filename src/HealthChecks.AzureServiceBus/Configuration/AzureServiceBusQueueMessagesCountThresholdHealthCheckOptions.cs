@@ -10,12 +10,12 @@ namespace HealthChecks.AzureServiceBus.Configuration;
 public class AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions : AzureServiceBusQueueHealthCheckOptions
 {
     /// <summary>
-    /// Number of active/dead letter Service Bus messages in the queue before message health check returned <see cref="HealthStatus.Degraded"/>
+    /// Number of active/dead letter Service Bus messages in the queue before message health check returned <see cref="HealthStatus.Degraded"/>.
     /// </summary>
     public int DegradedThreshold { get; set; } = 5;
 
     /// <summary>
-    /// Number of active/dead letter Service Bus messages in the queue before message health check returned <see cref="HealthStatus.Unhealthy"/>
+    /// Number of active/dead letter Service Bus messages in the queue before message health check returned <see cref="HealthStatus.Unhealthy"/>.
     /// </summary>
     public int UnhealthyThreshold { get; set; } = 10;
 

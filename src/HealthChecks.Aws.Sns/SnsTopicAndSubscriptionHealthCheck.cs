@@ -22,12 +22,8 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
             foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
             {
-                var topic = await client.FindTopicAsync(topicName).ConfigureAwait(false);
-
-                if (topic == null)
-                {
-                    throw new NotFoundException($"Topic {topicName} does not exist.");
-                }
+                var topic = await client.FindTopicAsync(topicName).ConfigureAwait(false)
+                    ?? throw new NotFoundException($"Topic {topicName} does not exist.");
 
                 if (subscriptions.Count == 0)
                 {

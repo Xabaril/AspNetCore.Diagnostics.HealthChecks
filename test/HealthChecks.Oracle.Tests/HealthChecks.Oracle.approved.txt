@@ -11,6 +11,7 @@ namespace HealthChecks.Oracle
         public string CommandText { get; set; }
         public System.Action<Oracle.ManagedDataAccess.Client.OracleConnection>? Configure { get; set; }
         public string ConnectionString { get; set; }
+        public Oracle.ManagedDataAccess.Client.OracleCredential? Credential { get; set; }
         public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
     }
 }

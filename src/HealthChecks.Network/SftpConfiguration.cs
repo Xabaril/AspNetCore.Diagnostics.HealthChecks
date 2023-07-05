@@ -44,6 +44,14 @@ public class SftpConfigurationBuilder
 
         return this;
     }
+
+    public SftpConfigurationBuilder AddPrivateKeyAuthentication(PrivateKeyFile privateKey)
+    {
+        AuthenticationMethods.Add(new PrivateKeyAuthenticationMethod(_userName, privateKey));
+
+        return this;
+    }
+
     public SftpConfigurationBuilder CreateFileOnConnect(string remoteFilePath)
     {
         _fileCreationOptions = (true, remoteFilePath);

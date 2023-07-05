@@ -97,16 +97,16 @@ prometheus:
   - src/HealthChecks.Publisher.Prometheus/**/*
 
 applicationinsights:
-  - src/HealthChecks.Publisher/ApplicationInsights/**/*
+  - src/HealthChecks.Publisher.ApplicationInsights/**/*
 
 cloudwatch:
-  - src/HealthChecks.Publisher/CloudWatch/**/*
+  - src/HealthChecks.Publisher.CloudWatch/**/*
 
 datadog:
   - src/HealthChecks.Publisher.Datadog/**/*
 
 seq:
-  -src/HealthChecks.Publisher/Seq/**/*
+  -src/HealthChecks.Publisher.Seq/**/*
 
 rabbitmq:
   - src/HealthChecks.Rabbitmq/**/*

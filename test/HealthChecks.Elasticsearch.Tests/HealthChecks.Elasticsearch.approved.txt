@@ -8,7 +8,7 @@ namespace HealthChecks.Elasticsearch
     public class ElasticsearchOptions
     {
         public ElasticsearchOptions() { }
-        public Elasticsearch.Net.ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; set; }
+        public Elasticsearch.Net.ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; }
         public bool AuthenticateWithApiKey { get; }
         public bool AuthenticateWithBasicCredentials { get; }
         public bool AuthenticateWithCertificate { get; }

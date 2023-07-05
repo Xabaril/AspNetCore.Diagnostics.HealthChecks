@@ -5,6 +5,29 @@ namespace HealthChecks.UI.Tests
 {
     public class mysql_storage_should
     {
+        private const string PROVIDER_NAME = "Pomelo.EntityFrameworkCore.MySql";
+
+        [Fact]
+        public void register_healthchecksdb_context_with_migrations()
+        {
+            var customOptionsInvoked = false;
+
+            var hostBuilder = new WebHostBuilder()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecksUI()
+                    .AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI", options => customOptionsInvoked = true);
+                });
+
+            var services = hostBuilder.Build().Services;
+            var context = services.GetRequiredService<HealthChecksDb>();
+
+            context.ShouldNotBeNull();
+            context.Database.GetMigrations().Count().ShouldBeGreaterThan(0);
+            context.Database.ProviderName.ShouldBe(PROVIDER_NAME);
+            customOptionsInvoked.ShouldBeTrue();
+        }
+
         [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {

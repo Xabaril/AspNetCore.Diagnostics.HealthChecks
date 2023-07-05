@@ -114,6 +114,7 @@ HealthChecks packages include health checks for:
 | Azure IoT Hub          | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Azure.IoTHub)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Azure.IoTHub)               |
 | Azure DigitalTwin      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureDigitalTwin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureDigitalTwin)       | Subscription status, models and instances                              |
 | Azure Key Vault        | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureKeyVault)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureKeyVault)             |
+| Azure Search           | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureSearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureSearch)                 |
 | Azure Service Bus      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureServiceBus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureServiceBus)         | EventHub, Queue and Topics                                             |
 | Azure Storage          | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureStorage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureStorage)               | Blob, File, Queue                                                      |
 | ClickHouse             | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ClickHouse)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ClickHouse)                   | 
@@ -162,6 +163,7 @@ Install-Package AspNetCore.HealthChecks.Aws.SystemsManager
 Install-Package AspNetCore.HealthChecks.Azure.IoTHub
 Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
+Install-Package AspNetCore.HealthChecks.AzureSearch
 Install-Package AspNetCore.HealthChecks.AzureServiceBus
 Install-Package AspNetCore.HealthChecks.AzureStorage
 Install-Package AspNetCore.HealthChecks.ClickHouse

@@ -9,6 +9,7 @@
     <HealthCheckAWSSqs>7.0.0</HealthCheckAWSSqs>
     <HealthCheckAWSSystemsManager>7.0.0</HealthCheckAWSSystemsManager>
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
+    <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
     <HealthCheckAzureServiceBus>7.0.0</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorage>7.0.0</HealthCheckAzureStorage>
     <HealthCheckClickHouse>7.0.0</HealthCheckClickHouse>

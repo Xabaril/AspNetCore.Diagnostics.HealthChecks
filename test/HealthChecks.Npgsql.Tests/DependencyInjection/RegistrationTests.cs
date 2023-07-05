@@ -9,7 +9,7 @@ public class npgsql_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddNpgSql("connectionstring");
+            .AddNpgSql("Server=localhost");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -27,7 +27,7 @@ public class npgsql_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddNpgSql("connectionstring", name: "my-npg-1");
+            .AddNpgSql("Server=localhost", name: "my-npg-1");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -48,7 +48,7 @@ public class npgsql_registration_should
             .AddNpgSql(_ =>
             {
                 factoryCalled = true;
-                return "connectionstring";
+                return "Server=localhost";
             }, name: "my-npg-1");
 
         using var serviceProvider = services.BuildServiceProvider();

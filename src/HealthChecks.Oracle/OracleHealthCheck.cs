@@ -22,7 +22,9 @@ public class OracleHealthCheck : IHealthCheck
     {
         try
         {
-            using var connection = new OracleConnection(_options.ConnectionString);
+            using var connection = _options.Credential == null
+                ? new OracleConnection(_options.ConnectionString)
+                : new OracleConnection(_options.ConnectionString, _options.Credential);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);

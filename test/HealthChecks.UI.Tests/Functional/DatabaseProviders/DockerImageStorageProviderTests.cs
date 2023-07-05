@@ -3,7 +3,7 @@ using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
 using Microsoft.Extensions.Configuration;
 
-namespace UnitTests.UI.DatabaseProviders
+namespace HealthChecks.UI.Tests
 {
     public class docker_image_storage_provider_configuration_should
     {
@@ -184,7 +184,7 @@ namespace UnitTests.UI.DatabaseProviders
             context.Database.ProviderName.ShouldBe(InMemoryProviderName);
         }
 
-        [Fact(Skip = "Ignored meanwhile pomelo is not update to 1.0")]
+        [Fact]
         public void register_mysql()
         {
             //

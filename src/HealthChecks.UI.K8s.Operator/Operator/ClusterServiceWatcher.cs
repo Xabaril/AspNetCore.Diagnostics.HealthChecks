@@ -29,7 +29,7 @@ namespace HealthChecks.UI.K8s.Operator.Operator
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)
         {
-            var response = _client.ListServiceForAllNamespacesWithHttpMessagesAsync(
+            var response = _client.CoreV1.ListServiceForAllNamespacesWithHttpMessagesAsync(
                 labelSelector: $"{resource.Spec.ServicesLabel}",
                 watch: true,
                 cancellationToken: token);

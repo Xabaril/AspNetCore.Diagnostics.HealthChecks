@@ -71,7 +71,7 @@ public class ElasticContainerFixture : IAsyncLifetime
         using var httpClient = new HttpClient(handler);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
             Encoding.ASCII.GetBytes($"elastic:{ELASTIC_PASSWORD}")));
-        using var response = await httpClient.PostAsJsonAsync("https://localhost:9200/_security/api_key?pretty",
+        using var response = await httpClient.PostAsJsonAsync("https://localhost:9201/_security/api_key?pretty",
             new { name = "new-api-key", role_descriptors = new { } }).ConfigureAwait(false);
         var apiKeyResponse = await response.Content.ReadFromJsonAsync<ApiKeyResponse>().ConfigureAwait(false) ?? throw new JsonException();
 

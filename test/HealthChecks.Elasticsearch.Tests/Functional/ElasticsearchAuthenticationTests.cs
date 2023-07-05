@@ -16,7 +16,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_using_valid_api_key()
     {
-        var connectionString = @"https://localhost:9200";
+        var connectionString = @"https://localhost:9201";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -52,7 +52,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_using_valid_user_and_password()
     {
-        var connectionString = @"https://localhost:9200";
+        var connectionString = @"https://localhost:9201";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

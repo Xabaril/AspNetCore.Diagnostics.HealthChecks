@@ -32,7 +32,7 @@ services:
         find . -type d -exec chmod 750 \{\} \;;
         find . -type f -exec chmod 640 \{\} \;;
         echo "Waiting for Elasticsearch availability";
-        until curl -s --cacert config/certs/ca/ca.crt https://es01:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+        until curl -s --cacert config/certs/ca/ca.crt https://es01:9201 | grep -q "missing authentication credentials"; do sleep 30; done;
         echo "All done!";
       '
     healthcheck:
@@ -50,7 +50,7 @@ services:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - 9201:9200
     environment:
       - node.name=es01
       - discovery.type=single-node
@@ -77,7 +77,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+          "curl -s --cacert config/certs/ca/ca.crt https://localhost:9201 | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
       timeout: 10s

@@ -5,6 +5,20 @@ namespace HealthChecks.Uris.Tests.Functional
 {
     public class uris_healthcheck_should
     {
+        // httpbin.org is unstable
+        private async Task Retry(TestServer server, int times = 10)
+        {
+            for (int i = 0; i < times; ++i)
+            {
+                using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+                if (i == times - 1)
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                if (response.StatusCode == HttpStatusCode.OK)
+                    break;
+                await Task.Delay(1000 + Random.Shared.Next(100)).ConfigureAwait(false);
+            }
+        }
+
         [Fact]
         public async Task be_healthy_if_uri_is_available()
         {
@@ -26,8 +40,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -51,8 +64,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -75,9 +87,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
@@ -103,9 +113,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
@@ -129,12 +137,10 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
-            response.StatusCode
-                    .ShouldBe(HttpStatusCode.ServiceUnavailable);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
+
         [Fact]
         public async Task be_unhealthy_if_request_is_timeout_using_default_timeout()
         {
@@ -159,11 +165,10 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
+
         [Fact]
         public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
         {
@@ -175,7 +180,7 @@ namespace HealthChecks.Uris.Tests.Functional
                     services.AddHealthChecks()
                     .AddUrlGroup(setup =>
                     {
-                        setup.UseTimeout(TimeSpan.FromSeconds(3));
+                        setup.UseTimeout(TimeSpan.FromSeconds(4));
                         setup.AddUri(uri);
                     }, tags: new string[] { "uris" });
                 })
@@ -189,8 +194,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -202,7 +206,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))), tags: new string[] { "uris" });
+                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(4))), tags: new string[] { "uris" });
                 })
                 .Configure(app =>
                 {
@@ -214,8 +218,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -241,10 +244,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             var server = new TestServer(webHostBuilder);
-
-            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            await Retry(server).ConfigureAwait(false);
         }
 
         [Fact]
@@ -273,9 +273,7 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             var server = new TestServer(webHostBuilder);
-
             var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
     }

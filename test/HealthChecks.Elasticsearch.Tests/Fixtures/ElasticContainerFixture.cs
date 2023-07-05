@@ -18,7 +18,8 @@ public class ElasticContainerFixture : IAsyncLifetime
     public const string ELASTIC_PASSWORD = "abcDEF123!";
     private readonly string _composeFilePath = $"{Directory.GetCurrentDirectory()}/Resources/docker-compose.yml";
     private readonly ICompositeService _compositeService;
-    public string? ApiKey;
+
+    public string? ApiKey { get; set; }
 
     public ElasticContainerFixture()
     {

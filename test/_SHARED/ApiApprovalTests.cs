@@ -12,12 +12,6 @@ public class ApiApprovalTests
         var dependencies = currentAsm.GetReferencedAssemblies();
         var nameItems = currentAsm.GetName().Name!.Split('.');
 
-        if (nameItems.Length == 1 && nameItems[0] == "UnitTests")
-        {
-            // TODO: remove this condition after removing UnitTests project
-            return;
-        }
-
         Debug.Assert(nameItems.Last() == "Tests");
 
         var nameToFind = string.Join(".", nameItems.SkipLast(1));

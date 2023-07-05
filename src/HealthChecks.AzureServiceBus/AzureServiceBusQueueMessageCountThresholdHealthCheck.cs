@@ -1,31 +1,20 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure.Core;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureServiceBusHealthCheck, IHealthCheck
+    public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions>, IHealthCheck
     {
         private readonly string _queueName;
         private readonly int _degradedThreshold;
         private readonly int _unhealthyThreshold;
 
-        public AzureServiceBusQueueMessageCountThresholdHealthCheck(string connectionString, string queueName, int degradedThreshold = 5, int unhealthyThreshold = 10) 
-            : base(connectionString)
+        public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options)
+            : base(options)
         {
-            _queueName = queueName;
-            _degradedThreshold = degradedThreshold;
-            _unhealthyThreshold = unhealthyThreshold;
-        }
-
-        public AzureServiceBusQueueMessageCountThresholdHealthCheck(string endpoint, string queueName, TokenCredential tokenCredential,  int degradedThreshold = 5, int unhealthyThreshold = 10) 
-            : base(endpoint, tokenCredential)
-        {
-            _queueName = queueName;
-            _degradedThreshold = degradedThreshold;
-            _unhealthyThreshold = unhealthyThreshold;
+            _queueName = Guard.ThrowIfNull(options.QueueName);
+            _degradedThreshold = options.DegradedThreshold;
+            _unhealthyThreshold = options.UnhealthyThreshold;
         }
 
         protected override string ConnectionKey => $"{Prefix}_{_queueName}";
@@ -45,7 +34,7 @@ namespace HealthChecks.AzureServiceBus
                     }
                 }
 
-                var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken);
+                var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
                 if (properties.Value.ActiveMessageCount >= _unhealthyThreshold)
                     return HealthCheckResult.Unhealthy($"Message in queue {_queueName} exceeded the amount of messages allowed for the unhealthy threshold {_unhealthyThreshold}/{properties.Value.ActiveMessageCount}");
 

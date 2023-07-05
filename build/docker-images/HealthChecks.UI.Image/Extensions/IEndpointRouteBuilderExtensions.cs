@@ -1,13 +1,8 @@
-﻿using HealthChecks.UI.Image;
+using System.Text.Json;
+using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Image.Extensions;
 using HealthChecks.UI.Image.PushService;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Text.Json;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -18,7 +13,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             if (bool.TryParse(configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
             {
-                builder.MapHealthCheckPushEndpoint(configuration);
+                builder.MapHealthCheckPushEndpoint(/*configuration*/);
             }
 
             return builder.MapHealthChecksUI(setup =>
@@ -28,10 +23,8 @@ namespace Microsoft.AspNetCore.Builder
 
             });
         }
-        private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder,
-            IConfiguration configuration)
+        private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder/*, IConfiguration configuration*/)
         {
-
             var logger = builder.ServiceProvider.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("HealthChecks Push Endpoint Enabled");
 
@@ -50,7 +43,7 @@ namespace Microsoft.AspNetCore.Builder
 
                     if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(uri))
                     {
-                        var pushService = context.RequestServices.GetService<HealthChecksPushService>();
+                        var pushService = context.RequestServices.GetRequiredService<HealthChecksPushService>();
 
                         if (type == PushServiceKeys.ServiceAdded)
                         {
@@ -70,7 +63,6 @@ namespace Microsoft.AspNetCore.Builder
                 {
                     context.Response.StatusCode = 401;
                 }
-
             });
         }
     }

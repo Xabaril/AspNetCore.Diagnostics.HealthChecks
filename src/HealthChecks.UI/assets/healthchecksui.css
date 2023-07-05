@@ -331,7 +331,6 @@ h4 {
   min-width: 3.5rem;
 }
 
-
 .hc-button:hover {
   background-image: var(--bgImageDarken);
 }
@@ -575,7 +574,6 @@ h4 {
   padding: 2px;
   margin-right: 2px;
   margin-left: 2px;
-  height: 16px;  
   min-width: 4px;
   max-width: 112px;  
   border: 1px solid;

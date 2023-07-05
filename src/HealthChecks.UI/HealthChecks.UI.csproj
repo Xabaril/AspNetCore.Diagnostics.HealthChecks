@@ -1,11 +1,12 @@
-﻿<Project Sdk=" Microsoft.NET.Sdk">
+<Project Sdk=" Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <Description>HealthChecks.UI Is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks.For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
-    <PackageTags>HealthCheck;UI</PackageTags>
-    <Version>$(HealthCheckUI)</Version>
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageTags>$(PackageTags);UI</PackageTags>
+    <Description>HealthChecks.UI is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks. For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
+    <VersionPrefix>$(HealthCheckUI)</VersionPrefix>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
-    <PackageId>AspNetCore.HealthChecks.UI</PackageId>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);RCS1090</WarningsNotAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,17 +18,19 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsHttp)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCore)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCoreDesign)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCoreSqlite)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="$(MicrosoftEntityFrameworkCoreSqliteDesign)" />
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
-    <PackageReference Include="KubernetesClient" Version="$(KubernetesClient)" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="KubernetesClient" Version="11.0.36" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+    <ProjectReference Include="..\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HealthChecks.UI.Tests" />
   </ItemGroup>
 
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">
@@ -44,4 +47,5 @@
     <Message Importance="high" Text="*** Uglifying css files *** " />
     <Exec Command="npm run buildcss:prod" ContinueOnError="false" />
   </Target>
+
 </Project>

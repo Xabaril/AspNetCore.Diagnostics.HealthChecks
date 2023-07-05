@@ -1,10 +1,11 @@
 {
+  "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:2122/",
-      "sslPort": 0
+      "applicationUrl": "http://localhost:62618/",
+      "sslPort": 44318
     }
   },
   "profiles": {
@@ -19,6 +20,7 @@
     "HealthChecks.Sample": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "healthz",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

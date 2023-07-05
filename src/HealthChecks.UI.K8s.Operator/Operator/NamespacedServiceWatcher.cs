@@ -3,12 +3,6 @@ using HealthChecks.UI.K8s.Operator.Handlers;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator
 {
@@ -19,7 +13,7 @@ namespace HealthChecks.UI.K8s.Operator
         private readonly OperatorDiagnostics _diagnostics;
         private readonly NotificationHandler _notificationHandler;
         private readonly IHttpClientFactory _httpClientFactory;
-        private Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new Dictionary<HealthCheckResource, Watcher<V1Service>>();
+        private readonly Dictionary<HealthCheckResource, Watcher<V1Service>> _watchers = new();
 
         public NamespacedServiceWatcher(
             IKubernetes client,
@@ -28,20 +22,20 @@ namespace HealthChecks.UI.K8s.Operator
             NotificationHandler notificationHandler,
             IHttpClientFactory httpClientFactory)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _notificationHandler = notificationHandler ?? throw new ArgumentNullException(nameof(notificationHandler));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
+            _diagnostics = Guard.ThrowIfNull(diagnostics);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+            _notificationHandler = Guard.ThrowIfNull(notificationHandler);
         }
 
         internal Task Watch(HealthCheckResource resource, CancellationToken token)
         {
-            Func<HealthCheckResource, bool> filter = (k) => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
+            Func<HealthCheckResource, bool> filter = k => k.Metadata.NamespaceProperty == resource.Metadata.NamespaceProperty;
 
             if (!_watchers.Keys.Any(filter))
             {
-                var response = _client.ListNamespacedServiceWithHttpMessagesAsync(
+                var response = _client.CoreV1.ListNamespacedServiceWithHttpMessagesAsync(
                     namespaceParameter: resource.Metadata.NamespaceProperty,
                     labelSelector: $"{resource.Spec.ServicesLabel}",
                     watch: true,
@@ -92,9 +86,9 @@ namespace HealthChecks.UI.K8s.Operator
             await HealthChecksPushService.PushNotification(
                 type,
                 resource,
-                uiService,
+                uiService!, // TODO: check
                 service,
-                secret,
+                secret!, // TODO: check
                 _logger,
                 _httpClientFactory);
         }
@@ -103,7 +97,8 @@ namespace HealthChecks.UI.K8s.Operator
         {
             _watchers.Values.ToList().ForEach(w =>
             {
-                if (w != null && w.Watching) w.Dispose();
+                if (w != null && w.Watching)
+                    w.Dispose();
             });
         }
     }

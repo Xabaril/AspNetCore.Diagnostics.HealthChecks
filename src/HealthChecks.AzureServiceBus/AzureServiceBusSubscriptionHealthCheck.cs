@@ -1,73 +1,55 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using HealthChecks.AzureServiceBus.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureServiceBus
+namespace HealthChecks.AzureServiceBus;
+
+public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>, IHealthCheck
 {
-    using Azure.Core;
+    private string? _connectionKey;
 
-    public class AzureServiceBusSubscriptionHealthCheck   : AzureServiceBusHealthCheck, IHealthCheck
+    protected override string ConnectionKey =>
+        _connectionKey ??= $"{Prefix}_{Options.TopicName}_{Options.SubscriptionName}";
+
+    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
+        : base(options)
     {
-        private readonly string _topicName;
-        private readonly string _subscriptionName;
+        Guard.ThrowIfNull(options.TopicName, true);
+        Guard.ThrowIfNull(options.SubscriptionName, true);
+    }
 
-        public AzureServiceBusSubscriptionHealthCheck(string connectionString, string topicName, string subscriptionName) : base(connectionString)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
+            if (Options.UsePeekMode)
+                await CheckWithReceiver().ConfigureAwait(false);
+            else
+                await CheckWithManagement().ConfigureAwait(false);
 
-            if (string.IsNullOrEmpty(subscriptionName))
-            {
-                throw new ArgumentNullException(nameof(subscriptionName));
-            }
-
-            _topicName = topicName;
-            _subscriptionName = subscriptionName;
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
 
-        public AzureServiceBusSubscriptionHealthCheck(string endPoint, string topicName, string subscriptionName, TokenCredential tokenCredential) :base(endPoint,tokenCredential)
+        Task CheckWithReceiver()
         {
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
+            var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
+            var receiver = ServiceBusReceivers.GetOrAdd(
+                $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
+                client.CreateReceiver(Options.TopicName, Options.SubscriptionName));
 
-            if (string.IsNullOrEmpty(subscriptionName))
-            {
-                throw new ArgumentNullException(nameof(subscriptionName));
-            }
-
-            _topicName = topicName;
-            _subscriptionName = subscriptionName;
+            return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        Task CheckWithManagement()
         {
-            try
-            {
-                var connectionKey = ConnectionKey;
-                if (!ManagementClientConnections.TryGetValue(connectionKey, out var managementClient))
-                {
-                    managementClient = CreateManagementClient();
-                    if (!ManagementClientConnections.TryAdd(connectionKey, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description:
-                            "New service bus administration client connection can't be added into dictionary.");
-                    }
-                }
+            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-                _ = await managementClient.GetSubscriptionRuntimePropertiesAsync(_topicName, _subscriptionName, cancellationToken);
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return managementClient.GetSubscriptionRuntimePropertiesAsync(
+                Options.TopicName, Options.SubscriptionName, cancellationToken);
         }
-
-        protected override string ConnectionKey => $"{Prefix}_{_topicName}_{_subscriptionName}";
     }
 }

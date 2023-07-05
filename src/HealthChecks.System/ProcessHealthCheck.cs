@@ -1,37 +1,36 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.System
+namespace HealthChecks.System;
+
+public class ProcessHealthCheck : IHealthCheck
 {
-    public class ProcessHealthCheck : IHealthCheck
+    private readonly string _processName;
+    private readonly Func<Process[], bool> _predicate;
+
+    public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
     {
-        private string _processName;
-        private Func<Process[], bool> _predicate;
-        public ProcessHealthCheck(string processName, Func<Process[], bool> predicate)
-        {
-            _processName = processName ?? throw new ArgumentNullException(nameof(processName));
-            _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-        }
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var processes = Process.GetProcessesByName(_processName);
+        _processName = Guard.ThrowIfNull(processName);
+        _predicate = Guard.ThrowIfNull(predicate);
+    }
 
-                if (_predicate(processes))
-                {
-                    return Task.FromResult(HealthCheckResult.Healthy());
-                }
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
-            }
+    /// <inheritdoc />
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var processes = Process.GetProcessesByName(_processName);
 
-            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: null));
+            if (_predicate(processes))
+            {
+                return HealthCheckResultTask.Healthy;
+            }
         }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
+        }
+
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus));
     }
 }

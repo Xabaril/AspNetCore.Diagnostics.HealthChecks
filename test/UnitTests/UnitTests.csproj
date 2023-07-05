@@ -1,71 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
-    <IsPackable>false</IsPackable>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
-    <PackageReference Include="RichardSzalay.MockHttp" Version="$(RichardSzalayMockHttp)" />
-    <PackageReference Include="xunit" Version="$(xunit)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsDependencyInjection)" />
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
-    <PackageReference Include="MySqlConnector" Version="$(MySqlConnector)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\build\docker-images\HealthChecks.UI.Image\HealthChecks.UI.Image.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Gcp.CloudFirestore\HealthChecks.Gcp.CloudFirestore.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.AzureKeyVault\HealthChecks.AzureKeyVault.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Consul\HealthChecks.Consul.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Hangfire\HealthChecks.Hangfire.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Network\HealthChecks.Network.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.SendGrid\HealthChecks.SendGrid.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Sqlite\HealthChecks.Sqlite.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.SqlServer\HealthChecks.SqlServer.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.System\HealthChecks.System.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.SQLite.Storage\HealthChecks.UI.SQLite.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.SqlServer.Storage\HealthChecks.UI.SqlServer.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.Publisher.ApplicationInsights\HealthChecks.Publisher.ApplicationInsights.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="UI\Kubernetes\SampleData\local-cluster-discovery-sample.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="UI\Kubernetes\SampleData\remote-cluster-discovery-sample.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

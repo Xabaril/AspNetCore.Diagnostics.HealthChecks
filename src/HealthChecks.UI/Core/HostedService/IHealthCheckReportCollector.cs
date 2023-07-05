@@ -1,10 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+namespace HealthChecks.UI.Core.HostedService;
 
-namespace HealthChecks.UI.Core.HostedService
+public interface IHealthCheckReportCollector
 {
-    interface IHealthCheckReportCollector
-    {
-        Task Collect(CancellationToken cancellationToken);
-    }
+    Task Collect(CancellationToken cancellationToken);
 }

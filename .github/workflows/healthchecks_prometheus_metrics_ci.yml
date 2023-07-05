@@ -1,0 +1,65 @@
+name: HealthChecks Prometheus.Metrics CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Prometheus.Metrics/**
+      - test/HealthChecks.Prometheus.Metrics.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_prometheus_metrics_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+      - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Prometheus.Metrics/**
+      - test/HealthChecks.Prometheus.Metrics.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_prometheus_metrics_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj &&
+          dotnet restore ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Prometheus.Metrics.Tests/HealthChecks.Prometheus.Metrics.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Prometheus.Metrics
+          directory: .coverage

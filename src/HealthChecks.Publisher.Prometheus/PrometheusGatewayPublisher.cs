@@ -1,68 +1,67 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 
-namespace HealthChecks.Publisher.Prometheus
+namespace HealthChecks.Publisher.Prometheus;
+
+internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher
 {
-    internal sealed class PrometheusGatewayPublisher : LivenessPrometheusMetrics, IHealthCheckPublisher
+    private readonly Func<HttpClient> _httpClientFactory;
+    private readonly Uri _targetUrl;
+
+    public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string? instance = null)
     {
-        private readonly Func<HttpClient> _httpClientFactory;
-        private readonly Uri _targetUrl;
+        _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
 
-        public PrometheusGatewayPublisher(Func<HttpClient> httpClientFactory, string endpoint, string job, string instance = null)
+        Guard.ThrowIfNull(endpoint);
+
+        var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
+
+        if (!string.IsNullOrEmpty(instance))
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-
-            if (endpoint == null) throw new ArgumentNullException(nameof(endpoint));
-
-            var sb = new StringBuilder($"{endpoint.TrimEnd('/')}/job/{job}");
-
-            if (!string.IsNullOrEmpty(instance))
-            {
-                sb.AppendFormat("/instance/{0}", instance);
-            }
-
-            if (!Uri.TryCreate(sb.ToString(), UriKind.Absolute, out _targetUrl))
-            {
-                throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
-            }
+            sb.AppendFormat("/instance/{0}", instance);
         }
 
-        public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
-        {
-            WriteMetricsFromHealthReport(report);
+        _targetUrl = Uri.TryCreate(sb.ToString(), UriKind.Absolute, out var temp)
+            ? temp
+            : throw new ArgumentException("Endpoint must be a valid url", nameof(endpoint));
+    }
 
-            await PushMetrics();
+    public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
+    {
+        WriteMetricsFromHealthReport(report);
+
+        await PushMetricsAsync().ConfigureAwait(false);
+    }
+
+    private async Task PushMetricsAsync()
+    {
+        try
+        {
+            using var outStream = new MemoryStream();
+
+            await Registry.CollectAndExportAsTextAsync(outStream).ConfigureAwait(false);
+            outStream.Position = 0;
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _targetUrl)
+            {
+                Content = new StreamContent(outStream)
+            };
+
+            using var response = await _httpClientFactory()
+                .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
+                .ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
         }
-        private async Task PushMetrics()
+        catch (ScrapeFailedException ex)
         {
-            try
-            {
-                using (var outStream = new MemoryStream())
-                {
-                    await Registry.CollectAndExportAsTextAsync(outStream);
-                    outStream.Position = 0;
-
-                    var response = await _httpClientFactory()
-                        .PostAsync(_targetUrl, new StreamContent(outStream));
-
-                    response.EnsureSuccessStatusCode();
-                }
-            }
-            catch (ScrapeFailedException ex)
-            {
-                Trace.WriteLine($"Skipping metrics push due to failed scrape: {ex.Message}");
-            }
-            catch (Exception ex) when (!(ex is OperationCanceledException))
-            {
-                Trace.WriteLine($"Error in PushMetrics: {ex.Message}");
-            }
+            Trace.WriteLine($"Skipping metrics push due to failed scrape: {ex.Message}");
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            Trace.WriteLine($"Error in PushMetrics: {ex.Message}");
         }
     }
 }

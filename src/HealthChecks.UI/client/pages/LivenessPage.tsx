@@ -7,7 +7,6 @@ import { getHealthChecks } from '../api/fetchers';
 import { LivenessMenu } from '../components/LivenessMenu';
 import { AlertPanel } from '../components/AlertPanel';
 
-
 interface LivenessState {
     error: Nullable<string>;
     pollingIntervalSetting: string | number;

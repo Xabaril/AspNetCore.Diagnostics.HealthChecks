@@ -1,0 +1,65 @@
+<Project>
+
+  <PropertyGroup Label="Health Checks Package Versions">
+    <HealthCheckApplicationStatus>7.0.0</HealthCheckApplicationStatus>
+    <HealthCheckArangoDb>7.0.0</HealthCheckArangoDb>
+    <HealthCheckAWSS3>7.0.0</HealthCheckAWSS3>
+    <HealthCheckAWSSecretsManager>7.0.0</HealthCheckAWSSecretsManager>
+    <HealthCheckAWSSns>7.0.0</HealthCheckAWSSns>
+    <HealthCheckAWSSqs>7.0.0</HealthCheckAWSSqs>
+    <HealthCheckAWSSystemsManager>7.0.0</HealthCheckAWSSystemsManager>
+    <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
+    <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
+    <HealthCheckAzureServiceBus>7.0.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureStorage>7.0.0</HealthCheckAzureStorage>
+    <HealthCheckCloudFirestore>7.0.0</HealthCheckCloudFirestore>
+    <HealthCheckConsul>7.0.0</HealthCheckConsul>
+    <HealthCheckCosmosDb>7.0.0</HealthCheckCosmosDb>
+    <HealthCheckDocumentDb>7.0.0</HealthCheckDocumentDb>
+    <HealthCheckDynamoDb>7.0.0</HealthCheckDynamoDb>
+    <HealthCheckElasticsearch>7.0.0</HealthCheckElasticsearch>
+    <HealthCheckEventStoregRPC>7.0.0</HealthCheckEventStoregRPC>
+    <HealthCheckEventStore>7.0.0</HealthCheckEventStore>
+    <HealthCheckGremlin>7.0.0</HealthCheckGremlin>
+    <HealthCheckHangfire>7.0.0</HealthCheckHangfire>
+    <HealthCheckIbmMQ>7.0.0</HealthCheckIbmMQ>
+    <HealthCheckIoTHub>7.0.0</HealthCheckIoTHub>
+    <HealthCheckKafka>7.0.0</HealthCheckKafka>
+    <HealthCheckKeyVault>7.0.0</HealthCheckKeyVault>
+    <HealthCheckKubernetes>7.0.0</HealthCheckKubernetes>
+    <HealthCheckMongoDB>7.0.0</HealthCheckMongoDB>
+    <HealthCheckMySql>7.0.0</HealthCheckMySql>
+    <HealthCheckNetwork>7.0.0</HealthCheckNetwork>
+    <HealthCheckNats>7.0.0</HealthCheckNats>
+    <HealthCheckNpgSql>7.0.0</HealthCheckNpgSql>
+    <HealthCheckOpenIdConnectServer>7.0.0</HealthCheckOpenIdConnectServer>
+    <HealthCheckOracle>7.0.0</HealthCheckOracle>
+    <HealthCheckPrometheusMetrics>7.0.0</HealthCheckPrometheusMetrics>
+    <HealthCheckPublisherAppplicationInsights>7.0.0</HealthCheckPublisherAppplicationInsights>
+    <HealthCheckPublisherCloudWatch>7.0.0</HealthCheckPublisherCloudWatch>
+    <HealthCheckPublisherDatadog>7.0.0</HealthCheckPublisherDatadog>
+    <HealthCheckPublisherPrometheus>7.0.0</HealthCheckPublisherPrometheus>
+    <HealthCheckPublisherSeq>7.0.0</HealthCheckPublisherSeq>
+    <HealthCheckRabbitMQ>7.0.0</HealthCheckRabbitMQ>
+    <HealthCheckRavenDB>7.0.0</HealthCheckRavenDB>
+    <HealthCheckRedis>7.0.0</HealthCheckRedis>
+    <HealthCheckSendGrid>7.0.0</HealthCheckSendGrid>
+    <HealthCheckSignalR>7.0.0</HealthCheckSignalR>
+    <HealthCheckSolr>7.0.0</HealthCheckSolr>
+    <HealthCheckSqlite>7.0.0</HealthCheckSqlite>
+    <HealthCheckSqlServer>7.0.0</HealthCheckSqlServer>
+    <HealthChecksUIK8sOperator>7.0.0</HealthChecksUIK8sOperator>
+    <HealthChecksUIPostgreSQLStorage>7.0.0</HealthChecksUIPostgreSQLStorage>
+    <HealthCheckSystem>7.0.0</HealthCheckSystem>
+    <HealthCheckUI>7.0.0</HealthCheckUI>
+    <HealthCheckUIClient>7.0.0</HealthCheckUIClient>
+    <HealthCheckUICore>7.0.0</HealthCheckUICore>
+    <HealthCheckUIData>7.0.0</HealthCheckUIData>
+    <HealthCheckUIInMemoryStorage>7.0.0</HealthCheckUIInMemoryStorage>
+    <HealthCheckUIMySqlStorage>7.0.0</HealthCheckUIMySqlStorage>
+    <HealthCheckUISQLiteStorage>7.0.0</HealthCheckUISQLiteStorage>
+    <HealthCheckUISqlServerStorage>7.0.0</HealthCheckUISqlServerStorage>
+    <HealthCheckUri>7.0.0</HealthCheckUri>
+  </PropertyGroup>
+
+</Project>

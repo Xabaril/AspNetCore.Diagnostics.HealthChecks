@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.K8s.Operator.Crd;
+using HealthChecks.UI.K8s.Operator.Crd;
 
 namespace HealthChecks.UI.K8s.Operator
 {

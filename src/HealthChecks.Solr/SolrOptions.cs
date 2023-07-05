@@ -1,20 +1,19 @@
-using System;
+namespace HealthChecks.Solr;
 
-namespace HealthChecks.Solr
+public class SolrOptions
 {
-    public class SolrOptions
+    public string Uri { get; private set; } = null!;
+
+    public string Core { get; private set; } = null!;
+
+    public TimeSpan Timeout { get; private set; }
+
+    public SolrOptions UseServer(string uri, string core, TimeSpan? timeout)
     {
-        public string Uri { get; private set; }
-        public string Core { get; private set; }
-        public TimeSpan Timeout { get; private set; }
+        Uri = Guard.ThrowIfNull(uri);
+        Core = Guard.ThrowIfNull(core);
+        Timeout = timeout ?? TimeSpan.FromMilliseconds(1000);
 
-        public SolrOptions UseServer(string uri, string core, TimeSpan? timeout)
-        {
-            Uri = uri ?? throw new ArgumentNullException(nameof(uri));
-            Core = core ?? throw new ArgumentNullException(nameof(core));
-            Timeout = timeout ?? TimeSpan.FromMilliseconds(1000);
-
-            return this;
-        }
+        return this;
     }
 }

@@ -2,6 +2,7 @@ namespace HealthChecks.Redis
 {
     public class RedisHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
+        public RedisHealthCheck(StackExchange.Redis.IConnectionMultiplexer connectionMultiplexer) { }
         public RedisHealthCheck(string redisConnectionString) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
@@ -10,6 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class RedisHealthCheckBuilderExtensions
     {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddRedis(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, StackExchange.Redis.IConnectionMultiplexer connectionMultiplexer, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddRedis(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, StackExchange.Redis.IConnectionMultiplexer> connectionMultiplexerFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddRedis(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddRedis(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string redisConnectionString, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }

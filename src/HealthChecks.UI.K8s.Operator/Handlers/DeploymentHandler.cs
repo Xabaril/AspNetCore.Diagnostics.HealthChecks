@@ -34,7 +34,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             try
             {
                 var deploymentResource = Build(resource);
-                var response = await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty);
+                var response = await _client.AppsV1.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
 
                 _operatorDiagnostics.DeploymentCreated(deployment.Metadata.Name);
@@ -51,7 +51,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         {
             try
             {
-                await _client.DeleteNamespacedDeploymentAsync($"{resource.Spec.Name}-deploy",
+                await _client.AppsV1.DeleteNamespacedDeploymentAsync($"{resource.Spec.Name}-deploy",
                     resource.Metadata.NamespaceProperty);
             }
             catch (Exception ex)

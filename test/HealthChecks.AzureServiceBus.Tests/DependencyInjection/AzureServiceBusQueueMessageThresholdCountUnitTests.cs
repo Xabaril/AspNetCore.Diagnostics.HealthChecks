@@ -16,7 +16,7 @@ public class azure_service_bus_queue_message_threshold_registration_should
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("azurequeuethreshold");
-        check.GetType().ShouldBe(typeof(AzureServiceBusQueueMessageCountThresholdHealthCheck));
+        check.ShouldBeOfType<AzureServiceBusQueueMessageCountThresholdHealthCheck>();
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class azure_service_bus_queue_message_threshold_registration_should
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("azureservicebusqueuemessagethresholdcheck");
-        check.GetType().ShouldBe(typeof(AzureServiceBusQueueMessageCountThresholdHealthCheck));
+        check.ShouldBeOfType<AzureServiceBusQueueMessageCountThresholdHealthCheck>();
     }
 
     [Fact]
@@ -48,7 +48,8 @@ public class azure_service_bus_queue_message_threshold_registration_should
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
+        var factory = () => registration.Factory(serviceProvider);
 
-        Assert.Throws<ArgumentException>(() => registration.Factory(serviceProvider));
+        factory.ShouldThrow<ArgumentException>();
     }
 }

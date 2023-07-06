@@ -26,8 +26,7 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
     protected override string ConnectionKey => $"{Prefix}_{_queueName}";
 
     /// <inheritdoc />
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-        CancellationToken cancellationToken = default)
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {

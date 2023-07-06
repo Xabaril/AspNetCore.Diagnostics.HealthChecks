@@ -1,34 +1,32 @@
-﻿using HealthChecks.UI.K8s.Operator.Extensions;
+using System.Text;
+using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
-    public class SecretHandler
+    internal class SecretHandler
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
 
         public SecretHandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client)); ;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
         }
 
         public async Task<V1Secret> GetOrCreateAsync(HealthCheckResource resource)
         {
             var secret = await Get(resource);
-            if (secret != null) return secret;
+            if (secret != null)
+                return secret;
 
             try
             {
                 var secretResource = Build(resource);
-                secret = await _client.CreateNamespacedSecretAsync(secretResource,
+                secret = await _client.CoreV1.CreateNamespacedSecretAsync(secretResource,
                               resource.Metadata.NamespaceProperty);
 
                 _logger.LogInformation("Secret {name} has been created", secret.Metadata.Name);
@@ -36,21 +34,22 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             catch (Exception ex)
             {
                 _logger.LogError("Error creating Secret: {message}", ex.Message);
+                throw;
             }
 
             return secret;
         }
 
-        public Task<V1Secret> Get(HealthCheckResource resource)
+        public Task<V1Secret?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
-                await _client.DeleteNamespacedSecretAsync($"{resource.Spec.Name}-secret", resource.Metadata.NamespaceProperty);
+                await _client.CoreV1.DeleteNamespacedSecretAsync($"{resource.Spec.Name}-secret", resource.Metadata.NamespaceProperty);
             }
             catch (Exception ex)
             {
@@ -80,6 +79,5 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 }
             };
         }
-
     }
 }

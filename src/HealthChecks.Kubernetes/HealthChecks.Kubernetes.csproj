@@ -1,13 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <PackageTags>HealthCheck;Kubernetes;k8s;Cluster</PackageTags>
+    <TargetFrameworks>net6;net7</TargetFrameworks>
+    <PackageTags>$(PackageTags);Kubernetes;k8s;Cluster</PackageTags>
     <Description>HealthChecks.HealthChecks is the health check package for Kubernetes clusters.</Description>
-    <Version>$(HealthCheckKubernetes)</Version>
-    <PackageId>AspNetCore.HealthChecks.Kubernetes</PackageId>
+    <VersionPrefix>$(HealthCheckKubernetes)</VersionPrefix>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="$(KubernetesClient)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="KubernetesClient" Version="11.0.36" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
   </ItemGroup>
+
 </Project>

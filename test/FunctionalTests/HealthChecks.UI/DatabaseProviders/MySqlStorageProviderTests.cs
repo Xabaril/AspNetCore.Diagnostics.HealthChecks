@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +22,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
+
         [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {

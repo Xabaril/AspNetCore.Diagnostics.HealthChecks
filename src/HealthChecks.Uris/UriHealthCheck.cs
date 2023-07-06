@@ -1,69 +1,78 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Uris
+namespace HealthChecks.Uris;
+
+public class UriHealthCheck : IHealthCheck
 {
-    public class UriHealthCheck
-        : IHealthCheck
+    private readonly UriHealthCheckOptions _options;
+    private readonly Func<HttpClient> _httpClientFactory;
+
+    public UriHealthCheck(UriHealthCheckOptions options, Func<HttpClient> httpClientFactory)
     {
-        private readonly UriHealthCheckOptions _options;
-        private readonly Func<HttpClient> _httpClientFactory;
-        public UriHealthCheck(UriHealthCheckOptions options, Func<HttpClient> httpClientFactory)
-        {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-        }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            var defaultHttpMethod = _options.HttpMethod;
-            var defaultExpectedStatusCodes = _options.ExpectedHttpCodes;
-            var defaultTimeout = _options.Timeout;
-            var idx = 0;
+        _options = Guard.ThrowIfNull(options);
+        _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+    }
 
-            try
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        var defaultHttpMethod = _options.HttpMethod;
+        var defaultExpectedStatusCodes = _options.ExpectedHttpCodes;
+        var defaultTimeout = _options.Timeout;
+        int idx = 0;
+
+        try
+        {
+            foreach (var item in _options.UrisOptions)
             {
-                foreach (var item in _options.UrisOptions)
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"{nameof(UriHealthCheck)} execution is cancelled.");
-                    }
-
-                    var method = item.HttpMethod ?? defaultHttpMethod;
-                    var expectedStatusCodes = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
-                    var timeout = item.Timeout != TimeSpan.Zero ? item.Timeout : defaultTimeout;
-
-                    var httpClient = _httpClientFactory();
-
-                    var requestMessage = new HttpRequestMessage(method, item.Uri);
-
-                    foreach (var (Name, Value) in item.Headers)
-                    {
-                        requestMessage.Headers.Add(Name, Value);
-                    }
-
-                    using (var timeoutSource = new CancellationTokenSource(timeout))
-                    using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
-                    {
-                        var response = await httpClient.SendAsync(requestMessage, linkedSource.Token);
-
-                        if (!((int)response.StatusCode >= expectedStatusCodes.Min && (int)response.StatusCode <= expectedStatusCodes.Max))
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {expectedStatusCodes.Min}...{expectedStatusCodes.Max} range, the current status is {response.StatusCode}.");
-                        }
-
-                        ++idx;
-                    }
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"{nameof(UriHealthCheck)} execution is cancelled.");
                 }
-                return HealthCheckResult.Healthy();
+
+                var method = item.HttpMethod ?? defaultHttpMethod;
+                var (Min, Max) = item.ExpectedHttpCodes ?? defaultExpectedStatusCodes;
+                var timeout = item.Timeout != TimeSpan.Zero ? item.Timeout : defaultTimeout;
+
+                var httpClient = _httpClientFactory();
+
+                using var requestMessage = new HttpRequestMessage(method, item.Uri);
+
+#if NET5_0_OR_GREATER
+                requestMessage.Version = httpClient.DefaultRequestVersion;
+                requestMessage.VersionPolicy = httpClient.DefaultVersionPolicy;
+#endif
+
+                foreach (var (Name, Value) in item.Headers)
+                {
+                    requestMessage.Headers.Add(Name, Value);
+                }
+
+                using (var timeoutSource = new CancellationTokenSource(timeout))
+                using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
+                {
+                    using var response = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, linkedSource.Token).ConfigureAwait(false);
+
+                    if (!((int)response.StatusCode >= Min && (int)response.StatusCode <= Max))
+                    {
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint #{idx} is not responding with code in {Min}...{Max} range, the current status is {response.StatusCode}.");
+                    }
+
+                    if (item.ExpectedContent != null)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        if (responseBody != item.ExpectedContent)
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"The expected value '{item.ExpectedContent}' was not found in the response body.");
+                    }
+
+                    ++idx;
+                }
             }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

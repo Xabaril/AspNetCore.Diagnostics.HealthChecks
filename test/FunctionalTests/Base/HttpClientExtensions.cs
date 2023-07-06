@@ -11,7 +11,7 @@ namespace FunctionalTests.Base
         {
             var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(content,  new JsonSerializerSettings()
+            return JsonConvert.DeserializeObject<T>(content, new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateTimeZoneHandling = DateTimeZoneHandling.Local

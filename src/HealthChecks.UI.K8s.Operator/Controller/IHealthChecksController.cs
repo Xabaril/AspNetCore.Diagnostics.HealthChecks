@@ -1,5 +1,3 @@
-﻿using System.Threading.Tasks;
-
 namespace HealthChecks.UI.K8s.Operator.Controller
 {
     internal interface IHealthChecksController

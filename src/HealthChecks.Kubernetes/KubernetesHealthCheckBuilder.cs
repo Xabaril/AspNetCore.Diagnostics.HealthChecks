@@ -1,16 +1,17 @@
 using k8s;
 
-namespace HealthChecks.Kubernetes
+namespace HealthChecks.Kubernetes;
+
+public class KubernetesHealthCheckBuilder
 {
-    public class KubernetesHealthCheckBuilder
+    internal KubernetesClientConfiguration Configuration { get; private set; } = null!;
+
+    internal KubernetesHealthCheckOptions Options { get; private set; } = null!;
+
+    public KubernetesHealthCheckOptions WithConfiguration(KubernetesClientConfiguration configuration)
     {
-        internal KubernetesClientConfiguration Configuration { get; private set; }
-        internal KubernetesHealthCheckOptions Options { get; private set; }
-        public KubernetesHealthCheckOptions WithConfiguration(KubernetesClientConfiguration configuration)
-        {
-            Configuration = configuration;
-            Options =  new KubernetesHealthCheckOptions();
-            return Options;
-        }
+        Configuration = configuration;
+        Options = new KubernetesHealthCheckOptions();
+        return Options;
     }
 }

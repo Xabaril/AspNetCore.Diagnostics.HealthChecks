@@ -1,93 +1,105 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
 
-namespace HealthChecks.Publisher.Seq
+namespace HealthChecks.Publisher.Seq;
+
+public class SeqPublisher : IHealthCheckPublisher
 {
-    public class SeqPublisher : IHealthCheckPublisher
+    private readonly SeqOptions _options;
+    private readonly Func<HttpClient> _httpClientFactory;
+    private readonly Uri _checkUri;
+
+    public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
     {
-        private const string EVENT_NAME = "AspNetCoreHealthCheckResult";
-        private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";
-        private const string METRIC_DURATION_NAME = "AspNetCoreHealthCheckDuration";
+        _options = Guard.ThrowIfNull(options);
+        _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+        _checkUri = BuildCheckUri(options);
+    }
 
-        private readonly SeqOptions _options;
-        private readonly Func<HttpClient> _httpClientFactory;
+    public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
+    {
+        var level = _options.DefaultInputLevel;
 
-        public SeqPublisher(Func<HttpClient> httpClientFactory, SeqOptions options)
+        switch (report.Status)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            case HealthStatus.Degraded:
+                level = SeqInputLevel.Warning;
+                break;
+            case HealthStatus.Unhealthy:
+                level = SeqInputLevel.Error;
+                break;
         }
-        public async Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
-        {
-            var level = "Information";
-            switch (report.Status)
-            {
-                case HealthStatus.Degraded:
-                    level = "Warning";
-                    break;
-                case HealthStatus.Unhealthy:
-                    level = "Error";
-                    break;
-            }
 
-            var events = new RawEvents
+        string? assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+
+        var events = new RawEvents
+        {
+            Events = new RawEvent[]
             {
-                Events = new RawEvent[]
+                new RawEvent
                 {
-                    new RawEvent
+                    Timestamp = DateTimeOffset.UtcNow,
+                    MessageTemplate = $"[{assemblyName} - HealthCheck Result]",
+                    Level = level.ToString(),
+                    Properties = new Dictionary<string, object?>
                     {
-                        Timestamp = DateTimeOffset.UtcNow,
-                        MessageTemplate = EVENT_NAME,
-                        Level = level,
-                        Properties = new Dictionary<string, object>
-                        {
-                            { nameof(Environment.MachineName), Environment.MachineName },
-                            { nameof(Assembly), Assembly.GetEntryAssembly().GetName().Name },
-                            { METRIC_STATUS_NAME, (int)report.Status },
-                            { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
-                        }
+                        { nameof(Environment.MachineName), Environment.MachineName },
+                        { nameof(Assembly), assemblyName },
+                        { "Status", report.Status.ToString() },
+                        { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
+                        { "RawReport" , JsonConvert.SerializeObject(report)}
                     }
                 }
+            }
+        };
+
+        _options.Configure?.Invoke(events);
+
+        await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task PushMetricsAsync(string json, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var httpClient = _httpClientFactory();
+
+            using var pushMessage = new HttpRequestMessage(HttpMethod.Post, _checkUri)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
 
-            await PushMetrics(JsonConvert.SerializeObject(events));
-        }
-        private async Task PushMetrics(string json)
-        {
-            try
-            {
-                var httpClient = _httpClientFactory();
+            using var response = await httpClient.SendAsync(
+                pushMessage,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken).ConfigureAwait(false);
 
-                var pushMessage = new HttpRequestMessage(HttpMethod.Post, $"{_options.Endpoint}/api/events/raw?apiKey={_options.ApiKey}");
-                pushMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                (await httpClient.SendAsync(pushMessage))
-                    .EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Exception is throwed publishing metrics to Seq with message: {ex.Message}");
-            }
+            response.EnsureSuccessStatusCode();
         }
-        private class RawEvents
+        catch (Exception ex)
         {
-            public RawEvent[] Events { get; set; }
-        }
-        private class RawEvent
-        {
-            public DateTimeOffset Timestamp { get; set; }
-            public string Level { get; set; }
-            public string MessageTemplate { get; set; }
-            public Dictionary<string, object> Properties { get; set; }
+            Trace.WriteLine($"Exception thrown publishing metrics to Seq with message: {ex.Message}");
         }
     }
+
+    private static Uri BuildCheckUri(SeqOptions options)
+    {
+        Guard.ThrowIfNull(options.Endpoint, true);
+
+        var uriBuilder = new UriBuilder(options.Endpoint)
+        {
+            Path = "/api/events/raw",
+        };
+
+        // Add api key if supplied
+        if (!string.IsNullOrEmpty(options.ApiKey))
+            uriBuilder.Query = "?apiKey=" + options.ApiKey;
+
+        return uriBuilder.Uri;
+    }
+
 }

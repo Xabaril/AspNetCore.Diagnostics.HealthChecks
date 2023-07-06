@@ -1,28 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
-    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
-    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>HealthCheck;Prometheus;Prometheus Exporter;Metrics</PackageTags>
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageTags>$(PackageTags);Prometheus;Prometheus Exporter;Metrics</PackageTags>
     <Description>HealthChecks.Publisher.Prometheus is a health check prometheus metrics exporter.</Description>
-    <Version>$(HealthCheckPrometheusMetrics)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-    <Company>$(Company)</Company>
-    <Authors>$(Authors)</Authors>
-    <PackageId>AspNetCore.HealthChecks.Prometheus.Metrics</PackageId>
-    <PublishRepositoryUrl>$(PublishRepositoryUrl)</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <VersionPrefix>$(HealthCheckPrometheusMetrics)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="prometheus-net" Version="$(PrometheusNet)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="prometheus-net" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

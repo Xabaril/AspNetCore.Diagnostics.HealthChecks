@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  ui:
+    image: xabarilcoding/healthchecksui
+    depends_on:
+      - sqlserver
+      - webapp
+    build:
+      context: ../../
+      dockerfile: build/docker-images/HealthChecks.UI.Image/Dockerfile
+    environment:
+      - storage_provider=SqlServer
+      - storage_connection=Server=sqlserver;initial catalog=UI;user id=sa;password=Password12!;
+      - ui_path=/healthchecks
+      - HealthChecksUI:HealthChecks:0:Name=WebApp endpoint
+      - HealthChecksUI:HealthChecks:0:Uri=http://webapp/health
+      - HealthChecksUI:EvaluationTimeInSeconds=5
+    ports:
+      - 80:80
+
+  webapp:
+    image: carloslanderas/webapp
+    ports:
+      - 4100:80
+
+  sqlserver:
+    image: microsoft/mssql-server-linux
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password12!
+    ports:
+      - 1533:1433
+  redis-svc:
+    image: redis

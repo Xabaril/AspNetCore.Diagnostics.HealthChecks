@@ -1,26 +1,26 @@
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Extensions;
 using k8s;
 using k8s.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using static HealthChecks.UI.K8s.Operator.Constants;
 
 namespace HealthChecks.UI.K8s.Operator.Handlers
 {
-    public class DeploymentHandler
+    internal class DeploymentHandler
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;
+        private readonly OperatorDiagnostics _operatorDiagnostics;
 
-        public DeploymentHandler(IKubernetes client, ILogger<K8sOperator> logger)
+        public DeploymentHandler(IKubernetes client, ILogger<K8sOperator> logger, OperatorDiagnostics operatorDiagnostics)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
+            _operatorDiagnostics = Guard.ThrowIfNull(operatorDiagnostics);
         }
 
-        public Task<V1Deployment> Get(HealthCheckResource resource)
+        public Task<V1Deployment?> Get(HealthCheckResource resource)
         {
             return _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
         }
@@ -28,37 +28,35 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         public async Task<V1Deployment> GetOrCreateAsync(HealthCheckResource resource)
         {
             var deployment = await Get(resource);
-            if (deployment != null) return deployment;
+            if (deployment != null)
+                return deployment;
 
             try
             {
                 var deploymentResource = Build(resource);
-                var response =
-                    await _client.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource,
-                        resource.Metadata.NamespaceProperty);
+                var response = await _client.AppsV1.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty);
                 deployment = response.Body;
 
-                _logger.LogInformation("Deployment {deployment} has been created", deployment.Metadata.Name);
+                _operatorDiagnostics.DeploymentCreated(deployment.Metadata.Name);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error creating deployment: {error}", ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(deployment?.Metadata.Name!, Deployment.Operation.ADD, ex.Message);
             }
 
-            return deployment;
-
+            return deployment!;
         }
 
-        public async Task Delete(HealthCheckResource resource)
+        public async Task DeleteAsync(HealthCheckResource resource)
         {
             try
             {
-                await _client.DeleteNamespacedDeploymentAsync($"{resource.Spec.Name}-deploy",
+                await _client.AppsV1.DeleteNamespacedDeploymentAsync($"{resource.Spec.Name}-deploy",
                     resource.Metadata.NamespaceProperty);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error deleting deployment for hc resource: {name} - err: {error}", resource.Spec.Name, ex.Message);
+                _operatorDiagnostics.DeploymentOperationError(resource.Spec.Name, Deployment.Operation.DELETE, ex.Message);
             }
         }
 
@@ -77,6 +75,31 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                 Name = $"{resource.Spec.Name}-deploy",
                 NamespaceProperty = resource.Metadata.NamespaceProperty
             };
+
+            var uiContainer = new V1Container
+            {
+                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DEFAULT_PULL_POLICY,
+                Name = Constants.POD_NAME,
+                Image = resource.Spec.Image ?? Constants.IMAGE_NAME,
+                Ports = new List<V1ContainerPort>
+                                {
+                                    new V1ContainerPort(80)
+                                },
+                Env = new List<V1EnvVar>
+                                {
+                                    new V1EnvVar("enable_push_endpoint", "true"),
+                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
+                                    new V1EnvVar("Logging__LogLevel__Default", "Debug"),
+                                    new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__System", "Warning"),
+                                    new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
+                                }
+            };
+
+            uiContainer.MapCustomUIPaths(resource, _operatorDiagnostics);
+
+            var tolerations = resource.Spec.Tolerations?.Select(toleration => new V1Toleration(toleration.Effect,
+                toleration.Key, toleration.Operator, toleration.Seconds, toleration.Value)).ToList() ?? new List<V1Toleration>();
 
             var spec = new V1DeploymentSpec
             {
@@ -101,27 +124,9 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
                     {
                         Containers = new List<V1Container>
                         {
-                            new V1Container
-                            {
-                                ImagePullPolicy = resource.Spec.ImagePullPolicy ?? Constants.DefaultPullPolicy,
-                                Name = Constants.PodName,
-                                Image = resource.Spec.Image ?? Constants.ImageName,
-                                Ports = new List<V1ContainerPort>
-                                {
-                                    new V1ContainerPort(80)
-                                },
-                                Env = new List<V1EnvVar>
-                                {
-                                    new V1EnvVar("ui_path", resource.Spec.UiPath ?? Constants.DefaultUIPath),
-                                    new V1EnvVar("enable_push_endpoint", "true"),
-                                    new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
-                                    new V1EnvVar("Logging__LogLevel__Default", "Debug"),
-                                    new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
-                                    new V1EnvVar("Logging__LogLevel__System", "Warning"),
-                                    new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
-                                }
-                            }
-                        }
+                           uiContainer
+                        },
+                        Tolerations = tolerations
                     }
                 }
             };
@@ -135,7 +140,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             var specification = spec.Template.Spec;
             var container = specification.Containers.First();
 
-            for (int i = 0; i < resource.Spec.Webhooks.Count(); i++)
+            for (int i = 0; i < resource.Spec.Webhooks.Count; i++)
             {
                 var webhook = resource.Spec.Webhooks[i];
                 _logger.LogInformation("Adding webhook configuration for webhook {Webhook}", webhook.Name);
@@ -148,16 +153,16 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
             if (resource.HasBrandingConfigured())
             {
-                var volumeName = "healthchecks-volume";
+                const string volumeName = "healthchecks-volume";
 
-                if (specification.Volumes == null) specification.Volumes = new List<V1Volume>();
-                if (container.VolumeMounts == null) container.VolumeMounts = new List<V1VolumeMount>();
+                specification.Volumes ??= new List<V1Volume>();
+                container.VolumeMounts ??= new List<V1VolumeMount>();
 
                 specification.Volumes.Add(new V1Volume(name: volumeName,
                     configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));
 
-                container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.StylesPath}/{Constants.StyleSheetName}"));
-                container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.StylesPath}", volumeName));
+                container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.STYLES_PATH}/{Constants.STYLE_SHEET_NAME}"));
+                container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.STYLES_PATH}", volumeName));
             }
 
             return new V1Deployment(metadata: metadata, spec: spec);

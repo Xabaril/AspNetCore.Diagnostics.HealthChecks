@@ -1,57 +1,81 @@
-﻿using Microsoft.Azure.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.AzureServiceBus
+namespace HealthChecks.AzureServiceBus;
+
+public class AzureEventHubHealthCheck : IHealthCheck
 {
-    public class AzureEventHubHealthCheck
-        : IHealthCheck
+    private const string ENTITY_PATH_SEGMENT = "EntityPath=";
+    private readonly AzureEventHubHealthCheckOptions _options;
+
+    private string? _connectionKey;
+
+    private string ConnectionKey => _connectionKey ??= _options.ConnectionString is null
+        ? $"{_options.FullyQualifiedNamespace}_{_options.EventHubName}"
+        : GetFullConnectionString();
+
+    public AzureEventHubHealthCheck(AzureEventHubHealthCheckOptions options)
     {
-        private static readonly ConcurrentDictionary<string, EventHubClient> _eventHubConnections = new ConcurrentDictionary<string, EventHubClient>();
+        _options = options;
 
-        private readonly string _eventHubConnectionString;
-        public AzureEventHubHealthCheck(string connectionString, string eventHubName)
+        if (!string.IsNullOrWhiteSpace(options.ConnectionString))
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
-
-            if (string.IsNullOrEmpty(eventHubName))
-            {
-                throw new ArgumentNullException(nameof(eventHubName));
-            }
-
-            var builder = new EventHubsConnectionStringBuilder(connectionString)
-            {
-                EntityPath = eventHubName
-            };
-            _eventHubConnectionString = builder.ToString();
+            Guard.ThrowIfNull(options.EventHubName, true);
+            return;
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+
+        if (options.Credential is not null)
         {
-            try
-            {
-                if (!_eventHubConnections.TryGetValue(_eventHubConnectionString, out var eventHubClient))
-                {
-                    eventHubClient = EventHubClient.CreateFromConnectionString(_eventHubConnectionString);
-
-                    if (!_eventHubConnections.TryAdd(_eventHubConnectionString, eventHubClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "EventHubClient can't be added into dictionary.");
-                    }
-                }
-
-                await eventHubClient.GetRuntimeInformationAsync();
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            Guard.ThrowIfNull(options.FullyQualifiedNamespace, true);
+            Guard.ThrowIfNull(options.EventHubName, true);
+            return;
         }
+
+        if (options.Connection is not null)
+        {
+            _connectionKey = $"{options.Connection.FullyQualifiedNamespace}_{options.Connection.EventHubName}";
+            return;
+        }
+
+        throw new ArgumentException("A connection string, TokenCredential or EventHubConnection must be set!",
+            nameof(options));
+    }
+
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+
+            _ = await client.GetEventHubPropertiesAsync(cancellationToken).ConfigureAwait(false);
+
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+        }
+    }
+
+    private EventHubProducerClient CreateClient()
+    {
+        if (_options.ConnectionString is not null)
+            return new EventHubProducerClient(GetFullConnectionString());
+
+        if (_options.Connection is not null)
+            return new EventHubProducerClient(_options.Connection);
+
+        return new EventHubProducerClient(_options.FullyQualifiedNamespace, _options.EventHubName, _options.Credential);
+    }
+
+    private string GetFullConnectionString()
+    {
+        string connectionString = _options.ConnectionString!;
+
+        if (!connectionString.Contains(ENTITY_PATH_SEGMENT))
+            connectionString = $"{connectionString};{ENTITY_PATH_SEGMENT}{_options.EventHubName}";
+        return connectionString;
     }
 }

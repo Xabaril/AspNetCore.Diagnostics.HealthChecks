@@ -1,23 +1,27 @@
-﻿using HealthChecks.Network;
-using System;
+using HealthChecks.Network;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class DnsResolveOptionsExtensions
 {
-    public static class DnsResolveOptionsExtensions
+    /// <summary>
+    /// Add a host for DNS resolution.
+    /// </summary>
+    /// <remarks>Usage: ResolveHost(host).To(registrations);</remarks>
+    /// <param name="options">DNS Resolve options.</param>
+    /// <param name="host">Target host.</param>
+    public static Func<(DnsResolveOptions, DnsRegistration)> ResolveHost(this DnsResolveOptions options, string host)
     {
-        public static Func<(DnsResolveOptions, DnsRegistration)> ResolveHost(this DnsResolveOptions options, string host)
-        {
-            return () => (options, new DnsRegistration(host));
-        }
+        return () => (options, new DnsRegistration(host));
+    }
 
-        public static DnsResolveOptions To(this Func<(DnsResolveOptions, DnsRegistration)> registrationFunc, params string[] resolutions)
-        {
-            var (options, registration) = registrationFunc();
-            registration.Resolutions = resolutions;
+    public static DnsResolveOptions To(this Func<(DnsResolveOptions, DnsRegistration)> registrationFunc, params string[] resolutions)
+    {
+        var (options, registration) = registrationFunc();
+        registration.Resolutions = resolutions;
 
-            options.AddHost(registration.Host, registration);
+        options.AddHost(registration.Host, registration);
 
-            return options;
-        }
+        return options;
     }
 }

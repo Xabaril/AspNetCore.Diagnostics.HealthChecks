@@ -1,4 +1,3 @@
-using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

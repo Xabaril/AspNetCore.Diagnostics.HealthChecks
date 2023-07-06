@@ -1,3 +1,5 @@
+using Azure.Core;
+
 namespace HealthChecks.AzureServiceBus.Tests.DependencyInjection;
 
 public class azure_service_bus_queue_message_threshold_registration_should
@@ -52,4 +54,10 @@ public class azure_service_bus_queue_message_threshold_registration_should
 
         factory.ShouldThrow<ArgumentException>();
     }
+}
+
+public class MockTokenCredentials : TokenCredential
+{
+    public override AccessToken GetToken(TokenRequestContext requestContext, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public override ValueTask<AccessToken> GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken) => throw new NotImplementedException();
 }

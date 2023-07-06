@@ -18,24 +18,23 @@ public class DynamoDbHealthCheck : IHealthCheck
     {
         try
         {
-                var client = new AmazonDynamoDBClient();
-                var keysProvided = !string.IsNullOrEmpty(_options.AccessKey) &&
-                                   !string.IsNullOrEmpty(_options.SecretKey);
-                var regionProvided = _options.RegionEndpoint == null;
-                
-                if (keysProvided)
+            AWSCredentials? credentials = _options.Credentials;
+
+            if (credentials == null)
+            {
+#pragma warning disable CS0618 // Type or member is obsolete
+                if (!string.IsNullOrEmpty(_options.AccessKey) && !string.IsNullOrEmpty(_options.SecretKey))
                 {
                     // for backwards compatibility we create the basic credentials if the old fields are used
-                    var credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
-                    client = regionProvided ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint) : new AmazonDynamoDBClient(credentials);
+                    // but if they are not specified we fallback to using the default profile
+                    credentials = new BasicAWSCredentials(_options.AccessKey, _options.SecretKey);
                 }
-                else if (regionProvided)
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 
-                {
-                    client = new AmazonDynamoDBClient( _options.RegionEndpoint);
-                }
-                ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
-                : new AmazonDynamoDBClient(_options.RegionEndpoint);
+            using var client = credentials != null
+                ? CreateClientWithCredentials(credentials)
+                : CreateClientWithoutCredentials();
 
             _ = await client.ListTablesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -45,5 +44,20 @@ public class DynamoDbHealthCheck : IHealthCheck
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
+    }
+
+    private AmazonDynamoDBClient CreateClientWithCredentials(AWSCredentials credentials)
+    {
+        return _options.RegionEndpoint is null
+            ? new(credentials)
+            : new(credentials, _options.RegionEndpoint);
+    }
+
+    private AmazonDynamoDBClient CreateClientWithoutCredentials()
+    {
+        return _options.RegionEndpoint is null
+          ? new()
+          : new(_options.RegionEndpoint);
+
     }
 }

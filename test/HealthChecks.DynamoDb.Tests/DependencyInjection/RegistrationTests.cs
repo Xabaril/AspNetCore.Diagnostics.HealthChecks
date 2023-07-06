@@ -43,4 +43,38 @@ public class dynamoDb_registration_should
         registration.Name.ShouldBe("my-dynamodb-group");
         check.ShouldBeOfType<DynamoDbHealthCheck>();
     }
+
+    [Fact]
+    public void add_health_check_when_no_credentials_provided()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddDynamoDb(_ => _.RegionEndpoint = RegionEndpoint.CNNorth1);
+
+        var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("dynamodb");
+        check.ShouldBeOfType<DynamoDbHealthCheck>();
+    }
+
+    [Fact]
+    public void add_health_check_when_no_option_provided()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddDynamoDb();
+
+        var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("dynamodb");
+        check.ShouldBeOfType<DynamoDbHealthCheck>();
+    }
 }

@@ -11,7 +11,7 @@ public class azure_service_bus_queue_message_threshold_registration_with_token_s
         services.AddHealthChecks()
             .AddAzureServiceBusQueueMessageCountThreshold("cnn", "queueName", new MockTokenCredentials());
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -29,7 +29,7 @@ public class azure_service_bus_queue_message_threshold_registration_with_token_s
             .AddAzureServiceBusQueueMessageCountThreshold("cnn", "queueName", new MockTokenCredentials(),
             name: "azureservicebusqueuemessagethresholdcheck");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -46,7 +46,7 @@ public class azure_service_bus_queue_message_threshold_registration_with_token_s
         services.AddHealthChecks()
             .AddAzureServiceBusQueueMessageCountThreshold(string.Empty, string.Empty, new MockTokenCredentials());
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

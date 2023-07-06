@@ -9,7 +9,7 @@ public class azure_service_bus_queue_message_threshold_registration_should
         services.AddHealthChecks()
             .AddAzureServiceBusQueueMessageCountThreshold("cnn", "queueName");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -27,7 +27,7 @@ public class azure_service_bus_queue_message_threshold_registration_should
             .AddAzureServiceBusQueueMessageCountThreshold("cnn", "queueName",
             name: "azureservicebusqueuemessagethresholdcheck");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -44,7 +44,7 @@ public class azure_service_bus_queue_message_threshold_registration_should
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(string.Empty, string.Empty);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

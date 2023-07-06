@@ -19,7 +19,6 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     private const string AZURETOPIC_NAME = "azuretopic";
     private const string AZURESUBSCRIPTION_NAME = "azuresubscription";
     private const string AZUREQUEUETHRESHOLD_NAME = "azurequeuethreshold";
-    private const string AZUREDEADLETTERQUEUETHRESHOLD_NAME = "azuredeadletterqueuethreshold";
 
     /// <summary>
     /// Add a health check for specified Azure Event Hub.
@@ -520,7 +519,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         };
 
         return builder.Add(new HealthCheckRegistration(
-            name ?? AZUREDEADLETTERQUEUETHRESHOLD_NAME,
+            name ?? AZUREQUEUETHRESHOLD_NAME,
             sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options),
             failureStatus,
             tags,
@@ -570,7 +569,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         };
 
         return builder.Add(new HealthCheckRegistration(
-            name ?? AZUREDEADLETTERQUEUETHRESHOLD_NAME,
+            name ?? AZUREQUEUETHRESHOLD_NAME,
                 sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options),
                 failureStatus,
                 tags,

@@ -30,23 +30,21 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
             var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
 
             var activeQueueHealthStatus = CheckHealthStatus(
-                properties,
-                x => x.ActiveMessageCount,
+                properties.ActiveMessageCount,
                 _activeMessagesThreshold,
                 "queue");
 
-            if (!IsHealthy(activeQueueHealthStatus))
+            if (activeQueueHealthStatus.Status != HealthStatus.Healthy)
             {
                 return activeQueueHealthStatus;
             }
 
             var deadLetterQueueHealthStatus = CheckHealthStatus(
-                properties,
-                x => x.DeadLetterMessageCount,
+                properties.DeadLetterMessageCount,
                 _deadLetterMessagesThreshold,
                 "dead letter queue");
 
-            if (!IsHealthy(deadLetterQueueHealthStatus))
+            if (deadLetterQueueHealthStatus.Status != HealthStatus.Healthy)
             {
                 return deadLetterQueueHealthStatus;
             }
@@ -60,8 +58,7 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
     }
 
     private HealthCheckResult CheckHealthStatus(
-        QueueRuntimeProperties queueRuntimeProperty,
-        Func<QueueRuntimeProperties, long> messagesCountFunc,
+        long messagesCount,
         AzureServiceBusQueueMessagesCountThreshold threshold,
         string queueType)
     {
@@ -69,8 +66,6 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
         {
             return HealthCheckResult.Healthy();
         }
-
-        var messagesCount = messagesCountFunc(queueRuntimeProperty);
 
         if (messagesCount >= threshold.UnhealthyThreshold)
         {
@@ -84,6 +79,4 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
 
         return HealthCheckResult.Healthy();
     }
-
-    private bool IsHealthy(HealthCheckResult result) => result.Status == HealthStatus.Healthy;
 }

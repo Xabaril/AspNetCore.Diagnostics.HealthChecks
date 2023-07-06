@@ -387,19 +387,19 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     }
 
     /// <summary>
-    /// Add a health check for specified Azure Service Bus Queue active or dead letter messages threshold
+    /// Add a health check for specified Azure Service Bus Queue active or dead letter messages threshold.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="connectionString">The azure service bus connection string to be used.</param>
     /// <param name="queueName">The name of the queue to check.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeuethreshold' will be used for the name.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueueMessageCountThreshold(
         this IHealthChecksBuilder builder,
@@ -430,20 +430,20 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     }
 
     /// <summary>
-    /// Add a health check for specified Azure Service Bus Queue active or dead letter messages threshold
+    /// Add a health check for specified Azure Service Bus Queue active or dead letter messages threshold.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="endpoint">The azure service bus endpoint to be used, format sb://myservicebus.servicebus.windows.net/.</param>
     /// <param name="queueName">The name of the queue to check.</param>
-    /// <param name="tokenCredential">The token credential for auth</param>
+    /// <param name="tokenCredential">The token credential for authentication.</param>
     /// <param name="configure">An optional action to allow additional Azure Service Bus configuration.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeuethreshold' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
     public static IHealthChecksBuilder AddAzureServiceBusQueueMessageCountThreshold(
         this IHealthChecksBuilder builder,

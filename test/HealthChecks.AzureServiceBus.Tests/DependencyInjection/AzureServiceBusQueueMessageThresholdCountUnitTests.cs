@@ -1,5 +1,3 @@
-using Azure.Core;
-
 namespace HealthChecks.AzureServiceBus.Tests.DependencyInjection;
 
 public class azure_service_bus_queue_message_threshold_registration_should

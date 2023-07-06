@@ -75,10 +75,9 @@ namespace HealthChecks.AzureServiceBus.Configuration
     }
     public class AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions : HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueHealthCheckOptions
     {
-        public AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(string queueName, bool checkDeadLetterMessages, HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueMessagesCountThreshold threshold) { }
-        public HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueMessagesCountThreshold ActiveMessages { get; set; }
-        public bool CheckDeadLetterMessages { get; }
-        public HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueMessagesCountThreshold DeadLetterMessages { get; set; }
+        public AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(string queueName) { }
+        public HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueMessagesCountThreshold? ActiveMessages { get; set; }
+        public HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueMessagesCountThreshold? DeadLetterMessages { get; set; }
     }
     public class AzureServiceBusSubscriptionHealthCheckHealthCheckOptions : HealthChecks.AzureServiceBus.Configuration.AzureServiceBusTopicHealthCheckOptions
     {

@@ -17,7 +17,7 @@ public class azure_service_bus_deadletter_queue_message_threshold_registration_w
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("azuredeadletterqueuethreshold");
+        registration.Name.ShouldBe("azurequeuethreshold");
         check.ShouldBeOfType<AzureServiceBusQueueMessageCountThresholdHealthCheck>();
     }
 

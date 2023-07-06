@@ -6,21 +6,16 @@ namespace HealthChecks.AzureServiceBus;
 
 public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions>, IHealthCheck
 {
-    private readonly bool _checkDeadLetterMessages;
     private readonly string _queueName;
-    private readonly int _degradedThreshold;
-    private readonly int _unhealthyThreshold;
+    private readonly AzureServiceBusQueueMessagesCountThreshold _activeMessagesThreshold;
+    private readonly AzureServiceBusQueueMessagesCountThreshold _deadLetterMessagesThreshold;
 
     public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options)
         : base(options)
     {
-        _checkDeadLetterMessages = options.CheckDeadLetterMessages;
         _queueName = Guard.ThrowIfNull(options.QueueName);
-
-        var threshold = GetThreshold(options);
-
-        _degradedThreshold = threshold.DegradedThreshold;
-        _unhealthyThreshold = threshold.UnhealthyThreshold;
+        _activeMessagesThreshold = Guard.ThrowIfNull(options.ActiveMessages);
+        _deadLetterMessagesThreshold = Guard.ThrowIfNull(options.DeadLetterMessages);
     }
 
     protected override string ConnectionKey => $"{Prefix}_{_queueName}";
@@ -34,16 +29,26 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
 
             var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
 
-            var messagesCount = GetMessagesCount(properties);
+            var activeQueueHealthStatus = CheckHealthStatus(
+                properties,
+                x => x.ActiveMessageCount,
+                _activeMessagesThreshold,
+                "queue");
 
-            if (messagesCount >= _unhealthyThreshold)
+            if (!IsHealthy(activeQueueHealthStatus))
             {
-                return HealthCheckResult.Unhealthy($"Message in {GetQueueType()} {_queueName} exceeded the amount of messages allowed for the unhealthy threshold {_unhealthyThreshold}/{messagesCount}");
+                return activeQueueHealthStatus;
             }
 
-            if (messagesCount >= _degradedThreshold)
+            var deadLetterQueueHealthStatus = CheckHealthStatus(
+                properties,
+                x => x.DeadLetterMessageCount,
+                _deadLetterMessagesThreshold,
+                "dead letter queue");
+
+            if (!IsHealthy(deadLetterQueueHealthStatus))
             {
-                return HealthCheckResult.Degraded($"Message in {GetQueueType()} {_queueName} exceeded the amount of messages allowed for the degraded threshold {_degradedThreshold}/{messagesCount}");
+                return deadLetterQueueHealthStatus;
             }
 
             return HealthCheckResult.Healthy();
@@ -54,16 +59,31 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
         }
     }
 
-    private long GetMessagesCount(QueueRuntimeProperties queueRuntimeProperty) => _checkDeadLetterMessages
-        ? queueRuntimeProperty.DeadLetterMessageCount
-        : queueRuntimeProperty.ActiveMessageCount;
+    private HealthCheckResult CheckHealthStatus(
+        QueueRuntimeProperties queueRuntimeProperty,
+        Func<QueueRuntimeProperties, long> messagesCountFunc,
+        AzureServiceBusQueueMessagesCountThreshold threshold,
+        string queueType)
+    {
+        if (threshold is null)
+        {
+            return HealthCheckResult.Healthy();
+        }
 
-    private string GetQueueType() => _checkDeadLetterMessages
-        ? "dead letter queue"
-        : "queue";
+        var messagesCount = messagesCountFunc(queueRuntimeProperty);
 
-    private static AzureServiceBusQueueMessagesCountThreshold GetThreshold(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options) =>
-       options.CheckDeadLetterMessages
-            ? options.DeadLetterMessages
-            : options.ActiveMessages;
+        if (messagesCount >= threshold.UnhealthyThreshold)
+        {
+            return HealthCheckResult.Unhealthy($"Message in {queueType} {_queueName} exceeded the amount of messages allowed for the unhealthy threshold {threshold.UnhealthyThreshold}/{messagesCount}");
+        }
+
+        if (messagesCount >= threshold.DegradedThreshold)
+        {
+            return HealthCheckResult.Degraded($"Message in {queueType} {_queueName} exceeded the amount of messages allowed for the degraded threshold {threshold.DegradedThreshold}/{messagesCount}");
+        }
+
+        return HealthCheckResult.Healthy();
+    }
+
+    private bool IsHealthy(HealthCheckResult result) => result.Status == HealthStatus.Healthy;
 }

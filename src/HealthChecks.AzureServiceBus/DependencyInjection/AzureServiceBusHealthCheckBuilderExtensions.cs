@@ -418,12 +418,10 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         var threshold = new AzureServiceBusQueueMessagesCountThreshold();
         configure?.Invoke(threshold);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
-            queueName,
-            checkDeadLetterMessages: true,
-            threshold)
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
         {
             ConnectionString = connectionString,
+            ActiveMessages = threshold,
         };
 
         return builder.Add(new HealthCheckRegistration(
@@ -468,13 +466,11 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         var threshold = new AzureServiceBusQueueMessagesCountThreshold();
         configure?.Invoke(threshold);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
-            queueName,
-            checkDeadLetterMessages: false,
-            threshold)
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
         {
             FullyQualifiedNamespace = endpoint,
             Credential = tokenCredential,
+            ActiveMessages = threshold,
         };
 
         return builder.Add(new HealthCheckRegistration(
@@ -517,12 +513,10 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
 
         configure?.Invoke(threshold);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
-            queueName,
-            checkDeadLetterMessages: true,
-            threshold)
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
         {
             ConnectionString = connectionString,
+            DeadLetterMessages = threshold,
         };
 
         return builder.Add(new HealthCheckRegistration(
@@ -568,13 +562,11 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
 
         configure?.Invoke(threshold);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
-            queueName,
-            checkDeadLetterMessages: true,
-            threshold)
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
         {
             FullyQualifiedNamespace = endpoint,
             Credential = tokenCredential,
+            DeadLetterMessages = threshold,
         };
 
         return builder.Add(new HealthCheckRegistration(

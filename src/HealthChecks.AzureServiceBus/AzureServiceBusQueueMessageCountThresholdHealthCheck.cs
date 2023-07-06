@@ -29,7 +29,7 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
             var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
 
             var activeQueueHealthStatus = CheckHealthStatus(
-                properties.ActiveMessageCount,
+                properties.Value.ActiveMessageCount,
                 _activeMessagesThreshold,
                 "queue");
 
@@ -39,7 +39,7 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
             }
 
             var deadLetterQueueHealthStatus = CheckHealthStatus(
-                properties.DeadLetterMessageCount,
+                properties.Value.DeadLetterMessageCount,
                 _deadLetterMessagesThreshold,
                 "dead letter queue");
 

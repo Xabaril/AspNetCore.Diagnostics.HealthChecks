@@ -51,7 +51,7 @@ public class dynamoDb_registration_should
         services.AddHealthChecks()
             .AddDynamoDb(_ => _.RegionEndpoint = RegionEndpoint.CNNorth1);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -68,7 +68,7 @@ public class dynamoDb_registration_should
         services.AddHealthChecks()
             .AddDynamoDb();
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

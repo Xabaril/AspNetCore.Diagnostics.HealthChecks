@@ -10,8 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// Extension methods to configure <see cref="AzureEventHubHealthCheck"/>,
 /// <see cref="AzureServiceBusHealthCheck{TOptions}"/>, <see cref="AzureServiceBusQueueHealthCheck"/>,
 /// <see cref="AzureServiceBusSubscriptionHealthCheck"/>, <see cref="AzureServiceBusTopicHealthCheck"/>,
-/// <see cref="AzureServiceBusQueueMessageCountThresholdHealthCheck"/>,
-/// <see cref="AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck"/>.
+/// <see cref="AzureServiceBusQueueMessageCountThresholdHealthCheck"/>.
 /// </summary>
 public static class AzureServiceBusHealthCheckBuilderExtensions
 {
@@ -408,7 +407,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string connectionString,
         string queueName,
         string? name = default,
-        Action<AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions>? configure = null,
+        Action<AzureServiceBusQueueMessagesCountThreshold>? configure = null,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
@@ -416,12 +415,16 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Guard.ThrowIfNull(connectionString);
         Guard.ThrowIfNull(queueName);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
+        var threshold = new AzureServiceBusQueueMessagesCountThreshold();
+        configure?.Invoke(threshold);
+
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
+            queueName,
+            checkDeadLetterMessages: true,
+            threshold)
         {
             ConnectionString = connectionString,
         };
-
-        configure?.Invoke(options);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREQUEUETHRESHOLD_NAME,
@@ -452,7 +455,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string endpoint,
         string queueName,
         TokenCredential tokenCredential,
-        Action<AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions>? configure = null,
+        Action<AzureServiceBusQueueMessagesCountThreshold>? configure = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -462,13 +465,17 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Guard.ThrowIfNull(queueName);
         Guard.ThrowIfNull(tokenCredential);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
+        var threshold = new AzureServiceBusQueueMessagesCountThreshold();
+        configure?.Invoke(threshold);
+
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
+            queueName,
+            checkDeadLetterMessages: false,
+            threshold)
         {
             FullyQualifiedNamespace = endpoint,
             Credential = tokenCredential,
         };
-
-        configure?.Invoke(options);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREQUEUETHRESHOLD_NAME,
@@ -497,7 +504,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         string connectionString,
         string queueName,
-        Action<AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions>? configure = null,
+        Action<AzureServiceBusQueueMessagesCountThreshold>? configure = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -506,16 +513,21 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Guard.ThrowIfNull(connectionString);
         Guard.ThrowIfNull(queueName);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
+        var threshold = new AzureServiceBusQueueMessagesCountThreshold();
+
+        configure?.Invoke(threshold);
+
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
+            queueName,
+            checkDeadLetterMessages: true,
+            threshold)
         {
             ConnectionString = connectionString,
         };
 
-        configure?.Invoke(options);
-
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREDEADLETTERQUEUETHRESHOLD_NAME,
-            sp => new AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck(options),
+            sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options),
             failureStatus,
             tags,
             timeout));
@@ -542,7 +554,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         string endpoint,
         string queueName,
         TokenCredential tokenCredential,
-        Action<AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions>? configure = null,
+        Action<AzureServiceBusQueueMessagesCountThreshold>? configure = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -552,17 +564,22 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
         Guard.ThrowIfNull(queueName);
         Guard.ThrowIfNull(tokenCredential);
 
-        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(queueName)
+        var threshold = new AzureServiceBusQueueMessagesCountThreshold();
+
+        configure?.Invoke(threshold);
+
+        var options = new AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(
+            queueName,
+            checkDeadLetterMessages: true,
+            threshold)
         {
             FullyQualifiedNamespace = endpoint,
             Credential = tokenCredential,
         };
 
-        configure?.Invoke(options);
-
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREDEADLETTERQUEUETHRESHOLD_NAME,
-                sp => new AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck(options),
+                sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options),
                 failureStatus,
                 tags,
                 timeout));

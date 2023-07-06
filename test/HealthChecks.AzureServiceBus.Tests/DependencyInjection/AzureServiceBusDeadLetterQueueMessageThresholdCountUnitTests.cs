@@ -16,7 +16,7 @@ public class azure_service_bus_deadletter_queue_message_threshold_registration_s
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("azuredeadletterqueuethreshold");
-        check.GetType().ShouldBe(typeof(AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck));
+        check.ShouldBeOfType<AzureServiceBusQueueMessageCountThresholdHealthCheck>();
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class azure_service_bus_deadletter_queue_message_threshold_registration_s
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("azureservicebusdeadletterqueuemessagethresholdcheck");
-        check.GetType().ShouldBe(typeof(AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck));
+        check.ShouldBeOfType<AzureServiceBusQueueMessageCountThresholdHealthCheck>();
     }
 
     [Fact]
@@ -49,6 +49,8 @@ public class azure_service_bus_deadletter_queue_message_threshold_registration_s
 
         var registration = options.Value.Registrations.First();
 
-        Assert.Throws<ArgumentException>(() => registration.Factory(serviceProvider));
+        var healthCheckFactory = () => registration.Factory(serviceProvider);
+
+        healthCheckFactory.ShouldThrow<ArgumentException>();
     }
 }

@@ -1,26 +1,29 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-
 namespace HealthChecks.AzureServiceBus.Configuration;
 
 /// <summary>
-/// Configuration options for
-/// <see cref="AzureServiceBusDeadLetterQueueMessageCountThresholdHealthCheck"/>,
-/// <see cref="AzureServiceBusQueueMessageCountThresholdHealthCheck"/>.
+/// Configuration options for <see cref="AzureServiceBusQueueMessageCountThresholdHealthCheck"/>.
 /// </summary>
 public class AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions : AzureServiceBusQueueHealthCheckOptions
 {
     /// <summary>
-    /// Number of active/dead letter Service Bus messages in the queue before message health check returned <see cref="HealthStatus.Degraded"/>.
+    /// Indicates if dead letter messages queue or active messages queue should be checked.
     /// </summary>
-    public int DegradedThreshold { get; set; } = 5;
+    public bool CheckDeadLetterMessages { get; }
 
     /// <summary>
-    /// Number of active/dead letter Service Bus messages in the queue before message health check returned <see cref="HealthStatus.Unhealthy"/>.
+    /// Threshold configuration for active messages queue.
     /// </summary>
-    public int UnhealthyThreshold { get; set; } = 10;
+    public AzureServiceBusQueueMessagesCountThreshold ActiveMessages { get; set; }
 
-    public AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(string queueName)
+    /// <summary>
+    /// Threshold configuration for dead letter messages queue.
+    /// </summary>
+    public AzureServiceBusQueueMessagesCountThreshold DeadLetterMessages { get; set; }
+
+    public AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions(string queueName, bool checkDeadLetterMessages, AzureServiceBusQueueMessagesCountThreshold threshold)
         : base(queueName)
     {
+        CheckDeadLetterMessages = checkDeadLetterMessages;
+        ActiveMessages = threshold;
     }
 }

@@ -1,5 +1,4 @@
 using Azure.Core;
-using Shouldly;
 
 namespace HealthChecks.AzureServiceBus.Tests.DependencyInjection;
 

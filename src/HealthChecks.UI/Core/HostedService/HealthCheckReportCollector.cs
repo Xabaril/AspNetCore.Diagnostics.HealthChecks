@@ -8,6 +8,7 @@ using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -44,9 +45,8 @@ namespace HealthChecks.UI.Core.HostedService
             _logger = Guard.ThrowIfNull(logger);
             _serverAddressService = Guard.ThrowIfNull(serverAddressService);
             _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
-            _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
+            _settings = Guard.ThrowIfNull(settings.Value);
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
-            _settings = settings;
         }
 
         public async Task Collect(CancellationToken cancellationToken)
@@ -183,7 +183,6 @@ namespace HealthChecks.UI.Core.HostedService
         }
 
         private async Task<bool> ShouldNotifyAsync(string healthCheckName)
-
         {
             var lastNotifications = await _db.Failures
                .Where(lf => string.Equals(lf.HealthCheckName, healthCheckName, StringComparison.OrdinalIgnoreCase))

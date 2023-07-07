@@ -72,7 +72,7 @@ namespace HealthChecks.UI.Core.HostedService
 
                     if (healthReport.Status != UIHealthStatus.Healthy)
                     {
-                        if (!_settings.NotifyUnHealthyOnceTimeUntilChange || await ShouldNotifyAsync(item.Name).ConfigureAwait(false))
+                        if (!_settings.NotifyUnHealthyOneTimeUntilChange || await ShouldNotifyAsync(item.Name).ConfigureAwait(false))
                         {
                             await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport).ConfigureAwait(false);
                         }

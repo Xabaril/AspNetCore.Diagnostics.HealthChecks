@@ -167,7 +167,7 @@ namespace HealthChecks.UI.Core.HostedService
 
         private async Task<bool> HasLivenessRecoveredFromFailureAsync(HealthCheckConfiguration configuration)
         {
-            var previous = await GetHealthCheckExecutionAsync(configuration).ConfigureAwait(false);
+            var previous = await GetHealthCheckExecutionAsync(configuration);
 
             return previous != null && previous.Status != UIHealthStatus.Healthy;
         }

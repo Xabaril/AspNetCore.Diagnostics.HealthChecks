@@ -10,8 +10,8 @@ namespace HealthChecks.RavenDB
         public RavenDBOptions() { }
         public System.Security.Cryptography.X509Certificates.X509Certificate2? Certificate { get; set; }
         public string? Database { get; set; }
+        public System.TimeSpan? RequestTimeout { get; set; }
         public string[] Urls { get; set; }
-        public TimeSpan? RequestTimeout { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection

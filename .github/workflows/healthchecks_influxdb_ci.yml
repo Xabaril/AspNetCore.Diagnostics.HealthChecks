@@ -49,7 +49,7 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.InfluxDB/HealthChecks.InfluxDB.csproj &&
           dotnet build --no-restore ./test/HealthChecks.InfluxDB.Tests/HealthChecks.InfluxDB.Tests.csproj
       - name: Setup InfluxDB
-        uses: maikebing/influxdb-action@main
+        uses: maikebing/influxdb-action@v5
         with:
           influxdb_version: latest
           influxdb_org: influxdata

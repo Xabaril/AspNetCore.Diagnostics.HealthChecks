@@ -67,10 +67,10 @@ namespace HealthChecks.UI.Core.HostedService
 
                     if (healthReport.Status != UIHealthStatus.Healthy)
                     {
-                        if (! _settings.NotifyUnHealthyOnceTimeUntilChange || await ShouldNotify(item.Name, healthReport))
+                        if (!_settings.NotifyUnHealthyOnceTimeUntilChange || await ShouldNotifyAsync(item.Name, healthReport))
                         {
                             await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
-                        } 
+                        }
                     }
                     else
                     {
@@ -176,11 +176,11 @@ namespace HealthChecks.UI.Core.HostedService
                 .SingleOrDefaultAsync();
         }
 
-        private async Task<bool> ShouldNotify(string healthCheckName , UIHealthReport report)
+        private async Task<bool> ShouldNotifyAsync(string healthCheckName)
 
         {
             var lastNotifications = await _db.Failures
-               .Where(lf => lf.HealthCheckName.ToLower() == healthCheckName.ToLower())
+               .Where(lf => string.Equals(lf.HealthCheckName, healthCheckName, StringComparison.OrdinalIgnoreCase))
                .OrderByDescending(lf => lf.LastNotified)
                .Take(2).ToListAsync();
 

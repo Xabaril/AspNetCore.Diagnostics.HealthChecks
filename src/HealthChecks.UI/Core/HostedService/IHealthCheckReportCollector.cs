@@ -1,7 +1,6 @@
-namespace HealthChecks.UI.Core.HostedService
+namespace HealthChecks.UI.Core.HostedService;
+
+public interface IHealthCheckReportCollector
 {
-    internal interface IHealthCheckReportCollector
-    {
-        Task Collect(CancellationToken cancellationToken);
-    }
+    Task Collect(CancellationToken cancellationToken);
 }

@@ -11,8 +11,18 @@ public class NpgSqlHealthCheckOptions
 {
     /// <summary>
     /// The Postgres connection string to be used.
+    /// Use <see cref="DataSource"/> property for advanced configuration.
     /// </summary>
-    public string ConnectionString { get; set; } = null!;
+    public string? ConnectionString
+    {
+        get => DataSource?.ConnectionString;
+        set => DataSource = value is not null ? NpgsqlDataSource.Create(value) : null;
+    }
+
+    /// <summary>
+    /// The Postgres data source to be used.
+    /// </summary>
+    public NpgsqlDataSource? DataSource { get; set; }
 
     /// <summary>
     /// The query to be executed.

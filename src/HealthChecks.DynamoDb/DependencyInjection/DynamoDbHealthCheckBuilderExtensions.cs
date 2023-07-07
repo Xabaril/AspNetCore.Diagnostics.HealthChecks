@@ -25,7 +25,7 @@ public static class DynamoDbHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddDynamoDb(
         this IHealthChecksBuilder builder,
-        Action<DynamoDBOptions>? setup,
+        Action<DynamoDBOptions>? setup = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,

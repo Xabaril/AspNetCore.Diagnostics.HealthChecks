@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Npgsql;
 
 namespace HealthChecks.NpgSql;
 
@@ -12,7 +11,7 @@ public class NpgSqlHealthCheck : IHealthCheck
 
     public NpgSqlHealthCheck(NpgSqlHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.DataSource);
         Guard.ThrowIfNull(options.CommandText, true);
         _options = options;
     }
@@ -22,7 +21,7 @@ public class NpgSqlHealthCheck : IHealthCheck
     {
         try
         {
-            using var connection = new NpgsqlConnection(_options.ConnectionString);
+            await using var connection = _options.DataSource!.CreateConnection();
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);

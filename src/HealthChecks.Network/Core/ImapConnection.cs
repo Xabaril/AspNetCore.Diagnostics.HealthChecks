@@ -46,26 +46,26 @@ internal class ImapConnection : MailConnection
         }
     }
 
-    public async Task<bool> AuthenticateAsync(string user, string password)
+    public async Task<bool> AuthenticateAsync(string user, string password, CancellationToken cancellationToken = default)
     {
         if (ConnectionType == ImapConnectionType.STARTTLS)
         {
-            await UpgradeToSecureConnectionAsync().ConfigureAwait(false);
+            await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        var result = await ExecuteCommand(ImapCommands.Login(user, password)).ConfigureAwait(false);
+        var result = await ExecuteCommandAsync(ImapCommands.Login(user, password), cancellationToken).ConfigureAwait(false);
         IsAuthenticated = !result.Contains(ImapResponse.AUTHFAILED);
         return IsAuthenticated;
     }
 
-    private async Task<bool> UpgradeToSecureConnectionAsync()
+    private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
     {
-        var commandResult = await ExecuteCommand(ImapCommands.StartTLS()).ConfigureAwait(false);
+        var commandResult = await ExecuteCommandAsync(ImapCommands.StartTLS(), cancellationToken).ConfigureAwait(false);
         var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
         if (upgradeSuccess)
         {
             ConnectionType = ImapConnectionType.SSL_TLS;
-            _stream = GetStream();
+            _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
             return true;
         }
         else
@@ -74,20 +74,16 @@ internal class ImapConnection : MailConnection
         }
     }
 
-#pragma warning disable IDE1006 // Naming Styles
-    public async Task<bool> SelectFolder(string folder) //TODO: public API change
-#pragma warning restore IDE1006 // Naming Styles
+    public async Task<bool> SelectFolderAsync(string folder, CancellationToken cancellationToken = default)
     {
-        var result = await ExecuteCommand(ImapCommands.SelectFolder(folder)).ConfigureAwait(false);
+        var result = await ExecuteCommandAsync(ImapCommands.SelectFolder(folder), cancellationToken).ConfigureAwait(false);
 
         //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
         return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
     }
 
-#pragma warning disable IDE1006 // Naming Styles
-    public async Task<string> GetFolders() //TODO: public API change
-#pragma warning restore IDE1006 // Naming Styles
+    public async Task<string> GetFoldersAsync(CancellationToken cancellationToken = default)
     {
-        return await ExecuteCommand(ImapCommands.ListFolders()).ConfigureAwait(false);
+        return await ExecuteCommandAsync(ImapCommands.ListFolders(), cancellationToken).ConfigureAwait(false);
     }
 }

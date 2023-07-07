@@ -1,5 +1,5 @@
 using System.Net;
-#if !NET5_0_OR_GREATER
+#if !NET6_0_OR_GREATER
 using HealthChecks.Network.Extensions;
 #endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -20,9 +20,10 @@ public class DnsResolveHealthCheck : IHealthCheck
     {
         try
         {
+            List<string>? errorList = null;
             foreach (var item in _options.ConfigureHosts.Values)
             {
-#if NET5_0_OR_GREATER
+#if NET6_0_OR_GREATER
                 var ipAddresses = await Dns.GetHostAddressesAsync(item.Host, cancellationToken).ConfigureAwait(false);
 #else
                 var ipAddresses = await Dns.GetHostAddressesAsync(item.Host).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
@@ -32,12 +33,16 @@ public class DnsResolveHealthCheck : IHealthCheck
                 {
                     if (item.Resolutions == null || !item.Resolutions.Contains(ipAddress.ToString()))
                     {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Ip Address {ipAddress} was not resolved from host {item.Host}");
+                        (errorList ??= new()).Add($"Ip Address {ipAddress} was not resolved from host {item.Host}");
+                        if (!_options.CheckAllHosts)
+                        {
+                            break;
+                        }
                     }
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return errorList.GetHealthState(context);
         }
         catch (Exception ex)
         {

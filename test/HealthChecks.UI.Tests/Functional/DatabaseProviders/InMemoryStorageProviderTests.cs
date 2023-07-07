@@ -19,8 +19,7 @@ namespace HealthChecks.UI.Tests
                 {
                     services.AddHealthChecksUI()
                     .AddInMemoryStorage(opt => customOptionsInvoked = true);
-                })
-                .Configure(_ => { });
+                });
 
             var services = hostBuilder.Build().Services;
             var context = services.GetRequiredService<HealthChecksDb>();

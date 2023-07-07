@@ -585,12 +585,10 @@ The [web hooks section](./doc/webhooks.md) contains more information and webhook
 To prevent you from receiving several failure notifications from your application, a configuration was created to meet this scenario.
 
 ```csharp
-
 services.AddHealthChecksUI(setup =>
 {
     setup.SetNotifyUnHealthyOneTimeUntilChange(); // You will only receive one failure notification until the status changes.
 });
-
 ```
 
 ## UI Style and branding customization

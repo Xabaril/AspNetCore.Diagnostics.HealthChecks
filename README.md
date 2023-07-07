@@ -588,7 +588,7 @@ To prevent you from receiving several failure notifications from your applicatio
 
 services.AddHealthChecksUI(setup =>
 {
-    setup.NotifyUnHealthyOneTimeUntilChange(); // You will only receive one failure notification until the status changes.
+    setup.SetNotifyUnHealthyOneTimeUntilChange(); // You will only receive one failure notification until the status changes.
 });
 
 ```

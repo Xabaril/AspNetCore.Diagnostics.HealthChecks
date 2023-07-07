@@ -188,12 +188,7 @@ namespace HealthChecks.UI.Core.HostedService
                .OrderByDescending(lf => lf.LastNotified)
                .Take(2).ToListAsync();
 
-            if (lastNotifications == null)
-            {
-                return true;
-            }
-
-            if (lastNotifications.Count == 2)
+            if (lastNotifications?.Count == 2)
             {
                 var first = lastNotifications[0];
                 var second = lastNotifications[1];

@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
 using HealthChecks.UI.Data;
@@ -18,6 +19,7 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly ILogger<HealthCheckReportCollector> _logger;
         private readonly ServerAddressesService _serverAddressService;
         private readonly IEnumerable<IHealthCheckCollectorInterceptor> _interceptors;
+        private readonly Settings _settings;
         private static readonly Dictionary<int, Uri> _endpointAddresses = new();
         private static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web)
         {
@@ -33,6 +35,7 @@ namespace HealthChecks.UI.Core.HostedService
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
             IHttpClientFactory httpClientFactory,
             ILogger<HealthCheckReportCollector> logger,
+            IOptions<Settings> settings,
             ServerAddressesService serverAddressService,
             IEnumerable<IHealthCheckCollectorInterceptor> interceptors)
         {
@@ -41,14 +44,16 @@ namespace HealthChecks.UI.Core.HostedService
             _logger = Guard.ThrowIfNull(logger);
             _serverAddressService = Guard.ThrowIfNull(serverAddressService);
             _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
+            _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
+            _settings = settings;
         }
 
         public async Task Collect(CancellationToken cancellationToken)
         {
             using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
             {
-                var healthChecks = await _db.Configurations.ToListAsync(cancellationToken);
+                var healthChecks = await _db.Configurations.ToListAsync(cancellationToken).ConfigureAwait(false);
 
                 foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
@@ -60,31 +65,31 @@ namespace HealthChecks.UI.Core.HostedService
 
                     foreach (var interceptor in _interceptors)
                     {
-                        await interceptor.OnCollectExecuting(item);
+                        await interceptor.OnCollectExecuting(item).ConfigureAwait(false);
                     }
 
-                    var healthReport = await GetHealthReportAsync(item);
+                    var healthReport = await GetHealthReportAsync(item).ConfigureAwait(false);
 
                     if (healthReport.Status != UIHealthStatus.Healthy)
                     {
-                        if (!_settings.NotifyUnHealthyOnceTimeUntilChange || await ShouldNotifyAsync(item.Name, healthReport))
+                        if (!_settings.NotifyUnHealthyOnceTimeUntilChange || await ShouldNotifyAsync(item.Name).ConfigureAwait(false))
                         {
-                            await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                            await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport).ConfigureAwait(false);
                         }
                     }
                     else
                     {
-                        if (await HasLivenessRecoveredFromFailureAsync(item))
+                        if (await HasLivenessRecoveredFromFailureAsync(item).ConfigureAwait(false))
                         {
-                            await _healthCheckFailureNotifier.NotifyWakeUp(item.Name);
+                            await _healthCheckFailureNotifier.NotifyWakeUp(item.Name).ConfigureAwait(false);
                         }
                     }
 
-                    await SaveExecutionHistoryAsync(item, healthReport);
+                    await SaveExecutionHistoryAsync(item, healthReport).ConfigureAwait(false);
 
                     foreach (var interceptor in _interceptors)
                     {
-                        await interceptor.OnCollectExecuted(healthReport);
+                        await interceptor.OnCollectExecuted(healthReport).ConfigureAwait(false);
                     }
                 }
 
@@ -118,15 +123,15 @@ namespace HealthChecks.UI.Core.HostedService
 
                         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, absoluteUri);
                         requestMessage.Headers.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
-                        response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                        response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                     }
                 }
 
-                response ??= await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
+                response ??= await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
                 using (response)
                 {
-                    return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options)
+                    return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options).ConfigureAwait(false)
                         ?? throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
                 }
             }
@@ -162,7 +167,7 @@ namespace HealthChecks.UI.Core.HostedService
 
         private async Task<bool> HasLivenessRecoveredFromFailureAsync(HealthCheckConfiguration configuration)
         {
-            var previous = await GetHealthCheckExecutionAsync(configuration);
+            var previous = await GetHealthCheckExecutionAsync(configuration).ConfigureAwait(false);
 
             return previous != null && previous.Status != UIHealthStatus.Healthy;
         }
@@ -173,7 +178,8 @@ namespace HealthChecks.UI.Core.HostedService
                 .Include(le => le.History)
                 .Include(le => le.Entries)
                 .Where(le => le.Name == configuration.Name)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
         }
 
         private async Task<bool> ShouldNotifyAsync(string healthCheckName)
@@ -182,7 +188,7 @@ namespace HealthChecks.UI.Core.HostedService
             var lastNotifications = await _db.Failures
                .Where(lf => string.Equals(lf.HealthCheckName, healthCheckName, StringComparison.OrdinalIgnoreCase))
                .OrderByDescending(lf => lf.LastNotified)
-               .Take(2).ToListAsync();
+               .Take(2).ToListAsync().ConfigureAwait(false);
 
             if (lastNotifications == null)
             {
@@ -206,7 +212,7 @@ namespace HealthChecks.UI.Core.HostedService
         {
             _logger.LogDebug("HealthReportCollector - health report execution history saved.");
 
-            var execution = await GetHealthCheckExecutionAsync(configuration);
+            var execution = await GetHealthCheckExecutionAsync(configuration).ConfigureAwait(false);
 
             var lastExecutionTime = DateTime.UtcNow;
 
@@ -272,10 +278,11 @@ namespace HealthChecks.UI.Core.HostedService
                 };
 
                 await _db.Executions
-                    .AddAsync(execution);
+                    .AddAsync(execution)
+                    .ConfigureAwait(false);
             }
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         private static void UpdateUris(HealthCheckExecution execution, HealthCheckConfiguration configuration)

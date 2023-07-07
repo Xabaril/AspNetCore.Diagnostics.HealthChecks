@@ -37,6 +37,6 @@ echo "Sample: docker run --name ui -p 5000:80 -e 'HealthChecksUI:HealthChecks:0:
 #Publish it
 
 if($PublishToDockerHub){
-    docker push xabarilcoding/healthchecksui:$tag 
-    docker push xabarilcoding/healthchecksui:latest 
+    docker push xabarilcoding/healthchecksui:$tag
+    docker push xabarilcoding/healthchecksui:latest
 }

@@ -1,77 +1,67 @@
-﻿using Azure;
+using Azure.Core;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.CosmosDb
+namespace HealthChecks.CosmosDb;
+
+public class TableServiceHealthCheck : IHealthCheck
 {
-    public class TableServiceHealthCheck
-        : IHealthCheck
+    private readonly TableServiceClient _tableServiceClient;
+    private readonly TableServiceHealthCheckOptions _options;
+
+    public TableServiceHealthCheck(string connectionString, string? tableName)
+        : this(
+              ClientCache.GetOrAdd(connectionString, k => new TableServiceClient(k)),
+              new TableServiceHealthCheckOptions { TableName = tableName })
+    { }
+
+    public TableServiceHealthCheck(Uri endpoint, TableSharedKeyCredential credentials, string? tableName)
+        : this(
+              ClientCache.GetOrAdd(endpoint?.ToString()!, _ => new TableServiceClient(endpoint, credentials)),
+              new TableServiceHealthCheckOptions { TableName = tableName })
+    { }
+
+    public TableServiceHealthCheck(Uri endpoint, TokenCredential tokenCredential, string? tableName)
+        : this(
+              ClientCache.GetOrAdd(endpoint?.ToString()!, _ => new TableServiceClient(endpoint, tokenCredential)),
+              new TableServiceHealthCheckOptions { TableName = tableName })
+    { }
+
+    public TableServiceHealthCheck(TableServiceClient tableServiceClient, TableServiceHealthCheckOptions options)
     {
-        private static readonly ConcurrentDictionary<string, TableServiceClient> _connections = new ConcurrentDictionary<string, TableServiceClient>();
+        _tableServiceClient = Guard.ThrowIfNull(tableServiceClient);
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        private readonly string _connectionString;
-        private readonly string _tableName;
-
-        private readonly Uri _endpoint;
-        private readonly TableSharedKeyCredential _credentials;
-
-
-        public TableServiceHealthCheck(string connectionString, string tableName)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
+            // Note: TableServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+            // "Storage Table Data Contributor," so TableServiceClient.QueryAsync() and
+            // TableClient.QueryAsync<T>() are used instead to probe service health.
+            await _tableServiceClient
+                .QueryAsync(filter: "false", cancellationToken: cancellationToken)
+                .GetAsyncEnumerator(cancellationToken)
+                .MoveNextAsync()
+                .ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(_options.TableName))
+            {
+                var tableClient = _tableServiceClient.GetTableClient(_options.TableName);
+                await tableClient
+                    .QueryAsync<TableEntity>(filter: "false", cancellationToken: cancellationToken)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
+            }
+
+            return HealthCheckResult.Healthy();
         }
-
-        public TableServiceHealthCheck(Uri endpoint, TableSharedKeyCredential credentials, string tableName)
+        catch (Exception ex)
         {
-            _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
-            _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
-            _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
-        }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                TableServiceClient tableServiceClient;
-
-                var tableServiceKey = _connectionString ?? _endpoint.ToString();
-                if (!_connections.TryGetValue(tableServiceKey, out tableServiceClient))
-                {
-                    tableServiceClient = CreateTableServiceClient();
-
-                    if (!_connections.TryAdd(tableServiceKey, tableServiceClient))
-                    {
-                        tableServiceClient = _connections[_connectionString];
-                    }
-                }
-                var tableClient = tableServiceClient.GetTableClient(_tableName);
-                _ = await tableClient.GetAccessPoliciesAsync();
-
-                return HealthCheckResult.Healthy();
-            }
-            catch (RequestFailedException ex) when (ex.Status == 404)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Table with name {_tableName} does not exist.");
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
-        }
-
-        TableServiceClient CreateTableServiceClient()
-        {
-            if (!String.IsNullOrEmpty(_connectionString))
-            {
-                return new TableServiceClient(_connectionString);
-            }
-
-            return new TableServiceClient(_endpoint, _credentials);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

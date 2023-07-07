@@ -1,13 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>$(PackageTags);Sql Server</PackageTags>
     <Description>HealthChecks.SqlServer is the health check package for SqlServer.</Description>
-    <PackageTags>HealthCheck;Health;Sql Server</PackageTags>
-    <Version>$(HealthCheckSqlServer)</Version>
-    <PackageId>AspNetCore.HealthChecks.SqlServer</PackageId>
+    <VersionPrefix>$(HealthCheckSqlServer)</VersionPrefix>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="$(MicrosoftDataSqlClient)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
   </ItemGroup>
+
 </Project>

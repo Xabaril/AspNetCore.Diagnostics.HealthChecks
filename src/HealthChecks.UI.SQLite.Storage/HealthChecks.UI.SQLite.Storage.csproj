@@ -1,19 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageTags>$(PackageTags);SQLite</PackageTags>
     <Description>HealthChecks.UI.SQLite.Storage package contains the required classes to use SQLite provider in the UI</Description>
-    <PackageTags>HealthCheck;HealthChecks;SQLite</PackageTags>
-    <Version>$(HealthCheckUISQLiteStorage)</Version>
-    <PackageId>AspNetCore.HealthChecks.UI.SQLite.Storage</PackageId>
+    <VersionPrefix>$(HealthCheckUISQLiteStorage)</VersionPrefix>
   </PropertyGroup>
 
-  <ItemGroup>    
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCoreSqlite)" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HealthChecks.UI.Core\HealthChecks.UI.Core.csproj" />
+    <ProjectReference Include="..\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj" />
   </ItemGroup>
 
 </Project>

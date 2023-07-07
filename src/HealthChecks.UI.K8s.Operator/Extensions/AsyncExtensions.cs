@@ -1,6 +1,3 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
 namespace HealthChecks.UI.K8s.Operator
 {
     public static class AsyncExtensions
@@ -13,9 +10,9 @@ namespace HealthChecks.UI.K8s.Operator
             return token.IsCancellationRequested ? Task.CompletedTask : tsc.Task;
         }
 
-        public static void CancellationTokenCallback(object taskCompletionSource)
+        public static void CancellationTokenCallback(object? taskCompletionSource)
         {
-            ((TaskCompletionSource<bool>)taskCompletionSource).SetResult(true);
+            ((TaskCompletionSource<bool>)taskCompletionSource!).SetResult(true);
         }
     }
 }

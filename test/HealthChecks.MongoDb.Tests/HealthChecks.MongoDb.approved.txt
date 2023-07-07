@@ -1,0 +1,19 @@
+namespace HealthChecks.MongoDb
+{
+    public class MongoDbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public MongoDbHealthCheck(MongoDB.Driver.MongoClientSettings clientSettings, string? databaseName = null) { }
+        public MongoDbHealthCheck(string connectionString, string? databaseName = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class MongoDbHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMongoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, MongoDB.Driver.MongoClientSettings mongoClientSettings, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMongoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string mongodbConnectionString, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMongoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, MongoDB.Driver.MongoClientSettings mongoClientSettings, string mongoDatabaseName, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMongoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string mongodbConnectionString, string mongoDatabaseName, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

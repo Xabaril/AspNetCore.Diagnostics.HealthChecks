@@ -1,32 +1,29 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.System
+namespace HealthChecks.System;
+
+public class MaximumValueHealthCheck<T> : IHealthCheck
+    where T : IComparable<T>
 {
-    public class MaximumValueHealthCheck<T>
-        : IHealthCheck
-        where T : IComparable<T>
+    private readonly T _maximumValue;
+    private readonly Func<T> _currentValueFunc;
+
+    public MaximumValueHealthCheck(T maximumValue, Func<T> currentValueFunc)
     {
-        private readonly T _maximumValue;
-        private readonly Func<T> _currentValueFunc;
-        public MaximumValueHealthCheck(T maximumValue, Func<T> currentValueFunc)
-        {
-            _maximumValue = maximumValue;
-            _currentValueFunc = currentValueFunc ?? throw new ArgumentNullException(nameof(currentValueFunc));
-        }
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            var currentValue = _currentValueFunc();
+        _maximumValue = maximumValue;
+        _currentValueFunc = Guard.ThrowIfNull(currentValueFunc);
+    }
 
-            if (currentValue.CompareTo(_maximumValue) <= 0)
-            {
-                return Task.FromResult(HealthCheckResult.Healthy());
-            }
+    /// <inheritdoc />
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        var currentValue = _currentValueFunc();
 
-            return Task.FromResult(
-                new HealthCheckResult(context.Registration.FailureStatus, description: $"Maximum={_maximumValue}, Current={currentValue}"));
+        if (currentValue.CompareTo(_maximumValue) <= 0)
+        {
+            return HealthCheckResultTask.Healthy;
         }
+
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: $"Maximum={_maximumValue}, Current={currentValue}"));
     }
 }

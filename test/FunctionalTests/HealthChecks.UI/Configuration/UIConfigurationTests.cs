@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FunctionalTests.Base;
 using HealthChecks.UI;
@@ -8,6 +9,7 @@ using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -318,6 +320,40 @@ namespace FunctionalTests.UI.Configuration
             var UISettings = serviceProvider.GetService<IOptions<Settings>>().Value;
 
             UISettings.DisableMigrations.Should().Be(true);
+        }
+
+        [Fact]
+        public async Task support_configuring_page_title()
+        {
+            var pageTitle = "My Health Checks UI";
+
+            var builder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services
+                        .AddRouting()
+                        .AddHealthChecksUI()
+                        .AddInMemoryStorage();
+                })
+                .Configure(app =>
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(setup =>
+                    {
+                        setup.MapHealthChecksUI(options =>
+                        {
+                            options.PageTitle = pageTitle;
+                        });
+                    });
+                });
+
+            var server = new TestServer(builder);
+            var options = server.Services.GetRequiredService<IOptions<global::HealthChecks.UI.Configuration.Options>>().Value;
+            var response = await server.CreateRequest(options.UIPath).GetAsync();
+            var html = await response.Content.ReadAsStringAsync();
+
+            html.Should().Contain($"<title>{pageTitle}</title>");
         }
     }
 }

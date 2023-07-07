@@ -1,4 +1,4 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: healthchecks.aspnetcore.ui
@@ -11,98 +11,100 @@ spec:
     listKind: HealthChecks
     shortNames:
       - hc
+  scope: Namespaced
   versions:
     - name: v1
       served: true
       storage: true
-  scope: Namespaced
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
+      schema:
+        openAPIV3Schema:
+          type: object
           properties:
-            name:
-              type: string
-            scope:
-             type: string
-             enum:
-               - Cluster
-               - Namespaced
-            serviceType:
-              type: string
-              enum:
-                - ClusterIP
-                - LoadBalancer
-                - NodePort
-            portNumber:
-              type: number
-            uiPath:
-              type: string
-              pattern: "^/"
-            uiApiPath:
-              type: string
-              pattern: "^/"
-            uiResourcesPath:
-              type: string
-              pattern: "^/"
-            uiWebhooksPath:
-              type: string
-              pattern: "^/"
-            uiNoRelativePaths:
-              type: boolean
-            servicesLabel:
-              type: string
-            healthChecksPath:
-              type: string
-            healthChecksScheme:
-              type: string
-            image:
-              type: string
-            imagePullPolicy:
-              type: string
-            stylesheetContent:
-              type: string
-            serviceAnnotations:
-              type: array
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  value:
-                    type: string
-            deployAnnotations:
-              type: array
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  value:
-                    type: string
-                required:
-                  - name
-                  - value
-            webhooks:
-              type: array
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  uri:
-                    type: string
-                  payload:
-                    type: string
-                  restoredPayload:
-                    type: string
-                required:
-                  - name
-                  - uri
-                  - payload
-                  - restoredPayload
+            spec:
+              type: object
+              properties:
+                name:
+                  type: string
+                scope:
+                  type: string
+                  enum:
+                    - Cluster
+                    - Namespaced
+                serviceType:
+                  type: string
+                  enum:
+                    - ClusterIP
+                    - LoadBalancer
+                    - NodePort
+                portNumber:
+                  type: number
+                uiPath:
+                  type: string
+                  pattern: "^/"
+                uiApiPath:
+                  type: string
+                  pattern: "^/"
+                uiResourcesPath:
+                  type: string
+                  pattern: "^/"
+                uiWebhooksPath:
+                  type: string
+                  pattern: "^/"
+                uiNoRelativePaths:
+                  type: boolean
+                servicesLabel:
+                  type: string
+                healthChecksPath:
+                  type: string
+                healthChecksScheme:
+                  type: string
+                image:
+                  type: string
+                imagePullPolicy:
+                  type: string
+                stylesheetContent:
+                  type: string
+                serviceAnnotations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      value:
+                        type: string
+                deployAnnotations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      value:
+                        type: string
+                    required:
+                      - name
+                      - value
+                webhooks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      uri:
+                        type: string
+                      payload:
+                        type: string
+                      restoredPayload:
+                        type: string
+                    required:
+                      - name
+                      - uri
+                      - payload
+                      - restoredPayload
 
-          required:
-            - name
-            - scope
-            - servicesLabel
+              required:
+                - name
+                - scope
+                - servicesLabel

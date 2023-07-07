@@ -1,0 +1,23 @@
+namespace HealthChecks.Gremlin
+{
+    public class GremlinHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        protected readonly Gremlin.Net.Driver.GremlinServer _server;
+        public GremlinHealthCheck(HealthChecks.Gremlin.GremlinOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class GremlinOptions
+    {
+        public GremlinOptions() { }
+        public bool EnableSsl { get; set; }
+        public string Hostname { get; set; }
+        public int Port { get; set; }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class GremlinHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddGremlin(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, HealthChecks.Gremlin.GremlinOptions> connectionOptionsFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

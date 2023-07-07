@@ -1,13 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>$(NetFrameworkVersion);$(NetStandardVersion)</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Uri;Url;Uris;Urls</PackageTags>
+    <TargetFrameworks>netstandard2.0;net5</TargetFrameworks>
+    <PackageTags>$(PackageTags);Uri;Url;Uris;Urls</PackageTags>
     <Description>HealthChecks.Uris is a simple health check package for Uri groups.</Description>
-    <Version>$(HealthCheckUri)</Version>
-    <PackageId>AspNetCore.HealthChecks.Uris</PackageId>
+    <VersionPrefix>$(HealthCheckUri)</VersionPrefix>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsHttp)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
   </ItemGroup>
+
 </Project>

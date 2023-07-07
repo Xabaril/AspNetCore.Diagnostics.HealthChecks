@@ -1,40 +1,45 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.Oracle
+namespace HealthChecks.Oracle;
+
+/// <summary>
+/// A health check for Oracle databases.
+/// </summary>
+public class OracleHealthCheck : IHealthCheck
 {
-    public class OracleHealthCheck
-        : IHealthCheck
+    private readonly OracleHealthCheckOptions _options;
+
+    public OracleHealthCheck(OracleHealthCheckOptions options)
     {
-        private readonly string _connectionString;
-        private readonly string _sql;
-        public OracleHealthCheck(string connectionString, string sql)
+        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.CommandText, true);
+        _options = options;
+    }
+
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            using var connection = _options.Credential == null
+                ? new OracleConnection(_options.ConnectionString)
+                : new OracleConnection(_options.ConnectionString, _options.Credential);
+
+            _options.Configure?.Invoke(connection);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+            using var command = connection.CreateCommand();
+            command.CommandText = _options.CommandText;
+            var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+            return _options.HealthCheckResultBuilder == null
+                ? HealthCheckResult.Healthy()
+                : _options.HealthCheckResultBuilder(result);
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                using (var connection = new OracleConnection(_connectionString))
-                {
-                    await connection.OpenAsync(cancellationToken);
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-                    return HealthCheckResult.Healthy();
-                }
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

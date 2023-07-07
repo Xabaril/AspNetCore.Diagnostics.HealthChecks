@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator.Diagnostics
 {
@@ -8,8 +7,7 @@ namespace HealthChecks.UI.K8s.Operator.Diagnostics
         private readonly ILogger _logger;
         public OperatorDiagnostics(ILoggerFactory loggerFactory)
         {
-            _ = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _logger = loggerFactory.CreateLogger(nameof(K8sOperator));
+            _logger = Guard.ThrowIfNull(loggerFactory).CreateLogger(nameof(K8sOperator));
         }
 
         public void OperatorStarting()

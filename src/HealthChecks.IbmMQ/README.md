@@ -15,11 +15,12 @@ With all of the following examples, you can additionally add the following param
 
 Use the extension method where you provide the queue manager name and the connection properties.
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    Hashtable connectionProperties = new Hashtable {
-        {MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_BINDINGS},
+    Hashtable connectionProperties = new Hashtable
+    {
+        { MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_BINDINGS },
     };
     services
         .AddHealthChecks()
@@ -31,7 +32,7 @@ public void ConfigureServices(IServiceCollection services)
 
 For `MQC.TRANSPORT_MQSERIES_MANAGED` connection you can use the following conveniece extension method where you need to specify the channel and the host(port) information. User and password are optional parameters.
 
-```cs
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services

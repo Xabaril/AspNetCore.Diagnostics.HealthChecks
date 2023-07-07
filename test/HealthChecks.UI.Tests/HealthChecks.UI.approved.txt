@@ -29,7 +29,7 @@ namespace HealthChecks.UI.Configuration
         public HealthChecks.UI.Configuration.Settings ConfigureWebhooksEndpointHttpclient(System.Action<System.IServiceProvider, System.Net.Http.HttpClient> webhooksEndpointHttpClientconfig) { }
         public HealthChecks.UI.Configuration.Settings DisableDatabaseMigrations() { }
         public HealthChecks.UI.Configuration.Settings MaximumHistoryEntriesPerEndpoint(int maxValue) { }
-        public HealthChecks.UI.Configuration.Settings NotifyUnHealthyOneTimeUntilChangeToAvoidNotificationSpam() { }
+        public HealthChecks.UI.Configuration.Settings NotifyUnHealthyOneTimeUntilChange() { }
         public HealthChecks.UI.Configuration.Settings SetApiMaxActiveRequests(int apiMaxActiveRequests) { }
         public HealthChecks.UI.Configuration.Settings SetEvaluationTimeInSeconds(int seconds) { }
         public HealthChecks.UI.Configuration.Settings SetHeaderText(string text) { }

@@ -17,7 +17,8 @@ namespace HealthChecks.UI.Tests
                 {
                     services.AddHealthChecksUI()
                     .AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI", options => customOptionsInvoked = true);
-                });
+                })
+                .Configure(_ => { });
 
             var services = hostBuilder.Build().Services;
             var context = services.GetRequiredService<HealthChecksDb>();

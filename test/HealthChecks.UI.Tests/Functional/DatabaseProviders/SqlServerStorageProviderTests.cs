@@ -17,7 +17,8 @@ namespace HealthChecks.UI.Tests
                 {
                     services.AddHealthChecksUI()
                     .AddSqlServerStorage("connectionString", opt => customOptionsInvoked = true);
-                });
+                })
+                .Configure(_ => { });
 
             var services = hostBuilder.Build().Services;
             var context = services.GetRequiredService<HealthChecksDb>();

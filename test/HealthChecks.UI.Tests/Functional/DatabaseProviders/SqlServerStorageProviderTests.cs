@@ -13,6 +13,7 @@ namespace HealthChecks.UI.Tests
             var customOptionsInvoked = false;
 
             var hostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecksUI()

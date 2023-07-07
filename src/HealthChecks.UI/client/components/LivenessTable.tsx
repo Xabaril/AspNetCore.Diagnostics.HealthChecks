@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import moment from 'moment';
 import { Liveness } from '../typings/models';
 import { discoveryServices, getStatusConfig } from '../healthChecksResources';
 import { CheckTable } from './CheckTable';
@@ -89,7 +90,9 @@ const LivenessTable: FunctionComponent<LivenessTableProps> = ({ livenessData, ex
                     {statusConfig!.image}
                   </i>
                 </td>
-                <td>{item.onStateFrom}</td>
+                <td className="align-center">
+                  {item.status} {moment.utc(item.onStateFrom).fromNow().toString()}
+                </td>
                 <td className="align-center">
                   {new Date(item.lastExecuted).toLocaleString()}
                 </td>

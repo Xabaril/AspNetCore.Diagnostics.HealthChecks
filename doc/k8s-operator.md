@@ -38,29 +38,46 @@ The [HealthCheck operator definition](https://github.com/Xabaril/AspNetCore.Diag
 | Field         | Description                                                                        |
 | ------------- | :--------------------------------------------------------------------------------- |
 | name          | Name of the healthcheck resource                                                   |
+| scope         | Cluster / Namespaced                                                               |
 | servicesLabel | The label the operator service watcher will use to detected healthchecks endpoints |
+
+### Scope definition (Cluster or Namespaced)
+
+The scope field (Cluster or Namespaced) is mandatory and will specify to the operator whether it should watch for healthchecks services in the
+same namespace where the UI resource is created or watch to all services in all namespaces.
+
+If you wan't to have different UI's for different namespaced services you should use **Namespaced**
+
+If you wan't to have a single UI that monitors all the healthchecks from the cluster you should use **Cluster**
+
+Note: The UI resources created by the operator (deployment, service, configmap, secret, etc) will always be created in the metadata specified namespace.
 
 ### Optional fields
 
-| Field                 | Description                                                          | Default                                              |
-| --------------------- | :------------------------------------------------------------------- | ---------------------------------------------------- |
-| serviceType           | How the UI should be published (ClusterIP, LoadBalancer or NodePort) | ClusterIP                                            |
-| portNumber            | What port will be used to expose the UI service                      | 80                                                   |
-| uiPath                | Location where the UI frontend will be served                        | /healthchecks                                        |
-| healthChecksPath      | Path where the UI will collect health from endpoints                 | /health (Can be overriden with a service annotation) |
-| healthChecksScheme    | Scheme to be used to collect health from endpoints                   | http (Can be overriden with a service annotation)    |
-| image                 | Image to be used by the UI                                           | xabarilcoding/healthchecksui:latest                  |
-| imagePullPolicy       | Deployment image pull policy                                         | Always                                               |
-| stylesheetContent     | css content used to brand the UI                                     | none                                                 |
-| serviceAnnotations    | name / value array to use custom annotations in UI service           | none                                                 |
-| deploymentAnnotations | name / value array to use custom annotations in UI Deployment        | none                                                 |
-| webhooks              | webhook array object (name, uri, payload and restoredPayload)        | none                                                 |
+| Field                 | Description                                                               | Default                                              |
+| --------------------- | :------------------------------------------------------------------------ | ---------------------------------------------------- |
+| serviceType           | How the UI should be published (ClusterIP, LoadBalancer or NodePort)      | ClusterIP                                            |
+| portNumber            | What port will be used to expose the UI service                           | 80                                                   |
+| uiPath                | Location where the UI frontend will be served                             | /healthchecks                                        |
+| uiApiPath             | Location where the UI backend API will be served                          | UI defaults                                          |
+| uiResourcesPath       | Location where the UI static files resources will be served               | UI defaults                                          |
+| uiWebhooksPath        | Location where the Webhooks api                                           | UI defaults                                          |
+| uiNoRelativePaths     | Disable UI front-end relative paths                                       | false                                                |
+| healthChecksPath      | Path where the UI will collect health from endpoints                      | /health (Can be overriden with a service annotation) |
+| healthChecksScheme    | Scheme to be used to collect health from endpoints                        | http (Can be overriden with a service annotation)    |
+| image                 | Image to be used by the UI                                                | xabarilcoding/healthchecksui:latest                  |
+| imagePullPolicy       | Deployment image pull policy                                              | Always                                               |
+| stylesheetContent     | css content used to brand the UI                                          | none                                                 |
+| serviceAnnotations    | name / value array to use custom annotations in UI service                | none                                                 |
+| deploymentAnnotations | name / value array to use custom annotations in UI Deployment             | none                                                 |
+| webhooks              | webhook array object (name, uri, payload and restoredPayload)             | none                                                 |
+| tolerations           | toleration array object (key, operator, value, effect and seconds)        | none                                                 |
 
 ## Sample HealthChecks Operator Tutorial
 
 Let's start by creating a demo namespace:
 
-`kubectl create ns lande`
+`kubectl create ns demo`
 
 And then, create a healthchecks-ui.yaml file with the following contents:
 
@@ -72,6 +89,8 @@ metadata:
   namespace: demo
 spec:
   name: healthchecks-ui
+  scope: Namespaced #The UI will be created at specified namespace (demo) and will watch healthchecks services in demo namespace only
+  #scope: Cluster The UI will be created at specified namespace (demo) but will watch healthcheck services across all namespaces
   servicesLabel: HealthChecks
   serviceType: LoadBalancer
   stylesheetContent: >
@@ -254,12 +273,12 @@ spec:
   name: healthchecks-ui
   servicesLabel: HealthChecks
   stylesheetContent: >
-    :root {    
+    :root {
       --primaryColor: #0f519f;
-      --secondaryColor: #f4f4f4;  
+      --secondaryColor: #f4f4f4;
       --bgMenuActive: #0f519f;
-      --bgButton: #0f519f;      
-      --bgAside: var(--primaryColor);   
+      --bgButton: #0f519f;
+      --bgAside: var(--primaryColor);
     }
   webhooks:
     - name: requestcatcher1

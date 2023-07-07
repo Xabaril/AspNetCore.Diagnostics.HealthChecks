@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { getStatusConfig } from '../healthChecksResources';
 
 interface IStatusProps {
   status: string;
 }
 
-const Status = ({ status }: IStatusProps) => {
+const Status: FunctionComponent<IStatusProps> = ({ status }) => {
   const statusConfig = getStatusConfig(status);
   return (
     <div className="hc-status">

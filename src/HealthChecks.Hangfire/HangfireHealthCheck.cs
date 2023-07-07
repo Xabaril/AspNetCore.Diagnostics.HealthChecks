@@ -1,56 +1,52 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Hangfire
+namespace HealthChecks.Hangfire;
+
+public class HangfireHealthCheck : IHealthCheck
 {
-    public class HangfireHealthCheck
-        : IHealthCheck
+    private readonly HangfireOptions _hangfireOptions;
+
+    public HangfireHealthCheck(HangfireOptions hangfireOptions)
     {
-        private readonly HangfireOptions _hangfireOptions;
-        public HangfireHealthCheck(HangfireOptions hangfireOptions)
+        _hangfireOptions = Guard.ThrowIfNull(hangfireOptions);
+    }
+
+    /// <inheritdoc />
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _hangfireOptions = hangfireOptions ?? throw new ArgumentNullException(nameof(hangfireOptions));
+            List<string>? errorList = null;
+            var hangfireMonitoringApi = global::Hangfire.JobStorage.Current.GetMonitoringApi();
+
+            if (_hangfireOptions.MaximumJobsFailed.HasValue)
+            {
+                long failedJobsCount = hangfireMonitoringApi.FailedCount();
+                if (failedJobsCount >= _hangfireOptions.MaximumJobsFailed)
+                {
+                    (errorList ??= new()).Add($"Hangfire has #{failedJobsCount} failed jobs and the maximum available is {_hangfireOptions.MaximumJobsFailed}.");
+                }
+            }
+
+            if (_hangfireOptions.MinimumAvailableServers.HasValue)
+            {
+                int serversCount = hangfireMonitoringApi.Servers().Count;
+                if (serversCount < _hangfireOptions.MinimumAvailableServers)
+                {
+                    (errorList ??= new()).Add($"{serversCount} server registered. Expected minimum {_hangfireOptions.MinimumAvailableServers}.");
+                }
+            }
+
+            if (errorList?.Count > 0)
+            {
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join(" + ", errorList)));
+            }
+
+            return HealthCheckResultTask.Healthy;
         }
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                var errorList = new List<string>();
-                var hangfireMonitoringApi = global::Hangfire.JobStorage.Current.GetMonitoringApi();
-
-                if (_hangfireOptions.MaximumJobsFailed.HasValue)
-                {
-                    var failedJobsCount = hangfireMonitoringApi.FailedCount();
-                    if (failedJobsCount >= _hangfireOptions.MaximumJobsFailed)
-                    {
-                        errorList.Add($"Hangfire has #{failedJobsCount} failed jobs and the maximum available is {_hangfireOptions.MaximumJobsFailed}.");
-                    }
-                }
-
-                if (_hangfireOptions.MinimumAvailableServers.HasValue)
-                {
-                    var serversCount = hangfireMonitoringApi.Servers().Count;
-                    if (serversCount < _hangfireOptions.MinimumAvailableServers)
-                    {
-                        errorList.Add($"{serversCount} server registered. Expected minimum {_hangfireOptions.MinimumAvailableServers}.");
-                    }
-                }
-
-                if (errorList.Any())
-                {
-                    return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, description: string.Join(" + ", errorList)));
-                }
-
-                return Task.FromResult(HealthCheckResult.Healthy());
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
-            }
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
     }
 }

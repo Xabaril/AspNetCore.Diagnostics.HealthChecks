@@ -1,0 +1,65 @@
+name: HealthChecks SignalR CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.SignalR/**
+      - test/HealthChecks.SignalR.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_signalr_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+      - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.SignalR/**
+      - test/HealthChecks.SignalR.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_signalr_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj &&
+          dotnet restore ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.SignalR.Tests/HealthChecks.SignalR.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: SignalR
+          directory: .coverage

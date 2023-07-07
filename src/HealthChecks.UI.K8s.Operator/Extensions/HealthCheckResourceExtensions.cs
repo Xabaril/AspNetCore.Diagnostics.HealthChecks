@@ -1,5 +1,4 @@
-﻿using k8s.Models;
-using System;
+using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Extensions
 {
@@ -19,6 +18,6 @@ namespace HealthChecks.UI.K8s.Operator.Extensions
 
         public static bool HasBrandingConfigured(this HealthCheckResource resource) =>
                 resource.Spec.StylesheetContent.NotEmpty();
-            
+
     }
 }

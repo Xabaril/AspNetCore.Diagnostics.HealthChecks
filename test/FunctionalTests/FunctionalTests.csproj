@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
-    <IsPackable>false</IsPackable>
+    <TargetFramework>$(NetFrameworkVersion)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertions)" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHost)" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdk)" />
-    <PackageReference Include="NSubstitute" Version="$(NSubstitute)" />    
-    <PackageReference Include="xunit" Version="$(xunit)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(xunitrunnervisualstudio)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(MicrosoftAspNetCoreSignalR)" />
+    <PackageReference Include="FluentAssertions"/>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="NSubstitute"/>
+    <PackageReference Include="xunit"/>
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR"/>
+    <PackageReference Include="MySqlConnector"/>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Aws.S3\HealthChecks.Aws.S3.csproj" />
@@ -24,10 +24,11 @@
     <ProjectReference Include="..\..\src\HealthChecks.DynamoDb\HealthChecks.DynamoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Prometheus.Metrics\HealthChecks.Prometheus.Metrics.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Solr\HealthChecks.Solr.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.IdSvr\HealthChecks.IdSvr.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />
@@ -35,7 +36,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.RabbitMQ\HealthChecks.RabbitMQ.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.SignalR\HealthChecks.SignalR.csproj" />
@@ -51,13 +52,13 @@
     <ProjectReference Include="..\..\src\HealthChecks.UI\HealthChecks.UI.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Uris\HealthChecks.Uris.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="id_rsa">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="HealthChecks.UI\Configuration\appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

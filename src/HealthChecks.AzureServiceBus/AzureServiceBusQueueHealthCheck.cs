@@ -1,59 +1,52 @@
-﻿using Microsoft.Azure.ServiceBus.Management;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.AzureServiceBus
+namespace HealthChecks.AzureServiceBus;
+
+public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusQueueHealthCheckOptions>, IHealthCheck
 {
-    public class AzureServiceBusQueueHealthCheck
-        : IHealthCheck
+    private string? _connectionKey;
+
+    protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.QueueName}";
+
+    public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options)
+        : base(options)
     {
-        private static readonly ConcurrentDictionary<string, ManagementClient> _managementClientConnections = new ConcurrentDictionary<string, ManagementClient>();
-        private readonly string _connectionString;
-        private readonly string _queueName;
+        Guard.ThrowIfNull(options.QueueName, true);
+    }
 
-
-        public AzureServiceBusQueueHealthCheck(string connectionString, string queueName)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
+            if (Options.UsePeekMode)
+                await CheckWithReceiver().ConfigureAwait(false);
+            else
+                await CheckWithManagement().ConfigureAwait(false);
 
-            if (string.IsNullOrEmpty(queueName))
-            {
-                throw new ArgumentNullException(nameof(queueName));
-            }
-
-            _connectionString = connectionString;
-            _queueName = queueName;
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
 
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        Task CheckWithReceiver()
         {
-            try
-            {
-                var connectionKey = $"{_connectionString}_{_queueName}";
-                if (!_managementClientConnections.TryGetValue(connectionKey, out var managementClient))
-                {
-                    managementClient = new ManagementClient(_connectionString);
+            var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
+            var receiver = ServiceBusReceivers.GetOrAdd(
+                $"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}",
+                client.CreateReceiver(Options.QueueName));
 
-                    if (!_managementClientConnections.TryAdd(connectionKey, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New management client connection can't be added into dictionary.");
-                    }
-                }
+            return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
+        }
 
-                await managementClient.GetQueueRuntimeInfoAsync(_queueName, cancellationToken);
+        Task CheckWithManagement()
+        {
+            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return managementClient.GetQueueRuntimePropertiesAsync(Options.QueueName, cancellationToken);
         }
     }
 }

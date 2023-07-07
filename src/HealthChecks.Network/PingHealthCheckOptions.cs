@@ -1,15 +1,20 @@
-﻿using System.Collections.Generic;
+namespace HealthChecks.Network;
 
-namespace HealthChecks.Network
+public class PingHealthCheckOptions
 {
-    public class PingHealthCheckOptions
-    {
-        internal Dictionary<string, (string Host, int TimeOut)> ConfiguredHosts { get; } = new Dictionary<string, (string, int)>();
+    internal Dictionary<string, (string Host, int TimeOut)> ConfiguredHosts { get; } = new Dictionary<string, (string, int)>();
 
-        public PingHealthCheckOptions AddHost(string host, int timeout)
-        {
-            ConfiguredHosts.Add(host, (host, timeout));
-            return this;
-        }
+    public bool CheckAllHosts { get; set; }
+
+    public PingHealthCheckOptions AddHost(string host, int timeout)
+    {
+        ConfiguredHosts.Add(host, (host, timeout));
+        return this;
+    }
+
+    public PingHealthCheckOptions WithCheckAllHosts()
+    {
+        CheckAllHosts = true;
+        return this;
     }
 }

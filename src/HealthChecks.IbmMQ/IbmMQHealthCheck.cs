@@ -1,40 +1,39 @@
-﻿using IBM.WMQ;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
 using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
+using IBM.WMQ;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.IbmMQ
+namespace HealthChecks.IbmMQ;
+
+/// <summary>
+/// A health check for IBM MQ services.
+/// </summary>
+#if NETSTANDARD2_0
+[Obsolete("Use .NET6 based MQ Client libraries", false)]
+#endif
+public class IbmMQHealthCheck : IHealthCheck
 {
-    public class IbmMQHealthCheck : IHealthCheck
+    private readonly Hashtable _connectionProperties;
+    private readonly string _queueManager;
+
+    public IbmMQHealthCheck(string queueManager, Hashtable connectionProperties)
     {
-        private readonly Hashtable _connectionProperties;
-        private readonly string _queueManager;
+        Guard.ThrowIfNull(queueManager, true);
 
-        public IbmMQHealthCheck(string queueManager, Hashtable connectionProperties)
+        _queueManager = queueManager;
+        _connectionProperties = Guard.ThrowIfNull(connectionProperties);
+    }
+
+    /// <inheritdoc />
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            if (string.IsNullOrEmpty(queueManager)) throw new ArgumentNullException(nameof(queueManager));
-
-            _queueManager = queueManager;
-            _connectionProperties = connectionProperties ?? throw new ArgumentNullException(nameof(connectionProperties));
+            using var connection = new MQQueueManager(_queueManager, _connectionProperties);
+            return HealthCheckResultTask.Healthy;
         }
-
-        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                using (var connection = new MQQueueManager(_queueManager, _connectionProperties))
-                {
-                    return Task.FromResult(
-                        HealthCheckResult.Healthy());
-                }
-            }
-            catch (Exception ex)
-            {
-                return Task.FromResult(
-                    new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
-            }
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
     }
 }

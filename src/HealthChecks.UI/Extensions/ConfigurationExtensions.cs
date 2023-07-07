@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.Configuration
             (this IConfiguration configuration, string section, string fallback)
         {
             IConfigurationSection configurationSection = configuration.GetSection(section);
-            
+
             if (!configurationSection.Exists())
             {
                 configurationSection = configuration.GetSection(fallback);

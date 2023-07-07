@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FunctionalTests.Base;
-using HealthChecks.UI.Core.Data;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,42 +1,43 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.SqlServer
+namespace HealthChecks.SqlServer;
+
+/// <summary>
+/// A health check for SqlServer services.
+/// </summary>
+public class SqlServerHealthCheck : IHealthCheck
 {
-    public class SqlServerHealthCheck
-        : IHealthCheck
+    private readonly SqlServerHealthCheckOptions _options;
+
+    public SqlServerHealthCheck(SqlServerHealthCheckOptions options)
     {
-        private readonly string _connectionString;
-        private readonly string _sql;
-        public SqlServerHealthCheck(string sqlserverconnectionstring, string sql)
+        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.CommandText, true);
+        _options = options;
+    }
+
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _connectionString = sqlserverconnectionstring ?? throw new ArgumentNullException(nameof(sqlserverconnectionstring));
-            _sql = sql ?? throw new ArgumentNullException(nameof(sql));
+            using var connection = new SqlConnection(_options.ConnectionString);
+
+            _options.Configure?.Invoke(connection);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+            using var command = connection.CreateCommand();
+            command.CommandText = _options.CommandText;
+            object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+            return _options.HealthCheckResultBuilder == null
+                ? HealthCheckResult.Healthy()
+                : _options.HealthCheckResultBuilder(result);
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    await connection.OpenAsync(cancellationToken);
-
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = _sql;
-                        await command.ExecuteScalarAsync(cancellationToken);
-                    }
-
-                    return HealthCheckResult.Healthy();
-                }
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

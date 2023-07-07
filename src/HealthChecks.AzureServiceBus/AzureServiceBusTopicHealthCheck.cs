@@ -1,58 +1,35 @@
-﻿using Microsoft.Azure.ServiceBus.Management;
+using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.AzureServiceBus
+namespace HealthChecks.AzureServiceBus;
+
+public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusTopicHealthCheckOptions>, IHealthCheck
 {
-    public class AzureServiceBusTopicHealthCheck
-        : IHealthCheck
+    private string? _connectionKey;
+
+    protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.TopicName}";
+
+    public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
+        : base(options)
     {
-        private static readonly ConcurrentDictionary<string, ManagementClient> _managementClients = new ConcurrentDictionary<string, ManagementClient>();
+        Guard.ThrowIfNull(options.TopicName, true);
+    }
 
-        private readonly string _connectionString;
-        private readonly string _topicName;
-
-        public AzureServiceBusTopicHealthCheck(string connectionString, string topicName)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+        CancellationToken cancellationToken = default)
+    {
+        try
         {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentNullException(nameof(connectionString));
-            }
+            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
-            if (string.IsNullOrEmpty(topicName))
-            {
-                throw new ArgumentNullException(nameof(topicName));
-            }
+            _ = await managementClient.GetTopicRuntimePropertiesAsync(Options.TopicName, cancellationToken).ConfigureAwait(false);
 
-
-            _connectionString = connectionString;
-            _topicName = topicName;
+            return HealthCheckResult.Healthy();
         }
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                var connectionKey = $"{_connectionString}_{_topicName}";
-                if (!_managementClients.TryGetValue(connectionKey, out var managementClient))
-                {
-                    managementClient = new ManagementClient(_connectionString);
-
-                    if (!_managementClients.TryAdd(connectionKey, managementClient))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: "New Management Client can't be added into dictionary.");
-                    }
-                }
-
-                await managementClient.GetTopicRuntimeInfoAsync(_topicName);
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

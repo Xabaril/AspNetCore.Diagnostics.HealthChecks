@@ -1,10 +1,6 @@
-﻿using HealthChecks.UI.Image.Configuration;
+using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Image.PushService;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace HealthChecks.UI.Image
 {
@@ -19,15 +15,17 @@ namespace HealthChecks.UI.Image
 
         public void ConfigureServices(IServiceCollection services)
         {
+#pragma warning disable ASP5001, CS0618 // Type or member is obsolete
             services
                 .AddHealthChecksUI()
-                .AddStorageProvider(Configuration)                
+                .AddStorageProvider(Configuration)
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+#pragma warning restore ASP5001, CS0618 // Type or member is obsolete
 
             if (bool.TryParse(Configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
             {
-                if(string.IsNullOrEmpty(Configuration[PushServiceKeys.PushEndpointSecret]))
+                if (string.IsNullOrEmpty(Configuration[PushServiceKeys.PushEndpointSecret]))
                 {
                     throw new Exception($"{PushServiceKeys.PushEndpointSecret} environment variable has not been configured");
                 }

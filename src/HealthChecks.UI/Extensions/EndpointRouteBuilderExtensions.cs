@@ -1,19 +1,15 @@
-
 using HealthChecks.UI;
-using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
 using Microsoft.AspNetCore.Routing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Options = HealthChecks.UI.Configuration.Options;
 
 namespace Microsoft.AspNetCore.Builder
 {
     public static class EndpointRouteBuilderExtensions
     {
         public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
-            Action<Options> setupOptions = null)
+            Action<Options>? setupOptions = null)
         {
             var options = new Options();
             setupOptions?.Invoke(options);
@@ -22,28 +18,37 @@ namespace Microsoft.AspNetCore.Builder
 
             var apiDelegate =
                 builder.CreateApplicationBuilder()
+                    .UseMiddleware<UIApiRequestLimitingMidleware>()
                     .UseMiddleware<UIApiEndpointMiddleware>()
                     .Build();
+
+            var settingsDelegate = builder.CreateApplicationBuilder()
+                .UseMiddleware<UISettingsMiddleware>()
+                .Build();
 
             var webhooksDelegate =
                 builder.CreateApplicationBuilder()
                     .UseMiddleware<UIWebHooksApiMiddleware>()
                     .Build();
 
-
             var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 
-            var resourcesEndpoints = new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
-                .Map(builder, options);
-
+            var resourcesEndpoints =
+                new UIEndpointsResourceMapper(new UIEmbeddedResourcesReader(embeddedResourcesAssembly))
+                    .Map(builder, options);
 
             var apiEndpoint = builder.Map(options.ApiPath, apiDelegate)
-                                .WithDisplayName("HealthChecks UI Api");
+                .WithDisplayName("HealthChecks UI Api");
+
+            var settingsEndpoint =
+                builder.Map($"{options.ApiPath}/{Keys.HEALTHCHECKSUI_SETTINGS_PATH}", settingsDelegate);
 
             var webhooksEndpoint = builder.Map(options.WebhookPath, webhooksDelegate)
-                                .WithDisplayName("HealthChecks UI Webhooks");
+                .WithDisplayName("HealthChecks UI Webhooks");
 
-            var endpointConventionBuilders = new List<IEndpointConventionBuilder>(new[] { apiEndpoint, webhooksEndpoint }.Union(resourcesEndpoints));
+            var endpointConventionBuilders =
+                new List<IEndpointConventionBuilder>(
+                    new[] { apiEndpoint, webhooksEndpoint, settingsEndpoint }.Union(resourcesEndpoints));
 
             return new HealthCheckUIConventionBuilder(endpointConventionBuilders);
         }
@@ -54,7 +59,8 @@ namespace Microsoft.AspNetCore.Builder
             {
                 if (string.IsNullOrEmpty(path) || !path.StartsWith("/"))
                 {
-                    throw new ArgumentException("The value for customized path can't be null and need to start with / character.", argument);
+                    throw new ArgumentException(
+                        "The value for customized path can't be null and need to start with / character.", argument);
                 }
             };
 

@@ -1,19 +1,19 @@
-﻿using k8s;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using HealthChecks.UI.K8s.Operator.Controller;
+using HealthChecks.UI.K8s.Operator.Diagnostics;
 using HealthChecks.UI.K8s.Operator.Handlers;
-using Microsoft.Extensions.Logging;
+using HealthChecks.UI.K8s.Operator.Operator;
+using k8s;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using HealthChecks.UI.K8s.Operator.Diagnostics;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -35,20 +35,25 @@ namespace HealthChecks.UI.K8s.Operator
             {
                 services.AddHostedService<HealthChecksOperator>()
                 .AddSingleton<IKubernetes>(sp =>
-                {
-                    var config = KubernetesClientConfiguration.IsInCluster() ?
-                                   KubernetesClientConfiguration.InClusterConfig() :
-                                   KubernetesClientConfiguration.BuildConfigFromConfigFile();
+               {
+                   var config = KubernetesClientConfiguration.IsInCluster() ?
+                                  KubernetesClientConfiguration.InClusterConfig() :
+                                  KubernetesClientConfiguration.BuildConfigFromConfigFile();
 
-                    return new Kubernetes(config);
-                })
+                   Log.Logger.Information("Starting Kubernetes client using host: {host}", config.Host);
+
+                   return new Kubernetes(config);
+               })
+                .AddHttpClient()
                 .AddTransient<IHealthChecksController, HealthChecksController>()
                 .AddSingleton<OperatorDiagnostics>()
                 .AddSingleton<DeploymentHandler>()
                 .AddSingleton<ServiceHandler>()
                 .AddSingleton<SecretHandler>()
                 .AddSingleton<ConfigMaphandler>()
-                .AddSingleton<HealthCheckServiceWatcher>();
+                .AddSingleton<NotificationHandler>()
+                .AddSingleton<NamespacedServiceWatcher>()
+                .AddSingleton<ClusterServiceWatcher>();
 
             }).ConfigureLogging((context, builder) =>
             {
@@ -60,6 +65,8 @@ namespace HealthChecks.UI.K8s.Operator
                     .WriteTo.ColoredConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception:lj}")
                     .CreateLogger();
 
+                Log.Logger = logger;
+
                 builder.ClearProviders();
                 builder.AddSerilog(logger, dispose: true);
             });
@@ -67,4 +74,3 @@ namespace HealthChecks.UI.K8s.Operator
 }
 
 public class K8sOperator { } //Dummy class for logging
-

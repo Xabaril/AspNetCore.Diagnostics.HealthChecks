@@ -1,15 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
-    <PackageTags>HealthCheck;Azure Key Vault;Secrets</PackageTags>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>$(PackageTags);Azure Key Vault;Secrets</PackageTags>
     <Description>HealthChecks.AzureKeyVault is the health check package for Azure Key Vault secrets</Description>
-    <Version>$(HealthCheckKeyVault)</Version>
-    <PackageId>AspNetCore.HealthChecks.AzureKeyVault</PackageId>
+    <VersionPrefix>$(HealthCheckKeyVault)</VersionPrefix>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="$(MicrosoftAzureServicesAppAuthentication)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="$(MicrosoftExtensionsDiagnosticsHealthChecks)" />
-    <PackageReference Include="Microsoft.Azure.KeyVault" Version="$(MicrosoftAzureKeyVault)" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="$(MicrosoftIdentityModelClientsActiveDirectory)" />
+    <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.5.1" />
+    <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.5.0" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
   </ItemGroup>
+
 </Project>

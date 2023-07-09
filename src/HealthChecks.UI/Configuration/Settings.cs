@@ -52,12 +52,6 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings SetNotifyUnHealthyOneTimeUntilChange()
-        {
-            NotifyUnHealthyOneTimeUntilChange = true;
-            return this;
-        }
-
         public Settings SetEvaluationTimeInSeconds(int seconds)
         {
             EvaluationTimeInSeconds = seconds;
@@ -79,6 +73,12 @@ namespace HealthChecks.UI.Configuration
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;
+            return this;
+        }
+
+        public Settings SetNotifyUnHealthyOneTimeUntilChange()
+        {
+            NotifyUnHealthyOneTimeUntilChange = true;
             return this;
         }
 

@@ -543,6 +543,17 @@ Webhooks can be configured with configuration providers and also by code. Using 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
+**Avoid Fail notification spam**
+
+To prevent you from receiving several failure notifications from your application, a configuration was created to meet this scenario.
+
+```csharp
+services.AddHealthChecksUI(setup =>
+{
+    setup.SetNotifyUnHealthyOneTimeUntilChange(); // You will only receive one failure notification until the status changes.
+});
+```
+
 ## UI Style and branding customization
 
 ### Sample of dotnet styled UI

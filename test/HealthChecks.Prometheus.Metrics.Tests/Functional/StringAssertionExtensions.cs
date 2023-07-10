@@ -1,19 +1,13 @@
-using FluentAssertions;
-using FluentAssertions.Primitives;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+namespace HealthChecks.Prometheus.Metrics.Tests.Functional;
 
-namespace HealthChecks.Prometheus.Metrics.Tests.Functional
+public static class StringAssertionExentions
 {
-    public static class StringAssertionExentions
+    public static string ShouldContainCheckAndResult(this string value, string checkName, HealthStatus expectedResult)
     {
-        public static AndConstraint<StringAssertions> ContainCheckAndResult(this StringAssertions assertions, string checkName,
-            HealthStatus expectedResult)
-        {
-            assertions.Contain($"healthcheck{{healthcheck=\"{checkName}\"}} {expectedResult:D}",
-                "health check  must be included");
-            assertions.Contain($"healthcheck_duration_seconds{{healthcheck=\"{checkName}\"}}",
-                "health check duration must be included");
-            return new AndConstraint<StringAssertions>(assertions);
-        }
+        value.ShouldContain($"healthcheck{{healthcheck=\"{checkName}\"}} {expectedResult:D}",
+            customMessage: "health check  must be included");
+        value.ShouldContain($"healthcheck_duration_seconds{{healthcheck=\"{checkName}\"}}",
+            customMessage: "health check duration must be included");
+        return value;
     }
 }

@@ -34,6 +34,6 @@ echo "Created docker image healthchecksui-k8s-operator:$tag. You can execute thi
 
 #Publish it
 if ($PublishToDockerHub) {
-    docker push xabarilcoding/healthchecksui-k8s-operator:$tag 
-    docker push xabarilcoding/healthchecksui-k8s-operator:latest 
+    docker push xabarilcoding/healthchecksui-k8s-operator:$tag
+    docker push xabarilcoding/healthchecksui-k8s-operator:latest
 }

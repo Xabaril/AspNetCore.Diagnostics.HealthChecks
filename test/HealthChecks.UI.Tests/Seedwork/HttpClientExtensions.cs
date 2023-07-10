@@ -7,8 +7,8 @@ namespace HealthChecks.UI.Tests
     {
         public static async Task<T> GetAsJson<T>(this HttpClient client, string url)
         {
-            var response = await client.GetAsync(url);
-            var content = await response.Content.ReadAsStringAsync();
+            var response = await client.GetAsync(url).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<T>(content, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

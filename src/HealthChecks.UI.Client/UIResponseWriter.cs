@@ -23,11 +23,29 @@ namespace HealthChecks.UI.Client
 
                 var uiReport = UIHealthReport.CreateFrom(report);
 
-                await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value);
+                await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value).ConfigureAwait(false);
             }
             else
             {
-                await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse);
+                await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse).ConfigureAwait(false);
+            }
+        }
+
+#pragma warning disable IDE1006 // Naming Styles
+        public static async Task WriteHealthCheckUIResponseNoExceptionDetails(HttpContext httpContext, HealthReport report)
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            if (report != null)
+            {
+                httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
+
+                var uiReport = UIHealthReport.CreateFrom(report, _ => "Exception Occurred.");
+
+                await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value).ConfigureAwait(false);
+            }
+            else
+            {
+                await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse).ConfigureAwait(false);
             }
         }
 

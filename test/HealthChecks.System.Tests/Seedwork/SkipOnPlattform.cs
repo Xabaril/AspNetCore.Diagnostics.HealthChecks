@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 

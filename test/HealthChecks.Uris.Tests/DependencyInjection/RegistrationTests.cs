@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Xunit;
-
 namespace HealthChecks.Uris.Tests.DependencyInjection
 {
     public class uris_registration_should
@@ -21,8 +15,8 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("uri-group");
-            check.Should().BeOfType<UriHealthCheck>();
+            registration.Name.ShouldBe("uri-group");
+            check.ShouldBeOfType<UriHealthCheck>();
         }
 
         [Fact]
@@ -38,8 +32,8 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            registration.Name.Should().Be("my-uri-group");
-            check.Should().BeOfType<UriHealthCheck>();
+            registration.Name.ShouldBe("my-uri-group");
+            check.ShouldBeOfType<UriHealthCheck>();
         }
 
         [Fact]
@@ -55,7 +49,7 @@ namespace HealthChecks.Uris.Tests.DependencyInjection
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(serviceProvider);
 
-            check.Should().BeOfType<UriHealthCheck>();
+            check.ShouldBeOfType<UriHealthCheck>();
         }
     }
 }

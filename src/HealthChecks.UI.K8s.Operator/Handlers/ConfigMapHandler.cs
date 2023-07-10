@@ -13,8 +13,8 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
 
         public ConfigMaphandler(IKubernetes client, ILogger<K8sOperator> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = Guard.ThrowIfNull(client);
+            _logger = Guard.ThrowIfNull(logger);
         }
 
         public Task<V1ConfigMap?> Get(HealthCheckResource resource)
@@ -31,7 +31,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             try
             {
                 var configMapResource = Build(resource);
-                configMap = await _client.CreateNamespacedConfigMapAsync(configMapResource, resource.Metadata.NamespaceProperty);
+                configMap = await _client.CoreV1.CreateNamespacedConfigMapAsync(configMapResource, resource.Metadata.NamespaceProperty);
                 _logger.LogInformation("Config Map {name} has been created", configMap.Metadata.Name);
             }
             catch (Exception ex)
@@ -46,7 +46,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         {
             try
             {
-                await _client.DeleteNamespacedConfigMapAsync($"{resource.Spec.Name}-config", resource.Metadata.NamespaceProperty);
+                await _client.CoreV1.DeleteNamespacedConfigMapAsync($"{resource.Spec.Name}-config", resource.Metadata.NamespaceProperty);
             }
             catch (Exception ex)
             {

@@ -11,12 +11,13 @@ namespace HealthChecks.UI.Configuration
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int ApiMaxActiveRequests { get; private set; } = 3;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        internal bool NotifyUnHealthyOneTimeUntilChange { get; set; } = false;
         internal Func<IServiceProvider, HttpMessageHandler>? ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient>? ApiEndpointHttpClientConfig { get; private set; }
         internal Dictionary<string, Type> ApiEndpointDelegatingHandlerTypes { get; set; } = new();
         internal Func<IServiceProvider, HttpMessageHandler>? WebHooksEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient>? WebHooksEndpointHttpClientConfig { get; private set; }
-        internal Dictionary<string, Type> WebHooksEndpointDelegatingHandlerTypes { get; set; } = new Dictionary<string, Type>();
+        internal Dictionary<string, Type> WebHooksEndpointDelegatingHandlerTypes { get; set; } = new();
         internal string HeaderText { get; private set; } = "Health Checks Status";
 
         public Settings AddHealthCheckEndpoint(string name, string uri)
@@ -30,7 +31,7 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
-        public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "", Func<UIHealthReport, bool>? shouldNotifyFunc = null, Func<UIHealthReport, string>? customMessageFunc = null, Func<UIHealthReport, string>? customDescriptionFunc = null)
+        public Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "", Func<string, UIHealthReport, bool>? shouldNotifyFunc = null, Func<string, UIHealthReport, string>? customMessageFunc = null, Func<string, UIHealthReport, string>? customDescriptionFunc = null)
         {
             Webhooks.Add(new WebHookNotification
             {
@@ -50,6 +51,7 @@ namespace HealthChecks.UI.Configuration
             DisableMigrations = true;
             return this;
         }
+
         public Settings SetEvaluationTimeInSeconds(int seconds)
         {
             EvaluationTimeInSeconds = seconds;
@@ -71,6 +73,12 @@ namespace HealthChecks.UI.Configuration
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;
+            return this;
+        }
+
+        public Settings SetNotifyUnHealthyOneTimeUntilChange()
+        {
+            NotifyUnHealthyOneTimeUntilChange = true;
             return this;
         }
 
@@ -135,8 +143,8 @@ namespace HealthChecks.UI.Configuration
         public string Uri { get; set; } = null!;
         public string Payload { get; set; } = null!;
         public string RestoredPayload { get; set; } = null!;
-        internal Func<UIHealthReport, bool>? ShouldNotifyFunc { get; set; }
-        internal Func<UIHealthReport, string>? CustomMessageFunc { get; set; }
-        internal Func<UIHealthReport, string>? CustomDescriptionFunc { get; set; }
+        internal Func<string, UIHealthReport, bool>? ShouldNotifyFunc { get; set; }
+        internal Func<string, UIHealthReport, string>? CustomMessageFunc { get; set; }
+        internal Func<string, UIHealthReport, string>? CustomDescriptionFunc { get; set; }
     }
 }

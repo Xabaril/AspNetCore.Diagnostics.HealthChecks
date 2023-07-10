@@ -78,7 +78,6 @@ public class RavenDBHealthCheck : IHealthCheck
             });
 
             var store = value.Store;
-            SetRequestTimeoutForStoreForSpecificDatabase(store);
 
             if (string.IsNullOrWhiteSpace(_options.Database))
             {

@@ -51,7 +51,7 @@ public class RavenDBHealthCheck : IHealthCheck
                 try
                 {
                     store.Initialize();
-                    _requestTimeout = _options.RequestTimeout ?? TimeSpan.FromSeconds(15);
+                    _requestTimeout = _options.RequestTimeout ?? TimeSpan.FromMilliseconds(10);
 
                     //store.SetRequestTimeout(_requestTimeout, _options.Database);
                     return new DocumentStoreHolder

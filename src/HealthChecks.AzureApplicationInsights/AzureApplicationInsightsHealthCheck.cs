@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Runtime.ExceptionServices;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HealthChecks.AzureApplicationInsights
@@ -19,15 +18,15 @@ namespace HealthChecks.AzureApplicationInsights
 
         public AzureApplicationInsightsHealthCheck(string instrumentationKey, IHttpClientFactory httpClientFactory)
         {
-            _instrumentationKey = instrumentationKey ?? throw new ArgumentNullException(nameof(instrumentationKey));       
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory)); 
+            _instrumentationKey = instrumentationKey ?? throw new ArgumentNullException(nameof(instrumentationKey));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                bool resourceExists = await ApplicationInsightsResourceExistsAsync(cancellationToken);
+                bool resourceExists = await ApplicationInsightsResourceExistsAsync(cancellationToken).ConfigureAwait(false);
                 if (resourceExists)
                 {
                     return HealthCheckResult.Healthy();
@@ -55,7 +54,7 @@ namespace HealthChecks.AzureApplicationInsights
                     try
                     {
                         var uri = new Uri(_appInsightsUrls[index++] + path);
-                        HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                        HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                         if (response.IsSuccessStatusCode)
                         {
                             return true;

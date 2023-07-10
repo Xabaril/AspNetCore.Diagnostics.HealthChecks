@@ -245,11 +245,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.SystemsMan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTwin.Tests", "test\HealthChecks.AzureDigitalTwin.Tests\HealthChecks.AzureDigitalTwin.Tests.csproj", "{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureApplicationInsights.Tests", "test\HealthChecks.AzureApplicationInsights.Tests\HealthChecks.AzureApplicationInsights.Tests.csproj", "{78902D9E-CD1A-4FB7-B752-A3471A2DD457}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sqs", "src\HealthChecks.Aws.Sqs\HealthChecks.Aws.Sqs.csproj", "{3E28B63C-814E-46C9-ADBF-7357997148F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureApplicationInsights", "src\HealthChecks.AzureApplicationInsights\HealthChecks.AzureApplicationInsights.csproj", "{97C43FFC-0A48-47C7-93EE-7382C2989AAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureApplicationInsights.Tests", "test\HealthChecks.AzureApplicationInsights.Tests\HealthChecks.AzureApplicationInsights.Tests.csproj", "{78902D9E-CD1A-4FB7-B752-A3471A2DD457}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sqs.Tests", "test\HealthChecks.Aws.Sqs.Tests\HealthChecks.Aws.Sqs.Tests.csproj", "{EFA76A2C-CA0E-42BC-8215-AEEB16414947}"
 EndProject

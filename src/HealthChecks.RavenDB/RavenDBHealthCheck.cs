@@ -139,11 +139,6 @@ public class RavenDBHealthCheck : IHealthCheck
 
         private class DatabaseHealthCheckCommand : RavenCommand
         {
-            public DatabaseHealthCheckCommand()
-            {
-                Timeout = TimeSpan.FromSeconds(15); // maybe even less?
-            }
-
             public override HttpRequestMessage CreateRequest(JsonOperationContext ctx, ServerNode node, out string url)
             {
                 url = $"{node.Url}/databases/{node.Database}/healthcheck";

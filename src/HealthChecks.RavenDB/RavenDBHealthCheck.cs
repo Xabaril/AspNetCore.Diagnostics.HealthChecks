@@ -112,7 +112,7 @@ public class RavenDBHealthCheck : IHealthCheck
         }
     }
 
-    private void SetRequestTimeoutForStoreForSpecificDatabase(IDocumentStore? store)
+    private void SetRequestTimeoutForStoreForSpecificDatabase(IDocumentStore store)
     {
         if (!string.IsNullOrWhiteSpace(_options.Database))
         {

@@ -133,7 +133,7 @@ public class RavenDBHealthCheck : IHealthCheck
             return;
         }
 
-        await executor.SendAsync(new DatabaseHealthCheckOperation(_requestTimeout), cancellationToken).ConfigureAwait(false);
+        await executor.SendAsync(new DatabaseHealthCheckOperation(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS)), cancellationToken).ConfigureAwait(false);
     }
 
     private class DatabaseHealthCheckOperation : IMaintenanceOperation

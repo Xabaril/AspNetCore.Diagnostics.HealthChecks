@@ -27,8 +27,6 @@ public class RavenDBHealthCheck : IHealthCheck
 
     private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> _stores = new();
 
-    private TimeSpan _requestTimeout;
-
     public RavenDBHealthCheck(RavenDBOptions options)
     {
         Guard.ThrowIfNull(options);

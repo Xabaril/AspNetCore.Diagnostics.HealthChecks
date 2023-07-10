@@ -112,7 +112,7 @@ public class RavenDBHealthCheck : IHealthCheck
     {
         if (!string.IsNullOrWhiteSpace(_options.Database))
         {
-            store?.SetRequestTimeout(_requestTimeout, _options.Database);
+            store.SetRequestTimeout(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS), _options.Database);
         }
     }
 

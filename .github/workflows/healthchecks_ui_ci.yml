@@ -13,6 +13,7 @@ on:
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - build/docker-images/HealthChecks.UI.Image/**
     tags-ignore:
       - release-*
       - preview-*
@@ -28,6 +29,7 @@ on:
       - .github/workflows/healthchecks_ui_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - build/docker-images/HealthChecks.UI.Image/**
 
 jobs:
   build:

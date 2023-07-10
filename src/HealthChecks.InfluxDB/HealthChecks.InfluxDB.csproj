@@ -6,11 +6,11 @@
     <Description>HealthChecks.InfluxDB is the health check package for InfluxDB.</Description>
     <VersionPrefix>$(HealthCheckInfluxDB)</VersionPrefix>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="InfluxDB.Client" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
-  
+
 </Project>

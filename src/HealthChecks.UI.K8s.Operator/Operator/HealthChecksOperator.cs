@@ -72,7 +72,7 @@ namespace HealthChecks.UI.K8s.Operator
 
         private async Task StartWatcherAsync(CancellationToken token)
         {
-            var response = await _client.ListClusterCustomObjectWithHttpMessagesAsync(
+            var response = await _client.CustomObjects.ListClusterCustomObjectWithHttpMessagesAsync(
                 group: Constants.GROUP,
                 version: Constants.VERSION,
                 plural: Constants.PLURAL,

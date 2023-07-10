@@ -32,7 +32,7 @@ public class KubernetesChecksExecutor
 
         try
         {
-            var result = await _client.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
+            var result = await _client.AppsV1.ReadNamespacedDeploymentStatusWithHttpMessagesAsync(resourceCheck.Name,
                 resourceCheck.Namespace, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
@@ -51,7 +51,7 @@ public class KubernetesChecksExecutor
         var tsc = new TaskCompletionSource<(bool, string)>();
         try
         {
-            var result = await _client.ReadNamespacedPodStatusWithHttpMessagesAsync(resourceCheck.Name,
+            var result = await _client.CoreV1.ReadNamespacedPodStatusWithHttpMessagesAsync(resourceCheck.Name,
                 resourceCheck.Namespace, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));
@@ -70,7 +70,7 @@ public class KubernetesChecksExecutor
         var tsc = new TaskCompletionSource<(bool, string)>();
         try
         {
-            var result = await _client.ReadNamespacedServiceStatusWithHttpMessagesAsync(resourceCheck.Name,
+            var result = await _client.CoreV1.ReadNamespacedServiceStatusWithHttpMessagesAsync(resourceCheck.Name,
                 resourceCheck.Namespace, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             tsc.SetResult((resourceCheck.Check(result.Body), resourceCheck.Name));

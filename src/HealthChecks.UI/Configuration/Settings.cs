@@ -11,6 +11,7 @@ namespace HealthChecks.UI.Configuration
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int ApiMaxActiveRequests { get; private set; } = 3;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        internal bool NotifyUnHealthyOneTimeUntilChange { get; set; } = false;
         internal Func<IServiceProvider, HttpMessageHandler>? ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient>? ApiEndpointHttpClientConfig { get; private set; }
         internal Dictionary<string, Type> ApiEndpointDelegatingHandlerTypes { get; set; } = new();
@@ -50,6 +51,7 @@ namespace HealthChecks.UI.Configuration
             DisableMigrations = true;
             return this;
         }
+
         public Settings SetEvaluationTimeInSeconds(int seconds)
         {
             EvaluationTimeInSeconds = seconds;
@@ -71,6 +73,12 @@ namespace HealthChecks.UI.Configuration
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;
+            return this;
+        }
+
+        public Settings SetNotifyUnHealthyOneTimeUntilChange()
+        {
+            NotifyUnHealthyOneTimeUntilChange = true;
             return this;
         }
 

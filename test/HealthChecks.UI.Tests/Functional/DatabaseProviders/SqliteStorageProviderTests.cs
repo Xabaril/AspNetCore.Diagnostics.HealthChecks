@@ -5,6 +5,30 @@ namespace HealthChecks.UI.Tests
 {
     public class sqlite_storage_should
     {
+        private const string ProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
+
+        [Fact]
+        public void register_healthchecksdb_context_with_migrations()
+        {
+            var customOptionsInvoked = false;
+
+            var hostBuilder = new WebHostBuilder()
+                .UseStartup<DefaultStartup>()
+                .ConfigureServices(services =>
+                {
+                    services.AddHealthChecksUI()
+                    .AddSqliteStorage("connectionString", options => customOptionsInvoked = true);
+                });
+
+            var services = hostBuilder.Build().Services;
+            var context = services.GetRequiredService<HealthChecksDb>();
+
+            context.ShouldNotBeNull();
+            context.Database.GetMigrations().Count().ShouldBeGreaterThan(0);
+            context.Database.ProviderName.ShouldBe(ProviderName);
+            customOptionsInvoked.ShouldBeTrue();
+        }
+
         [Fact]
         public async Task seed_database_and_serve_stored_executions()
         {

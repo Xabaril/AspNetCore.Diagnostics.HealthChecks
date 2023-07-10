@@ -51,7 +51,10 @@ public class RavenDBHealthCheck : IHealthCheck
                 try
                 {
                     store.Initialize();
-                    SetRequestTimeoutForStoreForSpecificDatabase(store);
+                    if (!string.IsNullOrWhiteSpace(_options.Database))
+                    {
+                        store.SetRequestTimeout(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS), _options.Database);
+                    }
 
                     return new DocumentStoreHolder
                     {
@@ -105,14 +108,6 @@ public class RavenDBHealthCheck : IHealthCheck
         catch (Exception ex)
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-        }
-    }
-
-    private void SetRequestTimeoutForStoreForSpecificDatabase(IDocumentStore store)
-    {
-        if (!string.IsNullOrWhiteSpace(_options.Database))
-        {
-            store.SetRequestTimeout(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS), _options.Database);
         }
     }
 

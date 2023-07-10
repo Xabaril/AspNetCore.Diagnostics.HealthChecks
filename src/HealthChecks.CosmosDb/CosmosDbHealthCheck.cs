@@ -20,7 +20,7 @@ public class CosmosDbHealthCheck : IHealthCheck
     public CosmosDbHealthCheck(string accountEndpoint, TokenCredential tokenCredential, string database)
         : this(accountEndpoint, tokenCredential, database, default)
     { }
-        
+
     public CosmosDbHealthCheck(string connectionString, string? database, IEnumerable<string>? containers)
         : this(
               ClientCache.GetOrAddDisposable(connectionString, k => new CosmosClient(k)),

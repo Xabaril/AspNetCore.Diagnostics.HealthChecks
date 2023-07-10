@@ -1,8 +1,9 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Azure.Data.Tables;
 using HealthChecks.CosmosDb;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+
 namespace Microsoft.Extensions.DependencyInjection;
 
 /// <summary>

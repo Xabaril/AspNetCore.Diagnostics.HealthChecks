@@ -53,7 +53,7 @@ public class RavenDBHealthCheck : IHealthCheck
                     store.Initialize();
                     _requestTimeout = _options.RequestTimeout ?? TimeSpan.FromMilliseconds(10);
 
-                    //store.SetRequestTimeout(_requestTimeout, _options.Database);
+                    store.SetRequestTimeout(_requestTimeout, _options.Database);
                     return new DocumentStoreHolder
                     {
                         Store = store,
@@ -140,14 +140,14 @@ public class RavenDBHealthCheck : IHealthCheck
 
         public RavenCommand GetCommand(DocumentConventions conventions, JsonOperationContext context)
         {
-            return new DatabaseHealthCheckCommand(_timeout);
+            return new DatabaseHealthCheckCommand();
         }
 
         private class DatabaseHealthCheckCommand : RavenCommand
         {
-            public DatabaseHealthCheckCommand(TimeSpan timeout)
+            public DatabaseHealthCheckCommand()
             {
-                Timeout = timeout;
+                //Timeout = timeout;
             }
 
             public override HttpRequestMessage CreateRequest(JsonOperationContext ctx, ServerNode node, out string url)

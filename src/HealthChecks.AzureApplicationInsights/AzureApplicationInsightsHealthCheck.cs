@@ -5,7 +5,7 @@ namespace HealthChecks.AzureApplicationInsights
 {
     public class AzureApplicationInsightsHealthCheck : IHealthCheck
     {
-        //from https://docs.microsoft.com/en-us/azure/azure-monitor/app/ip-addresses#outgoing-ports
+        // from https://docs.microsoft.com/en-us/azure/azure-monitor/app/ip-addresses#outgoing-ports
         private readonly string[] _appInsightsUrls =
         {
             "https://dc.applicationinsights.azure.com",
@@ -16,10 +16,11 @@ namespace HealthChecks.AzureApplicationInsights
 
         private readonly IHttpClientFactory _httpClientFactory;
 
+        /// <inheritdoc />
         public AzureApplicationInsightsHealthCheck(string instrumentationKey, IHttpClientFactory httpClientFactory)
         {
-            _instrumentationKey = instrumentationKey ?? throw new ArgumentNullException(nameof(instrumentationKey));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _instrumentationKey = Guard.ThrowIfNull(instrumentationKey, throwOnEmptyString: true);
+            _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -44,33 +45,32 @@ namespace HealthChecks.AzureApplicationInsights
 
         private async Task<bool> ApplicationInsightsResourceExistsAsync(CancellationToken cancellationToken)
         {
-            using (var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME))
-            {
-                string path = $"/api/profiles/{_instrumentationKey}/appId";
-                int index = 0;
-                var exceptions = new List<Exception>();
-                while (index < _appInsightsUrls.Length)
-                {
-                    try
-                    {
-                        var uri = new Uri(_appInsightsUrls[index++] + path);
-                        HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            return true;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        exceptions.Add(e);
-                    }
-                }
+            using var httpClient = _httpClientFactory.CreateClient(AzureApplicationInsightsHealthCheckBuilderExtensions.AZUREAPPLICATIONINSIGHTS_NAME);
 
-                // All endpoints threw exceptions 
-                if (exceptions.Count == _appInsightsUrls.Length)
+            string path = $"/api/profiles/{_instrumentationKey}/appId";
+            int index = 0;
+            var exceptions = new List<Exception>();
+            while (index < _appInsightsUrls.Length)
+            {
+                try
                 {
-                    throw new AggregateException(exceptions.ToArray());
+                    var uri = new Uri(_appInsightsUrls[index++] + path);
+                    HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return true;
+                    }
                 }
+                catch (Exception e)
+                {
+                    exceptions.Add(e);
+                }
+            }
+
+            // All endpoints threw exceptions
+            if (exceptions.Count == _appInsightsUrls.Length)
+            {
+                throw new AggregateException(exceptions.ToArray());
             }
 
             // No success responses were returned and at least one endpoint returned an unsuccesful response

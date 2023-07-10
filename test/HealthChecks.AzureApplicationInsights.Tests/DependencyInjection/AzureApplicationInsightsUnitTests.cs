@@ -18,7 +18,7 @@ namespace UnitTests.DependencyInjection.AzureApplicationInsights
             var check = registration.Factory(serviceProvider);
 
             registration.Name.ShouldBe("azureappinsights");
-            check.GetType().ShouldBe(typeof(AzureApplicationInsightsHealthCheck));
+            check.ShouldBeOfType<AzureApplicationInsightsHealthCheck>();
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace UnitTests.DependencyInjection.AzureApplicationInsights
             var check = registration.Factory(serviceProvider);
 
             registration.Name.ShouldBe(healthCheckName);
-            check.GetType().ShouldBe(typeof(AzureApplicationInsightsHealthCheck));
+            check.ShouldBeOfType<AzureApplicationInsightsHealthCheck>();
         }
 
         [Fact]
@@ -50,8 +50,9 @@ namespace UnitTests.DependencyInjection.AzureApplicationInsights
             var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
             var registration = options.Value.Registrations.First();
+            var factory = () => registration.Factory(serviceProvider);
 
-            Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+            factory.ShouldThrow<ArgumentException>();
         }
     }
 }

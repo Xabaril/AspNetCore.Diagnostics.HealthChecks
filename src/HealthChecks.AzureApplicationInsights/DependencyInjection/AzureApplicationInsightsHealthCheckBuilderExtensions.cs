@@ -1,8 +1,11 @@
-﻿using HealthChecks.AzureApplicationInsights;
+using HealthChecks.AzureApplicationInsights;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="AzureApplicationInsightsHealthCheck"/>.
+    /// </summary>
     public static class AzureApplicationInsightsHealthCheckBuilderExtensions
     {
         internal const string AZUREAPPLICATIONINSIGHTS_NAME = "azureappinsights";
@@ -30,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var registrationName = name ?? AZUREAPPLICATIONINSIGHTS_NAME;
             builder.Services.AddHttpClient(registrationName);
-            
+
             return builder.Add(new HealthCheckRegistration(
                 registrationName,
                 sp => new AzureApplicationInsightsHealthCheck(instrumentationKey, sp.GetRequiredService<IHttpClientFactory>()),

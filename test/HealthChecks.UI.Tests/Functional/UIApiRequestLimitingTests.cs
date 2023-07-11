@@ -15,7 +15,7 @@ namespace HealthChecks.UI.Tests
         }
 
         [Fact]
-        public void should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
+        public async Task should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
         {
             _output.WriteLine($"Processors available to should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests: {Environment.ProcessorCount}");
 
@@ -57,29 +57,23 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            List<HttpResponseMessage> responses = new();
+            // warmup
+            (await server.CreateRequest("/healthchecks-api").GetAsync().ConfigureAwait(false)).StatusCode.ShouldBe(HttpStatusCode.OK);
 
-            // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(1, maxActiveRequests + 2)
-                .Select(_ => new Thread(_ =>
-                {
-                    var r = server.CreateRequest("/healthchecks-api").GetAsync().Result;
-                    lock (responses)
-                        responses.Add(r);
-                }))
+            var requests = Enumerable.Range(1, maxActiveRequests + 2)
+                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync())
                 .ToList();
 
-            threads.ForEach(t => t.Start());
-            threads.ForEach(t => t.Join());
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
-            _output.WriteLine($"Statuses: {string.Join(" ", responses.Select(r => r.StatusCode))}");
+            _output.WriteLine($"Statuses: {string.Join(" ", requests.Select(r => r.Result.StatusCode))}");
 
-            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Count - maxActiveRequests);
-            responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
 
         [Fact]
-        public void should_return_too_many_requests_status_using_default_server_max_active_requests()
+        public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
         {
             _output.WriteLine($"Processors available to should_return_too_many_requests_status_using_default_server_max_active_requests: {Environment.ProcessorCount}");
 
@@ -116,27 +110,21 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            List<HttpResponseMessage> responses = new();
-
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
 
-            // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
-                .Select(_ => new Thread(_ =>
-                {
-                    var r = server.CreateRequest("/healthchecks-api").GetAsync().Result;
-                    lock (responses)
-                        responses.Add(r);
-                }))
+            // warmup
+            (await server.CreateRequest("/healthchecks-api").GetAsync().ConfigureAwait(false)).StatusCode.ShouldBe(HttpStatusCode.OK);
+
+            var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
+                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync())
                 .ToList();
 
-            threads.ForEach(t => t.Start());
-            threads.ForEach(t => t.Join());
+            var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
-            _output.WriteLine($"Statuses: {string.Join(" ", responses.Select(r => r.StatusCode))}");
+            _output.WriteLine($"Statuses: {string.Join(" ", requests.Select(r => r.Result.StatusCode))}");
 
-            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Count - serverSettings.ApiMaxActiveRequests);
-            responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - serverSettings.ApiMaxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
         }
     }
 }

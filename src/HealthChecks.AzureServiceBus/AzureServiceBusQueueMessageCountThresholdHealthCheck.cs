@@ -24,7 +24,7 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
     {
         try
         {
-            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, CreateManagementClient());
+            var managementClient = ClientCache.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
             var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
 

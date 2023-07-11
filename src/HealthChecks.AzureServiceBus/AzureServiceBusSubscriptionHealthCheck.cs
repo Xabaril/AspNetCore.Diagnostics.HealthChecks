@@ -34,19 +34,20 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
 
-        Task CheckWithReceiver()
+        async Task CheckWithReceiver()
         {
-            var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
-            var receiver = ServiceBusReceivers.GetOrAdd(
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+            var receiver = await ClientCache.GetOrAddAsyncDisposableAsync(
                 $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
-                client.CreateReceiver(Options.TopicName, Options.SubscriptionName));
+                _ => client.CreateReceiver(Options.TopicName, Options.SubscriptionName))
+                .ConfigureAwait(false);
 
-            return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
+            await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         Task CheckWithManagement()
         {
-            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
+            var managementClient = ClientCache.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
             return managementClient.GetSubscriptionRuntimePropertiesAsync(
                 Options.TopicName, Options.SubscriptionName, cancellationToken);

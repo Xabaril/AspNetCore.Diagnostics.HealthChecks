@@ -21,7 +21,7 @@ public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureS
     {
         try
         {
-            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
+            var managementClient = ClientCache.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
             _ = await managementClient.GetTopicRuntimePropertiesAsync(Options.TopicName, cancellationToken).ConfigureAwait(false);
 

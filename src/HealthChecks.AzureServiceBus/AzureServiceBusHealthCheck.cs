@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
@@ -7,12 +6,6 @@ namespace HealthChecks.AzureServiceBus;
 
 public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : AzureServiceBusHealthCheckOptions
 {
-    protected static readonly ConcurrentDictionary<string, ServiceBusClient> ClientConnections = new();
-
-    protected static readonly ConcurrentDictionary<string, ServiceBusAdministrationClient> ManagementClientConnections = new();
-
-    protected static readonly ConcurrentDictionary<string, ServiceBusReceiver> ServiceBusReceivers = new();
-
     protected TOptions Options { get; }
 
     protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;

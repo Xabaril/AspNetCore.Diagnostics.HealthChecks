@@ -123,8 +123,8 @@ Install-Package AspNetCore.HealthChecks.Aws.Sns
 Install-Package AspNetCore.HealthChecks.Aws.Sqs
 Install-Package AspNetCore.HealthChecks.Aws.SystemsManager
 Install-Package AspNetCore.HealthChecks.Azure.IoTHub
-Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
 Install-Package AspNetCore.HealthChecks.AzureApplicationInsights
+Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
 Install-Package AspNetCore.HealthChecks.AzureKeyVault
 Install-Package AspNetCore.HealthChecks.AzureSearch
 Install-Package AspNetCore.HealthChecks.AzureServiceBus

@@ -7,7 +7,7 @@ namespace HealthChecks.UI.Tests
     public class ui_api_request_limiting
     {
         [Fact]
-        public async Task should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
+        public void should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
         {
             int maxActiveRequests = 2;
 
@@ -22,7 +22,7 @@ namespace HealthChecks.UI.Tests
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(300);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -43,18 +43,29 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            var requests = Enumerable.Range(1, maxActiveRequests + 2)
-                .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
+            List<HttpResponseMessage> responses = new();
+            var b = new Barrier(maxActiveRequests + 5);
+
+            // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
+            var threads = Enumerable.Range(1, maxActiveRequests + 5)
+                .Select(_ => new Thread(_ =>
+                {
+                    b.SignalAndWait();
+                    var r = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result;
+                    lock (responses)
+                        responses.Add(r);
+                }))
                 .ToList();
 
-            var results = await Task.WhenAll(requests).ConfigureAwait(false);
+            threads.ForEach(t => t.Start());
+            threads.ForEach(t => t.Join());
 
-            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - maxActiveRequests);
-            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
+            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Count - maxActiveRequests);
+            responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
 
         [Fact]
-        public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
+        public void should_return_too_many_requests_status_using_default_server_max_active_requests()
         {
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
@@ -66,7 +77,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecksUI(setup =>
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(300);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -88,16 +99,26 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
+            List<HttpResponseMessage> responses = new();
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
+            var b = new Barrier(serverSettings.ApiMaxActiveRequests + 5);
 
-            var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
-                .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
+            // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
+            var threads = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 5)
+                .Select(_ => new Thread(_ =>
+                {
+                    b.SignalAndWait();
+                    var r = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result;
+                    lock (responses)
+                        responses.Add(r);
+                }))
                 .ToList();
 
-            var results = await Task.WhenAll(requests).ConfigureAwait(false);
+            threads.ForEach(t => t.Start());
+            threads.ForEach(t => t.Join());
 
-            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - serverSettings.ApiMaxActiveRequests);
-            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
+            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Count - serverSettings.ApiMaxActiveRequests);
+            responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
         }
     }
 }

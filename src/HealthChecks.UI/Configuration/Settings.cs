@@ -1,4 +1,5 @@
 using HealthChecks.UI.Core;
+using Microsoft.AspNetCore.Http;
 
 namespace HealthChecks.UI.Configuration
 {
@@ -58,6 +59,13 @@ namespace HealthChecks.UI.Configuration
             return this;
         }
 
+        /// <summary>
+        /// Sets limit on maximum active (concurrent) HTTP requests to <see cref="Options.ApiPath"/> URL.
+        /// If this limit is exceeded, requests to <see cref="Options.ApiPath"/> return <see cref="StatusCodes.Status429TooManyRequests"/>.
+        /// Initially, this value is set to 3.
+        /// </summary>
+        /// <param name="apiMaxActiveRequests">Concurrency limit.</param>
+        /// <returns>Reference to the same <see cref="Settings"/>.</returns>
         public Settings SetApiMaxActiveRequests(int apiMaxActiveRequests)
         {
             ApiMaxActiveRequests = apiMaxActiveRequests;

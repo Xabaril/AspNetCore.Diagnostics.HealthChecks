@@ -16,7 +16,6 @@ namespace HealthChecks.AzureApplicationInsights
 
         private readonly IHttpClientFactory _httpClientFactory;
 
-        /// <inheritdoc />
         public AzureApplicationInsightsHealthCheck(string instrumentationKey, IHttpClientFactory httpClientFactory)
         {
             _instrumentationKey = Guard.ThrowIfNull(instrumentationKey, throwOnEmptyString: true);

@@ -1,14 +1,24 @@
 using System.Net;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
+using Xunit.Abstractions;
 
 namespace HealthChecks.UI.Tests
 {
     public class ui_api_request_limiting
     {
+        private readonly ITestOutputHelper _output;
+
+        public ui_api_request_limiting(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Fact]
         public async Task should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
         {
+            _output.WriteLine($"Processors available to should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests: {Environment.ProcessorCount}");
+
             int maxActiveRequests = 2;
 
             var webHostBuilder = new WebHostBuilder()
@@ -63,6 +73,8 @@ namespace HealthChecks.UI.Tests
         [Fact]
         public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
         {
+            _output.WriteLine($"Processors available to should_return_too_many_requests_status_using_default_server_max_active_requests: {Environment.ProcessorCount}");
+
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {

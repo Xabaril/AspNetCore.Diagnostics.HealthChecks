@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>HealthCheck;Azure;ApplicationInsights</PackageTags>
     <Description>HealthChecks.AzureApplicationInsights is the health check package for Azure Application Insights.</Description>
-    <Version>$(HealthCheckAzureApplicationInsights)</Version>
+    <VersionPrefix>$(HealthCheckAzureApplicationInsights)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,8 @@
 using System.Net;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Data;
+using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 
 namespace HealthChecks.UI.Tests
@@ -38,7 +40,7 @@ namespace HealthChecks.UI.Tests
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
                         })
-                        .AddInMemoryStorage(databaseName: "LimitingTests");
+                        .AddInMemoryStorage<DelayedHealthChecksDb>(databaseName: "LimitingTests");
                 })
                 .Configure(app =>
                 {
@@ -61,7 +63,7 @@ namespace HealthChecks.UI.Tests
             (await server.CreateRequest("/healthchecks-api").GetAsync().ConfigureAwait(false)).StatusCode.ShouldBe(HttpStatusCode.OK);
 
             var requests = Enumerable.Range(1, maxActiveRequests + 2)
-                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync())
+                .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
                 .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
@@ -90,7 +92,7 @@ namespace HealthChecks.UI.Tests
                         })
                         .Services
                         .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health"))
-                        .AddInMemoryStorage(databaseName: "LimitingTests");
+                        .AddInMemoryStorage<DelayedHealthChecksDb>(databaseName: "LimitingTests");
                 })
                 .Configure(app =>
                 {
@@ -116,7 +118,7 @@ namespace HealthChecks.UI.Tests
             (await server.CreateRequest("/healthchecks-api").GetAsync().ConfigureAwait(false)).StatusCode.ShouldBe(HttpStatusCode.OK);
 
             var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
-                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync())
+                .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
                 .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
@@ -125,6 +127,25 @@ namespace HealthChecks.UI.Tests
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - serverSettings.ApiMaxActiveRequests);
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
+        }
+
+        private sealed class DelayedHealthChecksDb : HealthChecksDb
+        {
+            public DelayedHealthChecksDb(DbContextOptions<DelayedHealthChecksDb> options) : base(options)
+            {
+            }
+
+            public override void Dispose()
+            {
+                Thread.Sleep(200);
+                base.Dispose();
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                await Task.Delay(200).ConfigureAwait(false);
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
         }
     }
 }

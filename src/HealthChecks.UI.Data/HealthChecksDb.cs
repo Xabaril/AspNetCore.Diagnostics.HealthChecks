@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Data
 {
-    public class HealthChecksDb
-        : DbContext
+    public class HealthChecksDb : DbContext
     {
         public DbSet<HealthCheckConfiguration> Configurations { get; set; }
 
@@ -15,6 +14,10 @@ namespace HealthChecks.UI.Data
         public DbSet<HealthCheckExecutionEntry> HealthCheckExecutionEntries { get; set; }
 
         public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
+
+        protected HealthChecksDb(DbContextOptions options) : base(options)
+        {
+        }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options)

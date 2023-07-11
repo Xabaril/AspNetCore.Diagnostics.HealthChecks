@@ -7,7 +7,7 @@ public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureS
 {
     private string? _connectionKey;
 
-    protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.TopicName}";
+    protected override string ConnectionKey => _connectionKey ??= Prefix;
 
     public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
         : base(options)

@@ -17,7 +17,7 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
         _deadLetterMessagesThreshold = options.DeadLetterMessages;
     }
 
-    protected override string ConnectionKey => $"{Prefix}_{_queueName}";
+    protected override string ConnectionKey => Prefix;
 
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

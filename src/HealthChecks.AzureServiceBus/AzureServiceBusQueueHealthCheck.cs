@@ -7,7 +7,9 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
 {
     private string? _connectionKey;
 
-    protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.QueueName}";
+    protected override string ConnectionKey => _connectionKey ??= Prefix;
+
+    private string queueKey => $"{ConnectionKey}_{Options.QueueName}";
 
     public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options)
         : base(options)
@@ -36,7 +38,7 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
         {
             var client = await ClientCache.GetOrAddAsyncDisposableAsync(Prefix, _ => CreateClient()).ConfigureAwait(false);
             var receiver = await ClientCache.GetOrAddAsyncDisposableAsync(
-                $"{nameof(AzureServiceBusQueueHealthCheck)}_{ConnectionKey}",
+                $"{nameof(AzureServiceBusQueueHealthCheck)}_{queueKey}",
                 _ => client.CreateReceiver(Options.QueueName))
                 .ConfigureAwait(false);
 

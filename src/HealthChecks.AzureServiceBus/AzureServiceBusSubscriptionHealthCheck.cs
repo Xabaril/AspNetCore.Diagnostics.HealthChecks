@@ -7,8 +7,9 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
 {
     private string? _connectionKey;
 
-    protected override string ConnectionKey =>
-        _connectionKey ??= $"{Prefix}_{Options.TopicName}_{Options.SubscriptionName}";
+    protected override string ConnectionKey => _connectionKey ??= Prefix;
+
+    private string subscriptionKey => $"{ConnectionKey}_{Options.TopicName}_{Options.SubscriptionName}";
 
     public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
         : base(options)
@@ -38,7 +39,7 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
         {
             var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
             var receiver = await ClientCache.GetOrAddAsyncDisposableAsync(
-                $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
+                $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{subscriptionKey}",
                 _ => client.CreateReceiver(Options.TopicName, Options.SubscriptionName))
                 .ConfigureAwait(false);
 

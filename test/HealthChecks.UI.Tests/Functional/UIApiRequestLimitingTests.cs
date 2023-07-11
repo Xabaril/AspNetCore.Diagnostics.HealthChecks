@@ -47,8 +47,12 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
+            // warmup
+            (await server.CreateRequest("/healthchecks-api").GetAsync().ConfigureAwait(false)).StatusCode.ShouldBe(HttpStatusCode.OK);
+
             var requests = Enumerable.Range(1, maxActiveRequests + 2)
-                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync()).ToList();
+                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync())
+                .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
@@ -94,8 +98,12 @@ namespace HealthChecks.UI.Tests
 
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
 
+            // warmup
+            (await server.CreateRequest("/healthchecks-api").GetAsync().ConfigureAwait(false)).StatusCode.ShouldBe(HttpStatusCode.OK);
+
             var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
-                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync()).ToList();
+                .Select(_ => server.CreateRequest("/healthchecks-api").GetAsync())
+                .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 

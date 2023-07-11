@@ -60,6 +60,7 @@ namespace HealthChecks.UI.Middleware
                 }
             }
 
+            _settings.ConfigureUIApiEndpointResult?.Invoke(healthChecksExecutions);
             var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
             context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
 

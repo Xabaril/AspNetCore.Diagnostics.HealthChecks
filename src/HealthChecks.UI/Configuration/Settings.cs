@@ -1,10 +1,13 @@
 using HealthChecks.UI.Core;
+using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Http;
 
 namespace HealthChecks.UI.Configuration
 {
     public class Settings
     {
+        public Action<List<HealthCheckExecution>>? ConfigureUIApiEndpointResult { get; set; }
+
         internal List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
         internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
         internal bool DisableMigrations { get; set; } = false;

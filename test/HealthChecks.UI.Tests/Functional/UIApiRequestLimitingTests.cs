@@ -66,6 +66,8 @@ namespace HealthChecks.UI.Tests
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
+            _output.WriteLine($"Statuses: {string.Join(" ", requests.Select(r => r.Result.StatusCode))}");
+
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - maxActiveRequests);
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
@@ -118,6 +120,8 @@ namespace HealthChecks.UI.Tests
                 .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
+
+            _output.WriteLine($"Statuses: {string.Join(" ", requests.Select(r => r.Result.StatusCode))}");
 
             results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - serverSettings.ApiMaxActiveRequests);
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);

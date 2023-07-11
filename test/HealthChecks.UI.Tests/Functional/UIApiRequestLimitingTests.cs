@@ -17,16 +17,12 @@ namespace HealthChecks.UI.Tests
                     services
                         .AddRouting()
                         .AddHealthChecks()
-                        .AddAsyncCheck("Delayed", async () =>
-                        {
-                            await Task.Delay(200).ConfigureAwait(false);
-                            return HealthCheckResult.Healthy();
-                        })
                         .Services
                         .AddHealthChecksUI(setup =>
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -37,7 +33,7 @@ namespace HealthChecks.UI.Tests
                     {
                         setup.MapHealthChecks("/health", new HealthCheckOptions
                         {
-                            Predicate = r => true,
+                            Predicate = _ => true,
                             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                         });
 
@@ -47,12 +43,13 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            var requests = Enumerable.Range(1, maxActiveRequests)
-                .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
+            var requests = Enumerable.Range(1, maxActiveRequests + 2)
+                .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
+                .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
-            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count() - maxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - maxActiveRequests);
             results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
 
@@ -65,13 +62,12 @@ namespace HealthChecks.UI.Tests
                     services
                         .AddRouting()
                         .AddHealthChecks()
-                        .AddAsyncCheck("Delayed", async () =>
-                        {
-                            await Task.Delay(200).ConfigureAwait(false);
-                            return HealthCheckResult.Healthy();
-                        })
                         .Services
-                        .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health"))
+                        .AddHealthChecksUI(setup =>
+                        {
+                            setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
+                        })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
                 .Configure(app =>
@@ -81,7 +77,7 @@ namespace HealthChecks.UI.Tests
                     {
                         setup.MapHealthChecks("/health", new HealthCheckOptions
                         {
-                            Predicate = r => true,
+                            Predicate = _ => true,
                             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                         });
 
@@ -94,17 +90,14 @@ namespace HealthChecks.UI.Tests
 
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
 
-            var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests)
-                .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
+            var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
+                .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
+                .ToList();
 
             var results = await Task.WhenAll(requests).ConfigureAwait(false);
 
-            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests)
-                .Count()
-                .ShouldBe(requests.Count() - serverSettings.ApiMaxActiveRequests);
-
-            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count()
-                .ShouldBe(serverSettings.ApiMaxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(requests.Count - serverSettings.ApiMaxActiveRequests);
+            results.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
         }
     }
 }

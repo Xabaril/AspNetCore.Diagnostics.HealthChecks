@@ -275,6 +275,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureSearch", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureSearch.Tests", "test\HealthChecks.AzureSearch.Tests\HealthChecks.AzureSearch.Tests.csproj", "{076B7DAE-E92A-4B81-BC1D-D63AF0E9C5B4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Data.Tests", "test\HealthChecks.UI.Data.Tests\HealthChecks.UI.Data.Tests.csproj", "{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -765,6 +767,10 @@ Global
 		{076B7DAE-E92A-4B81-BC1D-D63AF0E9C5B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{076B7DAE-E92A-4B81-BC1D-D63AF0E9C5B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{076B7DAE-E92A-4B81-BC1D-D63AF0E9C5B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -891,6 +897,7 @@ Global
 		{E8CEC72F-15D2-409B-ACA1-DE45697DCA54} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{0BE32765-7244-4717-9D48-B4C716DD1769} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{076B7DAE-E92A-4B81-BC1D-D63AF0E9C5B4} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

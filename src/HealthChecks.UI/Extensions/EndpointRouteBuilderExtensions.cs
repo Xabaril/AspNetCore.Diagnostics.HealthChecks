@@ -8,8 +8,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class EndpointRouteBuilderExtensions
     {
-        public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
-            Action<Options>? setupOptions = null)
+        public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder, Action<Options>? setupOptions = null)
         {
             var options = new Options();
             setupOptions?.Invoke(options);

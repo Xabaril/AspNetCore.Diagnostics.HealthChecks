@@ -9,8 +9,8 @@ public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureS
 
     protected override string ConnectionKey => _connectionKey ??= Prefix;
 
-    public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         Guard.ThrowIfNull(options.TopicName, true);
     }

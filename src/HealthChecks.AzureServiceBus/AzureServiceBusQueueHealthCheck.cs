@@ -11,8 +11,8 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
 
     private string queueKey => $"{ConnectionKey}_{Options.QueueName}";
 
-    public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         Guard.ThrowIfNull(options.QueueName, true);
     }

@@ -11,8 +11,8 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
 
     private string subscriptionKey => $"{ConnectionKey}_{Options.TopicName}_{Options.SubscriptionName}";
 
-    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         Guard.ThrowIfNull(options.TopicName, true);
         Guard.ThrowIfNull(options.SubscriptionName, true);

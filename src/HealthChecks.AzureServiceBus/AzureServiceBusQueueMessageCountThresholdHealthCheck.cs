@@ -9,8 +9,8 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
     private readonly AzureServiceBusQueueMessagesCountThreshold? _activeMessagesThreshold;
     private readonly AzureServiceBusQueueMessagesCountThreshold? _deadLetterMessagesThreshold;
 
-    public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         _queueName = Guard.ThrowIfNull(options.QueueName);
         _activeMessagesThreshold = options.ActiveMessages;

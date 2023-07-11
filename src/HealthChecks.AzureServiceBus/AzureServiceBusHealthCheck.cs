@@ -8,13 +8,16 @@ public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : Azur
 {
     protected TOptions Options { get; }
 
+    private readonly ServiceBusClientProvider _clientProvider;
+
     protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
 
     protected abstract string ConnectionKey { get; }
 
-    protected AzureServiceBusHealthCheck(TOptions options)
+    protected AzureServiceBusHealthCheck(TOptions options, ServiceBusClientProvider clientProvider)
     {
         Options = options;
+        _clientProvider = clientProvider;
 
         if (!string.IsNullOrWhiteSpace(options.ConnectionString))
             return;
@@ -30,11 +33,11 @@ public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : Azur
 
     protected ServiceBusClient CreateClient() =>
         Options.Credential is null
-            ? new ServiceBusClient(Options.ConnectionString)
-            : new ServiceBusClient(Options.FullyQualifiedNamespace, Options.Credential);
+            ? _clientProvider.CreateClient(Options.ConnectionString)
+            : _clientProvider.CreateClient(Options.FullyQualifiedNamespace, Options.Credential);
 
     protected ServiceBusAdministrationClient CreateManagementClient() =>
         Options.Credential is null
-            ? new ServiceBusAdministrationClient(Options.ConnectionString)
-            : new ServiceBusAdministrationClient(Options.FullyQualifiedNamespace, Options.Credential);
+            ? _clientProvider.CreateManagementClient(Options.ConnectionString)
+            : _clientProvider.CreateManagementClient(Options.FullyQualifiedNamespace, Options.Credential);
 }

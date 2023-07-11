@@ -44,10 +44,10 @@ namespace HealthChecks.UI.Tests
             using var server = new TestServer(webHostBuilder);
 
             List<HttpResponseMessage> responses = new();
-            var b = new Barrier(maxActiveRequests + 2);
+            var b = new Barrier(maxActiveRequests + 5);
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(1, maxActiveRequests + 2)
+            var threads = Enumerable.Range(1, maxActiveRequests + 5)
                 .Select(_ => new Thread(_ =>
                 {
                     b.SignalAndWait();
@@ -101,10 +101,10 @@ namespace HealthChecks.UI.Tests
 
             List<HttpResponseMessage> responses = new();
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
-            var b = new Barrier(serverSettings.ApiMaxActiveRequests + 2);
+            var b = new Barrier(serverSettings.ApiMaxActiveRequests + 5);
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 2)
+            var threads = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 5)
                 .Select(_ => new Thread(_ =>
                 {
                     b.SignalAndWait();

@@ -8,6 +8,7 @@
     <HealthCheckAWSSns>7.0.0</HealthCheckAWSSns>
     <HealthCheckAWSSqs>7.0.0</HealthCheckAWSSqs>
     <HealthCheckAWSSystemsManager>7.0.0</HealthCheckAWSSystemsManager>
+    <HealthCheckAzureApplicationInsights>7.0.0</HealthCheckAzureApplicationInsights>
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
     <HealthCheckAzureServiceBus>7.0.0</HealthCheckAzureServiceBus>

@@ -25,7 +25,6 @@ public class MySqlHealthCheck : IHealthCheck
             using var connection = new MySqlConnection(_options.ConnectionString);
 
             _options.Configure?.Invoke(connection);
-
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             using var command = connection.CreateCommand();

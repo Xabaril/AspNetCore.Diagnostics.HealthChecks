@@ -13,10 +13,10 @@ public static class MySqlHealthCheckBuilderExtensions
     internal const string HEALTH_QUERY = "SELECT 1;";
 
     /// <summary>
-    /// Add a health check for MySql databases.
+    /// Add a health check for MySQL databases.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionString">The MySql connection string to be used.</param>
+    /// <param name="connectionString">The MySQL connection string to be used.</param>
     /// <param name="healthQuery">The query to be executed.</param>
     /// <param name="configure">An optional action to allow additional MySQL specific configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mysql' will be used for the name.</param>

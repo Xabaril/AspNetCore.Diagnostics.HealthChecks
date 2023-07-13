@@ -47,7 +47,7 @@ public static class MySqlHealthCheckBuilderExtensions
     /// <param name="connectionStringFactory">A factory to build the MySQL connection string to use.</param>
     /// <param name="healthQuery">The query to be executed.</param>
     /// <param name="configure">An optional action to allow additional MySQL specific configuration.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'sqlserver' will be used for the name.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mysql' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.

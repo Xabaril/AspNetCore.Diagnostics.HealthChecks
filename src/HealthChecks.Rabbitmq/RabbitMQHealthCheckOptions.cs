@@ -18,7 +18,7 @@ public class RabbitMQHealthCheckOptions
     public IConnectionFactory? ConnectionFactory { get; set; }
 
     /// <summary>
-    /// An Uri representing a  connection string for RabbitMQ.
+    /// An Uri representing a connection string for RabbitMQ.
     /// </summary>
     /// <remarks>
     /// Can be used in conjunction with the <see cref="SslOption"/> property.

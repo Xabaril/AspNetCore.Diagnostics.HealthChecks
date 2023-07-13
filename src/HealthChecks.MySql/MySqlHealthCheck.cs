@@ -4,7 +4,7 @@ using MySqlConnector;
 namespace HealthChecks.MySql;
 
 /// <summary>
-/// A health check for MySql databases.
+/// A health check for MySQL databases.
 /// </summary>
 public class MySqlHealthCheck : IHealthCheck
 {

@@ -31,9 +31,9 @@ public class MySqlHealthCheck : IHealthCheck
             command.CommandText = _options.CommandText;
             object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
-            var returnQueryResults =
-                _options.HealthCheckResultBuilder?
-                    .Invoke(result) ?? HealthCheckResult.Healthy();
+            var returnQueryResults = _options.HealthCheckResultBuilder == null
+                ? HealthCheckResult.Healthy()
+                : _options.HealthCheckResultBuilder(result);
 
             return await connection.PingAsync(cancellationToken).ConfigureAwait(false)
                 ? returnQueryResults

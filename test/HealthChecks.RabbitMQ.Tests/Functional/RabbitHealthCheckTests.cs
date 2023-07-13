@@ -239,37 +239,58 @@ public class rabbitmq_healthcheck_should
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
-        [Fact]
-        public async Task two_rabbitmq_health_check()
-        {
-            var connectionString1 = "amqp://admin:password@localhost:5672/%2f";
-            var connectionString2 = "amqp://localhost:6672/";
+    [Fact]
+    public async Task two_rabbitmq_health_check()
+    {
+        var connectionString1 = "amqp://admin:password@localhost:5672/%2f";
+        var connectionString2 = "amqp://localhost:6672/";
 
-            var webHostBuilder = new WebHostBuilder()
-                .ConfigureServices(services =>
-                {
-                    services.AddHealthChecks()
-                        .AddRabbitMQ(rabbitConnectionString: connectionString1, name: "rabbitmq1")
-                        .AddRabbitMQ(rabbitConnectionString: connectionString2, name: "rabbitmq2");
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
+            {
+                services.AddHealthChecks()
+                    .AddRabbitMQ(rabbitConnectionString: connectionString1, name: "rabbitmq1")
+                    .AddRabbitMQ(rabbitConnectionString: connectionString2, name: "rabbitmq2");
+
+/* Unmerged change from project 'HealthChecks.RabbitMQ.Tests(net7.0)'
+Before:
                 })
                 .Configure(app =>
+After:
+            })
+            .Configure(app =>
+*/
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health1", new HealthCheckOptions
                 {
-                    app.UseHealthChecks("/health1", new HealthCheckOptions
-                    {
-                        Predicate = r => r.Name.Equals("rabbitmq1")
+                    Predicate = r => r.Name.Equals("rabbitmq1")
+
+/* Unmerged change from project 'HealthChecks.RabbitMQ.Tests(net7.0)'
+Before:
                     });
                     app.UseHealthChecks("/health2", new HealthCheckOptions
                     {
                         Predicate = r => r.Name.Equals("rabbitmq2")
                     });
                 });
+After:
+                });
+*/
+                });
+                app.UseHealthChecks("/health2", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Equals("rabbitmq2")
+                });
+            });
 
-            using var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
-            var response1 = await server.CreateRequest("/health1").GetAsync().ConfigureAwait(false);
-            var response2 = await server.CreateRequest("/health2").GetAsync().ConfigureAwait(false);
+        var response1 = await server.CreateRequest("/health1").GetAsync().ConfigureAwait(false);
+        var response2 = await server.CreateRequest("/health2").GetAsync().ConfigureAwait(false);
 
-            response1.StatusCode.ShouldBe(HttpStatusCode.OK);
-            response2.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-        }
+        response1.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response2.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+    }
 }

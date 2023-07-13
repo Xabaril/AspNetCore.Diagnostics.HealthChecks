@@ -9,6 +9,7 @@ public class RabbitMQHealthCheckOptions
 {
     /// <summary>
     /// An already created connection to RabbitMQ.
+    /// It has priority over <see cref="ConnectionFactory"/> and <see cref="ConnectionUri"/>.
     /// </summary>
     public IConnection? Connection { get; set; }
 

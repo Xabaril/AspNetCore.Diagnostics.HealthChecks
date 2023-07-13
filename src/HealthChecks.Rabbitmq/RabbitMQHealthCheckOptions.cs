@@ -15,6 +15,7 @@ public class RabbitMQHealthCheckOptions
 
     /// <summary>
     /// A connection factory for RabbitMQ.
+    /// It has priority over <see cref="ConnectionUri"/>.
     /// </summary>
     public IConnectionFactory? ConnectionFactory { get; set; }
 

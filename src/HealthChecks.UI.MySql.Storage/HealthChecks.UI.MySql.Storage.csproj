@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <PackageTags>$(PackageTags);MySql</PackageTags>
-    <Description>HealthChecks.UI.MySql.Storage package contains the required classes to use the MySql database provider in the UI</Description>
+    <Description>HealthChecks.UI.MySql.Storage package contains the required classes to use the MySQL database provider in the UI</Description>
     <VersionPrefix>$(HealthCheckUIMySqlStorage)</VersionPrefix>
   </PropertyGroup>
 

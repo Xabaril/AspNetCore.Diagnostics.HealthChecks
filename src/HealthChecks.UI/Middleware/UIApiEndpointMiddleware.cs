@@ -34,7 +34,7 @@ namespace HealthChecks.UI.Middleware
             using var scope = _serviceScopeFactory.CreateScope();
             using var db = scope.ServiceProvider.GetRequiredService<HealthChecksDb>();
 
-            var healthChecks = await db.Configurations.ToListAsync();
+            var healthChecks = await db.Configurations.ToListAsync().ConfigureAwait(false);
 
             var healthChecksExecutions = new List<HealthCheckExecution>();
 
@@ -44,7 +44,8 @@ namespace HealthChecks.UI.Middleware
                             .Include(le => le.Entries)
                             .Where(le => le.Name == item.Name)
                             .AsNoTracking()
-                            .SingleOrDefaultAsync();
+                            .SingleOrDefaultAsync()
+                            .ConfigureAwait(false);
 
                 if (execution != null)
                 {
@@ -52,16 +53,18 @@ namespace HealthChecks.UI.Middleware
                         .Where(eh => EF.Property<int>(eh, "HealthCheckExecutionId") == execution.Id)
                         .OrderByDescending(eh => eh.On)
                         .Take(_settings.MaximumExecutionHistoriesPerEndpoint)
-                        .ToListAsync();
+                        .ToListAsync()
+                        .ConfigureAwait(false);
 
                     healthChecksExecutions.Add(execution);
                 }
             }
 
+            _settings.ConfigureUIApiEndpointResult?.Invoke(healthChecksExecutions);
             var responseContent = JsonConvert.SerializeObject(healthChecksExecutions, _jsonSerializationSettings);
             context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
 
-            await context.Response.WriteAsync(responseContent);
+            await context.Response.WriteAsync(responseContent).ConfigureAwait(false);
         }
     }
 }

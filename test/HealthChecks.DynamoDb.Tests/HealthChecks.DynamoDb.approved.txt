@@ -22,6 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DynamoDbHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDynamoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.DynamoDb.DynamoDBOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDynamoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.DynamoDb.DynamoDBOptions>? setup = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

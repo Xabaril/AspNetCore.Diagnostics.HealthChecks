@@ -2,14 +2,24 @@ namespace HealthChecks.MySql
 {
     public class MySqlHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public MySqlHealthCheck(string connectionString) { }
+        public MySqlHealthCheck(HealthChecks.MySql.MySqlHealthCheckOptions options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class MySqlHealthCheckOptions
+    {
+        public MySqlHealthCheckOptions() { }
+        public string CommandText { get; set; }
+        public System.Action<MySqlConnector.MySqlConnection>? Configure { get; set; }
+        public string ConnectionString { get; set; }
+        public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class MySqlHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMySql(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMySql(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, HealthChecks.MySql.MySqlHealthCheckOptions options, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMySql(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, string healthQuery = "SELECT 1;", System.Action<MySqlConnector.MySqlConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddMySql(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string healthQuery = "SELECT 1;", System.Action<MySqlConnector.MySqlConnection>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

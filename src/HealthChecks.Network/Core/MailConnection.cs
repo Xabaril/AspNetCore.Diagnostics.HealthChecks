@@ -86,9 +86,9 @@ public class MailConnection : IDisposable
         }
     }
 
-    public delegate T CommandResultAction<T>(byte[] result);
+    public delegate bool CommandResultAction(byte[] result);
 
-    protected async Task<T> ExecuteCommandAsync<T>(string command, CommandResultAction<T> action, CancellationToken cancellationToken)
+    protected async Task<bool> ExecuteCommandAsync(string command, CommandResultAction action, CancellationToken cancellationToken)
     {
         if (_stream == null)
             throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");

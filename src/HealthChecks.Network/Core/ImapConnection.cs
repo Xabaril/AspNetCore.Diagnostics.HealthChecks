@@ -101,9 +101,4 @@ internal class ImapConnection : MailConnection
             },
             cancellationToken).ConfigureAwait(false);
     }
-
-    //public async Task<string> GetFoldersAsync(CancellationToken cancellationToken = default)
-    //{
-    //    return await ExecuteCommandAsync(ImapCommands.ListFolders(), cancellationToken).ConfigureAwait(false);
-    //}
 }

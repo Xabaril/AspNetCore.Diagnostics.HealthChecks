@@ -21,7 +21,7 @@ public class RabbitMQHealthCheckOptions
     /// An Uri representing a connection string for RabbitMQ.
     /// </summary>
     /// <remarks>
-    /// Can be used in conjunction with the <see cref="SslOption"/> property.
+    /// Can be used in conjunction with the <see cref="Ssl"/> property.
     /// </remarks>
     public Uri? ConnectionUri { get; set; }
 

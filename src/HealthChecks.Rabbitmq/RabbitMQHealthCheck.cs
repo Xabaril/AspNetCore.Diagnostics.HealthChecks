@@ -41,9 +41,7 @@ public class RabbitMQHealthCheck : IHealthCheck
 
     private IConnection EnsureConnection()
     {
-        if (_connection is null)
-        {
-            _connection = _connections.GetOrAdd(_options, _ =>
+        _connection ??= _connections.GetOrAdd(_options, _ =>
             {
                 var factory = _options.ConnectionFactory;
 
@@ -65,7 +63,6 @@ public class RabbitMQHealthCheck : IHealthCheck
 
                 return factory.CreateConnection();
             });
-        }
 
         return _connection;
     }

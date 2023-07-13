@@ -28,12 +28,8 @@ public class MySqlHealthCheck : IHealthCheck
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             using var command = connection.CreateCommand();
-
             command.CommandText = _options.CommandText;
-
-            object? result = await command
-                .ExecuteScalarAsync(cancellationToken)
-                .ConfigureAwait(false);
+            object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
             var returnQueryResults =
                 _options.HealthCheckResultBuilder?

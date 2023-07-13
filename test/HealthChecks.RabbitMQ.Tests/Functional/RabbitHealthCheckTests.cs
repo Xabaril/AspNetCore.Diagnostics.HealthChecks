@@ -251,33 +251,12 @@ public class rabbitmq_healthcheck_should
                 services.AddHealthChecks()
                     .AddRabbitMQ(rabbitConnectionString: connectionString1, name: "rabbitmq1")
                     .AddRabbitMQ(rabbitConnectionString: connectionString2, name: "rabbitmq2");
-
-/* Unmerged change from project 'HealthChecks.RabbitMQ.Tests(net7.0)'
-Before:
-                })
-                .Configure(app =>
-After:
-            })
-            .Configure(app =>
-*/
             })
             .Configure(app =>
             {
                 app.UseHealthChecks("/health1", new HealthCheckOptions
                 {
                     Predicate = r => r.Name.Equals("rabbitmq1")
-
-/* Unmerged change from project 'HealthChecks.RabbitMQ.Tests(net7.0)'
-Before:
-                    });
-                    app.UseHealthChecks("/health2", new HealthCheckOptions
-                    {
-                        Predicate = r => r.Name.Equals("rabbitmq2")
-                    });
-                });
-After:
-                });
-*/
                 });
                 app.UseHealthChecks("/health2", new HealthCheckOptions
                 {

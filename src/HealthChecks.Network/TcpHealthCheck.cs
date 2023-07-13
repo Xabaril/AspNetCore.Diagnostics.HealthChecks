@@ -4,45 +4,46 @@ using HealthChecks.Network.Extensions;
 #endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Network
+namespace HealthChecks.Network;
+
+public class TcpHealthCheck : IHealthCheck
 {
-    public class TcpHealthCheck : IHealthCheck
+    private readonly TcpHealthCheckOptions _options;
+
+    public TcpHealthCheck(TcpHealthCheckOptions options)
     {
-        private readonly TcpHealthCheckOptions _options;
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        public TcpHealthCheck(TcpHealthCheckOptions options)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _options = Guard.ThrowIfNull(options);
-        }
-
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            List<string>? errorList = null;
+            foreach (var (host, port) in _options.ConfiguredHosts)
             {
-                foreach (var (host, port) in _options.ConfiguredHosts)
-                {
-                    using (var tcpClient = new TcpClient(_options.AddressFamily))
-                    {
+                using var tcpClient = new TcpClient(_options.AddressFamily);
 #if NET5_0_OR_GREATER
-                        await tcpClient.ConnectAsync(host, port, cancellationToken).ConfigureAwait(false);
+                await tcpClient.ConnectAsync(host, port, cancellationToken).ConfigureAwait(false);
 #else
-                        await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+                await tcpClient.ConnectAsync(host, port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
-
-                        if (!tcpClient.Connected)
-                        {
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"Connection to host {host}:{port} failed");
-                        }
+                if (!tcpClient.Connected)
+                {
+                    (errorList ??= new()).Add($"Connection to host {host}:{port} failed");
+                    if (!_options.CheckAllHosts)
+                    {
+                        break;
                     }
                 }
+            }
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return errorList.GetHealthState(context);
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

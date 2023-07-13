@@ -1,0 +1,71 @@
+namespace HealthChecks.UI.Data.Configuration
+{
+    public class HealthCheckFailureNotificationsMap : Microsoft.EntityFrameworkCore.IEntityTypeConfiguration<HealthChecks.UI.Data.HealthCheckFailureNotification>
+    {
+        public HealthCheckFailureNotificationsMap() { }
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<HealthChecks.UI.Data.HealthCheckFailureNotification> builder) { }
+    }
+}
+namespace HealthChecks.UI.Data
+{
+    public class HealthCheckConfiguration
+    {
+        public HealthCheckConfiguration() { }
+        public string? DiscoveryService { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Uri { get; set; }
+        public void Deconstruct(out string uri, out string name) { }
+    }
+    public class HealthCheckExecution
+    {
+        public HealthCheckExecution() { }
+        public string? DiscoveryService { get; set; }
+        public System.Collections.Generic.List<HealthChecks.UI.Data.HealthCheckExecutionEntry> Entries { get; set; }
+        public System.Collections.Generic.List<HealthChecks.UI.Data.HealthCheckExecutionHistory> History { get; set; }
+        public int Id { get; set; }
+        public System.DateTime LastExecuted { get; set; }
+        public string Name { get; set; }
+        public System.DateTime OnStateFrom { get; set; }
+        public HealthChecks.UI.Core.UIHealthStatus Status { get; set; }
+        public string Uri { get; set; }
+    }
+    public class HealthCheckExecutionEntry
+    {
+        public HealthCheckExecutionEntry() { }
+        public string? Description { get; set; }
+        public System.TimeSpan Duration { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public HealthChecks.UI.Core.UIHealthStatus Status { get; set; }
+        public System.Collections.Generic.List<string>? Tags { get; set; }
+    }
+    public class HealthCheckExecutionHistory
+    {
+        public HealthCheckExecutionHistory() { }
+        public string? Description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public System.DateTime On { get; set; }
+        public HealthChecks.UI.Core.UIHealthStatus Status { get; set; }
+    }
+    public class HealthCheckFailureNotification
+    {
+        public HealthCheckFailureNotification() { }
+        public string HealthCheckName { get; set; }
+        public int Id { get; set; }
+        public bool IsUpAndRunning { get; set; }
+        public System.DateTime LastNotified { get; set; }
+    }
+    public class HealthChecksDb : Microsoft.EntityFrameworkCore.DbContext
+    {
+        protected HealthChecksDb(Microsoft.EntityFrameworkCore.DbContextOptions options) { }
+        public HealthChecksDb(Microsoft.EntityFrameworkCore.DbContextOptions<HealthChecks.UI.Data.HealthChecksDb> options) { }
+        public Microsoft.EntityFrameworkCore.DbSet<HealthChecks.UI.Data.HealthCheckConfiguration> Configurations { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<HealthChecks.UI.Data.HealthCheckExecution> Executions { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<HealthChecks.UI.Data.HealthCheckFailureNotification> Failures { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<HealthChecks.UI.Data.HealthCheckExecutionEntry> HealthCheckExecutionEntries { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<HealthChecks.UI.Data.HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
+        protected override void OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder) { }
+    }
+}

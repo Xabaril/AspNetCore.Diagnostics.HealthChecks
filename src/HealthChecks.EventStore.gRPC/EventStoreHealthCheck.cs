@@ -22,13 +22,20 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
     {
         try
         {
-            using var subscription = await _client.SubscribeToAllAsync(
-                FromAll.End,
-                eventAppeared: (_, _, _) => Task.CompletedTask,
-                cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+            var readAllStreamResult = _client.ReadAllAsync(
+                direction: Direction.Backwards,
+                position: Position.End,
+                maxCount: 1,
+                cancellationToken: cancellationToken);
 
-            return new HealthCheckResult(HealthStatus.Healthy);
+            await foreach (var _ in readAllStreamResult.Messages.WithCancellation(cancellationToken))
+            {
+                // If there are messages in the response,
+                // that means we successfully connected to EventStore
+                return HealthCheckResult.Healthy();
+            }
+
+            return new HealthCheckResult(context.Registration.FailureStatus, "Failed to connect to EventStore.");
         }
         catch (Exception exception)
         {

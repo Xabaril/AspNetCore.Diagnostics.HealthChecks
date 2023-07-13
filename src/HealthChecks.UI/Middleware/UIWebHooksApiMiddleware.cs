@@ -26,19 +26,18 @@ namespace HealthChecks.UI.Core
 
         public async Task InvokeAsync(HttpContext context)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var settings = scope.ServiceProvider.GetRequiredService<IOptions<Settings>>();
-                var sanitizedWebhooksResponse = settings.Value.Webhooks.Select(item => new
-                {
-                    item.Name,
-                    Payload = string.IsNullOrEmpty(item.Payload) ? new JObject() : JObject.Parse(Regex.Unescape(item.Payload))
-                });
-                context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
-                var response = JsonConvert.SerializeObject(sanitizedWebhooksResponse, _jsonSerializationSettings);
+            using var scope = _serviceScopeFactory.CreateScope();
 
-                await context.Response.WriteAsync(response);
-            }
+            var settings = scope.ServiceProvider.GetRequiredService<IOptions<Settings>>();
+            var sanitizedWebhooksResponse = settings.Value.Webhooks.Select(item => new
+            {
+                item.Name,
+                Payload = string.IsNullOrEmpty(item.Payload) ? new JObject() : JObject.Parse(Regex.Unescape(item.Payload))
+            });
+            context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
+            var response = JsonConvert.SerializeObject(sanitizedWebhooksResponse, _jsonSerializationSettings);
+
+            await context.Response.WriteAsync(response);
         }
     }
 }

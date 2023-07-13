@@ -12,26 +12,19 @@ public class ApiApprovalTests
         var dependencies = currentAsm.GetReferencedAssemblies();
         var nameItems = currentAsm.GetName().Name!.Split('.');
 
-        if (nameItems.Length == 1 && nameItems[0] == "UnitTests")
-        {
-            // TODO: remove this condition after removing UnitTests project
-            return;
-        }
+        Debug.Assert(nameItems.Last() == "Tests");
 
-        var nameToFind = nameItems[1]; // 0 element always equals to "HealthChecks"
-        if (nameToFind == "UI")
-        {
-            // TODO: Add API approval tests to UI projects and/or split UI tests into separate test projects
-            return;
-        }
-
-        var asmForTest = dependencies.Select(dep => Assembly.Load(dep)).Where(asm => asm.GetTypes().Any(type => type.Name == "ApiMarker") && asm.GetName().Name!.Contains(nameToFind, StringComparison.InvariantCultureIgnoreCase)).Single();
+        var nameToFind = string.Join(".", nameItems.SkipLast(1));
+        var asmForTest = dependencies
+            .Select(Assembly.Load)
+            .Where(asm => asm.GetTypes().Any(type => type.Name == "ApiMarker") && asm.GetName().Name!.Equals(nameToFind, StringComparison.InvariantCultureIgnoreCase))
+            .Single();
 
         // https://github.com/PublicApiGenerator/PublicApiGenerator
-        string publicApi = asmForTest.GeneratePublicApi(new ApiGeneratorOptions
+        string publicApi = asmForTest.GeneratePublicApi(new()
         {
             IncludeAssemblyAttributes = false,
-            WhitelistedNamespacePrefixes = new[] { "Microsoft.Extensions.DependencyInjection" }
+            AllowNamespacePrefixes = new[] { "Microsoft" }
         });
 
         var location = Assembly.GetExecutingAssembly().Location;
@@ -43,6 +36,6 @@ public class ApiApprovalTests
         // Note: If the AssemblyName.approved.txt file doesn't match the latest publicApi value,
         // this call will try to launch a diff tool to help you out but that can fail on
         // your machine if a diff tool isn't configured/setup.
-        publicApi.ShouldMatchApproved(options => options.SubFolder(Path.Combine(".." /*_SHARED*/, pathItems[index + 1])).WithFilenameGenerator((testMethodInfo, discriminator, fileType, fileExtension) => $"{asmForTest.GetName().Name}.{fileType}.{fileExtension}"));
+        publicApi.ShouldMatchApproved(options => options.SubFolder(Path.Combine(".." /*_SHARED*/, pathItems[index + 1])).WithFilenameGenerator((_, _, fileType, fileExtension) => $"{asmForTest.GetName().Name}.{fileType}.{fileExtension}"));
     }
 }

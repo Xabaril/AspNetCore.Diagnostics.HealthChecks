@@ -1,12 +1,14 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core.Extensions;
 using HealthChecks.UI.Core.Notifications;
 using HealthChecks.UI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
@@ -18,12 +20,14 @@ namespace HealthChecks.UI.Core.HostedService
         private readonly ILogger<HealthCheckReportCollector> _logger;
         private readonly ServerAddressesService _serverAddressService;
         private readonly IEnumerable<IHealthCheckCollectorInterceptor> _interceptors;
+        private readonly Settings _settings;
         private static readonly Dictionary<int, Uri> _endpointAddresses = new();
         private static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web)
         {
             Converters =
             {
-                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: false)
+                // allowIntegerValues: true https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1422
+                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: true)
             }
         };
 
@@ -32,6 +36,7 @@ namespace HealthChecks.UI.Core.HostedService
             IHealthCheckFailureNotifier healthCheckFailureNotifier,
             IHttpClientFactory httpClientFactory,
             ILogger<HealthCheckReportCollector> logger,
+            IOptions<Settings> settings,
             ServerAddressesService serverAddressService,
             IEnumerable<IHealthCheckCollectorInterceptor> interceptors)
         {
@@ -40,6 +45,7 @@ namespace HealthChecks.UI.Core.HostedService
             _logger = Guard.ThrowIfNull(logger);
             _serverAddressService = Guard.ThrowIfNull(serverAddressService);
             _interceptors = interceptors ?? Enumerable.Empty<IHealthCheckCollectorInterceptor>();
+            _settings = Guard.ThrowIfNull(settings.Value);
             _httpClient = httpClientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
         }
 
@@ -47,8 +53,7 @@ namespace HealthChecks.UI.Core.HostedService
         {
             using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
             {
-                var healthChecks = await _db.Configurations
-                   .ToListAsync(cancellationToken);
+                var healthChecks = await _db.Configurations.ToListAsync(cancellationToken);
 
                 foreach (var item in healthChecks.OrderBy(h => h.Id))
                 {
@@ -67,7 +72,10 @@ namespace HealthChecks.UI.Core.HostedService
 
                     if (healthReport.Status != UIHealthStatus.Healthy)
                     {
-                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                        if (!_settings.NotifyUnHealthyOneTimeUntilChange || await ShouldNotifyAsync(item.Name))
+                        {
+                            await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                        }
                     }
                     else
                     {
@@ -123,10 +131,8 @@ namespace HealthChecks.UI.Core.HostedService
 
                 using (response)
                 {
-                    var report = await response.Content.ReadFromJsonAsync<UIHealthReport>(_options);
-                    if (report == null)
-                        throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
-                    return report;
+                    return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options)
+                        ?? throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
                 }
             }
             catch (Exception exception)
@@ -173,6 +179,26 @@ namespace HealthChecks.UI.Core.HostedService
                 .Include(le => le.Entries)
                 .Where(le => le.Name == configuration.Name)
                 .SingleOrDefaultAsync();
+        }
+
+        private async Task<bool> ShouldNotifyAsync(string healthCheckName)
+        {
+            var lastNotifications = await _db.Failures
+               .Where(lf => string.Equals(lf.HealthCheckName, healthCheckName, StringComparison.OrdinalIgnoreCase))
+               .OrderByDescending(lf => lf.LastNotified)
+               .Take(2).ToListAsync();
+
+            if (lastNotifications?.Count == 2)
+            {
+                var first = lastNotifications[0];
+                var second = lastNotifications[1];
+                if (first.IsUpAndRunning == second.IsUpAndRunning)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private async Task SaveExecutionHistoryAsync(HealthCheckConfiguration configuration, UIHealthReport healthReport)

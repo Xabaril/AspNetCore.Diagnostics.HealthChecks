@@ -1,23 +1,22 @@
 using HealthChecks.Network.Core;
 
-namespace HealthChecks.Network
+namespace HealthChecks.Network;
+
+public class ImapHealthCheckOptions : ImapConnectionOptions
 {
-    public class ImapHealthCheckOptions : ImapConnectionOptions
+    internal (bool Login, (string, string) Account) AccountOptions { get; private set; }
+    internal (bool CheckFolder, string FolderName) FolderOptions { get; private set; }
+
+    public void LoginWith(string userName, string password)
     {
-        internal (bool Login, (string, string) Account) AccountOptions { get; private set; }
-        internal (bool CheckFolder, string FolderName) FolderOptions { get; private set; }
+        Guard.ThrowIfNull(userName, true);
+        Guard.ThrowIfNull(password, true);
 
-        public void LoginWith(string userName, string password)
-        {
-            Guard.ThrowIfNull(userName, true);
-            Guard.ThrowIfNull(password, true);
+        AccountOptions = (Login: true, Account: (userName, password));
+    }
 
-            AccountOptions = (Login: true, Account: (userName, password));
-        }
-
-        public void CheckFolderExists(string inboxName)
-        {
-            FolderOptions = (true, inboxName);
-        }
+    public void CheckFolderExists(string inboxName)
+    {
+        FolderOptions = (true, inboxName);
     }
 }

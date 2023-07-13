@@ -1,95 +1,114 @@
 using System.Text;
+using HealthChecks.Network.Extensions;
 
-namespace HealthChecks.Network.Core
+namespace HealthChecks.Network.Core;
+
+internal class SmtpConnection : MailConnection
 {
-    internal class SmtpConnection : MailConnection
+    private readonly SmtpConnectionOptions _options;
+    private SmtpConnectionType _connectionType;
+
+    public SmtpConnectionType ConnectionType
     {
-        private readonly SmtpConnectionOptions _options;
-        private SmtpConnectionType _connectionType;
+        get => _connectionType;
 
-        public SmtpConnectionType ConnectionType
+        private set
         {
-            get => _connectionType;
+            _connectionType = value;
+            UseSSL = ConnectionType == SmtpConnectionType.SSL ? true : false;
+        }
+    }
 
-            private set
+    public SmtpConnection(SmtpConnectionOptions options)
+        : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
+    {
+        _options = Guard.ThrowIfNull(options);
+        ConnectionType = _options.ConnectionType;
+        ComputeDefaultValues();
+    }
+
+    public new async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
+    {
+        await base.ConnectAsync(cancellationToken).ConfigureAwait(false);
+        return await ExecuteCommandAsync(
+            SmtpCommands.EHLO(Host),
+            result =>
             {
-                _connectionType = value;
-                UseSSL = ConnectionType == SmtpConnectionType.SSL ? true : false;
-            }
-        }
+                var ACTION_OK = "250"u8;
+                return result.ContainsArray(ACTION_OK);
+            },
+            cancellationToken).ConfigureAwait(false);
+    }
 
-        public SmtpConnection(SmtpConnectionOptions options)
-            : base(options.Host, options.Port, false, options.AllowInvalidRemoteCertificates)
+    public async Task<bool> AuthenticateAsync(string userName, string password, CancellationToken cancellationToken = default)
+    {
+        if (ShouldUpgradeConnection)
         {
-            _options = Guard.ThrowIfNull(options);
-            ConnectionType = _options.ConnectionType;
-            ComputeDefaultValues();
+            await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
+        await ExecuteCommandAsync(SmtpCommands.EHLO(Host), _ => true, cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync(SmtpCommands.AUTHLOGIN(), _ => true, cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync($"{ToBase64(userName)}\r\n", _ => true, cancellationToken).ConfigureAwait(false);
 
-        public new async Task<bool> ConnectAsync()
-        {
-            await base.ConnectAsync().ConfigureAwait(false);
-            var result = await ExecuteCommand(SmtpCommands.EHLO(Host)).ConfigureAwait(false);
-            return result.Contains(SmtpResponse.ACTION_OK);
-        }
+        password = password?.Length > 0 ? ToBase64(password) : "";
 
-        public async Task<bool> AuthenticateAsync(string userName, string password)
-        {
-            if (ShouldUpgradeConnection)
+        return await ExecuteCommandAsync(
+            $"{password}\r\n",
+            result =>
             {
-                await UpgradeToSecureConnectionAsync().ConfigureAwait(false);
-            }
-            await ExecuteCommand(SmtpCommands.EHLO(Host)).ConfigureAwait(false);
-            await ExecuteCommand(SmtpCommands.AUTHLOGIN()).ConfigureAwait(false);
-            await ExecuteCommand($"{ToBase64(userName)}\r\n").ConfigureAwait(false);
+                var AUTHENTICATION_SUCCESS = "235"u8;
+                return result.ContainsArray(AUTHENTICATION_SUCCESS);
+            },
+            cancellationToken).ConfigureAwait(false);
+    }
 
-            password = password?.Length > 0 ? ToBase64(password) : "";
+    private bool ShouldUpgradeConnection => !UseSSL && _connectionType != SmtpConnectionType.PLAIN;
 
-            var result = await ExecuteCommand($"{password}\r\n").ConfigureAwait(false);
-            return result.Contains(SmtpResponse.AUTHENTICATION_SUCCESS);
-        }
-
-        private bool ShouldUpgradeConnection => !UseSSL && _connectionType != SmtpConnectionType.PLAIN;
-
-        private void ComputeDefaultValues()
+    private void ComputeDefaultValues()
+    {
+        switch (_options.ConnectionType)
         {
-            switch (_options.ConnectionType)
-            {
-                case SmtpConnectionType.AUTO when Port == 465:
-                    ConnectionType = SmtpConnectionType.SSL;
-                    break;
-                case SmtpConnectionType.AUTO when Port == 587:
-                    ConnectionType = SmtpConnectionType.TLS;
-                    break;
-                case SmtpConnectionType.AUTO when Port == 25:
-                    ConnectionType = SmtpConnectionType.PLAIN;
-                    break;
-            }
-
-            if (ConnectionType == SmtpConnectionType.AUTO)
-            {
-                throw new Exception($"Port {Port} is not a valid smtp port when using automatic configuration");
-            }
+            case SmtpConnectionType.AUTO when Port == 465:
+                ConnectionType = SmtpConnectionType.SSL;
+                break;
+            case SmtpConnectionType.AUTO when Port == 587:
+                ConnectionType = SmtpConnectionType.TLS;
+                break;
+            case SmtpConnectionType.AUTO when Port == 25:
+                ConnectionType = SmtpConnectionType.PLAIN;
+                break;
         }
 
-        private async Task<bool> UpgradeToSecureConnectionAsync()
+        if (ConnectionType == SmtpConnectionType.AUTO)
         {
-            var upgradeResult = await ExecuteCommand(SmtpCommands.STARTTLS()).ConfigureAwait(false);
-            if (upgradeResult.Contains(SmtpResponse.SERVICE_READY))
-            {
-                UseSSL = true;
-                _stream = GetStream();
-                return true;
-            }
-            else
-            {
-                throw new Exception("Could not upgrade SMTP non SSL connection using STARTTLS handshake");
-            }
+            throw new Exception($"Port {Port} is not a valid smtp port when using automatic configuration");
         }
+    }
 
-        private string ToBase64(string text)
+    private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
+    {
+        var upgradeResult = await ExecuteCommandAsync(
+            SmtpCommands.STARTTLS(),
+            result =>
+            {
+                var SERVICE_READY = "220"u8;
+                return result.ContainsArray(SERVICE_READY);
+            },
+            cancellationToken).ConfigureAwait(false);
+        if (upgradeResult)
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
+            UseSSL = true;
+            _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
+            return true;
         }
+        else
+        {
+            throw new Exception("Could not upgrade SMTP non SSL connection using STARTTLS handshake");
+        }
+    }
+
+    private string ToBase64(string text)
+    {
+        return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
     }
 }

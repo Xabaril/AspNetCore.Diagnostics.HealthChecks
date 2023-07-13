@@ -4,15 +4,17 @@ using MySqlConnector;
 namespace HealthChecks.MySql;
 
 /// <summary>
-/// A health check for MySql databases.
+/// A health check for MySQL databases.
 /// </summary>
 public class MySqlHealthCheck : IHealthCheck
 {
-    private readonly string _connectionString;
+    private readonly MySqlHealthCheckOptions _options;
 
-    public MySqlHealthCheck(string connectionString)
+    public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
-        _connectionString = Guard.ThrowIfNull(connectionString);
+        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.CommandText, true);
+        _options = options;
     }
 
     /// <inheritdoc />
@@ -20,14 +22,18 @@ public class MySqlHealthCheck : IHealthCheck
     {
         try
         {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            using var connection = new MySqlConnection(_options.ConnectionString);
 
-                return await connection.PingAsync(cancellationToken).ConfigureAwait(false)
-                    ? HealthCheckResult.Healthy()
-                    : new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
-            }
+            _options.Configure?.Invoke(connection);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+            using var command = connection.CreateCommand();
+            command.CommandText = _options.CommandText;
+            object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+            return _options.HealthCheckResultBuilder == null
+                ? HealthCheckResult.Healthy()
+                : _options.HealthCheckResultBuilder(result);
         }
         catch (Exception ex)
         {

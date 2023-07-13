@@ -1,35 +1,34 @@
 using HealthChecks.Publisher.Seq;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class SeqHealthCheckBuilderExtensions
 {
-    public static class SeqHealthCheckBuilderExtensions
+    private const string NAME = "seq";
+
+    /// <summary>
+    /// Add a health check publisher for Seq.
+    /// </summary>
+    /// <remarks>
+    /// For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
+    /// Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
+    /// </remarks>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
+    /// <param name="setup">The Seq configuration options.</param>
+    /// <param name="name">The registration name. This is also the associated http client name if you use AddHttpClient.</param>
+    /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
+    public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions>? setup, string? name = default)
     {
-        private const string NAME = "seq";
+        builder.Services.AddHttpClient();
 
-        /// <summary>
-        /// Add a health check publisher for Seq.
-        /// </summary>
-        /// <remarks>
-        /// For each <see cref="HealthReport" /> published a new metric value indicating the health check status (2 Healthy, 1
-        /// Degraded, 0 Unhealthy)  and the total time the health check took to execute on seconds.
-        /// </remarks>
-        /// <param name="builder">The <see cref="IHealthChecksBuilder" />.</param>
-        /// <param name="setup">The Seq configuration options.</param>
-        /// <param name="name"> The registration name. This is also the associated http client name if you use AddHttpClient </param>
-        /// <returns>The <see cref="IHealthChecksBuilder" />.</returns>
-        public static IHealthChecksBuilder AddSeqPublisher(this IHealthChecksBuilder builder, Action<SeqOptions>? setup, string? name = default)
-        {
-            builder.Services.AddHttpClient();
+        var options = new SeqOptions();
+        setup?.Invoke(options);
 
-            var options = new SeqOptions();
-            setup?.Invoke(options);
+        var registrationName = name ?? NAME;
 
-            var registrationName = name ?? NAME;
+        builder.Services.AddSingleton<IHealthCheckPublisher>(sp => new SeqPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName), options));
 
-            builder.Services.AddSingleton<IHealthCheckPublisher>(sp => new SeqPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(registrationName), options));
-
-            return builder;
-        }
+        return builder;
     }
 }

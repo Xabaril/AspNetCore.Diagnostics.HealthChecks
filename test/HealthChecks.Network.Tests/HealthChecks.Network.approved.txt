@@ -22,14 +22,6 @@ namespace HealthChecks.Network.Core
         SSL_TLS = 1,
         STARTTLS = 2,
     }
-    public class ImapResponse
-    {
-        public static string AUTHFAILED;
-        public static string ERROR;
-        public static string OK;
-        public static string OK_TLS_NEGOTIATION;
-        public ImapResponse() { }
-    }
     public class MailConnection : System.IDisposable
     {
         protected System.IO.Stream? _stream;
@@ -39,12 +31,13 @@ namespace HealthChecks.Network.Core
         public string Host { get; set; }
         public int Port { get; set; }
         protected bool UseSSL { get; set; }
-        public System.Threading.Tasks.Task<bool> ConnectAsync() { }
+        public System.Threading.Tasks.Task<bool> ConnectAsync(System.Threading.CancellationToken cancellationToken = default) { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
-        protected System.Threading.Tasks.Task<string> ExecuteCommand(string command) { }
+        protected System.Threading.Tasks.Task<T> ExecuteCommandAsync<T>(string command, HealthChecks.Network.Core.MailConnection.CommandResultAction<T> action, System.Threading.CancellationToken cancellationToken) { }
         protected System.Net.Security.SslStream GetSSLStream(System.IO.Stream stream) { }
-        protected System.IO.Stream GetStream() { }
+        protected System.Threading.Tasks.Task<System.IO.Stream> GetStreamAsync(System.Threading.CancellationToken cancellationToken) { }
+        public delegate T CommandResultAction<T>(byte[] result);
     }
     public class SmtpCommands
     {
@@ -67,13 +60,6 @@ namespace HealthChecks.Network.Core
         SSL = 1,
         TLS = 2,
         PLAIN = 3,
-    }
-    public class SmtpResponse
-    {
-        public const string ACTION_OK = "250";
-        public const string AUTHENTICATION_SUCCESS = "235";
-        public const string SERVICE_READY = "220";
-        public SmtpResponse() { }
     }
 }
 namespace HealthChecks.Network
@@ -100,6 +86,8 @@ namespace HealthChecks.Network
     public class DnsResolveOptions
     {
         public DnsResolveOptions() { }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.DnsResolveOptions WithCheckAllHosts() { }
     }
     public class FtpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
@@ -109,7 +97,9 @@ namespace HealthChecks.Network
     public class FtpHealthCheckOptions
     {
         public FtpHealthCheckOptions() { }
+        public bool CheckAllHosts { get; set; }
         public HealthChecks.Network.FtpHealthCheckOptions AddHost(string host, bool createFile = false, System.Net.NetworkCredential? credentials = null) { }
+        public HealthChecks.Network.FtpHealthCheckOptions WithCheckAllHosts() { }
     }
     public class ImapHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
@@ -130,7 +120,9 @@ namespace HealthChecks.Network
     public class PingHealthCheckOptions
     {
         public PingHealthCheckOptions() { }
+        public bool CheckAllHosts { get; set; }
         public HealthChecks.Network.PingHealthCheckOptions AddHost(string host, int timeout) { }
+        public HealthChecks.Network.PingHealthCheckOptions WithCheckAllHosts() { }
     }
     public class SftpConfiguration { }
     public class SftpConfigurationBuilder
@@ -149,7 +141,9 @@ namespace HealthChecks.Network
     public class SftpHealthCheckOptions
     {
         public SftpHealthCheckOptions() { }
+        public bool CheckAllHosts { get; set; }
         public HealthChecks.Network.SftpHealthCheckOptions AddHost(HealthChecks.Network.SftpConfiguration sftpConfiguration) { }
+        public HealthChecks.Network.SftpHealthCheckOptions WithCheckAllHosts() { }
     }
     public class SmtpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
@@ -170,7 +164,9 @@ namespace HealthChecks.Network
     {
         public SslHealthCheckOptions() { }
         public System.Net.Sockets.AddressFamily AddressFamily { get; set; }
+        public bool CheckAllHosts { get; set; }
         public HealthChecks.Network.SslHealthCheckOptions AddHost(string host, int port = 443, int checkLeftDays = 60) { }
+        public HealthChecks.Network.SslHealthCheckOptions WithCheckAllHosts() { }
     }
     public class TcpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
@@ -181,7 +177,9 @@ namespace HealthChecks.Network
     {
         public TcpHealthCheckOptions() { }
         public System.Net.Sockets.AddressFamily AddressFamily { get; set; }
+        public bool CheckAllHosts { get; set; }
         public HealthChecks.Network.TcpHealthCheckOptions AddHost(string host, int port) { }
+        public HealthChecks.Network.TcpHealthCheckOptions WithCheckAllHosts() { }
     }
 }
 namespace HealthChecks.Network.Extensions

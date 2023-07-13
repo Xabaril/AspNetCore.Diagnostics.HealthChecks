@@ -30,7 +30,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             try
             {
                 var serviceResource = Build(resource);
-                service = await _client.CreateNamespacedServiceAsync(serviceResource, resource.Metadata.NamespaceProperty);
+                service = await _client.CoreV1.CreateNamespacedServiceAsync(serviceResource, resource.Metadata.NamespaceProperty);
                 _logger.LogInformation("Service {name} has been created", service.Metadata.Name);
             }
             catch (Exception ex)
@@ -46,7 +46,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         {
             try
             {
-                await _client.DeleteNamespacedServiceAsync($"{resource.Spec.Name}-svc", resource.Metadata.NamespaceProperty);
+                await _client.CoreV1.DeleteNamespacedServiceAsync($"{resource.Spec.Name}-svc", resource.Metadata.NamespaceProperty);
             }
             catch (Exception ex)
             {

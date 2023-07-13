@@ -2,7 +2,7 @@ namespace HealthChecks.Prometheus.Metrics
 {
     public abstract class LivenessPrometheusMetrics
     {
-        protected const string CONTENT_TYPE = "text/plain; version=0.0.4";
+        protected const string CONTENT_TYPE = "text/plain; version=0.0.4; charset=utf-8";
         protected readonly Prometheus.CollectorRegistry Registry;
         protected void WriteMetricsFromHealthReport(Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
     }
@@ -14,5 +14,9 @@ namespace HealthChecks.Prometheus.Metrics
 }
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class PrometheusHealthCheckMiddleware { }
+    public static class PrometheusHealthCheckMiddleware
+    {
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksPrometheusExporter(this Microsoft.AspNetCore.Builder.IApplicationBuilder applicationBuilder, Microsoft.AspNetCore.Http.PathString endpoint) { }
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksPrometheusExporter(this Microsoft.AspNetCore.Builder.IApplicationBuilder applicationBuilder, Microsoft.AspNetCore.Http.PathString endpoint, System.Action<Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions>? configure) { }
+    }
 }

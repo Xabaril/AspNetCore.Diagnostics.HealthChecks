@@ -3,109 +3,136 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+#if !NET5_0_OR_GREATER
+using HealthChecks.Network.Extensions;
+#endif
 
-namespace HealthChecks.Network.Core
+namespace HealthChecks.Network.Core;
+
+public class MailConnection : IDisposable
 {
-    public class MailConnection : IDisposable
+    public int Port { get; protected set; }
+    public string Host { get; protected set; }
+    protected bool UseSSL { get; set; } = true;
+
+    protected TcpClient? _tcpClient;
+    protected Stream? _stream;
+    protected Func<object, X509Certificate?, X509Chain?, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
+    private bool _disposed;
+    private readonly bool _allowInvalidCertificates;
+
+    public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false)
     {
-        public int Port { get; protected set; }
-        public string Host { get; protected set; }
-        protected bool UseSSL { get; set; } = true;
+        Host = Guard.ThrowIfNull(host);
+        if (port == default)
+            throw new ArgumentNullException(nameof(port));
+        Port = port;
+        UseSSL = useSSL;
+        _allowInvalidCertificates = allowInvalidCertificates;
+    }
 
-        protected TcpClient? _tcpClient;
-        protected Stream? _stream;
-        protected Func<object, X509Certificate?, X509Chain?, SslPolicyErrors, bool> _validateRemoteCertificate = (o, c, ch, e) => true;
-        private bool _disposed;
-        private readonly bool _allowInvalidCertificates;
+    public async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
+    {
+        _tcpClient = new TcpClient();
+#if NET5_0_OR_GREATER
+        await _tcpClient.ConnectAsync(Host, Port, cancellationToken).ConfigureAwait(false);
+#else
+        await _tcpClient.ConnectAsync(Host, Port).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+#endif
 
-        public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false)
+        _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync(string.Empty, _ => true, cancellationToken).ConfigureAwait(false);
+
+        return _tcpClient.Connected;
+    }
+
+    protected async Task<Stream> GetStreamAsync(CancellationToken cancellationToken)
+    {
+        if (_tcpClient == null)
+            throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
+
+        var stream = _tcpClient.GetStream();
+
+        if (UseSSL)
         {
-            Host = Guard.ThrowIfNull(host);
-            if (port == default)
-                throw new ArgumentNullException(nameof(port));
-            Port = port;
-            UseSSL = useSSL;
-            _allowInvalidCertificates = allowInvalidCertificates;
-        }
+            var sslStream = GetSSLStream(stream);
 
-        public async Task<bool> ConnectAsync()
-        {
-            _tcpClient = new TcpClient();
-            await _tcpClient.ConnectAsync(Host, Port).ConfigureAwait(false);
-
-            _stream = GetStream();
-            await ExecuteCommand(string.Empty).ConfigureAwait(false);
-
-            return _tcpClient.Connected;
-        }
-
-        protected Stream GetStream()
-        {
-            if (_tcpClient == null)
-                throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
-
-            var stream = _tcpClient.GetStream();
-
-            if (UseSSL)
+#if NET5_0_OR_GREATER
+            var clientAuthenticationOptions = new SslClientAuthenticationOptions
             {
-                var sslStream = GetSSLStream(stream);
-                sslStream.AuthenticateAsClient(Host);
-                return sslStream;
-            }
-            else
-            {
-                return stream;
-            }
+                TargetHost = Host
+            };
+            await sslStream.AuthenticateAsClientAsync(clientAuthenticationOptions, cancellationToken).ConfigureAwait(false);
+#else
+            await sslStream.AuthenticateAsClientAsync(Host).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+#endif
+            return sslStream;
         }
-
-        protected SslStream GetSSLStream(Stream stream)
+        else
         {
-            if (_allowInvalidCertificates)
-            {
-                return new SslStream(stream, true, new RemoteCertificateValidationCallback(_validateRemoteCertificate));
-            }
-            else
-            {
-                return new SslStream(stream);
-            }
+            return stream;
         }
+    }
 
-#pragma warning disable IDE1006 // Naming Styles
-        protected async Task<string> ExecuteCommand(string command) //TODO: rename public API
-#pragma warning restore IDE1006 // Naming Styles
+    protected SslStream GetSSLStream(Stream stream)
+    {
+        if (_allowInvalidCertificates)
         {
-            if (_stream == null)
-                throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
+            return new SslStream(stream, true, new RemoteCertificateValidationCallback(_validateRemoteCertificate));
+        }
+        else
+        {
+            return new SslStream(stream);
+        }
+    }
 
-            var buffer = Encoding.ASCII.GetBytes(command);
-            await _stream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+    public delegate bool CommandResultAction(byte[] result);
 
-            var readBuffer = ArrayPool<byte>.Shared.Rent(512);
-            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length).ConfigureAwait(false);
-            var output = Encoding.UTF8.GetString(readBuffer);
+    protected async Task<bool> ExecuteCommandAsync(string command, CommandResultAction action, CancellationToken cancellationToken)
+    {
+        if (_stream == null)
+            throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
 
+        var buffer = Encoding.ASCII.GetBytes(command);
+
+#if NET5_0_OR_GREATER
+        await _stream.WriteAsync(buffer, cancellationToken).ConfigureAwait(false);
+#else
+        await _stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
+#endif
+
+        var readBuffer = ArrayPool<byte>.Shared.Rent(512);
+        try
+        {
+#if NET5_0_OR_GREATER
+            int read = await _stream.ReadAsync(readBuffer, cancellationToken).ConfigureAwait(false);
+#else
+            int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length, cancellationToken).ConfigureAwait(false);
+#endif
+            return action(readBuffer);
+        }
+        finally
+        {
             ArrayPool<byte>.Shared.Return(readBuffer);
-
-            return output;
         }
+    }
 
-        public void Dispose()
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _stream?.Dispose();
+            _tcpClient?.Dispose();
         }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-            {
-                _stream?.Dispose();
-                _tcpClient?.Dispose();
-            }
-            _disposed = true;
-        }
+        _disposed = true;
     }
 }

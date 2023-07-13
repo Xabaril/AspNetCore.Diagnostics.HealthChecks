@@ -1,3 +1,5 @@
+using HealthChecks.AzureServiceBus.Configuration;
+
 namespace HealthChecks.AzureServiceBus.Tests;
 
 public class azure_service_bus_queue_registration_should
@@ -20,12 +22,38 @@ public class azure_service_bus_queue_registration_should
     }
 
     [Fact]
+    public void add_health_check_with_options_when_properly_configured()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue("cnn", "queueName",
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
+    }
+
+    [Fact]
     public void add_named_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureServiceBusQueue("cnn", "queueName",
-                name: "azureservicebusqueuecheck");
+            .AddAzureServiceBusQueue("cnn", "queueName", name: "azureservicebusqueuecheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -49,15 +77,16 @@ public class azure_service_bus_queue_registration_should
 
         var registration = options.Value.Registrations.First();
 
-        var exception = Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
-        exception.ParamName.ShouldBe("connectionString");
+        var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
+        exception.ParamName.ShouldBe("options");
     }
 
     [Fact]
     public void add_health_check_using_factories_when_properly_configured()
     {
-        var services = new ServiceCollection();
         bool connectionStringFactoryCalled = false, queueNameFactoryCalled = false;
+
+        var services = new ServiceCollection();
         services.AddHealthChecks()
             .AddAzureServiceBusQueue(_ =>
                 {
@@ -80,5 +109,32 @@ public class azure_service_bus_queue_registration_should
         check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
         connectionStringFactoryCalled.ShouldBeTrue();
         queueNameFactoryCalled.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void add_health_check_using_factories_with_options_when_properly_configured()
+    {
+        AzureServiceBusQueueHealthCheckOptions? configurationOptions = null;
+        bool configurationCalled = false;
+
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueue(_ => "cnn", _ => "queueName",
+                options =>
+                {
+                    configurationCalled = true;
+                    configurationOptions = options;
+                });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+        configurationCalled.ShouldBeTrue();
+        configurationOptions.ShouldNotBeNull();
+        configurationOptions.UsePeekMode.ShouldBeTrue();
     }
 }

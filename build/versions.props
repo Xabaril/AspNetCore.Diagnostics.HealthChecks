@@ -8,7 +8,9 @@
     <HealthCheckAWSSns>7.0.0</HealthCheckAWSSns>
     <HealthCheckAWSSqs>7.0.0</HealthCheckAWSSqs>
     <HealthCheckAWSSystemsManager>7.0.0</HealthCheckAWSSystemsManager>
+    <HealthCheckAzureApplicationInsights>7.0.0</HealthCheckAzureApplicationInsights>
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
+    <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
     <HealthCheckAzureServiceBus>7.0.0</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorage>7.0.0</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>7.0.0</HealthCheckCloudFirestore>
@@ -22,6 +24,7 @@
     <HealthCheckGremlin>7.0.0</HealthCheckGremlin>
     <HealthCheckHangfire>7.0.0</HealthCheckHangfire>
     <HealthCheckIbmMQ>7.0.0</HealthCheckIbmMQ>
+    <HealthCheckInfluxDB>7.0.0</HealthCheckInfluxDB>
     <HealthCheckIoTHub>7.0.0</HealthCheckIoTHub>
     <HealthCheckKafka>7.0.0</HealthCheckKafka>
     <HealthCheckKeyVault>7.0.0</HealthCheckKeyVault>

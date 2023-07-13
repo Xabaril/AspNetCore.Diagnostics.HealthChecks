@@ -2,58 +2,57 @@ using Azure.Core;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureStorage
+namespace HealthChecks.AzureStorage;
+
+public class AzureQueueStorageHealthCheck : IHealthCheck
 {
-    public class AzureQueueStorageHealthCheck : IHealthCheck
+    private readonly QueueServiceClient _queueServiceClient;
+    private readonly AzureQueueStorageHealthCheckOptions _options;
+
+    public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
+        : this(
+              ClientCache.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
+              new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
+    { }
+
+    public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
+        : this(
+              ClientCache.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
+              new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
+    { }
+
+    public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
     {
-        private readonly QueueServiceClient _queueServiceClient;
-        private readonly AzureQueueStorageHealthCheckOptions _options;
+        _queueServiceClient = Guard.ThrowIfNull(queueServiceClient);
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
-            : this(
-                  ClientCache.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
-                  new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
-        { }
-
-        public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
-            : this(
-                  ClientCache.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
-                  new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
-        { }
-
-        public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _queueServiceClient = Guard.ThrowIfNull(queueServiceClient);
-            _options = Guard.ThrowIfNull(options);
+            // Note: QueueServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+            // "Storage Queue Data Contributor," so QueueServiceClient.GetQueuesAsync() is used instead to probe service health.
+            // However, QueueClient.GetPropertiesAsync() does have sufficient permissions.
+            await _queueServiceClient
+                .GetQueuesAsync(cancellationToken: cancellationToken)
+                .AsPages(pageSizeHint: 1)
+                .GetAsyncEnumerator(cancellationToken)
+                .MoveNextAsync()
+                .ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(_options.QueueName))
+            {
+                var queueClient = _queueServiceClient.GetQueueClient(_options.QueueName);
+                await queueClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            return HealthCheckResult.Healthy();
         }
-
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                // Note: QueueServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
-                // "Storage Queue Data Contributor," so QueueServiceClient.GetQueuesAsync() is used instead to probe service health.
-                // However, QueueClient.GetPropertiesAsync() does have sufficient permissions.
-                await _queueServiceClient
-                    .GetQueuesAsync(cancellationToken: cancellationToken)
-                    .AsPages(pageSizeHint: 1)
-                    .GetAsyncEnumerator(cancellationToken)
-                    .MoveNextAsync()
-                    .ConfigureAwait(false);
-
-                if (!string.IsNullOrEmpty(_options.QueueName))
-                {
-                    var queueClient = _queueServiceClient.GetQueueClient(_options.QueueName);
-                    await queueClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
-                }
-
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

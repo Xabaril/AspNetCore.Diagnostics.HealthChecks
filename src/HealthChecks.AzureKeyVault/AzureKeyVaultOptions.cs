@@ -1,57 +1,56 @@
-namespace HealthChecks.AzureKeyVault
+namespace HealthChecks.AzureKeyVault;
+
+/// <summary>
+/// Azure KeyVault configuration options.
+/// </summary>
+public class AzureKeyVaultOptions
 {
+    internal HashSet<string> _secrets = new();
+
+    internal IEnumerable<string> Secrets => _secrets;
+
+    internal HashSet<string> _keys = new();
+
+    internal IEnumerable<string> Keys => _keys;
+
+    internal List<(string, bool)> _certificates = new();
+
+    internal List<(string, bool)> Certificates => _certificates;
+
     /// <summary>
-    /// Azure KeyVault configuration options.
+    /// Add a Azure Key Vault secret to be checked.
     /// </summary>
-    public class AzureKeyVaultOptions
+    /// <param name="secretName">The secret to be checked.</param>
+    /// <returns><see cref="AzureKeyVaultOptions"/></returns>
+    public AzureKeyVaultOptions AddSecret(string secretName)
     {
-        internal HashSet<string> _secrets = new();
+        _secrets.Add(secretName);
 
-        internal IEnumerable<string> Secrets => _secrets;
+        return this;
+    }
 
-        internal HashSet<string> _keys = new();
+    /// <summary>
+    /// Add a Azure Key Vault cryptographic key to be checked.
+    /// </summary>
+    /// <param name="keyName">The cryptographic key to be checked.</param>
+    /// <returns><see cref="AzureKeyVaultOptions"/></returns>
+    public AzureKeyVaultOptions AddKey(string keyName)
+    {
+        _keys.Add(keyName);
 
-        internal IEnumerable<string> Keys => _keys;
+        return this;
+    }
 
-        internal List<(string, bool)> _certificates = new();
+    /// <summary>
+    /// Add a Azure Key Vault certificate key to be checked.
+    /// </summary>
+    /// <param name="certificateName">The certificate key to be checked.</param>
+    /// /// <param name="checkExpired">Certificate expiration date should be checked. It the certificate is expired a exception will be thrown</param>
+    /// <returns><see cref="AzureKeyVaultOptions"/></returns>
+    public AzureKeyVaultOptions AddCertificate(string certificateName, bool checkExpired = false)
+    {
+        _certificates.Add((certificateName, checkExpired));
 
-        internal List<(string, bool)> Certificates => _certificates;
-
-        /// <summary>
-        /// Add a Azure Key Vault secret to be checked
-        /// </summary>
-        /// <param name="secretName">The secret to be checked</param>
-        /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions AddSecret(string secretName)
-        {
-            _secrets.Add(secretName);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Add a Azure Key Vault cryptographic key to be checked
-        /// </summary>
-        /// <param name="keyName">The cryptographic key to be checked</param>
-        /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions AddKey(string keyName)
-        {
-            _keys.Add(keyName);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Add a Azure Key Vault certificate key to be checked
-        /// </summary>
-        /// <param name="certificateName">The certificate key to be checked</param>
-        /// /// <param name="checkExpired">Certificate expiration date should be checked. It the certificate is expired a exception will be thrown</param>
-        /// <returns><see cref="AzureKeyVaultOptions"/></returns>
-        public AzureKeyVaultOptions AddCertificate(string certificateName, bool checkExpired = false)
-        {
-            _certificates.Add((certificateName, checkExpired));
-
-            return this;
-        }
+        return this;
     }
 }

@@ -10,11 +10,17 @@ namespace HealthChecks.Redis;
 public class RedisHealthCheck : IHealthCheck
 {
     private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new();
-    private readonly string _redisConnectionString;
+    private readonly string? _redisConnectionString;
+    private readonly IConnectionMultiplexer? _connectionMultiplexer;
 
     public RedisHealthCheck(string redisConnectionString)
     {
         _redisConnectionString = Guard.ThrowIfNull(redisConnectionString);
+    }
+
+    public RedisHealthCheck(IConnectionMultiplexer connectionMultiplexer)
+    {
+        _connectionMultiplexer = Guard.ThrowIfNull(connectionMultiplexer);
     }
 
     /// <inheritdoc />
@@ -22,9 +28,19 @@ public class RedisHealthCheck : IHealthCheck
     {
         try
         {
-            if (!_connections.TryGetValue(_redisConnectionString, out var connection))
+            var connection = (ConnectionMultiplexer)_connectionMultiplexer!;
+
+            if (_redisConnectionString is not null && !_connections.TryGetValue(_redisConnectionString, out connection))
             {
-                connection = await ConnectionMultiplexer.ConnectAsync(_redisConnectionString).ConfigureAwait(false);
+                try
+                {
+                    var connectionMultiplexerTask = ConnectionMultiplexer.ConnectAsync(_redisConnectionString!);
+                    connection = await TimeoutAsync(connectionMultiplexerTask, cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    return new HealthCheckResult(context.Registration.FailureStatus, description: "Healthcheck timed out");
+                }
 
                 if (!_connections.TryAdd(_redisConnectionString, connection))
                 {
@@ -67,9 +83,30 @@ public class RedisHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            _connections.TryRemove(_redisConnectionString, out var connection);
-            connection?.Dispose();
+            if (_redisConnectionString is not null)
+            {
+                _connections.TryRemove(_redisConnectionString, out var connection);
+                connection?.Dispose();
+            }
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
+    }
+
+    // Remove when https://github.com/StackExchange/StackExchange.Redis/issues/1039 is done
+    private static async Task<ConnectionMultiplexer> TimeoutAsync(Task<ConnectionMultiplexer> task, CancellationToken cancellationToken)
+    {
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        var completedTask = await Task.
+            WhenAny(task, Task.Delay(Timeout.Infinite, timeoutCts.Token))
+            .ConfigureAwait(false);
+
+        if (completedTask == task)
+        {
+            timeoutCts.Cancel();
+            return await task.ConfigureAwait(false);
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        throw new OperationCanceledException();
     }
 }

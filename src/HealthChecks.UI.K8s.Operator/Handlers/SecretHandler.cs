@@ -26,7 +26,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
             try
             {
                 var secretResource = Build(resource);
-                secret = await _client.CreateNamespacedSecretAsync(secretResource,
+                secret = await _client.CoreV1.CreateNamespacedSecretAsync(secretResource,
                               resource.Metadata.NamespaceProperty);
 
                 _logger.LogInformation("Secret {name} has been created", secret.Metadata.Name);
@@ -49,7 +49,7 @@ namespace HealthChecks.UI.K8s.Operator.Handlers
         {
             try
             {
-                await _client.DeleteNamespacedSecretAsync($"{resource.Spec.Name}-secret", resource.Metadata.NamespaceProperty);
+                await _client.CoreV1.DeleteNamespacedSecretAsync($"{resource.Spec.Name}-secret", resource.Metadata.NamespaceProperty);
             }
             catch (Exception ex)
             {

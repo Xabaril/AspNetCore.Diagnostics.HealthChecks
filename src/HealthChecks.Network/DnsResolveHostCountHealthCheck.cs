@@ -1,56 +1,55 @@
 using System.Net;
-#if !NET5_0_OR_GREATER
+#if !NET6_0_OR_GREATER
 using HealthChecks.Network.Extensions;
 #endif
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.Network
+namespace HealthChecks.Network;
+
+public class DnsResolveHostCountHealthCheck : IHealthCheck
 {
-    public class DnsResolveHostCountHealthCheck : IHealthCheck
+    private readonly DnsResolveCountOptions _options;
+
+    public DnsResolveHostCountHealthCheck(DnsResolveCountOptions options)
     {
-        private readonly DnsResolveCountOptions _options;
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        public DnsResolveHostCountHealthCheck(DnsResolveCountOptions options)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _options = Guard.ThrowIfNull(options);
-        }
+            List<(string host, int total)>? resolutionsAboveThreshold = null;
 
-        /// <inheritdoc />
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            foreach (var entry in _options.HostRegistrations)
             {
-                List<(string host, int total)>? resolutionsAboveThreshold = null;
+                var (minHosts, maxHosts) = entry.Value;
 
-                foreach (var entry in _options.HostRegistrations)
-                {
-                    var (minHosts, maxHosts) = entry.Value;
-
-#if NET5_0_OR_GREATER
-                    var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key, cancellationToken);
+#if NET6_0_OR_GREATER
+                var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key, cancellationToken).ConfigureAwait(false);
 #else
-                    var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+                var ipAddresses = await Dns.GetHostAddressesAsync(entry.Key).WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
 #endif
-                    var totalAddresses = ipAddresses.Length;
+                var totalAddresses = ipAddresses.Length;
 
-                    if (totalAddresses < minHosts || totalAddresses > maxHosts)
-                    {
-                        (resolutionsAboveThreshold ??= new()).Add((entry.Key, totalAddresses));
-                    }
-                }
-
-                if (resolutionsAboveThreshold?.Count > 0)
+                if (totalAddresses < minHosts || totalAddresses > maxHosts)
                 {
-                    var description = string.Join(",", resolutionsAboveThreshold.Select(f => $"Host: {f.host} resolves to {f.total} addresses"));
-                    return new HealthCheckResult(context.Registration.FailureStatus, description);
+                    (resolutionsAboveThreshold ??= new()).Add((entry.Key, totalAddresses));
                 }
+            }
 
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
+            if (resolutionsAboveThreshold?.Count > 0)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+                var description = string.Join(",", resolutionsAboveThreshold.Select(f => $"Host: {f.host} resolves to {f.total} addresses"));
+                return new HealthCheckResult(context.Registration.FailureStatus, description);
             }
+
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

@@ -1,9 +1,12 @@
 using HealthChecks.UI.Core;
+using HealthChecks.UI.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace HealthChecks.UI.Configuration
 {
     public class Settings
     {
+        internal Action<List<HealthCheckExecution>>? ConfigureUIApiEndpointResult { get; set; }
         internal List<HealthCheckSetting> HealthChecks { get; set; } = new List<HealthCheckSetting>();
         internal List<WebHookNotification> Webhooks { get; set; } = new List<WebHookNotification>();
         internal bool DisableMigrations { get; set; } = false;
@@ -11,6 +14,7 @@ namespace HealthChecks.UI.Configuration
         internal int EvaluationTimeInSeconds { get; set; } = 10;
         internal int ApiMaxActiveRequests { get; private set; } = 3;
         internal int MinimumSecondsBetweenFailureNotifications { get; set; } = 60 * 10;
+        internal bool NotifyUnHealthyOneTimeUntilChange { get; set; } = false;
         internal Func<IServiceProvider, HttpMessageHandler>? ApiEndpointHttpHandler { get; private set; }
         internal Action<IServiceProvider, HttpClient>? ApiEndpointHttpClientConfig { get; private set; }
         internal Dictionary<string, Type> ApiEndpointDelegatingHandlerTypes { get; set; } = new();
@@ -50,12 +54,20 @@ namespace HealthChecks.UI.Configuration
             DisableMigrations = true;
             return this;
         }
+
         public Settings SetEvaluationTimeInSeconds(int seconds)
         {
             EvaluationTimeInSeconds = seconds;
             return this;
         }
 
+        /// <summary>
+        /// Sets limit on maximum active (concurrent) HTTP requests to <see cref="Options.ApiPath"/> URL.
+        /// If this limit is exceeded, requests to <see cref="Options.ApiPath"/> return <see cref="StatusCodes.Status429TooManyRequests"/>.
+        /// Initially, this value is set to 3.
+        /// </summary>
+        /// <param name="apiMaxActiveRequests">Concurrency limit.</param>
+        /// <returns>Reference to the same <see cref="Settings"/>.</returns>
         public Settings SetApiMaxActiveRequests(int apiMaxActiveRequests)
         {
             ApiMaxActiveRequests = apiMaxActiveRequests;
@@ -71,6 +83,12 @@ namespace HealthChecks.UI.Configuration
         public Settings SetMinimumSecondsBetweenFailureNotifications(int seconds)
         {
             MinimumSecondsBetweenFailureNotifications = seconds;
+            return this;
+        }
+
+        public Settings SetNotifyUnHealthyOneTimeUntilChange()
+        {
+            NotifyUnHealthyOneTimeUntilChange = true;
             return this;
         }
 

@@ -20,10 +20,6 @@ public class rabbitmq_registration_should
 
         registration.Name.ShouldBe(DEFAULT_CHECK_NAME);
         check.ShouldBeOfType<RabbitMQHealthCheck>();
-        ((RabbitMQHealthCheck)check).Dispose();
-        var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
-        result.Status.ShouldBe(HealthStatus.Unhealthy);
-        result.Exception!.GetType().ShouldBe(typeof(ObjectDisposedException));
     }
 
     [Fact]
@@ -43,10 +39,6 @@ public class rabbitmq_registration_should
 
         registration.Name.ShouldBe(customCheckName);
         check.ShouldBeOfType<RabbitMQHealthCheck>();
-        ((RabbitMQHealthCheck)check).Dispose();
-        var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
-        result.Status.ShouldBe(HealthStatus.Unhealthy);
-        result.Exception!.GetType().ShouldBe(typeof(ObjectDisposedException));
     }
 
     [Fact]

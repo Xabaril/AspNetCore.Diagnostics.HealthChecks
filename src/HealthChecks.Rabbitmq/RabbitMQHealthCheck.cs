@@ -16,7 +16,7 @@ public class RabbitMQHealthCheck : IHealthCheck
 
     public RabbitMQHealthCheck(RabbitMQHealthCheckOptions options)
     {
-        _options = options;
+        _options = Guard.ThrowIfNull(options);
         _connection = options.Connection;
 
         if (_connection is null && _options.ConnectionFactory is null && _options.ConnectionUri is null)

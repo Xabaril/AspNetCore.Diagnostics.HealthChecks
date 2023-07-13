@@ -8,11 +8,13 @@ namespace HealthChecks.MySql;
 /// </summary>
 public class MySqlHealthCheck : IHealthCheck
 {
-    private readonly string _connectionString;
+    private readonly MySqlHealthCheckOptions _options;
 
-    public MySqlHealthCheck(string connectionString)
+    public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
-        _connectionString = Guard.ThrowIfNull(connectionString);
+        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options.CommandText, true);
+        _options = options;
     }
 
     /// <inheritdoc />
@@ -20,13 +22,18 @@ public class MySqlHealthCheck : IHealthCheck
     {
         try
         {
-            using var connection = new MySqlConnection(_connectionString);
+            using var connection = new MySqlConnection(_options.ConnectionString);
 
+            _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            return await connection.PingAsync(cancellationToken).ConfigureAwait(false)
+            using var command = connection.CreateCommand();
+            command.CommandText = _options.CommandText;
+            object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+            return _options.HealthCheckResultBuilder == null
                 ? HealthCheckResult.Healthy()
-                : new HealthCheckResult(context.Registration.FailureStatus, description: $"The {nameof(MySqlHealthCheck)} check fail.");
+                : _options.HealthCheckResultBuilder(result);
         }
         catch (Exception ex)
         {

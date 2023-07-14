@@ -1,4 +1,5 @@
 using System.Text;
+using HealthChecks.Network.Extensions;
 
 namespace HealthChecks.Network.Core;
 
@@ -29,8 +30,14 @@ internal class SmtpConnection : MailConnection
     public new async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
     {
         await base.ConnectAsync(cancellationToken).ConfigureAwait(false);
-        var result = await ExecuteCommandAsync(SmtpCommands.EHLO(Host), cancellationToken).ConfigureAwait(false);
-        return result.Contains(SmtpResponse.ACTION_OK);
+        return await ExecuteCommandAsync(
+            SmtpCommands.EHLO(Host),
+            result =>
+            {
+                var ACTION_OK = "250"u8;
+                return result.ContainsArray(ACTION_OK);
+            },
+            cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<bool> AuthenticateAsync(string userName, string password, CancellationToken cancellationToken = default)
@@ -39,14 +46,20 @@ internal class SmtpConnection : MailConnection
         {
             await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
         }
-        await ExecuteCommandAsync(SmtpCommands.EHLO(Host), cancellationToken).ConfigureAwait(false);
-        await ExecuteCommandAsync(SmtpCommands.AUTHLOGIN(), cancellationToken).ConfigureAwait(false);
-        await ExecuteCommandAsync($"{ToBase64(userName)}\r\n", cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync(SmtpCommands.EHLO(Host), _ => true, cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync(SmtpCommands.AUTHLOGIN(), _ => true, cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync($"{ToBase64(userName)}\r\n", _ => true, cancellationToken).ConfigureAwait(false);
 
         password = password?.Length > 0 ? ToBase64(password) : "";
 
-        var result = await ExecuteCommandAsync($"{password}\r\n", cancellationToken).ConfigureAwait(false);
-        return result.Contains(SmtpResponse.AUTHENTICATION_SUCCESS);
+        return await ExecuteCommandAsync(
+            $"{password}\r\n",
+            result =>
+            {
+                var AUTHENTICATION_SUCCESS = "235"u8;
+                return result.ContainsArray(AUTHENTICATION_SUCCESS);
+            },
+            cancellationToken).ConfigureAwait(false);
     }
 
     private bool ShouldUpgradeConnection => !UseSSL && _connectionType != SmtpConnectionType.PLAIN;
@@ -74,8 +87,15 @@ internal class SmtpConnection : MailConnection
 
     private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
     {
-        var upgradeResult = await ExecuteCommandAsync(SmtpCommands.STARTTLS(), cancellationToken).ConfigureAwait(false);
-        if (upgradeResult.Contains(SmtpResponse.SERVICE_READY))
+        var upgradeResult = await ExecuteCommandAsync(
+            SmtpCommands.STARTTLS(),
+            result =>
+            {
+                var SERVICE_READY = "220"u8;
+                return result.ContainsArray(SERVICE_READY);
+            },
+            cancellationToken).ConfigureAwait(false);
+        if (upgradeResult)
         {
             UseSSL = true;
             _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);

@@ -22,14 +22,6 @@ namespace HealthChecks.Network.Core
         SSL_TLS = 1,
         STARTTLS = 2,
     }
-    public class ImapResponse
-    {
-        public static string AUTHFAILED;
-        public static string ERROR;
-        public static string OK;
-        public static string OK_TLS_NEGOTIATION;
-        public ImapResponse() { }
-    }
     public class MailConnection : System.IDisposable
     {
         protected System.IO.Stream? _stream;
@@ -39,12 +31,13 @@ namespace HealthChecks.Network.Core
         public string Host { get; set; }
         public int Port { get; set; }
         protected bool UseSSL { get; set; }
-        public System.Threading.Tasks.Task<bool> ConnectAsync() { }
+        public System.Threading.Tasks.Task<bool> ConnectAsync(System.Threading.CancellationToken cancellationToken = default) { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
-        protected System.Threading.Tasks.Task<string> ExecuteCommand(string command) { }
+        protected System.Threading.Tasks.Task<T> ExecuteCommandAsync<T>(string command, HealthChecks.Network.Core.MailConnection.CommandResultAction<T> action, System.Threading.CancellationToken cancellationToken) { }
         protected System.Net.Security.SslStream GetSSLStream(System.IO.Stream stream) { }
-        protected System.IO.Stream GetStream() { }
+        protected System.Threading.Tasks.Task<System.IO.Stream> GetStreamAsync(System.Threading.CancellationToken cancellationToken) { }
+        public delegate T CommandResultAction<T>(byte[] result);
     }
     public class SmtpCommands
     {
@@ -67,13 +60,6 @@ namespace HealthChecks.Network.Core
         SSL = 1,
         TLS = 2,
         PLAIN = 3,
-    }
-    public class SmtpResponse
-    {
-        public const string ACTION_OK = "250";
-        public const string AUTHENTICATION_SUCCESS = "235";
-        public const string SERVICE_READY = "220";
-        public SmtpResponse() { }
     }
 }
 namespace HealthChecks.Network

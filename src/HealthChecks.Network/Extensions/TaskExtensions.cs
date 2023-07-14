@@ -31,4 +31,23 @@ public static class TaskExtensions
             return await task.ConfigureAwait(false);
         }
     }
+
+    internal static bool ContainsArray(this byte[] source, ReadOnlySpan<byte> segment)
+    {
+        if (segment.Length == 0)
+            return true;
+
+        for (int i = 0; i < source.Length - segment.Length + 1; ++i)
+        {
+            for (int j = 0; j < segment.Length; ++j)
+            {
+                if (source[i + j] != segment[j])
+                    break;
+                if (j == segment.Length - 1)
+                    return true;
+            }
+        }
+
+        return false;
+    }
 }

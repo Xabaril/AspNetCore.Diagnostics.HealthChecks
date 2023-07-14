@@ -17,11 +17,11 @@ namespace HealthChecks.RavenDB;
 /// </summary>
 public class RavenDBHealthCheck : IHealthCheck
 {
+    private const int DEFAULT_REQUEST_TIMEOUT_IN_SECONDS = 15;
+
     private readonly RavenDBOptions _options;
 
     private static readonly GetBuildNumberOperation _serverHealthCheck = new();
-
-    private static readonly DatabaseHealthCheckOperation _databaseHealthCheck = new();
 
     private static readonly GetStatisticsOperation _legacyDatabaseHealthCheck = new();
 
@@ -51,6 +51,11 @@ public class RavenDBHealthCheck : IHealthCheck
                 try
                 {
                     store.Initialize();
+                    if (!string.IsNullOrWhiteSpace(_options.Database))
+                    {
+                        store.SetRequestTimeout(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS), _options.Database);
+                    }
+
                     return new DocumentStoreHolder
                     {
                         Store = store,
@@ -113,7 +118,7 @@ public class RavenDBHealthCheck : IHealthCheck
             .SendAsync(_serverHealthCheck, cancellationToken);
     }
 
-    private static async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
+    private async Task CheckDatabaseHealthAsync(IDocumentStore store, string database, bool legacy, CancellationToken cancellationToken)
     {
         var executor = store.Maintenance.ForDatabase(database);
 
@@ -123,21 +128,28 @@ public class RavenDBHealthCheck : IHealthCheck
             return;
         }
 
-        await executor.SendAsync(_databaseHealthCheck, cancellationToken).ConfigureAwait(false);
+        await executor.SendAsync(new DatabaseHealthCheckOperation(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS)), cancellationToken).ConfigureAwait(false);
     }
 
     private class DatabaseHealthCheckOperation : IMaintenanceOperation
     {
+        private readonly TimeSpan _timeout;
+
+        public DatabaseHealthCheckOperation(TimeSpan timeout)
+        {
+            _timeout = timeout;
+        }
+
         public RavenCommand GetCommand(DocumentConventions conventions, JsonOperationContext context)
         {
-            return new DatabaseHealthCheckCommand();
+            return new DatabaseHealthCheckCommand(_timeout);
         }
 
         private class DatabaseHealthCheckCommand : RavenCommand
         {
-            public DatabaseHealthCheckCommand()
+            public DatabaseHealthCheckCommand(TimeSpan timeout)
             {
-                Timeout = TimeSpan.FromSeconds(15); // maybe even less?
+                Timeout = timeout;
             }
 
             public override HttpRequestMessage CreateRequest(JsonOperationContext ctx, ServerNode node, out string url)

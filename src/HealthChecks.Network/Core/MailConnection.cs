@@ -41,7 +41,7 @@ public class MailConnection : IDisposable
 #endif
 
         _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
-        await ExecuteCommandAsync(string.Empty, cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandAsync(string.Empty, _ => true, cancellationToken).ConfigureAwait(false);
 
         return _tcpClient.Connected;
     }
@@ -86,7 +86,9 @@ public class MailConnection : IDisposable
         }
     }
 
-    protected async Task<string> ExecuteCommandAsync(string command, CancellationToken cancellationToken)
+    public delegate bool CommandResultAction(byte[] result);
+
+    protected async Task<bool> ExecuteCommandAsync(string command, CommandResultAction action, CancellationToken cancellationToken)
     {
         if (_stream == null)
             throw new InvalidOperationException($"{nameof(ConnectAsync)} should be called first");
@@ -102,14 +104,12 @@ public class MailConnection : IDisposable
         var readBuffer = ArrayPool<byte>.Shared.Rent(512);
         try
         {
-
 #if NET5_0_OR_GREATER
             int read = await _stream.ReadAsync(readBuffer, cancellationToken).ConfigureAwait(false);
 #else
             int read = await _stream.ReadAsync(readBuffer, 0, readBuffer.Length, cancellationToken).ConfigureAwait(false);
 #endif
-
-            return Encoding.UTF8.GetString(readBuffer);
+            return action(readBuffer);
         }
         finally
         {

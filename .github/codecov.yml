@@ -9,15 +9,23 @@ flags:
     carryforward: true
   Aws.S3:
     carryforward: true
+  Aws.SecretsManager:
+    carryforward: true
   Aws.Sns:
     carryforward: true
   Aws.Sqs:
     carryforward: true
-  AzureDigitalTwin:
+  Aws.SystemsManager:
     carryforward: true
   Azure.IoTHub:
     carryforward: true
+  AzureApplicationInsights:
+    carryforward: true
+  AzureDigitalTwin:
+    carryforward: true
   AzureKeyVault:
+    carryforward: true
+  AzureSearch:
     carryforward: true
   AzureServiceBus:
     carryforward: true
@@ -49,6 +57,8 @@ flags:
     carryforward: true
   Kafka:
     carryforward: true
+  Kubernetes:
+    carryforward: true
   MongoDb:
     carryforward: true
   MySql:
@@ -58,6 +68,8 @@ flags:
   Network:
     carryforward: true
   Npgsql:
+    carryforward: true
+  OpenIdConnectServer:
     carryforward: true
   Oracle:
     carryforward: true

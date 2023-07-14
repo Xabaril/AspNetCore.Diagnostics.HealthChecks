@@ -83,6 +83,37 @@ public class ravendb_healthcheck_should
     }
 
     [Fact]
+    public async Task be_unhealthy_if_ravendb_is_available_but_timeout_is_too_low()
+    {
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddHealthChecks()
+                    .AddRavenDB(_ =>
+                    {
+                        _.Urls = _urls;
+                        _.Database = "Demo";
+                        _.RequestTimeout = TimeSpan.Zero;
+                    }, tags: new string[] { "ravendb" });
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions
+                {
+                    Predicate = r => r.Tags.Contains("ravendb"),
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+                });
+            });
+
+        using var server = new TestServer(webHostBuilder);
+
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+    }
+
+    [Fact]
     public async Task be_unhealthy_if_ravendb_is_not_available()
     {
         var connectionString = "http://localhost:9999";
@@ -135,7 +166,7 @@ public class ravendb_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
     }

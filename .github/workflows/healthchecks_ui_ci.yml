@@ -72,6 +72,7 @@ jobs:
           dotnet restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj &&
           dotnet restore ./test/HealthChecks.UI.Core.Tests/HealthChecks.UI.Core.Tests.csproj &&
           dotnet restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj &&
+          dotnet restore ./test/HealthChecks.UI.Data.Tests/HealthChecks.UI.Data.Tests.csproj &&
           dotnet restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj &&
           dotnet restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj &&
           dotnet restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj &&
@@ -88,6 +89,7 @@ jobs:
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.UI.Core.Tests/HealthChecks.UI.Core.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.UI.Data.Tests/HealthChecks.UI.Data.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
@@ -104,6 +106,7 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.UI.Core/HealthChecks.UI.Core.csproj &&
           dotnet build --no-restore ./test/HealthChecks.UI.Core.Tests/HealthChecks.UI.Core.Tests.csproj &&
           dotnet build --no-restore ./src/HealthChecks.UI.Data/HealthChecks.UI.Data.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.UI.Data.Tests/HealthChecks.UI.Data.Tests.csproj &&
           dotnet build --no-restore ./src/HealthChecks.UI.InMemory.Storage/HealthChecks.UI.InMemory.Storage.csproj &&
           dotnet build --no-restore ./src/HealthChecks.UI.MySql.Storage/HealthChecks.UI.MySql.Storage.csproj &&
           dotnet build --no-restore ./src/HealthChecks.UI.PostgreSQL.Storage/HealthChecks.UI.PostgreSQL.Storage.csproj &&
@@ -131,6 +134,14 @@ jobs:
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover &&
           dotnet test
           ./test/HealthChecks.UI.Core.Tests/HealthChecks.UI.Core.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          dotnet test
+          ./test/HealthChecks.UI.Data.Tests/HealthChecks.UI.Data.Tests.csproj
           --no-restore
           --no-build
           --collect "XPlat Code Coverage"

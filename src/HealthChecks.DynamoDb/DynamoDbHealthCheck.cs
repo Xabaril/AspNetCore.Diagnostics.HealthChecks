@@ -11,8 +11,6 @@ public class DynamoDbHealthCheck : IHealthCheck
     public DynamoDbHealthCheck(DynamoDBOptions options)
     {
         _options = Guard.ThrowIfNull(options);
-
-        Guard.ThrowIfNull(options.RegionEndpoint);
     }
 
     /// <inheritdoc />
@@ -35,8 +33,8 @@ public class DynamoDbHealthCheck : IHealthCheck
             }
 
             using var client = credentials != null
-                ? new AmazonDynamoDBClient(credentials, _options.RegionEndpoint)
-                : new AmazonDynamoDBClient(_options.RegionEndpoint);
+                ? CreateClientWithCredentials(credentials)
+                : CreateClientWithoutCredentials();
 
             _ = await client.ListTablesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -46,5 +44,20 @@ public class DynamoDbHealthCheck : IHealthCheck
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
+    }
+
+    private AmazonDynamoDBClient CreateClientWithCredentials(AWSCredentials credentials)
+    {
+        return _options.RegionEndpoint is null
+            ? new(credentials)
+            : new(credentials, _options.RegionEndpoint);
+    }
+
+    private AmazonDynamoDBClient CreateClientWithoutCredentials()
+    {
+        return _options.RegionEndpoint is null
+          ? new()
+          : new(_options.RegionEndpoint);
+
     }
 }

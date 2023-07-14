@@ -29,7 +29,7 @@ namespace HealthChecks.UI.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!await _semaphore.WaitAsync(TimeSpan.Zero))
+            if (!await _semaphore.WaitAsync(TimeSpan.Zero).ConfigureAwait(false))
             {
                 context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
                 return;
@@ -37,11 +37,9 @@ namespace HealthChecks.UI.Middleware
 
             try
             {
-                _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}",
-                    context.Connection.RemoteIpAddress,
-                    _semaphore.CurrentCount);
+                _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}", context.Connection.RemoteIpAddress, _semaphore.CurrentCount);
 
-                await _next(context);
+                await _next(context).ConfigureAwait(false);
             }
             finally
             {

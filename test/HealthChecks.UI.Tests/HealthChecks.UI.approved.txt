@@ -33,6 +33,7 @@ namespace HealthChecks.UI.Configuration
         public HealthChecks.UI.Configuration.Settings SetEvaluationTimeInSeconds(int seconds) { }
         public HealthChecks.UI.Configuration.Settings SetHeaderText(string text) { }
         public HealthChecks.UI.Configuration.Settings SetMinimumSecondsBetweenFailureNotifications(int seconds) { }
+        public HealthChecks.UI.Configuration.Settings SetNotifyUnHealthyOneTimeUntilChange() { }
         public HealthChecks.UI.Configuration.Settings UseApiEndpointDelegatingHandler<T>()
             where T : System.Net.Http.DelegatingHandler { }
         public HealthChecks.UI.Configuration.Settings UseApiEndpointHttpMessageHandler(System.Func<System.IServiceProvider, System.Net.Http.HttpClientHandler> apiEndpointHttpHandler) { }

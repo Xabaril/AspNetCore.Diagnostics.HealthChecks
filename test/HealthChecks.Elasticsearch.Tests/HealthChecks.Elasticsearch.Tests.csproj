@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ductus.FluentDocker" Version="2.10.45" />
+    <PackageReference Include="Ductus.FluentDocker" Version="2.10.59" />
   </ItemGroup>
 
 </Project>

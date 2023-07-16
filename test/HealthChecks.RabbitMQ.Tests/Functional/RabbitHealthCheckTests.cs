@@ -242,8 +242,8 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task two_rabbitmq_health_check()
     {
-        var connectionString1 = "amqp://admin:password@localhost:5672/%2f";
-        var connectionString2 = "amqp://localhost:6672/";
+        const string connectionString1 = "amqp://localhost:5672";
+        const string connectionString2 = "amqp://localhost:6672/";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

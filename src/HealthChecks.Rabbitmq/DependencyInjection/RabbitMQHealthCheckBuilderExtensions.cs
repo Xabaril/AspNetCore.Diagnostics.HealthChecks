@@ -60,9 +60,15 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
+        var options = new RabbitMQHealthCheckOptions
+        {
+            ConnectionUri = rabbitConnectionString,
+            Ssl = sslOption
+        };
+
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            _ => new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { ConnectionUri = rabbitConnectionString, Ssl = sslOption }),
+            new RabbitMQHealthCheck(options),
             failureStatus,
             tags,
             timeout));

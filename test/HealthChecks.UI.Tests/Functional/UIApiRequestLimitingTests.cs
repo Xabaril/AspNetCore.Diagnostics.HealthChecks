@@ -1,6 +1,7 @@
 using System.Net;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
+using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
 namespace HealthChecks.UI.Tests
@@ -23,6 +24,7 @@ namespace HealthChecks.UI.Tests
                 .ConfigureServices(services =>
                 {
                     services
+                    .AddLogging(builder => builder.AddXUnit(_output))
                         .AddRouting()
                         .AddHealthChecks()
                         .Services

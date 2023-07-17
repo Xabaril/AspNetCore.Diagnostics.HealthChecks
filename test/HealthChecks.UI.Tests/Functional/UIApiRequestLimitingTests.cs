@@ -1,11 +1,19 @@
 using System.Net;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
+using Xunit.Abstractions;
 
 namespace HealthChecks.UI.Tests
 {
     public class ui_api_request_limiting
     {
+        private readonly ITestOutputHelper _output;
+
+        public ui_api_request_limiting(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Fact]
         public void should_return_too_many_requests_status_code_when_exceding_configured_max_active_requests()
         {
@@ -50,8 +58,16 @@ namespace HealthChecks.UI.Tests
                 .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 
-            threads.ForEach(t => t.Start());
-            threads.ForEach(t => t.Join());
+            threads.ForEach(t =>
+            {
+                t.Start();
+                _output.WriteLine($"Thread {t.ManagedThreadId} started at {DateTime.Now}");
+            });
+            threads.ForEach(t =>
+            {
+                t.Join();
+                _output.WriteLine($"Thread {t.ManagedThreadId} ended at {DateTime.Now}");
+            });
 
             responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - maxActiveRequests);
             responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
@@ -100,8 +116,16 @@ namespace HealthChecks.UI.Tests
                 .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 
-            threads.ForEach(t => t.Start());
-            threads.ForEach(t => t.Join());
+            threads.ForEach(t =>
+            {
+                t.Start();
+                _output.WriteLine($"Thread {t.ManagedThreadId} started at {DateTime.Now}");
+            });
+            threads.ForEach(t =>
+            {
+                t.Join();
+                _output.WriteLine($"Thread {t.ManagedThreadId} ended at {DateTime.Now}");
+            });
 
             responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - serverSettings.ApiMaxActiveRequests);
             responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);

@@ -61,12 +61,12 @@ namespace HealthChecks.UI.Tests
             threads.ForEach(t =>
             {
                 t.Start();
-                _output.WriteLine($"Thread {t.ManagedThreadId} started at {DateTime.Now}");
+                _output.WriteLine($"Thread {t.ManagedThreadId} started at {DateTime.Now:hh:mm:ss.FFFF}");
             });
             threads.ForEach(t =>
             {
                 t.Join();
-                _output.WriteLine($"Thread {t.ManagedThreadId} ended at {DateTime.Now}");
+                _output.WriteLine($"Thread {t.ManagedThreadId} ended at {DateTime.Now:hh:mm:ss.FFFF}");
             });
 
             responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - maxActiveRequests);
@@ -119,12 +119,12 @@ namespace HealthChecks.UI.Tests
             threads.ForEach(t =>
             {
                 t.Start();
-                _output.WriteLine($"Thread {t.ManagedThreadId} started at {DateTime.Now}");
+                _output.WriteLine($"Thread {t.ManagedThreadId} started at {DateTime.Now:hh:mm:ss.FFFF}");
             });
             threads.ForEach(t =>
             {
                 t.Join();
-                _output.WriteLine($"Thread {t.ManagedThreadId} ended at {DateTime.Now}");
+                _output.WriteLine($"Thread {t.ManagedThreadId} ended at {DateTime.Now:hh:mm:ss.FFFF}");
             });
 
             responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - serverSettings.ApiMaxActiveRequests);

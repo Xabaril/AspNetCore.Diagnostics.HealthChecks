@@ -22,7 +22,7 @@ namespace HealthChecks.UI.Tests
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(300);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -43,24 +43,17 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            List<HttpResponseMessage> responses = new();
-            var b = new Barrier(maxActiveRequests + 5);
+            var responses = new HttpResponseMessage[maxActiveRequests + 5];
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
             var threads = Enumerable.Range(1, maxActiveRequests + 5)
-                .Select(_ => new Thread(_ =>
-                {
-                    b.SignalAndWait();
-                    var r = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result;
-                    lock (responses)
-                        responses.Add(r);
-                }))
+                .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 
             threads.ForEach(t => t.Start());
             threads.ForEach(t => t.Join());
 
-            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Count - maxActiveRequests);
+            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - maxActiveRequests);
             responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
         }
 
@@ -77,7 +70,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecksUI(setup =>
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(300);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -99,25 +92,18 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            List<HttpResponseMessage> responses = new();
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
-            var b = new Barrier(serverSettings.ApiMaxActiveRequests + 5);
+            var responses = new HttpResponseMessage[serverSettings.ApiMaxActiveRequests + 5];
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
             var threads = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 5)
-                .Select(_ => new Thread(_ =>
-                {
-                    b.SignalAndWait();
-                    var r = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result;
-                    lock (responses)
-                        responses.Add(r);
-                }))
+                .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 
             threads.ForEach(t => t.Start());
             threads.ForEach(t => t.Join());
 
-            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Count - serverSettings.ApiMaxActiveRequests);
+            responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - serverSettings.ApiMaxActiveRequests);
             responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);
         }
     }

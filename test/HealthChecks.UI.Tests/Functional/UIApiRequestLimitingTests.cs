@@ -46,7 +46,7 @@ namespace HealthChecks.UI.Tests
             var responses = new HttpResponseMessage[maxActiveRequests + 5];
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(1, maxActiveRequests + 5)
+            var threads = Enumerable.Range(0, maxActiveRequests + 5)
                 .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 
@@ -96,7 +96,7 @@ namespace HealthChecks.UI.Tests
             var responses = new HttpResponseMessage[serverSettings.ApiMaxActiveRequests + 5];
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests + 5)
+            var threads = Enumerable.Range(0, serverSettings.ApiMaxActiveRequests + 5)
                 .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 

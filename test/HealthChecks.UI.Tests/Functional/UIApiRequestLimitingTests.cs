@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Tests
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddLogging(builder => builder.AddXUnit(_output))
+                    .AddLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddXUnit(_output))
                         .AddRouting()
                         .AddHealthChecks()
                         .Services

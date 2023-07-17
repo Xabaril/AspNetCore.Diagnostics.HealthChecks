@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/github/license/Xabaril/AspNetCore.Diagnostics.HealthChecks)](LICENSE.md)
+[![License](https://img.shields.io/github/license/Xabaril/AspNetCore.Diagnostics.HealthChecks)](LICENSE)
 [![codecov](https://codecov.io/github/Xabaril/AspNetCore.Diagnostics.HealthChecks/coverage.svg?branch=master)](https://codecov.io/github/Xabaril/AspNetCore.Diagnostics.HealthChecks?branch=master)
 [![GitHub Release Date](https://img.shields.io/github/release-date/Xabaril/AspNetCore.Diagnostics.HealthChecks?label=released)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/releases)
 [![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/Xabaril/AspNetCore.Diagnostics.HealthChecks/latest?label=new+commits)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/commits/master)

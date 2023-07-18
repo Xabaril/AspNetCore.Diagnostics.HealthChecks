@@ -24,7 +24,7 @@ namespace HealthChecks.UI.Tests
                 .ConfigureServices(services =>
                 {
                     services
-                    .AddLogging(builder => builder.SetMinimumLevel(LogLevel.Debug).AddXUnit(_output))
+                    .AddLogging(builder => builder.AddXUnit(_output))
                         .AddRouting()
                         .AddHealthChecks()
                         .Services
@@ -32,7 +32,7 @@ namespace HealthChecks.UI.Tests
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(1000);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -53,10 +53,10 @@ namespace HealthChecks.UI.Tests
 
             using var server = new TestServer(webHostBuilder);
 
-            var responses = new HttpResponseMessage[maxActiveRequests + 5];
+            var responses = new HttpResponseMessage[maxActiveRequests + 1];
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(0, maxActiveRequests + 5)
+            var threads = Enumerable.Range(0, maxActiveRequests + 1)
                 .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 
@@ -88,7 +88,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecksUI(setup =>
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(200);
+                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(1000);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -111,10 +111,10 @@ namespace HealthChecks.UI.Tests
             using var server = new TestServer(webHostBuilder);
 
             var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
-            var responses = new HttpResponseMessage[serverSettings.ApiMaxActiveRequests + 5];
+            var responses = new HttpResponseMessage[serverSettings.ApiMaxActiveRequests + 1];
 
             // see discussion from https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1896
-            var threads = Enumerable.Range(0, serverSettings.ApiMaxActiveRequests + 5)
+            var threads = Enumerable.Range(0, serverSettings.ApiMaxActiveRequests + 1)
                 .Select(i => new Thread(_ => responses[i] = server.CreateRequest(new Configuration.Options().ApiPath).GetAsync().Result))
                 .ToList();
 

@@ -62,7 +62,8 @@ internal class UIApiEndpointMiddleware
             }
         }
 
-        _settings.ConfigureUIApiEndpointResult?.Invoke(healthChecksExecutions);
+        if (_settings.ConfigureUIApiEndpointResult != null)
+            await _settings.ConfigureUIApiEndpointResult(healthChecksExecutions).ConfigureAwait(false);
         await context.Response.WriteAsJsonAsync(healthChecksExecutions, _jsonSerializerOptions).ConfigureAwait(false);
     }
 }

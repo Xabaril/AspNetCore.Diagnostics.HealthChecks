@@ -32,7 +32,7 @@ namespace HealthChecks.UI.Tests
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
                             setup.SetApiMaxActiveRequests(maxActiveRequests);
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(1000);
+                            setup.ConfigureUIApiEndpointResult = _ => Task.Delay(1000);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })
@@ -88,7 +88,7 @@ namespace HealthChecks.UI.Tests
                         .AddHealthChecksUI(setup =>
                         {
                             setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                            setup.ConfigureUIApiEndpointResult = _ => Thread.Sleep(1000);
+                            setup.ConfigureUIApiEndpointResult = _ => Task.Delay(1000);
                         })
                         .AddInMemoryStorage(databaseName: "LimitingTests");
                 })

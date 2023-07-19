@@ -20,11 +20,6 @@ public class rabbitmq_registration_should
 
         registration.Name.ShouldBe(DEFAULT_CHECK_NAME);
         check.ShouldBeOfType<RabbitMQHealthCheck>();
-
-        ((RabbitMQHealthCheck)check).Dispose();
-        var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
-        result.Status.ShouldBe(HealthStatus.Unhealthy);
-        result.Exception!.GetType().ShouldBe(typeof(ObjectDisposedException));
     }
 
     [Fact]
@@ -44,11 +39,6 @@ public class rabbitmq_registration_should
 
         registration.Name.ShouldBe(customCheckName);
         check.ShouldBeOfType<RabbitMQHealthCheck>();
-
-        ((RabbitMQHealthCheck)check).Dispose();
-        var result = check.CheckHealthAsync(new HealthCheckContext { Registration = new HealthCheckRegistration("", check, null, null) }).Result;
-        result.Status.ShouldBe(HealthStatus.Unhealthy);
-        result.Exception!.GetType().ShouldBe(typeof(ObjectDisposedException));
     }
 
     [Fact]
@@ -62,7 +52,12 @@ public class rabbitmq_registration_should
         });
 
         services.AddHealthChecks()
-            .AddRabbitMQ(sp => sp.GetRequiredService<RabbitMqSetting>().ConnectionString, name: customCheckName);
+            .AddRabbitMQ((sp, options) =>
+            {
+                var connectionString = sp.GetRequiredService<RabbitMqSetting>().ConnectionString;
+
+                options.ConnectionUri = new Uri(connectionString);
+            }, name: customCheckName);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -85,7 +80,12 @@ public class rabbitmq_registration_should
         });
 
         services.AddHealthChecks()
-            .AddRabbitMQ(sp => new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString), name: customCheckName);
+            .AddRabbitMQ((sp, options) =>
+            {
+                var connectionString = new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString);
+
+                options.ConnectionUri = connectionString;
+            }, name: customCheckName);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

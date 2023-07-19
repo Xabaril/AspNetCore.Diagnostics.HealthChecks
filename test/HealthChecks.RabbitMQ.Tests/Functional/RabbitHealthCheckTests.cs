@@ -98,7 +98,7 @@ public class rabbitmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddRabbitMQ(setup => setup.ConnectionFactory = factory, tags: new string[] { "rabbitmq" });
+                    .AddRabbitMQ(options => options.ConnectionFactory = factory, tags: new string[] { "rabbitmq" });
             })
             .Configure(app =>
             {

@@ -21,6 +21,21 @@ public class uris_healthcheck_should
         }
     }
 
+    private sealed class ContentStubMessageHandler : HttpClientHandler
+    {
+        private readonly string _content;
+
+        public ContentStubMessageHandler(string content)
+        {
+            _content = content;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(_content) });
+        }
+    }
+
     [Fact]
     public async Task be_healthy_if_uri_is_available()
     {
@@ -243,14 +258,15 @@ public class uris_healthcheck_should
     [Fact]
     public async Task be_healthy_if_request_succeeds_and_expected_response_matches()
     {
-        var uri = new Uri("https://httpbin.org/robots.txt");
+        var uri = new Uri("https://httpbin.org/robots.txt"); // does not matter
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                     .AddUrlGroup(
-                        opt => opt.AddUri(uri, options => options.ExpectContent("User-agent: *\nDisallow: /deny\n")),
+                        opt => opt.AddUri(uri, options => options.ExpectContent("abc")),
+                        configurePrimaryHttpMessageHandler: _ => new ContentStubMessageHandler("abc"),
                         tags: new string[] { "uris" });
             })
             .Configure(app =>
@@ -269,14 +285,15 @@ public class uris_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_request_succeeds_and_expected_response_fails()
     {
-        var uri = new Uri("https://httpbin.org/robots.txt");
+        var uri = new Uri("https://httpbin.org/robots.txt"); // does not matter
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                     .AddUrlGroup(
-                        opt => opt.AddUri(uri, options => options.ExpectContent("non-existent")),
+                        opt => opt.AddUri(uri, options => options.ExpectContent("xyz")),
+                        configurePrimaryHttpMessageHandler: _ => new ContentStubMessageHandler("abc"),
                         tags: new string[] { "uris" });
             })
             .Configure(app =>

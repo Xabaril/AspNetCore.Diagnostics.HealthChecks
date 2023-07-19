@@ -39,13 +39,16 @@ public class uris_healthcheck_should
     [Fact]
     public async Task be_healthy_if_uri_is_available()
     {
-        var uri = new Uri("https://httpbin.org/get");
+        var uri = new Uri("https://httpbin.org/get"); // does not matter
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddUrlGroup(uri, tags: new string[] { "uris" });
+                    .AddUrlGroup(
+                        uri,
+                        configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.Zero),
+                        tags: new string[] { "uris" });
             })
             .Configure(app =>
             {

@@ -131,7 +131,7 @@ public class uris_healthcheck_should
             {
                 services.AddHealthChecks()
                 .AddUrlGroup(
-                    opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(1))),
+                    opt => opt.AddUri(uri, options => options.UseTimeout(TimeSpan.FromSeconds(1))),
                     tags: new string[] { "uris" });
             })
             .Configure(app =>
@@ -189,7 +189,7 @@ public class uris_healthcheck_should
                 services
                     .AddHealthChecks()
                     .AddUrlGroup(
-                        opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))),
+                        opt => opt.AddUri(uri, options => options.UseTimeout(TimeSpan.FromSeconds(3))),
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
                         tags: new string[] { "uris" });
             })
@@ -250,7 +250,7 @@ public class uris_healthcheck_should
             {
                 services.AddHealthChecks()
                     .AddUrlGroup(
-                        opt => opt.AddUri(uri, options => options.ExpectContent("User-agent: *\r\nDisallow: /deny")),
+                        opt => opt.AddUri(uri, options => options.ExpectContent("User-agent: *\nDisallow: /deny\n")),
                         tags: new string[] { "uris" });
             })
             .Configure(app =>

@@ -180,7 +180,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddRabbitMQ(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, RabbitMQHealthCheckOptions>? setup,
+        Action<IServiceProvider, RabbitMQHealthCheckOptions>? setup,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -190,7 +190,12 @@ public static class RabbitMQHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new RabbitMQHealthCheck(setup == null ? options : setup.Invoke(sp)),
+            sp =>
+            {
+                setup?.Invoke(sp, options);
+
+                return new RabbitMQHealthCheck(options);
+            },
             failureStatus,
             tags,
             timeout));

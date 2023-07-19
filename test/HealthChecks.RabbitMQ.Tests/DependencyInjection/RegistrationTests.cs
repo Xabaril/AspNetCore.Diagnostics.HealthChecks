@@ -52,14 +52,11 @@ public class rabbitmq_registration_should
         });
 
         services.AddHealthChecks()
-            .AddRabbitMQ(sp =>
+            .AddRabbitMQ((sp, options) =>
             {
                 var connectionString = sp.GetRequiredService<RabbitMqSetting>().ConnectionString;
 
-                return new RabbitMQHealthCheckOptions
-                {
-                    ConnectionUri = new Uri(connectionString)
-                };
+                options.ConnectionUri = new Uri(connectionString);
             }, name: customCheckName);
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -83,14 +80,11 @@ public class rabbitmq_registration_should
         });
 
         services.AddHealthChecks()
-            .AddRabbitMQ(sp =>
+            .AddRabbitMQ((sp, options) =>
             {
                 var connectionString = new Uri(sp.GetRequiredService<RabbitMqSetting>().ConnectionString);
 
-                return new RabbitMQHealthCheckOptions
-                {
-                    ConnectionUri = connectionString
-                };
+                options.ConnectionUri = connectionString;
             }, name: customCheckName);
 
         using var serviceProvider = services.BuildServiceProvider();

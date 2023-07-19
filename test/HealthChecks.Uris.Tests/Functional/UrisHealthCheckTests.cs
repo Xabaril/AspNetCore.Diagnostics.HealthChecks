@@ -5,6 +5,22 @@ namespace HealthChecks.Uris.Tests.Functional
 {
     public class uris_healthcheck_should
     {
+        private class DelayStubMessageHandler : HttpClientHandler
+        {
+            private readonly TimeSpan _delay;
+
+            public DelayStubMessageHandler(TimeSpan delay)
+            {
+                _delay = delay;
+            }
+
+            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                await Task.Delay(_delay).ConfigureAwait(false);
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
+
         // httpbin.org is unstable
         private async Task Retry(TestServer server, int times = 10)
         {
@@ -200,13 +216,13 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_healthy_if_request_success_and_timeout_is_configured()
         {
-            var uri = new Uri($"https://httpbin.org/delay/2");
+            var uri = new Uri($"https://httpbin.org/delay/2"); // does not matter
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
                     services.AddHealthChecks()
-                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(4))), tags: new string[] { "uris" });
+                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))), configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)), tags: new string[] { "uris" });
                 })
                 .Configure(app =>
                 {
@@ -218,7 +234,8 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Retry(server).ConfigureAwait(false);
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]

@@ -42,8 +42,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -117,7 +117,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -143,14 +143,14 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
     [Fact]
     public async Task be_unhealthy_if_request_is_timeout_using_default_timeout()
     {
-        var uri = new Uri($"https://httpbin.org/delay/3");
+        var uri = new Uri($"https://httpbin.org/delay/11"); // does not matter
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -159,9 +159,10 @@ public class uris_healthcheck_should
                 .AddUrlGroup(
                     opt =>
                     {
-                        opt.UseTimeout(TimeSpan.FromSeconds(1));
+                        // opt.UseTimeout(TimeSpan.FromSeconds(1)); use default timeout - 10 seconds
                         opt.AddUri(uri);
                     },
+                    configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(11)),
                     tags: new string[] { "uris" });
             })
             .Configure(app =>
@@ -173,12 +174,12 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
     [Fact]
-    public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
+    public async Task be_healthy_if_request_success_and_timeout_is_configured()
     {
         var uri = new Uri($"https://httpbin.org/delay/2"); // does not matter
 
@@ -188,11 +189,7 @@ public class uris_healthcheck_should
                 services
                     .AddHealthChecks()
                     .AddUrlGroup(
-                        opt =>
-                        {
-                            // opt.UseTimeout(TimeSpan.FromSeconds(4)); use default timeout - 10 seconds
-                            opt.AddUri(uri);
-                        },
+                        opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))),
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
                         tags: new string[] { "uris" });
             })
@@ -211,7 +208,7 @@ public class uris_healthcheck_should
     }
 
     [Fact]
-    public async Task be_healthy_if_request_success_and_timeout_is_configured()
+    public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
     {
         var uri = new Uri($"https://httpbin.org/delay/2"); // does not matter
 
@@ -221,7 +218,11 @@ public class uris_healthcheck_should
                 services
                     .AddHealthChecks()
                     .AddUrlGroup(
-                        opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))),
+                        opt =>
+                        {
+                            // opt.UseTimeout(TimeSpan.FromSeconds(4)); use default timeout - 10 seconds
+                            opt.AddUri(uri);
+                        },
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
                         tags: new string[] { "uris" });
             })

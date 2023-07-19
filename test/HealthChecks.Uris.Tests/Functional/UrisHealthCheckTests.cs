@@ -64,13 +64,17 @@ public class uris_healthcheck_should
     [Fact]
     public async Task be_healthy_if_method_is_available()
     {
-        var uri = new Uri("https://httpbin.org/post");
+        var uri = new Uri("https://httpbin.org/post"); // does not matter
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddUrlGroup(uri, HttpMethod.Post, tags: new string[] { "uris" });
+                    .AddUrlGroup(
+                        uri,
+                        HttpMethod.Post,
+                        configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.Zero),
+                        tags: new string[] { "uris" });
             })
             .Configure(app =>
             {

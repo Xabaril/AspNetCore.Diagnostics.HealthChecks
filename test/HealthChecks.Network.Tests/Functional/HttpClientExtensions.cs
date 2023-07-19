@@ -1,5 +1,4 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 
 namespace System.Net.Http;
 
@@ -9,10 +8,9 @@ public static class HttpClientExtensions
     {
         var response = await client.GetAsync(url).ConfigureAwait(false);
         string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return JsonConvert.DeserializeObject<T>(content, new JsonSerializerSettings
+        return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            DateTimeZoneHandling = DateTimeZoneHandling.Local
+            PropertyNameCaseInsensitive = true,
         });
     }
 }

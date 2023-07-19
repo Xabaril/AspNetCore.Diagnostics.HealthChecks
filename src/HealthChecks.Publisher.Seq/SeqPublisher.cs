@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
 
 namespace HealthChecks.Publisher.Seq;
 
@@ -51,7 +51,7 @@ public class SeqPublisher : IHealthCheckPublisher
                         { nameof(Assembly), assemblyName },
                         { "Status", report.Status.ToString() },
                         { "TimeElapsed", report.TotalDuration.TotalMilliseconds },
-                        { "RawReport" , JsonConvert.SerializeObject(report)}
+                        { "RawReport" , JsonSerializer.Serialize(report)}
                     }
                 }
             }
@@ -59,7 +59,7 @@ public class SeqPublisher : IHealthCheckPublisher
 
         _options.Configure?.Invoke(events);
 
-        await PushMetricsAsync(JsonConvert.SerializeObject(events), cancellationToken).ConfigureAwait(false);
+        await PushMetricsAsync(JsonSerializer.Serialize(events), cancellationToken).ConfigureAwait(false);
     }
 
     private async Task PushMetricsAsync(string json, CancellationToken cancellationToken)

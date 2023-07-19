@@ -60,12 +60,15 @@ public static class RabbitMQHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(rabbitConnectionString, sslOption));
+        var options = new RabbitMQHealthCheckOptions
+        {
+            ConnectionUri = rabbitConnectionString,
+            Ssl = sslOption
+        };
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            new RabbitMQHealthCheck(options),
             failureStatus,
             tags,
             timeout));
@@ -75,6 +78,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// Add a health check for RabbitMQ services using <see cref="IConnection"/> from service provider
     /// or <see cref="IConnectionFactory"/> from service provider if none is found. At least one must be configured.
     /// </summary>
+    /// <remarks>
+    /// This method shouldn't be called more than once.
+    /// Each subsequent call will create a new connection, which overrides the previous ones.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
@@ -98,11 +105,11 @@ public static class RabbitMQHealthCheckBuilderExtensions
 
             if (connection != null)
             {
-                return new RabbitMQHealthCheck(connection);
+                return new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { Connection = connection });
             }
             else if (connectionFactory != null)
             {
-                return new RabbitMQHealthCheck(connectionFactory);
+                return new RabbitMQHealthCheck(new RabbitMQHealthCheckOptions { ConnectionFactory = connectionFactory });
             }
             else
             {
@@ -119,10 +126,14 @@ public static class RabbitMQHealthCheckBuilderExtensions
     }
 
     /// <summary>
-    /// Add a health check for RabbitMQ services using <see cref="IConnection"/> factory function.
+    /// Add a health check for RabbitMQ services.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="setup"/> will be called each time the healthcheck route is requested. However
+    /// the created <see cref="IConnection"/> will be reused.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionFactory">A factory function to provide the rabbitMQ connection.</param>
+    /// <param name="setup">The action to configure the RabbitMQ setup.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -133,28 +144,32 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddRabbitMQ(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, IConnection> connectionFactory,
+        Action<RabbitMQHealthCheckOptions>? setup,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactory(sp)));
+        var options = new RabbitMQHealthCheckOptions();
+        setup?.Invoke(options);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            new RabbitMQHealthCheck(options),
             failureStatus,
             tags,
             timeout));
     }
 
     /// <summary>
-    /// Add a health check for RabbitMQ services using <see cref="IConnectionFactory"/> factory function.
+    /// Add a health check for RabbitMQ services.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="setup"/> will be called each time the healthcheck route is requested. However
+    /// the created <see cref="IConnection"/> will be reused.
+    /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionFactoryFactory">A factory function to provide the rabbitMQ connection factory.</param>
+    /// <param name="setup">The action to configure the RabbitMQ setup with <see cref="IServiceProvider"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -165,80 +180,24 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddRabbitMQ(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, IConnectionFactory> connectionFactoryFactory,
+        Action<IServiceProvider, RabbitMQHealthCheckOptions>? setup,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(connectionFactoryFactory(sp)));
+        var options = new RabbitMQHealthCheckOptions();
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
+            sp =>
+            {
+                setup?.Invoke(sp, options);
+
+                return new RabbitMQHealthCheck(options);
+            },
             failureStatus,
             tags,
             timeout));
-    }
-
-    /// <summary>
-    /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
-    /// </summary>
-    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionStringFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
-    /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
-    /// <param name="failureStatus">
-    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-    /// </param>
-    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-    /// <returns>The specified <paramref name="builder"/>.</returns>
-    public static IHealthChecksBuilder AddRabbitMQ(
-        this IHealthChecksBuilder builder,
-        Func<IServiceProvider, Uri> connectionStringFactory,
-        SslOption? sslOption = default,
-        string? name = default,
-        HealthStatus? failureStatus = default,
-        IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
-    {
-        builder.Services
-            .AddSingleton(sp => new RabbitMQHealthCheck(connectionStringFactory(sp), sslOption));
-
-        return builder.Add(new HealthCheckRegistration(
-            name ?? NAME,
-            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
-            failureStatus,
-            tags,
-            timeout));
-    }
-
-    /// <summary>
-    /// Add a health check for RabbitMQ services using connection string (amqp uri) factory.
-    /// </summary>
-    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="connectionStringFactory">A factory function to provide the RabbitMQ connection string (amqp uri).</param>
-    /// <param name="sslOption">The RabbitMQ ssl options. Optional. If <c>null</c>, the ssl option will counted as disabled and not used.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
-    /// <param name="failureStatus">
-    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
-    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-    /// </param>
-    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-    /// <returns>The specified <paramref name="builder"/>.</returns>
-    public static IHealthChecksBuilder AddRabbitMQ(
-        this IHealthChecksBuilder builder,
-        Func<IServiceProvider, string> connectionStringFactory,
-        SslOption? sslOption = default,
-        string? name = default,
-        HealthStatus? failureStatus = default,
-        IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
-    {
-        return builder.AddRabbitMQ(sp => new Uri(connectionStringFactory(sp)), sslOption, name, failureStatus, tags, timeout);
     }
 }

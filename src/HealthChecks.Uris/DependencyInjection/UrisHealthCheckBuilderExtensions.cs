@@ -23,7 +23,7 @@ public static class UrisHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <param name="configurePrimaryHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddUrlGroup(
         this IHealthChecksBuilder builder,
@@ -33,10 +33,10 @@ public static class UrisHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default,
         Action<IServiceProvider, HttpClient>? configureClient = null,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler = null)
     {
         var registrationName = name ?? NAME;
-        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        ConfigureUrisClient(builder, configureClient, configurePrimaryHttpMessageHandler, registrationName);
 
         return builder.Add(new HealthCheckRegistration(
             registrationName,
@@ -66,7 +66,7 @@ public static class UrisHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <param name="configurePrimaryHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddUrlGroup(
         this IHealthChecksBuilder builder,
@@ -77,10 +77,10 @@ public static class UrisHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default,
         Action<IServiceProvider, HttpClient>? configureClient = null,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler = null)
     {
         var registrationName = name ?? NAME;
-        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        ConfigureUrisClient(builder, configureClient, configurePrimaryHttpMessageHandler, registrationName);
 
         return builder.Add(new HealthCheckRegistration(
             registrationName,
@@ -110,7 +110,7 @@ public static class UrisHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <param name="configurePrimaryHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddUrlGroup(
         this IHealthChecksBuilder builder, IEnumerable<Uri> uris,
@@ -119,10 +119,10 @@ public static class UrisHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default,
         Action<IServiceProvider, HttpClient>? configureClient = null,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler = null)
     {
         var registrationName = name ?? NAME;
-        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        ConfigureUrisClient(builder, configureClient, configurePrimaryHttpMessageHandler, registrationName);
 
         return builder.Add(new HealthCheckRegistration(
             registrationName,
@@ -146,7 +146,7 @@ public static class UrisHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <param name="configurePrimaryHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddUrlGroup(
         this IHealthChecksBuilder builder,
@@ -157,10 +157,10 @@ public static class UrisHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default,
         Action<IServiceProvider, HttpClient>? configureClient = null,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler = null)
     {
         var registrationName = name ?? NAME;
-        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        ConfigureUrisClient(builder, configureClient, configurePrimaryHttpMessageHandler, registrationName);
 
         return builder.Add(new HealthCheckRegistration(
             registrationName,
@@ -190,7 +190,7 @@ public static class UrisHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <param name="configurePrimaryHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddUrlGroup(
         this IHealthChecksBuilder builder,
@@ -200,10 +200,10 @@ public static class UrisHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default,
         Action<IServiceProvider, HttpClient>? configureClient = null,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler = null)
     {
         var registrationName = name ?? NAME;
-        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        ConfigureUrisClient(builder, configureClient, configurePrimaryHttpMessageHandler, registrationName);
 
         return builder.Add(new HealthCheckRegistration(
             registrationName,
@@ -231,7 +231,7 @@ public static class UrisHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <param name="configureClient">An optional setup action to configure the Uris HealthCheck http client.</param>
-    /// <param name="configureHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
+    /// <param name="configurePrimaryHttpMessageHandler">An optional setup action to configure the Uris HealthCheck http client message handler.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddUrlGroup(
         this IHealthChecksBuilder builder,
@@ -241,10 +241,10 @@ public static class UrisHealthCheckBuilderExtensions
         IEnumerable<string>? tags = null,
         TimeSpan? timeout = null,
         Action<IServiceProvider, HttpClient>? configureClient = null,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler = null)
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler = null)
     {
         var registrationName = name ?? NAME;
-        ConfigureUrisClient(builder, configureClient, configureHttpMessageHandler, registrationName);
+        ConfigureUrisClient(builder, configureClient, configurePrimaryHttpMessageHandler, registrationName);
 
         return builder.Add(
             new HealthCheckRegistration(
@@ -277,11 +277,11 @@ public static class UrisHealthCheckBuilderExtensions
     private static void ConfigureUrisClient(
         IHealthChecksBuilder builder,
         Action<IServiceProvider, HttpClient>? configureHttpclient,
-        Func<IServiceProvider, HttpMessageHandler>? configureHttpMessageHandler,
+        Func<IServiceProvider, HttpMessageHandler>? configurePrimaryHttpMessageHandler,
         string registrationName)
     {
         builder.Services.AddHttpClient(registrationName)
             .ConfigureHttpClient(configureHttpclient ?? _emptyHttpClientCallback)
-            .ConfigurePrimaryHttpMessageHandler(configureHttpMessageHandler ?? _defaultHttpMessageHandlerCallback);
+            .ConfigurePrimaryHttpMessageHandler(configurePrimaryHttpMessageHandler ?? _defaultHttpMessageHandlerCallback);
     }
 }

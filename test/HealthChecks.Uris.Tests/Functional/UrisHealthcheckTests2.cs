@@ -20,7 +20,7 @@ namespace HealthChecks.Uris.Tests.Functional
 
             services
                 .AddHealthChecks()
-                .AddUrlGroup(new Uri(RequestUri), hcname, configureClient: clientConfigurationCallback, configureHttpMessageHandler: configureHttpClientHandler);
+                .AddUrlGroup(new Uri(RequestUri), hcname, configureClient: clientConfigurationCallback, configurePrimaryHttpMessageHandler: configureHttpClientHandler);
 
             using var sp = services.BuildServiceProvider();
             var options = sp.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -52,7 +52,7 @@ namespace HealthChecks.Uris.Tests.Functional
 
             services
                 .AddHealthChecks()
-                .AddUrlGroup(new Uri(RequestUri), HttpMethod.Post, hcname, configureClient: clientConfigurationCallback, configureHttpMessageHandler: configureHttpClientHandler);
+                .AddUrlGroup(new Uri(RequestUri), HttpMethod.Post, hcname, configureClient: clientConfigurationCallback, configurePrimaryHttpMessageHandler: configureHttpClientHandler);
 
             using var sp = services.BuildServiceProvider();
             var options = sp.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -76,7 +76,7 @@ namespace HealthChecks.Uris.Tests.Functional
 
             services
                 .AddHealthChecks()
-                .AddUrlGroup(uriOptions: uriOptions => uriOptions.AddUri(new Uri(RequestUri)), name: hcname, configureClient: clientConfigurationCallback, configureHttpMessageHandler: configureHttpClientHandler);
+                .AddUrlGroup(uriOptions: uriOptions => uriOptions.AddUri(new Uri(RequestUri)), name: hcname, configureClient: clientConfigurationCallback, configurePrimaryHttpMessageHandler: configureHttpClientHandler);
 
             using var sp = services.BuildServiceProvider();
             var options = sp.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

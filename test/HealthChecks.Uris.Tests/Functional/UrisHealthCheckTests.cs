@@ -56,7 +56,8 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Retry(server).ConfigureAwait(false);
+            var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
         [Fact]

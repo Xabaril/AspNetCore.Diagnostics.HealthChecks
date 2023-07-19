@@ -1,6 +1,6 @@
+using System.Text.Json;
 using HealthChecks.UI.Core.Discovery.K8S;
 using k8s.Models;
-using Newtonsoft.Json;
 
 namespace HealthChecks.UI.Tests
 {
@@ -12,7 +12,7 @@ namespace HealthChecks.UI.Tests
             var healthPath = "healthz";
             var apiResponse = File.ReadAllText("SampleData/local-cluster-discovery-sample.json");
 
-            var services = JsonConvert.DeserializeObject<V1ServiceList>(apiResponse);
+            var services = JsonSerializer.Deserialize<V1ServiceList>(apiResponse);
 
             var addressFactory = new KubernetesAddressFactory(new KubernetesDiscoverySettings
             {
@@ -38,7 +38,7 @@ namespace HealthChecks.UI.Tests
             var healthPath = "healthz";
             var apiResponse = File.ReadAllText("SampleData/remote-cluster-discovery-sample.json");
 
-            var services = JsonConvert.DeserializeObject<V1ServiceList>(apiResponse);
+            var services = JsonSerializer.Deserialize<V1ServiceList>(apiResponse);
 
             var addressFactory = new KubernetesAddressFactory(new KubernetesDiscoverySettings
             {

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net7</TargetFrameworks>
     <PackageTags>$(PackageTags);Publisher;Seq</PackageTags>
     <Description>HealthChecks.Publisher.Seq is the health check publisher for Seq.</Description>
     <VersionPrefix>$(HealthCheckPublisherSeq)</VersionPrefix>
@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
   </ItemGroup>
 
 </Project>

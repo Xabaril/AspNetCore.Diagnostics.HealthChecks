@@ -1,19 +1,22 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace HealthChecks.UI.Tests
+namespace HealthChecks.UI.Tests;
+
+public static class HttpClientExtensions
 {
-    public static class HttpClientExtensions
+    public static async Task<T> GetAsJson<T>(this HttpClient client, string url)
     {
-        public static async Task<T> GetAsJson<T>(this HttpClient client, string url)
+        var response = await client.GetAsync(url).ConfigureAwait(false);
+        string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions
         {
-            var response = await client.GetAsync(url).ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<T>(content, new JsonSerializerSettings
+            PropertyNameCaseInsensitive = true,
+            Converters =
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DateTimeZoneHandling = DateTimeZoneHandling.Local
-            })!;
-        }
+                // allowIntegerValues: true https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1422
+                new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: true)
+            }
+        })!;
     }
 }

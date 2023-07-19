@@ -188,17 +188,20 @@ namespace HealthChecks.Uris.Tests.Functional
         [Fact]
         public async Task be_healthy_if_request_success_and_default_timeout_is_configured()
         {
-            var uri = new Uri($"https://httpbin.org/delay/2");
+            var uri = new Uri($"https://httpbin.org/delay/2"); // does not matter
 
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddHealthChecks()
-                    .AddUrlGroup(setup =>
-                    {
-                        setup.UseTimeout(TimeSpan.FromSeconds(4));
-                        setup.AddUri(uri);
-                    }, tags: new string[] { "uris" });
+                    services
+                        .AddHealthChecks()
+                        .AddUrlGroup(opt =>
+                        {
+                            // opt.UseTimeout(TimeSpan.FromSeconds(4)); use default timeout - 10 seconds
+                            opt.AddUri(uri);
+                        },
+                        configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
+                        tags: new string[] { "uris" });
                 })
                 .Configure(app =>
                 {
@@ -210,7 +213,8 @@ namespace HealthChecks.Uris.Tests.Functional
                 });
 
             using var server = new TestServer(webHostBuilder);
-            await Retry(server).ConfigureAwait(false);
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
         [Fact]
@@ -221,8 +225,11 @@ namespace HealthChecks.Uris.Tests.Functional
             var webHostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddHealthChecks()
-                    .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))), configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)), tags: new string[] { "uris" });
+                    services
+                        .AddHealthChecks()
+                        .AddUrlGroup(opt => opt.AddUri(uri, setup => setup.UseTimeout(TimeSpan.FromSeconds(3))),
+                        configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
+                        tags: new string[] { "uris" });
                 })
                 .Configure(app =>
                 {

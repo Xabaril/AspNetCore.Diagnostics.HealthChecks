@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

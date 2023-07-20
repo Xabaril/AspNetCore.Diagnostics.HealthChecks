@@ -115,12 +115,13 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
                 {
                     // Create TelemetryConfiguration
                     // Hierachy: _connectionString > _instrumentationKey > _telemetryConfiguration
+#pragma warning disable CS0618 // Type or member is obsolete
                     var configuration = string.IsNullOrWhiteSpace(_connectionString)
                         ? string.IsNullOrWhiteSpace(_instrumentationKey)
                             ? _telemetryConfiguration
                             : new TelemetryConfiguration(_instrumentationKey)
                         : new TelemetryConfiguration { ConnectionString = _connectionString };
-
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     _client = new TelemetryClient(configuration);
                 }

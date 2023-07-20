@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.EventHubs" Version="5.9.2" />
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.15.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
   </ItemGroup>
 
 </Project>

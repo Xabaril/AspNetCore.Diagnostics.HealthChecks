@@ -36,7 +36,9 @@ public class application_insights_publisher_registration_should
     public void add_healthcheck_when_application_insights_is_properly_configured_with_IOptions()
     {
         var services = new ServiceCollection();
+#pragma warning disable CS0618 // Type or member is obsolete
         services.Configure<TelemetryConfiguration>(config => config.InstrumentationKey = "telemetrykey");
+#pragma warning restore CS0618 // Type or member is obsolete
 
         services
             .AddHealthChecks()

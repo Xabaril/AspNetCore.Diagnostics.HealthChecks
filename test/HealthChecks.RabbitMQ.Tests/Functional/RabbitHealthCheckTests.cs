@@ -1,6 +1,4 @@
 using System.Net;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 
 namespace HealthChecks.RabbitMQ.Tests.Functional;

@@ -28,6 +28,7 @@ public class RabbitMQHealthCheck : IHealthCheck
     /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        // TODO: cancellationToken unused, see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/714
         try
         {
             using var model = EnsureConnection().CreateModel();
@@ -52,8 +53,13 @@ public class RabbitMQHealthCheck : IHealthCheck
                     {
                         Uri = _options.ConnectionUri,
                         AutomaticRecoveryEnabled = true,
-                        UseBackgroundThreadsForIO = true,
+                        UseBackgroundThreadsForIO = true
                     };
+
+                    if (_options.RequestedConnectionTimeout is not null)
+                    {
+                        ((ConnectionFactory)factory).RequestedConnectionTimeout = _options.RequestedConnectionTimeout.Value;
+                    }
 
                     if (_options.Ssl is not null)
                     {

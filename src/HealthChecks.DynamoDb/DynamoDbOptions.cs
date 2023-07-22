@@ -17,4 +17,14 @@ public class DynamoDBOptions
     public string? SecretKey { get; set; }
 
     public RegionEndpoint RegionEndpoint { get; set; } = null!;
+
+    /// <summary>
+    /// A maximum number of table names to read.
+    /// </summary>
+    public int? Limit { get; set; }
+
+    /// <summary>
+    /// The first table name to read.
+    /// </summary>
+    public string? LastEvaluatedTableName { get; set; }
 }

@@ -1,13 +1,22 @@
+using System.Collections.Generic;
 using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.DynamoDb;
 
+/// <summary>
+/// Health check for AWS DynamoDb database.
+/// </summary>
 public class DynamoDbHealthCheck : IHealthCheck
 {
     private readonly DynamoDBOptions _options;
 
+    /// <summary>
+    /// Creates health check for AWS DynamoDb database with the specified options.
+    /// </summary>
+    /// <param name="options"></param>
     public DynamoDbHealthCheck(DynamoDBOptions options)
     {
         _options = Guard.ThrowIfNull(options);
@@ -36,7 +45,11 @@ public class DynamoDbHealthCheck : IHealthCheck
                 ? CreateClientWithCredentials(credentials)
                 : CreateClientWithoutCredentials();
 
-            _ = await client.ListTablesAsync(cancellationToken).ConfigureAwait(false);
+            var request = new ListTablesRequest { ExclusiveStartTableName = _options.LastEvaluatedTableName };
+            if (_options.Limit != null)
+                request.Limit = _options.Limit.Value;
+
+            var response = await client.ListTablesAsync(request, cancellationToken).ConfigureAwait(false);
 
             return HealthCheckResult.Healthy();
         }

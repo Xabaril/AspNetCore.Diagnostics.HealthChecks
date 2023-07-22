@@ -7,6 +7,8 @@ namespace HealthChecks.DynamoDb
             "d")]
         public string? AccessKey { get; set; }
         public Amazon.Runtime.AWSCredentials? Credentials { get; set; }
+        public string? LastEvaluatedTableName { get; set; }
+        public int? Limit { get; set; }
         public Amazon.RegionEndpoint RegionEndpoint { get; set; }
         [System.Obsolete("Specify access key and secret as a BasicCredential to Credentials property instea" +
             "d")]

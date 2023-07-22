@@ -36,7 +36,7 @@ public static class DynamoDbHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new DynamoDbHealthCheck(options),
+            _ => new DynamoDbHealthCheck(options),
             failureStatus,
             tags,
             timeout));

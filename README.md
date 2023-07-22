@@ -669,7 +669,9 @@ Thanks to all the people who already contributed!
   <img src="https://contributors-img.web.app/image?repo=Xabaril/AspNetCore.Diagnostics.HealthChecks" />
 </a>
 
-If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
+If you want to contribute to the project and make it better, your help is very welcome.
+You can contribute with helpful bug reports, features requests, submitting new features with pull requests and also
+answering [questions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/question).
 
 1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
 2. Follow the code guidelines and conventions.

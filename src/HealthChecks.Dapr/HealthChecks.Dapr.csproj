@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-    <PackageTags>$(PackagFPeTags);Dapr</PackageTags>
+    <PackageTags>$(PackageTags);Dapr</PackageTags>
     <Description>HealthChecks.Dapr is the health check package for Dapr.</Description>
     <VersionPrefix>$(HealthCheckDapr)</VersionPrefix>
   </PropertyGroup>

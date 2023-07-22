@@ -272,4 +272,30 @@ public class rabbitmq_healthcheck_should
         response1.StatusCode.ShouldBe(HttpStatusCode.OK);
         response2.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
+
+    // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/714
+    [Fact]
+    public async Task should_respect_timeout()
+    {
+        var services = new ServiceCollection();
+
+        services
+            .AddLogging()
+            .AddHealthChecks()
+            .AddRabbitMQ(opt =>
+                {
+                    opt.RequestedConnectionTimeout = TimeSpan.FromSeconds(1);
+                    opt.ConnectionUri = new Uri($"amqps://user:pwd@invalid-host:5672");
+                },
+                timeout: TimeSpan.FromSeconds(10));
+
+        using var provider = services.BuildServiceProvider();
+        var healthCheckService = provider.GetRequiredService<HealthCheckService>();
+        var start = DateTime.Now;
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        var report = await healthCheckService.CheckHealthAsync(cts.Token).ConfigureAwait(false);
+        report.Status.ShouldBe(HealthStatus.Unhealthy);
+        var end = DateTime.Now;
+        (end - start).ShouldBeLessThan(TimeSpan.FromSeconds(10));
+    }
 }

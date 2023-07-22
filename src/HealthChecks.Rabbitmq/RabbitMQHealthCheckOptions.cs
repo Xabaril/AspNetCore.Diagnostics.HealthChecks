@@ -34,4 +34,9 @@ public class RabbitMQHealthCheckOptions
     /// Must be used in conjunction with the <see cref="ConnectionUri"/> property.
     /// </remarks>
     public SslOption? Ssl { get; set; }
+
+    /// <summary>
+    /// Timeout setting for connection attempts.
+    /// </summary>
+    public TimeSpan? RequestedConnectionTimeout { get; set; }
 }

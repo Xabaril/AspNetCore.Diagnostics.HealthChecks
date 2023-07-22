@@ -1,51 +1,51 @@
-using System;
-using System.Collections.Generic;
 using k8s;
 using k8s.Models;
 
-namespace HealthChecks.Kubernetes
+namespace HealthChecks.Kubernetes;
+
+public class KubernetesHealthCheckOptions
 {
-    public class KubernetesHealthCheckOptions
+    private const string DEFAULT_NAMESPACE = "default";
+
+    internal KubernetesHealthCheckOptions()
     {
-        private const string DefaultNamespace = "default";
+    }
 
-        internal KubernetesHealthCheckOptions() { }
-        internal List<KubernetesResourceCheck> Registrations { get; } = new List<KubernetesResourceCheck>();
-        public KubernetesHealthCheckOptions CheckDeployment(string name, Func<V1Deployment, bool> condition,
-            string @namespace = DefaultNamespace)
-        {
-            Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Deployment);
+    internal List<KubernetesResourceCheck> Registrations { get; } = new();
 
-            var deploymentCheck =
-                KubernetesResourceCheck.Create<V1Deployment>(name, @namespace, delegateCheck);
+    public KubernetesHealthCheckOptions CheckDeployment(string name, Func<V1Deployment, bool> condition,
+        string @namespace = DEFAULT_NAMESPACE)
+    {
+        Func<IKubernetesObject, bool> delegateCheck = o => condition((V1Deployment)o);
 
-            Registrations.Add(deploymentCheck);
+        var deploymentCheck = KubernetesResourceCheck.Create<V1Deployment>(name, @namespace, delegateCheck);
 
-            return this;
-        }
-        public KubernetesHealthCheckOptions CheckPod(string name, Func<V1Pod, bool> condition,
-            string @namespace = DefaultNamespace)
-        {
-            Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Pod);
+        Registrations.Add(deploymentCheck);
 
-            var podCheck =
-                KubernetesResourceCheck.Create<V1Pod>(name, @namespace, delegateCheck);
+        return this;
+    }
 
-            Registrations.Add(podCheck);
+    public KubernetesHealthCheckOptions CheckPod(string name, Func<V1Pod, bool> condition,
+        string @namespace = DEFAULT_NAMESPACE)
+    {
+        Func<IKubernetesObject, bool> delegateCheck = o => condition((V1Pod)o);
 
-            return this;
-        }
-        public KubernetesHealthCheckOptions CheckService(string name, Func<V1Service, bool> condition,
-            string @namespace = DefaultNamespace)
-        {
-            Func<IKubernetesObject, bool> delegateCheck = (o) => condition(o as V1Service);
+        var podCheck = KubernetesResourceCheck.Create<V1Pod>(name, @namespace, delegateCheck);
 
-            var serviceCheck =
-                KubernetesResourceCheck.Create<V1Service>(name, @namespace, delegateCheck);
+        Registrations.Add(podCheck);
 
-            Registrations.Add(serviceCheck);
+        return this;
+    }
 
-            return this;
-        }
+    public KubernetesHealthCheckOptions CheckService(string name, Func<V1Service, bool> condition,
+        string @namespace = DEFAULT_NAMESPACE)
+    {
+        Func<IKubernetesObject, bool> delegateCheck = o => condition((V1Service)o);
+
+        var serviceCheck = KubernetesResourceCheck.Create<V1Service>(name, @namespace, delegateCheck);
+
+        Registrations.Add(serviceCheck);
+
+        return this;
     }
 }

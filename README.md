@@ -1,18 +1,19 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/ldk031dvcn2no51g/branch/master?svg=true)](https://ci.appveyor.com/project/Xabaril/aspnetcore-diagnostics-healthchecks)
+[![License](https://img.shields.io/github/license/Xabaril/AspNetCore.Diagnostics.HealthChecks)](LICENSE)
+[![codecov](https://codecov.io/github/Xabaril/AspNetCore.Diagnostics.HealthChecks/coverage.svg?branch=master)](https://codecov.io/github/Xabaril/AspNetCore.Diagnostics.HealthChecks?branch=master)
+[![GitHub Release Date](https://img.shields.io/github/release-date/Xabaril/AspNetCore.Diagnostics.HealthChecks?label=released)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/releases)
+[![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/Xabaril/AspNetCore.Diagnostics.HealthChecks/latest?label=new+commits)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/commits/master)
+![Size](https://img.shields.io/github/repo-size/Xabaril/AspNetCore.Diagnostics.HealthChecks)
 
-[![Build history](https://buildstats.info/appveyor/chart/xabaril/aspnetcore-diagnostics-healthchecks)](https://ci.appveyor.com/project/xabaril/aspnetcore-diagnostics-healthchecks/history)
-
-![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=Docker%20UI%20Version&logo=dsd&sort=date)
-![ui pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui.svg?label=Docker%20UI%20Pulls)
-
-![k8s version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui-k8s-operator?label=k8s%20Operator%20Version&logo=dsd&sort=date)
-![k8s pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui-k8s-operator.svg?label=k8s%20Operator%20Pulls)
+[![GitHub contributors](https://img.shields.io/github/contributors/Xabaril/AspNetCore.Diagnostics.HealthChecks)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/contributors)
+![Activity](https://img.shields.io/github/commit-activity/w/Xabaril/AspNetCore.Diagnostics.HealthChecks)
+![Activity](https://img.shields.io/github/commit-activity/m/Xabaril/AspNetCore.Diagnostics.HealthChecks)
+![Activity](https://img.shields.io/github/commit-activity/y/Xabaril/AspNetCore.Diagnostics.HealthChecks)
 
 # AspNetCore.Diagnostics.HealthChecks
 
 This repository offers a wide collection of **ASP.NET Core** Health Check packages for widely used services and platforms.
 
-**ASP.NET Core** versions supported: 5.0, 3.1, 3.0 and 2.2
+**ASP.NET Core** versions supported: 7.0, 6.0, 5.0, 3.1, 3.0 and 2.2
 
 # Sections
 
@@ -50,87 +51,118 @@ This repository offers a wide collection of **ASP.NET Core** Health Check packag
 
 - [Tutorials, Demos and walkthroughs](#tutorials-demos-and-walkthroughs-on-aspnet-core-healthchecks)
 
+## Docker images
+
+HealthChecks repo provides following images:
+
+| Image | Downloads | Latest | Issues |
+|------|--------|---|---|
+| UI | ![ui pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui.svg?label=downloads) | ![ui version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui?label=docker&logo=dsd&sort=date) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/ui)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/ui)
+| K8s operator | ![k8s pulls](https://img.shields.io/docker/pulls/xabarilcoding/healthchecksui-k8s-operator.svg?label=downloads) | ![k8s version](https://img.shields.io/docker/v/xabarilcoding/healthchecksui-k8s-operator?label=docker&logo=dsd&sort=date)
+
 ## Health Checks
 
 HealthChecks packages include health checks for:
 
-- Sql Server
-- MySql
-- Oracle
-- Sqlite
-- RavenDB
-- Postgres
-- EventStore
-- RabbitMQ
-- IbmMQ
-- Elasticsearch
-- CosmosDb
-- Solr
-- Redis
-- SendGrid
-- System: Disk Storage, Private Memory, Virtual Memory, Process, Windows Service
-- Azure Service Bus: EventHub, Queue and Topics
-- Azure Storage: Blob, Queue and Table
-- Azure Key Vault
-- Azure DocumentDb
-- Azure IoT Hub
-- Amazon DynamoDb
-- Amazon S3
-- Google Cloud Firestore
-- Network: Ftp, SFtp, Dns, Tcp port, Smtp, Imap, Ssl
-- MongoDB
-- Kafka
-- Identity Server
-- Uri: single uri and uri groups
-- Consul
-- Hangfire
-- SignalR
-- Kubernetes
-- ArangoDB
-- Gremlin
-- Dapr
+| Package                    | Downloads                                                                                                                                                                     | NuGet Latest | Issues | Notes                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------ | ---------------------------------------------------------------------- |
+| ApplicationStatus          | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ApplicationStatus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ApplicationStatus)               | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.ApplicationStatus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ApplicationStatus) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/applicationstatus)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/applicationstatus)
+| ArangoDB                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.ArangoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ArangoDb)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.ArangoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.ArangoDb) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/arrangodb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/arrangodb)
+| Amazon S3                  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.S3)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.S3)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Aws.S3)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.S3) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/aws)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/aws)
+| Amazon Secrets Manager     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.SecretsManager)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.SecretsManager)             | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Aws.SecretsManager)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.SecretsManager) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/aws)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/aws)
+| Amazon SNS                 | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.Sns)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.Sns)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Aws.Sns)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.Sns) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/aws)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/aws)
+| Amazon SQS                 | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.Sqs)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.Sqs)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Aws.Sqs)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.Sqs) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/aws)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/aws)
+| Amazon Systems Manager     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Aws.SystemsManager)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.SystemsManager)             | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Aws.SystemsManager)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Aws.SystemsManager) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/aws)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/aws)
+| Azure Application Insights | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureApplicationInsights)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureApplicationInsights) | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.AzureApplicationInsights)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureApplicationInsights) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/applicationinsights)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/applicationinsights)
+| Azure IoT Hub              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Azure.IoTHub)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Azure.IoTHub)                         | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Azure.IoTHub)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Azure.IoTHub) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/azure)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/azure) |
+| Azure DigitalTwin          | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureDigitalTwin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureDigitalTwin)                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.AzureDigitalTwin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureDigitalTwin) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/azure)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/azure) | Subscription status, models and instances                              |
+| Azure Key Vault            | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureKeyVault)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureKeyVault)                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.AzureKeyVault)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureKeyVault) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/azure)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/azure)
+| Azure Search               | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureSearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureSearch)                           | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.AzureSearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureSearch) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/azure)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/azure)
+| Azure Service Bus          | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureServiceBus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureServiceBus)                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.AzureServiceBus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureServiceBus) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/azure)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/azure) | EventHub, Queue and Topics                                             |
+| Azure Storage              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.AzureStorage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureStorage)                         | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.AzureStorage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.AzureStorage) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/azure)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/azure) | Blob, File, Queue                                                      |
+| Consul                     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Consul)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Consul)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Consul)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Consul) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/consul)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/consul)
+| CosmosDb                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.CosmosDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.CosmosDb)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.CosmosDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.CosmosDb) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/cosmosdb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/cosmosdb) | CosmosDb and Azure Table
+| Azure DocumentDb           | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.DocumentDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DocumentDb)                             | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.DocumentDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DocumentDb) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/documentdb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/documentdb)
+| Amazon DynamoDb            | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.DynamoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DynamoDb)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.DynamoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.DynamoDb) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/dynamodb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/dynamodb)
+| Elasticsearch              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Elasticsearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Elasticsearch)                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Elasticsearch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Elasticsearch) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/elasticsearch)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/elasticsearch)
+| EventStore                 | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore)                             | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.EventStore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/eventstore)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/eventstore) | [TCP EventStore](https://github.com/EventStore/EventStoreDB-Client-Dotnet-Legacy)
+| EventStore gRPC            | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.EventStore.gRPC)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore.gRPC)                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.EventStore.gRPC)](https://www.nuget.org/packages/AspNetCore.HealthChecks.EventStore.gRPC) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/eventstore)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/eventstore) | [gRPC EventStore](https://github.com/EventStore/EventStore-Client-Dotnet)
+| Google Cloud Firestore     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Gcp.CloudFirestore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gcp.CloudFirestore)             | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Gcp.CloudFirestore)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gcp.CloudFirestore) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/cloudfirestore)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/cloudfirestore)
+| Gremlin                    | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Gremlin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gremlin)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Gremlin)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Gremlin) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/gremlin)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/gremlin)
+| Hangfire                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Hangfire)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Hangfire)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Hangfire)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Hangfire) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/hangfire)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/hangfire)
+| IbmMQ                      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.IbmMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.IbmMQ)                                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.IbmMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.IbmMQ) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/ibmmq)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/ibmmq)
+| InfluxDB                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.InfluxDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.InfluxDB)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.InfluxDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.InfluxDB) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/influxdb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/influxdb)
+| Kafka                      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Kafka)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kafka)                                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Kafka)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kafka) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/kafka)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/kafka)
+| Kubernetes                 | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Kubernetes)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kubernetes)                             | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Kubernetes)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Kubernetes) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/kubernetes)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/kubernetes)
+| MongoDB                    | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.MongoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MongoDb)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.MongoDb)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MongoDb) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/mongodb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/mongodb)
+| MySql                      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.MySql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MySql)                                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.MySql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.MySql) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/mysql)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/mysql)
+| Nats                       | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Nats)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Nats)                                         | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Nats)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Nats) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/nats)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/nats) | NATS, messaging, message-bus, pubsub                                   |
+| Network                    | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Network)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Network)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Network)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Network) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/network)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/network) | Ftp, SFtp, Dns, Tcp port, Smtp, Imap, Ssl                              |
+| Postgres                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.NpgSql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.NpgSql)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.NpgSql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.NpgSql) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/npgsql)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/npgsql)
+| Identity Server            | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.OpenIdConnectServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.OpenIdConnectServer)           | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.OpenIdConnectServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.OpenIdConnectServer) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/openidconnect)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/openidconnect)
+| Oracle                     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Oracle)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Oracle)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Oracle)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Oracle) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/oracle)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/oracle)
+| RabbitMQ                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.RabbitMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RabbitMQ)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.RabbitMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RabbitMQ) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/rabbitmq)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/rabbitmq)
+| RavenDB                    | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.RavenDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RavenDB)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.RavenDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RavenDB) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/ravendb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/ravendb)
+| Redis                      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Redis)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Redis)                                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Redis)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Redis) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/redis)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/redis)
+| SendGrid                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.SendGrid)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SendGrid)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.SendGrid)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SendGrid) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/sendgrid)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/sendgrid)
+| SignalR                    | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.SignalR)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SignalR)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.SignalR)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SignalR) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/signalr)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/signalr)
+| Solr                       | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Solr)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Solr)                                         | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Solr)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Solr) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/solr)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/solr)
+| Sqlite                     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Sqlite)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Sqlite)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Sqlite)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Sqlite) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/sqlite)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/sqlite)
+| Sql Server                 | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.SqlServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SqlServer)                               | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.SqlServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.SqlServer) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/sqlserver)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/sqlserver)
+| System                     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.System)](https://www.nuget.org/packages/AspNetCore.HealthChecks.System)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.System)](https://www.nuget.org/packages/AspNetCore.HealthChecks.System) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/system)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/system) | Disk Storage, Folder, Private Memory, Virtual Memory, Process, Windows Service |
+| Uri                        | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Uris)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Uris)                                         | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Uris)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Uris) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/uris)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/uris) | Single uri and uri groups                                              |
 
 > We support netcoreapp 2.2, 3.0 and 3.1. Please use package versions 2.2.X, 3.0.X and 3.1.X to target different versions.
 
 ```PowerShell
-Install-Package AspNetCore.HealthChecks.System
-Install-Package AspNetCore.HealthChecks.Network
-Install-Package AspNetCore.HealthChecks.SqlServer
-Install-Package AspNetCore.HealthChecks.MongoDb
-Install-Package AspNetCore.HealthChecks.Npgsql
-Install-Package AspNetCore.HealthChecks.Elasticsearch
-Install-Package AspNetCore.HealthChecks.CosmosDb
-Install-Package AspNetCore.HealthChecks.Solr
-Install-Package AspNetCore.HealthChecks.Redis
-Install-Package AspNetCore.HealthChecks.EventStore
-Install-Package AspNetCore.HealthChecks.AzureStorage
-Install-Package AspNetCore.HealthChecks.AzureServiceBus
-Install-Package AspNetCore.HealthChecks.AzureKeyVault
-Install-Package AspNetCore.HealthChecks.Azure.IoTHub
-Install-Package AspNetCore.HealthChecks.MySql
-Install-Package AspNetCore.HealthChecks.DocumentDb
-Install-Package AspNetCore.HealthChecks.SqLite
-Install-Package AspNetCore.HealthChecks.RavenDB
-Install-Package AspNetCore.HealthChecks.Kafka
-Install-Package AspNetCore.HealthChecks.RabbitMQ
-Install-Package AspNetCore.HealthChecks.IbmMQ
-Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
-Install-Package AspNetCore.HealthChecks.DynamoDB
-Install-Package AspNetCore.HealthChecks.Oracle
-Install-Package AspNetCore.HealthChecks.Uris
-Install-Package AspNetCore.HealthChecks.Aws.S3
-Install-Package AspNetCore.HealthChecks.Consul
-Install-Package AspNetCore.HealthChecks.Hangfire
-Install-Package AspNetCore.HealthChecks.SignalR
-Install-Package AspNetCore.HealthChecks.Kubernetes
-Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
-Install-Package AspNetCore.HealthChecks.SendGrid
+Install-Package AspNetCore.HealthChecks.ApplicationStatus
 Install-Package AspNetCore.HealthChecks.ArangoDb
-Install-Package AspNetCore.HealthChecks.Gremlin
+Install-Package AspNetCore.HealthChecks.Aws.S3
+Install-Package AspNetCore.HealthChecks.Aws.SecretsManager
+Install-Package AspNetCore.HealthChecks.Aws.Sns
+Install-Package AspNetCore.HealthChecks.Aws.Sqs
+Install-Package AspNetCore.HealthChecks.Aws.SystemsManager
+Install-Package AspNetCore.HealthChecks.Azure.IoTHub
+Install-Package AspNetCore.HealthChecks.AzureApplicationInsights
+Install-Package AspNetCore.HealthChecks.AzureDigitalTwin
+Install-Package AspNetCore.HealthChecks.AzureKeyVault
+Install-Package AspNetCore.HealthChecks.AzureSearch
+Install-Package AspNetCore.HealthChecks.AzureServiceBus
+Install-Package AspNetCore.HealthChecks.AzureStorage
+Install-Package AspNetCore.HealthChecks.Consul
+Install-Package AspNetCore.HealthChecks.CosmosDb
 Install-Package AspNetCore.HealthChecks.Dapr
+Install-Package AspNetCore.HealthChecks.DocumentDb
+Install-Package AspNetCore.HealthChecks.DynamoDB
+Install-Package AspNetCore.HealthChecks.Elasticsearch
+Install-Package AspNetCore.HealthChecks.EventStore
+Install-Package AspNetCore.HealthChecks.EventStore.gRPC
+Install-Package AspNetCore.HealthChecks.Gcp.CloudFirestore
+Install-Package AspNetCore.HealthChecks.Gremlin
+Install-Package AspNetCore.HealthChecks.Hangfire
+Install-Package AspNetCore.HealthChecks.IbmMQ
+Install-Package AspNetCore.HealthChecks.InfluxDB
+Install-Package AspNetCore.HealthChecks.Kafka
+Install-Package AspNetCore.HealthChecks.Kubernetes
+Install-Package AspNetCore.HealthChecks.MongoDb
+Install-Package AspNetCore.HealthChecks.MySql
+Install-Package AspNetCore.HealthChecks.Nats
+Install-Package AspNetCore.HealthChecks.Network
+Install-Package AspNetCore.HealthChecks.Npgsql
+Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
+Install-Package AspNetCore.HealthChecks.Oracle
+Install-Package AspNetCore.HealthChecks.RabbitMQ
+Install-Package AspNetCore.HealthChecks.RavenDB
+Install-Package AspNetCore.HealthChecks.Redis
+Install-Package AspNetCore.HealthChecks.SendGrid
+Install-Package AspNetCore.HealthChecks.SignalR
+Install-Package AspNetCore.HealthChecks.Solr
+Install-Package AspNetCore.HealthChecks.SqlServer
+Install-Package AspNetCore.HealthChecks.System
+Install-Package AspNetCore.HealthChecks.Uris
 ```
 
-Once the package is installed you can add the HealthCheck using the **AddXXX** IServiceCollection extension methods.
+Once the package is installed you can add the HealthCheck using the **AddXXX** `IServiceCollection` extension methods.
 
 > We use [MyGet](https://www.myget.org/F/xabaril/api/v3/index.json) feed for preview versions of HealthChecks packages.
 
@@ -148,38 +180,54 @@ Each HealthCheck registration supports also name, tags, failure status and other
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-      services.AddHealthChecks()
-          .AddSqlServer(
-              connectionString: Configuration["Data:ConnectionStrings:Sql"],
-              healthQuery: "SELECT 1;",
-              name: "sql",
-              failureStatus: HealthStatus.Degraded,
-              tags: new string[] { "db", "sql", "sqlserver" });
+    services
+        .AddHealthChecks()
+        .AddSqlServer(
+            connectionString: Configuration["Data:ConnectionStrings:Sql"],
+            healthQuery: "SELECT 1;",
+            name: "sql",
+            failureStatus: HealthStatus.Degraded,
+            tags: new string[] { "db", "sql", "sqlserver" });
 }
 ```
 
 ## HealthCheck push results
 
-HealthChecks include a _push model_ to send HealthCheckReport results into configured consumers. The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights**, **AspNetCore.HealthChecks.Publisher.Datadog**, **AspNetCore.HealthChecks.Publisher.Prometheus** or **AspNetCore.HealthChecks.Publisher.Seq** define a consumers to send report results to Application Insights, Datadog, Prometheus or Seq.
+HealthChecks include a _push model_ to send HealthCheckReport results into configured consumers.
+The project **AspNetCore.HealthChecks.Publisher.ApplicationInsights**, **AspNetCore.HealthChecks.Publisher.Datadog**,
+**AspNetCore.HealthChecks.Publisher.Prometheus**, **AspNetCore.HealthChecks.Publisher.Seq** or
+**AspNetCore.HealthChecks.Publisher.CloudWatch** define a consumers to send report results to
+Application Insights, Datadog, Prometheus, Seq or CloudWatch.
+
+| Package              | Downloads                                                                                                                                                                               | NuGet Latest | Issues | Notes          |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------ | -------------- |
+| Application Insights | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.ApplicationInsights)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.ApplicationInsights) | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Publisher.ApplicationInsights)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.ApplicationInsights) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/applicationinsights)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/applicationinsights)
+| CloudWatch           | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.CloudWatch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.CloudWatch)                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Publisher.CloudWatch)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.CloudWatch) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/cloudwatch)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/cloudwatch)
+| Datadog              | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Datadog)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Datadog)                         | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Publisher.Datadog)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Datadog) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/datadog)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/datadog)
+| Prometheus Gateway   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Prometheus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Prometheus)                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Publisher.Prometheus)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Prometheus) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/prometheus)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/prometheus) | **DEPRECATED** |
+| Seq                  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Publisher.Seq)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Seq)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Publisher.Seq)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Publisher.Seq) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/seq)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/seq)
 
 Include the package in your project:
 
 ```powershell
 install-package AspNetcore.HealthChecks.Publisher.ApplicationInsights
+install-package AspNetcore.HealthChecks.Publisher.CloudWatch
 install-package AspNetcore.HealthChecks.Publisher.Datadog
 install-package AspNetcore.HealthChecks.Publisher.Prometheus
 install-package AspNetcore.HealthChecks.Publisher.Seq
 ```
 
-Add publisher[s] into the _IHealthCheckBuilder_
+Add publisher[s] into the `IHealthCheckBuilder`:
 
 ```csharp
-services.AddHealthChecks()
-        .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
-        .AddCheck<RandomHealthCheck>("random")
-        .AddApplicationInsightsPublisher()
-        .AddDatadogPublisher("myservice.healthchecks")
-        .AddPrometheusGatewayPublisher();
+services
+    .AddHealthChecks()
+    .AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
+    .AddCheck<RandomHealthCheck>("random")
+    .AddApplicationInsightsPublisher()
+    .AddCloudWatchPublisher()
+    .AddDatadogPublisher("myservice.healthchecks")
+    .AddPrometheusGatewayPublisher();
 ```
 
 ## HealthChecks Prometheus Exporter
@@ -190,7 +238,7 @@ If you need an endpoint to consume from prometheus instead of using Prometheus G
 install-package AspNetCore.HealthChecks.Prometheus.Metrics
 ```
 
-Use the _ApplicationBuilder_ extension method to add the endpoint with the metrics:
+Use the `ApplicationBuilder` extension method to add the endpoint with the metrics:
 
 ```csharp
 // default endpoint: /healthmetrics
@@ -214,7 +262,6 @@ The project HealthChecks.UI is a minimal UI interface that stores and shows the 
 To integrate HealthChecks.UI in your project you just need to add the HealthChecks.UI services and middlewares available in the package: **AspNetCore.HealthChecks.UI**
 
 ```csharp
-
 using HealthChecks.UI.Core;
 using HealthChecks.UI.InMemory.Storage;
 
@@ -223,41 +270,44 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
-        .AddHealthChecksUI()
-        .AddInMemoryStorage();
+            .AddHealthChecksUI()
+            .AddInMemoryStorage();
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
         app
-          .UseRouting()
-          .UseEndpoints(config =>
-           {
-             config.MapHealthChecksUI();
-          });
+            .UseRouting()
+            .UseEndpoints(config => config.MapHealthChecksUI());
     }
 }
 ```
 
-This automatically registers a new interface on **/healthchecks-ui** where the spa will be served.
+This automatically registers a new interface on **/healthchecks-ui** where the SPA will be served.
 
-> Optionally, _MapHealthChecksUI_ can be configured to serve its health api, webhooks api and the front-end resources in different endpoints using the MapHealthChecksUI(setup =>) method overload. Default configured urls for this endpoints can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
+> Optionally, `MapHealthChecksUI` can be configured to serve its health api, webhooks api and the front-end resources in
+> different endpoints using the `MapHealthChecksUI(setup => { })` method overload. Default configured urls for this endpoints
+> can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
-**Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend spa to receive the result of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by default is the url that the spa queries.
+**Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend SPA to receive the result
+of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by
+default is the url that the SPA queries.
 
-Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
+Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in
+the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
 
-When we target applications to be tested and shown on the UI interface, those endpoints have to register the UIResponseWriter that is present on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
+When we target applications to be tested and shown on the UI interface, those endpoints have to register the `UIResponseWriter` that is present
+on the **AspNetCore.HealthChecks.UI.Client** as their [ResponseWriter in the HealthChecksOptions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.Sample/Startup.cs#L48) when configuring MapHealthChecks method.
 
 ### UI Polling interval
 
 You can configure the polling interval in seconds for the UI inside the setup method. Default value is 10 seconds:
 
 ```csharp
- .AddHealthChecksUI(setupSettings: setup =>
-  {
-     setup.SetEvaluationTimeInSeconds(5); //Configures the UI to poll for healthchecks updates every 5 seconds
-  });
+.AddHealthChecksUI(setupSettings: setup =>
+{
+    setup.SetEvaluationTimeInSeconds(5); // Configures the UI to poll for healthchecks updates every 5 seconds
+});
 ```
 
 ### UI API max active requests
@@ -265,12 +315,12 @@ You can configure the polling interval in seconds for the UI inside the setup me
 You can configure max active requests to the HealthChecks UI backend api using the setup method. Default value is 3 active requests:
 
 ```csharp
- .AddHealthChecksUI(setupSettings: setup =>
-  {
-     setup.SetApiMaxActiveRequests(1);
-     //Only one active request will be executed at a time.
-     //All the excedent requests will result in 429 (Too many requests)
-  });
+.AddHealthChecksUI(setupSettings: setup =>
+{
+    setup.SetApiMaxActiveRequests(1);
+    //Only one active request will be executed at a time.
+    //All the excedent requests will result in 429 (Too many requests)
+});
 ```
 
 ### UI Storage Providers
@@ -279,18 +329,20 @@ HealthChecks UI offers several storage providers, available as different nuget p
 
 The current supported databases are:
 
-- [AspNetCore.HealthChecks.UI.InMemory.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.InMemory.Storage)
-- [AspNetCore.HealthChecks.UI.SqlServer.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SqlServer.Storage)
-- [AspNetCore.HealthChecks.UI.SQLite.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SQLite.Storage)
-- [AspNetCore.HealthChecks.UI.PostgreSQL.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.PostgreSQL.Storage)
-- [AspNetCore.HealthChecks.UI.MySql.Storage](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.MySql.Storage)
+| Package    | Downloads                                                                                                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| InMemory   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.UI.InMemory.Storage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.InMemory.Storage)     |
+| SqlServer  | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.UI.SqlServer.Storage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SqlServer.Storage)   |
+| SQLite     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.UI.SQLite.Storage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.SQLite.Storage)         |
+| PostgreSQL | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.UI.PostgreSQL.Storage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.PostgreSQL.Storage) |
+| MySql      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.UI.MySql.Storage)](https://www.nuget.org/packages/AspNetCore.HealthChecks.UI.MySql.Storage)           |
 
-All the storage providers are extensions of HealthChecksUIBuilder:
+All the storage providers are extensions of `HealthChecksUIBuilder`:
 
 **InMemory**
 
 ```csharp
-  services
+services
     .AddHealthChecksUI()
     .AddInMemoryStorage();
 ```
@@ -298,7 +350,7 @@ All the storage providers are extensions of HealthChecksUIBuilder:
 **Sql Server**
 
 ```csharp
-  services
+services
     .AddHealthChecksUI()
     .AddSqlServerStorage("connectionString");
 ```
@@ -306,49 +358,43 @@ All the storage providers are extensions of HealthChecksUIBuilder:
 **Postgre SQL**
 
 ```csharp
-
-  services
+services
     .AddHealthChecksUI()
     .AddPostgreSqlStorage("connectionString");
-
 ```
 
 **MySql**
 
 ```csharp
-
-  services
+services
     .AddHealthChecksUI()
     .AddMySqlStorage("connectionString");
-
 ```
 
 **Sqlite**
 
 ```csharp
-  services
+services
     .AddHealthChecksUI()
     .AddSqliteStorage($"Data Source=sqlite.db");
-
 ```
 
 ### UI Database Migrations
 
-**Database Migrations** are enabled by default, if you need to disable migrations you can use the AddHealthChecksUI setup:
+**Database Migrations** are enabled by default, if you need to disable migrations you can use the `AddHealthChecksUI` setup:
 
 ```csharp
-  services
+services
     .AddHealthChecksUI(setup => setup.DisableDatabaseMigrations())
     .AddInMemoryStorage();
 ```
 
-Or you can use IConfiguration providers, like json file or environment variables:
+Or you can use `IConfiguration` providers, like json file or environment variables:
 
 ```json
- "HealthChecksUI": {
-   "DisableMigrations": true
- }
-
+"HealthChecksUI": {
+  "DisableMigrations": true
+}
 ```
 
 ### Health status history timeline
@@ -359,39 +405,42 @@ By clicking details button in the healthcheck row you can preview the health sta
 
 **Note**: HealthChecks UI saves an execution history entry in the database whenever a HealthCheck status changes from Healthy to Unhealthy and viceversa.
 
-This information is displayed in the status history timeline but we do not perform purge or cleanup tasks in users databases. In order to limit the maximum history entries that are sent by the UI Api middleware to the frontend you can do a database cleanup or set the maximum history entries served by endpoint using:
+This information is displayed in the status history timeline but we do not perform purge or cleanup tasks in users databases.
+In order to limit the maximum history entries that are sent by the UI Api middleware to the frontend you can do a database cleanup or set the maximum history entries served by endpoint using:
 
 ```csharp
-  services.AddHealthChecksUI(setup =>
-  {
-     // Set the maximum history entries by endpoint that will be served by the UI api middleware
-      setup.MaximumHistoryEntriesPerEndpoint(50);
-  });
+services.AddHealthChecksUI(setup =>
+{
+    // Set the maximum history entries by endpoint that will be served by the UI api middleware
+    setup.MaximumHistoryEntriesPerEndpoint(50);
+});
 ```
 
 **HealthChecksUI** is also available as a _docker image_ You can read more about [HealthChecks UI Docker image](./doc/ui-docker.md).
 
 ### Configuration
 
-By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific ResponseWriter.
+By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that
+HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific `ResponseWriter`.
 
 ```csharp
- app
+app
     .UseRouting()
     .UseEndpoints(config =>
     {
-      config.MapHealthChecks("/healthz", new HealthCheckOptions
-      {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-      });
+        config.MapHealthChecks("/healthz", new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+    });
 ```
 
 > _WriteHealthCheckUIResponse_ is defined on HealthChecks.UI.Client nuget package.
 
 To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings.
 
-You can configure these Healthchecks and webhooks by using _IConfiguration_ providers (appsettings, user secrets, env variables) or the _AddHealthChecksUI(setupSettings: setup =>)_ method can be used too.
+You can configure these Healthchecks and webhooks by using `IConfiguration` providers (appsettings, user secrets, env variables) or the `AddHealthChecksUI(setupSettings: setup => { })` method can be used too.
 
 #### Sample 2: Configuration using appsettings.json
 
@@ -421,7 +470,7 @@ You can configure these Healthchecks and webhooks by using _IConfiguration_ prov
 #### Sample 2: Configuration using setupSettings method:
 
 ```csharp
-  services
+services
     .AddHealthChecksUI(setupSettings: setup =>
     {
        setup.AddHealthCheckEndpoint("endpoint1", "http://localhost:8001/healthz");
@@ -464,15 +513,13 @@ You can configure these Healthchecks and webhooks by using _IConfiguration_ prov
 ### Using relative urls in Health Checks and Webhooks configurations (UI 3.0.5 onwards)
 
 If you are configuring the UI in the same process where the HealthChecks and Webhooks are listening, from version 3.0.5 onwards the UI can use relative urls
-and it will automatically discover the listening endpoints by using server IServerAddressesFeature
+and it will automatically discover the listening endpoints by using server `IServerAddressesFeature`.
 
 Sample:
 
 ```csharp
-
-  //Configuration sample with relative url health checks and webhooks
-
-  services
+//Configuration sample with relative url health checks and webhooks
+services
     .AddHealthChecksUI(setupSettings: setup =>
     {
        setup.AddHealthCheckEndpoint("endpoint1", "/health-databases");
@@ -482,7 +529,7 @@ Sample:
     .AddSqlServer("connectionString");
 ```
 
-You can also use relative urls when using IConfiguration providers like appsettings.json
+You can also use relative urls when using `IConfiguration` providers like appsettings.json.
 
 ### Webhooks and Failure Notifications
 
@@ -498,6 +545,17 @@ Webhooks can be configured with configuration providers and also by code. Using 
 
 The [web hooks section](./doc/webhooks.md) contains more information and webhooks samples for Microsoft Teams, Azure Functions, Slack and more.
 
+**Avoid Fail notification spam**
+
+To prevent you from receiving several failure notifications from your application, a configuration was created to meet this scenario.
+
+```csharp
+services.AddHealthChecksUI(setup =>
+{
+    setup.SetNotifyUnHealthyOneTimeUntilChange(); // You will only receive one failure notification until the status changes.
+});
+```
+
 ## UI Style and branding customization
 
 ### Sample of dotnet styled UI
@@ -508,26 +566,24 @@ Since version 2.2.34, UI supports custom styles and branding by using a **custom
 To add your custom styles sheet, use the UI setup method:
 
 ```csharp
-  app
-   .UseRouting()
-   .UseEndpoints(config =>
+app
+    .UseRouting()
+    .UseEndpoints(config =>
     {
-      config.MapHealthChecksUI(setup =>
-      {
-        setup.AddCustomStylesheet("dotnet.css");
-      });
-   });
-
+        config.MapHealthChecksUI(setup =>
+        {
+            setup.AddCustomStylesheet("dotnet.css");
+        });
+    });
 ```
 
 You can visit the section [custom styles and branding](./doc/styles-branding.md) to find source samples and get further information about custom css properties.
 
 ## UI Configure HttpClient and HttpMessageHandler for Api and Webhooks endpoints
 
-If you need to configure a proxy, or set an authentication header, the UI allows you to configure the HttpMessageHandler and the HttpClient for the webhooks and healtheck api endpoints.
+If you need to configure a proxy, or set an authentication header, the UI allows you to configure the `HttpMessageHandler` and the `HttpClient` for the webhooks and healtheck api endpoints. You can also register custom delegating handlers for the API and WebHooks HTTP clients.
 
 ```csharp
-
 services.AddHealthChecksUI(setupSettings: setup =>
 {
     setup.ConfigureApiEndpointHttpclient((sp, client) =>
@@ -535,12 +591,13 @@ services.AddHealthChecksUI(setupSettings: setup =>
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "supertoken");
     })
     .UseApiEndpointHttpMessageHandler(sp =>
+    {
+        return new HttpClientHandler
         {
-            return new HttpClientHandler
-            {
-                Proxy = new WebProxy("http://proxy:8080")
-            };
-        })
+            Proxy = new WebProxy("http://proxy:8080")
+        };
+    })
+    .UseApiEndpointDelegatingHandler<CustomDelegatingHandler>()
     .ConfigureWebhooksEndpointHttpclient((sp, client) =>
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "sampletoken");
@@ -554,10 +611,10 @@ services.AddHealthChecksUI(setupSettings: setup =>
                 ["prop"] = "value"
             }
         };
-    });
+    })
+    .UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
 })
 .AddInMemoryStorage();
-
 ```
 
 ## UI Kubernetes Operator
@@ -600,13 +657,23 @@ Check this [README](./extensions/README.md) on how to configure it.
 
 ## Contributing
 
-AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors. The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla), Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas), Eduard Tomás [@eiximenis](https://github.com/eiximenis) and Eva Crespo [@evacrespob](https://github.com/evacrespob)
+AspNetCore.Diagnostics.HealthChecks wouldn't be possible without the time and effort of its contributors.
+The team is made up of Unai Zorrilla Castro [@unaizorrilla](https://github.com/unaizorrilla),
+Luis Ruiz Pavón [@lurumad](https://github.com/lurumad), Carlos Landeras [@carloslanderas](https://github.com/carloslanderas),
+Eduard Tomás [@eiximenis](https://github.com/eiximenis), Eva Crespo [@evacrespob](https://github.com/evacrespob) and
+Ivan Maximov [@sungam3r](https://github.com/sungam3r).
 
-_Our valued committers are_: Hugo Biarge @hbiarge, Matt Channer @mattchanner, Luis Fraile @lfraile, Bradley Grainger @bgrainger, Simon Birrer @SbiCA, Mahamadou Camara @poumup, Jonathan Berube @joncloud, Daniel Edwards @dantheman999301, Mike McFarland @roketworks, Matteo @Franklin89, Miňo Martiniak @Burgyn, Peter Winkler @pajzo, @mikevanoo,Alexandru Rus @AlexandruRus23,Volker Thiel @riker09, Ahmad Magdy @Ahmad-Magdy, Marcel Lambacher @Marcel-Lambacher, Ivan Maximov @sungam3r, David Bottiau @odonno,ZeWizard @zeWizard, Ruslan Popovych @rpopovych, @jnovick, Marcos Palacios @mpcmarcos, Gerard Godone-Maresca @ggmaresca, Facundo @fglaeser, Daniel Nordström @SpaceOgre, @mphelt
+Thanks to all the people who already contributed!
 
-If you want to contribute to the project and make it better, your help is very welcome. You can contribute with helpful bug reports, features requests and also submitting new features with pull requests.
+<a href="https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=Xabaril/AspNetCore.Diagnostics.HealthChecks" />
+</a>
+
+If you want to contribute to the project and make it better, your help is very welcome.
+You can contribute with helpful bug reports, features requests, submitting new features with pull requests and also
+answering [questions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/question).
 
 1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
-2. Build.ps1 is working on local and AppVeyor.
-3. Follow the code guidelines and conventions.
-4. New features are not only code, tests and documentation are also mandatory.
+2. Follow the code guidelines and conventions.
+3. New features are not only code, tests and documentation are also mandatory.
+4. PRs with [`Ups for grabs`](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/Ups%20for%20grabs) tag are good candidates to contribute. 

@@ -1,87 +1,58 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.AzureStorage
+namespace HealthChecks.AzureStorage;
+
+public class AzureBlobStorageHealthCheck : IHealthCheck
 {
-    public class AzureBlobStorageHealthCheck
-        : IHealthCheck
+    private readonly BlobServiceClient _blobServiceClient;
+    private readonly AzureBlobStorageHealthCheckOptions _options;
+
+    public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = default)
+        : this(
+              ClientCache.GetOrAdd(connectionString, k => new BlobServiceClient(k, clientOptions)),
+              new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
+    { }
+
+    public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = default)
+        : this(
+              ClientCache.GetOrAdd(blobServiceUri?.ToString()!, _ => new BlobServiceClient(blobServiceUri, credential, clientOptions)),
+              new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
+    { }
+
+    public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, AzureBlobStorageHealthCheckOptions options)
     {
-        private readonly TokenCredential _azureCredential;
-        private readonly Uri _blobServiceUri;
+        _blobServiceClient = Guard.ThrowIfNull(blobServiceClient);
+        _options = Guard.ThrowIfNull(options);
+    }
 
-        private readonly string _connectionString;
-        private readonly string _containerName;
-        private readonly BlobClientOptions _clientOptions;
-
-        private static readonly ConcurrentDictionary<string, BlobServiceClient> _blobClientsHolder
-            = new ConcurrentDictionary<string, BlobServiceClient>();
-
-        public AzureBlobStorageHealthCheck(string connectionString, string containerName = default, BlobClientOptions clientOptions = null)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
-            _containerName = containerName;
-            _clientOptions = clientOptions;
-        }
+            // Note: BlobServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+            // "Storage Blob Data Contributor," so BlobServiceClient.GetBlobContainersAsync() is used instead to probe service health.
+            // However, BlobContainerClient.GetPropertiesAsync() does have sufficient permissions.
+            await _blobServiceClient
+                .GetBlobContainersAsync(cancellationToken: cancellationToken)
+                .AsPages(pageSizeHint: 1)
+                .GetAsyncEnumerator(cancellationToken)
+                .MoveNextAsync()
+                .ConfigureAwait(false);
 
-        public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string containerName = default, BlobClientOptions clientOptions = null)
-        {
-            _blobServiceUri = blobServiceUri ?? throw new ArgumentNullException(nameof(blobServiceUri));
-            _azureCredential = credential ?? throw new ArgumentNullException(nameof(credential));
-            _containerName = containerName;
-            _clientOptions = clientOptions;
-        }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-        {
-            try
+            if (!string.IsNullOrEmpty(_options.ContainerName))
             {
-                var blobServiceClient = GetBlobServiceClient();
-                var serviceProperties = await blobServiceClient.GetPropertiesAsync(cancellationToken);
-
-                if (!string.IsNullOrEmpty(_containerName))
-                {
-                    var containerClient = blobServiceClient.GetBlobContainerClient(_containerName);
-
-                    if (!await containerClient.ExistsAsync(cancellationToken))
-                    {
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"Container '{_containerName}' not exists");
-                    }
-
-                    await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken);
-                }
-
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
-        }
-
-        private BlobServiceClient GetBlobServiceClient()
-        {
-            var serviceUri = _connectionString ?? _blobServiceUri.ToString();
-
-            if (!_blobClientsHolder.TryGetValue(serviceUri, out BlobServiceClient client))
-            {
-                if (_connectionString != null)
-                {
-                    client = new BlobServiceClient(_connectionString, _clientOptions);
-                }
-                else
-                {
-                    client = new BlobServiceClient(_blobServiceUri, _azureCredential, _clientOptions);
-                }
-
-                _blobClientsHolder.TryAdd(serviceUri, client);
+                var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
+                await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
-            return client;
+            return HealthCheckResult.Healthy();
+        }
+        catch (Exception ex)
+        {
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 }

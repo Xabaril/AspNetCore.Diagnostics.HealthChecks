@@ -1,45 +1,23 @@
-﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Threading.Tasks;
 
+namespace HealthChecks.UI.Middleware;
 
-namespace HealthChecks.UI.Middleware
+internal class UISettingsMiddleware
 {
-    internal class UISettingsMiddleware
+    private readonly object _uiOutputSettings;
+
+    public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
     {
-        private static Settings Settings { get; set; }
-        private readonly JsonSerializerSettings _jsonSerializationSettings;
-        private Lazy<dynamic> _uiOutputSettings = new Lazy<dynamic>(GetUIOutputSettings);
-
-        public UISettingsMiddleware(RequestDelegate next, IOptions<Settings> settings)
+        _ = next;
+        _ = Guard.ThrowIfNull(settings);
+        _uiOutputSettings = new
         {
-            _ = settings ?? throw new ArgumentNullException(nameof(settings));
-            Settings = settings.Value;
-
-            _jsonSerializationSettings = new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
-        }
-        public async Task InvokeAsync(HttpContext context)
-        {
-            string content = JsonConvert.SerializeObject(_uiOutputSettings.Value, _jsonSerializationSettings);
-            context.Response.ContentType = Keys.DEFAULT_RESPONSE_CONTENT_TYPE;
-
-            await context.Response.WriteAsync(content);
-        }
-
-        private static dynamic GetUIOutputSettings()
-        {
-            return new
-            {
-                PollingInterval = Settings.EvaluationTimeInSeconds,
-                HeaderText = Settings.HeaderText
-            };
-        }
+            pollingInterval = settings.Value.EvaluationTimeInSeconds,
+            headerText = settings.Value.HeaderText
+        };
     }
+
+    public Task InvokeAsync(HttpContext context) => context.Response.WriteAsJsonAsync(_uiOutputSettings);
 }

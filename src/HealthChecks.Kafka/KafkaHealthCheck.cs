@@ -1,52 +1,51 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HealthChecks.Kafka
+namespace HealthChecks.Kafka;
+
+/// <summary>
+/// A health check for Kafka cluster.
+/// </summary>
+public class KafkaHealthCheck : IHealthCheck, IDisposable
 {
-    public class KafkaHealthCheck : IHealthCheck
+    private readonly KafkaHealthCheckOptions _options;
+    private IProducer<string, string>? _producer;
+
+    public KafkaHealthCheck(KafkaHealthCheckOptions options)
     {
-        private readonly ProducerConfig _configuration;
-        private readonly string _topic;
+        Guard.ThrowIfNull(options.Configuration);
+        _options = options;
+    }
 
-        private IProducer<string, string> _producer;
-
-        public KafkaHealthCheck(ProducerConfig configuration, string topic)
+    /// <inheritdoc />
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _topic = topic ?? "healthchecks-topic";
+            if (_producer == null)
+            {
+                var builder = new ProducerBuilder<string, string>(_options.Configuration);
+                _options.Configure?.Invoke(builder);
+                _producer ??= builder.Build();
+            }
+
+            var message = _options.MessageBuilder(_options);
+
+            var result = await _producer.ProduceAsync(_options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC, message, cancellationToken).ConfigureAwait(false);
+
+            if (result.Status == PersistenceStatus.NotPersisted)
+            {
+                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.");
+            }
+
+            return HealthCheckResult.Healthy();
         }
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                if (_producer == null)
-                {
-                    _producer = new ProducerBuilder<string, string>(_configuration).Build();
-                }
-
-                var message = new Message<string, string>()
-                {
-                    Key = "healthcheck-key",
-                    Value = $"Check Kafka healthy on {DateTime.UtcNow}"
-                };
-
-                var result = await _producer.ProduceAsync(_topic, message, cancellationToken);
-
-                if (result.Status == PersistenceStatus.NotPersisted)
-                {
-                    return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.");
-                }
-
-                return HealthCheckResult.Healthy();
-            }
-            catch (Exception ex)
-            {
-                return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
-            }
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
+
+    public void Dispose() => _producer?.Dispose();
 }

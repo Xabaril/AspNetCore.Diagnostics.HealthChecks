@@ -1,0 +1,109 @@
+# https://docs.codecov.com/docs/codecov-yaml
+comment:
+  behavior: new
+
+flags:
+  ApplicationStatus:
+    carryforward: true
+  ArangoDb:
+    carryforward: true
+  Aws.S3:
+    carryforward: true
+  Aws.SecretsManager:
+    carryforward: true
+  Aws.Sns:
+    carryforward: true
+  Aws.Sqs:
+    carryforward: true
+  Aws.SystemsManager:
+    carryforward: true
+  Azure.IoTHub:
+    carryforward: true
+  AzureApplicationInsights:
+    carryforward: true
+  AzureDigitalTwin:
+    carryforward: true
+  AzureKeyVault:
+    carryforward: true
+  AzureSearch:
+    carryforward: true
+  AzureServiceBus:
+    carryforward: true
+  AzureStorage:
+    carryforward: true
+  Consul:
+    carryforward: true
+  CosmosDb:
+    carryforward: true
+  DocumentDb:
+    carryforward: true
+  DynamoDb:
+    carryforward: true
+  Elasticsearch:
+    carryforward: true
+  EventStore:
+    carryforward: true
+  EventStore.gRPC:
+    carryforward: true
+  Gcp.CloudFirestore:
+    carryforward: true
+  Gremlin:
+    carryforward: true
+  Hangfire:
+    carryforward: true
+  IbmMQ:
+    carryforward: true
+  InfluxDB:
+    carryforward: true
+  Kafka:
+    carryforward: true
+  Kubernetes:
+    carryforward: true
+  MongoDb:
+    carryforward: true
+  MySql:
+    carryforward: true
+  Nats:
+    carryforward: true
+  Network:
+    carryforward: true
+  Npgsql:
+    carryforward: true
+  OpenIdConnectServer:
+    carryforward: true
+  Oracle:
+    carryforward: true
+  Prometheus.Metrics:
+    carryforward: true
+  Publisher.ApplicationInsights:
+    carryforward: true
+  Publisher.CloudWatch:
+    carryforward: true
+  Publisher.Datadog:
+    carryforward: true
+  Publisher.Prometheus:
+    carryforward: true
+  Publisher.Seq:
+    carryforward: true
+  RabbitMQ:
+    carryforward: true
+  RavenDb:
+    carryforward: true
+  Redis:
+    carryforward: true
+  SendGrid:
+    carryforward: true
+  SignalR:
+    carryforward: true
+  Solr:
+    carryforward: true
+  Sqlite:
+    carryforward: true
+  SqlServer:
+    carryforward: true
+  System:
+    carryforward: true
+  UI:
+    carryforward: true
+  Uris:
+    carryforward: true

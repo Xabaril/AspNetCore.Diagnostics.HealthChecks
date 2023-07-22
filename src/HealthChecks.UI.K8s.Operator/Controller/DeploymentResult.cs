@@ -1,4 +1,3 @@
-using System;
 using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator.Controller
@@ -11,10 +10,11 @@ namespace HealthChecks.UI.K8s.Operator.Controller
 
         private DeploymentResult(V1Deployment deployment, V1Service service, V1Secret secret)
         {
-            Deployment = deployment ?? throw new ArgumentNullException(nameof(deployment));
-            Service = service ?? throw new ArgumentNullException(nameof(service));
-            Secret = secret ?? throw new ArgumentNullException(nameof(secret));
+            Deployment = Guard.ThrowIfNull(deployment);
+            Service = Guard.ThrowIfNull(service);
+            Secret = Guard.ThrowIfNull(secret);
         }
+
         public static DeploymentResult Create(V1Deployment deployment, V1Service service, V1Secret secret)
         {
             return new DeploymentResult(deployment, service, secret);

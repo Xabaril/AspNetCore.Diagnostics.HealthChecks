@@ -1,5 +1,4 @@
 using HealthChecks.UI.K8s.Operator.Diagnostics;
-using k8s;
 using k8s.Models;
 
 namespace HealthChecks.UI.K8s.Operator
@@ -9,7 +8,7 @@ namespace HealthChecks.UI.K8s.Operator
         internal static void MapCustomUIPaths(this V1Container container, HealthCheckResource resource, OperatorDiagnostics diagnostics)
         {
 
-            var uiPath = resource.Spec.UiPath ?? Constants.DefaultUIPath;
+            var uiPath = resource.Spec.UiPath ?? Constants.DEFAULT_UI_PATH;
             container.Env.Add(new V1EnvVar("ui_path", uiPath));
             diagnostics.UiPathConfigured(nameof(resource.Spec.UiPath), uiPath);
 

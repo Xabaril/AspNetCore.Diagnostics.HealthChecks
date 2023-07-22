@@ -13,8 +13,7 @@ module.exports = {
     plugins: [
         new webpack.DllPlugin({
             path: path.join(__dirname, "../assets", "[name]-manifest.json"),
-            name: "[name]"            
-        }),
-        new webpack.optimize.OccurrenceOrderPlugin()        
-    ]    
+            name: "[name]"
+        })
+    ]
 };

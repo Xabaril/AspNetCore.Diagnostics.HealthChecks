@@ -1,15 +1,7 @@
-﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Utilities.Net;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using IPAddress = System.Net.IPAddress;
 namespace HealthChecks.UI.Middleware
 {
     internal class UIApiRequestLimitingMidleware
@@ -21,9 +13,9 @@ namespace HealthChecks.UI.Middleware
 
         public UIApiRequestLimitingMidleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next));
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _next = Guard.ThrowIfNull(next);
+            _settings = Guard.ThrowIfNull(settings);
+            _logger = Guard.ThrowIfNull(logger);
 
             var maxActiveRequests = _settings.Value.ApiMaxActiveRequests;
 
@@ -37,7 +29,7 @@ namespace HealthChecks.UI.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!await _semaphore.WaitAsync(TimeSpan.Zero))
+            if (!await _semaphore.WaitAsync(TimeSpan.Zero).ConfigureAwait(false))
             {
                 context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
                 return;
@@ -45,11 +37,9 @@ namespace HealthChecks.UI.Middleware
 
             try
             {
-                _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}",
-                    context.Connection.RemoteIpAddress,
-                    _semaphore.CurrentCount);
+                _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}", context.Connection.RemoteIpAddress, _semaphore.CurrentCount);
 
-                await _next(context);
+                await _next(context).ConfigureAwait(false);
             }
             finally
             {

@@ -1,10 +1,9 @@
-﻿namespace HealthChecks.Network.Core
+namespace HealthChecks.Network.Core;
+
+public enum SmtpConnectionType
 {
-    public enum SmtpConnectionType
-    {
-        AUTO,
-        SSL,
-        TLS,
-        PLAIN
-    }
+    AUTO,
+    SSL,
+    TLS,
+    PLAIN
 }

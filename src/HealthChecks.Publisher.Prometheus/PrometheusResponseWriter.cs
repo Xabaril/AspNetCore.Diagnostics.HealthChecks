@@ -1,28 +1,30 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Threading.Tasks;
 
-namespace HealthChecks.Publisher.Prometheus
+namespace HealthChecks.Publisher.Prometheus;
+
+public sealed class PrometheusResponseWriter : LivenessPrometheusMetrics
 {
-    public sealed class PrometheusResponseWriter : LivenessPrometheusMetrics
+#pragma warning disable IDE1006 // Naming Styles
+    public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok) //TODO: change public API
+#pragma warning restore IDE1006 // Naming Styles
     {
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report, bool alwaysReturnHttp200Ok)
+        var instance = new PrometheusResponseWriter();
+        instance.WriteMetricsFromHealthReport(report);
+
+        context.Response.ContentType = CONTENT_TYPE;
+        if (alwaysReturnHttp200Ok)
         {
-            var instance = new PrometheusResponseWriter();
-            instance.WriteMetricsFromHealthReport(report);
-
-            context.Response.ContentType = ContentType;
-            if (alwaysReturnHttp200Ok)
-            {
-                context.Response.StatusCode = StatusCodes.Status200OK;
-            }
-
-            await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted);
+            context.Response.StatusCode = StatusCodes.Status200OK;
         }
 
-        public static async Task WritePrometheusResultText(HttpContext context, HealthReport report)
-        {
-            await WritePrometheusResultText(context, report, false);
-        }
+        await instance.Registry.CollectAndExportAsTextAsync(context.Response.Body, context.RequestAborted).ConfigureAwait(false);
+    }
+
+#pragma warning disable IDE1006 // Naming Styles
+    public static async Task WritePrometheusResultText(HttpContext context, HealthReport report) //TODO: change public API
+#pragma warning restore IDE1006 // Naming Styles
+    {
+        await WritePrometheusResultText(context, report, false).ConfigureAwait(false);
     }
 }

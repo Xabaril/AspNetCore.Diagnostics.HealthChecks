@@ -1,0 +1,212 @@
+namespace HealthChecks.Network.Core
+{
+    public class ImapCommands
+    {
+        public ImapCommands() { }
+        public static string ListFolders() { }
+        public static string Login(string user, string password) { }
+        public static string SelectFolder(string folder) { }
+        public static string StartTLS() { }
+    }
+    public class ImapConnectionOptions
+    {
+        public ImapConnectionOptions() { }
+        public bool AllowInvalidRemoteCertificates { get; set; }
+        public HealthChecks.Network.Core.ImapConnectionType ConnectionType { get; set; }
+        public string Host { get; set; }
+        public int Port { get; set; }
+    }
+    public enum ImapConnectionType
+    {
+        AUTO = 0,
+        SSL_TLS = 1,
+        STARTTLS = 2,
+    }
+    public class MailConnection : System.IDisposable
+    {
+        protected System.IO.Stream? _stream;
+        protected System.Net.Sockets.TcpClient? _tcpClient;
+        protected System.Func<object, System.Security.Cryptography.X509Certificates.X509Certificate?, System.Security.Cryptography.X509Certificates.X509Chain?, System.Net.Security.SslPolicyErrors, bool> _validateRemoteCertificate;
+        public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false) { }
+        public string Host { get; set; }
+        public int Port { get; set; }
+        protected bool UseSSL { get; set; }
+        public System.Threading.Tasks.Task<bool> ConnectAsync(System.Threading.CancellationToken cancellationToken = default) { }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        protected System.Threading.Tasks.Task<T> ExecuteCommandAsync<T>(string command, HealthChecks.Network.Core.MailConnection.CommandResultAction<T> action, System.Threading.CancellationToken cancellationToken) { }
+        protected System.Net.Security.SslStream GetSSLStream(System.IO.Stream stream) { }
+        protected System.Threading.Tasks.Task<System.IO.Stream> GetStreamAsync(System.Threading.CancellationToken cancellationToken) { }
+        public delegate T CommandResultAction<T>(byte[] result);
+    }
+    public class SmtpCommands
+    {
+        public SmtpCommands() { }
+        public static string AUTHLOGIN() { }
+        public static string EHLO(string host) { }
+        public static string STARTTLS() { }
+    }
+    public class SmtpConnectionOptions
+    {
+        public HealthChecks.Network.Core.SmtpConnectionType ConnectionType;
+        public SmtpConnectionOptions() { }
+        public bool AllowInvalidRemoteCertificates { get; set; }
+        public string Host { get; set; }
+        public int Port { get; set; }
+    }
+    public enum SmtpConnectionType
+    {
+        AUTO = 0,
+        SSL = 1,
+        TLS = 2,
+        PLAIN = 3,
+    }
+}
+namespace HealthChecks.Network
+{
+    public class DnsRegistration
+    {
+        public DnsRegistration(string host) { }
+    }
+    public class DnsResolveCountOptions
+    {
+        public DnsResolveCountOptions() { }
+        public HealthChecks.Network.DnsResolveCountOptions AddHost(string hostName, int minHosts, int? maxHosts) { }
+    }
+    public class DnsResolveHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public DnsResolveHealthCheck(HealthChecks.Network.DnsResolveOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class DnsResolveHostCountHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public DnsResolveHostCountHealthCheck(HealthChecks.Network.DnsResolveCountOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class DnsResolveOptions
+    {
+        public DnsResolveOptions() { }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.DnsResolveOptions WithCheckAllHosts() { }
+    }
+    public class FtpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public FtpHealthCheck(HealthChecks.Network.FtpHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class FtpHealthCheckOptions
+    {
+        public FtpHealthCheckOptions() { }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.FtpHealthCheckOptions AddHost(string host, bool createFile = false, System.Net.NetworkCredential? credentials = null) { }
+        public HealthChecks.Network.FtpHealthCheckOptions WithCheckAllHosts() { }
+    }
+    public class ImapHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public ImapHealthCheck(HealthChecks.Network.ImapHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class ImapHealthCheckOptions : HealthChecks.Network.Core.ImapConnectionOptions
+    {
+        public ImapHealthCheckOptions() { }
+        public void CheckFolderExists(string inboxName) { }
+        public void LoginWith(string userName, string password) { }
+    }
+    public class PingHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public PingHealthCheck(HealthChecks.Network.PingHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class PingHealthCheckOptions
+    {
+        public PingHealthCheckOptions() { }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.PingHealthCheckOptions AddHost(string host, int timeout) { }
+        public HealthChecks.Network.PingHealthCheckOptions WithCheckAllHosts() { }
+    }
+    public class SftpConfiguration { }
+    public class SftpConfigurationBuilder
+    {
+        public SftpConfigurationBuilder(string host, int port, string userName) { }
+        public HealthChecks.Network.SftpConfigurationBuilder AddPasswordAuthentication(string password) { }
+        public HealthChecks.Network.SftpConfigurationBuilder AddPrivateKeyAuthentication(string privateKey, string passphrase) { }
+        public HealthChecks.Network.SftpConfiguration Build() { }
+        public HealthChecks.Network.SftpConfigurationBuilder CreateFileOnConnect(string remoteFilePath) { }
+    }
+    public class SftpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public SftpHealthCheck(HealthChecks.Network.SftpHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class SftpHealthCheckOptions
+    {
+        public SftpHealthCheckOptions() { }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.SftpHealthCheckOptions AddHost(HealthChecks.Network.SftpConfiguration sftpConfiguration) { }
+        public HealthChecks.Network.SftpHealthCheckOptions WithCheckAllHosts() { }
+    }
+    public class SmtpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public SmtpHealthCheck(HealthChecks.Network.SmtpHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class SmtpHealthCheckOptions : HealthChecks.Network.Core.SmtpConnectionOptions
+    {
+        public SmtpHealthCheckOptions() { }
+        public void LoginWith(string userName, string password) { }
+    }
+    public class SslHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public SslHealthCheck(HealthChecks.Network.SslHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class SslHealthCheckOptions
+    {
+        public SslHealthCheckOptions() { }
+        public System.Net.Sockets.AddressFamily AddressFamily { get; set; }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.SslHealthCheckOptions AddHost(string host, int port = 443, int checkLeftDays = 60) { }
+        public HealthChecks.Network.SslHealthCheckOptions WithCheckAllHosts() { }
+    }
+    public class TcpHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public TcpHealthCheck(HealthChecks.Network.TcpHealthCheckOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class TcpHealthCheckOptions
+    {
+        public TcpHealthCheckOptions() { }
+        public System.Net.Sockets.AddressFamily AddressFamily { get; set; }
+        public bool CheckAllHosts { get; set; }
+        public HealthChecks.Network.TcpHealthCheckOptions AddHost(string host, int port) { }
+        public HealthChecks.Network.TcpHealthCheckOptions WithCheckAllHosts() { }
+    }
+}
+namespace HealthChecks.Network.Extensions
+{
+    public static class TaskExtensions
+    {
+        public static System.Threading.Tasks.Task WithCancellationTokenAsync(this System.Threading.Tasks.Task task, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task<T> WithCancellationTokenAsync<T>(this System.Threading.Tasks.Task<T> task, System.Threading.CancellationToken cancellationToken) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class DnsResolveOptionsExtensions
+    {
+        public static System.Func<System.ValueTuple<HealthChecks.Network.DnsResolveOptions, HealthChecks.Network.DnsRegistration>> ResolveHost(this HealthChecks.Network.DnsResolveOptions options, string host) { }
+        public static HealthChecks.Network.DnsResolveOptions To(this System.Func<System.ValueTuple<HealthChecks.Network.DnsResolveOptions, HealthChecks.Network.DnsRegistration>> registrationFunc, params string[] resolutions) { }
+    }
+    public static class NetworkHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDnsResolveHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.DnsResolveOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDnsResolveHostCountHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.DnsResolveCountOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddFtpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.FtpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddImapHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.ImapHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddPingHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.PingHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSftpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.SftpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSmtpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.SmtpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSslHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.SslHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddTcpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.TcpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

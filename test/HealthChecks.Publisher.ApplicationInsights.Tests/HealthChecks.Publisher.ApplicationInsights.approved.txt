@@ -1,0 +1,7 @@
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class ApplicationInsightsHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddApplicationInsightsPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string? connectionString = null, string? instrumentationKey = null, bool saveDetailedReport = false, bool excludeHealthyReports = false) { }
+    }
+}

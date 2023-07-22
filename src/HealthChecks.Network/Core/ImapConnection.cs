@@ -1,95 +1,104 @@
-﻿using System;
-using System.Threading.Tasks;
+using HealthChecks.Network.Extensions;
 
-namespace HealthChecks.Network.Core
+namespace HealthChecks.Network.Core;
+
+internal class ImapConnection : MailConnection
 {
-    internal class ImapConnection : MailConnection
+    public bool IsAuthenticated { get; private set; }
+
+    public bool Connected => _tcpClient?.Connected == true;
+
+    public ImapConnectionType ConnectionType
     {
-        public bool IsAuthenticated { get; private set; }
-        public bool Connected => _tcpClient.Connected;
+        get => _connectionType;
 
-        public ImapConnectionType ConnectionType
+        private set
         {
-            get
-            {
-                return _connectionType;
-            }
-
-            private set
-            {
-                _connectionType = value;
-                UseSSL = ConnectionType == ImapConnectionType.SSL_TLS ? true : false;
-            }
+            _connectionType = value;
+            UseSSL = ConnectionType == ImapConnectionType.SSL_TLS ? true : false;
         }
+    }
 
-        private ImapConnectionType _connectionType;
+    private ImapConnectionType _connectionType;
 
-        internal ImapConnection(ImapConnectionOptions options) :
-            base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
+    internal ImapConnection(ImapConnectionOptions options)
+        : base(options.Host, options.Port, true, options.AllowInvalidRemoteCertificates)
+    {
+        Guard.ThrowIfNull(options);
+
+        ConnectionType = options.ConnectionType;
+        ComputeDefaultValues();
+    }
+
+    private void ComputeDefaultValues()
+    {
+        switch (ConnectionType)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
-
-            ConnectionType = options.ConnectionType;
-            ComputeDefaultValues();
-        }
-
-        private void ComputeDefaultValues()
-        {
-            switch (ConnectionType)
-            {
-                case ImapConnectionType.AUTO when Port == 993:
-                    ConnectionType = ImapConnectionType.SSL_TLS;
-                    break;
-                case ImapConnectionType.AUTO when Port == 143:
-                    ConnectionType = ImapConnectionType.STARTTLS;
-                    break;
-            }
-
-            if (ConnectionType == ImapConnectionType.AUTO)
-            {
-                throw new Exception($"Port {Port} is not a valid imap port when using automatic configuration");
-            }
-        }
-
-        public async Task<bool> AuthenticateAsync(string user, string password)
-        {
-            if (ConnectionType == ImapConnectionType.STARTTLS)
-            {
-                await UpgradeToSecureConnection();
-            }
-
-            var result = await ExecuteCommand(ImapCommands.Login(user, password));
-            IsAuthenticated = !result.Contains(ImapResponse.AUTHFAILED);
-            return IsAuthenticated;
-        }
-
-        private async Task<bool> UpgradeToSecureConnection()
-        {
-            var commandResult = await ExecuteCommand(ImapCommands.StartTLS());
-            var upgradeSuccess = commandResult.Contains(ImapResponse.OK_TLS_NEGOTIATION);
-            if (upgradeSuccess)
-            {
+            case ImapConnectionType.AUTO when Port == 993:
                 ConnectionType = ImapConnectionType.SSL_TLS;
-                _stream = GetStream();
-                return true;
-            }
-            else
+                break;
+            case ImapConnectionType.AUTO when Port == 143:
+                ConnectionType = ImapConnectionType.STARTTLS;
+                break;
+        }
+
+        if (ConnectionType == ImapConnectionType.AUTO)
+        {
+            throw new Exception($"Port {Port} is not a valid imap port when using automatic configuration");
+        }
+    }
+
+    public async Task<bool> AuthenticateAsync(string user, string password, CancellationToken cancellationToken = default)
+    {
+        if (ConnectionType == ImapConnectionType.STARTTLS)
+        {
+            await UpgradeToSecureConnectionAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        IsAuthenticated = await ExecuteCommandAsync(
+            ImapCommands.Login(user, password),
+            result =>
             {
-                throw new Exception("Could not upgrade IMAP non SSL connection using STARTTLS handshake");
-            }
-        }
+                var AUTHFAILED = "AUTHENTICATIONFAILED"u8;
+                return !result.ContainsArray(AUTHFAILED);
+            },
+            cancellationToken).ConfigureAwait(false);
+        return IsAuthenticated;
+    }
 
-        public async Task<bool> SelectFolder(string folder)
+    private async Task<bool> UpgradeToSecureConnectionAsync(CancellationToken cancellationToken)
+    {
+        var upgradeSuccess = await ExecuteCommandAsync(
+            ImapCommands.StartTLS(),
+            result =>
+            {
+                var OK_TLS_NEGOTIATION = "OK Begin TLS"u8;
+                return result.ContainsArray(OK_TLS_NEGOTIATION);
+            },
+            cancellationToken).ConfigureAwait(false);
+        if (upgradeSuccess)
         {
-            var result = await ExecuteCommand(ImapCommands.SelectFolder(folder));
-
-            //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
-            return result.Contains(ImapResponse.OK) && !result.Contains(ImapResponse.ERROR);
+            ConnectionType = ImapConnectionType.SSL_TLS;
+            _stream = await GetStreamAsync(cancellationToken).ConfigureAwait(false);
+            return true;
         }
-
-        public async Task<string> GetFolders()
+        else
         {
-            return await ExecuteCommand(ImapCommands.ListFolders());
+            throw new Exception("Could not upgrade IMAP non SSL connection using STARTTLS handshake");
         }
+    }
+
+    public async Task<bool> SelectFolderAsync(string folder, CancellationToken cancellationToken = default)
+    {
+        return await ExecuteCommandAsync(
+            ImapCommands.SelectFolder(folder),
+            result =>
+            {
+                var OK = "& OK"u8;
+                var ERROR = "& NO"u8;
+                //Double check, some servers sometimes include a last line with a & OK appending extra info when command fails
+                return result.ContainsArray(OK) && !result.ContainsArray(ERROR);
+            },
+            cancellationToken).ConfigureAwait(false);
     }
 }

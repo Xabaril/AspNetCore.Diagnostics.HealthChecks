@@ -1,8 +1,6 @@
-﻿using HealthChecks.UI.Configuration;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading.Tasks;
 
 namespace HealthChecks.UI.Core
 {
@@ -12,7 +10,7 @@ namespace HealthChecks.UI.Core
 
         public UIResourcesMapper(IUIResourcesReader reader)
         {
-            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            _reader = Guard.ThrowIfNull(reader);
         }
 
         public void Map(IApplicationBuilder app, Options options)
@@ -54,7 +52,6 @@ namespace HealthChecks.UI.Core
                     await context.Response.WriteAsync(ui.Content);
                 });
             });
-
 
             foreach (var item in styleSheets)
             {

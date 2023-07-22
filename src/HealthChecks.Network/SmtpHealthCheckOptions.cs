@@ -1,16 +1,14 @@
-﻿using HealthChecks.Network.Core;
-using System;
+using HealthChecks.Network.Core;
 
-namespace HealthChecks.Network
+namespace HealthChecks.Network;
+
+public class SmtpHealthCheckOptions : SmtpConnectionOptions
 {
-    public class SmtpHealthCheckOptions : SmtpConnectionOptions
+    internal (bool Login, (string, string) Account) AccountOptions { get; private set; }
+    public void LoginWith(string userName, string password)
     {
-        internal (bool Login, (string, string) Account) AccountOptions { get; private set; }
-        public void LoginWith(string userName, string password)
-        {
-            if (string.IsNullOrEmpty(userName)) throw new ArgumentNullException(nameof(userName));
+        Guard.ThrowIfNull(userName, true);
 
-            AccountOptions = (Login: true, Account: (userName, password));
-        }
+        AccountOptions = (Login: true, Account: (userName, password));
     }
 }

@@ -1,0 +1,137 @@
+namespace HealthChecks.UI.Configuration
+{
+    public class HealthCheckSetting
+    {
+        public HealthCheckSetting() { }
+        public string Name { get; set; }
+        public string Uri { get; set; }
+    }
+    public class Options
+    {
+        public bool UseRelativeApiPath;
+        public bool UseRelativeResourcesPath;
+        public bool UseRelativeWebhookPath;
+        public Options() { }
+        public string ApiPath { get; set; }
+        public bool AsideMenuOpened { get; set; }
+        public string PageTitle { get; set; }
+        public string ResourcesPath { get; set; }
+        public string UIPath { get; set; }
+        public string WebhookPath { get; set; }
+        public HealthChecks.UI.Configuration.Options AddCustomStylesheet(string path) { }
+    }
+    public class Settings
+    {
+        public Settings() { }
+        public HealthChecks.UI.Configuration.Settings AddHealthCheckEndpoint(string name, string uri) { }
+        public HealthChecks.UI.Configuration.Settings AddWebhookNotification(string name, string uri, string payload, string restorePayload = "", System.Func<string, HealthChecks.UI.Core.UIHealthReport, bool>? shouldNotifyFunc = null, System.Func<string, HealthChecks.UI.Core.UIHealthReport, string>? customMessageFunc = null, System.Func<string, HealthChecks.UI.Core.UIHealthReport, string>? customDescriptionFunc = null) { }
+        public HealthChecks.UI.Configuration.Settings ConfigureApiEndpointHttpclient(System.Action<System.IServiceProvider, System.Net.Http.HttpClient> apiEndpointHttpClientconfig) { }
+        public HealthChecks.UI.Configuration.Settings ConfigureWebhooksEndpointHttpclient(System.Action<System.IServiceProvider, System.Net.Http.HttpClient> webhooksEndpointHttpClientconfig) { }
+        public HealthChecks.UI.Configuration.Settings DisableDatabaseMigrations() { }
+        public HealthChecks.UI.Configuration.Settings MaximumHistoryEntriesPerEndpoint(int maxValue) { }
+        public HealthChecks.UI.Configuration.Settings SetApiMaxActiveRequests(int apiMaxActiveRequests) { }
+        public HealthChecks.UI.Configuration.Settings SetEvaluationTimeInSeconds(int seconds) { }
+        public HealthChecks.UI.Configuration.Settings SetHeaderText(string text) { }
+        public HealthChecks.UI.Configuration.Settings SetMinimumSecondsBetweenFailureNotifications(int seconds) { }
+        public HealthChecks.UI.Configuration.Settings SetNotifyUnHealthyOneTimeUntilChange() { }
+        public HealthChecks.UI.Configuration.Settings UseApiEndpointDelegatingHandler<T>()
+            where T : System.Net.Http.DelegatingHandler { }
+        public HealthChecks.UI.Configuration.Settings UseApiEndpointHttpMessageHandler(System.Func<System.IServiceProvider, System.Net.Http.HttpClientHandler> apiEndpointHttpHandler) { }
+        public HealthChecks.UI.Configuration.Settings UseWebHooksEndpointDelegatingHandler<T>()
+            where T : System.Net.Http.DelegatingHandler { }
+        public HealthChecks.UI.Configuration.Settings UseWebhookEndpointHttpMessageHandler(System.Func<System.IServiceProvider, System.Net.Http.HttpClientHandler> webhookEndpointHttpHandler) { }
+    }
+    public class WebHookNotification
+    {
+        public WebHookNotification() { }
+        public string Name { get; set; }
+        public string Payload { get; set; }
+        public string RestoredPayload { get; set; }
+        public string Uri { get; set; }
+    }
+}
+namespace HealthChecks.UI.Core.Extensions
+{
+    public static class UriExtensions
+    {
+        public static bool IsValidHealthCheckEndpoint(this System.Uri uri) { }
+    }
+}
+namespace HealthChecks.UI.Core.HostedService
+{
+    public interface IHealthCheckReportCollector
+    {
+        System.Threading.Tasks.Task Collect(System.Threading.CancellationToken cancellationToken);
+    }
+}
+namespace HealthChecks.UI.Core
+{
+    public interface IHealthCheckCollectorInterceptor
+    {
+        System.Threading.Tasks.ValueTask OnCollectExecuted(HealthChecks.UI.Core.UIHealthReport report);
+        System.Threading.Tasks.ValueTask OnCollectExecuting(HealthChecks.UI.Data.HealthCheckConfiguration healthCheck);
+    }
+    public class UIStylesheet
+    {
+        public byte[] Content { get; }
+        public string FileName { get; }
+        public string ResourcePath { get; }
+        public static HealthChecks.UI.Core.UIStylesheet Create(HealthChecks.UI.Configuration.Options options, string filePath) { }
+    }
+    public class UIWebHooksApiMiddleware
+    {
+        public UIWebHooksApiMiddleware(Microsoft.AspNetCore.Http.RequestDelegate next, Microsoft.Extensions.DependencyInjection.IServiceScopeFactory serviceScopeFactory) { }
+        public System.Threading.Tasks.Task InvokeAsync(Microsoft.AspNetCore.Http.HttpContext context) { }
+    }
+}
+namespace HealthChecks.UI.Core.Notifications
+{
+    public interface IHealthCheckFailureNotifier
+    {
+        System.Threading.Tasks.Task NotifyDown(string name, HealthChecks.UI.Core.UIHealthReport report);
+        System.Threading.Tasks.Task NotifyWakeUp(string name);
+    }
+}
+namespace Microsoft.AspNetCore.Builder
+{
+    public static class ApplicationBuilderExtensions
+    {
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksUI(this Microsoft.AspNetCore.Builder.IApplicationBuilder app) { }
+        public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksUI(this Microsoft.AspNetCore.Builder.IApplicationBuilder app, System.Action<HealthChecks.UI.Configuration.Options> setup) { }
+    }
+    public static class EndpointRouteBuilderExtensions
+    {
+        public static Microsoft.AspNetCore.Builder.IEndpointConventionBuilder MapHealthChecksUI(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, System.Action<HealthChecks.UI.Configuration.Options>? setupOptions = null) { }
+    }
+}
+namespace Microsoft.EntityFrameworkCore
+{
+    public static class DatabaseFacadeExtensions
+    {
+        public static bool IsInMemory(this Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade database) { }
+    }
+}
+namespace Microsoft.Extensions.Configuration
+{
+    public static class ConfigurationExtensions
+    {
+        public static HealthChecks.UI.Configuration.Settings BindUISettings(this Microsoft.Extensions.Configuration.IConfiguration configuration, HealthChecks.UI.Configuration.Settings settings) { }
+        public static Microsoft.Extensions.Configuration.IConfigurationSection GetSectionWithFallBack(this Microsoft.Extensions.Configuration.IConfiguration configuration, string section, string fallback) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddApiEndpointHttpClient(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+        public static Microsoft.Extensions.DependencyInjection.HealthChecksUIBuilder AddHealthChecksUI(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action<HealthChecks.UI.Configuration.Settings>? setupSettings = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddWebhooksEndpointHttpClient(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+}
+namespace Microsoft.Extensions.Diagnostics.HealthChecks
+{
+    public static class HealthReportExtensions
+    {
+        public static System.Collections.Generic.List<HealthChecks.UI.Data.HealthCheckExecutionEntry> ToExecutionEntries(this HealthChecks.UI.Core.UIHealthReport report) { }
+    }
+}

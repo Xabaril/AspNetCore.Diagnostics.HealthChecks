@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <PackageTags>HealthCheck;Health;Dapr</PackageTags>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <PackageTags>$(PackagFPeTags);Dapr</PackageTags>
     <Description>HealthChecks.Dapr is the health check package for Dapr.</Description>
     <VersionPrefix>$(HealthCheckDapr)</VersionPrefix>
   </PropertyGroup>

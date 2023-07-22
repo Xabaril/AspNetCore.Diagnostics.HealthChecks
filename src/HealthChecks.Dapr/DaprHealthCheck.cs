@@ -1,8 +1,5 @@
 using Dapr.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HealthChecks.Dapr
 {
@@ -19,7 +16,7 @@ namespace HealthChecks.Dapr
             HealthCheckContext context,
             CancellationToken cancellationToken = default)
         {
-            return await _daprClient.CheckHealthAsync(cancellationToken)
+            return await _daprClient.CheckHealthAsync(cancellationToken).ConfigureAwait(false)
                 ? new HealthCheckResult(HealthStatus.Healthy)
                 : new HealthCheckResult(context.Registration.FailureStatus);
         }

@@ -1,8 +1,6 @@
 using Dapr.Client;
 using HealthChecks.Dapr;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add a health check for Dapr using provided <see cref="DaprClient"/>.
         /// </summary>
         /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-        /// <param name="daprClient">The DaprClient to be used. <see cref="DaprClient"/>/param>
+        /// <param name="daprClient">The DaprClient to be used. <see cref="DaprClient"/></param>
         /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'dapr' will be used for the name.</param>
         /// <param name="failureStatus">
         /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -26,9 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHealthChecksBuilder AddDapr(
             this IHealthChecksBuilder builder,
             DaprClient daprClient,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(
@@ -53,9 +51,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
         public static IHealthChecksBuilder AddDapr(
             this IHealthChecksBuilder builder,
-            string name = default,
+            string? name = default,
             HealthStatus? failureStatus = default,
-            IEnumerable<string> tags = default,
+            IEnumerable<string>? tags = default,
             TimeSpan? timeout = default)
         {
             return builder.Add(new HealthCheckRegistration(

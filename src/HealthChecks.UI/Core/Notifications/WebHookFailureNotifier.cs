@@ -145,8 +145,7 @@ namespace HealthChecks.UI.Core.Notifications
 
         private string GetFailedMessageFromContent(UIHealthReport healthReport)
         {
-            var failedChecks = healthReport.Entries.Values
-                .Count(c => c.Status != UIHealthStatus.Healthy);
+            var failedChecks = healthReport.Entries?.Values.Count(c => c.Status != UIHealthStatus.Healthy) ?? 0;
             var plural = PluralizeHealthcheck(failedChecks);
 
             return $"There {plural.plural} at least {failedChecks} {plural.noun} failing.";

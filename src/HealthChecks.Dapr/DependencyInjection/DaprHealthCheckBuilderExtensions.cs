@@ -34,7 +34,7 @@ public static class DaprHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? DAPR_NAME,
-            sp => new DaprHealthCheck(daprClient),
+            new DaprHealthCheck(daprClient),
             failureStatus,
             tags,
             timeout));

@@ -50,7 +50,7 @@ public static class DaprHealthCheckBuilderExtensions
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An System.TimeSpan representing the timeout of the check. Optoinal.</param>
+    /// <param name="timeout">An System.TimeSpan representing the timeout of the check. Optional.</param>
     /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
     public static IHealthChecksBuilder AddDapr(
         this IHealthChecksBuilder builder,

@@ -37,7 +37,7 @@ public class signalr_healthcheck_should
 
         server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -72,7 +72,7 @@ public class signalr_healthcheck_should
 
         server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

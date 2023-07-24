@@ -5,23 +5,21 @@ namespace HealthChecks.UI.Data
 {
     public class HealthChecksDb : DbContext
     {
-        public DbSet<HealthCheckConfiguration> Configurations { get; set; }
+        public DbSet<HealthCheckConfiguration> Configurations => Set<HealthCheckConfiguration>();
 
-        public DbSet<HealthCheckExecution> Executions { get; set; }
+        public DbSet<HealthCheckExecution> Executions => Set<HealthCheckExecution>();
 
-        public DbSet<HealthCheckFailureNotification> Failures { get; set; }
+        public DbSet<HealthCheckFailureNotification> Failures => Set<HealthCheckFailureNotification>();
 
-        public DbSet<HealthCheckExecutionEntry> HealthCheckExecutionEntries { get; set; }
+        public DbSet<HealthCheckExecutionEntry> HealthCheckExecutionEntries => Set<HealthCheckExecutionEntry>();
 
-        public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories { get; set; }
+        public DbSet<HealthCheckExecutionHistory> HealthCheckExecutionHistories => Set<HealthCheckExecutionHistory>();
 
         protected HealthChecksDb(DbContextOptions options) : base(options)
         {
         }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public HealthChecksDb(DbContextOptions<HealthChecksDb> options) : base(options)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
         }
 

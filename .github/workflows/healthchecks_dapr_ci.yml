@@ -21,7 +21,7 @@ on:
       - src/HealthChecks.Dapr/**
       - test/HealthChecks.Dapr.Tests/**
       - test/_SHARED/**
-      - .github/workflows/healthchecks_Dapr_ci.yml
+      - .github/workflows/healthchecks_dapr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
 

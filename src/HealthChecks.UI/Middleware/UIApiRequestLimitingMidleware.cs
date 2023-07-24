@@ -8,10 +8,10 @@ namespace HealthChecks.UI.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IOptions<Settings> _settings;
-        private readonly ILogger<UIApiEndpointMiddleware> _logger;
+        private readonly ILogger<UIApiRequestLimitingMidleware> _logger;
         private readonly SemaphoreSlim _semaphore;
 
-        public UIApiRequestLimitingMidleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
+        public UIApiRequestLimitingMidleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiRequestLimitingMidleware> logger)
         {
             _next = Guard.ThrowIfNull(next);
             _settings = Guard.ThrowIfNull(settings);

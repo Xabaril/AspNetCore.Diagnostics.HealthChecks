@@ -16,7 +16,7 @@ public class DaprHealthCheck : IHealthCheck
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         return await _daprClient.CheckHealthAsync(cancellationToken).ConfigureAwait(false)
-            ? new HealthCheckResult(HealthStatus.Healthy)
+            ? HealthCheckResult.Healthy()
             : new HealthCheckResult(context.Registration.FailureStatus);
     }
 }

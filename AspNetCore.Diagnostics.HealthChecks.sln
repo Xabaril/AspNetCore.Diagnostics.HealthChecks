@@ -281,6 +281,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureSearch.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Data.Tests", "test\HealthChecks.UI.Data.Tests\HealthChecks.UI.Data.Tests.csproj", "{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Dapr", "src\HealthChecks.Dapr\HealthChecks.Dapr.csproj", "{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Dapr.Tests", "test\HealthChecks.Dapr.Tests\HealthChecks.Dapr.Tests.csproj", "{1C2085FA-2D33-459B-945E-337323485E16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -783,6 +787,14 @@ Global
 		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2085FA-2D33-459B-945E-337323485E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2085FA-2D33-459B-945E-337323485E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2085FA-2D33-459B-945E-337323485E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2085FA-2D33-459B-945E-337323485E16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -912,6 +924,8 @@ Global
 		{0BE32765-7244-4717-9D48-B4C716DD1769} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{076B7DAE-E92A-4B81-BC1D-D63AF0E9C5B4} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{93DEEAD7-9A89-48C6-AD42-103AEADBCACE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{716C2E59-6BB4-49A1-B685-9958B7EF0F3B} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{1C2085FA-2D33-459B-945E-337323485E16} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

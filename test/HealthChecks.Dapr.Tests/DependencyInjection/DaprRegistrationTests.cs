@@ -14,7 +14,7 @@ public class dapr_registration_should
         services.AddHealthChecks()
             .AddDapr();
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -31,7 +31,7 @@ public class dapr_registration_should
         services.AddHealthChecks()
             .AddDapr(daprClient: new DaprClientBuilder().Build());
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -51,7 +51,7 @@ public class dapr_registration_should
         services.AddHealthChecks()
             .AddDapr(name: customCheckName);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

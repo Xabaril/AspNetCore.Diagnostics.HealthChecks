@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.190" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.100" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.110" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
 
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
   </ItemGroup>

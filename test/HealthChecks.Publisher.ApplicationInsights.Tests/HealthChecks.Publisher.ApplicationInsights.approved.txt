@@ -1,7 +1,15 @@
+namespace HealthChecks.Publisher.ApplicationInsights
+{
+    public class ApplicationInsightsPublisher : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheckPublisher
+    {
+        public ApplicationInsightsPublisher(Microsoft.Extensions.Options.IOptions<Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration>? telemetryConfiguration, string? connectionString = null, bool saveDetailedReport = false, bool excludeHealthyReports = false) { }
+        public System.Threading.Tasks.Task PublishAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report, System.Threading.CancellationToken cancellationToken) { }
+    }
+}
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ApplicationInsightsHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddApplicationInsightsPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string? connectionString = null, string? instrumentationKey = null, bool saveDetailedReport = false, bool excludeHealthyReports = false) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddApplicationInsightsPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string? connectionString = null, bool saveDetailedReport = false, bool excludeHealthyReports = false) { }
     }
 }

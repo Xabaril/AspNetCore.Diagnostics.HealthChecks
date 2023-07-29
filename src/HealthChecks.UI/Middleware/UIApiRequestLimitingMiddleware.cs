@@ -4,14 +4,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 namespace HealthChecks.UI.Middleware
 {
-    internal class UIApiRequestLimitingMidleware
+    internal sealed class UIApiRequestLimitingMiddleware : IDisposable
     {
         private readonly RequestDelegate _next;
         private readonly IOptions<Settings> _settings;
         private readonly ILogger<UIApiEndpointMiddleware> _logger;
         private readonly SemaphoreSlim _semaphore;
+        private bool _disposed;
 
-        public UIApiRequestLimitingMidleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
+        public UIApiRequestLimitingMiddleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
         {
             _next = Guard.ThrowIfNull(next);
             _settings = Guard.ThrowIfNull(settings);
@@ -45,6 +46,17 @@ namespace HealthChecks.UI.Middleware
             {
                 _semaphore.Release();
             }
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _semaphore.Dispose();
+            _disposed = true;
         }
     }
 }

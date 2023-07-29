@@ -25,8 +25,8 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            using var server = new TestServer(webhostBuilder);
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
@@ -47,8 +47,8 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var server = new TestServer(webhostBuilder);
-            var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+            using var server = new TestServer(webhostBuilder);
+            using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
             response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
 
@@ -71,7 +71,7 @@ namespace HealthChecks.System.Tests.Functional
 
             var exception = Assert.Throws<PlatformNotSupportedException>(() =>
             {
-                var server = new TestServer(webhostBuilder);
+                using var server = new TestServer(webhostBuilder);
             });
 
             exception.Message.ShouldBe("WindowsServiceHealthCheck can only be registered in Windows Systems");

@@ -35,7 +35,7 @@ namespace HealthChecks.UI.K8s.Operator
                 Uri = address
             };
 
-            var client = httpClientFactory.CreateClient();
+            using var client = httpClientFactory.CreateClient();
             try
             {
                 string type = healthCheck.Type.ToString();

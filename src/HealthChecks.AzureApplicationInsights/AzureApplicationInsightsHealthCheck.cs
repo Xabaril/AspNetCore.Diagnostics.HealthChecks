@@ -55,7 +55,7 @@ public class AzureApplicationInsightsHealthCheck : IHealthCheck
             try
             {
                 var uri = new Uri(_appInsightsUrls[index++] + path);
-                HttpResponseMessage response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                using var response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
                 if (response.IsSuccessStatusCode)
                 {
                     return true;

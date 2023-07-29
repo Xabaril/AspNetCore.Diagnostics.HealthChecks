@@ -26,7 +26,7 @@ public class SendGridHealthCheck : IHealthCheck
     {
         try
         {
-            var httpClient = _httpClientFactory.CreateClient(SendGridHealthCheckExtensions.NAME);
+            using var httpClient = _httpClientFactory.CreateClient(SendGridHealthCheckExtensions.NAME);
 
             var client = new SendGridClient(httpClient, _apiKey);
             var from = new EmailAddress(MAIL_ADDRESS, MAIL_ADDRESS_NAME);

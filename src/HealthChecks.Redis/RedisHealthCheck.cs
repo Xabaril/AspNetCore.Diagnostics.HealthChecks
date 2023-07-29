@@ -86,7 +86,9 @@ public class RedisHealthCheck : IHealthCheck
             if (_redisConnectionString is not null)
             {
                 _connections.TryRemove(_redisConnectionString, out var connection);
+#pragma warning disable IDISP007 // Don't dispose injected [false positive here]
                 connection?.Dispose();
+#pragma warning restore IDISP007 // Don't dispose injected
             }
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }

@@ -41,7 +41,7 @@ public class SslHealthCheck : IHealthCheck
                     continue;
                 }
 
-                var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
+                using var certificate = await GetSslCertificateAsync(tcpClient, host).ConfigureAwait(false);
 
                 if (certificate is null || !certificate.Verify())
                 {
@@ -73,7 +73,10 @@ public class SslHealthCheck : IHealthCheck
 
     private async Task<X509Certificate2?> GetSslCertificateAsync(TcpClient client, string host)
     {
-        var ssl = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback((sender, cert, ca, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None), null);
+        // https://github.com/DotNetAnalyzers/IDisposableAnalyzers/issues/513
+#pragma warning disable IDISP004 // Don't ignore created IDisposable
+        using var ssl = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback((sender, cert, ca, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None), null);
+#pragma warning restore IDISP004 // Don't ignore created IDisposable
 
         try
         {
@@ -84,10 +87,6 @@ public class SslHealthCheck : IHealthCheck
         catch (Exception)
         {
             return null;
-        }
-        finally
-        {
-            ssl.Close();
         }
     }
 }

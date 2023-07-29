@@ -91,7 +91,7 @@ public class aws_secrets_manager_registration_should
         services.AddHealthChecks()
             .AddSecretsManager(setup => setup.RegionEndpoint = RegionEndpoint.EUCentral1);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options!.Value.Registrations.First();
@@ -112,7 +112,7 @@ public class aws_secrets_manager_registration_should
                 setup.RegionEndpoint = RegionEndpoint.EUCentral1;
             });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options!.Value.Registrations.First();

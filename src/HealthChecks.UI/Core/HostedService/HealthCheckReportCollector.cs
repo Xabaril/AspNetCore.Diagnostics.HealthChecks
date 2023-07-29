@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.HostedService
 {
-    internal class HealthCheckReportCollector : IHealthCheckReportCollector
+    internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, IDisposable
     {
         private readonly HealthChecksDb _db;
         private readonly IHealthCheckFailureNotifier _healthCheckFailureNotifier;
@@ -30,6 +30,7 @@ namespace HealthChecks.UI.Core.HostedService
                 new JsonStringEnumConverter(namingPolicy: null, allowIntegerValues: true)
             }
         };
+        private bool _disposed;
 
         public HealthCheckReportCollector(
             HealthChecksDb db,
@@ -95,6 +96,17 @@ namespace HealthChecks.UI.Core.HostedService
 
                 _logger.LogDebug("HealthReportCollector has completed.");
             }
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _httpClient.Dispose();
+            _disposed = true;
         }
 
         private async Task<UIHealthReport> GetHealthReportAsync(HealthCheckConfiguration configuration)
@@ -308,6 +320,14 @@ namespace HealthChecks.UI.Core.HostedService
             execution.OnStateFrom = lastExecutionTime;
             execution.LastExecuted = lastExecutionTime;
             execution.Status = healthReport.Status;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
         }
     }
 }

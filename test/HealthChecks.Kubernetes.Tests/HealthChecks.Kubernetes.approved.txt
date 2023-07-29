@@ -1,13 +1,8 @@
 namespace HealthChecks.Kubernetes
 {
-    public class KubernetesChecksExecutor
-    {
-        public KubernetesChecksExecutor(k8s.Kubernetes client) { }
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> CheckAsync(HealthChecks.Kubernetes.KubernetesResourceCheck resourceCheck, System.Threading.CancellationToken cancellationToken) { }
-    }
     public class KubernetesHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public KubernetesHealthCheck(HealthChecks.Kubernetes.KubernetesHealthCheckBuilder builder, HealthChecks.Kubernetes.KubernetesChecksExecutor kubernetesChecksExecutor) { }
+        public KubernetesHealthCheck(HealthChecks.Kubernetes.KubernetesHealthCheckBuilder builder, k8s.Kubernetes client) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public class KubernetesHealthCheckBuilder

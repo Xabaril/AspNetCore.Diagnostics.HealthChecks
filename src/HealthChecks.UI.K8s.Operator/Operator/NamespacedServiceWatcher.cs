@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HealthChecks.UI.K8s.Operator
 {
-    internal class NamespacedServiceWatcher : IDisposable
+    internal sealed class NamespacedServiceWatcher : IDisposable
     {
         private readonly IKubernetes _client;
         private readonly ILogger<K8sOperator> _logger;

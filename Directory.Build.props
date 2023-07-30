@@ -23,6 +23,8 @@
     <Nullable>enable</Nullable>
     <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
     <NoWarn>$(NoWarn);1591;IDISP013</NoWarn> <!--TODO: temporary solution-->
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">

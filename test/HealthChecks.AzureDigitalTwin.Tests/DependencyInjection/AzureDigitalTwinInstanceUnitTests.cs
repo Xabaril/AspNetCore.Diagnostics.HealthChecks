@@ -16,7 +16,7 @@ public class azure_digital_twin_instance_registration_should
                 "https://my-awesome-dt-host",
                 "my_dt_instance_name");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -39,7 +39,7 @@ public class azure_digital_twin_instance_registration_should
                 "my_dt_instance_name",
                 name: "azuredigitaltwininstance_check");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -56,7 +56,7 @@ public class azure_digital_twin_instance_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwinInstance(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -74,7 +74,7 @@ public class azure_digital_twin_instance_registration_should
                 "https://my-awesome-dt-host",
                 "my_dt_instance_name");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -95,7 +95,7 @@ public class azure_digital_twin_instance_registration_should
                 "my_dt_instance_name",
                 name: "azuredigitaltwininstance_check");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -112,7 +112,7 @@ public class azure_digital_twin_instance_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwinInstance(new AzureCliCredential(), string.Empty, string.Empty);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

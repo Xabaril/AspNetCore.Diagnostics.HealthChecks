@@ -43,5 +43,5 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
         }
     }
 
-    public void Dispose() => _client.Dispose();
+    public virtual void Dispose() => _client.Dispose();
 }

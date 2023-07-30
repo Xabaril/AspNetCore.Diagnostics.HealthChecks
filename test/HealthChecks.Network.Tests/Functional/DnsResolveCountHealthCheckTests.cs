@@ -41,7 +41,7 @@ public class dns_resolve_host_count_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }

@@ -29,7 +29,7 @@ namespace Microsoft.AspNetCore.Builder
             app.Map(options.ApiPath, appBuilder =>
             {
                 appBuilder
-                .UseMiddleware<UIApiRequestLimitingMidleware>()
+                .UseMiddleware<UIApiRequestLimitingMiddleware>()
                 .UseMiddleware<UIApiEndpointMiddleware>();
             });
 

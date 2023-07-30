@@ -5,13 +5,12 @@ namespace HealthChecks.Kubernetes;
 public class KubernetesHealthCheck : IHealthCheck
 {
     private readonly KubernetesHealthCheckBuilder _builder;
-    private readonly KubernetesChecksExecutor _kubernetesChecksExecutor;
+    private readonly k8s.Kubernetes _client;
 
-    public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder,
-        KubernetesChecksExecutor kubernetesChecksExecutor)
+    public KubernetesHealthCheck(KubernetesHealthCheckBuilder builder, k8s.Kubernetes client)
     {
         _builder = Guard.ThrowIfNull(builder);
-        _kubernetesChecksExecutor = Guard.ThrowIfNull(kubernetesChecksExecutor);
+        _client = Guard.ThrowIfNull(client);
     }
 
     /// <inheritdoc />
@@ -23,7 +22,7 @@ public class KubernetesHealthCheck : IHealthCheck
         {
             foreach (var item in _builder.Options.Registrations)
             {
-                checks.Add(_kubernetesChecksExecutor.CheckAsync(item, cancellationToken));
+                checks.Add(KubernetesChecksExecutor.CheckAsync(_client, item, cancellationToken));
             }
 
             var results = await Task.WhenAll(checks).PreserveMultipleExceptions().ConfigureAwait(false);

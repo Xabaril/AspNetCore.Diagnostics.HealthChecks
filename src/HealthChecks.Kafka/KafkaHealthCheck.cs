@@ -47,5 +47,5 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
         }
     }
 
-    public void Dispose() => _producer?.Dispose();
+    public virtual void Dispose() => _producer?.Dispose();
 }

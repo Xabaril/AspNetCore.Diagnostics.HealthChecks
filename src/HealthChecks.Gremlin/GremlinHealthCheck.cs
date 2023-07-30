@@ -25,7 +25,9 @@ public class GremlinHealthCheck : IHealthCheck
             using var client = new GremlinClient(_server);
             using var conn = new DriverRemoteConnection(client);
             var g = Traversal().WithRemote(conn);
+#pragma warning disable IDISP004 // Don't ignore created IDisposable
             await g.Inject(0).Promise(t => t.Next()).ConfigureAwait(false);
+#pragma warning restore IDISP004 // Don't ignore created IDisposable
         }
         catch (Exception ex)
         {

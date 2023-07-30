@@ -5,7 +5,7 @@ namespace HealthChecks.InfluxDB
         public InfluxDBHealthCheck(InfluxDB.Client.InfluxDBClient influxDBClient) { }
         public InfluxDBHealthCheck(System.Func<InfluxDB.Client.InfluxDBClientOptions.Builder, InfluxDB.Client.InfluxDBClientOptions> _options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
-        public void Dispose() { }
+        public virtual void Dispose() { }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection

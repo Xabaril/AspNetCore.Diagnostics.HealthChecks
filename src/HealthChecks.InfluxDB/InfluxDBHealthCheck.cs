@@ -6,15 +6,20 @@ namespace HealthChecks.InfluxDB;
 
 public class InfluxDBHealthCheck : IHealthCheck, IDisposable
 {
+#pragma warning disable IDISP008 // Don't assign member with injected and created disposables
     private readonly InfluxDBClient _influxDbClient;
+#pragma warning restore IDISP008 // Don't assign member with injected and created disposables
+    private readonly bool _ownsClient;
 
     public InfluxDBHealthCheck(Func<InfluxDBClientOptions.Builder, InfluxDBClientOptions> _options)
     {
+        _ownsClient = true;
         _influxDbClient = new InfluxDBClient(_options.Invoke(InfluxDBClientOptions.Builder.CreateNew()));
     }
 
     public InfluxDBHealthCheck(InfluxDBClient influxDBClient)
     {
+        _ownsClient = false;
         _influxDbClient = influxDBClient;
     }
 
@@ -44,5 +49,9 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
         }
     }
 
-    public void Dispose() => _influxDbClient.Dispose();
+    public virtual void Dispose()
+    {
+        if (_ownsClient)
+            _influxDbClient.Dispose();
+    }
 }

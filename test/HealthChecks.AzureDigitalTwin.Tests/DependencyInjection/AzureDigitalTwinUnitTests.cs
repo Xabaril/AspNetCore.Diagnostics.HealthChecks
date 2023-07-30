@@ -9,7 +9,7 @@ public class azure_digital_twin_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwin("MyDigitalTwinClientId", "MyDigitalTwinClientSecret", "TenantId");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -26,7 +26,7 @@ public class azure_digital_twin_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwin("MyDigitalTwinClientId", "MyDigitalTwinClientSecret", "TenantId", name: "azuredigitaltwincheck");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -43,7 +43,7 @@ public class azure_digital_twin_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwin(string.Empty, string.Empty, string.Empty);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -58,7 +58,7 @@ public class azure_digital_twin_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwin(credentials: new MockServiceClientCredentials());
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -75,7 +75,7 @@ public class azure_digital_twin_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwin(new MockServiceClientCredentials(), name: "azuredigitaltwincheck");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -92,7 +92,7 @@ public class azure_digital_twin_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwin(null!);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

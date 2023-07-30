@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.Discovery.K8S
 {
-    internal class KubernetesDiscoveryHostedService : IHostedService
+    internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDisposable
     {
         private readonly KubernetesDiscoverySettings _discoveryOptions;
         private readonly ILogger<KubernetesDiscoveryHostedService> _logger;
@@ -20,6 +20,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
         private readonly KubernetesAddressFactory _addressFactory;
 
         private Task? _executingTask;
+        private bool _disposed;
 
         public KubernetesDiscoveryHostedService(
             IServiceProvider serviceProvider,
@@ -45,6 +46,17 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 : Task.CompletedTask;
         }
 
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _discoveryClient?.Dispose();
+            _disposed = true;
+        }
+
         private Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _hostLifetime.ApplicationStarted.Register(async () =>
@@ -53,7 +65,9 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                 {
                     try
                     {
+#pragma warning disable IDISP003 // Dispose previous before re-assigning
                         _discoveryClient = InitializeKubernetesClient();
+#pragma warning restore IDISP003 // Dispose previous before re-assigning
                         await StartK8sServiceAsync(cancellationToken);
                     }
                     catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)

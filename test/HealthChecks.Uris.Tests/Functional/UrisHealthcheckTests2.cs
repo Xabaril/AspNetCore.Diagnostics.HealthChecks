@@ -30,7 +30,7 @@ namespace HealthChecks.Uris.Tests.Functional
             var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
 
             result.Status.ShouldBe(HealthStatus.Healthy);
-            var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
+            using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
             client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").ShouldBeTrue();
         }
 
@@ -58,7 +58,7 @@ namespace HealthChecks.Uris.Tests.Functional
             var options = sp.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
-            var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
+            using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
             var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
 
             result.Status.ShouldBe(HealthStatus.Unhealthy);
@@ -82,7 +82,7 @@ namespace HealthChecks.Uris.Tests.Functional
             var options = sp.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var check = registration.Factory(sp);
-            var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
+            using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
             var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
 
             client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").ShouldBeTrue();
@@ -98,11 +98,11 @@ namespace HealthChecks.Uris.Tests.Functional
                 .AddHealthChecks()
                 .AddUrlGroup(new Uri(RequestUri));
 
-            var sp = services.BuildServiceProvider();
+            using var sp = services.BuildServiceProvider();
             var options = sp.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
             var registration = options.Value.Registrations.First();
             var hc = registration.Factory(sp);
-            var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
+            using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
 
             client.DefaultRequestHeaders.ShouldBeEmpty();
             hc.ShouldBeOfType<UriHealthCheck>();

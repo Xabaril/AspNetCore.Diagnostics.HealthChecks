@@ -25,9 +25,7 @@ public static class PrometheusGatewayHealthCheckBuilderExtensions
         string? instance = null)
     {
         builder.Services
-            .AddHttpClient();
-
-        builder.Services
+            .AddHttpClient()
             .AddSingleton<IHealthCheckPublisher>(sp => new PrometheusGatewayPublisher(() => sp.GetRequiredService<IHttpClientFactory>().CreateClient(), endpoint, job, instance));
 
         return builder;

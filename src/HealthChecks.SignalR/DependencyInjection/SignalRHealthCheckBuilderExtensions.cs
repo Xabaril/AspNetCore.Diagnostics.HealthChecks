@@ -32,7 +32,7 @@ public static class SignalRHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Func<HubConnection> hubConnectionBuilder = () =>
+        HubConnection hubConnectionBuilder() =>
             new HubConnectionBuilder()
                 .WithUrl(url)
                 .Build();
@@ -40,7 +40,7 @@ public static class SignalRHealthCheckBuilderExtensions
         return builder.Add(
             new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new SignalRHealthCheck(hubConnectionBuilder),
+                _ => new SignalRHealthCheck(hubConnectionBuilder),
                 failureStatus,
                 tags,
                 timeout));
@@ -70,7 +70,7 @@ public static class SignalRHealthCheckBuilderExtensions
         return builder.Add(
             new HealthCheckRegistration(
                 name ?? NAME,
-                sp => new SignalRHealthCheck(hubConnectionBuilder),
+                _ => new SignalRHealthCheck(hubConnectionBuilder),
                 failureStatus,
                 tags,
                 timeout));

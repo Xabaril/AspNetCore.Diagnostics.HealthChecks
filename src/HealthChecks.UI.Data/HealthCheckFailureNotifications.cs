@@ -1,13 +1,12 @@
-namespace HealthChecks.UI.Data
+namespace HealthChecks.UI.Data;
+
+public class HealthCheckFailureNotification
 {
-    public class HealthCheckFailureNotification
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string HealthCheckName { get; set; } = null!;
+    public string HealthCheckName { get; set; } = null!;
 
-        public DateTime LastNotified { get; set; }
+    public DateTime LastNotified { get; set; }
 
-        public bool IsUpAndRunning { get; set; }
-    }
+    public bool IsUpAndRunning { get; set; }
 }

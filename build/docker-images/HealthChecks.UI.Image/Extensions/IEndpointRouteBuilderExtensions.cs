@@ -4,66 +4,65 @@ using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Image.Extensions;
 using HealthChecks.UI.Image.PushService;
 
-namespace Microsoft.AspNetCore.Builder
+namespace Microsoft.AspNetCore.Builder;
+
+public static class IEndpointRouteBuilderExtensions
 {
-    public static class IEndpointRouteBuilderExtensions
+    public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
+        IConfiguration configuration)
     {
-        public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder,
-            IConfiguration configuration)
+        if (bool.TryParse(configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
         {
-            if (bool.TryParse(configuration[PushServiceKeys.Enabled], out bool enabled) && enabled)
-            {
-                builder.MapHealthCheckPushEndpoint(/*configuration*/);
-            }
-
-            return builder.MapHealthChecksUI(setup =>
-            {
-                setup.ConfigureStylesheet(configuration);
-                setup.ConfigurePaths(configuration);
-
-            });
+            builder.MapHealthCheckPushEndpoint(/*configuration*/);
         }
-        private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder/*, IConfiguration configuration*/)
+
+        return builder.MapHealthChecksUI(setup =>
         {
-            var logger = builder.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            logger.LogInformation("HealthChecks Push Endpoint Enabled");
+            setup.ConfigureStylesheet(configuration);
+            setup.ConfigurePaths(configuration);
 
-            builder.MapPost("/healthchecks/push", async context =>
+        });
+    }
+    private static void MapHealthCheckPushEndpoint(this IEndpointRouteBuilder builder/*, IConfiguration configuration*/)
+    {
+        var logger = builder.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("HealthChecks Push Endpoint Enabled");
+
+        builder.MapPost("/healthchecks/push", async context =>
+        {
+            if (context.Request.IsAuthenticated())
             {
-                if (context.Request.IsAuthenticated())
+                using var streamReader = new StreamReader(context.Request.Body);
+                var content = await streamReader.ReadToEndAsync();
+
+                var endpoint = JsonDocument.Parse(content);
+                var root = endpoint.RootElement;
+                var name = root.GetProperty("name").GetString();
+                var uri = root.GetProperty("uri").GetString();
+                var type = root.GetProperty("type").GetInt16();
+
+                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(uri))
                 {
-                    using var streamReader = new StreamReader(context.Request.Body);
-                    var content = await streamReader.ReadToEndAsync();
+                    var pushService = context.RequestServices.GetRequiredService<HealthChecksPushService>();
 
-                    var endpoint = JsonDocument.Parse(content);
-                    var root = endpoint.RootElement;
-                    var name = root.GetProperty("name").GetString();
-                    var uri = root.GetProperty("uri").GetString();
-                    var type = root.GetProperty("type").GetInt16();
-
-                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(uri))
+                    if (type == PushServiceKeys.ServiceAdded)
                     {
-                        var pushService = context.RequestServices.GetRequiredService<HealthChecksPushService>();
-
-                        if (type == PushServiceKeys.ServiceAdded)
-                        {
-                            await pushService.AddAsync(name, uri);
-                        }
-                        else if (type == PushServiceKeys.ServiceRemoved)
-                        {
-                            await pushService.RemoveAsync(name);
-                        }
-                        else if (type == PushServiceKeys.ServiceUpdated)
-                        {
-                            await pushService.UpdateAsync(name, uri);
-                        }
+                        await pushService.AddAsync(name, uri);
+                    }
+                    else if (type == PushServiceKeys.ServiceRemoved)
+                    {
+                        await pushService.RemoveAsync(name);
+                    }
+                    else if (type == PushServiceKeys.ServiceUpdated)
+                    {
+                        await pushService.UpdateAsync(name, uri);
                     }
                 }
-                else
-                {
-                    context.Response.StatusCode = 401;
-                }
-            });
-        }
+            }
+            else
+            {
+                context.Response.StatusCode = 401;
+            }
+        });
     }
 }

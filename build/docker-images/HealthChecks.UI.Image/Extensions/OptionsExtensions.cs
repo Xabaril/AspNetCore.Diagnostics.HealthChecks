@@ -1,49 +1,48 @@
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Image.Configuration;
 
-namespace HealthChecks.UI.Image.Extensions
+namespace HealthChecks.UI.Image.Extensions;
+
+public static class OptionsExtensions
 {
-    public static class OptionsExtensions
+    public static void ConfigureStylesheet(this Options options, IConfiguration configuration)
     {
-        public static void ConfigureStylesheet(this Options options, IConfiguration configuration)
-        {
-            var uiStylesheet = configuration[UIKeys.UI_STYLESHEET];
+        var uiStylesheet = configuration[UIKeys.UI_STYLESHEET];
 
-            if (!string.IsNullOrEmpty(uiStylesheet))
-            {
-                options.AddCustomStylesheet(uiStylesheet);
-            }
+        if (!string.IsNullOrEmpty(uiStylesheet))
+        {
+            options.AddCustomStylesheet(uiStylesheet);
         }
-        public static void ConfigurePaths(this Options options, IConfiguration configuration)
+    }
+    public static void ConfigurePaths(this Options options, IConfiguration configuration)
+    {
+        var uiPath = configuration[UIKeys.UI_PATH];
+        var apiPath = configuration[UIKeys.UI_API_PATH];
+        var resourcesPath = configuration[UIKeys.UI_RESOURCES_PATH];
+        var webhooksPath = configuration[UIKeys.UI_WEBHOOKS_PATH];
+        var relativePaths = configuration[UIKeys.UI_NO_RELATIVE_PATHS];
+
+        bool disableRelativePaths = false;
+
+        if (!string.IsNullOrEmpty(relativePaths))
         {
-            var uiPath = configuration[UIKeys.UI_PATH];
-            var apiPath = configuration[UIKeys.UI_API_PATH];
-            var resourcesPath = configuration[UIKeys.UI_RESOURCES_PATH];
-            var webhooksPath = configuration[UIKeys.UI_WEBHOOKS_PATH];
-            var relativePaths = configuration[UIKeys.UI_NO_RELATIVE_PATHS];
+            bool.TryParse(relativePaths, out disableRelativePaths);
+        }
 
-            bool disableRelativePaths = false;
+        if (!string.IsNullOrEmpty(uiPath))
+            options.UIPath = uiPath;
+        if (!string.IsNullOrEmpty(apiPath))
+            options.ApiPath = apiPath;
+        if (!string.IsNullOrEmpty(resourcesPath))
+            options.ResourcesPath = resourcesPath;
+        if (!string.IsNullOrEmpty(webhooksPath))
+            options.WebhookPath = webhooksPath;
 
-            if (!string.IsNullOrEmpty(relativePaths))
-            {
-                bool.TryParse(relativePaths, out disableRelativePaths);
-            }
-
-            if (!string.IsNullOrEmpty(uiPath))
-                options.UIPath = uiPath;
-            if (!string.IsNullOrEmpty(apiPath))
-                options.ApiPath = apiPath;
-            if (!string.IsNullOrEmpty(resourcesPath))
-                options.ResourcesPath = resourcesPath;
-            if (!string.IsNullOrEmpty(webhooksPath))
-                options.WebhookPath = webhooksPath;
-
-            if (disableRelativePaths)
-            {
-                options.UseRelativeApiPath = false;
-                options.UseRelativeResourcesPath = false;
-                options.UseRelativeWebhookPath = false;
-            }
+        if (disableRelativePaths)
+        {
+            options.UseRelativeApiPath = false;
+            options.UseRelativeResourcesPath = false;
+            options.UseRelativeWebhookPath = false;
         }
     }
 }

@@ -1,18 +1,17 @@
-namespace HealthChecks.UI.K8s.Operator
+namespace HealthChecks.UI.K8s.Operator;
+
+public static class AsyncExtensions
 {
-    public static class AsyncExtensions
+    public static Task WaitAsync(this CancellationToken token)
     {
-        public static Task WaitAsync(this CancellationToken token)
-        {
-            var tsc = new TaskCompletionSource<bool>();
-            token.Register(CancellationTokenCallback, tsc);
+        var tsc = new TaskCompletionSource<bool>();
+        token.Register(CancellationTokenCallback, tsc);
 
-            return token.IsCancellationRequested ? Task.CompletedTask : tsc.Task;
-        }
+        return token.IsCancellationRequested ? Task.CompletedTask : tsc.Task;
+    }
 
-        public static void CancellationTokenCallback(object? taskCompletionSource)
-        {
-            ((TaskCompletionSource<bool>)taskCompletionSource!).SetResult(true);
-        }
+    public static void CancellationTokenCallback(object? taskCompletionSource)
+    {
+        ((TaskCompletionSource<bool>)taskCompletionSource!).SetResult(true);
     }
 }

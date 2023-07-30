@@ -1,19 +1,18 @@
 using HealthChecks.UI.Core;
 
-namespace HealthChecks.UI.Data
+namespace HealthChecks.UI.Data;
+
+public class HealthCheckExecutionEntry
 {
-    public class HealthCheckExecutionEntry
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public UIHealthStatus Status { get; set; }
+    public UIHealthStatus Status { get; set; }
 
-        public string? Description { get; set; }
+    public string? Description { get; set; }
 
-        public TimeSpan Duration { get; set; }
+    public TimeSpan Duration { get; set; }
 
-        public List<string>? Tags { get; set; }
-    }
+    public List<string>? Tags { get; set; }
 }

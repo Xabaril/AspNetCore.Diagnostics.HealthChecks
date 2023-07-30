@@ -1,25 +1,24 @@
 using HealthChecks.UI.Configuration;
 
-namespace HealthChecks.UI.Core
+namespace HealthChecks.UI.Core;
+
+public class UIStylesheet
 {
-    public class UIStylesheet
+    private const string STYLESHEETS_PATH = "css";
+
+    public string FileName { get; }
+    public byte[] Content { get; }
+    public string ResourcePath { get; }
+
+    private UIStylesheet(Options options, string filePath)
     {
-        private const string STYLESHEETS_PATH = "css";
+        FileName = Path.GetFileName(filePath);
+        Content = File.ReadAllBytes(filePath);
+        ResourcePath = $"{options.ResourcesPath}/{STYLESHEETS_PATH}/{FileName}";
+    }
 
-        public string FileName { get; }
-        public byte[] Content { get; }
-        public string ResourcePath { get; }
-
-        private UIStylesheet(Options options, string filePath)
-        {
-            FileName = Path.GetFileName(filePath);
-            Content = File.ReadAllBytes(filePath);
-            ResourcePath = $"{options.ResourcesPath}/{STYLESHEETS_PATH}/{FileName}";
-        }
-
-        public static UIStylesheet Create(Options options, string filePath)
-        {
-            return new UIStylesheet(options, filePath);
-        }
+    public static UIStylesheet Create(Options options, string filePath)
+    {
+        return new UIStylesheet(options, filePath);
     }
 }

@@ -2,45 +2,44 @@ using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
 using Microsoft.Extensions.Hosting;
 
-namespace HealthChecks.UI.Tests
+namespace HealthChecks.UI.Tests;
+
+public class HostBuilderHelper
 {
-    public class HostBuilderHelper
+    public static IWebHostBuilder Create(ManualResetEventSlim hostReset, ManualResetEventSlim? collectorReset = null, Action<HealthChecksUIBuilder>? configureUI = null)
     {
-        public static IWebHostBuilder Create(ManualResetEventSlim hostReset, ManualResetEventSlim? collectorReset = null, Action<HealthChecksUIBuilder>? configureUI = null)
-        {
-            return new WebHostBuilder()
-               .ConfigureServices(services =>
-               {
-                   var builder = services
-                   .AddRouting()
-                   .AddHealthChecks()
-                   .AddCheck("check1", () => HealthCheckResult.Healthy())
-                   .Services
-                   .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint(ProviderTestHelper.Endpoints[0].Name, ProviderTestHelper.Endpoints[0].Uri));
+        return new WebHostBuilder()
+           .ConfigureServices(services =>
+           {
+               var builder = services
+               .AddRouting()
+               .AddHealthChecks()
+               .AddCheck("check1", () => HealthCheckResult.Healthy())
+               .Services
+               .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint(ProviderTestHelper.Endpoints[0].Name, ProviderTestHelper.Endpoints[0].Uri));
 
-                   configureUI?.Invoke(builder);
+               configureUI?.Invoke(builder);
 
-                   if (collectorReset != null)
-                   {
-                       services.AddTransient<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(collectorReset));
-                   }
-               }).Configure(app =>
+               if (collectorReset != null)
                {
-                   app
-                   .UseRouting()
-                   .UseEndpoints(endpoints =>
+                   services.AddTransient<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(collectorReset));
+               }
+           }).Configure(app =>
+           {
+               app
+               .UseRouting()
+               .UseEndpoints(endpoints =>
+               {
+                   endpoints.MapHealthChecks("/health", new HealthCheckOptions
                    {
-                       endpoints.MapHealthChecks("/health", new HealthCheckOptions
-                       {
-                           Predicate = r => true,
-                           ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                       });
-                       endpoints.MapHealthChecksUI();
+                       Predicate = r => true,
+                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                    });
-
-                   var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-                   lifetime.ApplicationStarted.Register(() => hostReset.Set());
+                   endpoints.MapHealthChecksUI();
                });
-        }
+
+               var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
+               lifetime.ApplicationStarted.Register(() => hostReset.Set());
+           });
     }
 }

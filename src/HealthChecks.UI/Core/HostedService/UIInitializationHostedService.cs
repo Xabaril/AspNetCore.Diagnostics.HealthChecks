@@ -7,106 +7,105 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace HealthChecks.UI.Core.HostedService
+namespace HealthChecks.UI.Core.HostedService;
+
+internal class UIInitializationHostedService : IHostedService
 {
-    internal class UIInitializationHostedService : IHostedService
+    private readonly IServiceProvider _provider;
+    private readonly ILogger<UIInitializationHostedService> _logger;
+    private readonly Settings _settings;
+
+    public UIInitializationHostedService(
+        IServiceProvider provider,
+        ILogger<UIInitializationHostedService> logger,
+        IOptions<Settings> settings)
     {
-        private readonly IServiceProvider _provider;
-        private readonly ILogger<UIInitializationHostedService> _logger;
-        private readonly Settings _settings;
+        _provider = Guard.ThrowIfNull(provider);
+        _logger = Guard.ThrowIfNull(logger);
+        _settings = Guard.ThrowIfNull(settings?.Value);
+    }
 
-        public UIInitializationHostedService(
-            IServiceProvider provider,
-            ILogger<UIInitializationHostedService> logger,
-            IOptions<Settings> settings)
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Initializing UI Database");
+        var scopeFactory = _provider.GetRequiredService<IServiceScopeFactory>();
+        using var scope = scopeFactory.CreateScope();
+
+        await InitializeDatabaseAsync(scope.ServiceProvider);
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
+    private async Task InitializeDatabaseAsync(IServiceProvider sp)
+    {
+        var context = sp.GetRequiredService<HealthChecksDb>();
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        var settings = sp.GetRequiredService<IOptions<Settings>>();
+
+        if (await ShouldMigrateDatabaseAsync(context))
         {
-            _provider = Guard.ThrowIfNull(provider);
-            _logger = Guard.ThrowIfNull(logger);
-            _settings = Guard.ThrowIfNull(settings?.Value);
+            _logger.LogInformation("Executing database migrations");
+            await context.Database.MigrateAsync();
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Initializing UI Database");
-            var scopeFactory = _provider.GetRequiredService<IServiceScopeFactory>();
-            using var scope = scopeFactory.CreateScope();
+        var healthCheckConfigurations = settings.Value?
+                            .HealthChecks?
+                            .Select(s => new HealthCheckConfiguration
+                            {
+                                Name = s.Name,
+                                Uri = s.Uri
+                            });
 
-            await InitializeDatabaseAsync(scope.ServiceProvider);
+        bool isInitialized = await context.Configurations.AnyAsync();
+
+        if (!isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
+        {
+            _logger.LogInformation("Saving healthchecks configuration to database");
+
+            await context.Configurations
+                 .AddRangeAsync(healthCheckConfigurations);
+
         }
-
-        public Task StopAsync(CancellationToken cancellationToken)
+        else if (isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
         {
-            return Task.CompletedTask;
-        }
+            var dbConfigurations = await context.Configurations.ToListAsync();
 
-        private async Task InitializeDatabaseAsync(IServiceProvider sp)
-        {
-            var context = sp.GetRequiredService<HealthChecksDb>();
-            var configuration = sp.GetRequiredService<IConfiguration>();
-            var settings = sp.GetRequiredService<IOptions<Settings>>();
+            var existingConfigurations = dbConfigurations
+                .Where(hc => healthCheckConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
 
-            if (await ShouldMigrateDatabaseAsync(context))
+            foreach (var item in existingConfigurations)
             {
-                _logger.LogInformation("Executing database migrations");
-                await context.Database.MigrateAsync();
-            }
-
-            var healthCheckConfigurations = settings.Value?
-                                .HealthChecks?
-                                .Select(s => new HealthCheckConfiguration
-                                {
-                                    Name = s.Name,
-                                    Uri = s.Uri
-                                });
-
-            bool isInitialized = await context.Configurations.AnyAsync();
-
-            if (!isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
-            {
-                _logger.LogInformation("Saving healthchecks configuration to database");
-
-                await context.Configurations
-                     .AddRangeAsync(healthCheckConfigurations);
-
-            }
-            else if (isInitialized && healthCheckConfigurations != null && healthCheckConfigurations.Any())
-            {
-                var dbConfigurations = await context.Configurations.ToListAsync();
-
-                var existingConfigurations = dbConfigurations
-                    .Where(hc => healthCheckConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
-
-                foreach (var item in existingConfigurations)
+                var uri = healthCheckConfigurations.First(hc => hc.Name == item.Name).Uri;
+                if (!uri.Equals(item.Uri, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var uri = healthCheckConfigurations.First(hc => hc.Name == item.Name).Uri;
-                    if (!uri.Equals(item.Uri, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        item.Uri = uri;
-                        _logger.LogInformation("Updating service {service} to new uri: {uri}", item.Name, item.Uri);
-                    }
-                }
-
-                var newConfigurations = healthCheckConfigurations
-                    .Where(hc => !dbConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
-
-                if (newConfigurations != null)
-                {
-                    foreach (var item in newConfigurations)
-                    {
-                        _logger.LogInformation("Adding new service {service} to database", item.Name);
-                        await context.AddAsync(item);
-                    }
+                    item.Uri = uri;
+                    _logger.LogInformation("Updating service {service} to new uri: {uri}", item.Name, item.Uri);
                 }
             }
 
-            await context.SaveChangesAsync();
+            var newConfigurations = healthCheckConfigurations
+                .Where(hc => !dbConfigurations.Any(dbc => string.Equals(hc.Name, dbc.Name, StringComparison.InvariantCultureIgnoreCase)));
+
+            if (newConfigurations != null)
+            {
+                foreach (var item in newConfigurations)
+                {
+                    _logger.LogInformation("Adding new service {service} to database", item.Name);
+                    await context.AddAsync(item);
+                }
+            }
         }
 
-        private async Task<bool> ShouldMigrateDatabaseAsync(HealthChecksDb context)
-        {
-            return !_settings.DisableMigrations &&
-                !context.Database.IsInMemory() &&
-                (await context.Database.GetPendingMigrationsAsync()).Any();
-        }
+        await context.SaveChangesAsync();
+    }
+
+    private async Task<bool> ShouldMigrateDatabaseAsync(HealthChecksDb context)
+    {
+        return !_settings.DisableMigrations &&
+            !context.Database.IsInMemory() &&
+            (await context.Database.GetPendingMigrationsAsync()).Any();
     }
 }

@@ -11,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SignalRHealthCheckBuilderExtensions
     {
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSignalRHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<Microsoft.AspNetCore.SignalR.Client.HubConnection> hubConnectionBuilder, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSignalRHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, System.Func<Microsoft.AspNetCore.SignalR.Client.HubConnection>> hubConnectionBuilderFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSignalRHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string url, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

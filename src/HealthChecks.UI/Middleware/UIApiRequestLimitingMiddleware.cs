@@ -2,61 +2,60 @@ using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-namespace HealthChecks.UI.Middleware
+namespace HealthChecks.UI.Middleware;
+
+internal sealed class UIApiRequestLimitingMiddleware : IDisposable
 {
-    internal sealed class UIApiRequestLimitingMiddleware : IDisposable
+    private readonly RequestDelegate _next;
+    private readonly IOptions<Settings> _settings;
+    private readonly ILogger<UIApiEndpointMiddleware> _logger;
+    private readonly SemaphoreSlim _semaphore;
+    private bool _disposed;
+
+    public UIApiRequestLimitingMiddleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly IOptions<Settings> _settings;
-        private readonly ILogger<UIApiEndpointMiddleware> _logger;
-        private readonly SemaphoreSlim _semaphore;
-        private bool _disposed;
+        _next = Guard.ThrowIfNull(next);
+        _settings = Guard.ThrowIfNull(settings);
+        _logger = Guard.ThrowIfNull(logger);
 
-        public UIApiRequestLimitingMiddleware(RequestDelegate next, IOptions<Settings> settings, ILogger<UIApiEndpointMiddleware> logger)
+        var maxActiveRequests = _settings.Value.ApiMaxActiveRequests;
+
+        if (maxActiveRequests <= 0)
         {
-            _next = Guard.ThrowIfNull(next);
-            _settings = Guard.ThrowIfNull(settings);
-            _logger = Guard.ThrowIfNull(logger);
-
-            var maxActiveRequests = _settings.Value.ApiMaxActiveRequests;
-
-            if (maxActiveRequests <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(maxActiveRequests));
-            }
-
-            _semaphore = new SemaphoreSlim(maxActiveRequests, maxActiveRequests);
+            throw new ArgumentOutOfRangeException(nameof(maxActiveRequests));
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        _semaphore = new SemaphoreSlim(maxActiveRequests, maxActiveRequests);
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        if (!await _semaphore.WaitAsync(TimeSpan.Zero).ConfigureAwait(false))
         {
-            if (!await _semaphore.WaitAsync(TimeSpan.Zero).ConfigureAwait(false))
-            {
-                context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-                return;
-            }
-
-            try
-            {
-                _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}", context.Connection.RemoteIpAddress, _semaphore.CurrentCount);
-
-                await _next(context).ConfigureAwait(false);
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
+            context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+            return;
         }
 
-        public void Dispose()
+        try
         {
-            if (_disposed)
-            {
-                return;
-            }
+            _logger.LogDebug("Executing api middleware for client {client}, remaining slots: {slots}", context.Connection.RemoteIpAddress, _semaphore.CurrentCount);
 
-            _semaphore.Dispose();
-            _disposed = true;
+            await _next(context).ConfigureAwait(false);
         }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _semaphore.Dispose();
+        _disposed = true;
     }
 }

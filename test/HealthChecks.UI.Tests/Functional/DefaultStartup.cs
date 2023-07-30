@@ -1,13 +1,12 @@
-namespace HealthChecks.UI.Tests
-{
-    public class DefaultStartup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-        }
+namespace HealthChecks.UI.Tests;
 
-        public void Configure(IApplicationBuilder app)
-        {
-        }
+public class DefaultStartup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+    }
+
+    public void Configure(IApplicationBuilder app)
+    {
     }
 }

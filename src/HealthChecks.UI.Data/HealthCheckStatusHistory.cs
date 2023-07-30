@@ -1,17 +1,16 @@
 using HealthChecks.UI.Core;
 
-namespace HealthChecks.UI.Data
+namespace HealthChecks.UI.Data;
+
+public class HealthCheckExecutionHistory
 {
-    public class HealthCheckExecutionHistory
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public string? Description { get; set; }
+    public string? Description { get; set; }
 
-        public UIHealthStatus Status { get; set; }
+    public UIHealthStatus Status { get; set; }
 
-        public DateTime On { get; set; }
-    }
+    public DateTime On { get; set; }
 }

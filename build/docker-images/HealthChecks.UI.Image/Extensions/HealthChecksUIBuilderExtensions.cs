@@ -1,39 +1,38 @@
 using HealthChecks.UI.Image.Configuration;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class HealthChecksUIBuilderExtensions
 {
-    public static class HealthChecksUIBuilderExtensions
+    public static IServiceCollection AddStorageProvider(this HealthChecksUIBuilder builder, IConfiguration configuration)
     {
-        public static IServiceCollection AddStorageProvider(this HealthChecksUIBuilder builder, IConfiguration configuration)
+        string? configuredStorage = configuration[UIKeys.STORAGE_PROVIDER];
+        string? connectionString = configuration[UIKeys.STORAGE_CONNECTION];
+
+        if (string.IsNullOrEmpty(configuredStorage))
+            configuredStorage = StorageProviderEnum.InMemory.ToString();
+
+        if (Enum.TryParse(configuredStorage, out StorageProviderEnum storageEnum))
         {
-            string? configuredStorage = configuration[UIKeys.STORAGE_PROVIDER];
-            string? connectionString = configuration[UIKeys.STORAGE_CONNECTION];
+            var providers = Storage.GetProviders();
 
-            if (string.IsNullOrEmpty(configuredStorage))
-                configuredStorage = StorageProviderEnum.InMemory.ToString();
+            var targetProvider = providers[storageEnum];
 
-            if (Enum.TryParse(configuredStorage, out StorageProviderEnum storageEnum))
+            if (targetProvider.RequiresConnectionString && string.IsNullOrEmpty(connectionString))
             {
-                var providers = Storage.GetProviders();
-
-                var targetProvider = providers[storageEnum];
-
-                if (targetProvider.RequiresConnectionString && string.IsNullOrEmpty(connectionString))
-                {
-                    throw new ArgumentNullException($"{UIKeys.STORAGE_CONNECTION} value has not been configured and it's required for {storageEnum}");
-                }
-
-                Console.WriteLine($"Configuring image to work with {storageEnum} provider");
-
-                targetProvider.SetupProvider(builder, connectionString!);
-            }
-            else
-            {
-                throw new ArgumentException($"Variable {UIKeys.STORAGE_PROVIDER} has an invalid value: {configuredStorage}." +
-                    $" Available providers are {string.Join(" , ", Enum.GetNames(typeof(StorageProviderEnum)))}");
+                throw new ArgumentNullException($"{UIKeys.STORAGE_CONNECTION} value has not been configured and it's required for {storageEnum}");
             }
 
-            return builder.Services;
+            Console.WriteLine($"Configuring image to work with {storageEnum} provider");
+
+            targetProvider.SetupProvider(builder, connectionString!);
         }
+        else
+        {
+            throw new ArgumentException($"Variable {UIKeys.STORAGE_PROVIDER} has an invalid value: {configuredStorage}." +
+                $" Available providers are {string.Join(" , ", Enum.GetNames(typeof(StorageProviderEnum)))}");
+        }
+
+        return builder.Services;
     }
 }

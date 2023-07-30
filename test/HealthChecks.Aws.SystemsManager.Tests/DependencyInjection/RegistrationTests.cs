@@ -97,7 +97,7 @@ public class aws_systems_manager_registration_should
                 setup.RegionEndpoint = RegionEndpoint.EUCentral1;
             });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -118,7 +118,7 @@ public class aws_systems_manager_registration_should
                 setup.RegionEndpoint = RegionEndpoint.EUCentral1;
             });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

@@ -90,7 +90,7 @@ public class nats_healthcheck_should
                         tags: Tags))
             .Configure(ConfigureApplicationBuilder);
 
-        var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
         var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync().ConfigureAwait(false);
 
@@ -108,7 +108,7 @@ public class nats_healthcheck_should
                         tags: Tags))
             .Configure(ConfigureApplicationBuilder);
 
-        var server = new TestServer(webHostBuilder);
+        using var server = new TestServer(webHostBuilder);
 
         var response = await server.CreateRequest(HealthRequestRelativePath).GetAsync().ConfigureAwait(false);
 

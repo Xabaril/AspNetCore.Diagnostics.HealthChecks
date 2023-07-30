@@ -23,7 +23,9 @@ public class FtpHealthCheck : IHealthCheck
             {
                 var ftpRequest = CreateFtpWebRequest(host, createFile, credentials);
 
+#pragma warning disable IDISP004 // Don't ignore created IDisposable
                 using var ftpResponse = (FtpWebResponse)await ftpRequest.GetResponseAsync().WithCancellationTokenAsync(cancellationToken).ConfigureAwait(false);
+#pragma warning restore IDISP004 // Don't ignore created IDisposable
 
                 if (ftpResponse.StatusCode != FtpStatusCode.PathnameCreated && ftpResponse.StatusCode != FtpStatusCode.ClosingData)
                 {

@@ -33,7 +33,9 @@ public sealed class NatsHealthCheck : IHealthCheck, IDisposable
             IConnection? connection = _connection;
             if (connection == null)
             {
+#pragma warning disable IDISP001 // Dispose created [false positive, https://github.com/DotNetAnalyzers/IDisposableAnalyzers/issues/515]
                 connection = CreateConnection(_options);
+#pragma warning restore IDISP001 // Dispose created
                 var exchanged = Interlocked.CompareExchange(ref _connection, connection, null);
                 if (exchanged != null) // was set by other thread
                 {

@@ -678,4 +678,5 @@ answering [questions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthCh
 1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
 2. Follow the code guidelines and conventions.
 3. New features are not only code, tests and documentation are also mandatory.
-4. PRs with [`Ups for grabs`](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/Ups%20for%20grabs) tag are good candidates to contribute. 
+4. PRs with [`Ups for grabs`](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/Ups%20for%20grabs)
+and [help wanted](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/help%20wanted) tags are good candidates to contribute. 

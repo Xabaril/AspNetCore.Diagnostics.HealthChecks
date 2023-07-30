@@ -16,7 +16,7 @@ public class azure_digital_twin_model_registration_should
                 "https://my-awesome-dt-host",
                 new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -39,7 +39,7 @@ public class azure_digital_twin_model_registration_should
                 new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" },
                 name: "azuredigitaltwinmodels_check");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -56,12 +56,12 @@ public class azure_digital_twin_model_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwinModels(string.Empty, string.Empty, string.Empty, string.Empty, new string[] { });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
 
-        Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class azure_digital_twin_model_registration_should
                 "https://my-awesome-dt-host",
                 new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -95,7 +95,7 @@ public class azure_digital_twin_model_registration_should
                 new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" },
                 name: "azuredigitaltwinmodels_check");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
@@ -112,11 +112,11 @@ public class azure_digital_twin_model_registration_should
         services.AddHealthChecks()
             .AddAzureDigitalTwinModels(new AzureCliCredential(), string.Empty, new string[] { });
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
 
-        Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
     }
 }

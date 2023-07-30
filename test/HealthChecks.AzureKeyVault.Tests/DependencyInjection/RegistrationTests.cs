@@ -48,7 +48,7 @@ public class azure_keyvault_registration_should
     {
         var services = new ServiceCollection();
 
-        Assert.Throws<ArgumentNullException>(() =>
+        Should.Throw<ArgumentNullException>(() =>
         {
             services.AddHealthChecks()
             .AddAzureKeyVault(null!, new MockTokenCredentials(), setup =>
@@ -65,7 +65,7 @@ public class azure_keyvault_registration_should
     {
         var services = new ServiceCollection();
 
-        Assert.Throws<ArgumentNullException>(() =>
+        Should.Throw<ArgumentNullException>(() =>
         {
             services.AddHealthChecks()
             .AddAzureKeyVault((Uri)null!, new MockTokenCredentials(), (_, setup) =>
@@ -82,7 +82,7 @@ public class azure_keyvault_registration_should
     {
         var services = new ServiceCollection();
 
-        Assert.Throws<ArgumentNullException>(() =>
+        Should.Throw<ArgumentNullException>(() =>
         {
             services.AddHealthChecks()
                 .AddAzureKeyVault(new Uri("http://localhost"), null!, setup =>

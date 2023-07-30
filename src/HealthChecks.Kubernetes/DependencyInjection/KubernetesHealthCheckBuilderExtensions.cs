@@ -37,12 +37,15 @@ public static class KubernetesHealthCheckBuilderExtensions
 
         Guard.ThrowIfNull(kubernetesHealthCheckBuilder.Configuration);
 
+#pragma warning disable IDISP001 // Dispose created [by design, will be disposed by DisposalHostedService when app stops]
         var client = new Kubernetes(kubernetesHealthCheckBuilder.Configuration);
-        var kubernetesChecksExecutor = new KubernetesChecksExecutor(client);
+#pragma warning restore IDISP001 // Dispose created
+
+        builder.Services.AddHostedService(_ => new DisposalHostedService(client));
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new KubernetesHealthCheck(kubernetesHealthCheckBuilder, kubernetesChecksExecutor),
+            _ => new KubernetesHealthCheck(kubernetesHealthCheckBuilder, client),
             failureStatus,
             tags,
             timeout));

@@ -133,7 +133,7 @@ public class aws_sns_registration_should
         services.AddHealthChecks()
             .AddSnsTopicsAndSubscriptions(setup => setup.RegionEndpoint = RegionEndpoint.EUCentral1);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

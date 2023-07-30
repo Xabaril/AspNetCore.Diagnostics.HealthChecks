@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Builder
 
             var apiDelegate =
                 builder.CreateApplicationBuilder()
-                    .UseMiddleware<UIApiRequestLimitingMidleware>()
+                    .UseMiddleware<UIApiRequestLimitingMiddleware>()
                     .UseMiddleware<UIApiEndpointMiddleware>()
                     .Build();
 

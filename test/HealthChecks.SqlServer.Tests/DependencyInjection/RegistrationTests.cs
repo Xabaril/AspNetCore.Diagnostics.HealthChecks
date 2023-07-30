@@ -30,7 +30,7 @@ public class sql_server_registration_should
         Action<SqlConnection> beforeOpen = connection =>
         {
             invoked = true;
-            Assert.Equal(connectionstring, connection.ConnectionString);
+            connection.ConnectionString.ShouldBe(connectionstring);
         };
         services.AddHealthChecks()
             .AddSqlServer(connectionstring, configure: beforeOpen);
@@ -42,7 +42,7 @@ public class sql_server_registration_should
         var check = registration.Factory(serviceProvider);
 
         Record.ExceptionAsync(() => check.CheckHealthAsync(new HealthCheckContext())).GetAwaiter().GetResult();
-        Assert.True(invoked);
+        invoked.ShouldBeTrue();
     }
 
     [Fact]

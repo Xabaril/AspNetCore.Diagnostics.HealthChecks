@@ -38,7 +38,9 @@ public class SftpConfigurationBuilder
         memoryStream.Write(keyBytes, 0, keyBytes.Length);
         memoryStream.Seek(0, SeekOrigin.Begin);
 
+#pragma warning disable IDISP001 // Dispose created
         var privateKeyFile = new PrivateKeyFile(memoryStream, passphrase);
+#pragma warning restore IDISP001 // Dispose created
 
         AuthenticationMethods.Add(new PrivateKeyAuthenticationMethod(_userName, privateKeyFile));
 

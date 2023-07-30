@@ -34,7 +34,7 @@ public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
         return Task.FromResult(IsApplicationRunning ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         _ctRegistration.Dispose();
         _ctRegistration = default;

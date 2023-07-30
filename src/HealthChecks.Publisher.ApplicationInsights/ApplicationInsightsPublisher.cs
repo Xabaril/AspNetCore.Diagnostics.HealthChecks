@@ -17,20 +17,17 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
     private static readonly object _syncRoot = new object();
     private readonly TelemetryConfiguration? _telemetryConfiguration;
     private readonly string? _connectionString;
-    private readonly string? _instrumentationKey;
     private readonly bool _saveDetailedReport;
     private readonly bool _excludeHealthyReports;
 
     public ApplicationInsightsPublisher(
         IOptions<TelemetryConfiguration>? telemetryConfiguration,
         string? connectionString = default,
-        string? instrumentationKey = default,
         bool saveDetailedReport = false,
         bool excludeHealthyReports = false)
     {
         _telemetryConfiguration = telemetryConfiguration?.Value;
         _connectionString = connectionString;
-        _instrumentationKey = instrumentationKey;
         _saveDetailedReport = saveDetailedReport;
         _excludeHealthyReports = excludeHealthyReports;
     }
@@ -114,14 +111,11 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
                 if (_client == null)
                 {
                     // Create TelemetryConfiguration
-                    // Hierachy: _connectionString > _instrumentationKey > _telemetryConfiguration
-#pragma warning disable CS0618 // Type or member is obsolete
-                    var configuration = string.IsNullOrWhiteSpace(_connectionString)
-                        ? string.IsNullOrWhiteSpace(_instrumentationKey)
-                            ? _telemetryConfiguration
-                            : new TelemetryConfiguration(_instrumentationKey)
-                        : new TelemetryConfiguration { ConnectionString = _connectionString };
-#pragma warning restore CS0618 // Type or member is obsolete
+                    // Hierachy: _connectionString > _telemetryConfiguration
+                    var configuration = (!string.IsNullOrWhiteSpace(_connectionString)
+                        ? new TelemetryConfiguration { ConnectionString = _connectionString }
+                        : _telemetryConfiguration)
+                            ?? throw new ArgumentException("A connection string or TelemetryConfiguration must be set!");
 
                     _client = new TelemetryClient(configuration);
                 }

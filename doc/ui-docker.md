@@ -123,6 +123,8 @@ services:
       - Logging:LogLevel:HealthChecks=Debug
     ports:
       - 5000:80
+    volumes:
+      - config:/config
   sqlserver:
     image: mcr.microsoft.com/mssql/server
     environment:
@@ -136,4 +138,6 @@ services:
       timeout: 3s
       retries: 10
       start_period: 10s
+volumes:
+  config:
 ```

@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.100.40" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.200.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
   </ItemGroup>
 
 </Project>

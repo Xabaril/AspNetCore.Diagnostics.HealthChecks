@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.20.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
   </ItemGroup>
 
 </Project>

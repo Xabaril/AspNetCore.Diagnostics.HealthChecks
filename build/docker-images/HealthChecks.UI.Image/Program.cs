@@ -23,6 +23,7 @@ namespace HealthChecks.UI.Image
                         {
                             builder.UseAzureAppConfiguration();
                         }
+                        builder.AddJsonFile("/config/config.json", true);
 
                     })
                     .UseStartup<Startup>();

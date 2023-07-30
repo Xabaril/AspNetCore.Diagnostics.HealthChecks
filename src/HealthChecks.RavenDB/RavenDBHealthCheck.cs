@@ -36,6 +36,7 @@ public class RavenDBHealthCheck : IHealthCheck
     }
 
     /// <inheritdoc />
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP004:Don't ignore created IDisposable", Justification = "DocumentStore instances are static")]
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

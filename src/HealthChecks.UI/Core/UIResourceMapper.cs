@@ -38,7 +38,7 @@ namespace HealthChecks.UI.Core
                     context.Response.OnStarting(() =>
                     {
                         // prevent user add previous middleware in the pipeline
-                        // and set the cache-control 
+                        // and set the cache-control
 
                         if (!context.Response.Headers.ContainsKey("Cache-Control"))
                         {

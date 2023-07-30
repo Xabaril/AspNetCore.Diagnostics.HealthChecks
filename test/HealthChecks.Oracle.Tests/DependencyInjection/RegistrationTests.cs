@@ -43,7 +43,7 @@ public class oracle_registration_should
         services.AddHealthChecks()
             .AddOracle(_ => "connectionstring");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

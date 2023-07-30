@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.UI.Core.Notifications
 {
-    internal class WebHookFailureNotifier : IHealthCheckFailureNotifier
+    internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDisposable
     {
         private readonly ILogger<WebHookFailureNotifier> _logger;
         private readonly Settings _settings;
@@ -139,14 +139,13 @@ namespace HealthChecks.UI.Core.Notifications
             }
             catch (Exception exception)
             {
-                _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
+                _logger.LogError(exception, $"The failure notification for {name} has not executed successfully.");
             }
         }
 
         private string GetFailedMessageFromContent(UIHealthReport healthReport)
         {
-            var failedChecks = healthReport.Entries.Values
-                .Count(c => c.Status != UIHealthStatus.Healthy);
+            var failedChecks = healthReport.Entries?.Values.Count(c => c.Status != UIHealthStatus.Healthy) ?? 0;
             var plural = PluralizeHealthcheck(failedChecks);
 
             return $"There {plural.plural} at least {failedChecks} {plural.noun} failing.";
@@ -163,6 +162,7 @@ namespace HealthChecks.UI.Core.Notifications
         public void Dispose()
         {
             _db?.Dispose();
+            _httpClient.Dispose();
         }
 
         private static (string plural, string noun) PluralizeHealthcheck(int count) =>

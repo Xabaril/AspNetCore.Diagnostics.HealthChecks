@@ -11,7 +11,6 @@ public class Startup
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
-
         //To add authentication and authorization using demo identityserver uncomment AddDemoAuthentication and RequireAuthorization lines
 
         services
@@ -44,10 +43,11 @@ public class Startup
 
                 //Webhook endpoint with default failure and description messages
 
-                setup.AddWebhookNotification("webhook1", uri: "https://healthchecks.requestcatcher.com/",
-                                             payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
-                                             restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
-
+                setup.AddWebhookNotification(
+                    name: "webhook1",
+                    uri: "https://healthchecks.requestcatcher.com/",
+                    payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
+                    restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
             }).AddInMemoryStorage()
               .Services
             .AddControllers();

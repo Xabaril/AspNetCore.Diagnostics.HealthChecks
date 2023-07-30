@@ -8,8 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="11.0.36" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
+    <PackageReference Include="KubernetesClient" Version="11.0.44" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <Compile Include="../DisposalHostedService.cs" />
   </ItemGroup>
 
 </Project>

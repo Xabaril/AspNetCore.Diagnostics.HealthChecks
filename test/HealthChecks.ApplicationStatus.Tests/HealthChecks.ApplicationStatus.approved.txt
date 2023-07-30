@@ -4,7 +4,7 @@ namespace HealthChecks.ApplicationStatus
     {
         public ApplicationStatusHealthCheck(Microsoft.Extensions.Hosting.IHostApplicationLifetime lifetime) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
-        public void Dispose() { }
+        public virtual void Dispose() { }
     }
 }
 namespace HealthChecks.ApplicationStatus.DependencyInjection

@@ -41,7 +41,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health")
+        var response = await server.CreateRequest("/health")
             .GetAsync()
             .ConfigureAwait(false);
 
@@ -77,7 +77,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health")
+        var response = await server.CreateRequest("/health")
             .GetAsync()
             .ConfigureAwait(false);
 

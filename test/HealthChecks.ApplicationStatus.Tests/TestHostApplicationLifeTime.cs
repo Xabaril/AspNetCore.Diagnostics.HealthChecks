@@ -4,9 +4,9 @@ namespace HealthChecks.ApplicationStatus.Tests;
 
 public class TestHostApplicationLifeTime : IHostApplicationLifetime
 {
-    private readonly CancellationTokenSource _startedSource = new CancellationTokenSource();
-    private readonly CancellationTokenSource _stoppingSource = new CancellationTokenSource();
-    private readonly CancellationTokenSource _stoppedSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource _startedSource = new();
+    private readonly CancellationTokenSource _stoppingSource = new();
+    private readonly CancellationTokenSource _stoppedSource = new();
     public CancellationToken ApplicationStarted => _startedSource.Token;
 
     public CancellationToken ApplicationStopping => _stoppingSource.Token;

@@ -18,7 +18,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
 
         public string? Token { get; set; }
 
-        public int RefreshTimeOnSeconds { get; set; } = 300;
+        public int RefreshTimeInSeconds { get; set; } = 300;
 
         public List<string> Namespaces { get; set; } = new List<string>();
     }

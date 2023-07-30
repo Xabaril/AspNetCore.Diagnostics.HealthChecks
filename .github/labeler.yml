@@ -38,6 +38,9 @@ consul:
 cosmosdb:
   - src/HealthChecks.CosmosDb/**/*
 
+dapr:
+  - src/HealthChecks.Dapr/**/*
+
 documentdb:
   - src/HealthChecks.DocumentDb/**/*
 

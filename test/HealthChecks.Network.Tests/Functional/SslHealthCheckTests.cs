@@ -4,7 +4,7 @@ namespace HealthChecks.Network.Tests.Functional;
 
 public class ssl_healthcheck_should
 {
-    //Use https://badssl.com web site, witch provide samples certificates with varius states and types
+    //Use https://badssl.com web site, witch provide samples certificates with various states and types
     private const string _validHost256 = "sha256.badssl.com";
     private const string _validHost384 = "sha384.badssl.com";
     private const string _validHost512 = "sha512.badssl.com";
@@ -36,7 +36,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -60,7 +60,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -84,7 +84,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -108,7 +108,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -132,7 +132,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

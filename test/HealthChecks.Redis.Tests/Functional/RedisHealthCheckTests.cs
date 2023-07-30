@@ -26,7 +26,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -53,7 +53,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -80,7 +80,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -110,7 +110,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -134,7 +134,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -159,7 +159,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest($"/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         (await response.Content.ReadAsStringAsync().ConfigureAwait(false)).ShouldContain("Healthcheck timed out");

@@ -7,9 +7,10 @@ public class sql_server_registration_should
     [Fact]
     public void add_health_check_when_properly_configured()
     {
-        var services = new ServiceCollection();
-        services.AddHealthChecks()
-            .AddSqlServer("connectionstring");
+        var services = new ServiceCollection()
+            .AddHealthChecks()
+            .AddSqlServer("connectionstring")
+            .Services;
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -27,11 +28,11 @@ public class sql_server_registration_should
         var services = new ServiceCollection();
         bool invoked = false;
         const string connectionstring = "Server=(local);Database=foo;User Id=bar;Password=baz;Connection Timeout=1";
-        Action<SqlConnection> beforeOpen = connection =>
+        void beforeOpen(SqlConnection connection)
         {
             invoked = true;
-            Assert.Equal(connectionstring, connection.ConnectionString);
-        };
+            connection.ConnectionString.ShouldBe(connectionstring);
+        }
         services.AddHealthChecks()
             .AddSqlServer(connectionstring, configure: beforeOpen);
 
@@ -42,15 +43,16 @@ public class sql_server_registration_should
         var check = registration.Factory(serviceProvider);
 
         Record.ExceptionAsync(() => check.CheckHealthAsync(new HealthCheckContext())).GetAwaiter().GetResult();
-        Assert.True(invoked);
+        invoked.ShouldBeTrue();
     }
 
     [Fact]
     public void add_named_health_check_when_properly_configured()
     {
-        var services = new ServiceCollection();
-        services.AddHealthChecks()
-            .AddSqlServer("connectionstring", name: "my-sql-server-1");
+        var services = new ServiceCollection()
+            .AddHealthChecks()
+            .AddSqlServer("connectionstring", name: "my-sql-server-1")
+            .Services;
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -66,7 +68,7 @@ public class sql_server_registration_should
     public void add_health_check_with_connection_string_factory_when_properly_configured()
     {
         var services = new ServiceCollection();
-        var factoryCalled = false;
+        bool factoryCalled = false;
         services.AddHealthChecks()
             .AddSqlServer(_ =>
             {

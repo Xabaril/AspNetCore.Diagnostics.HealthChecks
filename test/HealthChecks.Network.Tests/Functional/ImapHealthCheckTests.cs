@@ -34,7 +34,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }
@@ -63,7 +63,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }
@@ -93,7 +93,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -123,7 +123,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }
@@ -153,7 +153,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -181,7 +181,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }
@@ -210,7 +210,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }
@@ -241,7 +241,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
     }
@@ -271,7 +271,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

@@ -11,6 +11,7 @@ namespace HealthChecks.RabbitMQ
         public RabbitMQ.Client.IConnection? Connection { get; set; }
         public RabbitMQ.Client.IConnectionFactory? ConnectionFactory { get; set; }
         public System.Uri? ConnectionUri { get; set; }
+        public System.TimeSpan? RequestedConnectionTimeout { get; set; }
         public RabbitMQ.Client.SslOption? Ssl { get; set; }
     }
 }

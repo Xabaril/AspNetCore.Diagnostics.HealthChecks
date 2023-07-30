@@ -14,6 +14,6 @@ public class prometheus_publisher_registration_should
         using var serviceProvider = services.BuildServiceProvider();
         var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
-        Assert.NotNull(publisher);
+        publisher.ShouldNotBeNull();
     }
 }

@@ -28,7 +28,7 @@ namespace HealthChecks.UI.Tests
                 })
                 .UseStartup<Startup>();
 
-            Assert.Throws<ArgumentException>(() => hostBuilder.Build());
+            Should.Throw<ArgumentException>(() => hostBuilder.Build());
         }
         [Fact]
         public void register_sql_server()
@@ -67,7 +67,7 @@ namespace HealthChecks.UI.Tests
                 })
                 .UseStartup<Startup>();
 
-            Assert.Throws<ArgumentNullException>(() => hostBuilder.Build());
+            Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace HealthChecks.UI.Tests
                 })
                 .UseStartup<Startup>();
 
-            Assert.Throws<ArgumentNullException>(() => hostBuilder.Build());
+            Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace HealthChecks.UI.Tests
                 })
                 .UseStartup<Startup>();
 
-            Assert.Throws<ArgumentNullException>(() => hostBuilder.Build());
+            Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
         }
 
         [Fact]
@@ -223,7 +223,7 @@ namespace HealthChecks.UI.Tests
                 })
                 .UseStartup<Startup>();
 
-            Assert.Throws<ArgumentNullException>(() => hostBuilder.Build());
+            Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
         }
 
     }

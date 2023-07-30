@@ -61,7 +61,7 @@ public class azure_digital_twin_model_registration_should
 
         var registration = options.Value.Registrations.First();
 
-        Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
     }
 
     [Fact]
@@ -117,6 +117,6 @@ public class azure_digital_twin_model_registration_should
 
         var registration = options.Value.Registrations.First();
 
-        Assert.Throws<ArgumentNullException>(() => registration.Factory(serviceProvider));
+        Should.Throw<ArgumentNullException>(() => registration.Factory(serviceProvider));
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace HealthChecks.Publisher.ApplicationInsights;
 
-public class ApplicationInsightsPublisher : IHealthCheckPublisher
+internal class ApplicationInsightsPublisher : IHealthCheckPublisher
 {
     private const string EVENT_NAME = "AspNetCoreHealthCheck";
     private const string METRIC_STATUS_NAME = "AspNetCoreHealthCheckStatus";

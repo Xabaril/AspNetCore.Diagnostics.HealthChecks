@@ -14,6 +14,7 @@ public class application_insights_publisher_should
 
         var publish = () => publisher.PublishAsync(report, default);
 
-        publish.ShouldThrow<ArgumentException>();
+        publish.ShouldThrow<ArgumentException>()
+            .Message.ShouldBe("A connection string or TelemetryConfiguration must be set!");
     }
 }

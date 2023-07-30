@@ -139,7 +139,7 @@ namespace HealthChecks.UI.Core.Notifications
             }
             catch (Exception exception)
             {
-                _logger.LogError($"The failure notification for {name} has not executed successfully.", exception);
+                _logger.LogError(exception, $"The failure notification for {name} has not executed successfully.");
             }
         }
 

@@ -131,7 +131,7 @@ namespace HealthChecks.UI.Core.Discovery.K8S
                     _logger.LogError(ex, "An error occurred on kubernetes service discovery");
                 }
 
-                await Task.Delay(_discoveryOptions.RefreshTimeOnSeconds * 1000);
+                await Task.Delay(_discoveryOptions.RefreshTimeInSeconds * 1000);
             }
         }
 

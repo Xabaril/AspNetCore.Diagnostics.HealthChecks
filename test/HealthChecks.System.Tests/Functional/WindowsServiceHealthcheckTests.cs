@@ -69,7 +69,7 @@ namespace HealthChecks.System.Tests.Functional
                     });
                 });
 
-            var exception = Assert.Throws<PlatformNotSupportedException>(() =>
+            var exception = Should.Throw<PlatformNotSupportedException>(() =>
             {
                 using var server = new TestServer(webhostBuilder);
             });

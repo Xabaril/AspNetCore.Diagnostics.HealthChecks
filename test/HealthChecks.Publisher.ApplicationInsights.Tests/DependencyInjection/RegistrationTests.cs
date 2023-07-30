@@ -15,7 +15,7 @@ public class application_insights_publisher_registration_should
         using var serviceProvider = services.BuildServiceProvider();
         var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
-        Assert.NotNull(publisher);
+        publisher.ShouldNotBeNull();
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class application_insights_publisher_registration_should
         using var serviceProvider = services.BuildServiceProvider();
         var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
-        Assert.NotNull(publisher);
+        publisher.ShouldNotBeNull();
     }
 
     [Fact]
@@ -47,6 +47,6 @@ public class application_insights_publisher_registration_should
         using var serviceProvider = services.BuildServiceProvider();
         var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
 
-        Assert.NotNull(publisher);
+        publisher.ShouldNotBeNull();
     }
 }

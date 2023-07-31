@@ -1,6 +1,6 @@
-using Azure.Messaging.ServiceBus.Administration;
-using Azure.Messaging.ServiceBus;
 using Azure.Core;
+using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus.Administration;
 
 namespace HealthChecks.AzureServiceBus;
 

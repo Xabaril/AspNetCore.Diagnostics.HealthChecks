@@ -54,7 +54,7 @@
     <HealthChecksUIK8sOperator>7.0.0</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>7.0.0</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>7.0.0</HealthCheckSystem>
-    <HealthCheckUI>7.0.0</HealthCheckUI>
+    <HealthCheckUI>7.0.1</HealthCheckUI>
     <HealthCheckUIClient>7.0.0</HealthCheckUIClient>
     <HealthCheckUICore>7.0.0</HealthCheckUICore>
     <HealthCheckUIData>7.0.0</HealthCheckUIData>

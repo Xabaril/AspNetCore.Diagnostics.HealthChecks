@@ -22,6 +22,7 @@ internal class UIApiEndpointMiddleware
         _settings = Guard.ThrowIfNull(settings?.Value);
         _jsonSerializerOptions = new JsonSerializerOptions
         {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
             Converters =
             {

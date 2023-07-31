@@ -18,7 +18,7 @@ function Exec {
 #Select the UI version from dependencies.props and use it as image version
 
 
-$version = select-xml -Path .\build\dependencies.props -XPath "/Project/PropertyGroup[contains(@Label,'Health Checks Package Versions')]/HealthChecksUIK8sOperator"
+$version = select-xml -Path .\build\versions.props -XPath "/Project/PropertyGroup[contains(@Label,'Health Checks Package Versions')]/HealthChecksUIK8sOperator"
 
 $tag = $version.node.InnerXML
 

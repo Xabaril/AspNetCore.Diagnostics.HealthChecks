@@ -18,6 +18,10 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
         Guard.ThrowIfNull(options.SubscriptionName, true);
     }
 
+    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
+        : this(options, new ServiceBusClientProvider())
+    { }
+
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {

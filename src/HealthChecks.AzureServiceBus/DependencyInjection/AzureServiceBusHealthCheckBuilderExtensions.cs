@@ -294,7 +294,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-                return new AzureServiceBusQueueHealthCheck(options, new ServiceBusClientProvider());
+                return new AzureServiceBusQueueHealthCheck(options);
             },
             failureStatus,
             tags,
@@ -379,7 +379,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-                return new AzureServiceBusQueueHealthCheck(options, new ServiceBusClientProvider());
+                return new AzureServiceBusQueueHealthCheck(options);
             },
             failureStatus,
             tags,
@@ -423,7 +423,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREQUEUETHRESHOLD_NAME,
-            sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options, new ServiceBusClientProvider()),
+            sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options),
             failureStatus,
             tags,
             timeout));
@@ -470,7 +470,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
             name ?? AZUREQUEUETHRESHOLD_NAME,
-            sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options, new ServiceBusClientProvider()),
+            sp => new AzureServiceBusQueueMessageCountThresholdHealthCheck(options),
             failureStatus,
             tags,
             timeout));
@@ -547,7 +547,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-                return new AzureServiceBusTopicHealthCheck(options, new ServiceBusClientProvider());
+                return new AzureServiceBusTopicHealthCheck(options);
             },
             failureStatus,
             tags,
@@ -630,7 +630,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-                return new AzureServiceBusTopicHealthCheck(options, new ServiceBusClientProvider());
+                return new AzureServiceBusTopicHealthCheck(options);
             },
             failureStatus,
             tags,
@@ -714,7 +714,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-                return new AzureServiceBusSubscriptionHealthCheck(options, new ServiceBusClientProvider());
+                return new AzureServiceBusSubscriptionHealthCheck(options);
             },
             failureStatus,
             tags,
@@ -805,7 +805,7 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
                 };
 
                 configure?.Invoke(options);
-                return new AzureServiceBusSubscriptionHealthCheck(options, new ServiceBusClientProvider());
+                return new AzureServiceBusSubscriptionHealthCheck(options);
             },
             failureStatus,
             tags,

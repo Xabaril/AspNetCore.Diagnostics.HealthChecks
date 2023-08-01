@@ -17,6 +17,10 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
         _deadLetterMessagesThreshold = options.DeadLetterMessages;
     }
 
+    public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options)
+        : this(options, new ServiceBusClientProvider())
+    { }
+
     protected override string ConnectionKey => Prefix;
 
     /// <inheritdoc />

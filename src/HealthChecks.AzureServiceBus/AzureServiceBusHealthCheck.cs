@@ -10,9 +10,10 @@ public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : Azur
 
     private readonly ServiceBusClientProvider _clientProvider;
 
+    [Obsolete]
     protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
 
-    protected abstract string ConnectionKey { get; }
+    protected virtual string ConnectionKey => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
 
     protected AzureServiceBusHealthCheck(TOptions options, ServiceBusClientProvider clientProvider)
     {

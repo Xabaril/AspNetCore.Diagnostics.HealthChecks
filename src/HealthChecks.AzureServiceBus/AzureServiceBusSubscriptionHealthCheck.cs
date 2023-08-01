@@ -5,10 +5,6 @@ namespace HealthChecks.AzureServiceBus;
 
 public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>, IHealthCheck
 {
-    private string? _connectionKey;
-
-    protected override string ConnectionKey => _connectionKey ??= Prefix;
-
     private string subscriptionKey => $"{ConnectionKey}_{Options.TopicName}_{Options.SubscriptionName}";
 
     public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options, ServiceBusClientProvider clientProvider)

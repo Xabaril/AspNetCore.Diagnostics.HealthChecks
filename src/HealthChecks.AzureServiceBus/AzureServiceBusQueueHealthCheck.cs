@@ -5,10 +5,6 @@ namespace HealthChecks.AzureServiceBus;
 
 public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusQueueHealthCheckOptions>, IHealthCheck
 {
-    private string? _connectionKey;
-
-    protected override string ConnectionKey => _connectionKey ??= Prefix;
-
     private string queueKey => $"{ConnectionKey}_{Options.QueueName}";
 
     public AzureServiceBusQueueHealthCheck(AzureServiceBusQueueHealthCheckOptions options, ServiceBusClientProvider clientProvider)
@@ -40,7 +36,7 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
 
         async Task CheckWithReceiver()
         {
-            var client = await ClientCache.GetOrAddAsyncDisposableAsync(Prefix, _ => CreateClient()).ConfigureAwait(false);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
             var receiver = await ClientCache.GetOrAddAsyncDisposableAsync(
                 $"{nameof(AzureServiceBusQueueHealthCheck)}_{queueKey}",
                 _ => client.CreateReceiver(Options.QueueName))

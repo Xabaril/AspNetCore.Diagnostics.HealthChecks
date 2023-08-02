@@ -11,7 +11,7 @@ namespace HealthChecks.AzureServiceBus
         protected AzureServiceBusHealthCheck(TOptions options, HealthChecks.AzureServiceBus.ServiceBusClientProvider clientProvider) { }
         protected virtual string ConnectionKey { get; }
         protected TOptions Options { get; }
-        [System.Obsolete]
+        [System.Obsolete("Please, override ConnectionKey property instead.")]
         protected string Prefix { get; }
         protected Azure.Messaging.ServiceBus.ServiceBusClient CreateClient() { }
         protected Azure.Messaging.ServiceBus.Administration.ServiceBusAdministrationClient CreateManagementClient() { }

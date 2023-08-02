@@ -10,7 +10,7 @@ public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : Azur
 
     private readonly ServiceBusClientProvider _clientProvider;
 
-    [Obsolete]
+    [Obsolete("Please, override ConnectionKey property instead.")]
     protected string Prefix => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;
 
     protected virtual string ConnectionKey => Options.ConnectionString ?? Options.FullyQualifiedNamespace!;

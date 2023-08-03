@@ -146,13 +146,13 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
             FullyQualifiedNamespace = FullyQualifiedName,
             Credential = _tokenCredential,
         };
-        var otherHealthCheck = new AzureServiceBusQueueMessageCountThresholdHealthCheck(options, _clientProvider);
+        var otherHealthCheck = new AzureServiceBusQueueMessageCountThresholdHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
-        var otherActual = await healthCheck
+        var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 

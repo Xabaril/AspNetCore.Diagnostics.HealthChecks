@@ -75,17 +75,17 @@ public class azureservicebustopichealthcheck_should
 
         // Second call
         var otherTopicName = Guid.NewGuid().ToString();
-        var otherOptions = new AzureServiceBusQueueHealthCheckOptions(otherTopicName)
+        var otherOptions = new AzureServiceBusTopicHealthCheckOptions(otherTopicName)
         {
             ConnectionString = ConnectionString,
         };
-        var otherHealthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
+        var otherHealthCheck = new AzureServiceBusTopicHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
-        var otherActual = await healthCheck
+        var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -145,13 +145,13 @@ public class azureservicebustopichealthcheck_should
             FullyQualifiedNamespace = FullyQualifiedName,
             Credential = _tokenCredential,
         };
-        var otherHealthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
+        var otherHealthCheck = new AzureServiceBusTopicHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
-        var otherActual = await healthCheck
+        var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 

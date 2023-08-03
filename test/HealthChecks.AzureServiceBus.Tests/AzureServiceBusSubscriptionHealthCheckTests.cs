@@ -100,17 +100,17 @@ public class azureservicebussubscriptionhealthcheck_should
 
         // Second call
         var otherTopicName = Guid.NewGuid().ToString();
-        var otherOptions = new AzureServiceBusQueueHealthCheckOptions(otherTopicName)
+        var otherOptions = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(otherTopicName, SubscriptionName)
         {
             ConnectionString = ConnectionString,
         };
-        var otherHealthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
+        var otherHealthCheck = new AzureServiceBusSubscriptionHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
-        var otherActual = await healthCheck
+        var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -194,13 +194,13 @@ public class azureservicebussubscriptionhealthcheck_should
             FullyQualifiedNamespace = FullyQualifiedName,
             Credential = _tokenCredential,
         };
-        var otherHealthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
+        var otherHealthCheck = new AzureServiceBusSubscriptionHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
-        var otherActual = await healthCheck
+        var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 

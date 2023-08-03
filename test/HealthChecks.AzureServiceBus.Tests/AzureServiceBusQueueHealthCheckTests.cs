@@ -9,11 +9,11 @@ namespace HealthChecks.AzureServiceBus.Tests;
 
 public class azureservicebusqueuehealthcheck_should
 {
+    private const string HEALTH_CHECK_NAME = "unit-test-check";
+
     private readonly string ConnectionString;
     private readonly string FullyQualifiedName;
     private readonly string QueueName;
-    private readonly string HealthCheckName = "unit-test-check";
-
     private readonly ServiceBusClient _serviceBusClient;
     private readonly ServiceBusReceiver _serviceBusReceiver;
     private readonly ServiceBusClientProvider _clientProvider;
@@ -53,7 +53,7 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -89,7 +89,7 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -105,7 +105,7 @@ public class azureservicebusqueuehealthcheck_should
         var otherHealthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var otherActual = await healthCheck
@@ -141,7 +141,7 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -178,7 +178,7 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -195,7 +195,7 @@ public class azureservicebusqueuehealthcheck_should
         var otherHealthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var otherActual = await healthCheck
@@ -228,12 +228,14 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
+
+        actual.Status.ShouldBe(HealthStatus.Healthy);
 
         _serviceBusClient
             .Received(1)
@@ -243,8 +245,6 @@ public class azureservicebusqueuehealthcheck_should
             .Received(1)
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -260,12 +260,14 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
+
+        actual.Status.ShouldBe(HealthStatus.Healthy);
 
         _serviceBusClient
             .Received(1)
@@ -275,8 +277,6 @@ public class azureservicebusqueuehealthcheck_should
             .Received(1)
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -291,7 +291,7 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         _serviceBusReceiver
@@ -302,6 +302,8 @@ public class azureservicebusqueuehealthcheck_should
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+
         _serviceBusClient
             .Received(1)
             .CreateReceiver(QueueName);
@@ -310,8 +312,6 @@ public class azureservicebusqueuehealthcheck_should
             .Received(1)
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 
     [Fact]
@@ -326,19 +326,19 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Healthy);
+
         await _serviceBusAdministrationClient
             .Received(1)
             .GetQueueRuntimePropertiesAsync(QueueName, cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -354,19 +354,19 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Healthy);
+
         await _serviceBusAdministrationClient
             .Received(1)
             .GetQueueRuntimePropertiesAsync(QueueName, cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -381,7 +381,7 @@ public class azureservicebusqueuehealthcheck_should
         var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         _serviceBusAdministrationClient
@@ -392,11 +392,11 @@ public class azureservicebusqueuehealthcheck_should
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+
         await _serviceBusAdministrationClient
            .Received(1)
            .GetQueueRuntimePropertiesAsync(QueueName, cancellationToken: tokenSource.Token)
            .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 }

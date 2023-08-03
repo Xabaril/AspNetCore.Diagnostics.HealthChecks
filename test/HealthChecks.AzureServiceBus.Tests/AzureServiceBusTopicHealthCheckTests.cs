@@ -8,11 +8,11 @@ namespace HealthChecks.AzureServiceBus.Tests;
 
 public class azureservicebustopichealthcheck_should
 {
+    private const string HEALTH_CHECK_NAME = "unit-test-check";
+
     private readonly string ConnectionString;
     private readonly string FullyQualifiedName;
     private readonly string TopicName;
-    private readonly string HealthCheckName = "unit-test-check";
-
     private readonly ServiceBusClientProvider _clientProvider;
     private readonly ServiceBusAdministrationClient _serviceBusAdministrationClient;
     private readonly TokenCredential _tokenCredential;
@@ -42,7 +42,7 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -55,7 +55,7 @@ public class azureservicebustopichealthcheck_should
     }
 
     [Fact]
-    public async Task reuses_existing_client_when_using_same_connection_string_with_different_queue()
+    public async Task reuses_existing_client_when_using_same_connection_string_with_different_topic()
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
@@ -66,7 +66,7 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -82,7 +82,7 @@ public class azureservicebustopichealthcheck_should
         var otherHealthCheck = new AzureServiceBusTopicHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
         var otherActual = await otherHealthCheck
@@ -95,7 +95,7 @@ public class azureservicebustopichealthcheck_should
     }
 
     [Fact]
-    public async Task can_create_client_with_fully_qualified_endpoint()
+    public async Task can_create_client_with_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
         var options = new AzureServiceBusTopicHealthCheckOptions(TopicName)
@@ -106,7 +106,7 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -119,7 +119,7 @@ public class azureservicebustopichealthcheck_should
     }
 
     [Fact]
-    public async Task reuses_existing_client_when_checking_different_topic_in_same_servicebus()
+    public async Task reuses_existing_client_when_using_same_fully_qualified_name_with_different_topic()
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
@@ -131,7 +131,7 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
@@ -148,7 +148,7 @@ public class azureservicebustopichealthcheck_should
         var otherHealthCheck = new AzureServiceBusTopicHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, otherHealthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
         var otherActual = await otherHealthCheck
@@ -171,12 +171,14 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
+
+        actual.Status.ShouldBe(HealthStatus.Healthy);
 
         _clientProvider
             .Received(1)
@@ -186,12 +188,10 @@ public class azureservicebustopichealthcheck_should
             .Received(1)
             .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
-    public async Task return_healthy_when_only_checking_healthy_service_through_administration_and_endpoint()
+    public async Task return_healthy_when_only_checking_healthy_service_through_administration_and_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
         var options = new AzureServiceBusTopicHealthCheckOptions(TopicName)
@@ -202,12 +202,14 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
+
+        actual.Status.ShouldBe(HealthStatus.Healthy);
 
         _clientProvider
             .Received(1)
@@ -217,8 +219,6 @@ public class azureservicebustopichealthcheck_should
             .Received(1)
             .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -232,7 +232,7 @@ public class azureservicebustopichealthcheck_should
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HealthCheckName, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
 
         _serviceBusAdministrationClient
@@ -243,11 +243,11 @@ public class azureservicebustopichealthcheck_should
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+
         await _serviceBusAdministrationClient
            .Received(1)
            .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
            .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 }

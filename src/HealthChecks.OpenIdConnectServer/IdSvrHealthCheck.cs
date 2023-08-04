@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -27,13 +28,35 @@ public class IdSvrHealthCheck : IHealthCheck
             var httpClient = _httpClientFactory();
             using var response = await httpClient.GetAsync(_discoverConfigurationSegment, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
-            return response.IsSuccessStatusCode
-                ? HealthCheckResult.Healthy()
-                : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+            }
+
+            var discoveryResponse = await response
+                   .Content
+                   .ReadFromJsonAsync<DiscoveryEndpointResponse>()
+                   .ConfigureAwait(false)
+               ?? throw new ArgumentException("Could not deserialize to discover endpoint response!");
+
+            ValidateResponse(discoveryResponse);
+
+            return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
+    }
+
+    private static void ValidateResponse(DiscoveryEndpointResponse response)
+    {
+        OidcValidationHelper.ValidateValue(response.Issuer, OidcConstants.ISSUER);
+        OidcValidationHelper.ValidateValue(response.AuthorizationEndpoint, OidcConstants.AUTHORIZATION_ENDPOINT);
+        OidcValidationHelper.ValidateValue(response.JwksUri, OidcConstants.JWKS_URI);
+
+        OidcValidationHelper.ValidateRequiredValues(response.ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
+        OidcValidationHelper.ValidateRequiredValues(response.SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
+        OidcValidationHelper.ValidateRequiredValues(response.IdTokenSigningAlgValuesSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }
 }

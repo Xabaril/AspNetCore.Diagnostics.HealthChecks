@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.AzureStorage is the health check package for Blobs, Tables and Queues.</Description>
     <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
@@ -11,7 +11,8 @@
     <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
     <PackageReference Include="Azure.Storage.Queues" Version="12.15.0" />
     <PackageReference Include="Azure.Storage.Files.Shares" Version="12.15.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" Condition="'$(TargetFramework)' != 'net6.0'"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.20" Condition="'$(TargetFramework)' == 'net6.0'"/>
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,8 @@ public class DocumentDbHealthCheck : IHealthCheck
     {
         _documentDbOptions.UriEndpoint = Guard.ThrowIfNull(documentDbOptions.UriEndpoint);
         _documentDbOptions.PrimaryKey = Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
+        _documentDbOptions.DatabaseName = documentDbOptions.DatabaseName;
+        _documentDbOptions.CollectionName = documentDbOptions.CollectionName;
     }
 
     /// <inheritdoc />
@@ -35,8 +37,10 @@ public class DocumentDbHealthCheck : IHealthCheck
             {
                 await documentDbClient.ReadDocumentCollectionAsync(GetCollectionUri()).ConfigureAwait(false);
             }
-
-            await documentDbClient.OpenAsync(cancellationToken).ConfigureAwait(false);
+            else
+            {
+                await documentDbClient.OpenAsync(cancellationToken).ConfigureAwait(false);
+            }
 
             return HealthCheckResult.Healthy();
         }

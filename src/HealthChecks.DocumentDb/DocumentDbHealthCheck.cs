@@ -30,6 +30,12 @@ public class DocumentDbHealthCheck : IHealthCheck
                     documentDbClient = _connections[_documentDbOptions.UriEndpoint];
                 }
             }
+
+            if (CanCheckCollectionInDatabase())
+            {
+                await documentDbClient.ReadDocumentCollectionAsync(GetCollectionUri()).ConfigureAwait(false);
+            }
+
             await documentDbClient.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             return HealthCheckResult.Healthy();
@@ -39,4 +45,16 @@ public class DocumentDbHealthCheck : IHealthCheck
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
+
+    private bool CanCheckCollectionInDatabase()
+    {
+        if (string.IsNullOrWhiteSpace(_documentDbOptions.DatabaseName) || string.IsNullOrWhiteSpace(_documentDbOptions.CollectionName))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private Uri GetCollectionUri() => UriFactory.CreateDocumentCollectionUri(_documentDbOptions.DatabaseName, _documentDbOptions.CollectionName);
 }

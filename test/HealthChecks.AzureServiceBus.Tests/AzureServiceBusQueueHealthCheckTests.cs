@@ -108,7 +108,7 @@ public class azureservicebusqueuehealthcheck_should
             Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
-        var otherActual = await healthCheck
+        var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 

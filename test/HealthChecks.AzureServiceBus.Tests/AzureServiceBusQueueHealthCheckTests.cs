@@ -102,7 +102,7 @@ public class azureservicebusqueuehealthcheck_should
         {
             ConnectionString = ConnectionString,
         };
-        var otherHealthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
+        var otherHealthCheck = new AzureServiceBusQueueHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
             Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)

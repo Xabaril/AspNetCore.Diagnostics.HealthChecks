@@ -32,6 +32,30 @@ public class UIResponseWriterTests
         healthReport.ShouldNotBeNull().Entries[healthReportKey].Exception.ShouldBe(exceptionMessage);
     }
 
+    [Theory]
+    [InlineData("你好")]
+    [InlineData("жарко")]
+    [InlineData("ąężćś")]
+    public async Task should_not_encode_unicode_characters(string healthReportKey)
+    {
+        var httpContext = new DefaultHttpContext();
+        httpContext.Response.Body = new MemoryStream();
+        var entries = new Dictionary<string, HealthReportEntry>
+        {
+            { healthReportKey, new HealthReportEntry(HealthStatus.Healthy, null, TimeSpan.FromSeconds(1), null, null) }
+        };
+        var report = new HealthReport(entries, TimeSpan.FromSeconds(1));
+
+        await UIResponseWriter.WriteHealthCheckUIResponse(httpContext, report).ConfigureAwait(false);
+
+        httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
+
+        var responseStreamReader = new StreamReader(httpContext.Response.Body);
+        var responseAsText = await responseStreamReader.ReadToEndAsync().ConfigureAwait(false);
+
+        responseAsText.ShouldContain(healthReportKey);
+    }
+
     private static JsonSerializerOptions CreateJsonOptions()
     {
         var options = new JsonSerializerOptions

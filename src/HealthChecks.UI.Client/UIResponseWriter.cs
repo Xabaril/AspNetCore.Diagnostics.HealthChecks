@@ -1,5 +1,7 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -55,6 +57,7 @@ public static class UIResponseWriter
         {
             AllowTrailingCommas = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <PackageTags>$(PackageTags);Gremlin;TinkerPop;GraphDB</PackageTags>
     <Description>HealthChecks.Gremlin is the health check package for Gremlin.</Description>
     <VersionPrefix>$(HealthCheckGremlin)</VersionPrefix>
@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Gremlin.Net" Version="3.6.4" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.20" Condition="'$(TargetFramework)' == 'net6.0'"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" Condition="'$(TargetFramework)' != 'net6.0'"/>
   </ItemGroup>
 
 </Project>

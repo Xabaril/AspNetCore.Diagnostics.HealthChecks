@@ -105,7 +105,7 @@ public class azureservicebusqueuehealthcheck_should
         var otherHealthCheck = new AzureServiceBusQueueHealthCheck(otherOptions, _clientProvider);
         var otherContext = new HealthCheckContext
         {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
         };
 
         var otherActual = await healthCheck

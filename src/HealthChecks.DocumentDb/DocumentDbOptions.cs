@@ -9,7 +9,7 @@ public class DocumentDbOptions
 
     public string PrimaryKey { get; set; } = null!;
 
-    public string DatabaseName { get; set; } = null!;
+    public string? DatabaseName { get; set; }
 
-    public string CollectionName { get; set; } = null!;
+    public string? CollectionName { get; set; }
 }

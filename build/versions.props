@@ -17,7 +17,7 @@
     <HealthCheckConsul>7.0.0</HealthCheckConsul>
     <HealthCheckCosmosDb>7.0.0</HealthCheckCosmosDb>
     <HealthCheckDapr>7.0.0</HealthCheckDapr>
-    <HealthCheckDocumentDb>7.0.0</HealthCheckDocumentDb>
+    <HealthCheckDocumentDb>7.1.0</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>7.0.0</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>7.0.0</HealthCheckElasticsearch>
     <HealthCheckEventStoregRPC>7.0.0</HealthCheckEventStoregRPC>

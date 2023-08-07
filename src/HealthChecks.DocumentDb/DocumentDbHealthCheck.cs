@@ -7,12 +7,14 @@ namespace HealthChecks.DocumentDb;
 public class DocumentDbHealthCheck : IHealthCheck
 {
     private static readonly ConcurrentDictionary<string, DocumentClient> _connections = new();
-    private readonly DocumentDbOptions _documentDbOptions = new();
+    private readonly DocumentDbOptions _options;
 
     public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions)
     {
-        _documentDbOptions.UriEndpoint = Guard.ThrowIfNull(documentDbOptions.UriEndpoint);
-        _documentDbOptions.PrimaryKey = Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
+        Guard.ThrowIfNull(documentDbOptions.UriEndpoint);
+        Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
+
+        _options = documentDbOptions;
     }
 
     /// <inheritdoc />
@@ -20,17 +22,25 @@ public class DocumentDbHealthCheck : IHealthCheck
     {
         try
         {
-            if (!_connections.TryGetValue(_documentDbOptions.UriEndpoint, out var documentDbClient))
+            if (!_connections.TryGetValue(_options.UriEndpoint, out var documentDbClient))
             {
-                documentDbClient = new DocumentClient(new Uri(_documentDbOptions.UriEndpoint), _documentDbOptions.PrimaryKey);
+                documentDbClient = new DocumentClient(new Uri(_options.UriEndpoint), _options.PrimaryKey);
 
-                if (!_connections.TryAdd(_documentDbOptions.UriEndpoint, documentDbClient))
+                if (!_connections.TryAdd(_options.UriEndpoint, documentDbClient))
                 {
                     documentDbClient.Dispose();
-                    documentDbClient = _connections[_documentDbOptions.UriEndpoint];
+                    documentDbClient = _connections[_options.UriEndpoint];
                 }
             }
-            await documentDbClient.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+            if (!string.IsNullOrWhiteSpace(_options.DatabaseName) && !string.IsNullOrWhiteSpace(_options.CollectionName))
+            {
+                await documentDbClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(_options.DatabaseName, _options.CollectionName)).ConfigureAwait(false);
+            }
+            else
+            {
+                await documentDbClient.OpenAsync(cancellationToken).ConfigureAwait(false);
+            }
 
             return HealthCheckResult.Healthy();
         }

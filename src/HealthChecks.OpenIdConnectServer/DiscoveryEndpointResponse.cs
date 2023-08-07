@@ -44,7 +44,7 @@ internal class DiscoveryEndpointResponse
         }
     }
 
-    private static void ValidateRequiredValues(IEnumerable<string> values, string metadata, string[] requiredValues)
+    private static void ValidateRequiredValues(string[] values, string metadata, string[] requiredValues)
     {
         if (values == null || !AnyValueContains(values, requiredValues))
         {

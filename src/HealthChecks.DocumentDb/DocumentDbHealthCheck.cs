@@ -7,17 +7,14 @@ namespace HealthChecks.DocumentDb;
 public class DocumentDbHealthCheck : IHealthCheck
 {
     private static readonly ConcurrentDictionary<string, DocumentClient> _connections = new();
-    private readonly string _uriEndpoint;
-    private readonly string _primaryKey;
-    private readonly string? _databaseName;
-    private readonly string? _collectionName;
+    private readonly DocumentDbOptions _options;
 
     public DocumentDbHealthCheck(DocumentDbOptions documentDbOptions)
     {
-        _uriEndpoint = Guard.ThrowIfNull(documentDbOptions.UriEndpoint);
-        _primaryKey = Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
-        _databaseName = documentDbOptions.DatabaseName;
-        _collectionName = documentDbOptions.CollectionName;
+        Guard.ThrowIfNull(documentDbOptions.UriEndpoint);
+        Guard.ThrowIfNull(documentDbOptions.PrimaryKey);
+
+        _options = documentDbOptions;
     }
 
     /// <inheritdoc />
@@ -25,20 +22,20 @@ public class DocumentDbHealthCheck : IHealthCheck
     {
         try
         {
-            if (!_connections.TryGetValue(_uriEndpoint, out var documentDbClient))
+            if (!_connections.TryGetValue(_options.UriEndpoint, out var documentDbClient))
             {
-                documentDbClient = new DocumentClient(new Uri(_uriEndpoint), _primaryKey);
+                documentDbClient = new DocumentClient(new Uri(_options.UriEndpoint), _options.PrimaryKey);
 
-                if (!_connections.TryAdd(_uriEndpoint, documentDbClient))
+                if (!_connections.TryAdd(_options.UriEndpoint, documentDbClient))
                 {
                     documentDbClient.Dispose();
-                    documentDbClient = _connections[_uriEndpoint];
+                    documentDbClient = _connections[_options.UriEndpoint];
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(_databaseName) && !string.IsNullOrWhiteSpace(_collectionName))
+            if (!string.IsNullOrWhiteSpace(_options.DatabaseName) && !string.IsNullOrWhiteSpace(_options.CollectionName))
             {
-                await documentDbClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName)).ConfigureAwait(false);
+                await documentDbClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(_options.DatabaseName, _options.CollectionName)).ConfigureAwait(false);
             }
             else
             {

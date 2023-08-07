@@ -25,5 +25,5 @@ internal static class OidcValidationHelper
         $"Invalid discover response - '{value}' must be set!";
 
     private static string GetMissingRequiredValuesExceptionMessage(string value, IEnumerable<string> requiredValues) =>
-        $"Invalid discover response - '{value}' must contain {string.Join(",", requiredValues)}!";
+        $"Invalid discover response - '{value}' must be one of the following values: {string.Join(",", requiredValues)}!";
 }

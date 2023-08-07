@@ -48,7 +48,7 @@ internal class DiscoveryEndpointResponse
     {
         if (values == null || !requiredValues.All(v => values.Contains(v)))
         {
-            throw new ArgumentException(GetMissingRequiredValuesExceptionMessage(metadata, requiredValues));
+            throw new ArgumentException(GetMissingRequiredAllValuesExceptionMessage(metadata, requiredValues));
         }
     }
 
@@ -65,4 +65,7 @@ internal class DiscoveryEndpointResponse
 
     private static string GetMissingRequiredValuesExceptionMessage(string value, string[] requiredValues) =>
         $"Invalid discovery response - '{value}' must be one of the following values: {string.Join(",", requiredValues)}!";
+
+    private static string GetMissingRequiredAllValuesExceptionMessage(string value, string[] requiredValues) =>
+            $"Invalid discovery response - '{value}' must contain the following values: {string.Join(",", requiredValues)}!";
 }

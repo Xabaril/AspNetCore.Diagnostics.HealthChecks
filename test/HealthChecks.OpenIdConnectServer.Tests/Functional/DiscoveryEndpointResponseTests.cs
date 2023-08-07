@@ -55,8 +55,8 @@ public class discovery_endpoint_response_should
     [Theory]
     [InlineData("")]
     [InlineData("code", "id_token")]
-    [InlineData("id_token", "token id_token")]
-    [InlineData("code", "token id_token")]
+    [InlineData("id_token", "id_token token")]
+    [InlineData("code", "id_token token")]
     public void be_invalid_when_required_response_types_supported_are_missing(params string[] responseTypesSupported)
     {
         var response = new DiscoveryEndpointResponse
@@ -71,13 +71,12 @@ public class discovery_endpoint_response_should
 
         validate
             .ShouldThrow<ArgumentException>()
-            .Message.ShouldBe("Invalid discovery response - 'response_types_supported' must be one of the following values: code,id_token,token id_token!");
+            .Message.ShouldBe("Invalid discovery response - 'response_types_supported' must contain the following values: code,id_token,id_token token!");
     }
 
     [Theory]
     [InlineData("")]
-    [InlineData("pairwise")]
-    [InlineData("public")]
+    [InlineData("some-value")]
     public void be_invalid_when_required_subject_types_supported_are_missing(string subjectTypesSupported)
     {
         var response = new DiscoveryEndpointResponse
@@ -113,7 +112,7 @@ public class discovery_endpoint_response_should
 
         validate
             .ShouldThrow<ArgumentException>()
-            .Message.ShouldBe("Invalid discovery response - 'id_token_signing_alg_values_supported' must be one of the following values: RS256!");
+            .Message.ShouldBe("Invalid discovery response - 'id_token_signing_alg_values_supported' must contain the following values: RS256!");
     }
 
     [Fact]

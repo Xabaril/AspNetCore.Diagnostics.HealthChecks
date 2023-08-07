@@ -37,7 +37,7 @@ public class IdSvrHealthCheck : IHealthCheck
                    .Content
                    .ReadFromJsonAsync<DiscoveryEndpointResponse>()
                    .ConfigureAwait(false)
-               ?? throw new ArgumentException("Could not deserialize to discover endpoint response!");
+               ?? throw new ArgumentException("Could not deserialize to discovery endpoint response!");
 
             discoveryResponse.ValidateResponse();
 

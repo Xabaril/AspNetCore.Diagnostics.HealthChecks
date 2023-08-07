@@ -56,8 +56,8 @@ internal class DiscoveryEndpointResponse
         values.Any(v => requiredValues.Contains(v));
 
     private static string GetMissingValueExceptionMessage(string value) =>
-        $"Invalid discover response - '{value}' must be set!";
+        $"Invalid discovery response - '{value}' must be set!";
 
     private static string GetMissingRequiredValuesExceptionMessage(string value, IEnumerable<string> requiredValues) =>
-        $"Invalid discover response - '{value}' must be one of the following values: {string.Join(",", requiredValues)}!";
+        $"Invalid discovery response - '{value}' must be one of the following values: {string.Join(",", requiredValues)}!";
 }

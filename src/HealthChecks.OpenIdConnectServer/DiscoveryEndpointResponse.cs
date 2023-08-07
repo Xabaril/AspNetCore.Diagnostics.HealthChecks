@@ -14,13 +14,13 @@ internal class DiscoveryEndpointResponse
     public string JwksUri { get; set; } = null!;
 
     [JsonPropertyName(OidcConstants.RESPONSE_TYPES_SUPPORTED)]
-    public IEnumerable<string> ResponseTypesSupported { get; set; } = null!;
+    public string[] ResponseTypesSupported { get; set; } = null!;
 
     [JsonPropertyName(OidcConstants.SUBJECT_TYPES_SUPPORTED)]
-    public IEnumerable<string> SubjectTypesSupported { get; set; } = null!;
+    public string[] SubjectTypesSupported { get; set; } = null!;
 
     [JsonPropertyName(OidcConstants.ALGORITHMS_SUPPORTED)]
-    public IEnumerable<string> IdTokenSigningAlgValuesSupported { get; set; } = null!;
+    public string[] IdTokenSigningAlgValuesSupported { get; set; } = null!;
 
     /// <summary>
     /// Validates Discovery response according to the <see href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID specification</see>

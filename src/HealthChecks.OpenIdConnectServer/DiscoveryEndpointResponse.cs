@@ -20,7 +20,7 @@ internal class DiscoveryEndpointResponse
     public string[] SubjectTypesSupported { get; set; } = null!;
 
     [JsonPropertyName(OidcConstants.ALGORITHMS_SUPPORTED)]
-    public string[] IdTokenSigningAlgValuesSupported { get; set; } = null!;
+    public string[] SigningAlgorithmsSupported { get; set; } = null!;
 
     /// <summary>
     /// Validates Discovery response according to the <see href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID specification</see>
@@ -33,7 +33,7 @@ internal class DiscoveryEndpointResponse
 
         ValidateRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
         ValidateRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
-        ValidateRequiredValues(IdTokenSigningAlgValuesSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
+        ValidateRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }
 
     private static void ValidateValue(string value, string metadata)
@@ -46,14 +46,11 @@ internal class DiscoveryEndpointResponse
 
     private static void ValidateRequiredValues(string[] values, string metadata, string[] requiredValues)
     {
-        if (values == null || !AnyValueContains(values, requiredValues))
+        if (values == null || !requiredValues.All(v => values.Contains(v)))
         {
             throw new ArgumentException(GetMissingRequiredValuesExceptionMessage(metadata, requiredValues));
         }
     }
-
-    private static bool AnyValueContains(string[] values, string[] requiredValues) =>
-        values.Any(v => requiredValues.Contains(v));
 
     private static string GetMissingValueExceptionMessage(string value) =>
         $"Invalid discovery response - '{value}' must be set!";

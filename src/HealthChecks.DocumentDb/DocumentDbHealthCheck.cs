@@ -49,16 +49,4 @@ public class DocumentDbHealthCheck : IHealthCheck
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
-
-    private bool CanCheckCollectionInDatabase()
-    {
-        if (string.IsNullOrWhiteSpace(_documentDbOptions.DatabaseName) || string.IsNullOrWhiteSpace(_documentDbOptions.CollectionName))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private Uri GetCollectionUri() => UriFactory.CreateDocumentCollectionUri(_documentDbOptions.DatabaseName, _documentDbOptions.CollectionName);
 }

@@ -52,7 +52,7 @@ internal class DiscoveryEndpointResponse
         }
     }
 
-    private static bool AnyValueContains(IEnumerable<string> values, string[] requiredValues) =>
+    private static bool AnyValueContains(string[] values, string[] requiredValues) =>
         values.Any(v => requiredValues.Contains(v));
 
     private static string GetMissingValueExceptionMessage(string value) =>

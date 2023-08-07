@@ -44,7 +44,7 @@ internal class DiscoveryEndpointResponse
         }
     }
 
-    private static void ValidateRequiredValues(IEnumerable<string> values, string metadata, IEnumerable<string> requiredValues)
+    private static void ValidateRequiredValues(IEnumerable<string> values, string metadata, string[] requiredValues)
     {
         if (values == null || !AnyValueContains(values, requiredValues))
         {
@@ -52,12 +52,12 @@ internal class DiscoveryEndpointResponse
         }
     }
 
-    private static bool AnyValueContains(IEnumerable<string> values, IEnumerable<string> requiredValues) =>
+    private static bool AnyValueContains(IEnumerable<string> values, string[] requiredValues) =>
         values.Any(v => requiredValues.Contains(v));
 
     private static string GetMissingValueExceptionMessage(string value) =>
         $"Invalid discovery response - '{value}' must be set!";
 
-    private static string GetMissingRequiredValuesExceptionMessage(string value, IEnumerable<string> requiredValues) =>
+    private static string GetMissingRequiredValuesExceptionMessage(string value, string[] requiredValues) =>
         $"Invalid discovery response - '{value}' must be one of the following values: {string.Join(",", requiredValues)}!";
 }

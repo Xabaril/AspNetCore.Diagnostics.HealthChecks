@@ -32,7 +32,7 @@ internal class DiscoveryEndpointResponse
         ValidateValue(JwksUri, OidcConstants.JWKS_URI);
 
         ValidateRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
-        ValidateRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
+        ValidateOneOfRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
         ValidateRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }
 
@@ -47,6 +47,14 @@ internal class DiscoveryEndpointResponse
     private static void ValidateRequiredValues(string[] values, string metadata, string[] requiredValues)
     {
         if (values == null || !requiredValues.All(v => values.Contains(v)))
+        {
+            throw new ArgumentException(GetMissingRequiredValuesExceptionMessage(metadata, requiredValues));
+        }
+    }
+
+    private static void ValidateOneOfRequiredValues(string[] values, string metadata, string[] requiredValues)
+    {
+        if (values == null || !requiredValues.Any(v => values.Contains(v)))
         {
             throw new ArgumentException(GetMissingRequiredValuesExceptionMessage(metadata, requiredValues));
         }

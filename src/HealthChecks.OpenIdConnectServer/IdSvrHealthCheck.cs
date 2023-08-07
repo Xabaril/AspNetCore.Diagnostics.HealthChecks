@@ -39,7 +39,7 @@ public class IdSvrHealthCheck : IHealthCheck
                    .ConfigureAwait(false)
                ?? throw new ArgumentException("Could not deserialize to discover endpoint response!");
 
-            ValidateResponse(discoveryResponse);
+            discoveryResponse.ValidateResponse();
 
             return HealthCheckResult.Healthy();
         }
@@ -47,16 +47,5 @@ public class IdSvrHealthCheck : IHealthCheck
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
-    }
-
-    private static void ValidateResponse(DiscoveryEndpointResponse response)
-    {
-        OidcValidationHelper.ValidateValue(response.Issuer, OidcConstants.ISSUER);
-        OidcValidationHelper.ValidateValue(response.AuthorizationEndpoint, OidcConstants.AUTHORIZATION_ENDPOINT);
-        OidcValidationHelper.ValidateValue(response.JwksUri, OidcConstants.JWKS_URI);
-
-        OidcValidationHelper.ValidateRequiredValues(response.ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
-        OidcValidationHelper.ValidateRequiredValues(response.SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
-        OidcValidationHelper.ValidateRequiredValues(response.IdTokenSigningAlgValuesSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }
 }

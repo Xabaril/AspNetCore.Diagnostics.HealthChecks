@@ -33,7 +33,7 @@ public class DocumentDbHealthCheck : IHealthCheck
                 }
             }
 
-            if (CanCheckCollectionInDatabase())
+            if (!string.IsNullOrWhiteSpace(_documentDbOptions.DatabaseName) && !string.IsNullOrWhiteSpace(_documentDbOptions.CollectionName))
             {
                 await documentDbClient.ReadDocumentCollectionAsync(GetCollectionUri()).ConfigureAwait(false);
             }

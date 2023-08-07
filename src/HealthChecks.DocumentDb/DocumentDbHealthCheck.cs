@@ -35,7 +35,7 @@ public class DocumentDbHealthCheck : IHealthCheck
 
             if (!string.IsNullOrWhiteSpace(_documentDbOptions.DatabaseName) && !string.IsNullOrWhiteSpace(_documentDbOptions.CollectionName))
             {
-                await documentDbClient.ReadDocumentCollectionAsync(GetCollectionUri()).ConfigureAwait(false);
+                await documentDbClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(_documentDbOptions.DatabaseName, _documentDbOptions.CollectionName)).ConfigureAwait(false);
             }
             else
             {

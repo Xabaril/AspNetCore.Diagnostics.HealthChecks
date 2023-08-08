@@ -54,7 +54,6 @@ public class discovery_endpoint_response_should
 
     [Theory]
     [InlineData("")]
-    [InlineData("code", "id_token")]
     [InlineData("id_token", "id_token token")]
     [InlineData("code", "id_token token")]
     public void be_invalid_when_required_response_types_supported_are_missing(params string[] responseTypesSupported)
@@ -71,7 +70,25 @@ public class discovery_endpoint_response_should
 
         validate
             .ShouldThrow<ArgumentException>()
-            .Message.ShouldBe("Invalid discovery response - 'response_types_supported' must contain the following values: code,id_token,id_token token!");
+            .Message.ShouldBe("Invalid discovery response - 'response_types_supported' must contain the following values: code,id_token!");
+    }
+
+    [Fact]
+    public void be_invalid_when_combined_response_types_supported_are_missing()
+    {
+        var response = new DiscoveryEndpointResponse
+        {
+            Issuer = RandomString,
+            AuthorizationEndpoint = RandomString,
+            JwksUri = RandomString,
+            ResponseTypesSupported = new[] { "id_token", "code" },
+        };
+
+        Action validate = () => response.ValidateResponse();
+
+        validate
+            .ShouldThrow<ArgumentException>()
+            .Message.ShouldBe("Invalid discovery response - 'response_types_supported' must be one of the following values: token id_token,id_token token!");
     }
 
     [Theory]
@@ -84,7 +101,7 @@ public class discovery_endpoint_response_should
             Issuer = RandomString,
             AuthorizationEndpoint = RandomString,
             JwksUri = RandomString,
-            ResponseTypesSupported = OidcConstants.REQUIRED_RESPONSE_TYPES,
+            ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
             SubjectTypesSupported = new[] { subjectTypesSupported },
         };
 
@@ -103,7 +120,7 @@ public class discovery_endpoint_response_should
             Issuer = RandomString,
             AuthorizationEndpoint = RandomString,
             JwksUri = RandomString,
-            ResponseTypesSupported = OidcConstants.REQUIRED_RESPONSE_TYPES,
+            ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
             SubjectTypesSupported = OidcConstants.REQUIRED_SUBJECT_TYPES,
             SigningAlgorithmsSupported = new[] { string.Empty },
         };
@@ -123,7 +140,7 @@ public class discovery_endpoint_response_should
             Issuer = RandomString,
             AuthorizationEndpoint = RandomString,
             JwksUri = RandomString,
-            ResponseTypesSupported = OidcConstants.REQUIRED_RESPONSE_TYPES,
+            ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
             SubjectTypesSupported = OidcConstants.REQUIRED_SUBJECT_TYPES,
             SigningAlgorithmsSupported = OidcConstants.REQUIRED_ALGORITHMS,
         };
@@ -134,4 +151,6 @@ public class discovery_endpoint_response_should
     }
 
     private static string RandomString => Guid.NewGuid().ToString();
+
+    private static readonly string[] REQUIRED_RESPONSE_TYPES = OidcConstants.REQUIRED_RESPONSE_TYPES.Concat(new[] { "id_token token" }).ToArray();
 }

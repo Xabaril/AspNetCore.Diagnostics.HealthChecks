@@ -32,6 +32,10 @@ internal class DiscoveryEndpointResponse
         ValidateValue(JwksUri, OidcConstants.JWKS_URI);
 
         ValidateRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
+
+        // Specification decribes 'token id_token' response type,
+        // but some identity providers (f.e. Identity Server and Azure AD) return 'id_token token'
+        ValidateOneOfRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_COMBINED_RESPONSE_TYPES);
         ValidateOneOfRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
         ValidateRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }

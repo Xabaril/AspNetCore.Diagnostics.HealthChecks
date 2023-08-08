@@ -14,7 +14,9 @@ internal class OidcConstants
 
     internal const string ALGORITHMS_SUPPORTED = "id_token_signing_alg_values_supported";
 
-    internal static string[] REQUIRED_RESPONSE_TYPES => new[] { "code", "id_token", "id_token token" };
+    internal static string[] REQUIRED_RESPONSE_TYPES => new[] { "code", "id_token" };
+
+    internal static string[] REQUIRED_COMBINED_RESPONSE_TYPES => new[] { "token id_token", "id_token token" };
 
     internal static string[] REQUIRED_SUBJECT_TYPES => new[] { "pairwise", "public" };
 

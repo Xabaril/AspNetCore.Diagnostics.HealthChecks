@@ -23,7 +23,7 @@ public class UIResponseWriterTests
 
         await UIResponseWriter.WriteHealthCheckUIResponseNoExceptionDetails(httpContext, report).ConfigureAwait(false);
 
-        // reset pointer to the beginning 
+        // reset pointer to the beginning
         httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
         var healthReport = await JsonSerializer.DeserializeAsync<UIHealthReport>(httpContext.Response.Body, CreateJsonOptions()).ConfigureAwait(false);
 

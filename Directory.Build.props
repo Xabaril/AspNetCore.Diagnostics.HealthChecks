@@ -36,6 +36,10 @@
     <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+  </ItemGroup>
+
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" Condition="'$(TargetFramework)' != 'net7.0'" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.20" Condition="'$(TargetFramework)' == 'net6.0'" />

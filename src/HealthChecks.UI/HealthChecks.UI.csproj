@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="HealthChecks.UI.Tests;HealthChecks.UI.Image" />
+    <InternalsVisibleTo Include="HealthChecks.UI.Image" />
   </ItemGroup>
 
   <Target Name="InstallPackages" BeforeTargets="BeforeBuild">

@@ -143,7 +143,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
 
             using (response)
             {
-                if (!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != "application/json")
                     return UIHealthReport.CreateFrom(new InvalidOperationException($"HTTP response is not in valid state ({response.StatusCode}) when trying to get report from {uri} configured with name {name}."));
 
                 return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options)

@@ -45,16 +45,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task can_create_client_with_connection_string(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -81,32 +72,15 @@ public class azureservicebusqueuehealthcheck_should
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
         // Second call
-        var otherTopicName = Guid.NewGuid().ToString();
-        var otherOptions = new AzureServiceBusQueueHealthCheckOptions(otherTopicName)
-        {
-            ConnectionString = ConnectionString,
-        };
-        var otherHealthCheck = new AzureServiceBusQueueHealthCheck(otherOptions, _clientProvider);
-        var otherContext = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
-        };
+        var otherQueueName = Guid.NewGuid().ToString();
+        var (otherHealthCheck, otherContext) = CreateQueueHealthCheck(otherQueueName, peakMode, connectionString: ConnectionString);
 
         var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -132,17 +106,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task can_create_client_with_fully_qualified_endpoint(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -152,13 +116,13 @@ public class azureservicebusqueuehealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateClient(FullyQualifiedName, _tokenCredential);
         }
         else
         {
             _clientProvider
                 .Received(1)
-                .CreateManagementClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateManagementClient(FullyQualifiedName, _tokenCredential);
         }
     }
 
@@ -169,17 +133,7 @@ public class azureservicebusqueuehealthcheck_should
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -187,16 +141,7 @@ public class azureservicebusqueuehealthcheck_should
 
         // Second call
         var otherQueueName = Guid.NewGuid().ToString();
-        var otherOptions = new AzureServiceBusQueueHealthCheckOptions(otherQueueName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-        };
-        var otherHealthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var otherContext = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (otherHealthCheck, otherContext) = CreateQueueHealthCheck(otherQueueName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
         var otherActual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -206,13 +151,13 @@ public class azureservicebusqueuehealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateClient(FullyQualifiedName, _tokenCredential);
         }
         else
         {
             _clientProvider
                 .Received(1)
-                .CreateManagementClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateManagementClient(FullyQualifiedName, _tokenCredential);
         }
     }
 
@@ -220,16 +165,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_peek_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = true,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, true, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -251,17 +187,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_peek_and_endpoint()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = true,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, true, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -283,16 +209,8 @@ public class azureservicebusqueuehealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = true,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, true, connectionString: ConnectionString);
+
 
         _serviceBusReceiver
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
@@ -318,16 +236,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_administration_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = false,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, false, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -345,17 +254,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_administration_and_endpoint()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = false,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, false, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -373,16 +272,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_administration_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusQueueHealthCheckOptions(QueueName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = false,
-        };
-        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateQueueHealthCheck(QueueName, false, connectionString: ConnectionString);
 
         _serviceBusAdministrationClient
             .GetQueueRuntimePropertiesAsync(QueueName, cancellationToken: tokenSource.Token)
@@ -398,5 +288,26 @@ public class azureservicebusqueuehealthcheck_should
            .Received(1)
            .GetQueueRuntimePropertiesAsync(QueueName, cancellationToken: tokenSource.Token)
            .ConfigureAwait(false);
+    }
+
+    private (AzureServiceBusQueueHealthCheck, HealthCheckContext) CreateQueueHealthCheck(
+        string queueName,
+        bool peakMode,
+        string? connectionString = null,
+        string? fullyQualifiedName = null)
+    {
+        var options = new AzureServiceBusQueueHealthCheckOptions(queueName)
+        {
+            ConnectionString = connectionString,
+            FullyQualifiedNamespace = fullyQualifiedName,
+            Credential = fullyQualifiedName is null ? null : _tokenCredential,
+            UsePeekMode = peakMode,
+        };
+        var healthCheck = new AzureServiceBusQueueHealthCheck(options, _clientProvider);
+        var context = new HealthCheckContext
+        {
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
+        };
+        return (healthCheck, context);
     }
 }

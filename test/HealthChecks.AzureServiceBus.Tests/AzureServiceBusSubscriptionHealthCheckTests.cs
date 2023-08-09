@@ -47,16 +47,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task can_create_client_with_connection_string(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -83,16 +74,7 @@ public class azureservicebussubscriptionhealthcheck_should
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -100,15 +82,7 @@ public class azureservicebussubscriptionhealthcheck_should
 
         // Second call
         var otherTopicName = Guid.NewGuid().ToString();
-        var otherOptions = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(otherTopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-        };
-        var otherHealthCheck = new AzureServiceBusSubscriptionHealthCheck(otherOptions, _clientProvider);
-        var otherContext = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (otherHealthCheck, otherContext) = CreateSubscriptionHealthCheck(otherTopicName, peakMode, connectionString: ConnectionString);
 
         var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -134,17 +108,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task can_create_client_with_fully_qualified_endpoint(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -154,13 +118,13 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateClient(FullyQualifiedName, _tokenCredential);
         }
         else
         {
             _clientProvider
                 .Received(1)
-                .CreateManagementClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateManagementClient(FullyQualifiedName, _tokenCredential);
         }
     }
 
@@ -171,17 +135,7 @@ public class azureservicebussubscriptionhealthcheck_should
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = peakMode,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -189,16 +143,7 @@ public class azureservicebussubscriptionhealthcheck_should
 
         // Second call
         var otherTopicName = Guid.NewGuid().ToString();
-        var otherOptions = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(otherTopicName, SubscriptionName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-        };
-        var otherHealthCheck = new AzureServiceBusSubscriptionHealthCheck(otherOptions, _clientProvider);
-        var otherContext = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, otherHealthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (otherHealthCheck, otherContext) = CreateSubscriptionHealthCheck(otherTopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
         var otherActual = await otherHealthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -208,13 +153,13 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateClient(FullyQualifiedName, _tokenCredential);
         }
         else
         {
             _clientProvider
                 .Received(1)
-                .CreateManagementClient(options.FullyQualifiedNamespace, options.Credential);
+                .CreateManagementClient(FullyQualifiedName, _tokenCredential);
         }
     }
 
@@ -222,16 +167,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_peek_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = true,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, true, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -253,17 +189,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_peek_and_endpoint()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = true,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, true, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -285,16 +211,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = true,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, true, connectionString: ConnectionString);
 
         _serviceBusReceiver
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
@@ -320,16 +237,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_administration_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = false,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, false, connectionString: ConnectionString);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -347,17 +255,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_administration_and_endpoint()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            FullyQualifiedNamespace = FullyQualifiedName,
-            Credential = _tokenCredential,
-            UsePeekMode = false,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, false, fullyQualifiedName: FullyQualifiedName);
 
         var actual = await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
@@ -375,16 +273,7 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_administration_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(TopicName, SubscriptionName)
-        {
-            ConnectionString = ConnectionString,
-            UsePeekMode = false,
-        };
-        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
-        var context = new HealthCheckContext
-        {
-            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
-        };
+        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, false, connectionString: ConnectionString);
 
         _serviceBusAdministrationClient
             .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, cancellationToken: tokenSource.Token)
@@ -400,5 +289,26 @@ public class azureservicebussubscriptionhealthcheck_should
            .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
+    }
+
+    private (AzureServiceBusSubscriptionHealthCheck, HealthCheckContext) CreateSubscriptionHealthCheck(
+        string topicName,
+        bool peakMode,
+        string? connectionString = null,
+        string? fullyQualifiedName = null)
+    {
+        var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicName, SubscriptionName)
+        {
+            ConnectionString = connectionString,
+            FullyQualifiedNamespace = fullyQualifiedName,
+            Credential = fullyQualifiedName is null ? null : _tokenCredential,
+            UsePeekMode = peakMode,
+        };
+        var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);
+        var context = new HealthCheckContext
+        {
+            Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
+        };
+        return (healthCheck, context);
     }
 }

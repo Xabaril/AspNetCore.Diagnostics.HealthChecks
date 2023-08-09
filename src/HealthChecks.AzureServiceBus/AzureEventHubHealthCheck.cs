@@ -7,6 +7,7 @@ namespace HealthChecks.AzureServiceBus;
 public class AzureEventHubHealthCheck : IHealthCheck
 {
     private const string ENTITY_PATH_SEGMENT = "EntityPath=";
+    private const int DEFAULT_TIME_OUT_IN_SECONDS = 60;
     private readonly AzureEventHubHealthCheckOptions _options;
 
     private string? _connectionKey;
@@ -85,7 +86,9 @@ public class AzureEventHubHealthCheck : IHealthCheck
     {
         ConnectionOptions = new()
         {
-            ConnectionIdleTimeout = context.Registration.Timeout,
+            ConnectionIdleTimeout = context.Registration.Timeout.TotalMilliseconds > 0
+                ? context.Registration.Timeout
+                : TimeSpan.FromSeconds(DEFAULT_TIME_OUT_IN_SECONDS), // Default in EventHub SDK
         }
     };
 }

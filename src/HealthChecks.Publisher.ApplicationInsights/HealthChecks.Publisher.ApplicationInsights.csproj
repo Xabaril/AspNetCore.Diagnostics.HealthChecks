@@ -12,8 +12,4 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Include="HealthChecks.Publisher.ApplicationInsights.Tests" />
-  </ItemGroup>
-
 </Project>

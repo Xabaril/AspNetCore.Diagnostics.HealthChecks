@@ -17,7 +17,7 @@
     <HealthCheckConsul>7.0.0</HealthCheckConsul>
     <HealthCheckCosmosDb>7.0.0</HealthCheckCosmosDb>
     <HealthCheckDapr>7.0.0</HealthCheckDapr>
-    <HealthCheckDocumentDb>7.0.0</HealthCheckDocumentDb>
+    <HealthCheckDocumentDb>7.1.0</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>7.0.0</HealthCheckDynamoDb>
     <HealthCheckElasticsearch>7.0.0</HealthCheckElasticsearch>
     <HealthCheckEventStoregRPC>7.0.0</HealthCheckEventStoregRPC>
@@ -54,8 +54,8 @@
     <HealthChecksUIK8sOperator>7.0.0</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>7.0.0</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>7.0.0</HealthCheckSystem>
-    <HealthCheckUI>7.0.1</HealthCheckUI>
-    <HealthCheckUIClient>7.0.0</HealthCheckUIClient>
+    <HealthCheckUI>7.0.2</HealthCheckUI>
+    <HealthCheckUIClient>7.1.0</HealthCheckUIClient>
     <HealthCheckUICore>7.0.0</HealthCheckUICore>
     <HealthCheckUIData>7.0.0</HealthCheckUIData>
     <HealthCheckUIInMemoryStorage>7.0.0</HealthCheckUIInMemoryStorage>

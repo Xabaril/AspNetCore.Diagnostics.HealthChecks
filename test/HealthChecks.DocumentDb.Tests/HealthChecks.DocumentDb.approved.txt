@@ -8,6 +8,8 @@ namespace HealthChecks.DocumentDb
     public class DocumentDbOptions
     {
         public DocumentDbOptions() { }
+        public string? CollectionName { get; set; }
+        public string? DatabaseName { get; set; }
         public string PrimaryKey { get; set; }
         public string UriEndpoint { get; set; }
     }

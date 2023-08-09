@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
-    <PackageReference Include="RavenDB.Client" Version="5.4.107" />
+    <PackageReference Include="RavenDB.Client" Version="5.4.109" />
   </ItemGroup>
 
 </Project>

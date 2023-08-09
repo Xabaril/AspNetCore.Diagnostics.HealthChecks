@@ -1,4 +1,3 @@
-using System.Threading;
 using Azure.Core;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
@@ -48,10 +47,12 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task can_create_client_with_connection_string(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, connectionString: ConnectionString);
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            peakMode,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -73,20 +74,21 @@ public class azureservicebussubscriptionhealthcheck_should
     [InlineData(false)]
     public async Task reuses_existing_client_when_using_same_connection_string_with_different_topic(bool peakMode)
     {
-        // First call
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, connectionString: ConnectionString);
+        var otherTopicName = Guid.NewGuid().ToString();
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            peakMode,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
-        // Second call
-        var otherTopicName = Guid.NewGuid().ToString();
-        var (otherHealthCheck, otherContext) = CreateSubscriptionHealthCheck(otherTopicName, peakMode, connectionString: ConnectionString);
-
-        await otherHealthCheck
-            .CheckHealthAsync(otherContext, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            otherTopicName,
+            peakMode,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -127,11 +129,12 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task can_create_client_with_fully_qualified_endpoint(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
-            .ConfigureAwait(false);
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            peakMode,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token).ConfigureAwait(false);
 
         if (peakMode)
         {
@@ -152,20 +155,21 @@ public class azureservicebussubscriptionhealthcheck_should
     [InlineData(false)]
     public async Task reuses_existing_client_when_checking_different_topic_in_same_servicebus(bool peakMode)
     {
-        // First call
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
+        var otherTopicName = Guid.NewGuid().ToString();
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            peakMode,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
-        // Second call
-        var otherTopicName = Guid.NewGuid().ToString();
-        var (otherHealthCheck, otherContext) = CreateSubscriptionHealthCheck(otherTopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
-
-        await otherHealthCheck
-            .CheckHealthAsync(otherContext, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            otherTopicName,
+            peakMode,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -204,10 +208,12 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_peek_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, true, connectionString: ConnectionString);
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            true,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _serviceBusClient
@@ -226,10 +232,12 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_peek_and_endpoint()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, true, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            true,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _serviceBusClient
@@ -248,14 +256,16 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, true, connectionString: ConnectionString);
 
         _serviceBusReceiver
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ThrowsAsyncForAnyArgs(new InvalidOperationException());
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            true,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _serviceBusClient
@@ -274,10 +284,12 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_administration_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, false, connectionString: ConnectionString);
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            false,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         await _serviceBusAdministrationClient
@@ -292,10 +304,12 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_healthy_when_checking_healthy_service_through_administration_and_endpoint()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, false, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            false,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         await _serviceBusAdministrationClient
@@ -310,14 +324,15 @@ public class azureservicebussubscriptionhealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_administration_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, false, connectionString: ConnectionString);
 
         _serviceBusAdministrationClient
             .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, cancellationToken: tokenSource.Token)
             .ThrowsAsyncForAnyArgs(new InvalidOperationException());
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName, false,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         await _serviceBusAdministrationClient
@@ -328,11 +343,12 @@ public class azureservicebussubscriptionhealthcheck_should
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 
-    private (AzureServiceBusSubscriptionHealthCheck, HealthCheckContext) CreateSubscriptionHealthCheck(
+    private Task<HealthCheckResult> ExecuteHealthCheckAsync(
         string topicName,
         bool peakMode,
         string? connectionString = null,
-        string? fullyQualifiedName = null)
+        string? fullyQualifiedName = null,
+        CancellationToken cancellationToken = default)
     {
         var options = new AzureServiceBusSubscriptionHealthCheckHealthCheckOptions(topicName, SubscriptionName)
         {
@@ -346,6 +362,7 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
-        return (healthCheck, context);
+
+        return healthCheck.CheckHealthAsync(context, cancellationToken);
     }
 }

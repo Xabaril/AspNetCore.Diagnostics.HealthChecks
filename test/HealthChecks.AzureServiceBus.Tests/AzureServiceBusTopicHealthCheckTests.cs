@@ -35,10 +35,11 @@ public class azureservicebustopichealthcheck_should
     public async Task can_create_client_with_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, connectionString: ConnectionString);
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _clientProvider
@@ -49,20 +50,19 @@ public class azureservicebustopichealthcheck_should
     [Fact]
     public async Task reuses_existing_client_when_using_same_connection_string_with_different_topic()
     {
-        // First call
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, connectionString: ConnectionString);
+        var otherTopicName = Guid.NewGuid().ToString();
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
-        // Second call
-        var otherTopicName = Guid.NewGuid().ToString();
-        var (otherHealthCheck, otherContext) = CreateTopicHealthCheck(otherTopicName, connectionString: ConnectionString);
-
-        await otherHealthCheck
-            .CheckHealthAsync(otherContext, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            otherTopicName,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _clientProvider
@@ -84,10 +84,11 @@ public class azureservicebustopichealthcheck_should
     public async Task can_create_client_with_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, fullyQualifiedName: FullyQualifiedName);
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _clientProvider
@@ -98,20 +99,19 @@ public class azureservicebustopichealthcheck_should
     [Fact]
     public async Task reuses_existing_client_when_using_same_fully_qualified_name_with_different_topic()
     {
-        // First call
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, fullyQualifiedName: FullyQualifiedName);
+        var otherTopicName = Guid.NewGuid().ToString();
 
-        await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            TopicName,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
-        // Second call
-        var otherTopicName = Guid.NewGuid().ToString();
-        var (otherHealthCheck, otherContext) = CreateTopicHealthCheck(otherTopicName, fullyQualifiedName: FullyQualifiedName);
-
-        await otherHealthCheck
-            .CheckHealthAsync(otherContext, tokenSource.Token)
+        await ExecuteHealthCheckAsync(
+            otherTopicName,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         _clientProvider
@@ -133,10 +133,11 @@ public class azureservicebustopichealthcheck_should
     public async Task return_healthy_when_only_checking_healthy_service_through_administration_and_connection_string()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, connectionString: ConnectionString);
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
@@ -155,10 +156,11 @@ public class azureservicebustopichealthcheck_should
     public async Task return_healthy_when_only_checking_healthy_service_through_administration_and_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            fullyQualifiedName: FullyQualifiedName,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
@@ -177,14 +179,15 @@ public class azureservicebustopichealthcheck_should
     public async Task return_unhealthy_when_exception_is_thrown_by_administration_client()
     {
         using var tokenSource = new CancellationTokenSource();
-        var (healthCheck, context) = CreateTopicHealthCheck(TopicName, connectionString: ConnectionString);
 
         _serviceBusAdministrationClient
             .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
             .ThrowsAsyncForAnyArgs(new InvalidOperationException());
 
-        var actual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        var actual = await ExecuteHealthCheckAsync(
+            TopicName,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
@@ -195,10 +198,11 @@ public class azureservicebustopichealthcheck_should
            .ConfigureAwait(false);
     }
 
-    private (AzureServiceBusTopicHealthCheck, HealthCheckContext) CreateTopicHealthCheck(
+    private Task<HealthCheckResult> ExecuteHealthCheckAsync(
         string topicName,
         string? connectionString = null,
-        string? fullyQualifiedName = null)
+        string? fullyQualifiedName = null,
+        CancellationToken cancellationToken = default)
     {
         var options = new AzureServiceBusTopicHealthCheckOptions(topicName)
         {
@@ -211,6 +215,7 @@ public class azureservicebustopichealthcheck_should
         {
             Registration = new HealthCheckRegistration(HEALTH_CHECK_NAME, healthCheck, HealthStatus.Unhealthy, null)
         };
-        return (healthCheck, context);
+
+        return healthCheck.CheckHealthAsync(context, cancellationToken);
     }
 }

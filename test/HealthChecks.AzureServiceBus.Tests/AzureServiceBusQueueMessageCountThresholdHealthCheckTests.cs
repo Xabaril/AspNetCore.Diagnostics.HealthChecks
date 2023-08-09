@@ -38,7 +38,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, connectionString: ConnectionString);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -54,7 +54,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, connectionString: ConnectionString);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -62,13 +62,23 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         var otherQueueName = Guid.NewGuid().ToString();
         var (otherHealthCheck, otherContext) = CreateQueueHealthCheck(otherQueueName, connectionString: ConnectionString);
 
-        var otherActual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await otherHealthCheck
+            .CheckHealthAsync(otherContext, tokenSource.Token)
             .ConfigureAwait(false);
 
         _clientProvider
             .Received(1)
             .CreateManagementClient(ConnectionString);
+
+        await _serviceBusAdministrationClient
+            .Received(1)
+            .GetQueueRuntimePropertiesAsync(QueueName, tokenSource.Token)
+            .ConfigureAwait(false);
+
+        await _serviceBusAdministrationClient
+            .Received(1)
+            .GetQueueRuntimePropertiesAsync(otherQueueName, tokenSource.Token)
+            .ConfigureAwait(false);
     }
 
     [Fact]
@@ -77,7 +87,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -93,7 +103,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -101,13 +111,23 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         var otherQueueName = Guid.NewGuid().ToString();
         var (otherHealthCheck, otherContext) = CreateQueueHealthCheck(otherQueueName, fullyQualifiedName: FullyQualifiedName);
 
-        var otherActual = await otherHealthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await otherHealthCheck
+            .CheckHealthAsync(otherContext, tokenSource.Token)
             .ConfigureAwait(false);
 
         _clientProvider
             .Received(1)
             .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+
+        await _serviceBusAdministrationClient
+            .Received(1)
+            .GetQueueRuntimePropertiesAsync(QueueName, tokenSource.Token)
+            .ConfigureAwait(false);
+
+        await _serviceBusAdministrationClient
+            .Received(1)
+            .GetQueueRuntimePropertiesAsync(otherQueueName, tokenSource.Token)
+            .ConfigureAwait(false);
     }
 
     [Fact]

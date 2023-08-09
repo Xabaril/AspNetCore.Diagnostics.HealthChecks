@@ -1,3 +1,4 @@
+using System.Threading;
 using Azure.Core;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
@@ -49,7 +50,7 @@ public class azureservicebussubscriptionhealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, connectionString: ConnectionString);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -70,13 +71,13 @@ public class azureservicebussubscriptionhealthcheck_should
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task reuses_existing_client_when_using_same_connection_string_with_different_queue(bool peakMode)
+    public async Task reuses_existing_client_when_using_same_connection_string_with_different_topic(bool peakMode)
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, connectionString: ConnectionString);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -84,8 +85,8 @@ public class azureservicebussubscriptionhealthcheck_should
         var otherTopicName = Guid.NewGuid().ToString();
         var (otherHealthCheck, otherContext) = CreateSubscriptionHealthCheck(otherTopicName, peakMode, connectionString: ConnectionString);
 
-        var otherActual = await otherHealthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await otherHealthCheck
+            .CheckHealthAsync(otherContext, tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -93,12 +94,30 @@ public class azureservicebussubscriptionhealthcheck_should
             _clientProvider
                 .Received(1)
                 .CreateClient(ConnectionString);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(TopicName, SubscriptionName);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(otherTopicName, SubscriptionName);
         }
         else
         {
             _clientProvider
                 .Received(1)
                 .CreateManagementClient(ConnectionString);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, tokenSource.Token)
+                .ConfigureAwait(false);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetSubscriptionRuntimePropertiesAsync(otherTopicName, SubscriptionName, tokenSource.Token)
+                .ConfigureAwait(false);
         }
     }
 
@@ -110,7 +129,7 @@ public class azureservicebussubscriptionhealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -131,13 +150,13 @@ public class azureservicebussubscriptionhealthcheck_should
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task reuses_existing_client_when_checking_different_queue_in_same_servicebus(bool peakMode)
+    public async Task reuses_existing_client_when_checking_different_topic_in_same_servicebus(bool peakMode)
     {
         // First call
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateSubscriptionHealthCheck(TopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -145,8 +164,8 @@ public class azureservicebussubscriptionhealthcheck_should
         var otherTopicName = Guid.NewGuid().ToString();
         var (otherHealthCheck, otherContext) = CreateSubscriptionHealthCheck(otherTopicName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        var otherActual = await otherHealthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await otherHealthCheck
+            .CheckHealthAsync(otherContext, tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -154,12 +173,30 @@ public class azureservicebussubscriptionhealthcheck_should
             _clientProvider
                 .Received(1)
                 .CreateClient(FullyQualifiedName, _tokenCredential);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(TopicName, SubscriptionName);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(otherTopicName, SubscriptionName);
         }
         else
         {
             _clientProvider
                 .Received(1)
                 .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, tokenSource.Token)
+                .ConfigureAwait(false);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetSubscriptionRuntimePropertiesAsync(otherTopicName, SubscriptionName, tokenSource.Token)
+                .ConfigureAwait(false);
         }
     }
 

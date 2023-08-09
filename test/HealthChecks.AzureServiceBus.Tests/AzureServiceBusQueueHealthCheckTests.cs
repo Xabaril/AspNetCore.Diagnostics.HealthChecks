@@ -47,7 +47,7 @@ public class azureservicebusqueuehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, ConnectionString);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -74,7 +74,7 @@ public class azureservicebusqueuehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, connectionString: ConnectionString);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -82,8 +82,8 @@ public class azureservicebusqueuehealthcheck_should
         var otherQueueName = Guid.NewGuid().ToString();
         var (otherHealthCheck, otherContext) = CreateQueueHealthCheck(otherQueueName, peakMode, connectionString: ConnectionString);
 
-        var otherActual = await otherHealthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await otherHealthCheck
+            .CheckHealthAsync(otherContext, tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -91,12 +91,30 @@ public class azureservicebusqueuehealthcheck_should
             _clientProvider
                 .Received(1)
                 .CreateClient(ConnectionString);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(QueueName);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(otherQueueName);
         }
         else
         {
             _clientProvider
                 .Received(1)
                 .CreateManagementClient(ConnectionString);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetQueueRuntimePropertiesAsync(QueueName, tokenSource.Token)
+                .ConfigureAwait(false);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetQueueRuntimePropertiesAsync(otherQueueName, tokenSource.Token)
+                .ConfigureAwait(false);
         }
     }
 
@@ -108,7 +126,7 @@ public class azureservicebusqueuehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -135,7 +153,7 @@ public class azureservicebusqueuehealthcheck_should
         using var tokenSource = new CancellationTokenSource();
         var (healthCheck, context) = CreateQueueHealthCheck(QueueName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        var actual = await healthCheck
+        await healthCheck
             .CheckHealthAsync(context, tokenSource.Token)
             .ConfigureAwait(false);
 
@@ -143,8 +161,8 @@ public class azureservicebusqueuehealthcheck_should
         var otherQueueName = Guid.NewGuid().ToString();
         var (otherHealthCheck, otherContext) = CreateQueueHealthCheck(otherQueueName, peakMode, fullyQualifiedName: FullyQualifiedName);
 
-        var otherActual = await healthCheck
-            .CheckHealthAsync(context, tokenSource.Token)
+        await otherHealthCheck
+            .CheckHealthAsync(otherContext, tokenSource.Token)
             .ConfigureAwait(false);
 
         if (peakMode)
@@ -152,12 +170,30 @@ public class azureservicebusqueuehealthcheck_should
             _clientProvider
                 .Received(1)
                 .CreateClient(FullyQualifiedName, _tokenCredential);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(QueueName);
+
+            _serviceBusClient
+                .Received(1)
+                .CreateReceiver(otherQueueName);
         }
         else
         {
             _clientProvider
                 .Received(1)
                 .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetQueueRuntimePropertiesAsync(QueueName, tokenSource.Token)
+                .ConfigureAwait(false);
+
+            await _serviceBusAdministrationClient
+                .Received(1)
+                .GetQueueRuntimePropertiesAsync(otherQueueName, tokenSource.Token)
+                .ConfigureAwait(false);
         }
     }
 

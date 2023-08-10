@@ -73,6 +73,7 @@ public class azureservicebusqueuehealthcheck_should
     public async Task reuses_existing_client_when_using_same_connection_string_with_different_queue(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
+        var otherQueueName = Guid.NewGuid().ToString();
 
         await ExecuteHealthCheckAsync(
             QueueName,
@@ -80,7 +81,6 @@ public class azureservicebusqueuehealthcheck_should
             connectionString: ConnectionString,
             cancellationToken: tokenSource.Token).ConfigureAwait(false);
 
-        var otherQueueName = Guid.NewGuid().ToString();
         await ExecuteHealthCheckAsync(
             otherQueueName,
             peakMode,
@@ -151,7 +151,7 @@ public class azureservicebusqueuehealthcheck_should
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task reuses_existing_client_when_checking_different_queue_in_same_servicebus(bool peakMode)
+    public async Task reuses_existing_client_when_using_same_fully_qualified_name_with_different_queue(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
         var otherQueueName = Guid.NewGuid().ToString();
@@ -227,7 +227,7 @@ public class azureservicebusqueuehealthcheck_should
     }
 
     [Fact]
-    public async Task return_healthy_when_checking_healthy_service_through_peek_and_endpoint()
+    public async Task return_healthy_when_checking_healthy_service_through_peek_and_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -299,7 +299,7 @@ public class azureservicebusqueuehealthcheck_should
     }
 
     [Fact]
-    public async Task return_healthy_when_checking_healthy_service_through_administration_and_endpoint()
+    public async Task return_healthy_when_checking_healthy_service_through_administration_and_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
 

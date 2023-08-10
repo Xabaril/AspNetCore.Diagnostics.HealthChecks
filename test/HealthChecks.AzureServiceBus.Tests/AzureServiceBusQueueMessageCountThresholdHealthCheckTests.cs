@@ -131,7 +131,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
     }
 
     [Fact]
-    public async Task return_healthy_when_active_queue_threshold_is_null()
+    public async Task return_healthy_when_active_message_threshold_is_null()
     {
         using var tokenSource = new CancellationTokenSource();
         var queueProperties = ServiceBusModelFactory.QueueRuntimeProperties(QueueName);
@@ -143,6 +143,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
 
         var actual = await ExecuteHealthCheckAsync(
             QueueName,
+            activeMessagesCountThreshold: null,
             connectionString: ConnectionString,
             cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
@@ -169,13 +170,13 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         HealthStatus expectedHealthStatus)
     {
         using var tokenSource = new CancellationTokenSource();
+        var queueProperties = ServiceBusModelFactory.QueueRuntimeProperties(QueueName, activeMessageCount: messageCount);
+        var response = Response.FromValue(queueProperties, Substitute.For<Response>());
         var messageCountThreshold = new AzureServiceBusQueueMessagesCountThreshold
         {
             DegradedThreshold = degradedThreshold,
             UnhealthyThreshold = unhealthyThreshold,
         };
-        var queueProperties = ServiceBusModelFactory.QueueRuntimeProperties(QueueName, activeMessageCount: messageCount);
-        var response = Response.FromValue(queueProperties, Substitute.For<Response>());
 
         _serviceBusAdministrationClient
             .GetQueueRuntimePropertiesAsync(QueueName, tokenSource.Token)
@@ -210,13 +211,13 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         HealthStatus expectedHealthStatus)
     {
         using var tokenSource = new CancellationTokenSource();
+        var queueProperties = ServiceBusModelFactory.QueueRuntimeProperties(QueueName, deadLetterMessageCount: messageCount);
+        var response = Response.FromValue(queueProperties, Substitute.For<Response>());
         var messageCountThreshold = new AzureServiceBusQueueMessagesCountThreshold
         {
             DegradedThreshold = degradedThreshold,
             UnhealthyThreshold = unhealthyThreshold,
         };
-        var queueProperties = ServiceBusModelFactory.QueueRuntimeProperties(QueueName, deadLetterMessageCount: messageCount);
-        var response = Response.FromValue(queueProperties, Substitute.For<Response>());
 
         _serviceBusAdministrationClient
             .GetQueueRuntimePropertiesAsync(QueueName, tokenSource.Token)

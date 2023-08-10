@@ -126,7 +126,7 @@ public class azureservicebussubscriptionhealthcheck_should
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task can_create_client_with_fully_qualified_endpoint(bool peakMode)
+    public async Task can_create_client_with_fully_qualified_name(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -153,7 +153,7 @@ public class azureservicebussubscriptionhealthcheck_should
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task reuses_existing_client_when_checking_different_topic_in_same_servicebus(bool peakMode)
+    public async Task reuses_existing_client_when_when_using_same_fully_qualified_name_with_different_topic(bool peakMode)
     {
         using var tokenSource = new CancellationTokenSource();
         var otherTopicName = Guid.NewGuid().ToString();
@@ -220,16 +220,16 @@ public class azureservicebussubscriptionhealthcheck_should
             .Received(1)
             .CreateReceiver(TopicName, SubscriptionName);
 
+        actual.Status.ShouldBe(HealthStatus.Healthy);
+
         await _serviceBusReceiver
             .Received(1)
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
-    public async Task return_healthy_when_checking_healthy_service_through_peek_and_endpoint()
+    public async Task return_healthy_when_checking_healthy_service_through_peek_and_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -240,6 +240,8 @@ public class azureservicebussubscriptionhealthcheck_should
             cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Healthy);
+
         _serviceBusClient
             .Received(1)
             .CreateReceiver(TopicName, SubscriptionName);
@@ -248,8 +250,6 @@ public class azureservicebussubscriptionhealthcheck_should
             .Received(1)
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -268,6 +268,8 @@ public class azureservicebussubscriptionhealthcheck_should
             cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+
         _serviceBusClient
             .Received(1)
             .CreateReceiver(TopicName, SubscriptionName);
@@ -276,8 +278,6 @@ public class azureservicebussubscriptionhealthcheck_should
             .Received(1)
             .PeekMessageAsync(cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 
     [Fact]
@@ -292,16 +292,16 @@ public class azureservicebussubscriptionhealthcheck_should
             cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Healthy);
+
         await _serviceBusAdministrationClient
             .Received(1)
             .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
-    public async Task return_healthy_when_checking_healthy_service_through_administration_and_endpoint()
+    public async Task return_healthy_when_checking_healthy_service_through_administration_and_fully_qualified_name()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -312,12 +312,12 @@ public class azureservicebussubscriptionhealthcheck_should
             cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Healthy);
+
         await _serviceBusAdministrationClient
             .Received(1)
             .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -335,12 +335,12 @@ public class azureservicebussubscriptionhealthcheck_should
             cancellationToken: tokenSource.Token)
             .ConfigureAwait(false);
 
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+
         await _serviceBusAdministrationClient
            .Received(1)
            .GetSubscriptionRuntimePropertiesAsync(TopicName, SubscriptionName, cancellationToken: tokenSource.Token)
            .ConfigureAwait(false);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 
     private Task<HealthCheckResult> ExecuteHealthCheckAsync(

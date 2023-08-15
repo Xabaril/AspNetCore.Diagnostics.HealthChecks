@@ -198,7 +198,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
 
     private async Task<bool> ShouldNotifyAsync(string healthCheckName)
     {
-#pragma warning disable RCS1155 // Use StringComparison when comparing strings.
+#pragma warning disable RCS1155 // Use StringComparison when comparing strings, see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1995
         var lastNotifications = await _db.Failures
            .Where(lf => string.Equals(lf.HealthCheckName, healthCheckName))
            .OrderByDescending(lf => lf.LastNotified)

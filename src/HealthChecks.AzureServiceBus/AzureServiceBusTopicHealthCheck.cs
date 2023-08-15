@@ -5,15 +5,15 @@ namespace HealthChecks.AzureServiceBus;
 
 public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusTopicHealthCheckOptions>, IHealthCheck
 {
-    private string? _connectionKey;
-
-    protected override string ConnectionKey => _connectionKey ??= $"{Prefix}_{Options.TopicName}";
-
-    public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         Guard.ThrowIfNull(options.TopicName, true);
     }
+
+    public AzureServiceBusTopicHealthCheck(AzureServiceBusTopicHealthCheckOptions options)
+        : this(options, new ServiceBusClientProvider())
+    { }
 
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
@@ -21,7 +21,7 @@ public class AzureServiceBusTopicHealthCheck : AzureServiceBusHealthCheck<AzureS
     {
         try
         {
-            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
+            var managementClient = ClientCache.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
             _ = await managementClient.GetTopicRuntimePropertiesAsync(Options.TopicName, cancellationToken).ConfigureAwait(false);
 

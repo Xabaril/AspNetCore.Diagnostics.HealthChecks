@@ -5,17 +5,20 @@ namespace HealthChecks.AzureServiceBus;
 
 public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck<AzureServiceBusSubscriptionHealthCheckHealthCheckOptions>, IHealthCheck
 {
-    private string? _connectionKey;
+    private readonly string _subscriptionKey;
 
-    protected override string ConnectionKey =>
-        _connectionKey ??= $"{Prefix}_{Options.TopicName}_{Options.SubscriptionName}";
-
-    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         Guard.ThrowIfNull(options.TopicName, true);
         Guard.ThrowIfNull(options.SubscriptionName, true);
+
+        _subscriptionKey = $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}_{Options.TopicName}_{Options.SubscriptionName}";
     }
+
+    public AzureServiceBusSubscriptionHealthCheck(AzureServiceBusSubscriptionHealthCheckHealthCheckOptions options)
+        : this(options, new ServiceBusClientProvider())
+    { }
 
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -34,19 +37,20 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
 
-        Task CheckWithReceiver()
+        async Task CheckWithReceiver()
         {
-            var client = ClientConnections.GetOrAdd(ConnectionKey, _ => CreateClient());
-            var receiver = ServiceBusReceivers.GetOrAdd(
-                $"{nameof(AzureServiceBusSubscriptionHealthCheck)}_{ConnectionKey}",
-                client.CreateReceiver(Options.TopicName, Options.SubscriptionName));
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+            var receiver = await ClientCache.GetOrAddAsyncDisposableAsync(
+                _subscriptionKey,
+                _ => client.CreateReceiver(Options.TopicName, Options.SubscriptionName))
+                .ConfigureAwait(false);
 
-            return receiver.PeekMessageAsync(cancellationToken: cancellationToken);
+            await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         Task CheckWithManagement()
         {
-            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
+            var managementClient = ClientCache.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
             return managementClient.GetSubscriptionRuntimePropertiesAsync(
                 Options.TopicName, Options.SubscriptionName, cancellationToken);

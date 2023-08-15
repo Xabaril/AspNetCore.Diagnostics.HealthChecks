@@ -35,7 +35,7 @@
     <HealthCheckNetwork>7.0.0</HealthCheckNetwork>
     <HealthCheckNats>7.0.0</HealthCheckNats>
     <HealthCheckNpgSql>7.0.0</HealthCheckNpgSql>
-    <HealthCheckOpenIdConnectServer>7.0.0</HealthCheckOpenIdConnectServer>
+    <HealthCheckOpenIdConnectServer>7.1.0</HealthCheckOpenIdConnectServer>
     <HealthCheckOracle>7.0.0</HealthCheckOracle>
     <HealthCheckPrometheusMetrics>7.0.0</HealthCheckPrometheusMetrics>
     <HealthCheckPublisherAppplicationInsights>7.0.0</HealthCheckPublisherAppplicationInsights>

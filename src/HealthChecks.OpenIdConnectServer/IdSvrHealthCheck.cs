@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -27,9 +28,20 @@ public class IdSvrHealthCheck : IHealthCheck
             var httpClient = _httpClientFactory();
             using var response = await httpClient.GetAsync(_discoverConfigurationSegment, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
-            return response.IsSuccessStatusCode
-                ? HealthCheckResult.Healthy()
-                : new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Discover endpoint is not responding with 200 OK, the current status is {response.StatusCode} and the content {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+            }
+
+            var discoveryResponse = await response
+                   .Content
+                   .ReadFromJsonAsync<DiscoveryEndpointResponse>()
+                   .ConfigureAwait(false)
+               ?? throw new ArgumentException("Could not deserialize to discovery endpoint response!");
+
+            discoveryResponse.ValidateResponse();
+
+            return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

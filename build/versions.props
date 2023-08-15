@@ -11,7 +11,7 @@
     <HealthCheckAzureApplicationInsights>7.0.0</HealthCheckAzureApplicationInsights>
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
-    <HealthCheckAzureServiceBus>7.0.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>7.1.0</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorage>7.0.0</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>7.0.0</HealthCheckCloudFirestore>
     <HealthCheckConsul>7.0.0</HealthCheckConsul>

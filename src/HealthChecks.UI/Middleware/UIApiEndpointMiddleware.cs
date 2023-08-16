@@ -44,7 +44,7 @@ internal class UIApiEndpointMiddleware
         foreach (var item in healthChecks.OrderBy(h => h.Id))
         {
             var execution = await db.Executions
-                        .Include(le => le.Entries)
+                        .Include(le => le.Entries.OrderBy(e => e.Name))
                         .Where(le => le.Name == item.Name)
                         .AsNoTracking()
                         .SingleOrDefaultAsync()

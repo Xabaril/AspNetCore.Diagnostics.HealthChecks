@@ -1,3 +1,4 @@
+using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -7,7 +8,6 @@ namespace HealthChecks.AzureServiceBus;
 public class AzureEventHubHealthCheck : IHealthCheck
 {
     private const string ENTITY_PATH_SEGMENT = "EntityPath=";
-    private const int DEFAULT_TIMEOUT_IN_SECONDS = 60;
     private readonly AzureEventHubHealthCheckOptions _options;
 
     private string? _connectionKey;
@@ -84,11 +84,18 @@ public class AzureEventHubHealthCheck : IHealthCheck
 
     private static EventHubProducerClientOptions CreateClientOptions(HealthCheckContext context) => new()
     {
-        ConnectionOptions = new()
-        {
-            ConnectionIdleTimeout = context.Registration.Timeout.TotalMilliseconds > 0
-                ? context.Registration.Timeout
-                : TimeSpan.FromSeconds(DEFAULT_TIMEOUT_IN_SECONDS), // Default in EventHub SDK
-        }
+        ConnectionOptions = CreateConnectionOptions(context)
     };
+
+    private static EventHubConnectionOptions CreateConnectionOptions(HealthCheckContext context)
+    {
+        EventHubConnectionOptions options = new();
+
+        if (context.Registration.Timeout.TotalMilliseconds > 0)
+        {
+            options.ConnectionIdleTimeout = context.Registration.Timeout;
+        }
+
+        return options;
+    }
 }

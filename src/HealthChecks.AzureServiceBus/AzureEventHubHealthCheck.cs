@@ -1,3 +1,4 @@
+using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -47,7 +48,7 @@ public class AzureEventHubHealthCheck : IHealthCheck
     {
         try
         {
-            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient(context)).ConfigureAwait(false);
 
             _ = await client.GetEventHubPropertiesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -59,15 +60,17 @@ public class AzureEventHubHealthCheck : IHealthCheck
         }
     }
 
-    private EventHubProducerClient CreateClient()
+    private EventHubProducerClient CreateClient(HealthCheckContext context)
     {
+        var clientOptions = CreateClientOptions(context);
+
         if (_options.ConnectionString is not null)
-            return new EventHubProducerClient(GetFullConnectionString());
+            return new EventHubProducerClient(GetFullConnectionString(), clientOptions);
 
         if (_options.Connection is not null)
-            return new EventHubProducerClient(_options.Connection);
+            return new EventHubProducerClient(_options.Connection, clientOptions);
 
-        return new EventHubProducerClient(_options.FullyQualifiedNamespace, _options.EventHubName, _options.Credential);
+        return new EventHubProducerClient(_options.FullyQualifiedNamespace, _options.EventHubName, _options.Credential, clientOptions);
     }
 
     private string GetFullConnectionString()
@@ -77,5 +80,22 @@ public class AzureEventHubHealthCheck : IHealthCheck
         if (!connectionString.Contains(ENTITY_PATH_SEGMENT))
             connectionString = $"{connectionString};{ENTITY_PATH_SEGMENT}{_options.EventHubName}";
         return connectionString;
+    }
+
+    private static EventHubProducerClientOptions CreateClientOptions(HealthCheckContext context) => new()
+    {
+        ConnectionOptions = CreateConnectionOptions(context)
+    };
+
+    private static EventHubConnectionOptions CreateConnectionOptions(HealthCheckContext context)
+    {
+        EventHubConnectionOptions options = new();
+
+        if (context.Registration.Timeout.TotalMilliseconds > 0)
+        {
+            options.ConnectionIdleTimeout = context.Registration.Timeout;
+        }
+
+        return options;
     }
 }

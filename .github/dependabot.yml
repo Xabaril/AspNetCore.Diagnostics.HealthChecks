@@ -3,8 +3,13 @@ updates:
 - package-ecosystem: "nuget"
   directory: "/"
   schedule:
-    interval: "daily"
+    interval: "weekly"
+    groups:
+      dependencies:
+        update-types:
+        - "minor"
+        - "patch"
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
-    interval: "daily"
+    interval: "weekly"

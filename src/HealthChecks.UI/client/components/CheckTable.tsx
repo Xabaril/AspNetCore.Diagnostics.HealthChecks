@@ -57,6 +57,7 @@ const CheckTable = ({ checks, history }: Props) => {
             </td>
             <td>{item.description}</td>
             <td className="align-center">{item.duration.toString()}</td>
+            <td><a>http://azureDevOps:8080/test.html</a></td>
             <td>
               <button
                 className="hc-action-btn"
@@ -88,6 +89,7 @@ const CheckTable = ({ checks, history }: Props) => {
             <th style={{ width: "10%" }}>Health</th>
             <th style={{ width: "30%" }}>Description</th>
             <th style={{ width: "20%" }}>Duration</th>
+            <th style={{ width: "10%" }}>Build Pipeline</th>
             <th style={{ width: "10%" }}>Details</th>
           </tr>
         </thead>

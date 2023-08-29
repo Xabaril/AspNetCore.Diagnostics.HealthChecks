@@ -16,6 +16,7 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder
+                .UseUrls("http://localhost:8808")
                 .ConfigureLogging(config => config.AddFilter(typeof(Program).Namespace, LogLevel.Information))
                 .ConfigureAppConfiguration((context, builder) =>
                 {

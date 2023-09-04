@@ -20,5 +20,6 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class NatsHealthCheckBuilderExtensions
     {
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddNats(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Nats.NatsOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddNats(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<System.IServiceProvider, HealthChecks.Nats.NatsOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

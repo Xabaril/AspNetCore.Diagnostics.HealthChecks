@@ -23,6 +23,27 @@ public class nats_registration_should
             setup => setup.Url = DemoConnectionString,
             check => check.ShouldBeOfType<NatsHealthCheck>());
 
+    [Fact]
+    public void add_health_check_with_service_provider()
+    {
+        var services = new ServiceCollection();
+
+        services
+            .AddSingleton<IDependency, Dependency>()
+            .AddHealthChecks()
+            .AddNats((sp, setup) => setup.Url = sp.GetRequiredService<IDependency>().ConnectionString);
+
+        var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        registration.Name.ShouldBe(NatsName);
+
+        var check = registration.Factory(serviceProvider);
+
+        check.ShouldBeOfType<NatsHealthCheck>();
+    }
+
     private void RegistrationFact(Action<NatsOptions> setup, Action<IHealthCheck> assert, string? name = null)
     {
         var services = new ServiceCollection();
@@ -36,5 +57,15 @@ public class nats_registration_should
 
         var check = registration.Factory(serviceProvider);
         assert(check);
+    }
+
+    private interface IDependency
+    {
+        string ConnectionString { get; }
+    }
+
+    private class Dependency : IDependency
+    {
+        public string ConnectionString => DemoConnectionString;
     }
 }

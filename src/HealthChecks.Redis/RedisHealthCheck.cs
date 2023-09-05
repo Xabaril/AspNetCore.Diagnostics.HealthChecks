@@ -9,7 +9,7 @@ namespace HealthChecks.Redis;
 /// </summary>
 public class RedisHealthCheck : IHealthCheck
 {
-    private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new();
+    private static readonly ConcurrentDictionary<string, IConnectionMultiplexer> _connections = new();
     private readonly string? _redisConnectionString;
     private readonly IConnectionMultiplexer? _connectionMultiplexer;
 
@@ -28,7 +28,7 @@ public class RedisHealthCheck : IHealthCheck
     {
         try
         {
-            var connection = (ConnectionMultiplexer)_connectionMultiplexer!;
+            IConnectionMultiplexer? connection = _connectionMultiplexer;
 
             if (_redisConnectionString is not null && !_connections.TryGetValue(_redisConnectionString, out connection))
             {
@@ -50,7 +50,7 @@ public class RedisHealthCheck : IHealthCheck
                 }
             }
 
-            foreach (var endPoint in connection.GetEndPoints(configuredOnly: true))
+            foreach (var endPoint in connection!.GetEndPoints(configuredOnly: true))
             {
                 var server = connection.GetServer(endPoint);
 

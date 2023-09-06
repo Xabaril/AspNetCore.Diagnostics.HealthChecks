@@ -118,6 +118,34 @@ public class redis_healthcheck_should
     }
 
     [Fact]
+    public async Task be_unhealthy_when_connection_multiplexer_factory_throws_on_connect()
+    {
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
+            {
+                // This factory will throw when called for the first time.
+                // The health check should take care of that and report Unhealthy status rather than throw an exception.
+                services.AddSingleton<IConnectionMultiplexer>(
+                    _ => ConnectionMultiplexer.Connect("nonexistinghost:6379,allowAdmin=true"));
+                services.AddHealthChecks()
+                    .AddRedis(serviceProvider => serviceProvider.GetRequiredService<IConnectionMultiplexer>());
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions
+                {
+                    Predicate = _ => true
+                });
+            });
+
+        using var server = new TestServer(webHostBuilder);
+
+        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+    }
+
+    [Fact]
     public async Task be_unhealthy_if_redis_is_not_available()
     {
         var webHostBuilder = new WebHostBuilder()

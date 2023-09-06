@@ -12,6 +12,7 @@ public class RedisHealthCheck : IHealthCheck
     private static readonly ConcurrentDictionary<string, IConnectionMultiplexer> _connections = new();
     private readonly string? _redisConnectionString;
     private readonly IConnectionMultiplexer? _connectionMultiplexer;
+    private readonly Func<IConnectionMultiplexer>? _connectionMultiplexerFactory;
 
     public RedisHealthCheck(string redisConnectionString)
     {
@@ -23,12 +24,27 @@ public class RedisHealthCheck : IHealthCheck
         _connectionMultiplexer = Guard.ThrowIfNull(connectionMultiplexer);
     }
 
+    /// <summary>
+    /// Creates an instance of <seealso cref="RedisHealthCheck"/> that calls provided factory when needed for the first time.
+    /// </summary>
+    /// <param name="connectionMultiplexerFactory">The factory method that connects to Redis.</param>
+    /// <remarks>
+    /// A call to <seealso cref="ConnectionMultiplexer.Connect(ConfigurationOptions, TextWriter?)"/> throws
+    /// when it is not possible to connect to the redis server(s). The call should not be invoked when
+    /// <seealso cref="HealthCheckRegistration"/> is created, but when <seealso cref="RedisHealthCheck"/> needs the
+    /// <seealso cref="IConnectionMultiplexer"/> for the first time, so exceptions can be handled gracefully.
+    /// </remarks>
+    internal RedisHealthCheck(Func<IConnectionMultiplexer> connectionMultiplexerFactory)
+    {
+        _connectionMultiplexerFactory = connectionMultiplexerFactory;
+    }
+
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            IConnectionMultiplexer? connection = _connectionMultiplexer;
+            IConnectionMultiplexer? connection = _connectionMultiplexer ?? _connectionMultiplexerFactory?.Invoke();
 
             if (_redisConnectionString is not null && !_connections.TryGetValue(_redisConnectionString, out connection))
             {

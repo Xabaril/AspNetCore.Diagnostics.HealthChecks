@@ -1,6 +1,7 @@
 using System.Net;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using HealthChecks.Azure.KeyVault.Secrets;
 
 namespace HealthChecks.AzureKeyVault.Tests.Functional;
 
@@ -10,29 +11,20 @@ public class AzureKeyVaultSecretsHealthCheckTests
     public void CtorThrowsArgumentNullExceptionForNullSecretClient()
     {
         ArgumentNullException argumentNullException = Assert.ThrowsAny<ArgumentNullException>(
-            () => new AzureKeyVaultSecretsHealthCheck(secretClient: null!, secretName: "notNull"));
+            () => new AzureKeyVaultSecretsHealthCheck(secretClient: null!, options: new AzureKeyVaultSecretOptions()));
 
         Assert.Equal("secretClient", argumentNullException.ParamName);
     }
 
     [Fact]
-    public void CtorThrowsArgumentNullExceptionForNullSecretName()
+    public void CtorThrowsArgumentNullExceptionForNullOptions()
     {
         ArgumentNullException argumentNullException = Assert.ThrowsAny<ArgumentNullException>(
             () => new AzureKeyVaultSecretsHealthCheck(
                 secretClient: new SecretClient(new Uri("https://www.thisisnotarealurl.com"), new DefaultAzureCredential()),
-                secretName: null!));
-        Assert.Equal("secretName", argumentNullException.ParamName);
-    }
+                options: null!));
 
-    [Fact]
-    public void CtorThrowsArgumentExceptionForEmptySecretName()
-    {
-        ArgumentException argumentException = Assert.ThrowsAny<ArgumentException>(
-            () => new AzureKeyVaultSecretsHealthCheck(
-                secretClient: new SecretClient(new Uri("https://www.thisisnotarealurl.com"), new DefaultAzureCredential()),
-                secretName: string.Empty));
-        Assert.Equal("secretName", argumentException.ParamName);
+        Assert.Equal("options", argumentNullException.ParamName);
     }
 
     [Theory]
@@ -50,7 +42,7 @@ public class AzureKeyVaultSecretsHealthCheckTests
                 services.AddHealthChecks()
                     .Add(new HealthCheckRegistration(
                         name: "azure_key_vault_secrets",
-                        instance: new AzureKeyVaultSecretsHealthCheck(secretClient),
+                        instance: new AzureKeyVaultSecretsHealthCheck(secretClient, new AzureKeyVaultSecretOptions()),
                         failureStatus: failureStatus,
                         tags: null));
             })

@@ -5,6 +5,7 @@ on:
   push:
     branches: [ master ]
     paths:
+      - src/HealthChecks.Azure.Data.Tables/HealthChecks.Azure.Data.Tables/**
       - src/HealthChecks.CosmosDb/**
       - test/HealthChecks.CosmosDb.Tests/**
       - test/_SHARED/**
@@ -18,6 +19,7 @@ on:
   pull_request:
     branches: [ master ]
     paths:
+      - src/HealthChecks.Azure.Data.Tables/HealthChecks.Azure.Data.Tables/**
       - src/HealthChecks.CosmosDb/**
       - test/HealthChecks.CosmosDb.Tests/**
       - test/_SHARED/**

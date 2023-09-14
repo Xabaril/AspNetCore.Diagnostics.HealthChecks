@@ -289,6 +289,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.KeyVault
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.KeyVault.Secrets.Tests", "test\HealthChecks.Azure.KeyVault.Secrets.Tests\HealthChecks.Azure.KeyVault.Secrets.Tests.csproj", "{B664ADD4-7067-4CCE-BBAC-146A174A7F73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Storage.Blobs", "src\HealthChecks.Azure.Storage.Blobs\HealthChecks.Azure.Storage.Blobs.csproj", "{35994A03-ABFD-4016-865E-907CCA6B0175}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Storage.Queues", "src\HealthChecks.Azure.Storage.Queues\HealthChecks.Azure.Storage.Queues.csproj", "{D51E2882-48E2-4384-A729-4FB627C6DB91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Storage.Files.Shares", "src\HealthChecks.Azure.Storage.Files.Shares\HealthChecks.Azure.Storage.Files.Shares.csproj", "{94031EF0-8262-46BE-9CF0-4E357CAE27AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -807,6 +813,18 @@ Global
 		{B664ADD4-7067-4CCE-BBAC-146A174A7F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B664ADD4-7067-4CCE-BBAC-146A174A7F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B664ADD4-7067-4CCE-BBAC-146A174A7F73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35994A03-ABFD-4016-865E-907CCA6B0175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35994A03-ABFD-4016-865E-907CCA6B0175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35994A03-ABFD-4016-865E-907CCA6B0175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35994A03-ABFD-4016-865E-907CCA6B0175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D51E2882-48E2-4384-A729-4FB627C6DB91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D51E2882-48E2-4384-A729-4FB627C6DB91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D51E2882-48E2-4384-A729-4FB627C6DB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D51E2882-48E2-4384-A729-4FB627C6DB91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94031EF0-8262-46BE-9CF0-4E357CAE27AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94031EF0-8262-46BE-9CF0-4E357CAE27AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94031EF0-8262-46BE-9CF0-4E357CAE27AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94031EF0-8262-46BE-9CF0-4E357CAE27AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -940,6 +958,9 @@ Global
 		{1C2085FA-2D33-459B-945E-337323485E16} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{877E2C7C-F136-4DC7-882D-C1ADE6B5E3ED} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{B664ADD4-7067-4CCE-BBAC-146A174A7F73} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{35994A03-ABFD-4016-865E-907CCA6B0175} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{D51E2882-48E2-4384-A729-4FB627C6DB91} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{94031EF0-8262-46BE-9CF0-4E357CAE27AE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

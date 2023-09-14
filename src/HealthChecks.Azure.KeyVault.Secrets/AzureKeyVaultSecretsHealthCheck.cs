@@ -41,7 +41,7 @@ public sealed class AzureKeyVaultSecretsHealthCheck : IHealthCheck
 
         try
         {
-            await _secretClient.GetSecretAsync(name: secretName, cancellationToken: cancellationToken).ConfigureAwait(false);
+            _ = await _secretClient.GetSecretAsync(name: secretName, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             return new HealthCheckResult(HealthStatus.Healthy);
         }

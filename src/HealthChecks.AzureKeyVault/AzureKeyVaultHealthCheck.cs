@@ -31,7 +31,9 @@ public class AzureKeyVaultHealthCheck : IHealthCheck
         {
             // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/785
             if (_options._keys.Count == 0 && _options.Certificates.Count == 0 && _options._secrets.Count == 0)
+            {
                 return HealthCheckResult.Unhealthy("No keys, certificates or secrets configured.");
+            }
 
             foreach (string secret in _options.Secrets)
             {

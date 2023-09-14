@@ -1,0 +1,33 @@
+parameters:
+  pipelineName: '' # required -- CI pipeline name
+  tags: []         # required -- list of tags
+  projectPath: ''  # required -- relative path to csproj with health check
+  packageName: ''  # required -- name of the NuGet package
+
+name: ${{ parameters.pipelineName }}
+
+on:
+  push:
+    tags: ${{ parameters.tags }}
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: dotnet restore ${{ parameters.projectPath }}
+      - name: Build
+        run: dotnet build --no-restore ${{ parameters.projectPath }} -c $BUILD_CONFIG
+      - name: Pack
+        run: dotnet pack --no-build ${{ parameters.projectPath }} -c $BUILD_CONFIG -o ./artifacts
+      - name: Publish
+        run: dotnet nuget push ./artifacts/${{ parameters.packageName }}.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

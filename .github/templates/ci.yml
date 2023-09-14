@@ -1,0 +1,60 @@
+parameters:
+  pipelineName: ''    # required -- CI pipeline name
+  paths: []           # required -- list of paths
+  projectPath: ''     # required -- relative path to csproj with health check
+  testProjectPath: '' # required -- relative path to csproj with health check tests
+  flags: ''           # required -- code coverage flags
+
+name: ${{ parameters.pipelineName }}
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths: ${{ parameters.paths }}
+   tags-ignore:
+     - release-*
+     - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths: ${{ parameters.paths }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ${{ parameters.projectPath }} &&
+          dotnet restore ${{ parameters.testProjectPath }}
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ${{ parameters.projectPath }} || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ${{ parameters.testProjectPath }} || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ${{ parameters.projectPath }}
+          dotnet build --no-restore ${{ parameters.testProjectPath }}
+      - name: Test
+        run: >
+          dotnet test
+          ${{ parameters.testProjectPath }}
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: ${{ parameters.flags }}
+          directory: .coverage

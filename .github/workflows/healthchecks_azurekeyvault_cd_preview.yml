@@ -1,30 +1,9 @@
-name: HealthChecks AzureKeyVault DB Preview CD
-
-on:
-  push:
+- template: /.github/templates/cd_preview.yml
+  parameters:
+    pipelineName: HealthChecks AzureKeyVault DB Preview CD
     tags:
       - preview-azurekeyvault-*
       - preview-all-*
-
-jobs:
-  build:
-    env:
-      BUILD_CONFIG: Release
-      VERSION_SUFFIX: rc2.${{ github.run_number }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: |
-            6.0.x
-            7.0.x
-      - name: Restore
-        run: dotnet restore ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj
-      - name: Build
-        run: dotnet build --no-restore ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj -c $BUILD_CONFIG
-      - name: Pack
-        run: dotnet pack --no-build ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
-      - name: Publish
-        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.AzureKeyVault.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+    projectPath: ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj
+    packageName: AspNetCore.HealthChecks.AzureKeyVault
+    versionPrefix: rc2

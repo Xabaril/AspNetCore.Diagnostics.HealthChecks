@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/reusable_workflow.yml
+    uses: ./.github/workflows/reusable_cd_workflow.yml
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj

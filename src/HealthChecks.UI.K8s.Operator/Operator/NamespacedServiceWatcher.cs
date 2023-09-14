@@ -42,7 +42,7 @@ internal sealed class NamespacedServiceWatcher : IDisposable
                 cancellationToken: token);
 
             var watcher = response.Watch<V1Service, V1ServiceList>(
-                onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
+                onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource).ConfigureAwait(false),
                 onError: e =>
                 {
                     _diagnostics.ServiceWatcherThrow(e);
@@ -75,8 +75,8 @@ internal sealed class NamespacedServiceWatcher : IDisposable
 
     internal async Task OnServiceDiscoveredAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
     {
-        var uiService = await _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
-        var secret = await _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
+        var uiService = await _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid).ConfigureAwait(false);
+        var secret = await _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid).ConfigureAwait(false);
 
         if (!service.Metadata.Labels.ContainsKey(resource.Spec.ServicesLabel))
         {
@@ -90,7 +90,7 @@ internal sealed class NamespacedServiceWatcher : IDisposable
             service,
             secret!, // TODO: check
             _logger,
-            _httpClientFactory);
+            _httpClientFactory).ConfigureAwait(false);
     }
 
     public void Dispose()

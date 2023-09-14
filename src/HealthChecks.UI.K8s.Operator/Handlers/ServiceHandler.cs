@@ -23,14 +23,14 @@ internal class ServiceHandler
 
     public async Task<V1Service> GetOrCreateAsync(HealthCheckResource resource)
     {
-        var service = await Get(resource);
+        var service = await Get(resource).ConfigureAwait(false);
         if (service != null)
             return service;
 
         try
         {
             var serviceResource = Build(resource);
-            service = await _client.CoreV1.CreateNamespacedServiceAsync(serviceResource, resource.Metadata.NamespaceProperty);
+            service = await _client.CoreV1.CreateNamespacedServiceAsync(serviceResource, resource.Metadata.NamespaceProperty).ConfigureAwait(false);
             _logger.LogInformation("Service {name} has been created", service.Metadata.Name);
         }
         catch (Exception ex)
@@ -46,7 +46,7 @@ internal class ServiceHandler
     {
         try
         {
-            await _client.CoreV1.DeleteNamespacedServiceAsync($"{resource.Spec.Name}-svc", resource.Metadata.NamespaceProperty);
+            await _client.CoreV1.DeleteNamespacedServiceAsync($"{resource.Spec.Name}-svc", resource.Metadata.NamespaceProperty).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

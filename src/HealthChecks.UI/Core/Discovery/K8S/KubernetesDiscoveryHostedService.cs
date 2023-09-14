@@ -68,7 +68,7 @@ internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDispos
 #pragma warning disable IDISP003 // Dispose previous before re-assigning
                     _discoveryClient = InitializeKubernetesClient();
 #pragma warning restore IDISP003 // Dispose previous before re-assigning
-                    await StartK8sServiceAsync(cancellationToken);
+                    await StartK8sServiceAsync(cancellationToken).ConfigureAwait(false);
                 }
                 catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
@@ -84,7 +84,7 @@ internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDispos
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (_executingTask != null)
-            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
+            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken)).ConfigureAwait(false);
     }
 
     private async Task StartK8sServiceAsync(CancellationToken cancellationToken)
@@ -99,7 +99,7 @@ internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDispos
 
             try
             {
-                var services = await _discoveryClient!.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken);
+                var services = await _discoveryClient!.GetServicesAsync(_discoveryOptions.ServicesLabel, _discoveryOptions.Namespaces, cancellationToken).ConfigureAwait(false);
 
                 if (services != null)
                 {
@@ -111,10 +111,10 @@ internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDispos
 
                             if (serviceAddress != null && !IsLivenessRegistered(livenessDbContext, serviceAddress))
                             {
-                                var statusCode = await CallClusterServiceAsync(serviceAddress);
+                                var statusCode = await CallClusterServiceAsync(serviceAddress).ConfigureAwait(false);
                                 if (IsValidHealthChecksStatusCode(statusCode))
                                 {
-                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name);
+                                    await RegisterDiscoveredLiveness(livenessDbContext, serviceAddress, item.Metadata.Name).ConfigureAwait(false);
                                     _logger.LogInformation($"Registered discovered liveness on {serviceAddress} with name {item.Metadata.Name}");
                                 }
                             }
@@ -131,7 +131,7 @@ internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDispos
                 _logger.LogError(ex, "An error occurred on kubernetes service discovery");
             }
 
-            await Task.Delay(_discoveryOptions.RefreshTimeInSeconds * 1000);
+            await Task.Delay(_discoveryOptions.RefreshTimeInSeconds * 1000).ConfigureAwait(false);
         }
     }
 
@@ -148,7 +148,7 @@ internal sealed class KubernetesDiscoveryHostedService : IHostedService, IDispos
 
     private async Task<HttpStatusCode> CallClusterServiceAsync(string host)
     {
-        using var response = await _clusterServiceClient.GetAsync(host, HttpCompletionOption.ResponseHeadersRead);
+        using var response = await _clusterServiceClient.GetAsync(host, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
         return response.StatusCode;
     }
 

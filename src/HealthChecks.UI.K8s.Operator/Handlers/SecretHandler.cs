@@ -19,7 +19,7 @@ internal class SecretHandler
 
     public async Task<V1Secret> GetOrCreateAsync(HealthCheckResource resource)
     {
-        var secret = await Get(resource);
+        var secret = await Get(resource).ConfigureAwait(false);
         if (secret != null)
             return secret;
 
@@ -27,7 +27,7 @@ internal class SecretHandler
         {
             var secretResource = Build(resource);
             secret = await _client.CoreV1.CreateNamespacedSecretAsync(secretResource,
-                          resource.Metadata.NamespaceProperty);
+                          resource.Metadata.NamespaceProperty).ConfigureAwait(false);
 
             _logger.LogInformation("Secret {name} has been created", secret.Metadata.Name);
         }
@@ -49,7 +49,7 @@ internal class SecretHandler
     {
         try
         {
-            await _client.CoreV1.DeleteNamespacedSecretAsync($"{resource.Spec.Name}-secret", resource.Metadata.NamespaceProperty);
+            await _client.CoreV1.DeleteNamespacedSecretAsync($"{resource.Spec.Name}-secret", resource.Metadata.NamespaceProperty).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

@@ -51,7 +51,7 @@ public class HealthChecksPushService
                 Content = new StringContent(JsonSerializer.Serialize(healthCheck, _options), Encoding.UTF8, "application/json")
             };
 
-            using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
             logger.LogInformation("[PushService] Notification result for {name} - status code: {statuscode}", notificationService.Metadata.Name, response.StatusCode);
         }

@@ -24,14 +24,14 @@ public class ConfigMaphandler
 
     public async Task<V1ConfigMap?> GetOrCreateAsync(HealthCheckResource resource)
     {
-        var configMap = await Get(resource);
+        var configMap = await Get(resource).ConfigureAwait(false);
         if (configMap != null)
             return configMap;
 
         try
         {
             var configMapResource = Build(resource);
-            configMap = await _client.CoreV1.CreateNamespacedConfigMapAsync(configMapResource, resource.Metadata.NamespaceProperty);
+            configMap = await _client.CoreV1.CreateNamespacedConfigMapAsync(configMapResource, resource.Metadata.NamespaceProperty).ConfigureAwait(false);
             _logger.LogInformation("Config Map {name} has been created", configMap.Metadata.Name);
         }
         catch (Exception ex)
@@ -46,7 +46,7 @@ public class ConfigMaphandler
     {
         try
         {
-            await _client.CoreV1.DeleteNamespacedConfigMapAsync($"{resource.Spec.Name}-config", resource.Metadata.NamespaceProperty);
+            await _client.CoreV1.DeleteNamespacedConfigMapAsync($"{resource.Spec.Name}-config", resource.Metadata.NamespaceProperty).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

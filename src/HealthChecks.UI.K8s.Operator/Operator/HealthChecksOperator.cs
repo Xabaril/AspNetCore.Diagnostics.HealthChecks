@@ -50,7 +50,7 @@ internal class HealthChecksOperator : IHostedService
         _diagnostics.OperatorStarting();
 
         _ = Task.Run(OperatorListenerAsync);
-        await StartWatcherAsync(cancellationToken);
+        await StartWatcherAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -79,7 +79,7 @@ internal class HealthChecksOperator : IHostedService
             watch: true,
             timeoutSeconds: (int)TimeSpan.FromMinutes(60).TotalSeconds,
             cancellationToken: token
-            );
+            ).ConfigureAwait(false);
 
         _watcher = response.Watch<HealthCheckResource, object>(
             onEvent: async (eventType, item) =>
@@ -88,7 +88,7 @@ internal class HealthChecksOperator : IHostedService
                 {
                     EventType = eventType,
                     Resource = item
-                }, token);
+                }, token).ConfigureAwait(false);
             }
             ,
             onClosed: () =>
@@ -102,7 +102,7 @@ internal class HealthChecksOperator : IHostedService
 
     private async Task OperatorListenerAsync()
     {
-        while (await _channel.Reader.WaitToReadAsync() && !_operatorCts.IsCancellationRequested)
+        while (await _channel.Reader.WaitToReadAsync().ConfigureAwait(false) && !_operatorCts.IsCancellationRequested)
         {
             while (_channel.Reader.TryRead(out var item))
             {
@@ -112,14 +112,14 @@ internal class HealthChecksOperator : IHostedService
                     {
                         _ = Task.Run(async () =>
                         {
-                            await _controller.DeployAsync(item.Resource);
-                            await WaitForAvailableReplicasAsync(item.Resource);
-                            await StartServiceWatcherAsync(item.Resource);
+                            await _controller.DeployAsync(item.Resource).ConfigureAwait(false);
+                            await WaitForAvailableReplicasAsync(item.Resource).ConfigureAwait(false);
+                            await StartServiceWatcherAsync(item.Resource).ConfigureAwait(false);
                         });
                     }
                     else if (item.EventType == WatchEventType.Deleted)
                     {
-                        await _controller.DeleteDeploymentAsync(item.Resource);
+                        await _controller.DeleteDeploymentAsync(item.Resource).ConfigureAwait(false);
                         StopServiceWatcher(item.Resource);
                     }
                 }
@@ -133,8 +133,8 @@ internal class HealthChecksOperator : IHostedService
 
     private async Task StartServiceWatcherAsync(HealthCheckResource resource)
     {
-        Func<Task> startWatcher = async () => await _serviceWatcher.Watch(resource, _operatorCts.Token);
-        Func<Task> startClusterWatcher = async () => await _clusterServiceWatcher.Watch(resource, _operatorCts.Token);
+        Func<Task> startWatcher = async () => await _serviceWatcher.Watch(resource, _operatorCts.Token).ConfigureAwait(false);
+        Func<Task> startClusterWatcher = async () => await _clusterServiceWatcher.Watch(resource, _operatorCts.Token).ConfigureAwait(false);
 
         var start = resource.Spec.Scope switch
         {
@@ -143,7 +143,7 @@ internal class HealthChecksOperator : IHostedService
             _ => throw new ArgumentOutOfRangeException(nameof(resource.Spec.Scope))
         };
 
-        await start();
+        await start().ConfigureAwait(false);
     }
 
     private void StopServiceWatcher(HealthCheckResource resource)
@@ -168,14 +168,14 @@ internal class HealthChecksOperator : IHostedService
 
         while (retries <= WAIT_FOR_REPLICA_RETRIES && availableReplicas == 0)
         {
-            var deployment = await _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
+            var deployment = await _client.ListNamespacedOwnedDeploymentAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid).ConfigureAwait(false);
 
             availableReplicas = deployment?.Status.AvailableReplicas ?? 0;
 
             if (availableReplicas == 0)
             {
                 _logger.LogInformation("The UI replica {Name} in {Namespace} is not available yet, retrying...{Retries}/{MaxRetries}", deployment?.Metadata.Name, resource.Metadata.NamespaceProperty, retries, WAIT_FOR_REPLICA_RETRIES);
-                await Task.Delay(WAIT_FOR_REPLICA_DELAY);
+                await Task.Delay(WAIT_FOR_REPLICA_DELAY).ConfigureAwait(false);
                 retries++;
             }
         }

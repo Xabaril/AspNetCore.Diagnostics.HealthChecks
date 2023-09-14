@@ -35,7 +35,7 @@ internal sealed class ClusterServiceWatcher : IDisposable
             cancellationToken: token);
 
         _watcher = response.Watch<V1Service, V1ServiceList>(
-            onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
+            onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource).ConfigureAwait(false),
             onError: e =>
             {
                 _diagnostics.ServiceWatcherThrow(e);

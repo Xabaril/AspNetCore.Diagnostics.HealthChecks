@@ -46,7 +46,7 @@ internal class HealthCheckCollectorHostedService : IHostedService
         _cancellationTokenSource.Cancel();
 
         if (_executingTask != null)
-            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
+            await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken)).ConfigureAwait(false);
     }
 
     private Task ExecuteAsync(CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ internal class HealthCheckCollectorHostedService : IHostedService
         {
             try
             {
-                await CollectAsync(cancellationToken);
+                await CollectAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -81,7 +81,7 @@ internal class HealthCheckCollectorHostedService : IHostedService
                 try
                 {
                     var runner = scope.ServiceProvider.GetRequiredService<IHealthCheckReportCollector>();
-                    await runner.Collect(cancellationToken);
+                    await runner.Collect(cancellationToken).ConfigureAwait(false);
 
                     _logger.LogDebug("HealthCheck collector HostedService executed successfully.");
                 }
@@ -91,7 +91,7 @@ internal class HealthCheckCollectorHostedService : IHostedService
                 }
             }
 
-            await Task.Delay(_settings.EvaluationTimeInSeconds * 1000, cancellationToken);
+            await Task.Delay(_settings.EvaluationTimeInSeconds * 1000, cancellationToken).ConfigureAwait(false);
         }
     }
 }

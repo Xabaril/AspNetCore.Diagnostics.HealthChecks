@@ -11,11 +11,11 @@
     <HealthCheckAzureApplicationInsights>7.0.0</HealthCheckAzureApplicationInsights>
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
-    <HealthCheckAzureServiceBus>7.2.0</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>7.2.1</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorage>7.0.1</HealthCheckAzureStorage>
     <HealthCheckCloudFirestore>7.0.0</HealthCheckCloudFirestore>
     <HealthCheckConsul>7.0.0</HealthCheckConsul>
-    <HealthCheckCosmosDb>7.0.0</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>7.0.1</HealthCheckCosmosDb>
     <HealthCheckDapr>7.0.0</HealthCheckDapr>
     <HealthCheckDocumentDb>7.1.0</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>7.0.0</HealthCheckDynamoDb>

@@ -32,7 +32,7 @@
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.AzureServiceBus' OR $(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
+  <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
     <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
   </ItemGroup>
 

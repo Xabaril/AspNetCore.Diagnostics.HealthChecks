@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>$(PackageTags);Azure;ServiceBus</PackageTags>
+    <Description>HealthChecks.Azure.Messaging.ServiceBus is the health check package for Azure Service Bus Queues and Topics.</Description>
+    <VersionPrefix>$(HealthCheckAzureServiceBus)</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.16.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+  </ItemGroup>
+
+</Project>

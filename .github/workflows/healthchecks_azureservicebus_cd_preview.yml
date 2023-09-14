@@ -24,7 +24,15 @@ jobs:
         run: dotnet restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj
       - name: Build
         run: dotnet build --no-restore ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj -c $BUILD_CONFIG
+      - name: Pack EventHubs
+        run: dotnet pack --no-build ./src/HealthChecks.Azure.Messaging.EventHubs/HealthChecks.Azure.Messaging.EventHubs.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+      - name: Pack ServiceBus
+        run: dotnet pack --no-build ./src/HealthChecks.Azure.Messaging.ServiceBus/HealthChecks.Azure.Messaging.ServiceBus.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
       - name: Pack
         run: dotnet pack --no-build ./src/HealthChecks.AzureServiceBus/HealthChecks.AzureServiceBus.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
+      - name: Publish EventHubs
+        run: dotnet nuget push ./artifacts/HealthChecks.Azure.Messaging.EventHubs.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Publish ServiceBus
+        run: dotnet nuget push ./artifacts/HealthChecks.Azure.Messaging.ServiceBus.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Publish
         run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.AzureServiceBus.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

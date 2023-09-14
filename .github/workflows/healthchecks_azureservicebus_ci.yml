@@ -5,6 +5,7 @@ on:
   push:
    branches: [ master ]
    paths:
+     - src/HealthChecks.Azure.Messaging.*/**
      - src/HealthChecks.AzureServiceBus/**
      - test/HealthChecks.AzureServiceBus.Tests/**
      - test/_SHARED/**
@@ -18,6 +19,7 @@ on:
   pull_request:
     branches: [ master ]
     paths:
+      - src/HealthChecks.Azure.Messaging.*/**
       - src/HealthChecks.AzureServiceBus/**
       - test/HealthChecks.AzureServiceBus.Tests/**
       - test/_SHARED/**

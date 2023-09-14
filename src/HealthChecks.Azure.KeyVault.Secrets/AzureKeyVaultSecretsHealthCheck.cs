@@ -31,7 +31,7 @@ public sealed class AzureKeyVaultSecretsHealthCheck : IHealthCheck
     public AzureKeyVaultSecretsHealthCheck(SecretClient secretClient, AzureKeyVaultSecretOptions options)
     {
         _secretClient = Guard.ThrowIfNull(secretClient);
-        _options = Guard.ThrowIfNull(options);
+        _options = options;
     }
 
     /// <inheritdoc />

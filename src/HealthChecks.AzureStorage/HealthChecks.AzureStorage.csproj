@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
-    <Description>HealthChecks.AzureStorage is the health check package for Blobs, Tables and Files Shares.</Description>
+    <Description>HealthChecks.AzureStorage is the health check package for Blobs, Queues and Files Shares.</Description>
     <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
   </PropertyGroup>
 

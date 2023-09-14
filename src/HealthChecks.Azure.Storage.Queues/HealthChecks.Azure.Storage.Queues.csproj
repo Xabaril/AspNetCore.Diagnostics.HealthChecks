@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
-    <Description>HealthChecks.AzureStorage.Queues is the health check package for Queues.</Description>
+    <Description>HealthChecks.Azure.Storage.Queues is the health check package for Azure Storage Queues.</Description>
     <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
   </PropertyGroup>
 

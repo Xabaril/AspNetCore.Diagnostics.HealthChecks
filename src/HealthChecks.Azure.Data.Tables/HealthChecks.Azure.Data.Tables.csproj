@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;Tables</PackageTags>
-    <Description>HealthChecks.CosmosDb is the health check package for Azure Tables.</Description>
+    <Description>HealthChecks.Azure.Data.Tables is the health check package for Azure Tables.</Description>
     <VersionPrefix>$(HealthCheckCosmosDb)</VersionPrefix>
   </PropertyGroup>
 

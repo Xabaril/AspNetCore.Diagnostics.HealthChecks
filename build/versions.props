@@ -45,7 +45,7 @@
     <HealthCheckPublisherSeq>7.0.0</HealthCheckPublisherSeq>
     <HealthCheckRabbitMQ>7.0.0</HealthCheckRabbitMQ>
     <HealthCheckRavenDB>7.0.0</HealthCheckRavenDB>
-    <HealthCheckRedis>7.0.0</HealthCheckRedis>
+    <HealthCheckRedis>7.0.1</HealthCheckRedis>
     <HealthCheckSendGrid>7.0.0</HealthCheckSendGrid>
     <HealthCheckSignalR>7.0.0</HealthCheckSignalR>
     <HealthCheckSolr>7.0.0</HealthCheckSolr>

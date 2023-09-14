@@ -3,13 +3,13 @@ name: Reusable CI workflow
 on:
   workflow_call:
     inputs:
-      projectPath:
+      PROJECT_PATH:
         required: true
         type: string
-      testProjectPath:
+      TEST_PROJECT_PATH:
         required: true
         type: string
-      flags:
+      CODECOV_FLAGS:
         required: true
         type: string
 
@@ -26,20 +26,20 @@ jobs:
             7.0.x
       - name: Restore
         run: |
-          dotnet restore ${{inputs.projectPath}} &&
-          dotnet restore ${{inputs.testProjectPath}}
+          dotnet restore ${{inputs.PROJECT_PATH}} &&
+          dotnet restore ${{inputs.TEST_PROJECT_PATH}}
       - name: Check formatting
         run: |
-          dotnet format --no-restore --verify-no-changes --severity warn ${{inputs.projectPath}} || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-          dotnet format --no-restore --verify-no-changes --severity warn ${{inputs.testProjectPath}} || (echo "Run 'dotnet format' to fix issues" && exit 1)
+          dotnet format --no-restore --verify-no-changes --severity warn ${{inputs.PROJECT_PATH}} || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ${{inputs.TEST_PROJECT_PATH}} || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Build
         run: |
-          dotnet build --no-restore ${{inputs.projectPath}}
-          dotnet build --no-restore ${{inputs.testProjectPath}}
+          dotnet build --no-restore ${{inputs.PROJECT_PATH}}
+          dotnet build --no-restore ${{inputs.TEST_PROJECT_PATH}}
       - name: Test
         run: >
           dotnet test
-          ${{inputs.testProjectPath}}
+          ${{inputs.TEST_PROJECT_PATH}}
           --no-restore
           --no-build
           --collect "XPlat Code Coverage"
@@ -49,5 +49,5 @@ jobs:
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:
-          flags: ${{inputs.flags}}
+          flags: ${{inputs.CODECOV_FLAGS}}
           directory: .coverage

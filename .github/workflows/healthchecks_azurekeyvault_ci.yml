@@ -9,6 +9,7 @@ on:
      - test/HealthChecks.AzureKeyVault.Tests/**
      - test/_SHARED/**
      - .github/workflows/healthchecks_azurekeyvault_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
      - Directory.Build.props
      - Directory.Build.targets
    tags-ignore:
@@ -22,6 +23,7 @@ on:
       - test/HealthChecks.AzureKeyVault.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_azurekeyvault_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
 
@@ -29,6 +31,6 @@ jobs:
   build:
     uses: ./.github/workflows/reusable_ci_workflow.yml
     with:
-      projectPath: ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj
-      testProjectPath: ./test/HealthChecks.AzureKeyVault.Tests/HealthChecks.AzureKeyVault.Tests.csproj
-      flags: AzureKeyVault
+      PROJECT_PATH: ./src/HealthChecks.AzureKeyVault/HealthChecks.AzureKeyVault.csproj
+      TEST_PROJECT_PATH: ./test/HealthChecks.AzureKeyVault.Tests/HealthChecks.AzureKeyVault.Tests.csproj
+      CODECOV_FLAGS: AzureKeyVault

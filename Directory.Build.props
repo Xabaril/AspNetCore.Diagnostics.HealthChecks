@@ -32,6 +32,10 @@
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
+    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.AzureServiceBus' OR $(MSBuildProjectName) == 'HealthChecks.AzureStorage' OR $(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
     <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
   </ItemGroup>

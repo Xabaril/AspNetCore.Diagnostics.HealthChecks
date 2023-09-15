@@ -1,0 +1,20 @@
+﻿namespace HealthChecks.AzureStorage
+{
+    public sealed class AzureQueueStorageHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureQueueStorageHealthCheck(Azure.Storage.Queues.QueueServiceClient queueServiceClient, HealthChecks.AzureStorage.AzureQueueStorageHealthCheckOptions? options = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public sealed class AzureQueueStorageHealthCheckOptions
+    {
+        public AzureQueueStorageHealthCheckOptions() { }
+        public string? QueueName { get; set; }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class AzureQueueStorageHealthChecksBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureQueueStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Storage.Queues.QueueServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.AzureStorage.AzureQueueStorageHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_queue_storage", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

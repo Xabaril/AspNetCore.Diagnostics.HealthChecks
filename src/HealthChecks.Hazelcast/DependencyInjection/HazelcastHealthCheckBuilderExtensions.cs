@@ -32,12 +32,7 @@ public static class HazelcastHealthCheckBuilderExtensions
         var options = new HazelcastHealthCheckOptions();
         setup?.Invoke(options);
 
-        return builder.Add(new HealthCheckRegistration(
-            name ?? "hazelcast",
-            _ => new HazelcastHealthCheck(options),
-            failureStatus,
-            tags,
-            timeout));
+        return builder.AddHazelcast(options, name, failureStatus, tags, timeout);
     }
 
     /// <summary>

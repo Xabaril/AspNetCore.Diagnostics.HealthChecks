@@ -10,7 +10,7 @@ By default, the `SecretClient` instance is resolved from service provider. `Azur
 public void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new SecretClient(new Uri("azure-key-vault-uri"), new DefaultAzureCredential()));
-    builder.AddAzureKeyVaultSecrets();
+    builder.AddHealthChecks().AddAzureKeyVaultSecrets();
 }
 ```
 
@@ -29,7 +29,7 @@ You can additionally add the following parameters:
 public void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new SecretClient(new Uri("azure-key-vault-uri"), new DefaultAzureCredential()));
-    builder.AddAzureKeyVaultSecrets(
+    builder.AddHealthChecks().AddAzureKeyVaultSecrets(
         optionsFactory: sp => new AzureKeyVaultSecretOptions()
         {
             SecretName = "demo"

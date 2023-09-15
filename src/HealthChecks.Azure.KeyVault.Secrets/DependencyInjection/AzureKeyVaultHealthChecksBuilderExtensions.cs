@@ -33,7 +33,7 @@ public static class AzureKeyVaultHealthChecksBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, SecretClient>? secretClientFactory = default,
         Func<IServiceProvider, AzureKeyVaultSecretOptions>? optionsFactory = default,
-        string? healthCheckName = default,
+        string? healthCheckName = HEALTH_CHECK_NAME,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)

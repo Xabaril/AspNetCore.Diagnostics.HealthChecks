@@ -24,6 +24,7 @@
     <HealthCheckEventStore>7.0.0</HealthCheckEventStore>
     <HealthCheckGremlin>7.0.0</HealthCheckGremlin>
     <HealthCheckHangfire>7.0.0</HealthCheckHangfire>
+    <HealthCheckHazelcast>7.0.0</HealthCheckHazelcast>
     <HealthCheckIbmMQ>7.0.0</HealthCheckIbmMQ>
     <HealthCheckInfluxDB>7.0.0</HealthCheckInfluxDB>
     <HealthCheckIoTHub>7.0.0</HealthCheckIoTHub>

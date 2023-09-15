@@ -42,8 +42,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Network", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.DocumentDb", "src\HealthChecks.DocumentDb\HealthChecks.DocumentDb.csproj", "{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureStorage", "src\HealthChecks.AzureStorage\HealthChecks.AzureStorage.csproj", "{E7A1DD9B-B7B1-450D-9736-331EE85649E1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus", "src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj", "{4F45BB95-CB91-406D-B8A4-01E2830CC451}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI", "src\HealthChecks.UI\HealthChecks.UI.csproj", "{6AE01EB5-86D4-4603-B798-26C7DB63AEB3}"
@@ -203,8 +201,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureKeyVault.Tests", "test\HealthChecks.AzureKeyVault.Tests\HealthChecks.AzureKeyVault.Tests.csproj", "{CAA0DB8F-9759-436D-A4E7-2061C0125B06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureStorage.Tests", "test\HealthChecks.AzureStorage.Tests\HealthChecks.AzureStorage.Tests.csproj", "{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.IoTHub.Tests", "test\HealthChecks.Azure.IoTHub.Tests\HealthChecks.Azure.IoTHub.Tests.csproj", "{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.S3.Tests", "test\HealthChecks.Aws.S3.Tests\HealthChecks.Aws.S3.Tests.csproj", "{62B73D6A-076D-414B-9B4E-D6C3FF38E786}"
@@ -247,9 +243,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureDigitalTw
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sqs", "src\HealthChecks.Aws.Sqs\HealthChecks.Aws.Sqs.csproj", "{3E28B63C-814E-46C9-ADBF-7357997148F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureApplicationInsights", "src\HealthChecks.AzureApplicationInsights\HealthChecks.AzureApplicationInsights.csproj", "{97C43FFC-0A48-47C7-93EE-7382C2989AAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureApplicationInsights", "src\HealthChecks.AzureApplicationInsights\HealthChecks.AzureApplicationInsights.csproj", "{97C43FFC-0A48-47C7-93EE-7382C2989AAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.AzureApplicationInsights.Tests", "test\HealthChecks.AzureApplicationInsights.Tests\HealthChecks.AzureApplicationInsights.Tests.csproj", "{78902D9E-CD1A-4FB7-B752-A3471A2DD457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureApplicationInsights.Tests", "test\HealthChecks.AzureApplicationInsights.Tests\HealthChecks.AzureApplicationInsights.Tests.csproj", "{78902D9E-CD1A-4FB7-B752-A3471A2DD457}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Aws.Sqs.Tests", "test\HealthChecks.Aws.Sqs.Tests\HealthChecks.Aws.Sqs.Tests.csproj", "{EFA76A2C-CA0E-42BC-8215-AEEB16414947}"
 EndProject
@@ -283,23 +279,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.Data.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Dapr", "src\HealthChecks.Dapr\HealthChecks.Dapr.csproj", "{716C2E59-6BB4-49A1-B685-9958B7EF0F3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Dapr.Tests", "test\HealthChecks.Dapr.Tests\HealthChecks.Dapr.Tests.csproj", "{1C2085FA-2D33-459B-945E-337323485E16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Dapr.Tests", "test\HealthChecks.Dapr.Tests\HealthChecks.Dapr.Tests.csproj", "{1C2085FA-2D33-459B-945E-337323485E16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.KeyVault.Secrets", "src\HealthChecks.Azure.KeyVault.Secrets\HealthChecks.Azure.KeyVault.Secrets.csproj", "{877E2C7C-F136-4DC7-882D-C1ADE6B5E3ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.KeyVault.Secrets", "src\HealthChecks.Azure.KeyVault.Secrets\HealthChecks.Azure.KeyVault.Secrets.csproj", "{877E2C7C-F136-4DC7-882D-C1ADE6B5E3ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.KeyVault.Secrets.Tests", "test\HealthChecks.Azure.KeyVault.Secrets.Tests\HealthChecks.Azure.KeyVault.Secrets.Tests.csproj", "{B664ADD4-7067-4CCE-BBAC-146A174A7F73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.KeyVault.Secrets.Tests", "test\HealthChecks.Azure.KeyVault.Secrets.Tests\HealthChecks.Azure.KeyVault.Secrets.Tests.csproj", "{B664ADD4-7067-4CCE-BBAC-146A174A7F73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Storage.Blobs", "src\HealthChecks.Azure.Storage.Blobs\HealthChecks.Azure.Storage.Blobs.csproj", "{35994A03-ABFD-4016-865E-907CCA6B0175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Blobs", "src\HealthChecks.Azure.Storage.Blobs\HealthChecks.Azure.Storage.Blobs.csproj", "{35994A03-ABFD-4016-865E-907CCA6B0175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Storage.Queues", "src\HealthChecks.Azure.Storage.Queues\HealthChecks.Azure.Storage.Queues.csproj", "{D51E2882-48E2-4384-A729-4FB627C6DB91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Queues", "src\HealthChecks.Azure.Storage.Queues\HealthChecks.Azure.Storage.Queues.csproj", "{D51E2882-48E2-4384-A729-4FB627C6DB91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Storage.Files.Shares", "src\HealthChecks.Azure.Storage.Files.Shares\HealthChecks.Azure.Storage.Files.Shares.csproj", "{94031EF0-8262-46BE-9CF0-4E357CAE27AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Files.Shares", "src\HealthChecks.Azure.Storage.Files.Shares\HealthChecks.Azure.Storage.Files.Shares.csproj", "{94031EF0-8262-46BE-9CF0-4E357CAE27AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Messaging.ServiceBus", "src\HealthChecks.Azure.Messaging.ServiceBus\HealthChecks.Azure.Messaging.ServiceBus.csproj", "{C84C0A78-B520-4B21-95D1-9113A6B46611}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.ServiceBus", "src\HealthChecks.Azure.Messaging.ServiceBus\HealthChecks.Azure.Messaging.ServiceBus.csproj", "{C84C0A78-B520-4B21-95D1-9113A6B46611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Messaging.EventHubs", "src\HealthChecks.Azure.Messaging.EventHubs\HealthChecks.Azure.Messaging.EventHubs.csproj", "{87F760F2-C265-4898-8B9F-2C78532BC321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.EventHubs", "src\HealthChecks.Azure.Messaging.EventHubs\HealthChecks.Azure.Messaging.EventHubs.csproj", "{87F760F2-C265-4898-8B9F-2C78532BC321}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Data.Tables", "src\HealthChecks.Azure.Data.Tables\HealthChecks.Azure.Data.Tables.csproj", "{B58D3765-3BB8-4FB4-9F0D-CC9A5EF07DF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Data.Tables", "src\HealthChecks.Azure.Data.Tables\HealthChecks.Azure.Data.Tables.csproj", "{B58D3765-3BB8-4FB4-9F0D-CC9A5EF07DF1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Blobs.Tests", "test\HealthChecks.Azure.Storage.Blobs.Tests\HealthChecks.Azure.Storage.Blobs.Tests.csproj", "{786230EB-BF05-4B85-910C-72906A924A17}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Queues.Tests", "test\HealthChecks.Azure.Storage.Queues.Tests\HealthChecks.Azure.Storage.Queues.Tests.csproj", "{5265E8E8-92B7-4123-BAF3-7B9A0E893785}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Files.Shares.Tests", "test\HealthChecks.Azure.Storage.Files.Shares.Tests\HealthChecks.Azure.Storage.Files.Shares.Tests.csproj", "{A6BD9977-E12E-4309-B0AA-A755C04E525B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Azure.Data.Tables.Tests", "test\HealthChecks.Azure.Data.Tables.Tests\HealthChecks.Azure.Data.Tables.Tests.csproj", "{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -355,10 +359,6 @@ Global
 		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7A1DD9B-B7B1-450D-9736-331EE85649E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F45BB95-CB91-406D-B8A4-01E2830CC451}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -647,10 +647,6 @@ Global
 		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAA0DB8F-9759-436D-A4E7-2061C0125B06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -731,18 +727,18 @@ Global
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E28B63C-814E-46C9-ADBF-7357997148F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E28B63C-814E-46C9-ADBF-7357997148F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E28B63C-814E-46C9-ADBF-7357997148F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E28B63C-814E-46C9-ADBF-7357997148F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C43FFC-0A48-47C7-93EE-7382C2989AAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78902D9E-CD1A-4FB7-B752-A3471A2DD457}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFA76A2C-CA0E-42BC-8215-AEEB16414947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFA76A2C-CA0E-42BC-8215-AEEB16414947}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFA76A2C-CA0E-42BC-8215-AEEB16414947}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -843,6 +839,22 @@ Global
 		{B58D3765-3BB8-4FB4-9F0D-CC9A5EF07DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B58D3765-3BB8-4FB4-9F0D-CC9A5EF07DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58D3765-3BB8-4FB4-9F0D-CC9A5EF07DF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{786230EB-BF05-4B85-910C-72906A924A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{786230EB-BF05-4B85-910C-72906A924A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{786230EB-BF05-4B85-910C-72906A924A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{786230EB-BF05-4B85-910C-72906A924A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5265E8E8-92B7-4123-BAF3-7B9A0E893785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5265E8E8-92B7-4123-BAF3-7B9A0E893785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5265E8E8-92B7-4123-BAF3-7B9A0E893785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5265E8E8-92B7-4123-BAF3-7B9A0E893785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6BD9977-E12E-4309-B0AA-A755C04E525B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6BD9977-E12E-4309-B0AA-A755C04E525B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6BD9977-E12E-4309-B0AA-A755C04E525B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6BD9977-E12E-4309-B0AA-A755C04E525B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -860,7 +872,6 @@ Global
 		{E6AF5AD6-618A-491D-B8BB-F8EF56C6B403} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{46A58C98-B38F-486C-83BA-3772A217A24E} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{F42DB8D6-65CE-4C7B-A1CB-560DDA468F93} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
-		{E7A1DD9B-B7B1-450D-9736-331EE85649E1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{4F45BB95-CB91-406D-B8A4-01E2830CC451} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{6AE01EB5-86D4-4603-B798-26C7DB63AEB3} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{7C8F7A48-2FF9-4CF4-AAAC-142053E34FC0} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
@@ -933,7 +944,6 @@ Global
 		{4E8DA856-FC10-4A18-BDFB-7C604F17D1EE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{80835FF3-C984-4BCE-B047-7985B42F6B0E} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{CAA0DB8F-9759-436D-A4E7-2061C0125B06} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
-		{6BA3E850-92EC-4F0F-BF53-D3F01EE6A120} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{C825E756-F1E0-4AE9-9814-B8A112B1CAA9} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{62B73D6A-076D-414B-9B4E-D6C3FF38E786} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{B67AF15E-698D-44E6-A58C-2BC7CCF62CBE} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
@@ -954,9 +964,9 @@ Global
 		{FF492215-60BC-40C6-B118-D22DF9063547} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{247EF2E5-F4B9-47D4-BB89-27860DF53D5F} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{7052C706-4B1A-4167-A33A-DF3E9FBCFE6B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
-		{78902D9E-CD1A-4FB7-B752-A3471A2DD457} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
-		{97C43FFC-0A48-47C7-93EE-7382C2989AAE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{3E28B63C-814E-46C9-ADBF-7357997148F5} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{97C43FFC-0A48-47C7-93EE-7382C2989AAE} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{78902D9E-CD1A-4FB7-B752-A3471A2DD457} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{EFA76A2C-CA0E-42BC-8215-AEEB16414947} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{AE41DB38-93BC-48A7-8841-163E5E13CE8D} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{CB1A7B68-E24A-4729-9401-606F3A914586} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
@@ -982,6 +992,10 @@ Global
 		{C84C0A78-B520-4B21-95D1-9113A6B46611} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{87F760F2-C265-4898-8B9F-2C78532BC321} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{B58D3765-3BB8-4FB4-9F0D-CC9A5EF07DF1} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{786230EB-BF05-4B85-910C-72906A924A17} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{5265E8E8-92B7-4123-BAF3-7B9A0E893785} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{A6BD9977-E12E-4309-B0AA-A755C04E525B} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

@@ -1,0 +1,37 @@
+name: HealthChecks Azure File Storage CI
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths:
+     - src/HealthChecks.Azure.Storage.Files.Shares/**
+     - test/HealthChecks.Azure.Storage.Files.Shares.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azure_filestorage_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+   tags-ignore:
+     - release-*
+     - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+     - src/HealthChecks.Azure.Storage.Files.Shares/**
+     - test/HealthChecks.Azure.Storage.Files.Shares.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azure_filestorage_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_ci_workflow.yml
+    with:
+      PROJECT_PATH: ./src/HealthChecks.Azure.Storage.Files.Shares/HealthChecks.Azure.Storage.Files.Shares.csproj
+      TEST_PROJECT_PATH: ./test/HealthChecks.Azure.Storage.Files.Shares.Tests/HealthChecks.Azure.Storage.Files.Shares.Tests.csproj
+      CODECOV_FLAGS: AzureFileStorage
+

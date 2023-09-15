@@ -1,30 +1,29 @@
-using Azure.Core;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage;
 
-public class AzureQueueStorageHealthCheck : IHealthCheck
+/// <summary>
+/// Azure Queue Storage health check.
+/// </summary>
+public sealed class AzureQueueStorageHealthCheck : IHealthCheck
 {
     private readonly QueueServiceClient _queueServiceClient;
     private readonly AzureQueueStorageHealthCheckOptions _options;
 
-    public AzureQueueStorageHealthCheck(string connectionString, string? queueName = default)
-        : this(
-              ClientCache.GetOrAdd(connectionString, k => new QueueServiceClient(k)),
-              new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
-    { }
-
-    public AzureQueueStorageHealthCheck(Uri queueServiceUri, TokenCredential credential, string? queueName = default)
-        : this(
-              ClientCache.GetOrAdd(queueServiceUri?.ToString()!, _ => new QueueServiceClient(queueServiceUri, credential)),
-              new AzureQueueStorageHealthCheckOptions { QueueName = queueName })
-    { }
-
-    public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions options)
+    /// <summary>
+    /// Creates new instance of Azure Queue Storage health check.
+    /// </summary>
+    /// <param name="queueServiceClient">
+    /// The <see cref="QueueServiceClient"/> used to perform Azure Queue Storage operations.
+    /// Azure SDK recommends treating clients as singletons <see href="https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/"/>,
+    /// so this should be the exact same instance used by other parts of the application.
+    /// </param>
+    /// <param name="options">Optional settings used by the health check.</param>
+    public AzureQueueStorageHealthCheck(QueueServiceClient queueServiceClient, AzureQueueStorageHealthCheckOptions? options = default)
     {
         _queueServiceClient = Guard.ThrowIfNull(queueServiceClient);
-        _options = Guard.ThrowIfNull(options);
+        _options = options ?? new();
     }
 
     /// <inheritdoc />

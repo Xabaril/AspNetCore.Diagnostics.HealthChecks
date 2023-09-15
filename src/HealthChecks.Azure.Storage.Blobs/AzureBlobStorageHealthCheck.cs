@@ -1,30 +1,29 @@
-using Azure.Core;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage;
 
-public class AzureBlobStorageHealthCheck : IHealthCheck
+/// <summary>
+/// Azure Blob Storage health check.
+/// </summary>
+public sealed class AzureBlobStorageHealthCheck : IHealthCheck
 {
     private readonly BlobServiceClient _blobServiceClient;
     private readonly AzureBlobStorageHealthCheckOptions _options;
 
-    public AzureBlobStorageHealthCheck(string connectionString, string? containerName = default, BlobClientOptions? clientOptions = default)
-        : this(
-              ClientCache.GetOrAdd(connectionString, k => new BlobServiceClient(k, clientOptions)),
-              new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
-    { }
-
-    public AzureBlobStorageHealthCheck(Uri blobServiceUri, TokenCredential credential, string? containerName = default, BlobClientOptions? clientOptions = default)
-        : this(
-              ClientCache.GetOrAdd(blobServiceUri?.ToString()!, _ => new BlobServiceClient(blobServiceUri, credential, clientOptions)),
-              new AzureBlobStorageHealthCheckOptions { ContainerName = containerName })
-    { }
-
-    public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, AzureBlobStorageHealthCheckOptions options)
+    /// <summary>
+    /// Creates new instance of Azure Blob Storage health check.
+    /// </summary>
+    /// <param name="blobServiceClient">
+    /// The <see cref="BlobServiceClient"/> used to perform Azure Blob Storage operations.
+    /// Azure SDK recommends treating clients as singletons <see href="https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/"/>,
+    /// so this should be the exact same instance used by other parts of the application.
+    /// </param>
+    /// <param name="options">Optional settings used by the health check.</param>
+    public AzureBlobStorageHealthCheck(BlobServiceClient blobServiceClient, AzureBlobStorageHealthCheckOptions? options = default)
     {
         _blobServiceClient = Guard.ThrowIfNull(blobServiceClient);
-        _options = Guard.ThrowIfNull(options);
+        _options = options ?? new AzureBlobStorageHealthCheckOptions();
     }
 
     /// <inheritdoc />

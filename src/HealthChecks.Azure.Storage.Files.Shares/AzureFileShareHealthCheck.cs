@@ -3,21 +3,18 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.AzureStorage;
 
-public class AzureFileShareHealthCheck : IHealthCheck
+/// <summary>
+/// Azure Files health check.
+/// </summary>
+public sealed class AzureFileShareHealthCheck : IHealthCheck
 {
     private readonly ShareServiceClient _shareServiceClient;
     private readonly AzureFileShareHealthCheckOptions _options;
 
-    public AzureFileShareHealthCheck(string connectionString, string? shareName = default)
-        : this(
-              ClientCache.GetOrAdd(connectionString, _ => new ShareServiceClient(connectionString)),
-              new AzureFileShareHealthCheckOptions { ShareName = shareName })
-    { }
-
-    public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, AzureFileShareHealthCheckOptions options)
+    public AzureFileShareHealthCheck(ShareServiceClient shareServiceClient, AzureFileShareHealthCheckOptions? options)
     {
         _shareServiceClient = Guard.ThrowIfNull(shareServiceClient);
-        _options = Guard.ThrowIfNull(options);
+        _options = options ?? new();
     }
 
     /// <inheritdoc />

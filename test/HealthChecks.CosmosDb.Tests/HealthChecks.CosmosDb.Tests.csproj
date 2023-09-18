@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.10.0" />
     <ProjectReference Include="..\..\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj" />
   </ItemGroup>
 

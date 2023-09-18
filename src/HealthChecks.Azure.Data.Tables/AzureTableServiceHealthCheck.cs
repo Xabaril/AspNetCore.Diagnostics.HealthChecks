@@ -1,7 +1,7 @@
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.CosmosDb;
+namespace HealthChecks.Azure.Data.Tables;
 
 /// <summary>
 /// Azure Tables health check.

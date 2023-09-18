@@ -3,13 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;EventHub</PackageTags>
-    <Description>HealthChecks.Azure.Messaging.EventHubs is the health check package for Azure EventHub.</Description>
-    <VersionPrefix>$(HealthCheckAzureServiceBus)</VersionPrefix>
+    <Description>HealthChecks.Azure.Messaging.EventHubs is the health check package for Azure Event Hubs.</Description>
+    <VersionPrefix>$(HealthCheckAzureMessagingEventsHubs)</VersionPrefix>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.EventHubs" Version="5.9.2" />

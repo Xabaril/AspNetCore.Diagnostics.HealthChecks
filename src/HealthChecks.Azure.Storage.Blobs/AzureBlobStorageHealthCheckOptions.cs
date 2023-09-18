@@ -1,4 +1,4 @@
-namespace HealthChecks.AzureStorage;
+namespace HealthChecks.Azure.Storage.Blobs;
 
 /// <summary>
 /// Represents a collection of settings that configure an

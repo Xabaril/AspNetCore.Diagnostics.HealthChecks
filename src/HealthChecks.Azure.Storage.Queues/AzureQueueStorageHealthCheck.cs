@@ -1,7 +1,7 @@
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureStorage;
+namespace HealthChecks.Azure.Storage.Queues;
 
 /// <summary>
 /// Azure Queue Storage health check.

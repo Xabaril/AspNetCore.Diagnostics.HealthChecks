@@ -1,8 +1,8 @@
-namespace HealthChecks.CosmosDb
+namespace HealthChecks.Azure.Data.Tables
 {
     public sealed class AzureTableServiceHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public AzureTableServiceHealthCheck(Azure.Data.Tables.TableServiceClient tableServiceClient, HealthChecks.CosmosDb.AzureTableServiceHealthCheckOptions? options) { }
+        public AzureTableServiceHealthCheck(Azure.Data.Tables.TableServiceClient tableServiceClient, HealthChecks.Azure.Data.Tables.AzureTableServiceHealthCheckOptions? options) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public sealed class AzureTableServiceHealthCheckOptions
@@ -15,6 +15,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AzureTablesServiceHealthChecksBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Data.Tables.TableServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.CosmosDb.AzureTableServiceHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_tables", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Data.Tables.TableServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.Data.Tables.AzureTableServiceHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_tables", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

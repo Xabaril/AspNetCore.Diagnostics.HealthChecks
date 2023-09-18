@@ -1,6 +1,5 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using HealthChecks.AzureStorage;
 
 namespace HealthChecks.Azure.Storage.Blobs.Tests;
 

@@ -3,7 +3,7 @@ name: HealthChecks Azure Blob Storage Preview CD
 on:
   push:
     tags:
-      - preview-azurequeuestorage-*
+      - preview-azureblobstorage-*
       - preview-all-*
 
 jobs:

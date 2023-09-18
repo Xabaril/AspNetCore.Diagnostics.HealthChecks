@@ -3,7 +3,7 @@ name: HealthChecks Azure Blob Storage CD
 on:
   push:
     tags:
-      - release-azurequeuestorage-*
+      - release-azureblobstorage-*
       - release-all-*
 
 jobs:

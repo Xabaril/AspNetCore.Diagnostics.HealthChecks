@@ -90,7 +90,7 @@ public abstract class ConformanceTests<TClient, THealthCheck, THealthCheckOption
     [Theory]
     [InlineData(HealthStatus.Unhealthy)]
     [InlineData(HealthStatus.Healthy)]
-    public void DependencyInjectionRegistrationWorksAsExpected(HealthStatus failureStatus)
+    public async Task DependencyInjectionRegistrationWorksAsExpected(HealthStatus failureStatus)
     {
         const string healthCheckName = "random_name";
         var timeout = TimeSpan.FromSeconds(5);
@@ -112,7 +112,7 @@ public abstract class ConformanceTests<TClient, THealthCheck, THealthCheckOption
             tags: tags,
             timeout: timeout);
 
-        using ServiceProvider serviceProvider = services.BuildServiceProvider();
+        await using ServiceProvider serviceProvider = services.BuildServiceProvider();
         IOptions<HealthCheckServiceOptions> options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         HealthCheckRegistration registration = options.Value.Registrations.Single();

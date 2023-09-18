@@ -1,8 +1,7 @@
 using Azure.Identity;
 using Azure.Storage.Files.Shares;
-using HealthChecks.AzureStorage;
 
-namespace HealthChecks.Azure.Storage.Queues.Tests;
+namespace HealthChecks.Azure.Storage.Files.Shares.Tests;
 
 public class FileConformanceTests : ConformanceTests<ShareServiceClient, AzureFileShareHealthCheck, AzureFileShareHealthCheckOptions>
 {

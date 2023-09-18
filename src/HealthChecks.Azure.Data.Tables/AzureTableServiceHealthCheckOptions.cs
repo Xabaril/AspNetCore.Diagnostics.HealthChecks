@@ -1,4 +1,4 @@
-namespace HealthChecks.CosmosDb;
+namespace HealthChecks.Azure.Data.Tables;
 
 /// <summary>
 /// Represents a collection of settings that configure an

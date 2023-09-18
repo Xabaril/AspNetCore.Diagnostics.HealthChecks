@@ -1,6 +1,5 @@
 using Azure.Data.Tables;
 using Azure.Identity;
-using HealthChecks.CosmosDb;
 
 namespace HealthChecks.Azure.Data.Tables.Tests;
 

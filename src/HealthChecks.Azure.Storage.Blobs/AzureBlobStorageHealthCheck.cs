@@ -1,7 +1,7 @@
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureStorage;
+namespace HealthChecks.Azure.Storage.Blobs;
 
 /// <summary>
 /// Azure Blob Storage health check.

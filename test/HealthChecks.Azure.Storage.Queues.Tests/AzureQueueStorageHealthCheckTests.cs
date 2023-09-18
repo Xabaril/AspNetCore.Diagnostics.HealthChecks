@@ -5,7 +5,7 @@ using Azure.Storage.Queues.Models;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace HealthChecks.AzureStorage.Tests;
+namespace HealthChecks.Azure.Storage.Queues.Tests;
 
 public class azurequeuestoragehealthcheck_should
 {

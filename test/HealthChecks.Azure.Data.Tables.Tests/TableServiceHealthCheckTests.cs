@@ -5,7 +5,7 @@ using Azure.Data.Tables.Models;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace HealthChecks.CosmosDb.Tests;
+namespace HealthChecks.Azure.Data.Tables.Tests;
 
 public class tableservicehealthcheck_should
 {

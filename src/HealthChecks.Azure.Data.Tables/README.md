@@ -7,7 +7,7 @@ This health check verifies the ability to communicate with [Azure Tables](https:
 By default, the `TableServiceClient` instance is resolved from service provider. `AzureTableServiceHealthCheckOptions` does not provide any specific container name, so the health check fetches just first container.
 
 ```csharp
-public void Configure(IHealthChecksBuilder builder)
+void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new TableServiceClient(new Uri("azure-table-storage-uri"), new DefaultAzureCredential()));
     builder.AddHealthChecks().AddAzureTable();
@@ -26,7 +26,7 @@ You can additionally add the following parameters:
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.
 
 ```csharp
-public void Configure(IHealthChecksBuilder builder)
+void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new TableServiceClient(new Uri("azure-table-storage-uri"), new DefaultAzureCredential()));
     builder.AddHealthChecks().AddAzureTable(
@@ -37,4 +37,7 @@ public void Configure(IHealthChecksBuilder builder)
 }
 ```
 
-For more information about credentials types please see [Azure TokenCredentials](https://docs.microsoft.com/dotnet/api/overview/azure/identity-readme)
+### Breaking changes
+
+In the prior releases, `TableServiceHealthCheck` was a part of `HealthChecks.CosmosDb` package. It had a dependency on not just `Azure.Data.Tables`, but also `Microsoft.Azure.Cosmos`. The packages have been split to avoid bringing unnecessary dependencies. Moreover, `TableServiceHealthCheck` was letting the users specify how `TableServiceClient` should be created (from raw connection string or from endpoint and managed identity credentials), at a cost of maintaining an internal, static client instances cache. Now the type does not create client instances nor maintain an internal cache and **it's the caller responsibility to provide the instance of `TableServiceClient`** (please see [#2040](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/2040) for more details). Since Azure SDK recommends treating clients as singletons <see href="https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/"/> and client instances can be expensive to create, it's recommended to register a singleton factory method for Azure SDK clients. So the clients are created only when needed and once per whole application lifetime.
+

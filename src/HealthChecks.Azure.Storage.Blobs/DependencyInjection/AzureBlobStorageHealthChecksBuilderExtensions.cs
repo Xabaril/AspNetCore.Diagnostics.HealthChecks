@@ -1,5 +1,5 @@
 using Azure.Storage.Blobs;
-using HealthChecks.AzureStorage;
+using HealthChecks.Azure.Storage.Blobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection;

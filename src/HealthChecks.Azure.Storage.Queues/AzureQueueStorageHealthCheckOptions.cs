@@ -1,4 +1,4 @@
-namespace HealthChecks.AzureStorage;
+namespace HealthChecks.Azure.Storage.Queues;
 
 /// <summary>
 /// Represents a collection of settings that configure an

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.Azure.Storage.Files.Shares is the health check package for Azure File Shares.</Description>
-    <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
+    <VersionPrefix>$(HealthCheckAzureStorageFilesShares)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 using Azure.Storage.Files.Shares;
-using HealthChecks.AzureStorage;
+using HealthChecks.Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Microsoft.Extensions.DependencyInjection;

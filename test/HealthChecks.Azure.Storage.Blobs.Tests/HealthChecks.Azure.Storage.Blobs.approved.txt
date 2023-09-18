@@ -1,8 +1,8 @@
-﻿namespace HealthChecks.AzureStorage
+namespace HealthChecks.Azure.Storage.Blobs
 {
     public sealed class AzureBlobStorageHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public AzureBlobStorageHealthCheck(Azure.Storage.Blobs.BlobServiceClient blobServiceClient, HealthChecks.AzureStorage.AzureBlobStorageHealthCheckOptions? options = null) { }
+        public AzureBlobStorageHealthCheck(Azure.Storage.Blobs.BlobServiceClient blobServiceClient, HealthChecks.Azure.Storage.Blobs.AzureBlobStorageHealthCheckOptions? options = null) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public sealed class AzureBlobStorageHealthCheckOptions
@@ -15,6 +15,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AzureBlobStorageHealthChecksBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureBlobStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Storage.Blobs.BlobServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.AzureStorage.AzureBlobStorageHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_blob_storage", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureBlobStorage(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Storage.Blobs.BlobServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.Storage.Blobs.AzureBlobStorageHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_blob_storage", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

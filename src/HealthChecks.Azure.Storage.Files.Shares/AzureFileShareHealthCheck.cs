@@ -1,7 +1,7 @@
 using Azure.Storage.Files.Shares;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.AzureStorage;
+namespace HealthChecks.Azure.Storage.Files.Shares;
 
 /// <summary>
 /// Azure Files health check.

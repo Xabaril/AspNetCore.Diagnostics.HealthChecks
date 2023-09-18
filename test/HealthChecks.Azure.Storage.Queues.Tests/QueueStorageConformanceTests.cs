@@ -1,6 +1,5 @@
 using Azure.Identity;
 using Azure.Storage.Queues;
-using HealthChecks.AzureStorage;
 
 namespace HealthChecks.Azure.Storage.Queues.Tests;
 

@@ -7,7 +7,7 @@ This health check verifies the ability to communicate with [Azure Key Vault Secr
 By default, the `SecretClient` instance is resolved from service provider. `AzureKeyVaultSecretsHealthCheckOptions` by default uses "AzureKeyVaultSecretsHealthCheck" secret name and does not try to create the secret when it's not found.
 
 ```csharp
-public void Configure(IHealthChecksBuilder builder)
+void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new SecretClient(new Uri("azure-key-vault-uri"), new DefaultAzureCredential()));
     builder.AddHealthChecks().AddAzureKeyVaultSecrets();
@@ -26,7 +26,7 @@ You can additionally add the following parameters:
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.
 
 ```csharp
-public void Configure(IHealthChecksBuilder builder)
+void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new SecretClient(new Uri("azure-key-vault-uri"), new DefaultAzureCredential()));
     builder.AddHealthChecks().AddAzureKeyVaultSecrets(

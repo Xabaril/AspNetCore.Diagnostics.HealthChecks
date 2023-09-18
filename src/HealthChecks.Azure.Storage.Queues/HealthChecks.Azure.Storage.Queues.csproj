@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.Azure.Storage.Queues is the health check package for Azure Storage Queues.</Description>
-    <VersionPrefix>$(HealthCheckAzureStorage)</VersionPrefix>
+    <VersionPrefix>$(HealthCheckAzureStorageQueues)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

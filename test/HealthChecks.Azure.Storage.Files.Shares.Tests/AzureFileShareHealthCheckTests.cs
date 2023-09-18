@@ -5,7 +5,7 @@ using Azure.Storage.Files.Shares.Models;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace HealthChecks.AzureStorage.Tests;
+namespace HealthChecks.Azure.Storage.Files.Shares.Tests;
 
 public class azurefilesharehealthcheck_should
 {

@@ -5,7 +5,7 @@ using Azure.Storage.Blobs.Models;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace HealthChecks.AzureStorage.Tests;
+namespace HealthChecks.Azure.Storage.Blobs.Tests;
 
 public class azureblobstoragehealthcheck_should
 {

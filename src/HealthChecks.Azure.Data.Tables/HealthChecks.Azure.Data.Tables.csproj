@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>$(PackageTags);Azure;Tables</PackageTags>
     <Description>HealthChecks.Azure.Data.Tables is the health check package for Azure Tables.</Description>
-    <VersionPrefix>$(HealthCheckCosmosDb)</VersionPrefix>
+    <VersionPrefix>$(HealthCheckAzureDataTables)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

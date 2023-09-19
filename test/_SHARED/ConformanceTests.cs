@@ -27,7 +27,7 @@ public abstract class ConformanceTests<TClient, THealthCheck, THealthCheckOption
     public void OptionsTypeIsSealed() => Assert.True(typeof(THealthCheckOptions).IsSealed);
 
     [Fact]
-    public void CtorThrowsArgumentNullExceptionForNullSecretClient()
+    public void CtorThrowsArgumentNullExceptionForNullClient()
     {
         ArgumentNullException argumentNullException = Assert.ThrowsAny<ArgumentNullException>(
             () => CreateHealthCheck(client: null!, options: CreateHealthCheckOptions()));

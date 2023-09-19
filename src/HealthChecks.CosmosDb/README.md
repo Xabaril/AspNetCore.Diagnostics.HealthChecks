@@ -1,4 +1,4 @@
-## Azure Tables Health Check
+## Azure Cosmos DB Health Check
 
 This health check verifies the ability to communicate with [Azure Cosmos DB](https://azure.microsoft.com/en-us/products/cosmos-db/). It uses the provided [CosmosClient](https://learn.microsoft.com/dotnet/api/microsoft.azure.cosmos.cosmosclient).
 
@@ -11,11 +11,7 @@ void Configure(IHealthChecksBuilder builder)
 {
     builder.Services.AddSingleton(sp => new CosmosClient(
         "endpoint-from-portal",
-        new DefaultAzureCredential(),
-        new CosmosClientOptions()
-        {
-            ApplicationRegion = Regions.EastUS2,
-        }));
+        new DefaultAzureCredential()));
     builder.AddHealthChecks().AddAzureCosmosDB();
 }
 ```

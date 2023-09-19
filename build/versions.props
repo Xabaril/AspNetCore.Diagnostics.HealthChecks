@@ -12,7 +12,7 @@
     <HealthCheckAzureDigitalTwin>7.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureSearch>7.0.0</HealthCheckAzureSearch>
     <HealthCheckAzureDataTables>7.0.0</HealthCheckAzureDataTables>
-    <HealthCheckAzureKeyVaultSecrets>7.0.1</HealthCheckAzureKeyVaultSecrets>
+    <HealthCheckAzureKeyVaultSecrets>8.0.0</HealthCheckAzureKeyVaultSecrets>
     <HealthCheckAzureMessagingEventsHubs>7.0.0</HealthCheckAzureMessagingEventsHubs>
     <HealthCheckAzureServiceBus>7.2.1</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorageBlobs>7.0.0</HealthCheckAzureStorageBlobs>

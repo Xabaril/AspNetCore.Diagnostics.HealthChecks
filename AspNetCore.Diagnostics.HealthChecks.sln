@@ -287,7 +287,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Storage.Files.Shares", "src\HealthChecks.Azure.Storage.Files.Shares\HealthChecks.Azure.Storage.Files.Shares.csproj", "{94031EF0-8262-46BE-9CF0-4E357CAE27AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.ServiceBus", "src\HealthChecks.Azure.Messaging.ServiceBus\HealthChecks.Azure.Messaging.ServiceBus.csproj", "{C84C0A78-B520-4B21-95D1-9113A6B46611}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus", "src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj", "{C84C0A78-B520-4B21-95D1-9113A6B46611}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.EventHubs", "src\HealthChecks.Azure.Messaging.EventHubs\HealthChecks.Azure.Messaging.EventHubs.csproj", "{87F760F2-C265-4898-8B9F-2C78532BC321}"
 EndProject
@@ -303,7 +303,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Data.Tab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.EventHubs.Tests", "test\HealthChecks.Azure.Messaging.EventHubs.Tests\HealthChecks.Azure.Messaging.EventHubs.Tests.csproj", "{09160C0F-BB5E-4DF2-AF44-E859E8EDE6BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.ServiceBus.Tests", "test\HealthChecks.Azure.Messaging.ServiceBus.Tests\HealthChecks.Azure.Messaging.ServiceBus.Tests.csproj", "{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus.Tests", "test\HealthChecks.AzureServiceBus.Tests\HealthChecks.AzureServiceBus.Tests.csproj", "{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageTags>$(PackageTags);Azure;ServiceBus</PackageTags>
-    <Description>HealthChecks.Azure.Messaging.ServiceBus is the health check package for Azure Service Bus Queues and Topics.</Description>
-    <VersionPrefix>$(HealthCheckAzureMessagingServiceBus)</VersionPrefix>
+    <PackageTags>$(PackageTags);Azure;ServiceBus;EventHub</PackageTags>
+    <Description>HealthChecks.AzureServiceBus is the health check package for Azure Service Bus Queues and Topics.</Description>
+    <VersionPrefix>$(HealthCheckAzureServiceBus)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

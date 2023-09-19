@@ -14,7 +14,7 @@
     <HealthCheckAzureDataTables>7.0.0</HealthCheckAzureDataTables>
     <HealthCheckAzureKeyVaultSecrets>7.0.1</HealthCheckAzureKeyVaultSecrets>
     <HealthCheckAzureMessagingEventsHubs>7.0.0</HealthCheckAzureMessagingEventsHubs>
-    <HealthCheckAzureMessagingServiceBus>7.2.1</HealthCheckAzureMessagingServiceBus>
+    <HealthCheckAzureServiceBus>7.2.1</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorageBlobs>7.0.0</HealthCheckAzureStorageBlobs>
     <HealthCheckAzureStorageFilesShares>7.0.0</HealthCheckAzureStorageFilesShares>
     <HealthCheckAzureStorageQueues>7.0.0</HealthCheckAzureStorageQueues>

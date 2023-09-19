@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\HealthChecks.Azure.Messaging.ServiceBus\HealthChecks.Azure.Messaging.ServiceBus.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
   </ItemGroup>
 
 </Project>

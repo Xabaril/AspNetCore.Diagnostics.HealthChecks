@@ -14,26 +14,28 @@ public static class AzureKeyVaultHealthChecksBuilderExtensions
     /// <summary>
     /// Add a health check for Azure Key Vault Secrets by registering <see cref="AzureKeyVaultSecretsHealthCheck"/> for given <paramref name="builder"/>.
     /// </summary>
-    /// <param healthCheckName="secretClientFactory">
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/> to add <see cref="HealthCheckRegistration"/> to.</param>
+    /// <param name="clientFactory">
     /// An optional factory to obtain <see cref="SecretClient" /> instance.
     /// When not provided, <see cref="SecretClient" /> is simply resolved from <see cref="IServiceProvider"/>.
     /// </param>
-    /// <param healthCheckName="keyVaultServiceUriFactory">
-    /// An optional factory to obtain <see cref="AzureKeyVaultSecretOptions"/> used by the health check.
-    /// When not provided, defaults are used.</param>
-    /// <param healthCheckName="healthCheckName">The health check healthCheckName. Optional. If <c>null</c> the type healthCheckName 'azure_key_vault_secret' will be used.</param>
-    /// <param healthCheckName="failureStatus">
+    /// <param name="optionsFactory">
+    /// An optional factory to obtain <see cref="AzureKeyVaultSecretsHealthCheckOptions"/> used by the health check.
+    /// When not provided, defaults are used.
+    /// </param>
+    /// <param name="healthCheckName">The health check name. Optional. If <c>null</c> the name 'azure_key_vault_secret' will be used.</param>
+    /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
     /// </param>
-    /// <param healthCheckName="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param healthCheckName="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-    /// <returns>The specified <paramref healthCheckName="builder"/>.</returns>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddAzureKeyVaultSecrets(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, SecretClient>? secretClientFactory = default,
-        Func<IServiceProvider, AzureKeyVaultSecretOptions>? optionsFactory = default,
-        string? healthCheckName = default,
+        Func<IServiceProvider, SecretClient>? clientFactory = default,
+        Func<IServiceProvider, AzureKeyVaultSecretsHealthCheckOptions>? optionsFactory = default,
+        string? healthCheckName = HEALTH_CHECK_NAME,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
@@ -41,8 +43,8 @@ public static class AzureKeyVaultHealthChecksBuilderExtensions
         return builder.Add(new HealthCheckRegistration(
            string.IsNullOrEmpty(healthCheckName) ? HEALTH_CHECK_NAME : healthCheckName!,
            sp => new AzureKeyVaultSecretsHealthCheck(
-                    secretClient: secretClientFactory?.Invoke(sp) ?? sp.GetRequiredService<SecretClient>(),
-                    options: optionsFactory?.Invoke(sp) ?? new AzureKeyVaultSecretOptions()),
+                    secretClient: clientFactory?.Invoke(sp) ?? sp.GetRequiredService<SecretClient>(),
+                    options: optionsFactory?.Invoke(sp)),
            failureStatus,
            tags,
            timeout));

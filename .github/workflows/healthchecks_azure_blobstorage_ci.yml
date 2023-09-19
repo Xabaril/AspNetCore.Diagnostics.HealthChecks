@@ -1,0 +1,37 @@
+name: HealthChecks Azure Blob Storage CI
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths:
+     - src/HealthChecks.Azure.Storage.Blobs/**
+     - test/HealthChecks.Azure.Storage.Blobs.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azure_blobstorage_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+   tags-ignore:
+     - release-*
+     - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+     - src/HealthChecks.Azure.Storage.Blobs/**
+     - test/HealthChecks.Azure.Storage.Blobs.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azure_blobstorage_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_ci_workflow.yml
+    with:
+      PROJECT_PATH: ./src/HealthChecks.Azure.Storage.Blobs/HealthChecks.Azure.Storage.Blobs.csproj
+      TEST_PROJECT_PATH: ./test/HealthChecks.Azure.Storage.Blobs.Tests/HealthChecks.Azure.Storage.Blobs.Tests.csproj
+      CODECOV_FLAGS: AzureBlobStorage
+

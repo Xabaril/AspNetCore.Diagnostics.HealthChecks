@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.3" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
-    <PackageReference Include="Azure.Data.Tables" Version="12.8.1" />
   </ItemGroup>
 
 </Project>

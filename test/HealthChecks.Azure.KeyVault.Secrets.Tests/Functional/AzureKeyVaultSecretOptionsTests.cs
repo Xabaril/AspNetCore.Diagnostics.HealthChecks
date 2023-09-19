@@ -7,7 +7,7 @@ public class AzureKeyVaultSecretOptionsTests
     [Fact]
     public void SecretNameThrowsArgumentNullExceptionForNull()
     {
-        AzureKeyVaultSecretOptions sut = new();
+        AzureKeyVaultSecretsHealthCheckOptions sut = new();
         ArgumentNullException argumentNullException = Assert.ThrowsAny<ArgumentNullException>(() => sut.SecretName = null!);
         Assert.Equal("SecretName", argumentNullException.ParamName);
     }
@@ -15,7 +15,7 @@ public class AzureKeyVaultSecretOptionsTests
     [Fact]
     public void SecretNameThrowsArgumentNullExceptionForEmptyString()
     {
-        AzureKeyVaultSecretOptions sut = new();
+        AzureKeyVaultSecretsHealthCheckOptions sut = new();
         ArgumentException argumentException = Assert.ThrowsAny<ArgumentException>(() => sut.SecretName = string.Empty);
         Assert.Equal("SecretName", argumentException.ParamName);
     }

@@ -38,7 +38,7 @@ jobs:
           EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: true
           EVENTSTORE_ENABLE_EXTERNAL_TCP: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:

@@ -41,7 +41,7 @@ jobs:
       # - name: Provide permission for deleting volume files
       #   run: sudo chown -R $USER:$USER /home/runner/work/${{ github.event.repository.name }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Initialize Solr
         run: |
           docker run -d -p8983:8983 -v${{ github.workspace }}/build/docker-services/solrcore:/var/solr/data/solrcore -v${{ github.workspace }}/build/docker-services/solrcoredown:/var/solr/data/solrcoredown solr:8.4.1

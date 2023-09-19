@@ -33,7 +33,7 @@
     <HealthCheckInfluxDB>7.0.0</HealthCheckInfluxDB>
     <HealthCheckIoTHub>7.0.0</HealthCheckIoTHub>
     <HealthCheckKafka>7.0.0</HealthCheckKafka>
-    <HealthCheckKeyVault>7.0.1</HealthCheckKeyVault>
+    <HealthCheckKeyVault>7.0.0</HealthCheckKeyVault>
     <HealthCheckKubernetes>7.0.0</HealthCheckKubernetes>
     <HealthCheckMongoDB>7.0.0</HealthCheckMongoDB>
     <HealthCheckMySql>7.0.0</HealthCheckMySql>

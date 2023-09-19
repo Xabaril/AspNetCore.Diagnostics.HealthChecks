@@ -36,7 +36,6 @@ void Configure(IHealthChecksBuilder builder)
 }
 ```
 
-
 ### Breaking changes
 
 In the prior releases, `AzureEventHubHealthCheck` was a part of `HealthChecks.AzureServiceBus` package. It had a dependency on not just `Azure.Messaging.EventHubs`, but also `Azure.Messaging.ServiceBus`. The packages have been split to avoid bringing unnecessary dependencies. Moreover, `AzureEventHubHealthCheck` was letting the users specify how `EventHubProducerClient` should be created (from raw connection string or from fully qualified namespace and managed identity credentials), at a cost of maintaining an internal, static client instances cache. Now the type does not create client instances nor maintain an internal cache and **it's the caller responsibility to provide the instance of `EventHubProducerClient`** (please see [#2040](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/2040) for more details). Since Azure SDK recommends treating clients as singletons <see href="https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/"/> and client instances can be expensive to create, it's recommended to register a singleton factory method for Azure SDK clients. So the clients are created only when needed and once per whole application lifetime.

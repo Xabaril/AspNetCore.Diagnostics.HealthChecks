@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/reusable_cd_workflow.yml
+    uses: ./.github/workflows/reusable_cd_preview_workflow.yml
     secrets: inherit
     with:
       BUILD_CONFIG: Release

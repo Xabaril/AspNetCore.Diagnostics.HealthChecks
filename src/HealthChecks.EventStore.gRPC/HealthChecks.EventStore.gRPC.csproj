@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);EventStore;gRPC</PackageTags>
     <Description>HealthChecks.EventStore.gRPC is the health check package for EventStore, using the gRPC client.</Description>
     <VersionPrefix>$(HealthCheckEventStoregRPC)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

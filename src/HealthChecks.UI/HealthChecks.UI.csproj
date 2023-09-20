@@ -7,6 +7,7 @@
     <VersionPrefix>$(HealthCheckUI)</VersionPrefix>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);RCS1090</WarningsNotAsErrors>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

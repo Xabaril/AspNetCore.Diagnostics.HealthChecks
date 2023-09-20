@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);solr</PackageTags>
     <Description>HealthChecks.solr is the health check package for solr.</Description>
     <VersionPrefix>$(HealthCheckSolr)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

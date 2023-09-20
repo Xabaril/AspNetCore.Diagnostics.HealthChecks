@@ -7,6 +7,7 @@
     <DockerfileContext>..\..</DockerfileContext>
     <VersionPrefix>$(HealthChecksUIK8sOperator)</VersionPrefix>
     <NoWarn>$(NoWarn);RCS1090</NoWarn>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

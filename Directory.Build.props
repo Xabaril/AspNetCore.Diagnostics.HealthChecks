@@ -33,7 +33,12 @@
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
+  <PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests')) AND '$(Configuration)' == 'Release' AND !$(MSBuildProjectName.StartsWith('HealthChecks.UI')) AND !$(MSBuildProjectName.Contains('Sample'))">
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build/strongNameKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests')) AND '$(SignAssembly)' != 'true' ">
     <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
   </ItemGroup>
 

@@ -6,6 +6,7 @@
     <Description>HealthChecks.OpenIdConnectServer is the health check package for OpenIdConnect servers</Description>
     <VersionPrefix>$(HealthCheckOpenIdConnectServer)</VersionPrefix>
     <RootNamespace>HealthChecks.IdSvr</RootNamespace> <!--For backward naming compatibility-->
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);Kubernetes;k8s;Cluster</PackageTags>
     <Description>HealthChecks.HealthChecks is the health check package for Kubernetes clusters.</Description>
     <VersionPrefix>$(HealthCheckKubernetes)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

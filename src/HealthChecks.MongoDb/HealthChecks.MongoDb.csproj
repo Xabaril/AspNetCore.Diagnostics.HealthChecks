@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);MongoDb</PackageTags>
     <Description>HealthChecks.MongoDb is the health check package for MongoDb.</Description>
     <VersionPrefix>$(HealthCheckMongoDB)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

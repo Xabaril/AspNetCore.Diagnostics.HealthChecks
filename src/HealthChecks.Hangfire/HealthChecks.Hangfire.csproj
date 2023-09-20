@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);Hangfire</PackageTags>
     <Description>HealthChecks.Hangfire is the health check package for Hangfire.</Description>
     <VersionPrefix>$(HealthCheckHangfire)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

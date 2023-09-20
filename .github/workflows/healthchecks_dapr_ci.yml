@@ -9,6 +9,7 @@ on:
       - test/HealthChecks.Dapr.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_dapr_ci.yml
+      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
@@ -22,44 +23,14 @@ on:
       - test/HealthChecks.Dapr.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_dapr_ci.yml
+      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: |
-            6.0.x
-            7.0.x
-      - name: Restore
-        run: |
-          dotnet restore ./src/HealthChecks.Dapr/HealthChecks.Dapr.csproj &&
-          dotnet restore ./test/HealthChecks.Dapr.Tests/HealthChecks.Dapr.Tests.csproj
-      - name: Check formatting
-        run: |
-          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Dapr/HealthChecks.Dapr.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Dapr.Tests/HealthChecks.Dapr.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
-      - name: Build
-        run: |
-          dotnet build --no-restore ./src/HealthChecks.Dapr/HealthChecks.Dapr.csproj &&
-          dotnet build --no-restore ./test/HealthChecks.Dapr.Tests/HealthChecks.Dapr.Tests.csproj
-      - name: Test
-        run: >
-          dotnet test
-          ./test/HealthChecks.Dapr.Tests/HealthChecks.Dapr.Tests.csproj
-          --no-restore
-          --no-build
-          --collect "XPlat Code Coverage"
-          --results-directory .coverage
-          --
-          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          flags: Dapr
-          directory: .coverage
+    uses: ./.github/workflows/reusable_ci_workflow.yml
+    with:
+      PROJECT_PATH: ./src/HealthChecks.Dapr/HealthChecks.Dapr.csproj
+      TEST_PROJECT_PATH: ./test/HealthChecks.Dapr.Tests/HealthChecks.Dapr.Tests.csproj
+      CODECOV_FLAGS: Dapr

@@ -14,13 +14,13 @@
     <HealthCheckAzureDataTables>7.0.0</HealthCheckAzureDataTables>
     <HealthCheckAzureKeyVaultSecrets>8.0.0</HealthCheckAzureKeyVaultSecrets>
     <HealthCheckAzureMessagingEventsHubs>7.0.0</HealthCheckAzureMessagingEventsHubs>
-    <HealthCheckAzureServiceBus>7.2.1</HealthCheckAzureServiceBus>
+    <HealthCheckAzureServiceBus>7.3.0</HealthCheckAzureServiceBus>
     <HealthCheckAzureStorageBlobs>7.0.0</HealthCheckAzureStorageBlobs>
     <HealthCheckAzureStorageFilesShares>7.0.0</HealthCheckAzureStorageFilesShares>
     <HealthCheckAzureStorageQueues>7.0.0</HealthCheckAzureStorageQueues>
     <HealthCheckCloudFirestore>7.0.0</HealthCheckCloudFirestore>
     <HealthCheckConsul>7.0.0</HealthCheckConsul>
-    <HealthCheckCosmosDb>7.0.1</HealthCheckCosmosDb>
+    <HealthCheckCosmosDb>7.1.0</HealthCheckCosmosDb>
     <HealthCheckDapr>7.0.0</HealthCheckDapr>
     <HealthCheckDocumentDb>7.1.0</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>7.0.0</HealthCheckDynamoDb>

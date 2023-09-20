@@ -6,7 +6,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <VersionPrefix>$(HealthChecksUIK8sOperator)</VersionPrefix>
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);RCS1090</WarningsNotAsErrors>
+    <NoWarn>$(NoWarn);RCS1090</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

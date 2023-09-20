@@ -18,8 +18,8 @@ public class NotificationHandler
     }
     public async Task NotifyDiscoveredServiceAsync(WatchEventType type, V1Service service, HealthCheckResource resource)
     {
-        var uiService = await _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid).ConfigureAwait(false);
-        var secret = await _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid).ConfigureAwait(false);
+        var uiService = await _client.ListNamespacedOwnedServiceAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
+        var secret = await _client.ListNamespacedOwnedSecretAsync(resource.Metadata.NamespaceProperty, resource.Metadata.Uid);
 
         if (!service.Metadata.Labels.ContainsKey(resource.Spec.ServicesLabel))
         {
@@ -33,6 +33,6 @@ public class NotificationHandler
             service,
             secret!, // TODO: check
             _logger,
-            _httpClientFactory).ConfigureAwait(false);
+            _httpClientFactory);
     }
 }

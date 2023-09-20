@@ -27,14 +27,14 @@ internal class DeploymentHandler
 
     public async Task<V1Deployment> GetOrCreateAsync(HealthCheckResource resource)
     {
-        var deployment = await Get(resource).ConfigureAwait(false);
+        var deployment = await Get(resource);
         if (deployment != null)
             return deployment;
 
         try
         {
             var deploymentResource = Build(resource);
-            var response = await _client.AppsV1.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty).ConfigureAwait(false);
+            var response = await _client.AppsV1.CreateNamespacedDeploymentWithHttpMessagesAsync(deploymentResource, resource.Metadata.NamespaceProperty);
             deployment = response.Body;
 
             _operatorDiagnostics.DeploymentCreated(deployment.Metadata.Name);
@@ -52,7 +52,7 @@ internal class DeploymentHandler
         try
         {
             await _client.AppsV1.DeleteNamespacedDeploymentAsync($"{resource.Spec.Name}-deploy",
-                resource.Metadata.NamespaceProperty).ConfigureAwait(false);
+                resource.Metadata.NamespaceProperty);
         }
         catch (Exception ex)
         {

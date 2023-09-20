@@ -34,21 +34,21 @@ internal class HealthChecksController : IHealthChecksController
     {
         _logger.LogInformation("Creating secret for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
 
-        var secret = await _secretHandler.GetOrCreateAsync(resource).ConfigureAwait(false);
+        var secret = await _secretHandler.GetOrCreateAsync(resource);
 
         if (resource.HasBrandingConfigured())
         {
             _logger.LogInformation("Creating configmap for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
-            await _configMapHandler.GetOrCreateAsync(resource).ConfigureAwait(false);
+            await _configMapHandler.GetOrCreateAsync(resource);
         }
 
         _logger.LogInformation("Creating deployment for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
 
-        var deployment = await _deploymentHandler.GetOrCreateAsync(resource).ConfigureAwait(false);
+        var deployment = await _deploymentHandler.GetOrCreateAsync(resource);
 
         _logger.LogInformation("Creating service for hc resource - namespace {namespace}", resource.Metadata.NamespaceProperty);
 
-        var service = await _serviceHandler.GetOrCreateAsync(resource).ConfigureAwait(false);
+        var service = await _serviceHandler.GetOrCreateAsync(resource);
 
         return DeploymentResult.Create(deployment, service, secret);
     }

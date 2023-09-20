@@ -8,23 +8,10 @@ on:
 
 jobs:
   build:
-    env:
+    uses: ./.github/workflows/reusable_cd_workflow.yml
+    secrets: inherit
+    with:
       BUILD_CONFIG: Release
-      VERSION_SUFFIX: rc2.${{ github.run_number }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: |
-            6.0.x
-            7.0.x
-      - name: Restore
-        run: dotnet restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-      - name: Build
-        run: dotnet build --no-restore ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj -c $BUILD_CONFIG
-      - name: Pack
-        run: dotnet pack --no-build ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj --version-suffix $VERSION_SUFFIX -c $BUILD_CONFIG -o ./artifacts
-      - name: Publish
-        run: dotnet nuget push ./artifacts/AspNetCore.HealthChecks.Oracle.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      VERSION_SUFFIX_PREFIX: rc1
+      PROJECT_PATH: ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
+      PACKAGE_NAME: AspNetCore.HealthChecks.Oracle

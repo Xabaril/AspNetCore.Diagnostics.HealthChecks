@@ -23,7 +23,7 @@ on:
       - test/HealthChecks.Aws.S3.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_aws_s3_ci.yml
-     - .github/workflows/reusable_ci_workflow.yml
+      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
 

@@ -33,7 +33,7 @@ public static class IEndpointRouteBuilderExtensions
             if (context.Request.IsAuthenticated())
             {
                 using var streamReader = new StreamReader(context.Request.Body);
-                var content = await streamReader.ReadToEndAsync();
+                var content = await streamReader.ReadToEndAsync().ConfigureAwait(false);
 
                 var endpoint = JsonDocument.Parse(content);
                 var root = endpoint.RootElement;
@@ -47,15 +47,15 @@ public static class IEndpointRouteBuilderExtensions
 
                     if (type == PushServiceKeys.ServiceAdded)
                     {
-                        await pushService.AddAsync(name, uri);
+                        await pushService.AddAsync(name, uri).ConfigureAwait(false);
                     }
                     else if (type == PushServiceKeys.ServiceRemoved)
                     {
-                        await pushService.RemoveAsync(name);
+                        await pushService.RemoveAsync(name).ConfigureAwait(false);
                     }
                     else if (type == PushServiceKeys.ServiceUpdated)
                     {
-                        await pushService.UpdateAsync(name, uri);
+                        await pushService.UpdateAsync(name, uri).ConfigureAwait(false);
                     }
                 }
             }

@@ -9,7 +9,6 @@ on:
       - test/HealthChecks.Npgsql.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_npgsql_ci.yml
-      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
@@ -23,12 +22,12 @@ on:
       - test/HealthChecks.Npgsql.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_npgsql_ci.yml
-      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     services:
       npgsql:
         image: postgres
@@ -37,9 +36,38 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: Password12!
-
-    uses: ./.github/workflows/reusable_ci_workflow.yml
-    with:
-      PROJECT_PATH: ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj
-      TEST_PROJECT_PATH: ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj
-      CODECOV_FLAGS: Npgsql
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj &&
+          dotnet restore ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.NpgSql/HealthChecks.NpgSql.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Npgsql.Tests/HealthChecks.Npgsql.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Npgsql
+          directory: .coverage

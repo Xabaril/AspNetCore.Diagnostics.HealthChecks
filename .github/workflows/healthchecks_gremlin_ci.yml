@@ -9,7 +9,6 @@ on:
       - test/HealthChecks.Gremlin.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_gremlin_ci.yml
-      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
@@ -23,12 +22,12 @@ on:
       - test/HealthChecks.Gremlin.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_gremlin_ci.yml
-      - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     services:
       gremlin:
         image: tinkerpop/gremlin-server
@@ -37,9 +36,38 @@ jobs:
         env:
           VIRTUAL_HOST: gremlin.docker
           VIRTUAL_PORT: 8182
-
-    uses: ./.github/workflows/reusable_ci_workflow.yml
-    with:
-      PROJECT_PATH: ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
-      TEST_PROJECT_PATH: ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
-      CODECOV_FLAGS: Gremlin
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj &&
+          dotnet restore ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Gremlin.Tests/HealthChecks.Gremlin.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Gremlin
+          directory: .coverage

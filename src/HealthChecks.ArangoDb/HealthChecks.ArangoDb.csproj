@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="ArangoDBNetStandard" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0-rc.1.23421.29" />
   </ItemGroup>
 
 </Project>

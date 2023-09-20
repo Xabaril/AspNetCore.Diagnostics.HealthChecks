@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0-rc.1.23419.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9" />
     <PackageReference Include="KubernetesClient" Version="11.0.44" />
   </ItemGroup>

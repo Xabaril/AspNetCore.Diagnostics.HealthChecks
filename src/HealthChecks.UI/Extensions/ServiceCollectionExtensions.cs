@@ -53,13 +53,13 @@ public static class ServiceCollectionExtensions
                 var settings = sp.GetRequiredService<IOptions<Settings>>();
                 return settings.Value.ApiEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
             })
-            .ConfigureHttpMessageHandlerBuilder(builder =>
+            .ConfigureAdditionalHttpMessageHandlers((handlerList, serviceProvider) =>
             {
-                var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
+                var settings = serviceProvider.GetRequiredService<IOptions<Settings>>();
 
                 foreach (var handlerType in settings.Value.ApiEndpointDelegatingHandlerTypes.Values)
                 {
-                    builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
+                    handlerList.Add((DelegatingHandler)serviceProvider.GetRequiredService(handlerType));
                 }
             })
             .Services;
@@ -77,13 +77,13 @@ public static class ServiceCollectionExtensions
              var settings = sp.GetRequiredService<IOptions<Settings>>();
              return settings.Value.WebHooksEndpointHttpHandler?.Invoke(sp) ?? new HttpClientHandler();
          })
-        .ConfigureHttpMessageHandlerBuilder(builder =>
+        .ConfigureAdditionalHttpMessageHandlers((handlersList, serviceProvider) =>
         {
-            var settings = builder.Services.GetRequiredService<IOptions<Settings>>();
+            var settings = serviceProvider.GetRequiredService<IOptions<Settings>>();
 
             foreach (var handlerType in settings.Value.WebHooksEndpointDelegatingHandlerTypes.Values)
             {
-                builder.AdditionalHandlers.Add((DelegatingHandler)builder.Services.GetRequiredService(handlerType));
+                handlersList.Add((DelegatingHandler)serviceProvider.GetRequiredService(handlerType));
             }
         })
         .Services;

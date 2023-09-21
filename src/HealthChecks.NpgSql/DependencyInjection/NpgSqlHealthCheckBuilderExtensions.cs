@@ -95,6 +95,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
     {
         Guard.ThrowIfNull(dbDataSourceFactory);
 
+        NpgsqlDataSource? dataSource = null;
         NpgSqlHealthCheckOptions options = new()
         {
             CommandText = healthQuery,
@@ -108,7 +109,27 @@ public static class NpgSqlHealthCheckBuilderExtensions
                 // The Data Source needs to be created only once,
                 // as each instance has it's own connection pool.
                 // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
-                options.DataSource ??= dbDataSourceFactory(sp);
+
+                // Perform an atomic read of the current value.
+                NpgsqlDataSource? existingDataSource = Volatile.Read(ref dataSource);
+                if (existingDataSource is null)
+                {
+                    // Create a new Data Source
+                    NpgsqlDataSource created = dbDataSourceFactory(sp);
+                    // Perform an atomic exchange, but only if the value is still null.
+                    existingDataSource = Interlocked.CompareExchange(ref dataSource, created, null);
+                    if (existingDataSource is not null)
+                    {
+                        // Some other thread has created the data source in the meantime,
+                        // we dispose our own copy, and use the existing instance.
+                        created.Dispose();
+                        options.DataSource = existingDataSource;
+                    }
+                    else
+                    {
+                        options.DataSource = created;
+                    }
+                }
 
                 return new NpgSqlHealthCheck(options);
             },

@@ -1,6 +1,6 @@
+using System.Reflection;
 using HealthChecks.NpgSql;
 using Npgsql;
-using System.Reflection;
 
 namespace HealthChecks.Npgsql.Tests.DependencyInjection;
 

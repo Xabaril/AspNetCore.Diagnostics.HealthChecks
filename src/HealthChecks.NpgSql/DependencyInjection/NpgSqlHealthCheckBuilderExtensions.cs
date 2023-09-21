@@ -95,16 +95,21 @@ public static class NpgSqlHealthCheckBuilderExtensions
     {
         Guard.ThrowIfNull(dbDataSourceFactory);
 
+        NpgSqlHealthCheckOptions options = new()
+        {
+            CommandText = healthQuery,
+            Configure = configure,
+        };
+
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
             sp =>
             {
-                var options = new NpgSqlHealthCheckOptions
-                {
-                    DataSource = dbDataSourceFactory(sp),
-                    CommandText = healthQuery,
-                    Configure = configure,
-                };
+                // The Data Source needs to be created only once,
+                // as each instance has it's own connection pool.
+                // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
+                options.DataSource ??= dbDataSourceFactory(sp);
+
                 return new NpgSqlHealthCheck(options);
             },
             failureStatus,

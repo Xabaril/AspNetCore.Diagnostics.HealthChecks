@@ -1,0 +1,16 @@
+name: HealthChecks Azure EventHubs CD
+
+on:
+  push:
+    tags:
+      - release-azureeventhubs-*
+      - release-all-*
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_cd_workflow.yml
+    secrets: inherit
+    with:
+      BUILD_CONFIG: Release
+      PROJECT_PATH: ./src/HealthChecks.Azure.Messaging.EventHubs/HealthChecks.Azure.Messaging.EventHubs.csproj
+      PACKAGE_NAME: AspNetCore.HealthChecks.Azure.Messaging.EventHubs

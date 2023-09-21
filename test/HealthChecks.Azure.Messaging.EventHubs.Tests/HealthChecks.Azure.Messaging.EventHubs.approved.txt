@@ -1,0 +1,15 @@
+namespace HealthChecks.Azure.Messaging.EventHubs
+{
+    public sealed class AzureEventHubHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureEventHubHealthCheck(Azure.Messaging.EventHubs.Producer.EventHubProducerClient client) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class AzureEventHubHealthChecksBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureEventHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Messaging.EventHubs.Producer.EventHubProducerClient>? clientFactory = null, string? healthCheckName = "azure_event_hub", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

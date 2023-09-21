@@ -54,7 +54,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
     {
         using (_logger.BeginScope("HealthReportCollector is collecting health checks results."))
         {
-            var healthChecks = await _db.Configurations.ToListAsync(cancellationToken);
+            var healthChecks = await _db.Configurations.ToListAsync(cancellationToken).ConfigureAwait(false);
 
             foreach (var item in healthChecks.OrderBy(h => h.Id))
             {
@@ -66,31 +66,31 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
 
                 foreach (var interceptor in _interceptors)
                 {
-                    await interceptor.OnCollectExecuting(item);
+                    await interceptor.OnCollectExecuting(item).ConfigureAwait(false);
                 }
 
-                var healthReport = await GetHealthReportAsync(item);
+                var healthReport = await GetHealthReportAsync(item).ConfigureAwait(false);
 
                 if (healthReport.Status != UIHealthStatus.Healthy)
                 {
-                    if (!_settings.NotifyUnHealthyOneTimeUntilChange || await ShouldNotifyAsync(item.Name))
+                    if (!_settings.NotifyUnHealthyOneTimeUntilChange || await ShouldNotifyAsync(item.Name).ConfigureAwait(false))
                     {
-                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport);
+                        await _healthCheckFailureNotifier.NotifyDown(item.Name, healthReport).ConfigureAwait(false);
                     }
                 }
                 else
                 {
-                    if (await HasLivenessRecoveredFromFailureAsync(item))
+                    if (await HasLivenessRecoveredFromFailureAsync(item).ConfigureAwait(false))
                     {
-                        await _healthCheckFailureNotifier.NotifyWakeUp(item.Name);
+                        await _healthCheckFailureNotifier.NotifyWakeUp(item.Name).ConfigureAwait(false);
                     }
                 }
 
-                await SaveExecutionHistoryAsync(item, healthReport);
+                await SaveExecutionHistoryAsync(item, healthReport).ConfigureAwait(false);
 
                 foreach (var interceptor in _interceptors)
                 {
-                    await interceptor.OnCollectExecuted(healthReport);
+                    await interceptor.OnCollectExecuted(healthReport).ConfigureAwait(false);
                 }
             }
 
@@ -135,18 +135,18 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
 
                     using var requestMessage = new HttpRequestMessage(HttpMethod.Get, absoluteUri);
                     requestMessage.Headers.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
-                    response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
+                    response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 }
             }
 
-            response ??= await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead);
+            response ??= await _httpClient.GetAsync(absoluteUri, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
             using (response)
             {
                 if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != "application/json")
                     return UIHealthReport.CreateFrom(new InvalidOperationException($"HTTP response is not in valid state ({response.StatusCode}) when trying to get report from {uri} configured with name {name}."));
 
-                return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options)
+                return await response.Content.ReadFromJsonAsync<UIHealthReport>(_options).ConfigureAwait(false)
                     ?? throw new InvalidOperationException($"{nameof(HttpContentJsonExtensions.ReadFromJsonAsync)} returned null");
             }
         }
@@ -182,7 +182,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
 
     private async Task<bool> HasLivenessRecoveredFromFailureAsync(HealthCheckConfiguration configuration)
     {
-        var previous = await GetHealthCheckExecutionAsync(configuration);
+        var previous = await GetHealthCheckExecutionAsync(configuration).ConfigureAwait(false);
 
         return previous != null && previous.Status != UIHealthStatus.Healthy;
     }
@@ -193,7 +193,8 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
             .Include(le => le.History)
             .Include(le => le.Entries)
             .Where(le => le.Name == configuration.Name)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync()
+            .ConfigureAwait(false);
     }
 
     private async Task<bool> ShouldNotifyAsync(string healthCheckName)
@@ -202,7 +203,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
         var lastNotifications = await _db.Failures
            .Where(lf => string.Equals(lf.HealthCheckName, healthCheckName))
            .OrderByDescending(lf => lf.LastNotified)
-           .Take(2).ToListAsync();
+           .Take(2).ToListAsync().ConfigureAwait(false);
 #pragma warning restore RCS1155 // Use StringComparison when comparing strings.
 
         if (lastNotifications?.Count == 2)
@@ -222,7 +223,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
     {
         _logger.LogDebug("HealthReportCollector - health report execution history saved.");
 
-        var execution = await GetHealthCheckExecutionAsync(configuration);
+        var execution = await GetHealthCheckExecutionAsync(configuration).ConfigureAwait(false);
 
         var lastExecutionTime = DateTime.UtcNow;
 
@@ -288,10 +289,11 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
             };
 
             await _db.Executions
-                .AddAsync(execution);
+                .AddAsync(execution)
+                .ConfigureAwait(false);
         }
 
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync().ConfigureAwait(false);
     }
 
     private static void UpdateUris(HealthCheckExecution execution, HealthCheckConfiguration configuration)

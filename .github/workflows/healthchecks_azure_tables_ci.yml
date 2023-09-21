@@ -1,0 +1,37 @@
+name: HealthChecks Azure Table Storage CI
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths:
+     - src/HealthChecks.Azure.Data.Tables/**
+     - test/HealthChecks.Azure.Data.Tables.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azure_tables_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+   tags-ignore:
+     - release-*
+     - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+     - src/HealthChecks.Azure.Data.Tables/**
+     - test/HealthChecks.Azure.Data.Tables.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azure_tables_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_ci_workflow.yml
+    with:
+      PROJECT_PATH: ./src/HealthChecks.Azure.Data.Tables/HealthChecks.Azure.Data.Tables.csproj
+      TEST_PROJECT_PATH: ./test/HealthChecks.Azure.Data.Tables.Tests/HealthChecks.Azure.Data.Tables.Tests.csproj
+      CODECOV_FLAGS: AzureTableStorage
+

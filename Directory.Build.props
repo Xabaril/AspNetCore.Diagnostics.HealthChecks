@@ -36,10 +36,6 @@
     <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.AzureServiceBus' OR $(MSBuildProjectName) == 'HealthChecks.AzureStorage' OR $(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
-    <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
-  </ItemGroup>
-
   <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
     <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
   </ItemGroup>
@@ -65,6 +61,7 @@
     <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
     <Compile Include="../_SHARED/TestLogger.cs" Link="TestLogger.cs" Visible="false" />
     <Compile Include="../_SHARED/TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
+    <Compile Include="../_SHARED/ConformanceTests.cs" Link="ConformanceTests.cs" Visible="false" />
 
     <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.AspNetCore.Hosting" />

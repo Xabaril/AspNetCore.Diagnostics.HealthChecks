@@ -10,7 +10,7 @@ namespace HealthChecks.Azure.KeyVault.Secrets;
 public sealed class AzureKeyVaultSecretsHealthCheck : IHealthCheck
 {
     private readonly SecretClient _secretClient;
-    private readonly AzureKeyVaultSecretOptions _options;
+    private readonly AzureKeyVaultSecretsHealthCheckOptions _options;
 
     /// <summary>
     /// Creates new instance of Azure Key Vault Secrets health check.
@@ -20,18 +20,18 @@ public sealed class AzureKeyVaultSecretsHealthCheck : IHealthCheck
     /// Azure SDK recommends treating clients as singletons <see href="https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/"/>,
     /// so this should be the exact same instance used by other parts of the application.
     /// </param>
-    /// <param name="options">The settings used by the health check.</param>
+    /// <param name="options">Optional settings used by the health check.</param>
     /// <remarks>
-    /// It uses the provided <paramref name="secretClient"/> to get given <see cref="AzureKeyVaultSecretOptions.SecretName"/> secret via
+    /// It uses the provided <paramref name="secretClient"/> to get given <see cref="AzureKeyVaultSecretsHealthCheckOptions.SecretName"/> secret via
     /// <see cref="SecretClient.GetSecretAsync(string, string, CancellationToken)"/> method.
-    /// When the secret is not found, it will try to create it if <see cref="AzureKeyVaultSecretOptions.CreateWhenNotFound"/> is set to true.
-    /// When the secret is not found, but <see cref="AzureKeyVaultSecretOptions.CreateWhenNotFound"/> is false, it returns <see cref="HealthStatus.Healthy"/> status,
+    /// When the secret is not found, it will try to create it if <see cref="AzureKeyVaultSecretsHealthCheckOptions.CreateWhenNotFound"/> is set to true.
+    /// When the secret is not found, but <see cref="AzureKeyVaultSecretsHealthCheckOptions.CreateWhenNotFound"/> is false, it returns <see cref="HealthStatus.Healthy"/> status,
     /// as the connection to the service itself can be made.
     /// </remarks>
-    public AzureKeyVaultSecretsHealthCheck(SecretClient secretClient, AzureKeyVaultSecretOptions options)
+    public AzureKeyVaultSecretsHealthCheck(SecretClient secretClient, AzureKeyVaultSecretsHealthCheckOptions? options = default)
     {
         _secretClient = Guard.ThrowIfNull(secretClient);
-        _options = Guard.ThrowIfNull(options);
+        _options = options ?? new AzureKeyVaultSecretsHealthCheckOptions();
     }
 
     /// <inheritdoc />

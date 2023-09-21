@@ -106,7 +106,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
             name ?? NAME,
             sp =>
             {
-                // The Data Source needs to be fromFactory only once,
+                // The Data Source needs to be created only once,
                 // as each instance has it's own connection pool.
                 // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
 
@@ -123,7 +123,12 @@ public static class NpgSqlHealthCheckBuilderExtensions
                     {
                         // If they are using the same ConnectionString, we can reuse the instance from DI.
                         // So there is only ONE NpgsqlDataSource per the whole app and ONE connection pool.
-                        fromFactory.Dispose();
+
+                        if (!ReferenceEquals(fromDI, fromFactory))
+                        {
+                            // Dispose it, as long as it's not the same instance.
+                            fromFactory.Dispose();
+                        }
                         Interlocked.Exchange(ref dataSource, fromDI);
                         options.DataSource = fromDI;
                     }

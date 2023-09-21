@@ -106,7 +106,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
             name ?? NAME,
             sp =>
             {
-                // The Data Source needs to be created only once,
+                // The Data Source needs to be fromFactory only once,
                 // as each instance has it's own connection pool.
                 // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
 
@@ -115,19 +115,33 @@ public static class NpgSqlHealthCheckBuilderExtensions
                 if (existingDataSource is null)
                 {
                     // Create a new Data Source
-                    NpgsqlDataSource created = dbDataSourceFactory(sp);
-                    // Perform an atomic exchange, but only if the value is still null.
-                    existingDataSource = Interlocked.CompareExchange(ref dataSource, created, null);
-                    if (existingDataSource is not null)
+                    NpgsqlDataSource fromFactory = dbDataSourceFactory(sp);
+                    // Try to resolve the Data Source from DI.
+                    NpgsqlDataSource? fromDI = sp.GetService<NpgsqlDataSource>();
+
+                    if (fromDI is not null && fromDI.ConnectionString.Equals(fromFactory.ConnectionString))
                     {
-                        // Some other thread has created the data source in the meantime,
-                        // we dispose our own copy, and use the existing instance.
-                        created.Dispose();
-                        options.DataSource = existingDataSource;
+                        // If they are using the same ConnectionString, we can reuse the instance from DI.
+                        // So there is only ONE NpgsqlDataSource per the whole app and ONE connection pool.
+                        fromFactory.Dispose();
+                        Interlocked.Exchange(ref dataSource, fromDI);
+                        options.DataSource = fromDI;
                     }
                     else
                     {
-                        options.DataSource = created;
+                        // Perform an atomic exchange, but only if the value is still null.
+                        existingDataSource = Interlocked.CompareExchange(ref dataSource, fromFactory, null);
+                        if (existingDataSource is not null)
+                        {
+                            // Some other thread has created the data source in the meantime,
+                            // we dispose our own copy, and use the existing instance.
+                            fromFactory.Dispose();
+                            options.DataSource = existingDataSource;
+                        }
+                        else
+                        {
+                            options.DataSource = fromFactory;
+                        }
                     }
                 }
 

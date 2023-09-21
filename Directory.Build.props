@@ -25,15 +25,16 @@
     <NoWarn>$(NoWarn);1591;IDISP013</NoWarn> <!--TODO: temporary solution-->
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
     <NoWarn>$(NoWarn);IDE1006</NoWarn>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
-    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">

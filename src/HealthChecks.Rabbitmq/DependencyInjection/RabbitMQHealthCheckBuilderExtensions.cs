@@ -152,10 +152,10 @@ public static class RabbitMQHealthCheckBuilderExtensions
     {
         var options = new RabbitMQHealthCheckOptions();
         setup?.Invoke(options);
-
+        builder.Services.AddSingleton(new RabbitMQHealthCheck(options));
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            new RabbitMQHealthCheck(options),
+            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
             failureStatus,
             tags,
             timeout));
@@ -187,15 +187,15 @@ public static class RabbitMQHealthCheckBuilderExtensions
         TimeSpan? timeout = default)
     {
         var options = new RabbitMQHealthCheckOptions();
+        builder.Services.AddSingleton(sp =>
+        {
+            setup?.Invoke(sp, options);
+            return new RabbitMQHealthCheck(options);
+        });
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
-            {
-                setup?.Invoke(sp, options);
-
-                return new RabbitMQHealthCheck(options);
-            },
+            sp => sp.GetRequiredService<RabbitMQHealthCheck>(),
             failureStatus,
             tags,
             timeout));

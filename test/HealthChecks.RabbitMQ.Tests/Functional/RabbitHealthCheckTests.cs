@@ -1,4 +1,5 @@
 using System.Net;
+using NSubstitute;
 using RabbitMQ.Client;
 
 namespace HealthChecks.RabbitMQ.Tests.Functional;
@@ -297,5 +298,95 @@ public class rabbitmq_healthcheck_should
         report.Status.ShouldBe(HealthStatus.Unhealthy);
         var end = DateTime.Now;
         (end - start).ShouldBeLessThan(TimeSpan.FromSeconds(10));
+    }
+
+    [Fact]
+    public async Task should_create_connection_with_connection_factory_once()
+    {
+        var (factory, _, model) = CreateMocks();
+
+        int disposeCounter = 0;
+        model.When(it => it.Dispose())
+            .Do(_ => disposeCounter++);
+
+
+        var services = new ServiceCollection();
+        services
+            .AddLogging()
+            .AddHealthChecks()
+            .AddRabbitMQ((p, s) => s.ConnectionFactory = factory);
+
+        await using var provider = services.BuildServiceProvider();
+
+        var healthCheckService = provider.GetRequiredService<HealthCheckService>();
+        await healthCheckService.CheckHealthAsync(CancellationToken.None).ConfigureAwait(false);
+        await healthCheckService.CheckHealthAsync(CancellationToken.None).ConfigureAwait(false);
+
+        factory.CreateConnection().Received(1);
+        Assert.Equal(2, disposeCounter);
+    }
+
+
+    [Fact]
+    public async Task should_create_connection_with_registered_connection_factory_once()
+    {
+        var (factory, _, model) = CreateMocks();
+
+        int disposeCounter = 0;
+        model.When(it => it.Dispose())
+            .Do(_ => disposeCounter++);
+
+
+        var services = new ServiceCollection();
+        services.AddSingleton(factory)
+            .AddLogging()
+            .AddHealthChecks()
+            .AddRabbitMQ();
+
+        await using var provider = services.BuildServiceProvider();
+
+        var healthCheckService = provider.GetRequiredService<HealthCheckService>();
+        await healthCheckService.CheckHealthAsync(CancellationToken.None).ConfigureAwait(false);
+        await healthCheckService.CheckHealthAsync(CancellationToken.None).ConfigureAwait(false);
+
+        factory.CreateConnection().Received(1);
+        Assert.Equal(2, disposeCounter);
+    }
+
+    [Fact]
+    public async Task should_create_connection_once()
+    {
+        var (_, connection, _) = CreateMocks();
+
+        int setupCallsCount = 0;
+        var services = new ServiceCollection();
+        services
+            .AddLogging()
+            .AddHealthChecks()
+            .AddRabbitMQ((p, s) =>
+            {
+                s.Connection = connection;
+                setupCallsCount++;
+            });
+
+        await using var provider = services.BuildServiceProvider();
+
+        var healthCheckService = provider.GetRequiredService<HealthCheckService>();
+        await healthCheckService.CheckHealthAsync(CancellationToken.None).ConfigureAwait(false);
+        await healthCheckService.CheckHealthAsync(CancellationToken.None).ConfigureAwait(false);
+
+        Assert.Equal(1, setupCallsCount);
+    }
+
+
+    private static (IConnectionFactory factory, IConnection connection, IModel model) CreateMocks()
+    {
+        var factory = Substitute.For<IConnectionFactory>();
+        var connection = Substitute.For<IConnection>();
+        var model = Substitute.For<IModel>();
+
+        factory.CreateConnection().Returns(connection);
+        connection.CreateModel().Returns(model);
+        return (factory, connection, model);
     }
 }

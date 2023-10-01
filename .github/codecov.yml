@@ -103,6 +103,8 @@ flags:
     carryforward: true
   SqlServer:
     carryforward: true
+  SurrealDb:
+    carryforward: true
   System:
     carryforward: true
   UI:

@@ -37,7 +37,7 @@
     <HealthCheckKubernetes>7.0.0</HealthCheckKubernetes>
     <HealthCheckMongoDB>7.0.0</HealthCheckMongoDB>
     <HealthCheckMySql>7.0.0</HealthCheckMySql>
-    <HealthCheckNetwork>7.0.0</HealthCheckNetwork>
+    <HealthCheckNetwork>7.1.0</HealthCheckNetwork>
     <HealthCheckNats>7.0.0</HealthCheckNats>
     <HealthCheckNpgSql>7.1.0</HealthCheckNpgSql>
     <HealthCheckOpenIdConnectServer>7.1.0</HealthCheckOpenIdConnectServer>

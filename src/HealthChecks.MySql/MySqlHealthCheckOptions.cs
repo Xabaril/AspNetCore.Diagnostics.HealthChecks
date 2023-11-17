@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySqlConnector;
 
@@ -17,7 +16,7 @@ public class MySqlHealthCheckOptions
     /// <summary>
     /// The query to be executed.
     /// </summary>
-    public string CommandText { get; set; } = MySqlHealthCheckBuilderExtensions.HEALTH_QUERY;
+    public string? CommandText { get; set; }
 
     /// <summary>
     /// An optional action executed before the connection is opened in the health check.

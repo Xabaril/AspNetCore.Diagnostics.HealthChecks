@@ -9,9 +9,14 @@ namespace HealthChecks.MySql;
 public class MySqlHealthCheckOptions
 {
     /// <summary>
-    /// The MySQL connection string to be used.
+    /// The MySQL data source to be used. This is the preferred way to specify the MySQL server to be checked.
     /// </summary>
-    public string ConnectionString { get; set; } = null!;
+    public MySqlDataSource? DataSource { get; set; }
+
+    /// <summary>
+    /// The MySQL connection string to be used, if <see cref="DataSource"/> isn't set.
+    /// </summary>
+    public string? ConnectionString { get; set; }
 
     /// <summary>
     /// The query to be executed.

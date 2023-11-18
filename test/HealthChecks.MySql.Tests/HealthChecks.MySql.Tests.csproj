@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySqlConnector.DependencyInjection" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />
   </ItemGroup>
 

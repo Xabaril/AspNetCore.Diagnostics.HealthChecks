@@ -12,7 +12,11 @@ public class MySqlHealthCheck : IHealthCheck
 
     public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options.ConnectionString, true);
+        Guard.ThrowIfNull(options);
+        if (options.DataSource is null && options.ConnectionString is null)
+            throw new InvalidOperationException("One of options.DataSource or options.ConnectionString must be specified.");
+        if (options.DataSource is not null && options.ConnectionString is not null)
+            throw new InvalidOperationException("Only one of options.DataSource or options.ConnectionString must be specified.");
         _options = options;
     }
 
@@ -21,7 +25,9 @@ public class MySqlHealthCheck : IHealthCheck
     {
         try
         {
-            using var connection = new MySqlConnection(_options.ConnectionString);
+            using var connection = _options.DataSource is not null ?
+                _options.DataSource.CreateConnection() :
+                new MySqlConnection(_options.ConnectionString);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);

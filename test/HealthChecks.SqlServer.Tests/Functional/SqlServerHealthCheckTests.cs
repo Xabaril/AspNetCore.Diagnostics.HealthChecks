@@ -49,8 +49,7 @@ public class sqlserver_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-        using var response = await server.CreateClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, "/health"), cts.Token);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

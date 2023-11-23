@@ -94,7 +94,7 @@ public class ravendb_healthcheck_should
                     {
                         _.Urls = _urls;
                         _.Database = "Demo";
-                        _.RequestTimeout = TimeSpan.Zero;
+                        _.RequestTimeout = TimeSpan.FromMilliseconds(0.001);
                     }, tags: new string[] { "ravendb" });
             })
             .Configure(app =>

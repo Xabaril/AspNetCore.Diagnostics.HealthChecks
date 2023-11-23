@@ -66,7 +66,7 @@
 
     <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
 
-    <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net8.0'" />
     <Compile Include="../_SHARED/TestLogger.cs" Link="TestLogger.cs" Visible="false" />
     <Compile Include="../_SHARED/TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
     <Compile Include="../_SHARED/ConformanceTests.cs" Link="ConformanceTests.cs" Visible="false" />

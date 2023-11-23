@@ -5,11 +5,12 @@
     <PackageTags>$(PackageTags);EventStore</PackageTags>
     <Description>HealthChecks.EventStore is the health check package for EventStore, using the TCP Client.</Description>
     <VersionPrefix>$(HealthCheckEventStore)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EventStore.Client" Version="22.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0-rc.1.23421.29" />
   </ItemGroup>
 
 </Project>

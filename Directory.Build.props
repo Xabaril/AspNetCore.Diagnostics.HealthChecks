@@ -48,16 +48,16 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0-rc.1.23419.4" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.21" Condition="'$(TargetFramework)' == 'net6.0'" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.10" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0-rc.1.23421.29" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-rc.1.23419.4" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
-    <PackageReference Include="xunit" Version="2.5.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0" />
+    <PackageReference Include="NSubstitute" Version="5.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4" />
     <PackageReference Include="PublicApiGenerator" Version="11.0.0" />
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -83,11 +83,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.4.0">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.4.0">
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

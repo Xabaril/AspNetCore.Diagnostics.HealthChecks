@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InfluxDB.Client" Version="4.13.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0-rc.1.23421.29" />
+    <PackageReference Include="InfluxDB.Client" Version="4.14.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

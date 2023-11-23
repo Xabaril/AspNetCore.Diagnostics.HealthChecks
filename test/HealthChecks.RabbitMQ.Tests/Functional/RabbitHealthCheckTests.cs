@@ -26,7 +26,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -52,7 +52,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -76,7 +76,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -110,7 +110,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -147,7 +147,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -173,7 +173,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -207,7 +207,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response1 = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response1 = await server.CreateRequest("/health").GetAsync();
         response1.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -234,7 +234,7 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -266,8 +266,8 @@ public class rabbitmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response1 = await server.CreateRequest("/health1").GetAsync().ConfigureAwait(false);
-        using var response2 = await server.CreateRequest("/health2").GetAsync().ConfigureAwait(false);
+        using var response1 = await server.CreateRequest("/health1").GetAsync();
+        using var response2 = await server.CreateRequest("/health2").GetAsync();
 
         response1.StatusCode.ShouldBe(HttpStatusCode.OK);
         response2.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
@@ -293,7 +293,7 @@ public class rabbitmq_healthcheck_should
         var healthCheckService = provider.GetRequiredService<HealthCheckService>();
         var start = DateTime.Now;
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        var report = await healthCheckService.CheckHealthAsync(cts.Token).ConfigureAwait(false);
+        var report = await healthCheckService.CheckHealthAsync(cts.Token);
         report.Status.ShouldBe(HealthStatus.Unhealthy);
         var end = DateTime.Now;
         (end - start).ShouldBeLessThan(TimeSpan.FromSeconds(10));

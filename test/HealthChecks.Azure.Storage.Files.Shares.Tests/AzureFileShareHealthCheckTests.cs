@@ -41,7 +41,7 @@ public class azurefilesharehealthcheck_should
             .GetSharesAsync(cancellationToken: tokenSource.Token)
             .Returns(AsyncPageable<ShareItem>.FromPages(Array.Empty<Page<ShareItem>>()));
 
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _shareServiceClient
             .Received(1)
@@ -49,8 +49,7 @@ public class azurefilesharehealthcheck_should
 
         await _shareClient
             .DidNotReceiveWithAnyArgs()
-            .GetPropertiesAsync(default)
-            .ConfigureAwait(false);
+            .GetPropertiesAsync(default);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -69,7 +68,7 @@ public class azurefilesharehealthcheck_should
             .Returns(Substitute.For<Response<ShareProperties>>());
 
         _options.ShareName = ShareName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _shareServiceClient
             .Received(1)
@@ -77,8 +76,7 @@ public class azurefilesharehealthcheck_should
 
         await _shareClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetPropertiesAsync(tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
@@ -111,7 +109,7 @@ public class azurefilesharehealthcheck_should
             .Returns(pageable);
 
         _options.ShareName = checkShare ? ShareName : null;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _shareServiceClient
             .Received(1)
@@ -127,13 +125,11 @@ public class azurefilesharehealthcheck_should
 
         await enumerator
             .Received(1)
-            .MoveNextAsync()
-            .ConfigureAwait(false);
+            .MoveNextAsync();
 
         await _shareClient
             .DidNotReceiveWithAnyArgs()
-            .GetPropertiesAsync(default)
-            .ConfigureAwait(false);
+            .GetPropertiesAsync(default);
 
         actual
             .Exception!.ShouldBeOfType<RequestFailedException>()
@@ -154,7 +150,7 @@ public class azurefilesharehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "File share not found"));
 
         _options.ShareName = ShareName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _shareServiceClient
             .Received(1)
@@ -162,8 +158,7 @@ public class azurefilesharehealthcheck_should
 
         await _shareClient
             .Received(1)
-            .GetPropertiesAsync(tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetPropertiesAsync(tokenSource.Token);
 
         actual
             .Exception!.ShouldBeOfType<RequestFailedException>()
@@ -190,7 +185,7 @@ public class azurefilesharehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "File share not found"));
 
         var service = provider.GetRequiredService<HealthCheckService>();
-        var report = await service.CheckHealthAsync().ConfigureAwait(false);
+        var report = await service.CheckHealthAsync();
 
         _shareServiceClient
             .Received(1)
@@ -198,8 +193,7 @@ public class azurefilesharehealthcheck_should
 
         await _shareClient
             .Received(1)
-            .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .ConfigureAwait(false);
+            .GetPropertiesAsync(Arg.Any<CancellationToken>());
 
         var actual = report.Entries[HealthCheckName];
         actual.Status.ShouldBe(HealthStatus.Unhealthy);

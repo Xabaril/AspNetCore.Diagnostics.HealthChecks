@@ -36,7 +36,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -60,7 +60,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -84,7 +84,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -108,7 +108,7 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -132,10 +132,10 @@ public class ssl_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-        var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldContain(HealthStatus.Unhealthy.ToString());
     }
 
@@ -155,7 +155,7 @@ public class ssl_healthcheck_should
                 failureStatus: HealthStatus.Degraded,
                 null,
                 timeout: null)
-        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
+        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
         result.Exception.ShouldBeOfType<OperationCanceledException>();
     }

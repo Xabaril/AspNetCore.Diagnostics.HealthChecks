@@ -34,7 +34,7 @@
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-    <NoWarn>$(NoWarn);IDE1006</NoWarn>
+    <NoWarn>$(NoWarn);IDE1006;RCS1090</NoWarn>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 

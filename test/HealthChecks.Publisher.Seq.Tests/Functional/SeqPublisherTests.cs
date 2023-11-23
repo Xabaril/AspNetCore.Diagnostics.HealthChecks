@@ -23,7 +23,7 @@ public class seq_publisher_should
 
         // Create publisher and publish
         var publisher = new SeqPublisher(HttpClientFactory, options);
-        await publisher.PublishAsync(testReport, CancellationToken.None).ConfigureAwait(false);
+        await publisher.PublishAsync(testReport, CancellationToken.None);
 
         handler.Request.ShouldNotBeNull();
         handler.Request.RequestUri.ShouldBe(expectedUri);
@@ -68,7 +68,7 @@ public class seq_publisher_should
 
         // Create publisher and publish
         var publisher = new SeqPublisher(HttpClientFactory, options);
-        await publisher.PublishAsync(testReport, CancellationToken.None).ConfigureAwait(false);
+        await publisher.PublishAsync(testReport, CancellationToken.None);
 
         handler.Request.ShouldNotBeNull();
         handler.Request.Content.ShouldNotBeNull();

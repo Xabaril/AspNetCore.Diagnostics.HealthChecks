@@ -60,7 +60,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -89,8 +89,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -113,7 +113,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -139,7 +139,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -165,7 +165,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -196,7 +196,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -225,8 +225,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -258,8 +258,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -285,8 +285,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -312,7 +312,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

@@ -33,6 +33,11 @@ public class SurrealDbHealthCheck : IHealthCheck
 
             bool result = await client.Health(cancellationToken).ConfigureAwait(false);
 
+            if (!string.IsNullOrWhiteSpace(_options.Query))
+            {
+                await client.Query(_options.Query).ConfigureAwait(false);
+            }
+
             return _options.HealthCheckResultBuilder == null
                 ? HealthCheckResult.Healthy()
                 : _options.HealthCheckResultBuilder(result);

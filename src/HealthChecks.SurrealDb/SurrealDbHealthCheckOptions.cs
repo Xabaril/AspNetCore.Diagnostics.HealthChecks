@@ -14,6 +14,11 @@ public class SurrealDbHealthCheckOptions
     public string ConnectionString { get; set; } = null!;
 
     /// <summary>
+    /// The query to be executed.
+    /// </summary>
+    public string? Query { get; set; }
+
+    /// <summary>
     /// An optional action executed before the connection is opened in the health check.
     /// </summary>
     public Action<ISurrealDbClient>? Configure { get; set; }

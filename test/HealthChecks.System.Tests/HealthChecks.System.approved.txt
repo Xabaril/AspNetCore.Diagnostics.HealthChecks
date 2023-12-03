@@ -23,6 +23,7 @@ namespace HealthChecks.System
     {
         public FileHealthCheckOptions() { }
         public bool CheckAllFiles { get; set; }
+        public System.Collections.Generic.List<string> Files { get; }
         public HealthChecks.System.FileHealthCheckOptions AddFile(string file) { }
         public HealthChecks.System.FileHealthCheckOptions WithCheckAllFiles() { }
     }

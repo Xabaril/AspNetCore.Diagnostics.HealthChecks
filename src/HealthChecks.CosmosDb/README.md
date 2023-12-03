@@ -22,7 +22,7 @@ You can additionally add the following parameters:
 
 - `clientFactory`: A factory method to provide `CosmosClient` instance.
 - `optionsFactory`: A factory method to provide `AzureCosmosDbHealthCheckOptions` instance. It allows to specify the database id and/or container id(s).
-- `healthCheckName`: The health check name. The default is `azure_cosmosdb`.
+- `name`: The health check name. The default is `azure_cosmosdb`.
 - `failureStatus`: The `HealthStatus` that should be reported when the health check fails. Default is `HealthStatus.Unhealthy`.
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.

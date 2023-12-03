@@ -16,6 +16,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CosmosDbHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureCosmosDB(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Microsoft.Azure.Cosmos.CosmosClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.CosmosDb.AzureCosmosDbHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_cosmosdb", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureCosmosDB(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Microsoft.Azure.Cosmos.CosmosClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.CosmosDb.AzureCosmosDbHealthCheckOptions>? optionsFactory = null, string? name = "azure_cosmosdb", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

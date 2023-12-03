@@ -10,11 +10,11 @@ internal static class KubernetesHttpClientExtensions
     {
         if (k8sNamespaces is null || k8sNamespaces.Count == 0)
         {
-            return await client.CoreV1.ListServiceForAllNamespacesAsync(labelSelector: label, cancellationToken: cancellationToken);
+            return await client.CoreV1.ListServiceForAllNamespacesAsync(labelSelector: label, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
         else
         {
-            var responses = await Task.WhenAll(k8sNamespaces.Select(k8sNamespace => client.CoreV1.ListNamespacedServiceAsync(k8sNamespace, labelSelector: label, cancellationToken: cancellationToken)));
+            var responses = await Task.WhenAll(k8sNamespaces.Select(k8sNamespace => client.CoreV1.ListNamespacedServiceAsync(k8sNamespace, labelSelector: label, cancellationToken: cancellationToken))).ConfigureAwait(false);
 
             return new V1ServiceList()
             {

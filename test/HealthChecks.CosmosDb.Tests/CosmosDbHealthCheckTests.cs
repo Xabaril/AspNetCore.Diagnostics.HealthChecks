@@ -15,16 +15,16 @@ public class cosmosdbhealthcheck_should
     private readonly CosmosClient _cosmosClient;
     private readonly Database _database;
     private readonly IReadOnlyDictionary<string, Container> _containers;
-    private readonly CosmosDbHealthCheckOptions _options;
-    private readonly CosmosDbHealthCheck _healthCheck;
+    private readonly AzureCosmosDbHealthCheckOptions _options;
+    private readonly AzureCosmosDbHealthCheck _healthCheck;
     private readonly HealthCheckContext _context;
 
     public cosmosdbhealthcheck_should()
     {
         _cosmosClient = Substitute.For<CosmosClient>();
         _database = Substitute.For<Database>();
-        _options = new CosmosDbHealthCheckOptions();
-        _healthCheck = new CosmosDbHealthCheck(_cosmosClient, _options);
+        _options = new AzureCosmosDbHealthCheckOptions();
+        _healthCheck = new AzureCosmosDbHealthCheck(_cosmosClient, _options);
         _context = new HealthCheckContext
         {
             Registration = new HealthCheckRegistration(HealthCheckName, _healthCheck, HealthStatus.Unhealthy, null)
@@ -296,7 +296,7 @@ public class cosmosdbhealthcheck_should
             .AddSingleton(_cosmosClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddCosmosDb(o => o.DatabaseId = DatabaseId, name: HealthCheckName)
+            .AddAzureCosmosDB(optionsFactory: _ => new AzureCosmosDbHealthCheckOptions() { DatabaseId = DatabaseId }, healthCheckName: HealthCheckName)
             .Services
             .BuildServiceProvider();
 

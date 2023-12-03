@@ -25,26 +25,34 @@
     <NoWarn>$(NoWarn);1591;IDISP013</NoWarn> <!--TODO: temporary solution-->
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <NoWarn>$(NoWarn);IDE1006</NoWarn>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName) == 'HealthChecks.AzureServiceBus' OR $(MSBuildProjectName) == 'HealthChecks.AzureStorage' OR $(MSBuildProjectName) == 'HealthChecks.CosmosDb'">
-    <Compile Include="../ClientCache.cs" Link="ClientCache.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests')) AND '$(Configuration)' == 'Release' AND !$(MSBuildProjectName.StartsWith('HealthChecks.UI')) AND !$(MSBuildProjectName.Contains('Sample'))">
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build/strongNameKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
 
-  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
+  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests')) AND '$(SignAssembly)' != 'true' ">
     <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" Condition="'$(TargetFramework)' != 'net7.0'" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0-rc.1.23419.4" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.21" Condition="'$(TargetFramework)' == 'net6.0'" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.10" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0-rc.1.23421.29" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-rc.1.23419.4" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="NSubstitute" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
@@ -61,6 +69,7 @@
     <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
     <Compile Include="../_SHARED/TestLogger.cs" Link="TestLogger.cs" Visible="false" />
     <Compile Include="../_SHARED/TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
+    <Compile Include="../_SHARED/ConformanceTests.cs" Link="ConformanceTests.cs" Visible="false" />
 
     <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
     <Using Include="Microsoft.AspNetCore.Hosting" />

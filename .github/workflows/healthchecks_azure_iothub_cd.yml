@@ -1,0 +1,16 @@
+name: HealthChecks Azure.IoTHub CD
+
+on:
+  push:
+    tags:
+      - release-azure_iothub-*
+      - release-all-*
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_cd_workflow.yml
+    secrets: inherit
+    with:
+      BUILD_CONFIG: Release
+      PROJECT_PATH: ./src/HealthChecks.Azure.IoTHub/HealthChecks.Azure.IoTHub.csproj
+      PACKAGE_NAME: AspNetCore.HealthChecks.Azure.IoTHub

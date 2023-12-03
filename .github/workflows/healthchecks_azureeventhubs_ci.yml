@@ -1,0 +1,37 @@
+name: HealthChecks Azure EventHubs CI
+
+on:
+  workflow_dispatch:
+  push:
+   branches: [ master ]
+   paths:
+     - src/HealthChecks.Azure.Messaging.EventHubs/**
+     - test/HealthChecks.Azure.Messaging.EventHubs.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azureeventhubs_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+   tags-ignore:
+     - release-*
+     - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+     - src/HealthChecks.Azure.Messaging.EventHubs/**
+     - test/HealthChecks.Azure.Messaging.EventHubs.Tests/**
+     - test/_SHARED/**
+     - .github/workflows/healthchecks_azureeventhubs_ci.yml
+     - .github/workflows/reusable_ci_workflow.yml
+     - Directory.Build.props
+     - Directory.Build.targets
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_ci_workflow.yml
+    with:
+      PROJECT_PATH: ./src/HealthChecks.Azure.Messaging.EventHubs/HealthChecks.Azure.Messaging.EventHubs.csproj
+      TEST_PROJECT_PATH: ./test/HealthChecks.Azure.Messaging.EventHubs.Tests/HealthChecks.Azure.Messaging.EventHubs.Tests.csproj
+      CODECOV_FLAGS: AzureEventHubs
+

@@ -106,6 +106,7 @@ public class redis_registration_should
 
         registration.Name.ShouldBe("redis");
         check.ShouldBeOfType<RedisHealthCheck>();
-        factoryCalled.ShouldBeTrue();
+        // the factory is called when it's used for the first time, as it can throw
+        factoryCalled.ShouldBeFalse();
     }
 }

@@ -11,6 +11,6 @@
     <PackageReference Include="Azure.Identity" Version="1.10.0" />
     <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" Version="1.2.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0-rc.1.23421.29" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,5 @@
 namespace HealthChecks.AzureServiceBus
 {
-    public class AzureEventHubHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
-    {
-        public AzureEventHubHealthCheck(HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions options) { }
-        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
-    }
     public abstract class AzureServiceBusHealthCheck<TOptions>
         where TOptions : HealthChecks.AzureServiceBus.Configuration.AzureServiceBusHealthCheckOptions
     {
@@ -51,15 +46,6 @@ namespace HealthChecks.AzureServiceBus
 }
 namespace HealthChecks.AzureServiceBus.Configuration
 {
-    public class AzureEventHubHealthCheckOptions
-    {
-        public AzureEventHubHealthCheckOptions() { }
-        public Azure.Messaging.EventHubs.EventHubConnection? Connection { get; set; }
-        public string? ConnectionString { get; set; }
-        public Azure.Core.TokenCredential? Credential { get; set; }
-        public string? EventHubName { get; set; }
-        public string? FullyQualifiedNamespace { get; set; }
-    }
     public abstract class AzureServiceBusHealthCheckOptions
     {
         protected AzureServiceBusHealthCheckOptions() { }
@@ -101,11 +87,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AzureServiceBusHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureEventHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Messaging.EventHubs.EventHubConnection> eventHubConnectionFactory, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureEventHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, System.Func<System.IServiceProvider, string> eventHubNameFactory, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureEventHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string eventHubName, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureEventHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> fullyQualifiedNamespaceFactory, System.Func<System.IServiceProvider, string> eventHubNameFactory, System.Func<System.IServiceProvider, Azure.Core.TokenCredential> tokenCredentialFactory, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureEventHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string fullyQualifiedNamespace, string eventHubName, Azure.Core.TokenCredential tokenCredential, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureEventHubHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureServiceBusQueue(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> connectionStringFactory, System.Func<System.IServiceProvider, string> queueNameFactory, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureServiceBusQueue(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string connectionString, string queueName, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureServiceBusQueue(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, string> fullyQualifiedNamespaceFactory, System.Func<System.IServiceProvider, string> queueNameFactory, System.Func<System.IServiceProvider, Azure.Core.TokenCredential> tokenCredentialFactory, System.Action<HealthChecks.AzureServiceBus.Configuration.AzureServiceBusQueueHealthCheckOptions>? configure = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }

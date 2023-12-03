@@ -27,7 +27,7 @@ internal class UIEndpointsResourceMapper
             endpoints.Add(builder.MapGet($"{options.ResourcesPath}/{resource.FileName}", async context =>
             {
                 context.Response.ContentType = resource.ContentType;
-                await context.Response.WriteAsync(resource.Content);
+                await context.Response.WriteAsync(resource.Content).ConfigureAwait(false);
             }));
         }
 
@@ -44,7 +44,7 @@ internal class UIEndpointsResourceMapper
             });
 
             context.Response.ContentType = ui.ContentType;
-            await context.Response.WriteAsync(ui.Content);
+            await context.Response.WriteAsync(ui.Content).ConfigureAwait(false);
         }));
 
         foreach (var item in styleSheets)
@@ -52,7 +52,7 @@ internal class UIEndpointsResourceMapper
             endpoints.Add(builder.MapGet(item.ResourcePath, async context =>
             {
                 context.Response.ContentType = "text/css";
-                await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length);
+                await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length).ConfigureAwait(false);
             }));
         }
 

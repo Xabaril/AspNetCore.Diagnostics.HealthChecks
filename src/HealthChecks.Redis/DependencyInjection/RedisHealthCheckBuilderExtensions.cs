@@ -115,7 +115,7 @@ public static class RedisHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
            name ?? NAME,
-           sp => new RedisHealthCheck(connectionMultiplexerFactory(sp)),
+           sp => new RedisHealthCheck(() => connectionMultiplexerFactory(sp)),
            failureStatus,
            tags,
            timeout));

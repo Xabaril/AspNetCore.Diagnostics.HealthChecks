@@ -33,7 +33,7 @@ public class nats_registration_should
             .AddHealthChecks()
             .AddNats((sp, setup) => setup.Url = sp.GetRequiredService<IDependency>().ConnectionString);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();

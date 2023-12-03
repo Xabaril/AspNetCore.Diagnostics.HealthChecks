@@ -2,9 +2,6 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Azure.Messaging.EventHubs\HealthChecks.Azure.Messaging.EventHubs.csproj" />
   </ItemGroup>
 

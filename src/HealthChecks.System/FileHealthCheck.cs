@@ -16,13 +16,13 @@ public class FileHealthCheck : IHealthCheck
         try
         {
             List<string> errorList = new();
-            foreach (string folder in _fileOptions.Files)
+            foreach (string file in _fileOptions.Files)
             {
-                if (!string.IsNullOrEmpty(folder))
+                if (!string.IsNullOrEmpty(file))
                 {
-                    if (!File.Exists(folder))
+                    if (!File.Exists(file))
                     {
-                        errorList.Add($"File {folder} does not exist.");
+                        errorList.Add($"File {file} does not exist.");
                         if (!_fileOptions.CheckAllFiles)
                         {
                             break;

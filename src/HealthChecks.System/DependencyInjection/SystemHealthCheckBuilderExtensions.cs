@@ -282,7 +282,7 @@ public static class SystemHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="setup">Delegate for configuring the health check. Optional.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'files' will be used for the name.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'file' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -306,7 +306,7 @@ public static class SystemHealthCheckBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="setup">The action method to configure the health check parameters.</param>
-    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'files' will be used for the name.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'file' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.

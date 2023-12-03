@@ -2,7 +2,7 @@ namespace HealthChecks.System;
 
 public class FileHealthCheckOptions
 {
-    internal List<string> Files { get; } = new();
+    public List<string> Files { get; } = new();
     public bool CheckAllFiles { get; set; }
 
     public FileHealthCheckOptions AddFile(string file)

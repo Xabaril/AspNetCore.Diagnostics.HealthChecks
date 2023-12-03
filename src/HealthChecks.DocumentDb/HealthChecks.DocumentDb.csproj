@@ -5,11 +5,12 @@
     <PackageTags>$(PackageTags);Azure;DocumentDb</PackageTags>
     <Description>HealthChecks.DocumentDb is the health check package for Azure DocumentDb.</Description>
     <VersionPrefix>$(HealthCheckDocumentDb)</VersionPrefix>
+    <NoWarn>$(NoWarn);NETSDK1206</NoWarn> <!-- Microsoft.Azure.DocumentDB.Core has win7-x64-specific things, but it works fine on every OS -->
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.20.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

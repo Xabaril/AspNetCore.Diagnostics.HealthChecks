@@ -37,7 +37,13 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddNpgSql(_ => connectionString, healthQuery, configure, name, failureStatus, tags, timeout);
+        Guard.ThrowIfNull(connectionString, throwOnEmptyString: true);
+
+        return builder.AddNpgSql(new NpgSqlHealthCheckOptions(connectionString)
+        {
+            CommandText = healthQuery,
+            Configure = configure
+        }, name, failureStatus, tags, timeout);
     }
 
     /// <summary>
@@ -65,14 +71,36 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddNpgSql(sp => new NpgsqlDataSourceBuilder(connectionStringFactory(sp)).Build(), healthQuery, configure, name, failureStatus, tags, timeout);
+        // This instance is captured in lambda closure, so it can be reused (perf)
+        NpgSqlHealthCheckOptions options = new()
+        {
+            CommandText = healthQuery,
+            Configure = configure,
+        };
+
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp =>
+            {
+                options.ConnectionString ??= Guard.ThrowIfNull(connectionStringFactory.Invoke(sp), throwOnEmptyString: true, paramName: nameof(connectionStringFactory));
+
+                ResolveDataSourceIfPossible(options, sp);
+
+                return new NpgSqlHealthCheck(options);
+            },
+            failureStatus,
+            tags,
+            timeout));
     }
 
     /// <summary>
     /// Add a health check for Postgres databases.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="dbDataSourceFactory">A factory to build the NpgsqlDataSource to use.</param>
+    /// <param name="dbDataSourceFactory">
+    /// An optional factory to obtain <see cref="NpgsqlDataSource" /> instance.
+    /// When not provided, <see cref="NpgsqlDataSource" /> is simply resolved from <see cref="IServiceProvider"/>.
+    /// </param>
     /// <param name="healthQuery">The query to be used in check.</param>
     /// <param name="configure">An optional action to allow additional Npgsql specific configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'npgsql' will be used for the name.</param>
@@ -85,7 +113,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddNpgSql(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, NpgsqlDataSource> dbDataSourceFactory,
+        Func<IServiceProvider, NpgsqlDataSource>? dbDataSourceFactory = null,
         string healthQuery = HEALTH_QUERY,
         Action<NpgsqlConnection>? configure = null,
         string? name = default,
@@ -93,9 +121,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(dbDataSourceFactory);
-
-        NpgsqlDataSource? dataSource = null;
+        // This instance is captured in lambda closure, so it can be reused (perf)
         NpgSqlHealthCheckOptions options = new()
         {
             CommandText = healthQuery,
@@ -106,47 +132,15 @@ public static class NpgSqlHealthCheckBuilderExtensions
             name ?? NAME,
             sp =>
             {
-                // The Data Source needs to be created only once,
-                // as each instance has it's own connection pool.
-                // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
-
-                // Perform an atomic read of the current value.
-                NpgsqlDataSource? existingDataSource = Volatile.Read(ref dataSource);
-                if (existingDataSource is null)
+                if (options.DataSource is null)
                 {
-                    // Create a new Data Source
-                    NpgsqlDataSource fromFactory = dbDataSourceFactory(sp);
-                    // Try to resolve the Data Source from DI.
-                    NpgsqlDataSource? fromDI = sp.GetService<NpgsqlDataSource>();
-
-                    if (fromDI is not null && fromDI.ConnectionString.Equals(fromFactory.ConnectionString))
+                    // this lock will most likely be obtained once, with no contention so the cost should be low and acceptable
+                    lock (options)
                     {
-                        // If they are using the same ConnectionString, we can reuse the instance from DI.
-                        // So there is only ONE NpgsqlDataSource per the whole app and ONE connection pool.
-
-                        if (!ReferenceEquals(fromDI, fromFactory))
-                        {
-                            // Dispose it, as long as it's not the same instance.
-                            fromFactory.Dispose();
-                        }
-                        Interlocked.Exchange(ref dataSource, fromDI);
-                        options.DataSource = fromDI;
-                    }
-                    else
-                    {
-                        // Perform an atomic exchange, but only if the value is still null.
-                        existingDataSource = Interlocked.CompareExchange(ref dataSource, fromFactory, null);
-                        if (existingDataSource is not null)
-                        {
-                            // Some other thread has created the data source in the meantime,
-                            // we dispose our own copy, and use the existing instance.
-                            fromFactory.Dispose();
-                            options.DataSource = existingDataSource;
-                        }
-                        else
-                        {
-                            options.DataSource = fromFactory;
-                        }
+                        // The Data Source needs to be created only once,
+                        // as each instance has it's own connection pool.
+                        // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
+                        options.DataSource ??= dbDataSourceFactory?.Invoke(sp) ?? sp.GetRequiredService<NpgsqlDataSource>();
                     }
                 }
 
@@ -161,7 +155,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
     /// Add a health check for Postgres databases.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="options">Options for health check.</param>
+    /// <param name="options">Options for health check. It's mandatory to provide <see cref="NpgSqlHealthCheckOptions.ConnectionString"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'npgsql' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -179,12 +173,32 @@ public static class NpgSqlHealthCheckBuilderExtensions
         TimeSpan? timeout = default)
     {
         Guard.ThrowIfNull(options);
+        Guard.ThrowIfNull(options.ConnectionString, throwOnEmptyString: true, paramName: "ConnectionString");
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            _ => new NpgSqlHealthCheck(options),
+            sp =>
+            {
+                ResolveDataSourceIfPossible(options, sp);
+
+                return new NpgSqlHealthCheck(options);
+            },
             failureStatus,
             tags,
             timeout));
+    }
+
+    private static void ResolveDataSourceIfPossible(NpgSqlHealthCheckOptions options, IServiceProvider sp)
+    {
+        if (options.DataSource is null && !options.TriedToResolveFromDI)
+        {
+            NpgsqlDataSource? fromDi = sp.GetService<NpgsqlDataSource>();
+            if (fromDi?.ConnectionString == options.ConnectionString)
+            {
+                // When it's possible, we reuse the DataSource registered in the DI
+                options.DataSource = fromDi;
+            }
+            options.TriedToResolveFromDI = true; // save the answer, so we don't do it more than once
+        }
     }
 }

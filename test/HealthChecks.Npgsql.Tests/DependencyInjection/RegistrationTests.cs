@@ -96,7 +96,7 @@ public class npgsql_registration_should
     [InlineData(false)]
     public void factory_reuses_pre_registered_datasource_when_possible(bool sameConnectionString)
     {
-        const string connectionString = "Server=localhost";
+        const string connectionString = "Host=localhost";
         ServiceCollection services = new();
 
         services.AddSingleton<NpgsqlDataSource>(serviceProvider =>
@@ -122,10 +122,13 @@ public class npgsql_registration_should
         for (int i = 0; i < 10; i++)
         {
             var healthCheck = (NpgSqlHealthCheck)registration.Factory(serviceProvider);
-            var fieldInfo = typeof(NpgSqlHealthCheck).GetField("_options", BindingFlags.Instance | BindingFlags.NonPublic);
-            var npgSqlHealthCheckOptions = (NpgSqlHealthCheckOptions)fieldInfo!.GetValue(healthCheck)!;
+            var optionsField = typeof(NpgSqlHealthCheck).GetField("_options", BindingFlags.Instance | BindingFlags.NonPublic);
+            var npgSqlHealthCheckOptions = (NpgSqlHealthCheckOptions)optionsField!.GetValue(healthCheck)!;
 
-            Assert.Equal(sameConnectionString, ReferenceEquals(serviceProvider.GetRequiredService<NpgsqlDataSource>(), npgSqlHealthCheckOptions.DataSource));
+            var dataSourceProperty = typeof(NpgSqlHealthCheckOptions).GetProperty("DataSource", BindingFlags.Instance | BindingFlags.NonPublic);
+            var dataSource = (NpgsqlDataSource)dataSourceProperty!.GetValue(npgSqlHealthCheckOptions)!;
+
+            Assert.Equal(sameConnectionString, ReferenceEquals(serviceProvider.GetRequiredService<NpgsqlDataSource>(), dataSource));
         }
 
         factoryCalls.ShouldBe(1);

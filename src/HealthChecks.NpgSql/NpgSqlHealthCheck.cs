@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Npgsql;
 
 namespace HealthChecks.NpgSql;
 
@@ -11,7 +13,7 @@ public class NpgSqlHealthCheck : IHealthCheck
 
     public NpgSqlHealthCheck(NpgSqlHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options.DataSource);
+        Debug.Assert(options.ConnectionString is not null || options.DataSource is not null);
         Guard.ThrowIfNull(options.CommandText, true);
         _options = options;
     }
@@ -21,7 +23,9 @@ public class NpgSqlHealthCheck : IHealthCheck
     {
         try
         {
-            await using var connection = _options.DataSource!.CreateConnection();
+            await using var connection = _options.DataSource is not null
+                ? _options.DataSource.CreateConnection()
+                : new NpgsqlConnection(_options.ConnectionString);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -33,7 +37,6 @@ public class NpgSqlHealthCheck : IHealthCheck
             return _options.HealthCheckResultBuilder == null
                 ? HealthCheckResult.Healthy()
                 : _options.HealthCheckResultBuilder(result);
-
         }
         catch (Exception ex)
         {

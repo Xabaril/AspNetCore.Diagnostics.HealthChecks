@@ -9,20 +9,34 @@ namespace HealthChecks.NpgSql;
 /// </summary>
 public class NpgSqlHealthCheckOptions
 {
+    internal NpgSqlHealthCheckOptions()
+    {
+        // this ctor is internal on purpose:
+        // those who want to use DataSource need to use the extension methods
+        // that take care of creating the right thing 
+    }
+
+    /// <summary>
+    /// Creates an instance of <see cref="NpgSqlHealthCheckOptions"/>.
+    /// </summary>
+    /// <param name="connectionString">The PostgreSQL connection string to be used.</param>
+    public NpgSqlHealthCheckOptions(string connectionString)
+    {
+        ConnectionString = Guard.ThrowIfNull(connectionString, throwOnEmptyString: true);
+    }
+
     /// <summary>
     /// The Postgres connection string to be used.
     /// Use <see cref="DataSource"/> property for advanced configuration.
     /// </summary>
-    public string? ConnectionString
-    {
-        get => DataSource?.ConnectionString;
-        set => DataSource = value is not null ? NpgsqlDataSource.Create(value) : null;
-    }
+    public string? ConnectionString { get; set; }
 
     /// <summary>
     /// The Postgres data source to be used.
     /// </summary>
-    public NpgsqlDataSource? DataSource { get; set; }
+    internal NpgsqlDataSource? DataSource { get; set; }
+
+    internal bool TriedToResolveFromDI { get; set; }
 
     /// <summary>
     /// The query to be executed.

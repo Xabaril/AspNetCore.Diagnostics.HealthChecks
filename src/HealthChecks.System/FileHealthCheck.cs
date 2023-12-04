@@ -6,11 +6,15 @@ public class FileHealthCheck : IHealthCheck
 {
     private readonly FileHealthCheckOptions _fileOptions;
 
+    /// <summary>
+    /// Creates an instance of <see cref="FileHealthCheck"/> with the specified options.
+    /// </summary>
     public FileHealthCheck(FileHealthCheckOptions fileOptions)
     {
         _fileOptions = fileOptions;
     }
 
+    /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try

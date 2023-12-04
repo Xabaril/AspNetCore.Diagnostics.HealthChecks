@@ -6,6 +6,9 @@ public class FolderHealthCheck : IHealthCheck
 {
     private readonly FolderHealthCheckOptions _folderOptions;
 
+    /// <summary>
+    /// Creates an instance of <see cref="FolderHealthCheck"/> with the specified options.
+    /// </summary>
     public FolderHealthCheck(FolderHealthCheckOptions folderOptions)
     {
         _folderOptions = Guard.ThrowIfNull(folderOptions);

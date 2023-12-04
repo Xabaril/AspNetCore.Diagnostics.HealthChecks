@@ -26,6 +26,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
+    <NuGetAuditLevel>critical</NuGetAuditLevel> <!-- TODO: remove-->
   </PropertyGroup>
 
   <ItemGroup>

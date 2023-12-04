@@ -2,9 +2,6 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.AzureServiceBus\HealthChecks.AzureServiceBus.csproj" />
   </ItemGroup>
 

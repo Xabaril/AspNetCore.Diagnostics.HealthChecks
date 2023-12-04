@@ -37,7 +37,7 @@ public class sqlserver_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlServer("Server=tcp:200.0.0.100,1833;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false", tags: new string[] { "sqlserver" });
+                .AddSqlServer("Server=tcp:localhost,1833;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false;Connection Timeout=10", tags: new string[] { "sqlserver" });
             })
             .Configure(app =>
             {

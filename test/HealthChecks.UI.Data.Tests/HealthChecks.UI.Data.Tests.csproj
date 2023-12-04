@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj" />
   </ItemGroup>
 

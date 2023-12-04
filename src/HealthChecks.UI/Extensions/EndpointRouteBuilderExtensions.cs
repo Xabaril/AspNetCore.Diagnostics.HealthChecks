@@ -6,8 +6,7 @@ using Options = HealthChecks.UI.Configuration.Options;
 
 namespace Microsoft.AspNetCore.Builder;
 
-// this type was renamed to avoid a name conflict with ASP.NET: https://github.com/dotnet/aspnetcore/issues/50836#issuecomment-1736455651
-public static class IEndpointRouteBuilderExtensions
+public static class EndpointRouteBuilderExtensions
 {
     public static IEndpointConventionBuilder MapHealthChecksUI(this IEndpointRouteBuilder builder, Action<Options>? setupOptions = null)
     {

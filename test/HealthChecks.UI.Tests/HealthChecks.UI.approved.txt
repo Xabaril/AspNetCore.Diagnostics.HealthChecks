@@ -99,7 +99,7 @@ namespace Microsoft.AspNetCore.Builder
         public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksUI(this Microsoft.AspNetCore.Builder.IApplicationBuilder app) { }
         public static Microsoft.AspNetCore.Builder.IApplicationBuilder UseHealthChecksUI(this Microsoft.AspNetCore.Builder.IApplicationBuilder app, System.Action<HealthChecks.UI.Configuration.Options> setup) { }
     }
-    public static class IEndpointRouteBuilderExtensions
+    public static class EndpointRouteBuilderExtensions
     {
         public static Microsoft.AspNetCore.Builder.IEndpointConventionBuilder MapHealthChecksUI(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, System.Action<HealthChecks.UI.Configuration.Options>? setupOptions = null) { }
     }

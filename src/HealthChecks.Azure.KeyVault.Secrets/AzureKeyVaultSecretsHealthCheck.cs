@@ -24,8 +24,8 @@ public sealed class AzureKeyVaultSecretsHealthCheck : IHealthCheck
     /// <remarks>
     /// It uses the provided <paramref name="secretClient"/> to get given <see cref="AzureKeyVaultSecretsHealthCheckOptions.SecretName"/> secret via
     /// <see cref="SecretClient.GetSecretAsync(string, string, CancellationToken)"/> method.
-    /// When the secret is not found, it will try to create it if <see cref="AzureKeyVaultSecretsHealthCheckOptions.CreateWhenNotFound"/> is set to true.
-    /// When the secret is not found, but <see cref="AzureKeyVaultSecretsHealthCheckOptions.CreateWhenNotFound"/> is false, it returns <see cref="HealthStatus.Healthy"/> status,
+    /// When the secret is not found, it will try to create it if <see cref="AzureKeyVaultSecretsHealthCheckOptions.CreateWhenNotFound"/> is set to <see langword="true"/>.
+    /// When the secret is not found, but <see cref="AzureKeyVaultSecretsHealthCheckOptions.CreateWhenNotFound"/> is <see langword="false"/>, it returns <see cref="HealthStatus.Healthy"/> status,
     /// as the connection to the service itself can be made.
     /// </remarks>
     public AzureKeyVaultSecretsHealthCheck(SecretClient secretClient, AzureKeyVaultSecretsHealthCheckOptions? options = default)

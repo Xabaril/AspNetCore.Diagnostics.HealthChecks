@@ -1,4 +1,4 @@
-## Azure KeyVault Health Check
+## Azure KeyVault Secrets Health Check
 
 This health check verifies the ability to communicate with [Azure Key Vault Secrets](https://azure.microsoft.com/services/key-vault/). It uses the provided [SecretClient](https://learn.microsoft.com/dotnet/api/azure.security.keyvault.secrets.secretclient) to get configured secret. When the connection to the service itself can be made, but secret is not found, it returns `HealthStatus.Healthy` status.
 
@@ -20,7 +20,7 @@ You can additionally add the following parameters:
 
 - `clientFactory`: A factory method to provide `SecretClient` instance.
 - `optionsFactory`: A factory method to provide `AzureKeyVaultSecretsHealthCheckOptions` instance. It allows to specify the secret name and whether the secret should be created when it's not found.
-- `healthCheckName`: The health check name. The default is `azure_key_vault_secret`.
+- `name`: The health check name. The default is `azure_key_vault_secret`.
 - `failureStatus`: The `HealthStatus` that should be reported when the health check fails. Default is `HealthStatus.Unhealthy`.
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.

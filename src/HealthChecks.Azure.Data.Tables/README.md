@@ -20,7 +20,7 @@ You can additionally add the following parameters:
 
 - `clientFactory`: A factory method to provide `TableServiceClient` instance.
 - `optionsFactory`: A factory method to provide `AzureTableServiceHealthCheckOptions` instance. It allows to specify the table name.
-- `healthCheckName`: The health check name. The default is `azure_tables`.
+- `name`: The health check name. The default is `azure_tables`.
 - `failureStatus`: The `HealthStatus` that should be reported when the health check fails. Default is `HealthStatus.Unhealthy`.
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.

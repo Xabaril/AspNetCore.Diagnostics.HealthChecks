@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class CosmosDbHealthCheckBuilderExtensions
 {
-    private const string HEALTH_CHECK_NAME = "azure_cosmosdb";
+    private const string NAME = "azure_cosmosdb";
 
     /// <summary>
     /// Add a health check for Azure Cosmos DB by registering <see cref="AzureCosmosDbHealthCheck"/> for given <paramref name="builder"/>.
@@ -23,7 +23,7 @@ public static class CosmosDbHealthCheckBuilderExtensions
     /// An optional factory to obtain <see cref="AzureCosmosDbHealthCheckOptions"/> used by the health check.
     /// When not provided, defaults are used.
     /// </param>
-    /// <param name="healthCheckName">The health check name. Optional. If <c>null</c> the name 'azure_cosmosdb' will be used.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the name 'azure_cosmosdb' will be used.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -35,13 +35,13 @@ public static class CosmosDbHealthCheckBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, CosmosClient>? clientFactory = default,
         Func<IServiceProvider, AzureCosmosDbHealthCheckOptions>? optionsFactory = default,
-        string? healthCheckName = HEALTH_CHECK_NAME,
+        string? name = NAME,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
         return builder.Add(new HealthCheckRegistration(
-           string.IsNullOrEmpty(healthCheckName) ? HEALTH_CHECK_NAME : healthCheckName!,
+           name ?? NAME,
            sp => new AzureCosmosDbHealthCheck(
                     cosmosClient: clientFactory?.Invoke(sp) ?? sp.GetRequiredService<CosmosClient>(),
                     options: optionsFactory?.Invoke(sp)),

@@ -1,5 +1,8 @@
 namespace HealthChecks.System;
 
+/// <summary>
+/// Options for <see cref="FileHealthCheck"/>.
+/// </summary>
 public class FileHealthCheckOptions
 {
     public List<string> Files { get; } = new();

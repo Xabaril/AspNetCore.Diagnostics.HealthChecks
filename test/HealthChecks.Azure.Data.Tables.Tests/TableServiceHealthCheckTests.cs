@@ -184,7 +184,7 @@ public class tableservicehealthcheck_should
             .AddSingleton(_tableServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureTable(optionsFactory: _ => new AzureTableServiceHealthCheckOptions() { TableName = TableName }, healthCheckName: HealthCheckName)
+            .AddAzureTable(optionsFactory: _ => new AzureTableServiceHealthCheckOptions() { TableName = TableName }, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 

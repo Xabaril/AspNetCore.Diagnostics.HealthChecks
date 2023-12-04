@@ -21,7 +21,7 @@ public sealed class AzureKeyVaultSecretsHealthCheckOptions
 
     /// <summary>
     /// A boolean value that indicates whether the secret should be created when it's not found.
-    /// False by default.
+    /// <see langword="false"/> by default.
     /// </summary>
     /// <remarks>
     /// Enabling it requires secret set permissions and can be used to improve performance

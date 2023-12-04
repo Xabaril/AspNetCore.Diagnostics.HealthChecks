@@ -172,7 +172,7 @@ public class azurefilesharehealthcheck_should
             .AddSingleton(_shareServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureFileShare(optionsFactory: _ => new AzureFileShareHealthCheckOptions() { ShareName = ShareName }, healthCheckName: HealthCheckName)
+            .AddAzureFileShare(optionsFactory: _ => new AzureFileShareHealthCheckOptions() { ShareName = ShareName }, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 

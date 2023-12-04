@@ -276,7 +276,7 @@ public class cosmosdbhealthcheck_should
             .AddSingleton(_cosmosClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureCosmosDB(optionsFactory: _ => new AzureCosmosDbHealthCheckOptions() { DatabaseId = DatabaseId }, healthCheckName: HealthCheckName)
+            .AddAzureCosmosDB(optionsFactory: _ => new AzureCosmosDbHealthCheckOptions() { DatabaseId = DatabaseId }, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 

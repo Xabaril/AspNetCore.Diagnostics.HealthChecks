@@ -189,7 +189,7 @@ public void ConfigureServices(IServiceCollection services)
             healthQuery: "SELECT 1;",
             name: "sql",
             failureStatus: HealthStatus.Degraded,
-            tags: new string[] { "db", "sql", "sqlserver" });
+            tags: ["db", "sql", "sqlserver"]);
 }
 ```
 

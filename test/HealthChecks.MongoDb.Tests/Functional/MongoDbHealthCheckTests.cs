@@ -13,7 +13,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -39,7 +39,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, mongoDatabaseName: "local", tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, mongoDatabaseName: "local", tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -64,7 +64,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -90,7 +90,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -114,7 +114,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
+                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -138,7 +138,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
+                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: ["mongodb"]);
             })
             .Configure(app =>
             {

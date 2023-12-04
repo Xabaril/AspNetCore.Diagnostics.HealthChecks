@@ -13,7 +13,7 @@ public class mysql_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMySql(connectionString, tags: new string[] { "mysql" });
+                .AddMySql(connectionString, tags: ["mysql"]);
             })
             .Configure(app =>
             {
@@ -39,7 +39,7 @@ public class mysql_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMySql(connectionString, tags: new string[] { "mysql" });
+                .AddMySql(connectionString, tags: ["mysql"]);
             })
             .Configure(app =>
             {
@@ -69,7 +69,7 @@ public class mysql_healthcheck_should
                     ConnectionString = connectionString
                 };
                 services.AddHealthChecks()
-                    .AddMySql(mysqlOptions, tags: new string[] { "mysql" });
+                    .AddMySql(mysqlOptions, tags: ["mysql"]);
             })
             .Configure(app =>
             {

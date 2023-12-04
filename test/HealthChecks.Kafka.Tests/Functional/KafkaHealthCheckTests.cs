@@ -21,7 +21,7 @@ public class kafka_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddKafka(configuration, tags: new string[] { "kafka" });
+                .AddKafka(configuration, tags: ["kafka"]);
             })
             .Configure(app =>
             {
@@ -51,7 +51,7 @@ public class kafka_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddKafka(configuration, tags: new string[] { "kafka" });
+                .AddKafka(configuration, tags: ["kafka"]);
             })
             .Configure(app =>
             {

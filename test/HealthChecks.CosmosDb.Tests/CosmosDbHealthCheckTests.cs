@@ -8,7 +8,7 @@ namespace HealthChecks.CosmosDb.Tests;
 
 public class cosmosdbhealthcheck_should
 {
-    private static readonly string[] ContainerIds = { "one", "two", "three" };
+    private static readonly string[] ContainerIds = ["one", "two", "three"];
     private const string DatabaseId = "unit-test";
     private const string HealthCheckName = "unit-test-check";
 

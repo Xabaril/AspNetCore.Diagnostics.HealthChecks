@@ -14,7 +14,7 @@ public class azure_digital_twin_model_registration_should
                 "MyDigitalTwinClientSecret",
                 "TenantId",
                 "https://my-awesome-dt-host",
-                new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" });
+                ["my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1"]);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -36,7 +36,7 @@ public class azure_digital_twin_model_registration_should
                 "MyDigitalTwinClientSecret",
                 "TenantId",
                 "https://my-awesome-dt-host",
-                new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" },
+                ["my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1"],
                 name: "azuredigitaltwinmodels_check");
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -54,7 +54,7 @@ public class azure_digital_twin_model_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureDigitalTwinModels(string.Empty, string.Empty, string.Empty, string.Empty, new string[] { });
+            .AddAzureDigitalTwinModels(string.Empty, string.Empty, string.Empty, string.Empty, []);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -72,7 +72,7 @@ public class azure_digital_twin_model_registration_should
             .AddAzureDigitalTwinModels(
                 new MockTokenCredentials(),
                 "https://my-awesome-dt-host",
-                new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" });
+                ["my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1"]);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -92,7 +92,7 @@ public class azure_digital_twin_model_registration_should
             .AddAzureDigitalTwinModels(
                 new MockTokenCredentials(),
                 "https://my-awesome-dt-host",
-                new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" },
+                ["my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1"],
                 name: "azuredigitaltwinmodels_check");
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -110,7 +110,7 @@ public class azure_digital_twin_model_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddAzureDigitalTwinModels(new AzureCliCredential(), string.Empty, new string[] { });
+            .AddAzureDigitalTwinModels(new AzureCliCredential(), string.Empty, []);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

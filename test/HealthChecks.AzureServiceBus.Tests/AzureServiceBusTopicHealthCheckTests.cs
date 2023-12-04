@@ -39,8 +39,7 @@ public class azureservicebustopichealthcheck_should
         await ExecuteHealthCheckAsync(
             TopicName,
             connectionString: ConnectionString,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         _clientProvider
             .Received(1)
@@ -56,14 +55,12 @@ public class azureservicebustopichealthcheck_should
         await ExecuteHealthCheckAsync(
             TopicName,
             connectionString: ConnectionString,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         await ExecuteHealthCheckAsync(
             otherTopicName,
             connectionString: ConnectionString,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         _clientProvider
             .Received(1)
@@ -71,13 +68,11 @@ public class azureservicebustopichealthcheck_should
 
         await _serviceBusAdministrationClient
             .Received(1)
-            .GetTopicRuntimePropertiesAsync(TopicName, tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetTopicRuntimePropertiesAsync(TopicName, tokenSource.Token);
 
         await _serviceBusAdministrationClient
             .Received(1)
-            .GetTopicRuntimePropertiesAsync(otherTopicName, tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetTopicRuntimePropertiesAsync(otherTopicName, tokenSource.Token);
     }
 
     [Fact]
@@ -88,8 +83,7 @@ public class azureservicebustopichealthcheck_should
         await ExecuteHealthCheckAsync(
             TopicName,
             fullyQualifiedName: FullyQualifiedName,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         _clientProvider
             .Received(1)
@@ -105,14 +99,12 @@ public class azureservicebustopichealthcheck_should
         await ExecuteHealthCheckAsync(
             TopicName,
             fullyQualifiedName: FullyQualifiedName,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         await ExecuteHealthCheckAsync(
             otherTopicName,
             fullyQualifiedName: FullyQualifiedName,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         _clientProvider
             .Received(1)
@@ -120,13 +112,11 @@ public class azureservicebustopichealthcheck_should
 
         await _serviceBusAdministrationClient
             .Received(1)
-            .GetTopicRuntimePropertiesAsync(TopicName, tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetTopicRuntimePropertiesAsync(TopicName, tokenSource.Token);
 
         await _serviceBusAdministrationClient
             .Received(1)
-            .GetTopicRuntimePropertiesAsync(otherTopicName, tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetTopicRuntimePropertiesAsync(otherTopicName, tokenSource.Token);
     }
 
     [Fact]
@@ -137,8 +127,7 @@ public class azureservicebustopichealthcheck_should
         var actual = await ExecuteHealthCheckAsync(
             TopicName,
             connectionString: ConnectionString,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
 
@@ -148,8 +137,7 @@ public class azureservicebustopichealthcheck_should
 
         await _serviceBusAdministrationClient
             .Received(1)
-            .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token);
     }
 
     [Fact]
@@ -160,8 +148,7 @@ public class azureservicebustopichealthcheck_should
         var actual = await ExecuteHealthCheckAsync(
             TopicName,
             fullyQualifiedName: FullyQualifiedName,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
 
@@ -171,8 +158,7 @@ public class azureservicebustopichealthcheck_should
 
         await _serviceBusAdministrationClient
             .Received(1)
-            .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token);
     }
 
     [Fact]
@@ -187,15 +173,13 @@ public class azureservicebustopichealthcheck_should
         var actual = await ExecuteHealthCheckAsync(
             TopicName,
             connectionString: ConnectionString,
-            cancellationToken: tokenSource.Token)
-            .ConfigureAwait(false);
+            cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
 
         await _serviceBusAdministrationClient
            .Received(1)
-           .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token)
-           .ConfigureAwait(false);
+           .GetTopicRuntimePropertiesAsync(TopicName, cancellationToken: tokenSource.Token);
     }
 
     private Task<HealthCheckResult> ExecuteHealthCheckAsync(

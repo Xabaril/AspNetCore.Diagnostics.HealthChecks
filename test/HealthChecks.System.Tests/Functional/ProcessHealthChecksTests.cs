@@ -26,7 +26,7 @@ public class process_healthcheck_should
             });
 
         using var server = new TestServer(webhostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -48,7 +48,7 @@ public class process_healthcheck_should
             });
 
         using var server = new TestServer(webhostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -70,7 +70,7 @@ public class process_healthcheck_should
             });
 
         using var server = new TestServer(webhostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

@@ -329,8 +329,8 @@ public class UI_Configuration_should
 
         var server = new TestServer(builder);
         var options = server.Services.GetRequiredService<IOptions<Configuration.Options>>().Value;
-        var response = await server.CreateRequest(options.UIPath).GetAsync().ConfigureAwait(false);
-        var html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var response = await server.CreateRequest(options.UIPath).GetAsync();
+        var html = await response.Content.ReadAsStringAsync();
 
         html.ShouldContain($"<title>{pageTitle}</title>");
     }

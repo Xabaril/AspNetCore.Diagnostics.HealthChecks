@@ -22,7 +22,7 @@ public class tcp_healthcheck_should
                 failureStatus: HealthStatus.Degraded,
                 null,
                 timeout: null)
-        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
+        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
         result.Exception.ShouldBeOfType<OperationCanceledException>();
     }

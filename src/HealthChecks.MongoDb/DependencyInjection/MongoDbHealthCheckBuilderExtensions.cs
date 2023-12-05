@@ -190,4 +190,124 @@ public static class MongoDbHealthCheckBuilderExtensions
             tags,
             timeout));
     }
+
+    /// <summary>
+    /// Add a health check for MongoDb that list all databases from specified <paramref name="mongoClientSettingsFactory"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="mongoClientSettingsFactory">A factory to build MongoClientSettings to be used.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddMongoDb(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, MongoClientSettings> mongoClientSettingsFactory,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp => new MongoDbHealthCheck(mongoClientSettingsFactory(sp)),
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="mongoClientSettingsFactory">A factory to build MongoClientSettings to be used.</param>
+    /// <param name="mongoDatabaseName">The Database name to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddMongoDb(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, MongoClientSettings> mongoClientSettingsFactory,
+        string mongoDatabaseName,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp => new MongoDbHealthCheck(mongoClientSettingsFactory(sp), mongoDatabaseName),
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for MongoDb that list all databases from specified <paramref name="mongoClientFactory"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="mongoClientFactory">A factory to build MongoClient to be used.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddMongoDb(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, MongoClient> mongoClientFactory,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp => new MongoDbHealthCheck(mongoClientFactory(sp)),
+            failureStatus,
+            tags,
+            timeout));
+    }
+
+    /// <summary>
+    /// Add a health check for MongoDb database that list all collections from specified database on <paramref name="mongoDatabaseName"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="mongoClientFactory">A factory to build MongoClientSettings to be used.</param>
+    /// <param name="mongoDatabaseName">The Database name to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddMongoDb(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, MongoClient> mongoClientFactory,
+        string mongoDatabaseName,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp => new MongoDbHealthCheck(mongoClientFactory(sp), mongoDatabaseName),
+            failureStatus,
+            tags,
+            timeout));
+    }
 }

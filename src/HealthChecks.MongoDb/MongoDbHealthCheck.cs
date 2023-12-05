@@ -21,6 +21,12 @@ public class MongoDbHealthCheck : IHealthCheck
         }
     }
 
+    public MongoDbHealthCheck(MongoClient client, string? databaseName = default)
+        : this(client.Settings, databaseName)
+    {
+        _mongoClient[_mongoClientSettings.ToString()] = client;
+    }
+
     public MongoDbHealthCheck(MongoClientSettings clientSettings, string? databaseName = default)
     {
         _specifiedDatabase = databaseName;

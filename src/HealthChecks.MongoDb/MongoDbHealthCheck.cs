@@ -8,7 +8,7 @@ namespace HealthChecks.MongoDb;
 public class MongoDbHealthCheck : IHealthCheck
 {
     private static readonly BsonDocumentCommand<BsonDocument> _command = new(BsonDocument.Parse("{ping:1}"));
-    private static readonly ConcurrentDictionary<string, MongoClient> _mongoClient = new();
+    private static readonly ConcurrentDictionary<string, IMongoClient> _mongoClient = new();
     private readonly MongoClientSettings _mongoClientSettings;
     private readonly string? _specifiedDatabase;
 
@@ -21,7 +21,7 @@ public class MongoDbHealthCheck : IHealthCheck
         }
     }
 
-    public MongoDbHealthCheck(MongoClient client, string? databaseName = default)
+    public MongoDbHealthCheck(IMongoClient client, string? databaseName = default)
         : this(client.Settings, databaseName)
     {
         _mongoClient[_mongoClientSettings.ToString()] = client;

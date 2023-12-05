@@ -266,7 +266,7 @@ public static class MongoDbHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddMongoDb(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, MongoClient> mongoClientFactory,
+        Func<IServiceProvider, IMongoClient> mongoClientFactory,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -296,7 +296,7 @@ public static class MongoDbHealthCheckBuilderExtensions
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddMongoDb(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, MongoClient> mongoClientFactory,
+        Func<IServiceProvider, IMongoClient> mongoClientFactory,
         string mongoDatabaseName,
         string? name = default,
         HealthStatus? failureStatus = default,

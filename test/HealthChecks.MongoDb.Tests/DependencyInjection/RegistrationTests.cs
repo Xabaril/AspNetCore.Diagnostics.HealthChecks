@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
 namespace HealthChecks.MongoDb.Tests.DependencyInjection;

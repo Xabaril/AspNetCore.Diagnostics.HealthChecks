@@ -130,4 +130,19 @@ public class npgsql_registration_should
 
         factoryCalls.ShouldBe(1);
     }
+
+    [Fact]
+    public void recommended_scenario_compiles_and_works_as_expected()
+    {
+        ServiceCollection services = new();
+        services.AddNpgsqlDataSource("Host=pg_server;Username=test;Password=test;Database=test");
+        services.AddHealthChecks().AddNpgSql();
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+        var registration = options.Value.Registrations.Single();
+        var healthCheck = registration.Factory(serviceProvider);
+
+        healthCheck.ShouldBeOfType<NpgSqlHealthCheck>();
+    }
 }

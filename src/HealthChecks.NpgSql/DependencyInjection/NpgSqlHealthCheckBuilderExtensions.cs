@@ -111,6 +111,10 @@ public static class NpgSqlHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
+    /// <remarks>
+    /// Depending on how the <see cref="NpgsqlDataSource" /> was configured, the connections it hands out may be pooled.
+    /// That is why it should be the exact same <see cref="NpgsqlDataSource" /> that is used by other parts of your app.
+    /// </remarks>
     public static IHealthChecksBuilder AddNpgSql(
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, NpgsqlDataSource>? dbDataSourceFactory = null,
@@ -132,17 +136,7 @@ public static class NpgSqlHealthCheckBuilderExtensions
             name ?? NAME,
             sp =>
             {
-                if (options.DataSource is null)
-                {
-                    // this lock will most likely be obtained once, with no contention so the cost should be low and acceptable
-                    lock (options)
-                    {
-                        // The Data Source needs to be created only once,
-                        // as each instance has it's own connection pool.
-                        // See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 for more details.
-                        options.DataSource ??= dbDataSourceFactory?.Invoke(sp) ?? sp.GetRequiredService<NpgsqlDataSource>();
-                    }
-                }
+                options.DataSource ??= dbDataSourceFactory?.Invoke(sp) ?? sp.GetRequiredService<NpgsqlDataSource>();
 
                 return new NpgSqlHealthCheck(options);
             },
@@ -173,7 +167,6 @@ public static class NpgSqlHealthCheckBuilderExtensions
         TimeSpan? timeout = default)
     {
         Guard.ThrowIfNull(options);
-        Guard.ThrowIfNull(options.ConnectionString, throwOnEmptyString: true, paramName: "ConnectionString");
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
@@ -195,7 +188,8 @@ public static class NpgSqlHealthCheckBuilderExtensions
             NpgsqlDataSource? fromDi = sp.GetService<NpgsqlDataSource>();
             if (fromDi?.ConnectionString == options.ConnectionString)
             {
-                // When it's possible, we reuse the DataSource registered in the DI
+                // When it's possible, we reuse the DataSource registered in the DI.
+                // We do that to achieve best performance and avoid issues like https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993
                 options.DataSource = fromDi;
             }
             options.TriedToResolveFromDI = true; // save the answer, so we don't do it more than once

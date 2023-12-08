@@ -7,10 +7,12 @@ namespace HealthChecks.NpgSql
     }
     public class NpgSqlHealthCheckOptions
     {
+        public NpgSqlHealthCheckOptions(Npgsql.NpgsqlDataSource dataSource) { }
         public NpgSqlHealthCheckOptions(string connectionString) { }
         public string CommandText { get; set; }
         public System.Action<Npgsql.NpgsqlConnection>? Configure { get; set; }
-        public string? ConnectionString { get; set; }
+        public string? ConnectionString { get; }
+        public Npgsql.NpgsqlDataSource? DataSource { get; }
         public System.Func<object?, Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult>? HealthCheckResultBuilder { get; set; }
     }
 }

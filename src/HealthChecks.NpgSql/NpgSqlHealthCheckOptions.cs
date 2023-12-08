@@ -11,32 +11,61 @@ public class NpgSqlHealthCheckOptions
 {
     internal NpgSqlHealthCheckOptions()
     {
-        // this ctor is internal on purpose:
-        // those who want to use DataSource need to use the extension methods
-        // that take care of creating the right thing 
+        // This ctor is internal on purpose: those who want to use NpgSqlHealthCheckOptions
+        // need to specify either ConnectionString or DataSource when creating it.
+        // Making the ConnectionString and DataSource setters internal
+        // allows us to ensure that the customers don't try to mix both concepts.
+        // By encapsulating all of that, we ensure that all instances of this type are valid.
     }
 
     /// <summary>
     /// Creates an instance of <see cref="NpgSqlHealthCheckOptions"/>.
     /// </summary>
     /// <param name="connectionString">The PostgreSQL connection string to be used.</param>
+    /// <remarks>
+    /// <see cref="NpgsqlDataSource"/> supports additional configuration beyond the connection string,
+    /// such as logging, advanced authentication options, type mapping management, and more.
+    /// To further configure a data source, use <see cref=" NpgsqlDataSourceBuilder"/> and
+    /// the <see cref="NpgSqlHealthCheckOptions(NpgsqlDataSource)"/> constructor.
+    /// </remarks>
     public NpgSqlHealthCheckOptions(string connectionString)
     {
         ConnectionString = Guard.ThrowIfNull(connectionString, throwOnEmptyString: true);
     }
 
     /// <summary>
-    /// The Postgres connection string to be used.
-    /// Use <see cref="DataSource"/> property for advanced configuration.
+    /// Creates an instance of <see cref="NpgSqlHealthCheckOptions"/>.
     /// </summary>
-    public string? ConnectionString { get; set; }
+    /// <param name="dataSource">The Postgres <see cref="NpgsqlDataSource" /> to be used.</param>
+    /// <remarks>
+    /// Depending on how the <see cref="NpgsqlDataSource" /> was configured, the connections it hands out may be pooled.
+    /// That is why it should be the exact same <see cref="NpgsqlDataSource" /> that is used by other parts of your app.
+    /// </remarks>
+    public NpgSqlHealthCheckOptions(NpgsqlDataSource dataSource)
+    {
+        DataSource = Guard.ThrowIfNull(dataSource);
+    }
 
     /// <summary>
-    /// The Postgres data source to be used.
+    /// The Postgres connection string to be used.
     /// </summary>
-    internal NpgsqlDataSource? DataSource { get; set; }
+    /// <remarks>
+    /// <see cref="NpgsqlDataSource"/> supports additional configuration beyond the connection string,
+    /// such as logging, advanced authentication options, type mapping management, and more.
+    /// To further configure a data source, use <see cref=" NpgsqlDataSourceBuilder"/> and the <see cref="NpgSqlHealthCheckOptions(NpgsqlDataSource)"/> constructor.
+    /// </remarks>
+    public string? ConnectionString { get; internal set; }
 
-    internal bool TriedToResolveFromDI { get; set; }
+    /// <summary>
+    /// The Postgres <see cref="NpgsqlDataSource" /> to be used.
+    /// </summary>
+    /// <remarks>
+    /// Depending on how the <see cref="NpgsqlDataSource" /> was configured, the connections it hands out may be pooled.
+    /// That is why it should be the exact same <see cref="NpgsqlDataSource" /> that is used by other parts of your app.
+    /// </remarks>
+    public NpgsqlDataSource? DataSource { get; internal set; }
+
+    internal bool TriedToResolveFromDI;
 
     /// <summary>
     /// The query to be executed.

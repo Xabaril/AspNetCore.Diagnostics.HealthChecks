@@ -125,10 +125,7 @@ public class npgsql_registration_should
             var optionsField = typeof(NpgSqlHealthCheck).GetField("_options", BindingFlags.Instance | BindingFlags.NonPublic);
             var npgSqlHealthCheckOptions = (NpgSqlHealthCheckOptions)optionsField!.GetValue(healthCheck)!;
 
-            var dataSourceProperty = typeof(NpgSqlHealthCheckOptions).GetProperty("DataSource", BindingFlags.Instance | BindingFlags.NonPublic);
-            var dataSource = (NpgsqlDataSource)dataSourceProperty!.GetValue(npgSqlHealthCheckOptions)!;
-
-            Assert.Equal(sameConnectionString, ReferenceEquals(serviceProvider.GetRequiredService<NpgsqlDataSource>(), dataSource));
+            Assert.Equal(sameConnectionString, ReferenceEquals(serviceProvider.GetRequiredService<NpgsqlDataSource>(), npgSqlHealthCheckOptions.DataSource));
         }
 
         factoryCalls.ShouldBe(1);

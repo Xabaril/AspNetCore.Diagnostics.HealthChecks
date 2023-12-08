@@ -122,8 +122,8 @@ public class npgsql_registration_should
         for (int i = 0; i < 10; i++)
         {
             var healthCheck = (NpgSqlHealthCheck)registration.Factory(serviceProvider);
-            var optionsField = typeof(NpgSqlHealthCheck).GetField("_options", BindingFlags.Instance | BindingFlags.NonPublic);
-            var npgSqlHealthCheckOptions = (NpgSqlHealthCheckOptions)optionsField!.GetValue(healthCheck)!;
+            var fieldInfo = typeof(NpgSqlHealthCheck).GetField("_options", BindingFlags.Instance | BindingFlags.NonPublic);
+            var npgSqlHealthCheckOptions = (NpgSqlHealthCheckOptions)fieldInfo!.GetValue(healthCheck)!;
 
             Assert.Equal(sameConnectionString, ReferenceEquals(serviceProvider.GetRequiredService<NpgsqlDataSource>(), npgSqlHealthCheckOptions.DataSource));
         }

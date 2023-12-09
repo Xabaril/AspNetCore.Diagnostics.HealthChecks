@@ -27,7 +27,7 @@ public class uris_healthcheck_should2
 
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(sp);
-        var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
+        var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
 
         result.Status.ShouldBe(HealthStatus.Healthy);
         using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
@@ -59,7 +59,7 @@ public class uris_healthcheck_should2
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(sp);
         using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
-        var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
+        var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
 
         result.Status.ShouldBe(HealthStatus.Unhealthy);
         client.DefaultRequestHeaders.Any(s => s.Key == headerName).ShouldBeTrue();
@@ -83,7 +83,7 @@ public class uris_healthcheck_should2
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(sp);
         using var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(hcname);
-        var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration }).ConfigureAwait(false);
+        var result = await check.CheckHealthAsync(new HealthCheckContext { Registration = registration });
 
         client.DefaultRequestHeaders.Any(s => s.Key == "MockHeader").ShouldBeTrue();
         result.Status.ShouldBe(HealthStatus.Unhealthy);

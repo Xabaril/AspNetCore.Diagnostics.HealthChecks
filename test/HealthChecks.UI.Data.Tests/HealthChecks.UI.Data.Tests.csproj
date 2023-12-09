@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.10" />
-  </ItemGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+  </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.Data\HealthChecks.UI.Data.csproj" />
   </ItemGroup>
 

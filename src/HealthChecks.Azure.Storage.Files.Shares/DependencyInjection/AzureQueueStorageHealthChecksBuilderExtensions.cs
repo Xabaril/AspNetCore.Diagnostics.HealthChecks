@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class AzureFileShareStorageHealthChecksBuilderExtensions
 {
-    private const string HEALTH_CHECK_NAME = "azure_file_share";
+    private const string NAME = "azure_file_share";
 
     /// <summary>
     /// Add a health check for Azure Files by registering <see cref="AzureFileShareHealthCheck"/> for given <paramref name="builder"/>.
@@ -23,7 +23,7 @@ public static class AzureFileShareStorageHealthChecksBuilderExtensions
     /// An optional factory to obtain <see cref="AzureFileShareHealthCheckOptions"/> used by the health check.
     /// When not provided, defaults are used.
     /// </param>
-    /// <param name="healthCheckName">The health check name. Optional. If <c>null</c> the name 'azure_file_share' will be used.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the name 'azure_file_share' will be used.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -35,13 +35,13 @@ public static class AzureFileShareStorageHealthChecksBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, ShareServiceClient>? clientFactory = default,
         Func<IServiceProvider, AzureFileShareHealthCheckOptions>? optionsFactory = default,
-        string? healthCheckName = HEALTH_CHECK_NAME,
+        string? name = NAME,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
         return builder.Add(new HealthCheckRegistration(
-           string.IsNullOrEmpty(healthCheckName) ? HEALTH_CHECK_NAME : healthCheckName!,
+           name ?? NAME,
            sp => new AzureFileShareHealthCheck(
                     shareServiceClient: clientFactory?.Invoke(sp) ?? sp.GetRequiredService<ShareServiceClient>(),
                     options: optionsFactory?.Invoke(sp)),

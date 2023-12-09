@@ -1,10 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.10.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <ProjectReference Include="..\..\src\HealthChecks.AzureDigitalTwin\HealthChecks.AzureDigitalTwin.csproj" />
   </ItemGroup>
 

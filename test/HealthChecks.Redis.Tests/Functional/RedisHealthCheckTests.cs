@@ -28,7 +28,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -55,7 +55,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -64,7 +64,7 @@ public class redis_healthcheck_should
     public async Task be_healthy_if_redis_is_available_with_connection_multiplexer()
     {
         var connectionMultiplexer = await ConnectionMultiplexer
-            .ConnectAsync("localhost:6379,allowAdmin=true").ConfigureAwait(false);
+            .ConnectAsync("localhost:6379,allowAdmin=true");
 
         var webHostBuilder = new WebHostBuilder()
          .ConfigureServices(services =>
@@ -82,7 +82,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -91,7 +91,7 @@ public class redis_healthcheck_should
     public async Task be_healthy_if_multiple_redis_are_available_with_connection_multiplexer()
     {
         var connectionMultiplexer = await ConnectionMultiplexer
-            .ConnectAsync("localhost:6379,allowAdmin=true").ConfigureAwait(false);
+            .ConnectAsync("localhost:6379,allowAdmin=true");
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -112,7 +112,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -140,7 +140,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -164,7 +164,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -189,10 +189,10 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-        (await response.Content.ReadAsStringAsync().ConfigureAwait(false)).ShouldContain("Healthcheck timed out");
+        (await response.Content.ReadAsStringAsync()).ShouldContain("Healthcheck timed out");
     }
 
     [Fact]
@@ -214,7 +214,7 @@ public class redis_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

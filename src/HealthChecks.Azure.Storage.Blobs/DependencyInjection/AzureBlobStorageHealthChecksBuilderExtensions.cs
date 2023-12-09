@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class AzureBlobStorageHealthChecksBuilderExtensions
 {
-    private const string HEALTH_CHECK_NAME = "azure_blob_storage";
+    private const string NAME = "azure_blob_storage";
 
     /// <summary>
     /// Add a health check for Azure Blob Storage by registering <see cref="AzureBlobStorageHealthCheck"/> for given <paramref name="builder"/>.
@@ -23,7 +23,7 @@ public static class AzureBlobStorageHealthChecksBuilderExtensions
     /// An optional factory to obtain <see cref="AzureBlobStorageHealthCheckOptions"/> used by the health check.
     /// When not provided, defaults are used.
     /// </param>
-    /// <param name="healthCheckName">The health check name. Optional. If <c>null</c> the name 'azure_blob_storage' will be used.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the name 'azure_blob_storage' will be used.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
     /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
@@ -35,13 +35,13 @@ public static class AzureBlobStorageHealthChecksBuilderExtensions
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, BlobServiceClient>? clientFactory = default,
         Func<IServiceProvider, AzureBlobStorageHealthCheckOptions>? optionsFactory = default,
-        string? healthCheckName = HEALTH_CHECK_NAME,
+        string? name = NAME,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
         return builder.Add(new HealthCheckRegistration(
-           string.IsNullOrEmpty(healthCheckName) ? HEALTH_CHECK_NAME : healthCheckName!,
+           name ?? NAME,
            sp => new AzureBlobStorageHealthCheck(
                     blobServiceClient: clientFactory?.Invoke(sp) ?? sp.GetRequiredService<BlobServiceClient>(),
                     options: optionsFactory?.Invoke(sp)),

@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.0.x
@@ -52,7 +52,7 @@ jobs:
       - name: Setup InfluxDB
         uses: maikebing/influxdb-action@v5
         with:
-          influxdb_version: latest
+          influxdb_version: 2.7.1
           influxdb_org: influxdata
           influxdb_user: ci_user
           influxdb_password: password

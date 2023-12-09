@@ -17,6 +17,7 @@ public class ApiApprovalTests
         var nameToFind = string.Join(".", nameItems.SkipLast(1));
         var asmForTest = dependencies
             .Select(Assembly.Load)
+            .Where(a => !string.Equals(a.FullName, "Microsoft.Data.SqlClient, Version=5.0.0.0, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5", StringComparison.OrdinalIgnoreCase)) // https://github.com/dotnet/SqlClient/issues/1930#issuecomment-1814595368
             .Where(asm => asm.GetTypes().Any(type => type.Name == "ApiMarker") && asm.GetName().Name!.Equals(nameToFind, StringComparison.InvariantCultureIgnoreCase))
             .Single();
 

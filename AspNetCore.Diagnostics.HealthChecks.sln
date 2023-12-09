@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A5A8CE48
 		Directory.Build.targets = Directory.Build.targets
 		docker-compose.yml = docker-compose.yml
 		.github\labeler.yml = .github\labeler.yml
+		build\strongNameKey.snk = build\strongNameKey.snk
 		build\versions.props = build\versions.props
 	EndProjectSection
 EndProject

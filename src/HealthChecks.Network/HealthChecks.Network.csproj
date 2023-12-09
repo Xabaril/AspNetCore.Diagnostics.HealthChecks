@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
     <PackageTags>$(PackageTags);Network;Sftp;Ftp;Tcp;DNS</PackageTags>
     <Description>HealthChecks.Network is the health check package for network services.</Description>
     <VersionPrefix>$(HealthCheckNetwork)</VersionPrefix>
@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="SSH.NET" Version="2023.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0-rc.1.23421.29" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>

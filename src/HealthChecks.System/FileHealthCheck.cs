@@ -2,16 +2,16 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System;
 
-public class FolderHealthCheck : IHealthCheck
+public class FileHealthCheck : IHealthCheck
 {
-    private readonly FolderHealthCheckOptions _folderOptions;
+    private readonly FileHealthCheckOptions _fileOptions;
 
     /// <summary>
-    /// Creates an instance of <see cref="FolderHealthCheck"/> with the specified options.
+    /// Creates an instance of <see cref="FileHealthCheck"/> with the specified options.
     /// </summary>
-    public FolderHealthCheck(FolderHealthCheckOptions folderOptions)
+    public FileHealthCheck(FileHealthCheckOptions fileOptions)
     {
-        _folderOptions = Guard.ThrowIfNull(folderOptions);
+        _fileOptions = fileOptions;
     }
 
     /// <inheritdoc />
@@ -19,15 +19,15 @@ public class FolderHealthCheck : IHealthCheck
     {
         try
         {
-            List<string>? errorList = null;
-            foreach (string folder in _folderOptions.Folders)
+            List<string> errorList = new();
+            foreach (string file in _fileOptions.Files)
             {
-                if (!string.IsNullOrEmpty(folder))
+                if (!string.IsNullOrEmpty(file))
                 {
-                    if (!Directory.Exists(folder))
+                    if (!File.Exists(file))
                     {
-                        (errorList ??= new()).Add($"Folder {folder} does not exist.");
-                        if (!_folderOptions.CheckAllFolders)
+                        errorList.Add($"File {file} does not exist.");
+                        if (!_fileOptions.CheckAllFiles)
                         {
                             break;
                         }

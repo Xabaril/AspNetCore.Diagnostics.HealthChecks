@@ -1,7 +1,7 @@
 <Project Sdk=" Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <PackageTags>$(PackageTags);UI</PackageTags>
     <Description>HealthChecks.UI is a ASP.NET Core UI viewer of ASP.NET Core HealthChecks. For more information see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</Description>
     <VersionPrefix>$(HealthCheckUI)</VersionPrefix>
@@ -19,9 +19,9 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0-rc.1.23419.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9" />
-    <PackageReference Include="KubernetesClient" Version="11.0.44" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
+    <PackageReference Include="KubernetesClient" Version="12.1.1" />
   </ItemGroup>
 
   <ItemGroup>

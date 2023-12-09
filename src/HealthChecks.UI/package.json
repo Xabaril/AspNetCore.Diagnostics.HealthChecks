@@ -26,7 +26,7 @@
     "@types/react-dom": "16.9.8",
     "@types/react-router-dom": "5.1.5",
     "@types/react-vertical-timeline-component": "^3.0.0",
-    "css-loader": "^4.3.0",
+    "css-loader": "^6.8.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^9.4.2",
     "typescript": "5.0.4",

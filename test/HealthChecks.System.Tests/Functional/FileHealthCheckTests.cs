@@ -2,22 +2,22 @@ using System.Net;
 
 namespace HealthChecks.System.Tests.Functional;
 
-public class folder_healthcheck_should
+public class file_healthcheck_should
 {
     [Fact]
-    public async Task be_healthy_if_folder_is_available()
+    public async Task be_healthy_if_file_is_available()
     {
         var webHostBuilder = new WebHostBuilder()
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                   .AddFolder(setup => setup.AddFolder(Directory.GetCurrentDirectory()), tags: new string[] { "folder" });
+                   .AddFile(setup => setup.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "HealthChecks.System.Tests.dll")), tags: new string[] { "file" });
            })
            .Configure(app =>
            {
                app.UseHealthChecks("/health", new HealthCheckOptions
                {
-                   Predicate = r => r.Tags.Contains("folder")
+                   Predicate = r => r.Tags.Contains("file")
                });
            });
 
@@ -29,21 +29,21 @@ public class folder_healthcheck_should
     }
 
     [Fact]
-    public async Task be_healthy_if_no_folder_provided()
+    public async Task be_healthy_if_no_file_provided()
     {
         var webHostBuilder = new WebHostBuilder()
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                   .AddFolder(setup =>
+                   .AddFile(setup =>
                    {
-                   }, tags: new string[] { "folder" });
+                   }, tags: new string[] { "file" });
            })
            .Configure(app =>
            {
                app.UseHealthChecks("/health", new HealthCheckOptions
                {
-                   Predicate = r => r.Tags.Contains("folder")
+                   Predicate = r => r.Tags.Contains("file")
                });
            });
 
@@ -55,19 +55,19 @@ public class folder_healthcheck_should
     }
 
     [Fact]
-    public async Task be_unhealthy_if_folder_is_not_available()
+    public async Task be_unhealthy_if_file_is_not_available()
     {
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddFolder(setup => setup.AddFolder($"{Directory.GetCurrentDirectory()}/non-existing-folder"), tags: new string[] { "folder" });
+                    .AddFile(setup => setup.AddFile($"{Directory.GetCurrentDirectory()}/non-existing-file"), tags: new string[] { "file" });
             })
             .Configure(app =>
             {
                 app.UseHealthChecks("/health", new HealthCheckOptions
                 {
-                    Predicate = r => r.Tags.Contains("folder")
+                    Predicate = r => r.Tags.Contains("file")
                 });
             });
 

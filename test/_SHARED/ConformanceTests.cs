@@ -82,7 +82,7 @@ public abstract class ConformanceTests<TClient, THealthCheck, THealthCheckOption
 
         using TestServer server = new(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(failureStatus == HealthStatus.Unhealthy ? HttpStatusCode.ServiceUnavailable : HttpStatusCode.OK);
     }

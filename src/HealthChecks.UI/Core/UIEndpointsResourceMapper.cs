@@ -37,7 +37,7 @@ internal class UIEndpointsResourceMapper
             {
                 if (!context.Response.Headers.ContainsKey("Cache-Control"))
                 {
-                    context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+                    context.Response.Headers.Append("Cache-Control", "no-cache, no-store");
                 }
 
                 return Task.CompletedTask;

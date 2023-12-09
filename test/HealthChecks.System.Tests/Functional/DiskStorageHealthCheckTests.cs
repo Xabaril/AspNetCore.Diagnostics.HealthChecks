@@ -30,7 +30,7 @@ public class disk_storage_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -58,7 +58,7 @@ public class disk_storage_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -81,7 +81,7 @@ public class disk_storage_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

@@ -92,10 +92,7 @@ public class mysql_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                var mysqlOptions = new MySqlHealthCheckOptions
-                {
-                    ConnectionString = connectionString
-                };
+                var mysqlOptions = new MySqlHealthCheckOptions(connectionString);
                 services.AddHealthChecks()
                     .AddMySql(mysqlOptions, tags: new string[] { "mysql" });
             })

@@ -38,9 +38,8 @@ public static class MySqlHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new MySqlHealthCheck(new()
+            sp => new MySqlHealthCheck(new(dataSourceFactory?.Invoke(sp) ?? sp.GetRequiredService<MySqlDataSource>())
             {
-                DataSource = dataSourceFactory?.Invoke(sp) ?? sp.GetRequiredService<MySqlDataSource>(),
                 CommandText = healthQuery,
                 Configure = configure,
             }),
@@ -74,7 +73,13 @@ public static class MySqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddMySql(_ => connectionString, healthQuery, configure, name, failureStatus, tags, timeout);
+        Guard.ThrowIfNull(connectionString, throwOnEmptyString: true);
+
+        return builder.AddMySql(new(connectionString)
+        {
+            CommandText = healthQuery,
+            Configure = configure
+        }, name, failureStatus, tags, timeout);
     }
 
     /// <summary>
@@ -106,16 +111,11 @@ public static class MySqlHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
+            sp => new MySqlHealthCheck(new(connectionStringFactory(sp))
             {
-                var options = new MySqlHealthCheckOptions
-                {
-                    ConnectionString = connectionStringFactory(sp),
-                    CommandText = healthQuery,
-                    Configure = configure,
-                };
-                return new MySqlHealthCheck(options);
-            },
+                CommandText = healthQuery,
+                Configure = configure,
+            }),
             failureStatus,
             tags,
             timeout));

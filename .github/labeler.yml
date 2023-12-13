@@ -141,3 +141,6 @@ UI:
 
 uris:
   - src/HealthChecks.Uris/**/*
+
+hazelcast:
+  - src/HealthChecks.Hazelcast/**/*

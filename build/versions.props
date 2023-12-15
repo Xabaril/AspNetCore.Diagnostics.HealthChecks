@@ -68,6 +68,7 @@
     <HealthCheckUISQLiteStorage>8.0.0</HealthCheckUISQLiteStorage>
     <HealthCheckUISqlServerStorage>8.0.0</HealthCheckUISqlServerStorage>
     <HealthCheckUri>8.0.0</HealthCheckUri>
+    <HealthCheckKeyVaultSecrets>8.0.0</HealthCheckKeyVaultSecrets>
   </PropertyGroup>
 
 </Project>

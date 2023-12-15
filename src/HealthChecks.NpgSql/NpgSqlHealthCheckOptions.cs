@@ -65,8 +65,6 @@ public class NpgSqlHealthCheckOptions
     /// </remarks>
     public NpgsqlDataSource? DataSource { get; internal set; }
 
-    internal bool TriedToResolveFromDI;
-
     /// <summary>
     /// The query to be executed.
     /// </summary>

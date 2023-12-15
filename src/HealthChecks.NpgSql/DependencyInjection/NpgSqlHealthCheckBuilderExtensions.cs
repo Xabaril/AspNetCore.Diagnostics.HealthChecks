@@ -84,8 +84,6 @@ public static class NpgSqlHealthCheckBuilderExtensions
             {
                 options.ConnectionString ??= Guard.ThrowIfNull(connectionStringFactory.Invoke(sp), throwOnEmptyString: true, paramName: nameof(connectionStringFactory));
 
-                ResolveDataSourceIfPossible(options, sp);
-
                 return new NpgSqlHealthCheck(options);
             },
             failureStatus,
@@ -170,29 +168,9 @@ public static class NpgSqlHealthCheckBuilderExtensions
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
-            {
-                ResolveDataSourceIfPossible(options, sp);
-
-                return new NpgSqlHealthCheck(options);
-            },
+            _ => new NpgSqlHealthCheck(options),
             failureStatus,
             tags,
             timeout));
-    }
-
-    private static void ResolveDataSourceIfPossible(NpgSqlHealthCheckOptions options, IServiceProvider sp)
-    {
-        if (options.DataSource is null && !options.TriedToResolveFromDI)
-        {
-            NpgsqlDataSource? fromDi = sp.GetService<NpgsqlDataSource>();
-            if (fromDi?.ConnectionString == options.ConnectionString)
-            {
-                // When it's possible, we reuse the DataSource registered in the DI.
-                // We do that to achieve best performance and avoid issues like https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993
-                options.DataSource = fromDi;
-            }
-            options.TriedToResolveFromDI = true; // save the answer, so we don't do it more than once
-        }
     }
 }

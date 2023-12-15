@@ -64,7 +64,7 @@
     <HealthCheckUICore>8.0.0</HealthCheckUICore>
     <HealthCheckUIData>8.0.0</HealthCheckUIData>
     <HealthCheckUIInMemoryStorage>8.0.0</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>8.0.0</HealthCheckUIMySqlStorage>
+    <HealthCheckUIMySqlStorage>8.0.0-preview1</HealthCheckUIMySqlStorage>
     <HealthCheckUISQLiteStorage>8.0.0</HealthCheckUISQLiteStorage>
     <HealthCheckUISqlServerStorage>8.0.0</HealthCheckUISqlServerStorage>
     <HealthCheckUri>8.0.0</HealthCheckUri>

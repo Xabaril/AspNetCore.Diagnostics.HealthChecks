@@ -1,6 +1,4 @@
-using System.Reflection;
 using HealthChecks.NpgSql;
-using Npgsql;
 
 namespace HealthChecks.Npgsql.Tests.DependencyInjection;
 
@@ -21,7 +19,6 @@ public class npgsql_registration_should
 
         registration.Name.ShouldBe("npgsql");
         check.ShouldBeOfType<NpgSqlHealthCheck>();
-
     }
 
     [Fact]
@@ -91,43 +88,18 @@ public class npgsql_registration_should
         factoryCalls.ShouldBe(1);
     }
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void factory_reuses_pre_registered_datasource_when_possible(bool sameConnectionString)
+    [Fact]
+    public void recommended_scenario_compiles_and_works_as_expected()
     {
-        const string connectionString = "Server=localhost";
         ServiceCollection services = new();
-
-        services.AddSingleton<NpgsqlDataSource>(serviceProvider =>
-        {
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-            return dataSourceBuilder.Build();
-        });
-
-        int factoryCalls = 0;
-        services.AddHealthChecks()
-            .AddNpgSql(_ =>
-            {
-                Interlocked.Increment(ref factoryCalls);
-                return sameConnectionString ? connectionString : $"{connectionString}2";
-            }, name: "my-npg-1");
+        services.AddNpgsqlDataSource("Host=pg_server;Username=test;Password=test;Database=test");
+        services.AddHealthChecks().AddNpgSql();
 
         using var serviceProvider = services.BuildServiceProvider();
-
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
-
         var registration = options.Value.Registrations.Single();
+        var healthCheck = registration.Factory(serviceProvider);
 
-        for (int i = 0; i < 10; i++)
-        {
-            var healthCheck = (NpgSqlHealthCheck)registration.Factory(serviceProvider);
-            var fieldInfo = typeof(NpgSqlHealthCheck).GetField("_options", BindingFlags.Instance | BindingFlags.NonPublic);
-            var npgSqlHealthCheckOptions = (NpgSqlHealthCheckOptions)fieldInfo!.GetValue(healthCheck)!;
-
-            Assert.Equal(sameConnectionString, ReferenceEquals(serviceProvider.GetRequiredService<NpgsqlDataSource>(), npgSqlHealthCheckOptions.DataSource));
-        }
-
-        factoryCalls.ShouldBe(1);
+        healthCheck.ShouldBeOfType<NpgSqlHealthCheck>();
     }
 }

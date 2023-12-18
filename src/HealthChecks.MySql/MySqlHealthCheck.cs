@@ -12,8 +12,7 @@ public class MySqlHealthCheck : IHealthCheck
 
     public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options);
-        _options = options;
+        _options = Guard.ThrowIfNull(options);
     }
 
     /// <inheritdoc />

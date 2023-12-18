@@ -12,12 +12,7 @@ public class MySqlHealthCheck : IHealthCheck
 
     public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options);
-        if (options.DataSource is null && options.ConnectionString is null)
-            throw new InvalidOperationException("One of options.DataSource or options.ConnectionString must be specified.");
-        if (options.DataSource is not null && options.ConnectionString is not null)
-            throw new InvalidOperationException("Only one of options.DataSource or options.ConnectionString must be specified.");
-        _options = options;
+        _options = Guard.ThrowIfNull(options);
     }
 
     /// <inheritdoc />

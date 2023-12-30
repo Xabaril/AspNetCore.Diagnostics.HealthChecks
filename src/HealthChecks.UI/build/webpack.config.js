@@ -24,8 +24,8 @@ module.exports = {
             // all files with a `.ts`, `.cts`, `.mts` or `.tsx` extension will be handled by `ts-loader`
             { test: /\.tsx?$/, loader: "ts-loader" },
             {
-                loader: 'url-loader',
-                test: /\.(png|jpg|gif|svg|woff2)$/
+                test: /\.(png|jpg|gif|svg|woff2)$/,
+                type: 'asset/inline'
             },
             {
                 test: /\.css$/i,

@@ -21,7 +21,7 @@ public class signalr_healthcheck_should
                     () => new HubConnectionBuilder()
                             .WithUrl("http://localhost/test", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                             .Build(),
-                    tags: new string[] { "signalr" });
+                    tags: ["signalr"]);
             })
             .Configure(app =>
             {
@@ -59,7 +59,7 @@ public class signalr_healthcheck_should
                     () => new HubConnectionBuilder()
                             .WithUrl("http://localhost/badhub", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                             .Build(),
-                    tags: new string[] { "signalr" });
+                    tags: ["signalr"]);
             })
             .Configure(app =>
             {

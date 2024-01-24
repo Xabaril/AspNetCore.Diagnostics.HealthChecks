@@ -19,7 +19,7 @@ public class disk_storage_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: new string[] { "diskstorage" });
+                .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: ["diskstorage"]);
             })
             .Configure(app =>
             {
@@ -47,7 +47,7 @@ public class disk_storage_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: new string[] { "diskstorage" });
+                .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: ["diskstorage"]);
             })
             .Configure(app =>
             {
@@ -70,7 +70,7 @@ public class disk_storage_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddDiskStorageHealthCheck(setup => setup.AddDrive("nonexistingdisk", 104857600), tags: new string[] { "diskstorage" });
+                .AddDiskStorageHealthCheck(setup => setup.AddDrive("nonexistingdisk", 104857600), tags: ["diskstorage"]);
             })
             .Configure(app =>
             {

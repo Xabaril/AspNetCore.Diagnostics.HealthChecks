@@ -11,7 +11,7 @@ public class eventstore_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("esdb://localhost:2113?tls=false", tags: new[] { "eventstore" });
+                    .AddEventStore("esdb://localhost:2113?tls=false", tags: ["eventstore"]);
             })
             .Configure(app =>
             {
@@ -35,7 +35,7 @@ public class eventstore_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("esdb://localhost:2113", tags: new[] { "eventstore" });
+                    .AddEventStore("esdb://localhost:2113", tags: ["eventstore"]);
             })
             .Configure(app =>
             {
@@ -59,7 +59,7 @@ public class eventstore_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("esdb://nonexistingdomain:2113?tls=false", tags: new[] { "eventstore" });
+                    .AddEventStore("esdb://nonexistingdomain:2113?tls=false", tags: ["eventstore"]);
             })
             .Configure(app =>
             {

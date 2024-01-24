@@ -13,7 +13,7 @@ internal class DatadogPublisher : IHealthCheckPublisher
     {
         _dogStatsd = Guard.ThrowIfNull(dogStatsd);
         _serviceCheckName = Guard.ThrowIfNull(serviceCheckName);
-        _defaultTags = defaultTags ?? Array.Empty<string>();
+        _defaultTags = defaultTags ?? [];
     }
 
     public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -43,10 +43,7 @@ internal class DatadogPublisher : IHealthCheckPublisher
                     break;
             }
 
-            var tags = _defaultTags.Concat(new[]
-            {
-                $"check:{key}"
-            }).ToArray();
+            var tags = _defaultTags.Concat([$"check:{key}"]).ToArray();
 
             var message = entry.Description ?? entry.Status.ToString();
             _dogStatsd.ServiceCheck(_serviceCheckName, dataDogStatus, null, Environment.MachineName, tags, message);

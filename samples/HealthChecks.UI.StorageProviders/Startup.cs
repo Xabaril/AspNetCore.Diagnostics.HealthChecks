@@ -19,7 +19,7 @@ public class Startup
         services
             .AddRouting()
             .AddHealthChecks()
-            .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 200, tags: new[] { "memory" })
+            .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 200, tags: ["memory"])
             .AddCheck(name: "random", () => DateTime.UtcNow.Second % 2 == 0 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy())
             .Services
             .AddHealthChecksUI(setup =>

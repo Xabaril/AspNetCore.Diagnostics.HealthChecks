@@ -12,7 +12,7 @@ public class eventstore_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: new string[] { "eventstore" });
+                    .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: ["eventstore"]);
             })
             .Configure(app =>
             {
@@ -37,7 +37,7 @@ public class eventstore_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
+                    .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: ["eventstore"]);
             })
             .Configure(app =>
             {
@@ -63,7 +63,7 @@ public class eventstore_healthcheck_should
             {
                 // Existing hostname, incorrect port. If the hostname cannot be reached, CreateRequest will hang.
                 services.AddHealthChecks()
-                .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500", tags: new string[] { "eventstore" });
+                .AddEventStore("ConnectTo=tcp://localhost:1114; UseSslConnection=false; HeartBeatTimeout=500", tags: ["eventstore"]);
             })
             .Configure(app =>
             {

@@ -17,7 +17,7 @@ public class arangodb_healthcheck_should
                      Database = "_system",
                      UserName = "root",
                      Password = "strongArangoDbPassword"
-                 }, tags: new string[] { "arangodb" });
+                 }, tags: ["arangodb"]);
             })
             .Configure(app =>
             {
@@ -47,7 +47,7 @@ public class arangodb_healthcheck_should
                         Database = "_system",
                         UserName = "root",
                         Password = "strongArangoDbPassword"
-                    }, tags: new string[] { "arango" }, name: "1")
+                    }, tags: ["arango"], name: "1")
                     .AddArangoDb(_ => new ArangoDbOptions
                     {
                         HostUri = "http://localhost:8529/",
@@ -55,7 +55,7 @@ public class arangodb_healthcheck_should
                         UserName = "root",
                         Password = "strongArangoDbPassword",
                         IsGenerateJwtTokenBasedOnUserNameAndPassword = true
-                    }, tags: new string[] { "arango" }, name: "2");
+                    }, tags: ["arango"], name: "2");
             })
             .Configure(app =>
             {
@@ -85,7 +85,7 @@ public class arangodb_healthcheck_should
                      Database = "_system",
                      UserName = "root",
                      Password = "invalid password"
-                 }, tags: new string[] { "arango" });
+                 }, tags: ["arango"]);
             })
             .Configure(app =>
             {

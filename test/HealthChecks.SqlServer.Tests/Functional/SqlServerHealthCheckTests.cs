@@ -13,7 +13,7 @@ public class sqlserver_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlServer(connectionString, tags: new string[] { "sqlserver" });
+                .AddSqlServer(connectionString, tags: ["sqlserver"]);
             })
             .Configure(app =>
             {
@@ -37,7 +37,7 @@ public class sqlserver_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlServer("Server=tcp:localhost,1833;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false;Connection Timeout=10", tags: new string[] { "sqlserver" });
+                .AddSqlServer("Server=tcp:localhost,1833;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false;Connection Timeout=10", tags: ["sqlserver"]);
             })
             .Configure(app =>
             {
@@ -63,7 +63,7 @@ public class sqlserver_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlServer(connectionString, healthQuery: "SELECT 1 FROM [NOT_VALID_DB]", tags: new string[] { "sqlserver" });
+                .AddSqlServer(connectionString, healthQuery: "SELECT 1 FROM [NOT_VALID_DB]", tags: ["sqlserver"]);
             })
             .Configure(app =>
             {

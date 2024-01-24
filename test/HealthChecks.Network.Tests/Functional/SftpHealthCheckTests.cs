@@ -19,7 +19,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" }, timeout: TimeSpan.FromSeconds(5));
+                }, tags: ["sftp"], timeout: TimeSpan.FromSeconds(5));
             })
             .Configure(app =>
             {
@@ -50,7 +50,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -83,7 +83,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -117,7 +117,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -151,7 +151,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -182,7 +182,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {

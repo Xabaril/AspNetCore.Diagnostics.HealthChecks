@@ -18,7 +18,7 @@ public class memory_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] { "privatememory" });
+                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
             })
             .Configure(app =>
             {
@@ -43,7 +43,7 @@ public class memory_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] { "privatememory" });
+                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
             })
             .Configure(app =>
             {
@@ -68,7 +68,7 @@ public class memory_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddWorkingSetHealthCheck(maximumMemory, tags: new string[] { "workingset" });
+                    .AddWorkingSetHealthCheck(maximumMemory, tags: ["workingset"]);
             })
             .Configure(app =>
             {
@@ -93,7 +93,7 @@ public class memory_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: new string[] { "privatememory" });
+                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
             })
             .Configure(app =>
             {
@@ -118,7 +118,7 @@ public class memory_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: new string[] { "virtualmemory" });
+                    .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: ["virtualmemory"]);
             })
             .Configure(app =>
             {
@@ -143,7 +143,7 @@ public class memory_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: new string[] { "virtualmemory" });
+                    .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: ["virtualmemory"]);
             })
             .Configure(app =>
             {

@@ -39,10 +39,7 @@ public class SkipOnPlatformTestDiscoverer : IXunitTestCaseDiscoverer
             }
         }
 
-        return new[]
-        {
-            new XunitTestCase(_diagnosticMessageSink, TestMethodDisplay.Method, TestMethodDisplayOptions.All ,testMethod)
-        };
+        return [new XunitTestCase(_diagnosticMessageSink, TestMethodDisplay.Method, TestMethodDisplayOptions.All, testMethod)];
     }
 }
 

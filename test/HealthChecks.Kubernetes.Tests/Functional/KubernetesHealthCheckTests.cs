@@ -17,7 +17,7 @@ public class kubernetes_healthcheck_should
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
-                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: new string[] { "k8s" });
+                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: ["k8s"]);
             })
             .Configure(app =>
             {
@@ -46,7 +46,7 @@ public class kubernetes_healthcheck_should
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
-                    }), tags: new string[] { "k8s" });
+                    }), tags: ["k8s"]);
             })
             .Configure(app =>
             {
@@ -75,7 +75,7 @@ public class kubernetes_healthcheck_should
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
-                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: new string[] { "k8s" });
+                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: ["k8s"]);
             })
             .Configure(app =>
             {

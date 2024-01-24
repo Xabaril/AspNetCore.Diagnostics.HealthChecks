@@ -8,7 +8,7 @@ namespace HealthChecks.RavenDb.Tests.Functional;
 
 public class ravendb_healthcheck_should
 {
-    private readonly string[] _urls = new[] { "http://localhost:9030" };
+    private readonly string[] _urls = ["http://localhost:9030"];
 
     public ravendb_healthcheck_should()
     {
@@ -34,7 +34,7 @@ public class ravendb_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddRavenDB(_ => _.Urls = _urls, tags: new string[] { "ravendb" });
+                    .AddRavenDB(_ => _.Urls = _urls, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -64,7 +64,7 @@ public class ravendb_healthcheck_should
                     {
                         _.Urls = _urls;
                         _.Database = "Demo";
-                    }, tags: new string[] { "ravendb" });
+                    }, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -95,7 +95,7 @@ public class ravendb_healthcheck_should
                         _.Urls = _urls;
                         _.Database = "Demo";
                         _.RequestTimeout = TimeSpan.FromMilliseconds(0.001);
-                    }, tags: new string[] { "ravendb" });
+                    }, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -123,7 +123,7 @@ public class ravendb_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddRavenDB(_ => _.Urls = new string[] { connectionString }, tags: new string[] { "ravendb" });
+                    .AddRavenDB(_ => _.Urls = [connectionString], tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -153,7 +153,7 @@ public class ravendb_healthcheck_should
                     {
                         _.Urls = _urls;
                         _.Database = "ThisDatabaseReallyDoesnExist";
-                    }, tags: new string[] { "ravendb" });
+                    }, tags: ["ravendb"]);
             })
             .Configure(app =>
             {

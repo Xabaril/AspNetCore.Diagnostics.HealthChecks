@@ -7,7 +7,7 @@ public class cloud_firestore_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddCloudFirestore(setup => setup.RequiredCollections = new string[] { });
+            .AddCloudFirestore(setup => setup.RequiredCollections = []);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -23,7 +23,7 @@ public class cloud_firestore_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddCloudFirestore(setup => setup.RequiredCollections = new string[] { }, name: "my-cloud-firestore-group");
+            .AddCloudFirestore(setup => setup.RequiredCollections = [], name: "my-cloud-firestore-group");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

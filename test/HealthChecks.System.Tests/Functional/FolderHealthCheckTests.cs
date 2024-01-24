@@ -11,7 +11,7 @@ public class folder_healthcheck_should
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                   .AddFolder(setup => setup.AddFolder(Directory.GetCurrentDirectory()), tags: new string[] { "folder" });
+                   .AddFolder(setup => setup.AddFolder(Directory.GetCurrentDirectory()), tags: ["folder"]);
            })
            .Configure(app =>
            {
@@ -37,7 +37,7 @@ public class folder_healthcheck_should
                services.AddHealthChecks()
                    .AddFolder(setup =>
                    {
-                   }, tags: new string[] { "folder" });
+                   }, tags: ["folder"]);
            })
            .Configure(app =>
            {
@@ -61,7 +61,7 @@ public class folder_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddFolder(setup => setup.AddFolder($"{Directory.GetCurrentDirectory()}/non-existing-folder"), tags: new string[] { "folder" });
+                    .AddFolder(setup => setup.AddFolder($"{Directory.GetCurrentDirectory()}/non-existing-folder"), tags: ["folder"]);
             })
             .Configure(app =>
             {

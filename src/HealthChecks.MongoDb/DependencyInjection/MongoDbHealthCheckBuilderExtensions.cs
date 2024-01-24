@@ -226,7 +226,7 @@ public static class MongoDbHealthCheckBuilderExtensions
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="mongoClientFactory">A factory to build MongoClient to be used.</param>
 
-    /// <param name="mongoDatabaseName">The Database name to check.</param>
+    /// <param name="mongoDatabaseName">The name of the database to check.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'mongodb' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

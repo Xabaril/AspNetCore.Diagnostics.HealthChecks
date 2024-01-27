@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SurrealDb.Net;
+using SurrealDb.Net.Models.Response;
 
 namespace HealthChecks.SurrealDb;
 
@@ -35,7 +36,22 @@ public class SurrealDbHealthCheck : IHealthCheck
 
             if (!string.IsNullOrWhiteSpace(_options.Query))
             {
-                await client.Query(_options.Query).ConfigureAwait(false);
+                var response = await client.Query(_options.Query).ConfigureAwait(false);
+
+                if (response.HasErrors)
+                {
+                    var error = response.Errors.First();
+                    string errorMessage = error switch
+                    {
+                        SurrealDbErrorResult errorResult => errorResult.Details,
+                        SurrealDbProtocolErrorResult protocolErrorResult => protocolErrorResult.Details ?? protocolErrorResult.Description,
+                        _ => "Unknown error"
+                    };
+
+                    return _options.HealthCheckResultBuilder == null
+                        ? HealthCheckResult.Unhealthy(errorMessage)
+                        : _options.HealthCheckResultBuilder(false);
+                }
             }
 
             return _options.HealthCheckResultBuilder == null

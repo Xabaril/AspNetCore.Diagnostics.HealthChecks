@@ -23,7 +23,7 @@ public class surrealdb_registration_should
     }
 
     [Fact]
-    public void invoke_beforeOpen_when_defined()
+    public async Task invoke_beforeOpen_when_defined()
     {
         var services = new ServiceCollection();
         bool invoked = false;
@@ -42,7 +42,7 @@ public class surrealdb_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        Record.ExceptionAsync(() => check.CheckHealthAsync(new HealthCheckContext())).GetAwaiter().GetResult();
+        await Record.ExceptionAsync(() => check.CheckHealthAsync(new HealthCheckContext()));
         invoked.ShouldBeTrue();
     }
 

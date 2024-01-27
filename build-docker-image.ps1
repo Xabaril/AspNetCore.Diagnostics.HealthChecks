@@ -19,7 +19,7 @@ function Exec
 #Select the UI version from dependencies.props and use it as image version
 
 
-$version = select-xml -Path ${PSScriptRoot}/build/dependencies.props -XPath "/Project/PropertyGroup[contains(@Label,'Health Checks Package Versions')]/HealthCheckUI"
+$version = select-xml -Path ${PSScriptRoot}/build/versions.props -XPath "/Project/PropertyGroup[contains(@Label,'Health Checks Package Versions')]/HealthCheckUI"
 
 $tag = $version.node.InnerXML
 

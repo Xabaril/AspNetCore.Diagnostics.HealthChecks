@@ -7,7 +7,7 @@ namespace ConsoleApp1;
 /// This program tests issue of loading Microsoft.Bcl.AsyncInterfaces assembly on NET6.
 /// See https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1975
 /// </summary>
-internal class Program
+internal static class Program
 {
     private static async Task Main()
     {

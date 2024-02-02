@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <ProjectReference Include="..\..\src\HealthChecks.Azure.Data.Tables\HealthChecks.Azure.Data.Tables.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -14,7 +14,7 @@ internal static class Program
         using var serviceProvider = new ServiceCollection()
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureBlobStorage("BlobEndpoint=https://unit-test.blob.core.windows.net")
+            .AddAzureBlobStorage()
             .Services
             .BuildServiceProvider();
 

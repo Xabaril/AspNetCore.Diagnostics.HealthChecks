@@ -9,22 +9,24 @@ public class AzureServiceBusQueueMessageCountThresholdHealthCheck : AzureService
     private readonly AzureServiceBusQueueMessagesCountThreshold? _activeMessagesThreshold;
     private readonly AzureServiceBusQueueMessagesCountThreshold? _deadLetterMessagesThreshold;
 
-    public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options)
-        : base(options)
+    public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options, ServiceBusClientProvider clientProvider)
+        : base(options, clientProvider)
     {
         _queueName = Guard.ThrowIfNull(options.QueueName);
         _activeMessagesThreshold = options.ActiveMessages;
         _deadLetterMessagesThreshold = options.DeadLetterMessages;
     }
 
-    protected override string ConnectionKey => $"{Prefix}_{_queueName}";
+    public AzureServiceBusQueueMessageCountThresholdHealthCheck(AzureServiceBusQueueMessagesCountThresholdHealthCheckOptions options)
+        : this(options, new ServiceBusClientProvider())
+    { }
 
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            var managementClient = ManagementClientConnections.GetOrAdd(ConnectionKey, CreateManagementClient());
+            var managementClient = ClientCache.GetOrAdd(ConnectionKey, _ => CreateManagementClient());
 
             var properties = await managementClient.GetQueueRuntimePropertiesAsync(_queueName, cancellationToken).ConfigureAwait(false);
 

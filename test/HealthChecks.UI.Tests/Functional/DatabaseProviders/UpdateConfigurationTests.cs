@@ -36,7 +36,7 @@ public class UpdateConfigurationTests
         hostReset.Wait();
 
         var context = host1.Services.GetRequiredService<HealthChecksDb>();
-        var configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
+        var configurations = await context.Configurations.ToListAsync();
 
         configurations[0].Name.ShouldBe(endpointName);
         configurations[0].Uri.ShouldBe(endpointUri);
@@ -46,7 +46,7 @@ public class UpdateConfigurationTests
         hostReset.Wait();
 
         context = host2.Services.GetRequiredService<HealthChecksDb>();
-        configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
+        configurations = await context.Configurations.ToListAsync();
 
         configurations[0].Name.ShouldBe(endpointName);
         configurations[0].Uri.ShouldBe(updatedEndpointUri);

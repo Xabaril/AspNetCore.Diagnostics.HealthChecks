@@ -15,10 +15,10 @@ public class prometheus_response_writer_should
             })
             .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
-        using var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await sut.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
-        var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Healthy);
     }
 
@@ -33,10 +33,10 @@ public class prometheus_response_writer_should
             })
             .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
 
-        using var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await sut.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-        var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
     }
 
@@ -51,10 +51,10 @@ public class prometheus_response_writer_should
             })
             .Configure(app => app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)));
 
-        using var response = await sut.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await sut.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
-        var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldContainCheckAndResult("fake", HealthStatus.Unhealthy);
     }
 }

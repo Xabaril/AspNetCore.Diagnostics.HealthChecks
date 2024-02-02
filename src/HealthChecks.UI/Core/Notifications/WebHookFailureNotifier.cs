@@ -33,12 +33,12 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
 
     public async Task NotifyDown(string name, UIHealthReport report)
     {
-        await NotifyAsync(name, report, isHealthy: false);
+        await NotifyAsync(name, report, isHealthy: false).ConfigureAwait(false);
     }
 
     public async Task NotifyWakeUp(string name)
     {
-        await NotifyAsync(name, null!, isHealthy: true); // TODO: why null! ?
+        await NotifyAsync(name, null!, isHealthy: true).ConfigureAwait(false); // TODO: why null! ?
     }
 
     internal async Task NotifyAsync(string name, UIHealthReport report, bool isHealthy = false)
@@ -46,14 +46,14 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
         string? failure = default;
         string? description = default;
 
-        if (!await IsNotifiedOnWindowTimeAsync(name, isHealthy))
+        if (!await IsNotifiedOnWindowTimeAsync(name, isHealthy).ConfigureAwait(false))
         {
             await SaveNotificationAsync(new HealthCheckFailureNotification()
             {
                 LastNotified = DateTime.UtcNow,
                 HealthCheckName = name,
                 IsUpAndRunning = isHealthy
-            });
+            }).ConfigureAwait(false);
 
             foreach (var webHook in _settings.Webhooks)
             {
@@ -86,7 +86,7 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
                 if (absoluteUri == null)
                     throw new InvalidOperationException("Could not get absolute uri");
 
-                await SendRequestAsync(absoluteUri, webHook.Name, payload);
+                await SendRequestAsync(absoluteUri, webHook.Name, payload).ConfigureAwait(false);
             }
         }
         else
@@ -102,7 +102,8 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
             .Where(lf => lf.HealthCheckName.ToLower() == livenessName.ToLower())
             .OrderByDescending(lf => lf.LastNotified)
             .Take(1)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync()
+            .ConfigureAwait(false);
 #pragma warning restore RCS1155 // Use StringComparison when comparing strings.
 
         return lastNotification != null
@@ -117,9 +118,10 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
         if (notification != null)
         {
             await _db.Failures
-                .AddAsync(notification);
+                .AddAsync(notification)
+                .ConfigureAwait(false);
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 
@@ -131,7 +133,7 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
             {
                 Content = new StringContent(payloadContent, Encoding.UTF8, Keys.DEFAULT_RESPONSE_CONTENT_TYPE)
             };
-            using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError("The webhook notification has not executed successfully for {name} webhook. The error code is {statuscode}.", name, response.StatusCode);

@@ -52,8 +52,7 @@ public class RabbitMQHealthCheck : IHealthCheck
                     factory = new ConnectionFactory
                     {
                         Uri = _options.ConnectionUri,
-                        AutomaticRecoveryEnabled = true,
-                        UseBackgroundThreadsForIO = true
+                        AutomaticRecoveryEnabled = true
                     };
 
                     if (_options.RequestedConnectionTimeout is not null)

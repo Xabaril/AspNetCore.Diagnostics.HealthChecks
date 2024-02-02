@@ -48,7 +48,7 @@ public class ui_api_request_limiting
             .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
             .ToList();
 
-        var responses = await Task.WhenAll(tasks).ConfigureAwait(false);
+        var responses = await Task.WhenAll(tasks);
 
         responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - maxActiveRequests);
         responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(maxActiveRequests);
@@ -95,7 +95,7 @@ public class ui_api_request_limiting
             .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
             .ToList();
 
-        var responses = await Task.WhenAll(tasks).ConfigureAwait(false);
+        var responses = await Task.WhenAll(tasks);
 
         responses.Where(r => r.StatusCode == HttpStatusCode.TooManyRequests).Count().ShouldBe(responses.Length - serverSettings.ApiMaxActiveRequests);
         responses.Where(r => r.StatusCode == HttpStatusCode.OK).Count().ShouldBe(serverSettings.ApiMaxActiveRequests);

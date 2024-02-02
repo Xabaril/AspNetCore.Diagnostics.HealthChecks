@@ -37,7 +37,13 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddNpgSql(_ => connectionString, healthQuery, configure, name, failureStatus, tags, timeout);
+        Guard.ThrowIfNull(connectionString, throwOnEmptyString: true);
+
+        return builder.AddNpgSql(new NpgSqlHealthCheckOptions(connectionString)
+        {
+            CommandText = healthQuery,
+            Configure = configure
+        }, name, failureStatus, tags, timeout);
     }
 
     /// <summary>
@@ -65,14 +71,34 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        return builder.AddNpgSql(sp => new NpgsqlDataSourceBuilder(connectionStringFactory(sp)).Build(), healthQuery, configure, name, failureStatus, tags, timeout);
+        // This instance is captured in lambda closure, so it can be reused (perf)
+        NpgSqlHealthCheckOptions options = new()
+        {
+            CommandText = healthQuery,
+            Configure = configure,
+        };
+
+        return builder.Add(new HealthCheckRegistration(
+            name ?? NAME,
+            sp =>
+            {
+                options.ConnectionString ??= Guard.ThrowIfNull(connectionStringFactory.Invoke(sp), throwOnEmptyString: true, paramName: nameof(connectionStringFactory));
+
+                return new NpgSqlHealthCheck(options);
+            },
+            failureStatus,
+            tags,
+            timeout));
     }
 
     /// <summary>
     /// Add a health check for Postgres databases.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="dbDataSourceFactory">A factory to build the NpgsqlDataSource to use.</param>
+    /// <param name="dbDataSourceFactory">
+    /// An optional factory to obtain <see cref="NpgsqlDataSource" /> instance.
+    /// When not provided, <see cref="NpgsqlDataSource" /> is simply resolved from <see cref="IServiceProvider"/>.
+    /// </param>
     /// <param name="healthQuery">The query to be used in check.</param>
     /// <param name="configure">An optional action to allow additional Npgsql specific configuration.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'npgsql' will be used for the name.</param>
@@ -83,9 +109,13 @@ public static class NpgSqlHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
+    /// <remarks>
+    /// Depending on how the <see cref="NpgsqlDataSource" /> was configured, the connections it hands out may be pooled.
+    /// That is why it should be the exact same <see cref="NpgsqlDataSource" /> that is used by other parts of your app.
+    /// </remarks>
     public static IHealthChecksBuilder AddNpgSql(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, NpgsqlDataSource> dbDataSourceFactory,
+        Func<IServiceProvider, NpgsqlDataSource>? dbDataSourceFactory = null,
         string healthQuery = HEALTH_QUERY,
         Action<NpgsqlConnection>? configure = null,
         string? name = default,
@@ -93,18 +123,19 @@ public static class NpgSqlHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
-        Guard.ThrowIfNull(dbDataSourceFactory);
+        // This instance is captured in lambda closure, so it can be reused (perf)
+        NpgSqlHealthCheckOptions options = new()
+        {
+            CommandText = healthQuery,
+            Configure = configure,
+        };
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
             sp =>
             {
-                var options = new NpgSqlHealthCheckOptions
-                {
-                    DataSource = dbDataSourceFactory(sp),
-                    CommandText = healthQuery,
-                    Configure = configure,
-                };
+                options.DataSource ??= dbDataSourceFactory?.Invoke(sp) ?? sp.GetRequiredService<NpgsqlDataSource>();
+
                 return new NpgSqlHealthCheck(options);
             },
             failureStatus,

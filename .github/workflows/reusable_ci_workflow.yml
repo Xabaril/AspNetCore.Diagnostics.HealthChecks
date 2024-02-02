@@ -1,0 +1,54 @@
+name: Reusable CI workflow
+
+on:
+  workflow_call:
+    inputs:
+      PROJECT_PATH:
+        required: true
+        type: string
+      TEST_PROJECT_PATH:
+        required: true
+        type: string
+      CODECOV_FLAGS:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+      - name: Restore
+        run: |
+          dotnet restore ${{inputs.PROJECT_PATH}} &&
+          dotnet restore ${{inputs.TEST_PROJECT_PATH}}
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ${{inputs.PROJECT_PATH}} || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ${{inputs.TEST_PROJECT_PATH}} || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ${{inputs.PROJECT_PATH}}
+          dotnet build --no-restore ${{inputs.TEST_PROJECT_PATH}}
+      - name: Test
+        run: >
+          dotnet test
+          ${{inputs.TEST_PROJECT_PATH}}
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: ${{inputs.CODECOV_FLAGS}}
+          directory: .coverage

@@ -16,16 +16,16 @@ internal class HealthChecksPushService
 
     public async Task AddAsync(string name, string uri)
     {
-        if (await Get(name) == null)
+        if (await Get(name).ConfigureAwait(false) == null)
         {
             await _db.Configurations.AddAsync(new HealthCheckConfiguration
             {
                 Name = name,
                 Uri = uri,
                 DiscoveryService = "kubernetes"
-            });
+            }).ConfigureAwait(false);
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
 
             _logger.LogInformation("[Push] New service added: {name} with uri: {uri}", name, uri);
         }
@@ -33,12 +33,12 @@ internal class HealthChecksPushService
 
     public async Task RemoveAsync(string name)
     {
-        var endpoint = await Get(name);
+        var endpoint = await Get(name).ConfigureAwait(false);
 
         if (endpoint != null)
         {
             _db.Configurations.Remove(endpoint);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
 
             _logger.LogInformation("[Push] Service removed: {name}", name);
         }
@@ -46,13 +46,13 @@ internal class HealthChecksPushService
 
     public async Task UpdateAsync(string name, string uri)
     {
-        var endpoint = await Get(name);
+        var endpoint = await Get(name).ConfigureAwait(false);
 
         if (endpoint != null)
         {
             endpoint.Uri = uri;
             _db.Configurations.Update(endpoint);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
 
             _logger.LogInformation("[Push] Service updated: {name} with uri {uri}", name, uri);
         }

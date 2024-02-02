@@ -1,0 +1,35 @@
+name: Reusable CD Workflow
+
+on:
+  workflow_call:
+    inputs:
+      BUILD_CONFIG:
+        required: true
+        type: string
+      PROJECT_PATH:
+        required: true
+        type: string
+      PACKAGE_NAME:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+      - name: Restore
+        run: dotnet restore ${{inputs.PROJECT_PATH}}
+      - name: Build
+        run: dotnet build --no-restore ${{inputs.PROJECT_PATH}} -c ${{inputs.BUILD_CONFIG}}
+      - name: Pack
+        run: dotnet pack --no-build ${{inputs.PROJECT_PATH}} -c ${{inputs.BUILD_CONFIG}} -o ./artifacts
+      - name: Publish
+        run: dotnet nuget push ./artifacts/${{inputs.PACKAGE_NAME}}.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate

@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gremlin.Net" Version="3.6.4" />
+    <PackageReference Include="Gremlin.Net" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.20" Condition="'$(TargetFramework)' == 'net6.0'"/>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" Condition="'$(TargetFramework)' != 'net6.0'"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" Condition="'$(TargetFramework)' != 'net6.0'"/>
   </ItemGroup>
 
 </Project>

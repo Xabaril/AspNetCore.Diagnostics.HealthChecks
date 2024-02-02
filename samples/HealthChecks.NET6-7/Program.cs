@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -12,6 +13,7 @@ internal static class Program
     private static async Task Main()
     {
         using var serviceProvider = new ServiceCollection()
+            .AddSingleton(new BlobServiceClient("BlobEndpoint=https://unit-test.blob.core.windows.net"))
             .AddLogging()
             .AddHealthChecks()
             .AddAzureBlobStorage()

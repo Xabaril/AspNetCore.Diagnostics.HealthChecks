@@ -12,7 +12,6 @@
     <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.20" Condition="'$(TargetFramework)' == 'net6.0'"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" Condition="'$(TargetFramework)' == 'net7.0'"/>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" Condition="'$(TargetFramework)' != 'net6.0' and '$(TargetFramework)' != 'net7.0'"/>
   </ItemGroup>
 
 </Project>

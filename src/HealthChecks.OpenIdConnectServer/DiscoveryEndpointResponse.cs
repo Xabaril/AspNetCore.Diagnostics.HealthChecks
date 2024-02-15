@@ -25,17 +25,21 @@ internal class DiscoveryEndpointResponse
     /// <summary>
     /// Validates Discovery response according to the <see href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID specification</see>
     /// </summary>
-    public void ValidateResponse()
+    public void ValidateResponse(bool isDynamicOpenIdProvider = false)
     {
         ValidateValue(Issuer, OidcConstants.ISSUER);
         ValidateValue(AuthorizationEndpoint, OidcConstants.AUTHORIZATION_ENDPOINT);
         ValidateValue(JwksUri, OidcConstants.JWKS_URI);
 
-        ValidateRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
+        if (isDynamicOpenIdProvider)
+        {
+            ValidateRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
 
-        // Specification describes 'token id_token' response type,
-        // but some identity providers (f.e. Identity Server and Azure AD) return 'id_token token'
-        ValidateOneOfRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_COMBINED_RESPONSE_TYPES);
+            // Specification describes 'token id_token' response type,
+            // but some identity providers (f.e. Identity Server and Azure AD) return 'id_token token'
+            ValidateOneOfRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_COMBINED_RESPONSE_TYPES);
+        }
+
         ValidateOneOfRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
         ValidateRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }

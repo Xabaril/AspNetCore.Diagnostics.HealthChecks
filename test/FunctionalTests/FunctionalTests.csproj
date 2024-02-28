@@ -36,6 +36,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.NpgSql\HealthChecks.NpgSql.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Publisher.Prometheus\HealthChecks.Publisher.Prometheus.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Pulsar\HealthChecks.Pulsar.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Rabbitmq\HealthChecks.Rabbitmq.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.Redis\HealthChecks.Redis.csproj" />

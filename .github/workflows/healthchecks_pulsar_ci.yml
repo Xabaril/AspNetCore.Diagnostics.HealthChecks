@@ -1,0 +1,75 @@
+name: HealthChecks Pulsar CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Pulsar/**
+      - test/HealthChecks.Pulsar.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_pulsar_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+      - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Pulsar/**
+      - test/HealthChecks.Pulsar.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_pulsar_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      pulsar:
+        image: apachepulsar/pulsar:latest
+        env:
+          PULSAR_MEM: " -Xms1g -Xmx1g -XX:MaxDirectMemorySize=2g"
+        ports:
+        - 6650:6650
+        options: >-
+          --entrypoint '/bin/bash -c "bin/apply-config-from-env.py conf/standalone.conf && bin/pulsar standalone --no-functions-worker"'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Pulsar/HealthChecks.Pulsar.csproj &&
+          dotnet restore ./test/HealthChecks.Pulsar.Tests/HealthChecks.Pulsar.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Pulsar/HealthChecks.Pulsar.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Pulsar.Tests/HealthChecks.Pulsar.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Pulsar/HealthChecks.Pulsar.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Pulsar.Tests/HealthChecks.Pulsar.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Pulsar.Tests/HealthChecks.Pulsar.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: Pulsar
+          directory: .coverage

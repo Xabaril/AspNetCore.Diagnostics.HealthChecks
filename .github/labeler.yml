@@ -99,6 +99,9 @@ prometheus:
   - src/HealthChecks.Prometheus.Metrics/**/*
   - src/HealthChecks.Publisher.Prometheus/**/*
 
+pulsar:
+  - src/HealthChecks.Pulsar/**/*
+
 applicationinsights:
   - src/HealthChecks.Publisher.ApplicationInsights/**/*
 

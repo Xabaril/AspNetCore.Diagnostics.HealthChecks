@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -305,6 +305,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.EventHubs.Tests", "test\HealthChecks.Azure.Messaging.EventHubs.Tests\HealthChecks.Azure.Messaging.EventHubs.Tests.csproj", "{09160C0F-BB5E-4DF2-AF44-E859E8EDE6BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus.Tests", "test\HealthChecks.AzureServiceBus.Tests\HealthChecks.AzureServiceBus.Tests.csproj", "{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Pulsar", "src\HealthChecks.Pulsar\HealthChecks.Pulsar.csproj", "{15E844A6-9411-42DF-9862-EBC6A9147D2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Pulsar.Tests", "test\HealthChecks.Pulsar.Tests\HealthChecks.Pulsar.Tests.csproj", "{72D9B21B-97A9-4F29-AEBE-A0FC15CC69B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -856,6 +860,14 @@ Global
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E844A6-9411-42DF-9862-EBC6A9147D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E844A6-9411-42DF-9862-EBC6A9147D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E844A6-9411-42DF-9862-EBC6A9147D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E844A6-9411-42DF-9862-EBC6A9147D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72D9B21B-97A9-4F29-AEBE-A0FC15CC69B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72D9B21B-97A9-4F29-AEBE-A0FC15CC69B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72D9B21B-97A9-4F29-AEBE-A0FC15CC69B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72D9B21B-97A9-4F29-AEBE-A0FC15CC69B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -997,6 +1009,8 @@ Global
 		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{09160C0F-BB5E-4DF2-AF44-E859E8EDE6BD} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{15E844A6-9411-42DF-9862-EBC6A9147D2C} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
+		{72D9B21B-97A9-4F29-AEBE-A0FC15CC69B4} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

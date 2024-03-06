@@ -68,6 +68,14 @@ services:
           - ${KAFKA_PORT}:9092
         links:
           - zookeeper
+    pulsar:
+        image: apachepulsar/pulsar:latest
+        environment:
+            PULSAR_MEM: " -Xms1g -Xmx1g -XX:MaxDirectMemorySize=2g"
+        ports:
+            - ${PULSAR_PORT}:6650
+        command: |
+            /bin/bash -c "bin/apply-config-from-env.py conf/standalone.conf && bin/pulsar standalone --no-functions-worker"
     rabbitmq:
         image: rabbitmq
         ports:
@@ -165,7 +173,7 @@ services:
         image: postgres
         ports:
         - "8010:5432"
-        environment: 
+        environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=Password12!
     nats:
@@ -180,7 +188,7 @@ services:
         ports:
          - "8086:8086"
         environment:
-          DOCKER_INFLUXDB_INIT_MODE: setup 
+          DOCKER_INFLUXDB_INIT_MODE: setup
           DOCKER_INFLUXDB_INIT_USERNAME: ci_user
           DOCKER_INFLUXDB_INIT_PASSWORD: password
           DOCKER_INFLUXDB_INIT_ORG: influxdata

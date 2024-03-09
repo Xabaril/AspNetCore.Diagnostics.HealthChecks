@@ -1,0 +1,24 @@
+namespace HealthChecks.CassandraDb
+{
+    public class CassandraDbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public CassandraDbHealthCheck(HealthChecks.CassandraDb.CassandraDbOptions options) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class CassandraDbOptions
+    {
+        public CassandraDbOptions() { }
+        public System.Action<Cassandra.Builder> ConfigureClusterBuilder { get; set; }
+        public string ContactPoint { get; set; }
+        public string Keyspace { get; set; }
+        public string Query { get; set; }
+    }
+}
+namespace HealthChecks.CassandraDb.DependencyInjection
+{
+    public static class CassandraDbHealthCheckBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCassandra(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, HealthChecks.CassandraDb.CassandraDbOptions options, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddCassandra(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string contactPoint, string keyspace, string query = "SELECT now() FROM system.local;", System.Action<Cassandra.Builder>? configureClusterBuilder = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

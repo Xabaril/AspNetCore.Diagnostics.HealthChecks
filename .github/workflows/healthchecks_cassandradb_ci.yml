@@ -29,10 +29,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      CassandraDb:
+      cassandradb:
         image: cassandra:latest
         ports:
           - 9042:9042
+        options: >-
+          --health-cmd "cqlsh -e 'DESC KEYSPACES'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
@@ -55,7 +60,7 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
       - name: Test
-        run: >
+        run: |
           dotnet test
           ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
           --no-restore

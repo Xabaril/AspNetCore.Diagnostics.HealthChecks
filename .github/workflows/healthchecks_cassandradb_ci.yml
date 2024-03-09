@@ -62,9 +62,6 @@ jobs:
             echo "Waiting for Cassandra..."
             sleep 10
           done
-      - name: Validate SELECT on Cassandra
-        run: |
-          docker run --network host -e CQLSH_HOST=localhost -e CQLSH_PORT=9042 cassandra:latest cqlsh -e "SELECT now() FROM system.local;"
       - name: Test
         run: >
           dotnet test

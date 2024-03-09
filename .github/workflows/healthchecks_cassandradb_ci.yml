@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       CassandraDb:
-        image: CassandraDb:latest
+        image: cassandra:latest
         ports:
           - 9042:9042
     steps:

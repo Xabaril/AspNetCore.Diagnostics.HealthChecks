@@ -69,3 +69,4 @@ jobs:
         with:
           flags: CassandraDb
           directory: .coverage
+

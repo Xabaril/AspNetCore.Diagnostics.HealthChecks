@@ -12,6 +12,10 @@ services:
         image: cassandra:latest
         ports:
             - "9042:9042"
+        volumes:
+            - ./build/docker-services/cassandra:/var/lib/cassandra
+        environment:
+            - CASSANDRA_CLUSTER_NAME=cloudinfra
     redis:
         image: redis:alpine
         ports:

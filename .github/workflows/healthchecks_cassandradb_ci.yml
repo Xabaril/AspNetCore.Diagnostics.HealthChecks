@@ -29,19 +29,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     services:
-      cassandradb:
+      CassandraDb:
         image: cassandra:latest
         ports:
           - 9042:9042
-        options: >-
-          --health-cmd "cqlsh -e 'DESC KEYSPACES'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
-      
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -49,38 +42,20 @@ jobs:
             6.0.x
             7.0.x
             8.0.x
-
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
-
       - name: Check formatting
         run: |
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" and exit 1)
-
       - name: Build
         run: |
           dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
-
-      - name: Wait for Cassandra to be ready
-        run: |
-          echo "Waiting for Cassandra to be ready..."
-          timeout=60
-          while ! nc -z localhost 9042; do
-            timeout=$((timeout-1))
-            if [ $timeout -eq 0 ]; then
-              echo "Timeout waiting for Cassandra to start"
-              exit 1
-            fi
-            sleep 1
-          done
-          echo "Cassandra is up and running!"
-
       - name: Test
-        run: |
+        run: >
           dotnet test
           ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
           --no-restore
@@ -89,7 +64,6 @@ jobs:
           --results-directory .coverage
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:

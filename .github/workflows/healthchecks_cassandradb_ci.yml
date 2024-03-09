@@ -33,6 +33,8 @@ jobs:
         image: cassandra:latest
         ports:
           - 9042:9042
+        volumes:
+            - ./build/docker-services/cassandra:/var/lib/cassandra
         environment:
             - CASSANDRA_CLUSTER_NAME=cloudinfra
     steps:
@@ -56,8 +58,6 @@ jobs:
         run: |
           dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
-      - name: Wait for Cassandra
-        run: sleep 45 
       - name: Test
         run: >
           dotnet test

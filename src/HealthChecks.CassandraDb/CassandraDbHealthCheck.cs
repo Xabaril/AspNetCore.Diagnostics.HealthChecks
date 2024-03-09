@@ -30,7 +30,7 @@ public class CassandraDbHealthCheck : IHealthCheck
 
 
             RowSet rows = await session.ExecuteAsync(new SimpleStatement(_options.Query)).ConfigureAwait(false);
-            var result = rows.SingleOrDefault();
+            var result = rows.FirstOrDefault();
 
             return HealthCheckResult.Healthy();
         }

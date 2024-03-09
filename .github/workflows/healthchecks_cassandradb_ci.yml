@@ -42,6 +42,13 @@ jobs:
             6.0.x
             7.0.x
             8.0.x
+       - name: Wait for Cassandra to be ready
+        run: |
+          for i in {1..30}; do
+            nc -zv localhost 9042 && echo "Cassandra is up" && break
+            echo "Waiting for Cassandra..."
+            sleep 10
+          done
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
@@ -54,13 +61,7 @@ jobs:
         run: |
           dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
-      - name: Wait for Cassandra to be ready
-        run: |
-          for i in {1..30}; do
-            nc -zv localhost 9042 && echo "Cassandra is up" && break
-            echo "Waiting for Cassandra..."
-            sleep 10
-          done
+     
       - name: Test
         run: >
           dotnet test

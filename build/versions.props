@@ -21,6 +21,7 @@
     <HealthCheckCloudFirestore>8.0.0</HealthCheckCloudFirestore>
     <HealthCheckConsul>8.0.0</HealthCheckConsul>
     <HealthCheckCosmosDb>8.0.0</HealthCheckCosmosDb>
+	<HealthCheckCassandraDb>8.0.0</HealthCheckCassandraDb>
     <HealthCheckDapr>8.0.0</HealthCheckDapr>
     <HealthCheckDocumentDb>8.0.0</HealthCheckDocumentDb>
     <HealthCheckDynamoDb>8.0.0</HealthCheckDynamoDb>

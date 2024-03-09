@@ -12,7 +12,7 @@ public class CassandraDbHealthCheckTests
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                        .AddCassandra(contactPoint: "127.0.0.1", keyspace: "system", query: "SELECT now() FROM system.local", configureClusterBuilder: builder => builder.WithPort(9042), tags: new string[] { "cassandra" });
+                        .AddCassandra(contactPoint: "cassandradb", keyspace: "system", query: "SELECT now() FROM system.local", configureClusterBuilder: builder => builder.WithPort(9042), tags: new string[] { "cassandra" });
             })
             .Configure(app =>
             {
@@ -58,7 +58,7 @@ public class CassandraDbHealthCheckTests
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                        .AddCassandra(contactPoint: "localhost", keyspace: "system", query: "SELECT invalid_query FROM system.local", configureClusterBuilder: builder => builder.WithPort(9042), tags: new string[] { "cassandra" });
+                        .AddCassandra(contactPoint: "cassandradb", keyspace: "system", query: "SELECT invalid_query FROM system.local", configureClusterBuilder: builder => builder.WithPort(9042), tags: new string[] { "cassandra" });
             })
             .Configure(app =>
             {

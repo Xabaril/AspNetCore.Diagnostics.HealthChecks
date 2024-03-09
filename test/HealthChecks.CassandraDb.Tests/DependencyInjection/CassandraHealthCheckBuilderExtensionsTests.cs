@@ -11,7 +11,7 @@ public class CassandraHealthCheckBuilderExtensionsTests
             .AddHealthChecks()
             .AddCassandra(new CassandraDbOptions
             {
-                ContactPoint = "127.0.0.1",
+                ContactPoint = "cassandradb",
                 Keyspace = "myKeyspace",
                 Query = "SELECT now() FROM system.local;",
                 ConfigureClusterBuilder = builder => builder.WithPort(9042)
@@ -33,7 +33,7 @@ public class CassandraHealthCheckBuilderExtensionsTests
             .AddHealthChecks()
             .AddCassandra(new CassandraDbOptions
             {
-                ContactPoint = "127.0.0.1",
+                ContactPoint = "cassandradb",
                 Keyspace = "testKeyspace",
                 Query = "SELECT now() FROM system.local;",
                 ConfigureClusterBuilder = builder => builder.WithPort(9042)
@@ -54,7 +54,7 @@ public class CassandraHealthCheckBuilderExtensionsTests
 
         Assert.Throws<ArgumentNullException>(() => services.AddHealthChecks().AddCassandra(new CassandraDbOptions
         {
-            ContactPoint = "127.0.0.1",
+            ContactPoint = "cassandradb",
             Keyspace = "myKeyspace",
         }));
     }

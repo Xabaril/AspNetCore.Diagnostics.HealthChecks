@@ -50,6 +50,10 @@ jobs:
         run: |
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
           dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" and exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
       - name: Wait for Cassandra to be ready
         run: |
           for i in {1..30}; do
@@ -57,10 +61,9 @@ jobs:
             echo "Waiting for Cassandra..."
             sleep 10
           done
-      - name: Build
+      - name: Validate SELECT on Cassandra
         run: |
-          dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
-          dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
+          docker run --network host -e CQLSH_HOST=localhost -e CQLSH_PORT=9042 cassandra:latest cqlsh -e "SELECT now() FROM system.local;"
       - name: Test
         run: >
           dotnet test

@@ -37,14 +37,14 @@ public class CassandraHealthCheckBuilderExtensionsTests
                 Keyspace = "testKeyspace",
                 Query = "SELECT now() FROM system.local;",
                 ConfigureClusterBuilder = builder => builder.WithPort(9042)
-            }, name: "my-cassandra-1")
+            }, name: "cassandra")
             .Services;
 
         var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
         var registration = options?.Value.Registrations.First(r => r.Name == "my-cassandra-1");
 
-        registration?.Name.ShouldBe("my-cassandra-1");
+        registration?.Name.ShouldBe("cassandra");
     }
 
     [Fact]

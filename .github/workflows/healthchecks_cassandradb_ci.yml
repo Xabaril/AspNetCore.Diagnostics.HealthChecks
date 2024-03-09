@@ -57,7 +57,7 @@ jobs:
           dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
       - name: Wait for Cassandra
-        run: sleep 30 # Ajuste conforme necessário
+        run: sleep 60 
       - name: Test
         run: >
           dotnet test

@@ -15,7 +15,7 @@ public class CassandraHealthCheckBuilderExtensionsTests
                 Keyspace = "myKeyspace",
                 Query = "SELECT now() FROM system.local;",
                 ConfigureClusterBuilder = builder => builder.WithPort(9042)
-            }, name: "cassandra")
+            }, name: "cassandradb")
             .Services;
 
         var serviceProvider = services.BuildServiceProvider();
@@ -23,7 +23,7 @@ public class CassandraHealthCheckBuilderExtensionsTests
         var healthCheckRegistration = options?.Value.Registrations.First();
         var registration = healthCheckRegistration;
 
-        registration?.Name.ShouldBe("cassandra");
+        registration?.Name.ShouldBe("cassandradb");
     }
 
     [Fact]
@@ -37,14 +37,14 @@ public class CassandraHealthCheckBuilderExtensionsTests
                 Keyspace = "testKeyspace",
                 Query = "SELECT now() FROM system.local;",
                 ConfigureClusterBuilder = builder => builder.WithPort(9042)
-            }, name: "cassandra")
+            }, name: "cassandradb")
             .Services;
 
         var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetService<IOptions<HealthCheckServiceOptions>>();
-        var registration = options?.Value.Registrations.First(r => r.Name == "my-cassandra-1");
+        var registration = options?.Value.Registrations.First(r => r.Name == "cassandradb");
 
-        registration?.Name.ShouldBe("cassandra");
+        registration?.Name.ShouldBe("cassandradb");
     }
 
     [Fact]

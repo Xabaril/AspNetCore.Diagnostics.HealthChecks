@@ -1,4 +1,4 @@
-name: HealthChecks CassandraDbDB CI
+name: HealthChecks CassandraDb CI
 
 on:
   workflow_dispatch:
@@ -48,16 +48,16 @@ jobs:
           dotnet restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
       - name: Check formatting
         run: |
-          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CassandraDbDb/HealthChecks.CassandraDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDbDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" and exit 1)
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" and exit 1)
       - name: Build
         run: |
-          dotnet build --no-restore ./src/HealthChecks.CassandraDbDb/HealthChecks.CassandraDbDb.csproj &&
-          dotnet build --no-restore ./test/HealthChecks.CassandraDbDb.Tests/HealthChecks.CassandraDbDb.Tests.csproj
+          dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
       - name: Test
         run: >
           dotnet test
-          ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDbDb.Tests.csproj
+          ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
           --no-restore
           --no-build
           --collect "XPlat Code Coverage"

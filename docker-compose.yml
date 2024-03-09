@@ -12,11 +12,6 @@ services:
         image: cassandra:latest
         ports:
             - "9042:9042"
-        environment:
-            - CASSANDRA_CLUSTER_NAME=MyCluster
-            - CASSANDRA_DC=DataCenter1
-            - CASSANDRA_RACK=Rack1
-            - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
     redis:
         image: redis:alpine
         ports:

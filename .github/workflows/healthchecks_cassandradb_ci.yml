@@ -35,8 +35,8 @@ jobs:
           - 9042:9042
         options: >-
           --health-cmd "cqlsh -e 'DESC KEYSPACES'"
-          --health-interval 10s
-          --health-timeout 5s
+          --health-interval 20s
+          --health-timeout 10s
           --health-retries 5
     steps:
       - uses: actions/checkout@v3

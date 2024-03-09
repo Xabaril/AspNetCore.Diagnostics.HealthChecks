@@ -34,8 +34,10 @@ jobs:
         ports:
           - 9042:9042
         options: --health-cmd="cqlsh -e 'DESCRIBE KEYSPACES'" --health-interval=10s --health-timeout=5s --health-retries=6
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -43,25 +45,36 @@ jobs:
             6.0.x
             7.0.x
             8.0.x
+
+      - name: Cache NuGet Packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/.*csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
+
       - name: Check formatting
         run: |
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" and exit 1)
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+
       - name: Build
         run: |
           dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
           dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
+
       - name: Wait for Cassandra to be ready
         run: |
-          for i in {1..30}; do
-            nc -zv localhost 9042 && echo "Cassandra is up" && break
+          until docker run --network host -e CQLSH_HOST=localhost -e CQLSH_PORT=9042 cassandra:latest cqlsh -e "SELECT now() FROM system.local;"; do
             echo "Waiting for Cassandra..."
             sleep 10
           done
+
       - name: Test
         run: >
           dotnet test
@@ -72,6 +85,7 @@ jobs:
           --results-directory .coverage
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:

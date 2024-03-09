@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       CassandraDb:
-        image: cassandra
+        image: cassandra:latest
         ports:
           - 9042:9042
     steps:
@@ -67,5 +67,5 @@ jobs:
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:
-          flags: cassandra
+          flags: CassandraDb
           directory: .coverage

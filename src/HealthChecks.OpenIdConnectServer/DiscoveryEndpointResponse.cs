@@ -37,7 +37,7 @@ internal class DiscoveryEndpointResponse
         // but some identity providers (f.e. Identity Server and Azure AD) return 'id_token token'
         ValidateOneOfRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_COMBINED_RESPONSE_TYPES);
         ValidateOneOfRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
-        ValidateRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
+        ValidateOneOfRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
     }
 
     private static void ValidateValue(string value, string metadata)

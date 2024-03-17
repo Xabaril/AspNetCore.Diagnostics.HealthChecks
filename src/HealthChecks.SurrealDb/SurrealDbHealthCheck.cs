@@ -36,7 +36,7 @@ public class SurrealDbHealthCheck : IHealthCheck
 
             if (!string.IsNullOrWhiteSpace(_options.Query))
             {
-                var response = await client.Query(_options.Query).ConfigureAwait(false);
+                var response = await client.RawQuery(_options.Query, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 if (response.HasErrors)
                 {

@@ -8,16 +8,24 @@ public class IdSvrHealthCheck : IHealthCheck
 {
     private readonly Func<HttpClient> _httpClientFactory;
     private readonly string _discoverConfigurationSegment;
+    private readonly string[]? _requiredAlgorithms;
 
     public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
-        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT)
+        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT, OidcConstants.REQUIRED_ALGORITHMS)
     {
     }
-
     public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment)
     {
         _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         _discoverConfigurationSegment = discoverConfigurationSegment;
+        _requiredAlgorithms = null;
+    }
+
+    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment, string[] requiredAlgorithms)
+    {
+        _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
+        _discoverConfigurationSegment = discoverConfigurationSegment;
+        _requiredAlgorithms = requiredAlgorithms;
     }
 
     /// <inheritdoc />
@@ -39,7 +47,7 @@ public class IdSvrHealthCheck : IHealthCheck
                    .ConfigureAwait(false)
                ?? throw new ArgumentException("Could not deserialize to discovery endpoint response!");
 
-            discoveryResponse.ValidateResponse();
+            discoveryResponse.ValidateResponse(_requiredAlgorithms);
 
             return HealthCheckResult.Healthy();
         }

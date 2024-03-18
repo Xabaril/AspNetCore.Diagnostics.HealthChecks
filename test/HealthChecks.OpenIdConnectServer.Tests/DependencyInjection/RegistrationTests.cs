@@ -66,4 +66,36 @@ public class idsvr_registration_should
         registration.Name.ShouldBe("my-idsvr-group");
         check.ShouldBeOfType<IdSvrHealthCheck>();
     }
+    [Fact]
+    public void add_health_check_when_properly_configured_with_requiredSigningAlgorithms()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddIdentityServer(new Uri("http://myidsvr"), requiredSigningAlgorithms: ["RS256"]);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("idsvr");
+        check.ShouldBeOfType<IdSvrHealthCheck>();
+    }
+    [Fact]
+    public void add_health_check_when_properly_configured_with_uri_provider_and_requiredSigningAlgorithms()
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddIdentityServer(sp => new Uri("http://myidsvr"), requiredSigningAlgorithms: ["RS256"]);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("idsvr");
+        check.ShouldBeOfType<IdSvrHealthCheck>();
+    }
 }

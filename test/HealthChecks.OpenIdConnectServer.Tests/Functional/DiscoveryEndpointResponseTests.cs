@@ -132,6 +132,28 @@ public class discovery_endpoint_response_should
             .Message.ShouldBe($"Invalid discovery response - 'id_token_signing_alg_values_supported' must be one of the following values: {string.Join(",", OidcConstants.REQUIRED_ALGORITHMS)}!");
     }
 
+    [Fact]
+    public void be_invalid_when_custom_required_id_token_signing_alg_values_supported_is_wrong()
+    {
+        string[] requiredSigningAlgorithms = { "ES512" };
+
+        var response = new DiscoveryEndpointResponse
+        {
+            Issuer = RandomString,
+            AuthorizationEndpoint = RandomString,
+            JwksUri = RandomString,
+            ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
+            SubjectTypesSupported = OidcConstants.REQUIRED_SUBJECT_TYPES,
+            SigningAlgorithmsSupported = new[] { "RS256" },
+        };
+
+        Action validate = () => response.ValidateResponse(requiredSigningAlgorithms);
+
+        validate
+            .ShouldThrow<ArgumentException>()
+            .Message.ShouldBe($"Invalid discovery response - 'id_token_signing_alg_values_supported' must be one of the following values: {string.Join(",", requiredSigningAlgorithms)}!");
+    }
+
     [Theory]
     [InlineData("RS256")]
     [InlineData("RS512")]
@@ -148,6 +170,26 @@ public class discovery_endpoint_response_should
         };
 
         Action validate = () => response.ValidateResponse();
+
+        validate.ShouldNotThrow();
+    }
+
+    [Fact]
+    public void be_valid_when_custom_required_id_token_signing_alg_value_is_provided()
+    {
+        string[] requiredSigningAlgorithms = { "ES512" };
+
+        var response = new DiscoveryEndpointResponse
+        {
+            Issuer = RandomString,
+            AuthorizationEndpoint = RandomString,
+            JwksUri = RandomString,
+            ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
+            SubjectTypesSupported = OidcConstants.REQUIRED_SUBJECT_TYPES,
+            SigningAlgorithmsSupported = new[] { "ES512" },
+        };
+
+        Action validate = () => response.ValidateResponse(requiredSigningAlgorithms);
 
         validate.ShouldNotThrow();
     }

@@ -25,7 +25,7 @@ internal class DiscoveryEndpointResponse
     /// <summary>
     /// Validates Discovery response according to the <see href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID specification</see>
     /// </summary>
-    public void ValidateResponse()
+    public void ValidateResponse(string[]? requiredAlgorithms = null)
     {
         ValidateValue(Issuer, OidcConstants.ISSUER);
         ValidateValue(AuthorizationEndpoint, OidcConstants.AUTHORIZATION_ENDPOINT);
@@ -37,7 +37,7 @@ internal class DiscoveryEndpointResponse
         // but some identity providers (f.e. Identity Server and Azure AD) return 'id_token token'
         ValidateOneOfRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_COMBINED_RESPONSE_TYPES);
         ValidateOneOfRequiredValues(SubjectTypesSupported, OidcConstants.SUBJECT_TYPES_SUPPORTED, OidcConstants.REQUIRED_SUBJECT_TYPES);
-        ValidateOneOfRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, OidcConstants.REQUIRED_ALGORITHMS);
+        ValidateOneOfRequiredValues(SigningAlgorithmsSupported, OidcConstants.ALGORITHMS_SUPPORTED, requiredAlgorithms ?? OidcConstants.REQUIRED_ALGORITHMS);
     }
 
     private static void ValidateValue(string value, string metadata)

@@ -38,7 +38,7 @@ void Configure(IHealthChecksBuilder builder)
             ApplicationRegion = Regions.EastUS2,
         }));
     builder.AddHealthChecks().AddAzureCosmosDB(
-        optionsFactory: sp => new CosmosDbHealthCheckOptions()
+        optionsFactory: sp => new AzureCosmosDbHealthCheckOptions()
         {
             DatabaseId = "demo"
         });

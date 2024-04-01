@@ -1,0 +1,10 @@
+<Project>
+
+  <Import Project="..\Directory.Build.props" />
+
+  <PropertyGroup>
+    <DefaultNetCoreApp>net6.0</DefaultNetCoreApp>
+    <DefaultLibraryTargetFrameworks>$(DefaultNetCoreApp);netstandard2.0</DefaultLibraryTargetFrameworks>
+  </PropertyGroup>
+
+</Project>

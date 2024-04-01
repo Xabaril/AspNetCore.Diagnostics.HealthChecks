@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Beat;System;Ping;Disk Storage</PackageTags>
     <Description>HealthChecks.System is the system health check package.</Description>
     <VersionPrefix>$(HealthCheckSystem)</VersionPrefix>

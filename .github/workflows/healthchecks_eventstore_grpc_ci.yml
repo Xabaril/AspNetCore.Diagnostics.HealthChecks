@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       eventstore:
-        image: eventstore/eventstore
+        image: eventstore/eventstore:release-v5
         ports:
           - "1113:1113"
           - "2113:2113"

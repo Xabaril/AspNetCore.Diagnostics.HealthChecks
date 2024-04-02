@@ -218,6 +218,9 @@ public static class SystemHealthCheckBuilderExtensions
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
+#if NET6_0_OR_GREATER
+    [global::System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
     public static IHealthChecksBuilder AddWindowsServiceHealthCheck(
         this IHealthChecksBuilder builder,
         string serviceName,

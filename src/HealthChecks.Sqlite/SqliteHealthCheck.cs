@@ -29,7 +29,7 @@ public class SqliteHealthCheck : IHealthCheck
 
             using var command = connection.CreateCommand();
             command.CommandText = _options.CommandText;
-            object result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+            object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
             return _options.HealthCheckResultBuilder == null
                 ? HealthCheckResult.Healthy()

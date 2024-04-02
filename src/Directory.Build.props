@@ -1,10 +1,37 @@
 <Project>
 
   <Import Project="..\Directory.Build.props" />
+  
+  <PropertyGroup>
+    <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
+    <PackageIcon>icon.png</PackageIcon>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
+    <Authors>Xabaril Contributors</Authors>
+    <Company>Xabaril</Company>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
+    <NuGetAuditLevel>critical</NuGetAuditLevel> <!-- TODO: remove-->
+  </PropertyGroup>
 
   <PropertyGroup>
     <DefaultNetCoreApp>net6.0</DefaultNetCoreApp>
     <DefaultLibraryTargetFrameworks>$(DefaultNetCoreApp);netstandard2.0</DefaultLibraryTargetFrameworks>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' AND !$(MSBuildProjectName.StartsWith('HealthChecks.UI'))">
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)../build/strongNameKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="\" />
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" Condition="'$(SignAssembly)' != 'true'"/>
+  </ItemGroup>
 
 </Project>

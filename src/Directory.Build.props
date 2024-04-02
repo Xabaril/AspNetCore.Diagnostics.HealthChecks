@@ -14,9 +14,7 @@
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
-    <NoWarn>$(NoWarn);1591;IDISP013;AD0001;</NoWarn> <!--TODO: temporary solution, remove AD0001 after https://github.com/dotnet/aspnetcore/issues/50836 fixed-->
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
     <NuGetAuditLevel>critical</NuGetAuditLevel> <!-- TODO: remove-->
   </PropertyGroup>

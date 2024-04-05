@@ -48,6 +48,7 @@
     <HealthCheckPublisherDatadog>8.0.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>8.0.0</HealthCheckPublisherPrometheus>
     <HealthCheckPublisherSeq>8.0.0</HealthCheckPublisherSeq>
+    <HealthCheckQdrant>8.0.0</HealthCheckQdrant>
     <HealthCheckRabbitMQ>8.0.0</HealthCheckRabbitMQ>
     <HealthCheckRavenDB>8.0.0</HealthCheckRavenDB>
     <HealthCheckRedis>8.0.0</HealthCheckRedis>

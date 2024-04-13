@@ -270,9 +270,9 @@ app.UseHealthChecksPrometheusExporter("/my-health-metrics", options => options.R
 
 [UI Changelog](./doc/ui-changelog.md)
 
-The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks uris.
+The project HealthChecks.UI is a minimal UI interface that stores and shows the health checks results from the configured HealthChecks URIs.
 
-For UI we provide the following packages:
+For UI, we provide the following packages:
 
 | Package   | Downloads                                                                                                                                       | NuGet Latest | Issues | Notes |
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------ | ------|
@@ -307,15 +307,15 @@ public class Startup
 
 This automatically registers a new interface on **/healthchecks-ui** where the SPA will be served.
 
-> Optionally, `MapHealthChecksUI` can be configured to serve its health api, webhooks api and the front-end resources in
-> different endpoints using the `MapHealthChecksUI(setup => { })` method overload. Default configured urls for this endpoints
+> Optionally, `MapHealthChecksUI` can be configured to serve its health API, webhooks API and the front-end resources in
+> different endpoints using the `MapHealthChecksUI(setup => { })` method overload. Default configured URLs for these endpoints
 > can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
 **Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend SPA to receive the result
 of all processed checks. The health reports are collected by a background hosted service and the API endpoint served at /healthchecks-api by
-default is the url that the SPA queries.
+default is the URL that the SPA queries.
 
-Do not confuse this UI api endpoint with the endpoints we have to configure to declare the target apis to be checked on the UI project in
+Do not confuse this UI API endpoint with the endpoints we have to configure to declare the target APIs to be checked on the UI project in
 the [appsettings HealthChecks configuration section](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/samples/HealthChecks.UI.Sample/appsettings.json)
 
 When we target applications to be tested and shown on the UI interface, those endpoints have to register the `UIResponseWriter` that is present
@@ -427,8 +427,8 @@ By clicking details button in the healthcheck row you can preview the health sta
 
 **Note**: HealthChecks UI saves an execution history entry in the database whenever a HealthCheck status changes from Healthy to Unhealthy and viceversa.
 
-This information is displayed in the status history timeline but we do not perform purge or cleanup tasks in users databases.
-In order to limit the maximum history entries that are sent by the UI Api middleware to the frontend you can do a database cleanup or set the maximum history entries served by endpoint using:
+This information is displayed in the status history timeline, but we do not perform purge or cleanup tasks in users databases.
+In order to limit the maximum history entries that are sent by the UI API middleware to the frontend, you can do a database cleanup or set the maximum history entries served by endpoint using:
 
 ```csharp
 services.AddHealthChecksUI(setup =>
@@ -442,8 +442,8 @@ services.AddHealthChecksUI(setup =>
 
 ### Configuration
 
-By default HealthChecks returns a simple Status Code (200 or 503) without the HealthReport data. If you want that
-HealthCheck-UI shows the HealthReport data from your HealthCheck you can enable it adding an specific `ResponseWriter`.
+By default, HealthChecks return a simple Status Code (200 or 503) without the HealthReport data. If you want the
+HealthCheck-UI to show the HealthReport data from your HealthCheck, you can enable it by adding a specific `ResponseWriter`.
 
 ```csharp
 app
@@ -460,7 +460,7 @@ app
 
 > _WriteHealthCheckUIResponse_ is defined on HealthChecks.UI.Client nuget package.
 
-To show these HealthChecks in HealthCheck-UI they have to be configured through the **HealthCheck-UI** settings.
+To show these HealthChecks in HealthCheck-UI, they have to be configured through the **HealthCheck-UI** settings.
 
 You can configure these Healthchecks and webhooks by using `IConfiguration` providers (appsettings, user secrets, env variables) or the `AddHealthChecksUI(setupSettings: setup => { })` method can be used too.
 
@@ -502,7 +502,7 @@ services
     .AddSqlServer("connectionString");
 ```
 
-**Note**: The previous configuration section was HealthChecks-UI, but due to incompatibilies with Azure Web App environment variables the section has been moved to HealthChecksUI. The UI is retro compatible and it will check the new section first, and fallback to the old section if the new section has not been declared.
+**Note**: The previous configuration section was HealthChecks-UI, but due to incompatibilies with Azure Web App environment variables, the section has been moved to HealthChecksUI. The UI is retro compatible and it will check the new section first, and fallback to the old section if the new section has not been declared.
 
     1.- HealthChecks: The collection of health checks uris to evaluate.
     2.- EvaluationTimeInSeconds: Number of elapsed seconds between health checks.
@@ -532,15 +532,15 @@ services
 }
 ```
 
-### Using relative urls in Health Checks and Webhooks configurations (UI 3.0.5 onwards)
+### Using relative URLs in Health Checks and Webhooks configurations (UI 3.0.5 onwards)
 
-If you are configuring the UI in the same process where the HealthChecks and Webhooks are listening, from version 3.0.5 onwards the UI can use relative urls
+If you are configuring the UI in the same process where the HealthChecks and Webhooks are listening, from version 3.0.5 onwards the UI can use relative URLs,
 and it will automatically discover the listening endpoints by using server `IServerAddressesFeature`.
 
 Sample:
 
 ```csharp
-//Configuration sample with relative url health checks and webhooks
+//Configuration sample with relative URL health checks and webhooks
 services
     .AddHealthChecksUI(setupSettings: setup =>
     {
@@ -551,7 +551,7 @@ services
     .AddSqlServer("connectionString");
 ```
 
-You can also use relative urls when using `IConfiguration` providers like appsettings.json.
+You can also use relative URLs when using `IConfiguration` providers like appsettings.json.
 
 ### Webhooks and Failure Notifications
 

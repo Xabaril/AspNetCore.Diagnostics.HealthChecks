@@ -308,7 +308,7 @@ public class Startup
 This automatically registers a new interface on **/healthchecks-ui** where the SPA will be served.
 
 > Optionally, `MapHealthChecksUI` can be configured to serve its health API, webhooks API and the front-end resources in
-> different endpoints using the `MapHealthChecksUI(setup => { })` method overload. Default configured URLs for these endpoints
+> different endpoints using the `MapHealthChecksUI(setup => { })` method overload. The default configured URLs for these endpoints
 > can be found [here](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/src/HealthChecks.UI/Configuration/Options.cs)
 
 **Important note:** It is important to understand that the API endpoint that the UI serves is used by the frontend SPA to receive the result
@@ -421,13 +421,13 @@ Or you can use `IConfiguration` providers, like json file or environment variabl
 
 ### Health status history timeline
 
-By clicking details button in the healthcheck row you can preview the health status history timeline:
+By clicking details button in the healthcheck row, you can preview the health status history timeline:
 
 ![Timeline](./doc/images/timeline.png)
 
 **Note**: HealthChecks UI saves an execution history entry in the database whenever a HealthCheck status changes from Healthy to Unhealthy and viceversa.
 
-This information is displayed in the status history timeline, but we do not perform purge or cleanup tasks in users databases.
+This information is displayed in the status history timeline, but we do not perform purge or cleanup tasks in users' databases.
 In order to limit the maximum history entries that are sent by the UI API middleware to the frontend, you can do a database cleanup or set the maximum history entries served by endpoint using:
 
 ```csharp

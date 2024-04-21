@@ -29,7 +29,7 @@ public class Startup
             //.AddRabbitMQ(rabbitConnectionString: "amqp://localhost:6672", name: "rabbit2")
             //.AddSqlServer(connectionString: Configuration["Data:ConnectionStrings:Sample"])
             .AddCheck<RandomHealthCheck>("random")
-            //.AddIdentityServer(new Uri("http://localhost:6060"))
+            //.AddOpenIdConnectServer(new Uri("http://localhost:6060"))
             //.AddAzureServiceBusQueue("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=5RdimhjY8yfmnjr5L9u5Cf0pCFkbIM7u0HruJuhjlu8=", "que1")
             //.AddAzureServiceBusTopic("Endpoint=sb://unaidemo.servicebus.windows.net/;SharedAccessKeyName=policy;SharedAccessKey=AQhdhXwnkzDO4Os0abQV7f/kB6esTfz2eFERMYKMsKk=", "to1")
             .AddApplicationInsightsPublisher(saveDetailedReport: true);

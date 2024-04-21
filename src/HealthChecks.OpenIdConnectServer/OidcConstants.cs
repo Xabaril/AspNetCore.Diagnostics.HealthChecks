@@ -1,4 +1,4 @@
-namespace HealthChecks.IdSvr;
+namespace HealthChecks.OpenIdConnectServer;
 
 internal class OidcConstants
 {

@@ -6,9 +6,9 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
-      - test/HealthChecks.IdSvr.Tests/**
+      - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
-      - .github/workflows/healthchecks_idsvr_ci.yml
+      - .github/workflows/healthchecks_openidconnectserver_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
     tags-ignore:
@@ -19,9 +19,9 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
-      - test/HealthChecks.IdSvr.Tests/**
+      - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
-      - .github/workflows/healthchecks_idsvr_ci.yml
+      - .github/workflows/healthchecks_openidconnectserver_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
 

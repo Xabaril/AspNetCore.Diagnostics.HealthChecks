@@ -31,23 +31,21 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
     {
         try
         {
+            if (_options is {DatabaseId: not null, ContainerIds: not null})
+            {
+                foreach (var containerId in _options.ContainerIds)
+                {
+                    var container = _cosmosClient.GetContainer(_options.DatabaseId, containerId);
+                    var query = new QueryDefinition($"SELECT 1 FROM {containerId}");
+                    using var queryStream = container.GetItemQueryStreamIterator(query);
+                }
+            }
             await _cosmosClient.ReadAccountAsync().ConfigureAwait(false);
 
             if (_options.DatabaseId != null)
             {
                 var database = _cosmosClient.GetDatabase(_options.DatabaseId);
                 await database.ReadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-
-                if (_options.ContainerIds != null)
-                {
-                    foreach (var container in _options.ContainerIds)
-                    {
-                        await database
-                            .GetContainer(container)
-                            .ReadContainerAsync(cancellationToken: cancellationToken)
-                            .ConfigureAwait(false);
-                    }
-                }
             }
 
             return HealthCheckResult.Healthy();

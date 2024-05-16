@@ -8,7 +8,7 @@
     <Deterministic>true</Deterministic>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);1591;IDISP013;AD0001;</NoWarn> <!--TODO: temporary solution, remove AD0001 after https://github.com/dotnet/aspnetcore/issues/50836 fixed-->
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>

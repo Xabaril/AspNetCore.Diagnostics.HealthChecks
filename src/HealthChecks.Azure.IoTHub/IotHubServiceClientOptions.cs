@@ -1,0 +1,2 @@
+
+public sealed class IotHubServiceClientOptions;

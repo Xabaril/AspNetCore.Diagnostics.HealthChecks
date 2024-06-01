@@ -21,7 +21,8 @@ public class MongoDbHealthCheck : IHealthCheck
     private readonly IMongoClient _client;
     private readonly string? _specifiedDatabase;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.type", nameof(MongoDbHealthCheck) },
+                    { "health_check.name", nameof(MongoDbHealthCheck) },
+                    { "health_check.task", "ready" },
                     { "db.system.name", "mongodb" }
     };
 

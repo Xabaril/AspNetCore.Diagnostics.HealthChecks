@@ -12,7 +12,8 @@ public class NpgSqlHealthCheck : IHealthCheck
 {
     private readonly NpgSqlHealthCheckOptions _options;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.type", nameof(NpgSqlHealthCheck) },
+                    { "health_check.name", nameof(NpgSqlHealthCheck) },
+                    { "health_check.task", "ready" },
                     { "db.system.name", "npgsql" }
     };
 

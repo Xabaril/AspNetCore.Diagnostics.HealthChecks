@@ -28,7 +28,7 @@ public class RavenDBHealthCheck : IHealthCheck
 
     private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> _stores = new();
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.type", nameof(RavenDBHealthCheck) },
+                    { "health_check.name", nameof(RavenDBHealthCheck) },
                     { "db.system.name", "ravendb" }
     };
 
@@ -90,15 +90,18 @@ public class RavenDBHealthCheck : IHealthCheck
 
             if (string.IsNullOrWhiteSpace(_options.Database))
             {
+                checkDetails.Add("health_check.task", "online");
                 await CheckServerHealthAsync(store, cancellationToken).ConfigureAwait(false);
 
-                return HealthCheckResult.Healthy();
+                return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
             }
 
             try
             {
                 try
                 {
+                    checkDetails.Add("health_check.task", "ready");
+                    checkDetails.Add("db.namespace", _options.Database);
                     await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                 }
                 catch (ClientVersionMismatchException e) when (e.Message.Contains(nameof(RouteNotFoundException)))

@@ -16,7 +16,8 @@ public class RedisHealthCheck : IHealthCheck
     private readonly IConnectionMultiplexer? _connectionMultiplexer;
     private readonly Func<IConnectionMultiplexer>? _connectionMultiplexerFactory;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.type", nameof(RedisHealthCheck) },
+                    { "health_check.name", nameof(RedisHealthCheck) },
+                    { "health_check.task", "online" },
                     { "db.system.name", "redis" }
     };
 

@@ -11,7 +11,8 @@ public class SqlServerHealthCheck : IHealthCheck
 {
     private readonly SqlServerHealthCheckOptions _options;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.type", nameof(SqlServerHealthCheck) },
+                    { "health_check.name", nameof(SqlServerHealthCheck) },
+                    { "health_check.task", "ready" },
                     { "db.system.name", "microsoft.sql_server" }
     };
 

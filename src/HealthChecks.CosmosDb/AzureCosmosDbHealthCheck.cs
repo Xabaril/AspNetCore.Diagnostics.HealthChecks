@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -10,6 +11,11 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
 {
     private readonly CosmosClient _cosmosClient;
     private readonly AzureCosmosDbHealthCheckOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.name", nameof(AzureCosmosDbHealthCheck) },
+                    { "health_check.task", "ready" },
+                    { "db.system.name", "azurecosmos" }
+    };
 
     /// <summary>
     /// Creates new instance of Azure Cosmos DB health check.
@@ -29,12 +35,16 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
+            checkDetails.Add("server.address", _cosmosClient.Endpoint.Host);
+            checkDetails.Add("server.port", _cosmosClient.Endpoint.Port);
             await _cosmosClient.ReadAccountAsync().ConfigureAwait(false);
 
             if (_options.DatabaseId != null)
             {
+                checkDetails.Add("db.namespace", _options.DatabaseId);
                 var database = _cosmosClient.GetDatabase(_options.DatabaseId);
                 await database.ReadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
@@ -50,11 +60,11 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

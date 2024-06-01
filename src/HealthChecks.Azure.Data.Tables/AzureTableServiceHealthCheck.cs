@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -10,6 +11,11 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly AzureTableServiceHealthCheckOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.name", nameof(AzureTableServiceHealthCheck) },
+                    { "health_check.task", "ready" },
+                    { "db.system.name", "azuretable" }
+    };
 
     /// <summary>
     /// Creates new instance of Azure Tables health check.
@@ -29,10 +35,14 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
+            checkDetails.Add("server.address", _tableServiceClient.Uri.Host);
+            checkDetails.Add("server.port", _tableServiceClient.Uri.Port);
             if (!string.IsNullOrEmpty(_options.TableName))
             {
+                checkDetails.Add("db.namespace", _options.TableName ?? "");
                 // Note: PoLP (Principle of least privilege)
                 // This can be used having at least the role assignment "Storage Table Data Reader" at table level.
                 var tableClient = _tableServiceClient.GetTableClient(_options.TableName);
@@ -56,11 +66,11 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
                     .ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

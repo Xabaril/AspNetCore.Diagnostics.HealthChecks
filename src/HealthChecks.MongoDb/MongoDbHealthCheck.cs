@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -18,6 +20,10 @@ public class MongoDbHealthCheck : IHealthCheck
     private static readonly Lazy<BsonDocumentCommand<BsonDocument>> _command = new(() => new(BsonDocument.Parse("{ping:1}")));
     private readonly IMongoClient _client;
     private readonly string? _specifiedDatabase;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.type", nameof(MongoDbHealthCheck) },
+                    { "db.system.name", "mongodb" }
+    };
 
     public MongoDbHealthCheck(IMongoClient client, string? databaseName = default)
     {
@@ -28,10 +34,15 @@ public class MongoDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
+            checkDetails.Add("server.address", _mongoClientSettings.Server.Host);
+            checkDetails.Add("server.port", _mongoClientSettings.Server.Port);
+
             if (!string.IsNullOrEmpty(_specifiedDatabase))
             {
+                checkDetails.Add("db.namespace", _specifiedDatabase);
                 // some users can't list all databases depending on database privileges, with
                 // this you can check a specified database.
                 // Related with issue #43 and #617
@@ -72,11 +83,11 @@ public class MongoDbHealthCheck : IHealthCheck
                 await cursor.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

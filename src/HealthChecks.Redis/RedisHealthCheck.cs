@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
+using System.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StackExchange.Redis;
 
@@ -13,6 +15,10 @@ public class RedisHealthCheck : IHealthCheck
     private readonly string? _redisConnectionString;
     private readonly IConnectionMultiplexer? _connectionMultiplexer;
     private readonly Func<IConnectionMultiplexer>? _connectionMultiplexerFactory;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.type", nameof(RedisHealthCheck) },
+                    { "db.system.name", "redis" }
+    };
 
     public RedisHealthCheck(string redisConnectionString)
     {
@@ -42,6 +48,7 @@ public class RedisHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             IConnectionMultiplexer? connection = _connectionMultiplexer ?? _connectionMultiplexerFactory?.Invoke();
@@ -68,7 +75,14 @@ public class RedisHealthCheck : IHealthCheck
 
             foreach (var endPoint in connection!.GetEndPoints(configuredOnly: true))
             {
+                if (endPoint == null)
+                {
+                    continue;
+                }
                 var server = connection.GetServer(endPoint);
+
+                checkDetails.Add("server.address", (endPoint as IPEndPoint).Address);
+                checkDetails.Add("server.port", (endPoint as IPEndPoint).Port);
 
                 if (server.ServerType != ServerType.Cluster)
                 {
@@ -84,18 +98,18 @@ public class RedisHealthCheck : IHealthCheck
                         if (!clusterInfo.ToString()!.Contains("cluster_state:ok"))
                         {
                             //cluster info is not ok!
-                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is not on OK state for endpoint {endPoint}");
+                            return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is not on OK state for endpoint {endPoint}", data: new ReadOnlyDictionary<string, object>(checkDetails));
                         }
                     }
                     else
                     {
                         //cluster info cannot be read for this cluster node
-                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is null or can't be read for endpoint {endPoint}");
+                        return new HealthCheckResult(context.Registration.FailureStatus, description: $"INFO CLUSTER is null or can't be read for endpoint {endPoint}", data: new ReadOnlyDictionary<string, object>(checkDetails));
                     }
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
@@ -106,7 +120,7 @@ public class RedisHealthCheck : IHealthCheck
                 connection?.Dispose();
 #pragma warning restore IDISP007 // Don't dispose injected
             }
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 

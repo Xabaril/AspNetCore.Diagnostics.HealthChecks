@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySqlConnector;
 
@@ -9,6 +10,10 @@ namespace HealthChecks.MySql;
 public class MySqlHealthCheck : IHealthCheck
 {
     private readonly MySqlHealthCheckOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.type", nameof(MySqlHealthCheck) },
+                    { "db.system.name", "mysql" }
+    };
 
     public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
@@ -18,11 +23,14 @@ public class MySqlHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             using var connection = _options.DataSource is not null ?
                 _options.DataSource.CreateConnection() :
                 new MySqlConnection(_options.ConnectionString);
+            checkDetails.Add("db.namespace", connection.Database);
+            checkDetails.Add("server.address", connection.DataSource);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -31,6 +39,7 @@ public class MySqlHealthCheck : IHealthCheck
             {
                 using var command = connection.CreateCommand();
                 command.CommandText = _options.CommandText;
+                checkDetails.Add("db.query.text", _options.CommandText);
                 object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
                 return _options.HealthCheckResultBuilder == null
@@ -41,13 +50,13 @@ public class MySqlHealthCheck : IHealthCheck
             {
                 var success = await connection.PingAsync(cancellationToken).ConfigureAwait(false);
                 return _options.HealthCheckResultBuilder is null
-                    ? (success ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus)) :
+                    ? (success ? HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails)) : new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails))) :
                     _options.HealthCheckResultBuilder(success);
             }
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

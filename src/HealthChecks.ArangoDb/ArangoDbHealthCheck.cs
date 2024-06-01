@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using ArangoDBNetStandard;
 using ArangoDBNetStandard.AuthApi;
 using ArangoDBNetStandard.Transport.Http;
@@ -8,6 +9,10 @@ namespace HealthChecks.ArangoDb;
 public class ArangoDbHealthCheck : IHealthCheck
 {
     private readonly ArangoDbOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.type", nameof(ArangoDbHealthCheck) },
+                    { "db.system.name", "arango" }
+    };
 
     public ArangoDbHealthCheck(ArangoDbOptions options)
     {
@@ -17,18 +22,20 @@ public class ArangoDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             using var transport = await GetTransportAsync(_options).ConfigureAwait(false);
+
             using var adb = new ArangoDBClient(transport);
             var databases = await adb.Database.GetCurrentDatabaseInfoAsync(cancellationToken).ConfigureAwait(false);
             return databases.Error
-                ? new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.")
-                : HealthCheckResult.Healthy();
+                ? new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.", data: new ReadOnlyDictionary<string, object>(checkDetails))
+                : HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, ex.Message, ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 

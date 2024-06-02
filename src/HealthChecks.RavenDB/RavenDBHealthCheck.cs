@@ -29,7 +29,8 @@ public class RavenDBHealthCheck : IHealthCheck
     private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> _stores = new();
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(RavenDBHealthCheck) },
-                    { "db.system.name", "ravendb" }
+                    { "db.system.name", "ravendb" },
+                    { "network.transport", "tcp" }
     };
 
     public RavenDBHealthCheck(RavenDBOptions options)
@@ -61,7 +62,7 @@ public class RavenDBHealthCheck : IHealthCheck
                     store.Initialize();
                     if (!string.IsNullOrWhiteSpace(_options.Database))
                     {
-                        checkDetails.Add("db.namespace", _options.Database);
+                        checkDetails.Add("db.namespace", _options.Database ?? "");
                         store.SetRequestTimeout(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS), _options.Database);
                     }
 
@@ -91,6 +92,7 @@ public class RavenDBHealthCheck : IHealthCheck
             if (string.IsNullOrWhiteSpace(_options.Database))
             {
                 checkDetails.Add("health_check.task", "online");
+                checkDetails.Add("db.namespace", _options.Database ?? "");
                 await CheckServerHealthAsync(store, cancellationToken).ConfigureAwait(false);
 
                 return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
@@ -101,7 +103,7 @@ public class RavenDBHealthCheck : IHealthCheck
                 try
                 {
                     checkDetails.Add("health_check.task", "ready");
-                    checkDetails.Add("db.namespace", _options.Database);
+                    checkDetails.Add("db.namespace", _options.Database ?? "");
                     await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                 }
                 catch (ClientVersionMismatchException e) when (e.Message.Contains(nameof(RouteNotFoundException)))

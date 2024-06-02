@@ -17,7 +17,8 @@ public class EventStoreHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(EventStoreHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "azuretable" }
+                    { "db.system.name", "eventstore" },
+                    { "network.transport", "tcp" }
     };
 
     public EventStoreHealthCheck(string eventStoreConnection, string? login, string? password)

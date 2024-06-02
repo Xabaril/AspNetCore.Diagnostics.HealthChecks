@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
@@ -23,7 +22,8 @@ public class MongoDbHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(MongoDbHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "mongodb" }
+                    { "db.system.name", "mongodb" },
+                    { "network.transport", "tcp" }
     };
 
     public MongoDbHealthCheck(IMongoClient client, string? databaseName = default)
@@ -38,12 +38,12 @@ public class MongoDbHealthCheck : IHealthCheck
         Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
-            checkDetails.Add("server.address", _mongoClientSettings.Server.Host);
-            checkDetails.Add("server.port", _mongoClientSettings.Server.Port);
+            checkDetails.Add("server.address", _client.Settings.Server.Host);
+            checkDetails.Add("server.port", _client.Settings.Server.Port);
 
             if (!string.IsNullOrEmpty(_specifiedDatabase))
             {
-                checkDetails.Add("db.namespace", _specifiedDatabase);
+                checkDetails.Add("db.namespace", _specifiedDatabase ?? "");
                 // some users can't list all databases depending on database privileges, with
                 // this you can check a specified database.
                 // Related with issue #43 and #617

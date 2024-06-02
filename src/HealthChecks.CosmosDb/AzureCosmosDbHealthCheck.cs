@@ -14,7 +14,8 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(AzureCosmosDbHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "azurecosmos" }
+                    { "db.system.name", "azure.cosmosdb" },
+                    { "network.transport", "tcp" }
     };
 
     /// <summary>
@@ -47,7 +48,8 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
                 checkDetails.Add("db.namespace", _options.DatabaseId);
                 var database = _cosmosClient.GetDatabase(_options.DatabaseId);
                 await database.ReadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-
+                checkDetails.Add("azure.cosmosdb.connection.mode", database.Client.ClientOptions.ConnectionMode);
+                checkDetails.Add("azure.cosmosdb.connection.level", database.Client.ClientOptions.ConsistencyLevel?.ToString() ?? "");
                 if (_options.ContainerIds != null)
                 {
                     foreach (var container in _options.ContainerIds)

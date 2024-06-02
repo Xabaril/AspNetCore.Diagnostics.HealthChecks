@@ -15,7 +15,8 @@ public class ElasticsearchHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(ElasticsearchHealthCheck) },
                     { "health_check.task", "online" },
-                    { "db.system.name", "elasticsearch" }
+                    { "db.system.name", "elasticsearch" },
+                    { "network.transport", "tcp" }
     };
 
     public ElasticsearchHealthCheck(ElasticsearchOptions options)
@@ -92,7 +93,6 @@ public class ElasticsearchHealthCheck : IHealthCheck
                     {
                         elasticsearchClient = _connections[_options.Uri!];
                     }
-                    checkDetails.Add("server.address", _options.Uri);
                 }
             }
 

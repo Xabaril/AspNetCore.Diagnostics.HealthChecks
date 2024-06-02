@@ -15,7 +15,8 @@ public class DynamoDbHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(DynamoDbHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "dynamodb" }
+                    { "db.system.name", "dynamodb" },
+                    { "network.transport", "tcp" }
     };
 
     /// <summary>

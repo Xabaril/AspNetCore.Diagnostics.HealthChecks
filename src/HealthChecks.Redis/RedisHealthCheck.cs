@@ -18,7 +18,8 @@ public class RedisHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(RedisHealthCheck) },
                     { "health_check.task", "online" },
-                    { "db.system.name", "redis" }
+                    { "db.system.name", "redis" },
+                    { "network.transport", "tcp" }
     };
 
     public RedisHealthCheck(string redisConnectionString)
@@ -82,8 +83,11 @@ public class RedisHealthCheck : IHealthCheck
                 }
                 var server = connection.GetServer(endPoint);
 
-                checkDetails.Add("server.address", (endPoint as IPEndPoint).Address);
-                checkDetails.Add("server.port", (endPoint as IPEndPoint).Port);
+                if (endPoint is IPEndPoint ip)
+                {
+                    checkDetails.Add("server.address", ip.Address);
+                    checkDetails.Add("server.port", ip.Port);
+                }
 
                 if (server.ServerType != ServerType.Cluster)
                 {

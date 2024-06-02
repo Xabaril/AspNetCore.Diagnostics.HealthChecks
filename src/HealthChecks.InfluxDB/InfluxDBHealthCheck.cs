@@ -14,7 +14,8 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(InfluxDBHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "influxdb" }
+                    { "db.system.name", "influxdb" },
+                    { "network.transport", "tcp" }
     };
 
     public InfluxDBHealthCheck(Func<InfluxDBClientOptions.Builder, InfluxDBClientOptions> _options)

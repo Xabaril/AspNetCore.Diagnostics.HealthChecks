@@ -12,7 +12,8 @@ public class OracleHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(OracleHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "oracle" }
+                    { "db.system.name", "oracle" },
+                    { "network.transport", "tcp" }
     };
 
     public OracleHealthCheck(OracleHealthCheckOptions options)

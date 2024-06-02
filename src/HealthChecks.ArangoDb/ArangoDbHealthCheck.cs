@@ -12,7 +12,8 @@ public class ArangoDbHealthCheck : IHealthCheck
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
                     { "health_check.name", nameof(ArangoDbHealthCheck) },
                     { "health_check.task", "ready" },
-                    { "db.system.name", "arango" }
+                    { "db.system.name", "arango" },
+                    { "network.transport", "tcp" },
     };
 
     public ArangoDbHealthCheck(ArangoDbOptions options)
@@ -26,15 +27,17 @@ public class ArangoDbHealthCheck : IHealthCheck
         Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
+            var uri = new Uri(_options.HostUri);
+            checkDetails.Add("db.namespace", _options.Database);
+            checkDetails.Add("server.address", uri.Host);
+            checkDetails.Add("server.port", uri.Port);
             using var transport = await GetTransportAsync(_options).ConfigureAwait(false);
-
             using var adb = new ArangoDBClient(transport);
             var databases = await adb.Database.GetCurrentDatabaseInfoAsync(cancellationToken).ConfigureAwait(false);
             if (databases.Error)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.", data: new ReadOnlyDictionary<string, object>(checkDetails))
+                return new HealthCheckResult(context.Registration.FailureStatus, $"HealthCheck failed with status code: {databases.Code}.", data: new ReadOnlyDictionary<string, object>(checkDetails));
             }
-            checkDetails.Add("db.namespace", databases.Result.Name);
             return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)

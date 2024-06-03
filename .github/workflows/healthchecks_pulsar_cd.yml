@@ -1,0 +1,16 @@
+name: HealthChecks Pulsar CD
+
+on:
+  push:
+    tags:
+      - release-pulsar-*
+      - release-all-*
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_cd_workflow.yml
+    secrets: inherit
+    with:
+      BUILD_CONFIG: Release
+      PROJECT_PATH: ./src/HealthChecks.Pulsar/HealthChecks.Pulsar.csproj
+      PACKAGE_NAME: AspNetCore.HealthChecks.Pulsar

@@ -3,6 +3,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.System;
 
+#if NET6_0_OR_GREATER
+[global::System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
 public class WindowsServiceHealthCheck : IHealthCheck
 {
     private readonly string _serviceName;

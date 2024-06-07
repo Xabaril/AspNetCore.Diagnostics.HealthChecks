@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);RavenDB</PackageTags>
     <Description>HealthChecks.RavenDB is the health check package for RavenDB.</Description>
     <VersionPrefix>$(HealthCheckRavenDB)</VersionPrefix>

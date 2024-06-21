@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Net;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -10,6 +12,15 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly AzureTableServiceHealthCheckOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "healthcheck.name", nameof(AzureTableServiceHealthCheck) },
+                    { "healthcheck.task", "ready" },
+                    { "db.system", "azuretable" },
+                    { "event.name", "database.healthcheck"},
+                    { "client.address", Dns.GetHostName()},
+                    { "network.protocol.name", "http" },
+                    { "network.transport", "tcp" }
+    };
 
     /// <summary>
     /// Creates new instance of Azure Tables health check.
@@ -29,8 +40,11 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
+            checkDetails.Add("server.address", _tableServiceClient.Uri.Host);
+            checkDetails.Add("server.port", _tableServiceClient.Uri.Port);
             // Note: TableServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
             // "Storage Table Data Contributor," so TableServiceClient.QueryAsync() and
             // TableClient.QueryAsync<T>() are used instead to probe service health.
@@ -42,6 +56,7 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
 
             if (!string.IsNullOrEmpty(_options.TableName))
             {
+                checkDetails.Add("db.namespace", _options.TableName ?? "");
                 var tableClient = _tableServiceClient.GetTableClient(_options.TableName);
                 await tableClient
                     .QueryAsync<TableEntity>(filter: "false", cancellationToken: cancellationToken)
@@ -50,11 +65,11 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
                     .ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
+using System.Net;
 using Elasticsearch.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Nest;
@@ -10,6 +12,15 @@ public class ElasticsearchHealthCheck : IHealthCheck
     private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new();
 
     private readonly ElasticsearchOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "healthcheck.name", nameof(ElasticsearchHealthCheck) },
+                    { "healthcheck.task", "online" },
+                    { "db.system", "elasticsearch" },
+                    { "event.name", "database.healthcheck"},
+                    { "client.address", Dns.GetHostName()},
+                    { "network.protocol.name", "http" },
+                    { "network.transport", "tcp" }
+    };
 
     public ElasticsearchHealthCheck(ElasticsearchOptions options)
     {
@@ -19,6 +30,7 @@ public class ElasticsearchHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             if (!_connections.TryGetValue(_options.Uri, out var lowLevelClient))
@@ -52,37 +64,39 @@ public class ElasticsearchHealthCheck : IHealthCheck
 
                 if (!_connections.TryAdd(_options.Uri, lowLevelClient))
                 {
+                    checkDetails.Add("server.address", _options.Uri);
                     lowLevelClient = _connections[_options.Uri];
                 }
             }
 
             if (_options.UseClusterHealthApi)
             {
+                checkDetails.Add("healthcheck.task", "ready");
                 var healthResponse = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken).ConfigureAwait(false);
 
                 if (healthResponse.ApiCall.HttpStatusCode != 200)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus);
+                    return new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails));
                 }
 
                 return healthResponse.Status switch
                 {
-                    Health.Green => HealthCheckResult.Healthy(),
-                    Health.Yellow => HealthCheckResult.Degraded(),
-                    _ => new HealthCheckResult(context.Registration.FailureStatus)
+                    Health.Green => HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails)),
+                    Health.Yellow => HealthCheckResult.Degraded(data: new ReadOnlyDictionary<string, object>(checkDetails)),
+                    _ => new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails))
                 };
             }
-
+            checkDetails.Add("healthcheck.task", "online");
             var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken).ConfigureAwait(false);
             bool isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
 
             return isSuccess
-                ? HealthCheckResult.Healthy()
-                : new HealthCheckResult(context.Registration.FailureStatus);
+                ? HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails))
+                : new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

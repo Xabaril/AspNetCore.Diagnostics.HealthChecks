@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Elasticsearch;
 

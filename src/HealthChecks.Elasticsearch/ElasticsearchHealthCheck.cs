@@ -1,13 +1,13 @@
 using System.Collections.Concurrent;
-using Elasticsearch.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Nest;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
 
 namespace HealthChecks.Elasticsearch;
 
 public class ElasticsearchHealthCheck : IHealthCheck
 {
-    private static readonly ConcurrentDictionary<string, ElasticClient> _connections = new();
+    private static readonly ConcurrentDictionary<string, ElasticsearchClient> _connections = new();
 
     private readonly ElasticsearchOptions _options;
 
@@ -21,9 +21,9 @@ public class ElasticsearchHealthCheck : IHealthCheck
     {
         try
         {
-            if (!_connections.TryGetValue(_options.Uri, out var lowLevelClient))
+            if (!_connections.TryGetValue(_options.Uri, out var elasticsearchClient))
             {
-                var settings = new ConnectionSettings(new Uri(_options.Uri));
+                var settings = new ElasticsearchClientSettings(new Uri(_options.Uri));
 
                 if (_options.RequestTimeout.HasValue)
                 {
@@ -32,15 +32,31 @@ public class ElasticsearchHealthCheck : IHealthCheck
 
                 if (_options.AuthenticateWithBasicCredentials)
                 {
-                    settings = settings.BasicAuthentication(_options.UserName, _options.Password);
+                    if (_options.UserName is null)
+                    {
+                        throw new ArgumentNullException(nameof(_options.UserName));
+                    }
+                    if (_options.Password is null)
+                    {
+                        throw new ArgumentNullException(nameof(_options.Password));
+                    }
+                    settings = settings.Authentication(new BasicAuthentication(_options.UserName, _options.Password));
                 }
                 else if (_options.AuthenticateWithCertificate)
                 {
+                    if (_options.Certificate is null)
+                    {
+                        throw new ArgumentNullException(nameof(_options.Certificate));
+                    }
                     settings = settings.ClientCertificate(_options.Certificate);
                 }
                 else if (_options.AuthenticateWithApiKey)
                 {
-                    settings = settings.ApiKeyAuthentication(_options.ApiKeyAuthenticationCredentials);
+                    if (_options.ApiKey is null)
+                    {
+                        throw new ArgumentNullException(nameof(_options.ApiKey));
+                    }
+                    settings.Authentication(new ApiKey(_options.ApiKey));
                 }
 
                 if (_options.CertificateValidationCallback != null)
@@ -48,33 +64,33 @@ public class ElasticsearchHealthCheck : IHealthCheck
                     settings = settings.ServerCertificateValidationCallback(_options.CertificateValidationCallback);
                 }
 
-                lowLevelClient = new ElasticClient(settings);
+                elasticsearchClient = new ElasticsearchClient(settings);
 
-                if (!_connections.TryAdd(_options.Uri, lowLevelClient))
+                if (!_connections.TryAdd(_options.Uri, elasticsearchClient))
                 {
-                    lowLevelClient = _connections[_options.Uri];
+                    elasticsearchClient = _connections[_options.Uri];
                 }
             }
 
             if (_options.UseClusterHealthApi)
             {
-                var healthResponse = await lowLevelClient.Cluster.HealthAsync(ct: cancellationToken).ConfigureAwait(false);
+                var healthResponse = await elasticsearchClient.Cluster.HealthAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
-                if (healthResponse.ApiCall.HttpStatusCode != 200)
+                if (healthResponse.ApiCallDetails.HttpStatusCode != 200)
                 {
                     return new HealthCheckResult(context.Registration.FailureStatus);
                 }
 
                 return healthResponse.Status switch
                 {
-                    Health.Green => HealthCheckResult.Healthy(),
-                    Health.Yellow => HealthCheckResult.Degraded(),
+                    Elastic.Clients.Elasticsearch.HealthStatus.Green => HealthCheckResult.Healthy(),
+                    Elastic.Clients.Elasticsearch.HealthStatus.Yellow => HealthCheckResult.Degraded(),
                     _ => new HealthCheckResult(context.Registration.FailureStatus)
                 };
             }
 
-            var pingResult = await lowLevelClient.PingAsync(ct: cancellationToken).ConfigureAwait(false);
-            bool isSuccess = pingResult.ApiCall.HttpStatusCode == 200;
+            var pingResult = await elasticsearchClient.PingAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+            bool isSuccess = pingResult.ApiCallDetails.HttpStatusCode == 200;
 
             return isSuccess
                 ? HealthCheckResult.Healthy()

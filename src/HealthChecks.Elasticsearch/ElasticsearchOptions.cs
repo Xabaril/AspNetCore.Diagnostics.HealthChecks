@@ -1,6 +1,5 @@
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using Elasticsearch.Net;
 
 namespace HealthChecks.Elasticsearch;
 
@@ -17,8 +16,6 @@ public class ElasticsearchOptions
 
     public X509Certificate? Certificate { get; private set; }
 
-    public ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; private set; }
-
     public bool AuthenticateWithBasicCredentials { get; private set; }
 
     public bool AuthenticateWithCertificate { get; private set; }
@@ -26,6 +23,8 @@ public class ElasticsearchOptions
     public bool AuthenticateWithApiKey { get; private set; }
 
     public bool UseClusterHealthApi { get; set; }
+
+    public string? ApiKey { get; private set; }
 
     public Func<object, X509Certificate, X509Chain, SslPolicyErrors, bool>? CertificateValidationCallback { get; private set; }
 
@@ -55,9 +54,9 @@ public class ElasticsearchOptions
         return this;
     }
 
-    public ElasticsearchOptions UseApiKey(ApiKeyAuthenticationCredentials apiKey)
+    public ElasticsearchOptions UseApiKey(string apiKey)
     {
-        ApiKeyAuthenticationCredentials = Guard.ThrowIfNull(apiKey);
+        ApiKey = Guard.ThrowIfNull(apiKey);
 
         UserName = string.Empty;
         Password = string.Empty;

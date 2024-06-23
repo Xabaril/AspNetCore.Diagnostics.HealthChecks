@@ -1,21 +1,68 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthCheks.Vault.DependencyInjection;
 
-internal static class HealthCkecksVaultBuilderExtension
+public static class HealthCkecksVaultBuilderExtension
 {
-    internal static IServiceCollection AddVaultHealthCheck<TAuthMethodInfo>(
-        this IServiceCollection services,
-        string healthCheckName,
-        Action<VaultHealthCheckOptions<TAuthMethodInfo>> configureOptions)
-        where TAuthMethodInfo : IVaultAuthMethodInfo
+    public static IHealthChecksBuilder AddVaultHealthCheck(
+        this IHealthChecksBuilder builder,
+        string vaultAddress,
+        string basicVaultToken,
+        string name,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
     {
-        var options = new VaultHealthCheckOptions<TAuthMethodInfo>();
-        configureOptions(options);
+        var options = new VaultHealthCheckOptions();
+        options.UseBasicAuthentication(basicVaultToken)
+            .WithVaultAddress(vaultAddress);
 
-        services.AddSingleton(options);
-        services.AddHealthChecks().AddCheck<HealthChecksVault<TAuthMethodInfo>>(healthCheckName);
-
-        return services;
+        return builder.Add(new HealthCheckRegistration(
+           name,
+           sp => new HealthChecksVault(options),
+           failureStatus,
+           tags,
+           timeout));
     }
+
+    public static IHealthChecksBuilder AddVaultHealthCheck(
+       this IHealthChecksBuilder builder,
+       string vaultAddress,
+       string userName,
+       string Password,
+       VaultCheckAuthenticationType authenticationType,
+       string name,
+       HealthStatus? failureStatus = default,
+       IEnumerable<string>? tags = default,
+       TimeSpan? timeout = default)
+    {
+        var options = new VaultHealthCheckOptions();
+        switch (authenticationType)
+        {
+            case VaultCheckAuthenticationType.IsRadiusAuthentication:
+                options.UseRadiusAuthentication(Password, userName)
+                    .WithVaultAddress(vaultAddress);
+                break;
+            case VaultCheckAuthenticationType.IsLdapAuthentication:
+                options.UseLdapAuthentication(Password, userName)
+                    .WithVaultAddress(vaultAddress);
+                break;
+            case VaultCheckAuthenticationType.IsOktaAuthentication:
+                options.UseOktaAuthentication(Password, userName)
+                    .WithVaultAddress(vaultAddress);
+                break;
+            default:
+                throw new ArgumentException("Invalid parameter");
+        }
+
+
+        return builder.Add(new HealthCheckRegistration(
+           name,
+           sp => new HealthChecksVault(options),
+           failureStatus,
+           tags,
+           timeout));
+    }
+
 }

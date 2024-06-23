@@ -306,9 +306,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messagin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus.Tests", "test\HealthChecks.AzureServiceBus.Tests\HealthChecks.AzureServiceBus.Tests.csproj", "{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCheks.Vault", "HealthCheks.Vault\HealthCheks.Vault.csproj", "{510505AA-05FC-42F2-80BB-74281D3C31E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheks.Vault", "HealthCheks.Vault\HealthCheks.Vault.csproj", "{510505AA-05FC-42F2-80BB-74281D3C31E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthCheks.Vault.Test", "HealthCheks.Vault.Test\HealthCheks.Vault.Test.csproj", "{6A76560E-ECCE-4983-A6FD-F10DB754657C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheks.Vault.Tests", "HealthCheks.Vault.Test\HealthCheks.Vault.Tests.csproj", "{6A76560E-ECCE-4983-A6FD-F10DB754657C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

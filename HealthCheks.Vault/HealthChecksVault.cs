@@ -1,27 +1,47 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using VaultSharp;
+using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.AuthMethods.LDAP;
+using VaultSharp.V1.AuthMethods.Okta;
+using VaultSharp.V1.AuthMethods.RADIUS;
+using VaultSharp.V1.AuthMethods.Token;
 
 namespace HealthCheks.Vault;
 
 
-internal class HealthChecksVault<TAuthMethodInfo> : IHealthCheck where TAuthMethodInfo : IVaultAuthMethodInfo
+public class HealthChecksVault : IHealthCheck
 {
-    private readonly VaultHealthCheckOptions<TAuthMethodInfo> _options;
+    private readonly VaultHealthCheckOptions _options;
     private IVaultClient? _vaultClient;
 
-    public HealthChecksVault(VaultHealthCheckOptions<TAuthMethodInfo> options)
+    public HealthChecksVault(VaultHealthCheckOptions options)
     {
         _options = options ?? throw new ArgumentNullException(nameof(options));
         InitializeVaultClient();
     }
 
+    //initialized vault
     private void InitializeVaultClient()
     {
-        var authMethodInfo = _options.AuthMethodInfo?.GetAuthMethodInfo();
-        var vaultClientSettings = new VaultClientSettings(_options.VaultAddress, authMethodInfo);
-
-        _options.ConfigureVaultClient?.Invoke(vaultClientSettings);
-
+        IAuthMethodInfo? AuthMethodInfo = null;
+        switch (_options.AuthenticationType)
+        {
+            case VaultCheckAuthenticationType.IsBasicVaultAuthentication:
+                AuthMethodInfo = new TokenAuthMethodInfo(vaultToken: _options.BasicVaultToken);
+                break;
+            case VaultCheckAuthenticationType.IsRadiusAuthentication:
+                AuthMethodInfo = new RADIUSAuthMethodInfo(_options.RadiusUserName, _options.RadiusPassword);
+                break;
+            case VaultCheckAuthenticationType.IsLdapAuthentication:
+                AuthMethodInfo = new LDAPAuthMethodInfo(_options.LdapUserName, _options.LdapPassword);
+                break;
+            case VaultCheckAuthenticationType.IsOktaAuthentication:
+                AuthMethodInfo = new OktaAuthMethodInfo(_options.OktaUsername, _options.OktaPassword);
+                break;
+            default:
+                throw new InvalidOperationException("can not resolve correct parameter AuthMethodInfo");
+        }
+        var vaultClientSettings = new VaultClientSettings(_options.VaultAddress, AuthMethodInfo);
         _vaultClient = new VaultClient(vaultClientSettings);
     }
 

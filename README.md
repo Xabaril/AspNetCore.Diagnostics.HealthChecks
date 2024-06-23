@@ -695,6 +695,22 @@ If you want to contribute to the project and make it better, your help is very w
 You can contribute with helpful bug reports, features requests, submitting new features with pull requests and also
 answering [questions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/question).
 
+### Running unit tests
+
+You can run the unit tests using the following commands:
+
+```Powershell
+# Navigate to the solution folder
+cd $env:USERPROFILE\source\repos\AspNetCore.Diagnostics.HealthChecks
+
+# Configure Docker Desktop to run include all the containers required for the tests.
+# Confirm: Status = Running 
+docker-compose up
+
+# Run unit and integration tests.
+dotnet test
+```
+
 1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
 2. Follow the code guidelines and conventions.
 3. New features are not only code, tests and documentation are also mandatory.

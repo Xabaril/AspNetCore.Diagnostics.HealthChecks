@@ -709,6 +709,9 @@ docker-compose up
 
 # Run unit and integration tests.
 dotnet test
+
+# Tear down the containers after your completed
+docker-compose down -v
 ```
 
 1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)

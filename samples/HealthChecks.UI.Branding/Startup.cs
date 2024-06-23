@@ -25,12 +25,12 @@ public class Startup
                 setup.SetHeaderText("Branding Demo - Health Checks Status");
                 setup.AddHealthCheckEndpoint("endpoint1", "/health-random");
                 setup.AddHealthCheckEndpoint("endpoint2", "health-process");
-                //Webhook endpoint with custom notification hours, and custom failure and description messages
+                //Webhook endpoint with custom notification hours (8am - 5pm), and custom failure and description messages
 
-                setup.AddWebhookNotification("webhook1", uri: "https://healthchecks2.requestcatcher.com/",
-                        payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
+                setup.AddWebhookNotification("webhook2", uri: "https://healthchecks2.requestcatcher.com/",
+                        payload: "{ \"message\": \"Webhook2 report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                             restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}",
-                            shouldNotifyFunc: (livenessName, report) => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 23,
+                            shouldNotifyFunc: (livenessName, report) => DateTime.UtcNow.Hour >= 8 && DateTime.UtcNow.Hour <= 17,
                             customMessageFunc: (livenessName, report) =>
                            {
                                var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
@@ -46,11 +46,10 @@ public class Startup
                 setup.AddWebhookNotification(
                     name: "webhook1",
                     uri: "https://healthchecks.requestcatcher.com/",
-                    payload: "{ message: \"Webhook report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
+                    payload: "{  \"message\": \"Webhook1 report for [[LIVENESS]]: [[FAILURE]] - Description: [[DESCRIPTIONS]]\"}",
                     restorePayload: "{ message: \"[[LIVENESS]] is back to life\"}");
             }).AddInMemoryStorage()
-              .Services
-            .AddControllers();
+            .Services.AddControllers();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

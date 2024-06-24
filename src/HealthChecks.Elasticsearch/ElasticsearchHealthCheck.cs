@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -13,6 +14,7 @@ public class ElasticsearchHealthCheck : IHealthCheck
 
     public ElasticsearchHealthCheck(ElasticsearchOptions options)
     {
+        Debug.Assert(options.Uri is not null || options.Client is not null || options.AuthenticateWithElasticCloud);
         _options = Guard.ThrowIfNull(options);
     }
 
@@ -21,54 +23,68 @@ public class ElasticsearchHealthCheck : IHealthCheck
     {
         try
         {
-            if (!_connections.TryGetValue(_options.Uri, out var elasticsearchClient))
+            ElasticsearchClient? elasticsearchClient = null;
+            if (_options.Client is not null)
             {
-                var settings = new ElasticsearchClientSettings(new Uri(_options.Uri));
+                elasticsearchClient = _options.Client;
+            }
+            else
+            {
+                ElasticsearchClientSettings? settings = null;
+
+                settings = _options.AuthenticateWithElasticCloud
+               ? new ElasticsearchClientSettings(_options.CloudId!, new ApiKey(_options.ApiKey!))
+               : new ElasticsearchClientSettings(new Uri(_options.Uri!));
+
 
                 if (_options.RequestTimeout.HasValue)
                 {
                     settings = settings.RequestTimeout(_options.RequestTimeout.Value);
                 }
 
-                if (_options.AuthenticateWithBasicCredentials)
+                if (!_connections.TryGetValue(_options.Uri!, out elasticsearchClient))
                 {
-                    if (_options.UserName is null)
-                    {
-                        throw new ArgumentNullException(nameof(_options.UserName));
-                    }
-                    if (_options.Password is null)
-                    {
-                        throw new ArgumentNullException(nameof(_options.Password));
-                    }
-                    settings = settings.Authentication(new BasicAuthentication(_options.UserName, _options.Password));
-                }
-                else if (_options.AuthenticateWithCertificate)
-                {
-                    if (_options.Certificate is null)
-                    {
-                        throw new ArgumentNullException(nameof(_options.Certificate));
-                    }
-                    settings = settings.ClientCertificate(_options.Certificate);
-                }
-                else if (_options.AuthenticateWithApiKey)
-                {
-                    if (_options.ApiKey is null)
-                    {
-                        throw new ArgumentNullException(nameof(_options.ApiKey));
-                    }
-                    settings.Authentication(new ApiKey(_options.ApiKey));
-                }
 
-                if (_options.CertificateValidationCallback != null)
-                {
-                    settings = settings.ServerCertificateValidationCallback(_options.CertificateValidationCallback);
-                }
+                    if (_options.AuthenticateWithBasicCredentials)
+                    {
+                        if (_options.UserName is null)
+                        {
+                            throw new ArgumentNullException(nameof(_options.UserName));
+                        }
+                        if (_options.Password is null)
+                        {
+                            throw new ArgumentNullException(nameof(_options.Password));
+                        }
+                        settings = settings.Authentication(new BasicAuthentication(_options.UserName, _options.Password));
+                    }
+                    else if (_options.AuthenticateWithCertificate)
+                    {
+                        if (_options.Certificate is null)
+                        {
+                            throw new ArgumentNullException(nameof(_options.Certificate));
+                        }
+                        settings = settings.ClientCertificate(_options.Certificate);
+                    }
+                    else if (_options.AuthenticateWithApiKey)
+                    {
+                        if (_options.ApiKey is null)
+                        {
+                            throw new ArgumentNullException(nameof(_options.ApiKey));
+                        }
+                        settings.Authentication(new ApiKey(_options.ApiKey));
+                    }
 
-                elasticsearchClient = new ElasticsearchClient(settings);
+                    if (_options.CertificateValidationCallback != null)
+                    {
+                        settings = settings.ServerCertificateValidationCallback(_options.CertificateValidationCallback);
+                    }
 
-                if (!_connections.TryAdd(_options.Uri, elasticsearchClient))
-                {
-                    elasticsearchClient = _connections[_options.Uri];
+                    elasticsearchClient = new ElasticsearchClient(settings);
+
+                    if (!_connections.TryAdd(_options.Uri!, elasticsearchClient))
+                    {
+                        elasticsearchClient = _connections[_options.Uri!];
+                    }
                 }
             }
 

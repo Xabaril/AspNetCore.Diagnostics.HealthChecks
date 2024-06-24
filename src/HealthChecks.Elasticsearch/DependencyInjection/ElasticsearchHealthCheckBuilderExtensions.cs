@@ -106,17 +106,14 @@ public static class ElasticsearchHealthCheckBuilderExtensions
         TimeSpan? timeout = default)
     {
 
-        var options = new ElasticsearchOptions();
-        setup?.Invoke(options);
-
-        options.RequestTimeout ??= timeout;
-
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
             sp =>
             {
+                var options = new ElasticsearchOptions();
+                options.RequestTimeout ??= timeout;
                 options.Client ??= clientFactory?.Invoke(sp) ?? sp.GetRequiredService<Elastic.Clients.Elasticsearch.ElasticsearchClient>();
-
+                setup?.Invoke(options);
                 return new ElasticsearchHealthCheck(options);
             },
             failureStatus,

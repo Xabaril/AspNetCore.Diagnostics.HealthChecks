@@ -1,189 +1,186 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
-version: '3.8'
+version: "3"
 services:
-    sqlserver:
-        image: mcr.microsoft.com/mssql/server
-        restart: always
-        ports:
-            - ${SQLSERVER_PORT}:1433
-        environment:
-            - ACCEPT_EULA=Y
-            - SA_PASSWORD=${SQLSERVER_SA_PASSWORD}
-    redis:
-        image: redis:alpine
-        ports:
-            - ${REDIS_PORT}:6379
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
-        ports:
-          - "9300:9300"
-          - ${ELASTICSEARCH_PORT}:9200
-    solr:
-        image: solr:8.4.1
-        ports:
-            - ${SOLR_PORT}:8983
-        volumes:
-            - ./build/docker-services/solrcore:/var/solr/data/solrcore
-            - ./build/docker-services/solrcoredown:/var/solr/data/solrcoredown
-    postgres:
-        image: postgres
-        environment:
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-        ports:
-            - ${POSTGRES_PORT}:5432
-    eventstore:
-        image: eventstore/eventstore
-        ports:
-          - ${EVENTSTORE_GRPC_PORT}:2113
-          - ${EVENTSTORE_PORT}:1113
-        environment:
-            - EVENTSTORE_INSECURE=true
-    mongodb:
-        image: mongo
-        ports:
-            - ${MONGODB_PORT}:27017
-    mysql:
-        image: mysql
-        environment:
-            - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
-        ports:
-            - ${MYSQL_PORT}:3306
-    zookeeper:
-        image: confluent/zookeeper
-        ports:
-            - ${ZOOKEEPER_PORT}:2181
-    raven:
-        image: ravendb/ravendb
-        ports:
-            - ${RAVENDB_PORT}:8080
-        environment:
-            - RAVEN_ARGS=--Setup.Mode=None
-    kafka:
-        image: confluent/kafka
-        environment:
-            - KAFKA_ADVERTISED_HOST_NAME=localhost
-            - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-            - KAFKA_ADVERTISED_PORT=9092
-        ports:
-          - ${KAFKA_PORT}:9092
-        links:
-          - zookeeper
-    rabbitmq:
-        image: rabbitmq
-        ports:
-          - ${RABBITMQ_PORT}:5672
-    idsvr:
-        image: nakah/identityserver4
-        ports:
-          - ${IDSVR_PORT}:80
-    oracle:
-# Build image from src, pending legal issues with binary distribution https://github.com/wnameless/docker-oracle-xe-11g/issues/118
-        build:
-          context: https://github.com/wnameless/docker-oracle-xe-11g.git
-        ports:
-            - ${ORACLE_PORT}:1521
-        environment:
-            - ORACLE_ALLOW_REMOTE=true
-    ftp:
-        image: bogem/ftp
-        ports:
-            - ${FTP_PORT}:21
-            - 47400-47470:47400-47470
-        environment:
-            - FTP_USER=${FTP_USER}
-            - FTP_PASS=${FTP_PASS}
-            - PASV_ADDRESS=127.0.0.1
-    sftp:
-        image: atmoz/sftp
-        ports:
-            - ${SFTP_PORT}:22
-        volumes:
-            - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro
-        command: foo:pass:::upload
-    mail:
-        image: tvial/docker-mailserver:latest
-        hostname: mail
-        container_name: mail
-        domainname: healthchecks.com
-        ports:
-            - 25:25
-            - 143:143
-            - 465:465
-            - 587:587
-            - 993:993
-            - 995:995
-        environment:
-            - SSL_TYPE=self-signed
-            - DMS_DEBUG=1
-        volumes:
-            - ./build/docker-services/mail/:/tmp/docker-mailserver/
-    localstack:
-        image: localstack/localstack
-        ports:
-        - "4567-4584:4567-4584"
-        - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
-        environment:
-        - SERVICES=${SERVICES- }
-        - DEBUG=${DEBUG- }
-        - DATA_DIR=${DATA_DIR- }
-        - PORT_WEB_UI=${PORT_WEB_UI- }
-        - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
-        - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
-        - DOCKER_HOST=unix:///var/run/docker.sock
-        volumes:
-        - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
-        - "/var/run/docker.sock:/var/run/docker.sock"
-    consul:
-        image: hashicorp/consul:latest
-        ports:
-          - "8500:8500"
-          - "8600:8600"
-    ibmmq:
-        image: ibmcom/mq
-        ports:
-        - "1414:1414"
-        - "9157:9157"
-        environment:
-        - LICENSE=accept
-        - MQ_QMGR_NAME=QM1
-        - MQ_APP_PASSWORD=12345678
-        - MQ_ENABLE_METRICS=true
-    arangodb:
-        image: arangodb/arangodb:latest
-        ports:
-        - "8529:8529"
-        environment:
-        - ARANGO_ROOT_PASSWORD=strongArangoDbPassword
-    gremlin:
-        image: tinkerpop/gremlin-server
-        ports:
-        - "8182:8182"
-        environment:
-        - VIRTUAL_HOST=gremlin.docker
-        - VIRTUAL_PORT=8182
-    npgsql:
-        image: postgres
-        ports:
-        - "8010:5432"
-        environment: 
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=Password12!
-    nats:
-        image: nats:latest
-        ports:
-        - "4222:4222"
-        - "8222:8222"
-        - "6222:6222"
-    influx:
-        image: influxdb:2.6.0
-        restart: always
-        ports:
-         - "8086:8086"
-        environment:
-          DOCKER_INFLUXDB_INIT_MODE: setup 
-          DOCKER_INFLUXDB_INIT_USERNAME: ci_user
-          DOCKER_INFLUXDB_INIT_PASSWORD: password
-          DOCKER_INFLUXDB_INIT_ORG: influxdata
-          DOCKER_INFLUXDB_INIT_BUCKET: dummy
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    restart: always
+    ports:
+      - ${SQLSERVER_PORT}:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SQLSERVER_SA_PASSWORD}
+  redis:
+    image: redis:alpine
+    ports:
+      - ${REDIS_PORT}:6379
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:latest
+    ports:
+      - ${ELASTICSEARCH_PORT}:9200
+      - 9300:9300
+  solr:
+    image: solr:8.4.1
+    ports:
+      - ${SOLR_PORT}:8983
+    volumes:
+      - ./build/docker-services/solrcore:/var/solr/data/solrcore
+      - ./build/docker-services/solrcoredown:/var/solr/data/solrcoredown
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:5432
+  eventstore:
+    image: eventstore/eventstore
+    ports:
+      - ${EVENTSTORE_GRPC_PORT}:2113
+      - ${EVENTSTORE_PORT}:1113
+    environment:
+      - EVENTSTORE_INSECURE=true
+  mongodb:
+    image: mongo
+    ports:
+      - ${MONGODB_PORT}:27017
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:3306
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    ports:
+      - ${ZOOKEEPER_PORT}:2181
+    environment:
+      - ZOOKEEPER_SECURE_CLIENT_PORT=2181
+  raven:
+    image: ravendb/ravendb
+    ports:
+      - ${RAVENDB_PORT}:8080
+    environment:
+      - RAVEN_ARGS=--Setup.Mode=None
+  kafka:
+    image: confluentinc/cp-kafka
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=localhost
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_SECURE_PORT}
+      - KAFKA_ADVERTISED_LISTENERS=SSL://localhost:${KAFKA_PORT}
+    ports:
+      - ${KAFKA_PORT}:9092
+    links:
+      - zookeeper
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - ${RABBITMQ_PORT}:5672
+  idsvr:
+    image: nakah/identityserver4
+    ports:
+      - ${IDSVR_PORT}:80
+  oracle:
+    # Build image from src, pending legal issues with binary distribution https://github.com/wnameless/docker-oracle-xe-11g/issues/118
+    build:
+      context: https://github.com/wnameless/docker-oracle-xe-11g.git
+    ports:
+      - ${ORACLE_PORT}:1521
+    environment:
+      - ORACLE_ALLOW_REMOTE=true
+  ftp:
+    image: bogem/ftp
+    ports:
+      - ${FTP_PORT}:21
+      - 47400-47470:47400-47470
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASS=${FTP_PASS}
+      - PASV_ADDRESS=127.0.0.1
+  sftp:
+    image: atmoz/sftp
+    ports:
+      - ${SFTP_PORT}:22
+    volumes:
+      - ./build/docker-services/certificate/id_rsa.pub:/home/foo/.ssh/keys/id_rsa.pub:ro
+    command: foo:pass:::upload
+  mail:
+    image: tvial/docker-mailserver:latest
+    hostname: mail
+    container_name: mail
+    domainname: healthchecks.com
+    ports:
+      - 25:25
+      - 143:143
+      - 465:465
+      - 587:587
+      - 993:993
+      - 995:995
+    environment:
+      - SSL_TYPE=self-signed
+      - DMS_DEBUG=1
+    volumes:
+      - ./build/docker-services/mail/:/tmp/docker-mailserver/
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566 # LocalStack Gateway
+    environment:
+      - SERVICES=s3,sns,sqs,ssm
+      - DEBUG="1"
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_DOCKER_NETWORK=development
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
+  consul:
+    image: hashicorp/consul
+    ports:
+      - 8500:8500
+      - 8600:8600
+  ibmmq:
+    image: ibmcom/mq
+    ports:
+      - 1414:1414
+      - 9157:9157
+    environment:
+      - LICENSE=accept
+      - MQ_QMGR_NAME=QM1
+      - MQ_APP_PASSWORD=${IBM_MQ_PASSWORD}
+      - MQ_ENABLE_METRICS=true
+  arangodb:
+    image: arangodb/arangodb
+    ports:
+      - 8529:8529
+    environment:
+      - ARANGO_ROOT_PASSWORD=${ARANGO_ROOT_PASSWORD}
+  gremlin:
+    image: tinkerpop/gremlin-server
+    ports:
+      - 8182:8182
+    environment:
+      - VIRTUAL_HOST=gremlin.docker
+      - VIRTUAL_PORT=8182
+  npgsql:
+    image: postgres
+    ports:
+      - 8010:5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  nats:
+    image: nats:latest
+    ports:
+      - 4222:4222
+      - 8222:8222
+      - 6222:6222
+  influx:
+    image: influxdb:2.6.0
+    restart: always
+    ports:
+      - 8086:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USER}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: influxdata
+      DOCKER_INFLUXDB_INIT_BUCKET: dummy

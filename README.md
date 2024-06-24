@@ -695,9 +695,15 @@ If you want to contribute to the project and make it better, your help is very w
 You can contribute with helpful bug reports, features requests, submitting new features with pull requests and also
 answering [questions](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/question).
 
-### Running unit tests
+1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
+2. Follow the code guidelines and conventions.
+3. New features are not only code, tests and documentation are also mandatory.
+4. PRs with [`Ups for grabs`](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/Ups%20for%20grabs)
+and [help wanted](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/help%20wanted) tags are good candidates to contribute.
 
-You can run the unit tests using the following commands:
+### Running tests locally
+
+Before submitting PRs for code changes, you should run the test suit locally. You can run the unit tests using the following commands:
 
 ```Powershell
 # Navigate to the solution folder
@@ -714,8 +720,14 @@ dotnet test
 docker-compose down -v
 ```
 
-1. Read and follow the [Don't push your pull requests](https://www.igvita.com/2011/12/19/dont-push-your-pull-requests/)
-2. Follow the code guidelines and conventions.
-3. New features are not only code, tests and documentation are also mandatory.
-4. PRs with [`Ups for grabs`](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/Ups%20for%20grabs)
-and [help wanted](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/help%20wanted) tags are good candidates to contribute. 
+In [Docker Compose](https://docs.docker.com/compose/compose-file/), it’s recommended to use secrets rather than environment variables or a .env file for sensitive information. The `.env` provided separates the sensitive secrets out, to facilitate moving those to secrets. The docker-componse.yml file include variable [interpolation](https://docs.docker.com/compose/compose-file/12-interpolation/) that provide a range of advanced variable substitution syntaxs like:
+
+```text
+${VAR:-default} -> value of VAR if set and non-empty, otherwise default
+```
+
+1. **Secrets**: Docker Compose allows you to define secrets using the [top-level secrets](https://docs.docker.com/compose/compose-file/09-secrets/) element in your Compose file. Secrets can include sensitive data like passwords, certificates, or API keys. You can grant access to secrets on a per-service basis, which provides granular control within a service container via standard filesystem permissions
+
+2. **env File**: Instead of specifying secrets directly in the Docker Compose file, you can use an environment file (e.g., .env). However, this approach doesn’t provide the same granular control as secrets
+
+3. **Environment Variables**: While you can use environment variables to pass sensitive information, it’s not recommended. Environment variables are often available to all processes, can be difficult to track, and may inadvertently expose information in logs during debugging

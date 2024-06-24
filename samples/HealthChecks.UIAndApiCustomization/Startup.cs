@@ -26,14 +26,14 @@ public class Startup
         services
             .AddHealthChecksUI()
             .AddInMemoryStorage()
-            //                .AddHealthChecksUI(setupSettings: settings =>
-            //                {
-            //                    settings
-            //                        .AddHealthCheckEndpoint("api1", "http://localhost:8001/custom/healthz")
-            //                        .AddWebhookNotification("webhook1", "http://webhook", "mypayload")
-            //                        .SetEvaluationTimeInSeconds(16);
-            //                })
-            .Services
+//            .AddHealthChecksUI(setupSettings: settings =>
+//            {
+//                settings
+//                    .AddHealthCheckEndpoint("api1", "http://localhost:8001/custom/healthz")
+//                    .AddWebhookNotification("webhook1", "http://webhook", "mypayload")
+//                    .SetEvaluationTimeInSeconds(16);
+//            })
+        .Services
             .AddHealthChecks()
             .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-1")
             .AddUrlGroup(new Uri("http://httpbin.org/status/200"), name: "uri-2")

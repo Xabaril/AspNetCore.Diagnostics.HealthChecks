@@ -87,7 +87,6 @@ public static class ElasticsearchHealthCheckBuilderExtensions
     /// <param name="clientFactory">
     /// An optional factory to obtain <see cref="Elastic.Clients.Elasticsearch.ElasticsearchClient" /> instance.
     /// When not provided, <see cref="Elastic.Clients.Elasticsearch.ElasticsearchClient" /> is simply resolved from <see cref="IServiceProvider"/>.</param>
-    /// <param name="setup">The Elasticsearch option setup.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'elasticsearch' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -99,7 +98,6 @@ public static class ElasticsearchHealthCheckBuilderExtensions
     public static IHealthChecksBuilder AddElasticsearch(
         this IHealthChecksBuilder builder,
         Func<IServiceProvider, Elastic.Clients.Elasticsearch.ElasticsearchClient>? clientFactory = null,
-        Action<ElasticsearchOptions>? setup = null,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
@@ -113,7 +111,6 @@ public static class ElasticsearchHealthCheckBuilderExtensions
                 var options = new ElasticsearchOptions();
                 options.RequestTimeout ??= timeout;
                 options.Client ??= clientFactory?.Invoke(sp) ?? sp.GetRequiredService<Elastic.Clients.Elasticsearch.ElasticsearchClient>();
-                setup?.Invoke(options);
                 return new ElasticsearchHealthCheck(options);
             },
             failureStatus,

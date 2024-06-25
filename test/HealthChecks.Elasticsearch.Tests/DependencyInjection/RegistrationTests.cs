@@ -88,6 +88,7 @@ public class elasticsearch_registration_should
 
         settings.RequestTimeout.ShouldBeNull();
     }
+
     [Fact]
     public void throw_exception_when_create_client_without_using_elasic_cloud_or_server()
     {
@@ -97,6 +98,7 @@ public class elasticsearch_registration_should
 
         Assert.Throws<InvalidOperationException>(() => services.AddHealthChecks().AddElasticsearch(setup => settings = setup));
     }
+
     [Fact]
     public void create_client_when_using_elasic_cloud()
     {
@@ -120,10 +122,9 @@ public class elasticsearch_registration_should
     {
         var client = new Elastic.Clients.Elasticsearch.ElasticsearchClient();
         var services = new ServiceCollection();
-        var settings = new ElasticsearchOptions();
         services.AddSingleton(client);
 
-        services.AddHealthChecks().AddElasticsearch(clientFactory: null, setup: (setup) => settings = setup);
+        services.AddHealthChecks().AddElasticsearch();
 
         using var serviceProvider = services.BuildServiceProvider();
 
@@ -133,17 +134,21 @@ public class elasticsearch_registration_should
         var check = registration.Factory(serviceProvider);
 
         check.ShouldBeOfType<ElasticsearchHealthCheck>();
-        settings.Client.ShouldNotBeNull();
-        settings.Client.ShouldBe(client);
     }
+
     [Fact]
-    public void use_client_factory_should_use_same_client()
+    public void use_client_factory()
     {
         var client = new Elastic.Clients.Elasticsearch.ElasticsearchClient();
         var services = new ServiceCollection();
         var settings = new ElasticsearchOptions();
+        var factoryCalled = false;
 
-        services.AddHealthChecks().AddElasticsearch(clientFactory: (sp => client), setup: (setup) => settings = setup);
+        services.AddHealthChecks().AddElasticsearch(clientFactory: (sp =>
+        {
+            factoryCalled = true;
+            return client;
+        }));
 
         using var serviceProvider = services.BuildServiceProvider();
 
@@ -153,8 +158,6 @@ public class elasticsearch_registration_should
         var check = registration.Factory(serviceProvider);
 
         check.ShouldBeOfType<ElasticsearchHealthCheck>();
-
-        settings.Client.ShouldNotBeNull();
-        settings.Client.ShouldBe(client);
+        factoryCalled.ShouldBeTrue();
     }
 }

@@ -98,11 +98,12 @@ public class elasticsearch_registration_should
 
         Assert.Throws<InvalidOperationException>(() => services.AddHealthChecks().AddElasticsearch(setup => settings = setup));
     }
+
     [Fact]
     public void create_client_when_using_elasic_cloud()
     {
-
         var services = new ServiceCollection();
+
         var settings = new ElasticsearchOptions();
 
         services.AddHealthChecks().AddElasticsearch(setup =>

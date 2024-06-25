@@ -88,6 +88,7 @@ public class elasticsearch_registration_should
 
         settings.RequestTimeout.ShouldBeNull();
     }
+
     [Fact]
     public void throw_exception_when_create_client_without_using_elasic_cloud_or_server()
     {

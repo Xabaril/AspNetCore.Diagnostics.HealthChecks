@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="IBMMQDotnetClient" Version="9.3.4" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.6" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

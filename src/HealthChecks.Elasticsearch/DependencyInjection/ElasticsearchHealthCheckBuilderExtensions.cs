@@ -109,8 +109,10 @@ public static class ElasticsearchHealthCheckBuilderExtensions
             sp =>
             {
                 var options = new ElasticsearchOptions();
-                options.RequestTimeout ??= timeout;
-                options.Client ??= clientFactory?.Invoke(sp) ?? sp.GetRequiredService<Elastic.Clients.Elasticsearch.ElasticsearchClient>();
+                options.RequestTimeout = timeout;
+
+                options.Client = clientFactory?.Invoke(sp) ?? sp.GetRequiredService<Elastic.Clients.Elasticsearch.ElasticsearchClient>();
+
                 return new ElasticsearchHealthCheck(options);
             },
             failureStatus,

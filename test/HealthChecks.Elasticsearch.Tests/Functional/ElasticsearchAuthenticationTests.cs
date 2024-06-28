@@ -1,5 +1,4 @@
 using System.Net;
-using Elasticsearch.Net;
 using HealthChecks.Elasticsearch.Tests.Fixtures;
 
 namespace HealthChecks.Elasticsearch.Tests.Functional;
@@ -25,7 +24,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                     .AddElasticsearch(options =>
                     {
                         options.UseServer(connectionString);
-                        options.UseApiKey(new ApiKeyAuthenticationCredentials(_fixture.ApiKey));
+                        options.UseApiKey(_fixture.ApiKey!);
                         options.UseCertificateValidationCallback(delegate
                         {
                             return true;

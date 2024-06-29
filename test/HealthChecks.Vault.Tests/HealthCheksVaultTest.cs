@@ -2,14 +2,15 @@ using HealthCheks.Vault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Moq;
 using Shouldly;
-using Xunit;
+using VaultSharp;
+using VaultSharp.V1.SystemBackend;
 
-namespace HealthChecks.Vault.Tests;
+namespace HealthChecks.Vault.Core.Tests;
 
-public class HealthCheckVaultTest
+public class UnitTest1
 {
-
     protected readonly string _defaultCheckName = "vault";
 
     [Fact]
@@ -62,6 +63,7 @@ public class HealthCheckVaultTest
 
         services.AddHealthChecks()
             .AddCheck<HealthChecksVault>(_defaultCheckName);
+
         var serviceProvider = services.BuildServiceProvider();
         var healthCheckOptions = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
@@ -159,49 +161,46 @@ public class HealthCheckVaultTest
         }
     }
 
-    //[Fact]
-    //public async Task CheckHealthAsync_VaultHealthy_ShouldReturnHealthyAsync()
-    //{
-    //    // Arrange
-    //    var services = new ServiceCollection();
-    //    services.AddSingleton<IVaultClient>(sp =>
-    //    {
-    //        var vaultClient = new Mock<IVaultClient>();
-    //        var mockSystemBackend = new Mock<ISystemBackend>();
-    //        mockSystemBackend
-    //            .Setup(m => m.GetHealthStatusAsync(It.IsAny<CancellationToken>()))
-    //            .ReturnsAsync(new VaultSharp.V1.SystemBackend.HealthStatus { Initialized = true, Sealed = false });
+    [Fact]
+    public async Task CheckHealthAsync_VaultHealthy_ShouldReturnHealthyAsync()
+    {
+        var services = new ServiceCollection();
 
-    //        vaultClient.Setup(m => m.V1.System).Returns(mockSystemBackend.Object);
+        var mockVaultClient = new Mock<IVaultClient>();
+        services.AddSingleton<IVaultClient>(mockVaultClient.Object);
+        var cancellationToken = CancellationToken.None;
+        var mockSystemBackend = new Mock<ISystemBackend>();
+        mockSystemBackend
+            .Setup(m => m.GetHealthStatusAsync(false, 200, 429, 503, 501, null))
+            .ReturnsAsync(new VaultSharp.V1.SystemBackend.HealthStatus { Initialized = true, Sealed = false });
 
-    //        return vaultClient.Object;
-    //    });
+        mockVaultClient.Setup(m => m.V1.System).Returns(mockSystemBackend.Object);
 
-    //    var options = new VaultHealthCheckOptions()
-    //        .UseBasicAuthentication("basic-token")
-    //        .WithVaultAddress("http://127.0.0.1:8200");
+        var options = new VaultHealthCheckOptions()
+            .UseBasicAuthentication("hvs.IYNZcSg8g1K0QWrEUxw8C6NC")
+            .WithVaultAddress("http://127.0.0.1:8200");
 
-    //    services.AddSingleton(options);
-    //    services.AddSingleton<IHealthCheck, HealthChecksVault>();
+        services.AddSingleton(options);
+        services.AddSingleton<IHealthCheck, HealthChecksVault>();
 
-    //    var serviceProvider = services.BuildServiceProvider();
-    //    var healthChecksVault = serviceProvider.GetRequiredService<IHealthCheck>();
+        var serviceProvider = services.BuildServiceProvider();
+        var healthChecksVault = serviceProvider.GetRequiredService<IHealthCheck>();
 
-    //    try
-    //    {
-    //        // Act
-    //        var result = await healthChecksVault.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(true);
+        try
+        {
+            // Act
+            var result = await healthChecksVault.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(true);
 
-    //        // Assert
-    //        result.Status.ShouldBe(Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Healthy);
-    //    }
-    //    finally
-    //    {
-    //        // Dispose the service provider
-    //        if (serviceProvider is IDisposable disposable)
-    //        {
-    //            disposable.Dispose();
-    //        }
-    //    }
-    //}
+            // Assert
+            result.Status.ShouldBe(Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Healthy);
+        }
+        finally
+        {
+            // Dispose the service provider
+            if (serviceProvider is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+    }
 }

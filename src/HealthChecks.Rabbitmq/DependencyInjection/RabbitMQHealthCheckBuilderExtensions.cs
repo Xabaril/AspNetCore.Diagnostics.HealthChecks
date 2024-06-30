@@ -192,7 +192,11 @@ public static class RabbitMQHealthCheckBuilderExtensions
             name ?? NAME,
             sp =>
             {
-                setup?.Invoke(sp, options);
+                if (!options.AlreadyConfiguredByHealthCheckRegistrationCall)
+                {
+                    setup?.Invoke(sp, options);
+                    options.AlreadyConfiguredByHealthCheckRegistrationCall = true;
+                }
 
                 return new RabbitMQHealthCheck(options);
             },

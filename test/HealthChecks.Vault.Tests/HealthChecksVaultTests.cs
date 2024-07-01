@@ -1,15 +1,11 @@
 using HealthCheks.Vault;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using Moq;
-using Shouldly;
 using VaultSharp;
 using VaultSharp.V1.SystemBackend;
 
-namespace HealthChecks.Vault.Core.Tests;
+namespace HealthChecks.Vault.Tests;
 
-public class UnitTest1
+public class HealthChecksVaultTests
 {
     protected readonly string _defaultCheckName = "vault";
 
@@ -177,7 +173,7 @@ public class UnitTest1
         mockVaultClient.Setup(m => m.V1.System).Returns(mockSystemBackend.Object);
 
         var options = new VaultHealthCheckOptions()
-            .UseBasicAuthentication("hvs.IYNZcSg8g1K0QWrEUxw8C6NC")
+            .UseBasicAuthentication("basic-token")
             .WithVaultAddress("http://127.0.0.1:8200");
 
         services.AddSingleton(options);

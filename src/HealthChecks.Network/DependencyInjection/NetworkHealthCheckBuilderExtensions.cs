@@ -79,6 +79,42 @@ public static class NetworkHealthCheckBuilderExtensions
             timeout));
     }
 
+
+    /// <summary>
+    /// Add a health check for network SFTP.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="sftpConfigurationFactory">A factory to build the SftpConfiguration to use.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'sftp' will be used for the name.</param>
+    /// <param name="failureStatus">
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// </param>
+    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
+    /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddSftpHealthCheck(
+        this IHealthChecksBuilder builder,
+        Func<IServiceProvider, SftpConfiguration> sftpConfigurationFactory,
+        string? name = default,
+        HealthStatus? failureStatus = default,
+        IEnumerable<string>? tags = default,
+        TimeSpan? timeout = default)
+    {
+        return builder.Add(new HealthCheckRegistration(
+            name ?? SFTP_NAME,
+            sp =>
+            {
+                var options = new SftpHealthCheckOptions();
+                var sftpConfiguration = sftpConfigurationFactory.Invoke(sp);
+                options.AddHost(sftpConfiguration);
+                return new SftpHealthCheck(options);
+            },
+            failureStatus,
+            tags,
+            timeout));
+    }
+
     /// <summary>
     /// Add a health check for network FTP.
     /// </summary>

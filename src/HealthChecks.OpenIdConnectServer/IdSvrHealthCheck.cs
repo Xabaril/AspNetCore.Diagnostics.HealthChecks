@@ -8,16 +8,18 @@ public class IdSvrHealthCheck : IHealthCheck
 {
     private readonly Func<HttpClient> _httpClientFactory;
     private readonly string _discoverConfigurationSegment;
+    private readonly bool _isDynamicOpenIdProvider;
 
     public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
-        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT)
+        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT, false)
     {
     }
 
-    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment)
+    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment, bool isDynamicOpenIdProvider)
     {
         _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         _discoverConfigurationSegment = discoverConfigurationSegment;
+        _isDynamicOpenIdProvider = isDynamicOpenIdProvider;
     }
 
     /// <inheritdoc />
@@ -39,7 +41,7 @@ public class IdSvrHealthCheck : IHealthCheck
                    .ConfigureAwait(false)
                ?? throw new ArgumentException("Could not deserialize to discovery endpoint response!");
 
-            discoveryResponse.ValidateResponse();
+            discoveryResponse.ValidateResponse(_isDynamicOpenIdProvider);
 
             return HealthCheckResult.Healthy();
         }

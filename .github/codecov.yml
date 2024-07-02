@@ -35,6 +35,8 @@ flags:
     carryforward: true
   CosmosDb:
     carryforward: true
+  CassandraDb:
+    carryforward: true
   DocumentDb:
     carryforward: true
   DynamoDb:

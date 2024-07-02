@@ -15,7 +15,7 @@ public class ElasticContainerFixture : IAsyncLifetime
     private const string ELASTIC_CONTAINER_NAME = "es01";
     private const string CONTAINER_CERTIFICATE_PATH = "/usr/share/elasticsearch/config/certs/ca/ca.crt";
 
-    public const string ELASTIC_PASSWORD = "abcDEF123!";
+    public const string ELASTIC_PASSWORD = "abcDEF123!"; /* Hard coded password for testing purposes */
     private readonly string _composeFilePath = $"{Directory.GetCurrentDirectory()}/Resources/docker-compose.yml";
     private readonly ICompositeService _compositeService;
 

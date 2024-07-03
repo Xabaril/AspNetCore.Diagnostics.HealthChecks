@@ -1,3 +1,4 @@
+using HealthCheks.Vault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using VaultSharp;
 using VaultSharp.V1.AuthMethods;
@@ -6,7 +7,7 @@ using VaultSharp.V1.AuthMethods.Okta;
 using VaultSharp.V1.AuthMethods.RADIUS;
 using VaultSharp.V1.AuthMethods.Token;
 
-namespace HealthCheks.Vault;
+namespace HealthChecks.Vault;
 
 
 public class HealthChecksVault : IHealthCheck

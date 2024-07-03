@@ -1,7 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
+using HealthCheks.Vault;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthCheks.Vault.DependencyInjection;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class HealthCkecksVaultBuilderExtension
 {
@@ -20,7 +20,7 @@ public static class HealthCkecksVaultBuilderExtension
 
         return builder.Add(new HealthCheckRegistration(
            name,
-           sp => new HealthChecksVault(options),
+           sp => new HealthChecks.Vault.HealthChecksVault(options),
            failureStatus,
            tags,
            timeout));
@@ -59,7 +59,7 @@ public static class HealthCkecksVaultBuilderExtension
 
         return builder.Add(new HealthCheckRegistration(
            name,
-           sp => new HealthChecksVault(options),
+           sp => new HealthChecks.Vault.HealthChecksVault(options),
            failureStatus,
            tags,
            timeout));

@@ -20,27 +20,16 @@ public class RegistrationTest
         services.AddHealthChecks()
             .AddCheck<HealthChecksVault>(_defaultCheckName);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var healthCheckOptions = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        try
-        {
-            // Act
-            var registration = healthCheckOptions.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        // Act
+        var registration = healthCheckOptions.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            // Assert
-            registration.Name.ShouldBe(_defaultCheckName);
-            check.ShouldBeOfType<HealthChecksVault>();
-        }
-        finally
-        {
-            // Dispose the service provider
-            if (serviceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        // Assert
+        registration.Name.ShouldBe(_defaultCheckName);
+        check.ShouldBeOfType<HealthChecksVault>();
     }
 
     [Fact]
@@ -57,27 +46,17 @@ public class RegistrationTest
         services.AddHealthChecks()
             .AddCheck<HealthChecksVault>(_defaultCheckName);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var healthCheckOptions = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        try
-        {
-            // Act
-            var registration = healthCheckOptions.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
+        // Act
+        var registration = healthCheckOptions.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
 
-            // Assert
-            registration.Name.ShouldBe(_defaultCheckName);
-            check.ShouldBeOfType<HealthChecksVault>();
-        }
-        finally
-        {
-            // Dispose the service provider
-            if (serviceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        // Assert
+        registration.Name.ShouldBe(_defaultCheckName);
+        check.ShouldBeOfType<HealthChecksVault>();
+
     }
 
     [Fact]
@@ -94,27 +73,18 @@ public class RegistrationTest
         services.AddHealthChecks()
             .AddCheck<HealthChecksVault>(_defaultCheckName);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var healthCheckOptions = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        try
-        {
-            // Act
-            var registration = healthCheckOptions.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
 
-            // Assert
-            registration.Name.ShouldBe(_defaultCheckName);
-            check.ShouldBeOfType<HealthChecksVault>();
-        }
-        finally
-        {
-            // Dispose the service provider
-            if (serviceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        // Act
+        var registration = healthCheckOptions.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        // Assert
+        registration.Name.ShouldBe(_defaultCheckName);
+        check.ShouldBeOfType<HealthChecksVault>();
+
     }
 
     [Fact]
@@ -131,26 +101,17 @@ public class RegistrationTest
         services.AddHealthChecks()
             .AddCheck<HealthChecksVault>(_defaultCheckName);
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var healthCheckOptions = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
-        try
-        {
-            // Act
-            var registration = healthCheckOptions.Value.Registrations.First();
-            var check = registration.Factory(serviceProvider);
 
-            // Assert
-            registration.Name.ShouldBe(_defaultCheckName);
-            check.ShouldBeOfType<HealthChecksVault>();
-        }
-        finally
-        {
-            // Dispose the service provider
-            if (serviceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        // Act
+        var registration = healthCheckOptions.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        // Assert
+        registration.Name.ShouldBe(_defaultCheckName);
+        check.ShouldBeOfType<HealthChecksVault>();
+
     }
 }

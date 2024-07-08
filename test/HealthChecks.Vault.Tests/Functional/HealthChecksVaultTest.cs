@@ -1,3 +1,4 @@
+using System.Net;
 using VaultSharp;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Token;
@@ -15,7 +16,7 @@ public class HealthChecksVaultTest : IClassFixture<Fixtures.VaultContainerFixtur
     }
 
     [Fact]
-    public async Task CheckVaultHealthAsync()
+    public async Task VaultHealthCheck_Should_Available()
     {
         var vaultAddress = _vaultContainerFixture.VaultAddress;
         var rootToken = _vaultContainerFixture.RootToken;
@@ -24,19 +25,24 @@ public class HealthChecksVaultTest : IClassFixture<Fixtures.VaultContainerFixtur
         var vaultClientSettings = new VaultClientSettings(vaultAddress, authMethod);
         IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
-        try
-        {
-            // Check the health of the Vault server
-            var healthStatus = await vaultClient.V1.System.GetHealthStatusAsync();
+        var webHostBuilder = new WebHostBuilder()
+       .ConfigureServices(services =>
+       {
+           services.AddHealthChecks()
+            .AddVaultHealthCheck(vaultAddress, rootToken!, "vault");
+       })
+       .Configure(app =>
+       {
+           app.UseHealthChecks("/health", new HealthCheckOptions
+           {
+               Predicate = r => r.Tags.Contains("vault")
+           });
+       });
 
-            // Assert the health status
-            Assert.True(healthStatus.Initialized);
-            Assert.False(healthStatus.Sealed);
-            Console.WriteLine($"Vault is healthy: Initialized = {healthStatus.Initialized}, Sealed = {healthStatus.Sealed}");
-        }
-        catch (Exception ex)
-        {
-            Assert.Fail($"Health check failed: {ex.Message}");
-        }
+        using var server = new TestServer(webHostBuilder);
+
+        using var response = await server.CreateRequest("/health").GetAsync();
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }

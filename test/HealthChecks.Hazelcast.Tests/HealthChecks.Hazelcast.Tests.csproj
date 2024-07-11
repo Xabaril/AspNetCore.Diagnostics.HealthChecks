@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Hazelcast\HealthChecks.Hazelcast.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Testcontainers" Version="3.9.0" />
+  </ItemGroup>
+  
+</Project>

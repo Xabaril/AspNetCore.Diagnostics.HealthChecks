@@ -1,3 +1,4 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -305,6 +306,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.Azure.Messaging.EventHubs.Tests", "test\HealthChecks.Azure.Messaging.EventHubs.Tests\HealthChecks.Azure.Messaging.EventHubs.Tests.csproj", "{09160C0F-BB5E-4DF2-AF44-E859E8EDE6BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.AzureServiceBus.Tests", "test\HealthChecks.AzureServiceBus.Tests\HealthChecks.AzureServiceBus.Tests.csproj", "{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthChecks.UI.ScrewedOver", "samples\HealthChecks.UI.ScrewedOver\HealthChecks.UI.ScrewedOver.csproj", "{D68A5B8B-F85C-4F54-9204-42A3FF8B1993}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -856,6 +859,10 @@ Global
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D68A5B8B-F85C-4F54-9204-42A3FF8B1993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68A5B8B-F85C-4F54-9204-42A3FF8B1993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68A5B8B-F85C-4F54-9204-42A3FF8B1993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68A5B8B-F85C-4F54-9204-42A3FF8B1993}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -997,6 +1004,7 @@ Global
 		{2C02BEDF-FFFA-4747-920A-A1ED6CFFC21A} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{09160C0F-BB5E-4DF2-AF44-E859E8EDE6BD} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{3B812989-2C4E-4FCE-B3A0-EF9C00A9B3A5} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{D68A5B8B-F85C-4F54-9204-42A3FF8B1993} = {092533AB-7505-4EDC-8932-D40BF575D0D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

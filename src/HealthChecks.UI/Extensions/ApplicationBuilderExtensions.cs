@@ -2,6 +2,7 @@ using HealthChecks.UI;
 using HealthChecks.UI.Configuration;
 using HealthChecks.UI.Core;
 using HealthChecks.UI.Middleware;
+using Microsoft.AspNetCore.Routing;
 
 namespace Microsoft.AspNetCore.Builder;
 
@@ -22,7 +23,10 @@ public static class ApplicationBuilderExtensions
 
     private static IApplicationBuilder ConfigurePipeline(IApplicationBuilder app, Options options)
     {
-        EnsureValidApiOptions(options);
+        EnsureValidApiOptions(options,
+            (app.ApplicationServices.GetService(typeof(IEnumerable<EndpointDataSource>)) as IEnumerable<EndpointDataSource>)
+                ?.SelectMany(dataSource => dataSource.Endpoints)
+                ?.OfType<RouteEndpoint>());
 
         var embeddedResourcesAssembly = typeof(UIResource).Assembly;
 
@@ -44,7 +48,7 @@ public static class ApplicationBuilderExtensions
         return app;
     }
 
-    private static void EnsureValidApiOptions(Options options)
+    private static void EnsureValidApiOptions(Options options, IEnumerable<RouteEndpoint>? routeEndpoints)
     {
         Action<string, string> ensureValidPath = (string path, string argument) =>
         {
@@ -54,8 +58,18 @@ public static class ApplicationBuilderExtensions
             }
         };
 
+        Func<string, string> normalizeUriPath = (string path) =>
+            path.TrimEnd('/').ToLower();
+
         ensureValidPath(options.ApiPath, nameof(Options.ApiPath));
         ensureValidPath(options.UIPath, nameof(Options.UIPath));
         ensureValidPath(options.WebhookPath, nameof(Options.WebhookPath));
+
+        if (routeEndpoints
+            ?.Select(endPoint => normalizeUriPath(endPoint.RoutePattern.RawText ?? string.Empty))
+            ?.Count(path => path == normalizeUriPath(options.ApiPath)) > 0)
+        {
+            throw new ArgumentException("ApiPath should not match any route registered via MapHealthChecks!");
+        }
     }
 }

@@ -334,4 +334,32 @@ public class UI_Configuration_should
 
         html.ShouldContain($"<title>{pageTitle}</title>");
     }
+
+    [Theory]
+    [InlineData("/healthz")]
+    [InlineData("/healthz/")]
+    [InlineData("/Healthz")]
+    public void throws_when_api_path_mounted_on_existing_health_check(string endPoint)
+    {
+        var builder = new WebHostBuilder()
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddRouting()
+                    .AddHealthChecksUI()
+                    .AddInMemoryStorage()
+                    .Services
+                    .AddHealthChecks();
+            })
+            .Configure(app =>
+            {
+                app
+                    .UseRouting()
+                    .UseEndpoints(setup => setup.MapHealthChecks(endPoint, new HealthCheckOptions()))
+                    .UseHealthChecksUI(setup => setup.ApiPath = "/healthz");
+            });
+
+        var exception = Assert.Throws<ArgumentException>(() => new TestServer(builder));
+        Assert.Equal("ApiPath should not match any route registered via MapHealthChecks!", exception.Message);
+    }
 }

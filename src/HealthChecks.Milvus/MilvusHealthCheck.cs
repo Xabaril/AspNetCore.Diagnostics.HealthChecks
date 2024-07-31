@@ -8,7 +8,6 @@ namespace HealthChecks.Milvus;
 /// </summary>
 public class MilvusHealthCheck : IHealthCheck
 {
-    //private readonly MilvusHealthCheckOptions _options;
     private readonly MilvusClient _client;
 
     public MilvusHealthCheck(MilvusClient client)

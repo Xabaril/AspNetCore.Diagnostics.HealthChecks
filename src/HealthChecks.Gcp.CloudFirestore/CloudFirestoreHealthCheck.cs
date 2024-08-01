@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Gcp.CloudFirestore;
@@ -5,6 +7,15 @@ namespace HealthChecks.Gcp.CloudFirestore;
 public class CloudFirestoreHealthCheck : IHealthCheck
 {
     private readonly CloudFirestoreOptions _cloudFirestoreOptions;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "healthcheck.name", nameof(CloudFirestoreHealthCheck) },
+                    { "healthcheck.task", "ready" },
+                    { "db.system", "gcpcloudfirestore" },
+                    { "event.name", "database.healthcheck"},
+                    { "client.address", Dns.GetHostName()},
+                    { "network.protocol.name", "http" },
+                    { "network.transport", "tcp" }
+    };
 
     public CloudFirestoreHealthCheck(CloudFirestoreOptions cloudFirestoreOptions)
     {
@@ -14,8 +25,10 @@ public class CloudFirestoreHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
+            checkDetails.Add("db.namespace", _cloudFirestoreOptions.FirestoreDatabase);
             var currentRootCollections = await GetRootCollectionsAsync(cancellationToken).ConfigureAwait(false);
             if (_cloudFirestoreOptions.RequiredCollections != null)
             {
@@ -26,16 +39,17 @@ public class CloudFirestoreHealthCheck : IHealthCheck
                 {
                     return new HealthCheckResult(
                         context.Registration.FailureStatus,
-                        description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'"))
+                        description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'")),
+                        data: new ReadOnlyDictionary<string, object>(checkDetails)
                     );
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 

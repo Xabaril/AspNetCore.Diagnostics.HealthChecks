@@ -15,7 +15,9 @@ public static class MilvusHealthCheckBuilderExtensions
     /// Add a health check for Milvus services.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="clientFactory">The Redis connection string to be used.</param>
+    /// <param name="clientFactory">
+    /// An optional factory to obtain <see cref="Milvus.Client.MilvusClient" /> instance.
+    /// When not provided, <see cref="Milvus.Client.MilvusClient" /> is simply resolved from <see cref="IServiceProvider"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'milvus' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

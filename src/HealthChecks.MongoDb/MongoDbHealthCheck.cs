@@ -7,6 +7,8 @@ namespace HealthChecks.MongoDb;
 
 public class MongoDbHealthCheck : IHealthCheck
 {
+    private const int MAX_PING_ATTEMPTS = 2;
+
     private static readonly BsonDocumentCommand<BsonDocument> _command = new(BsonDocument.Parse("{ping:1}"));
     private static readonly ConcurrentDictionary<string, IMongoClient> _mongoClient = new();
     private readonly MongoClientSettings _mongoClientSettings;
@@ -46,10 +48,30 @@ public class MongoDbHealthCheck : IHealthCheck
                 // this you can check a specified database.
                 // Related with issue #43 and #617
 
-                await mongoClient
-                    .GetDatabase(_specifiedDatabase)
-                    .RunCommandAsync(_command, cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
+                for (int attempt = 1; attempt <= MAX_PING_ATTEMPTS; attempt++)
+                {
+                    try
+                    {
+                        await mongoClient
+                            .GetDatabase(_specifiedDatabase)
+                            .RunCommandAsync(_command, cancellationToken: cancellationToken)
+                            .ConfigureAwait(false);
+                        break;
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception)
+                    {
+                        if (MAX_PING_ATTEMPTS == attempt)
+                        {
+                            throw;
+                        }
+
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+                }
             }
             else
             {

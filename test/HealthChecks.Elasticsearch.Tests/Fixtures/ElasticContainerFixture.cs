@@ -26,6 +26,7 @@ public class ElasticContainerFixture : IAsyncLifetime
         _compositeService = new Builder()
             .UseContainer()
             .UseCompose()
+            .AssumeComposeVersion(Ductus.FluentDocker.Model.Compose.ComposeVersion.V2)
             .FromFile(_composeFilePath)
             .ForceRecreate()
             .Build()

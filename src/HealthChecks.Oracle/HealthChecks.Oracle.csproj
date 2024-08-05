@@ -8,9 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.190" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

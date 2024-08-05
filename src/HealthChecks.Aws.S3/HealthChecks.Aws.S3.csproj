@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.302" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

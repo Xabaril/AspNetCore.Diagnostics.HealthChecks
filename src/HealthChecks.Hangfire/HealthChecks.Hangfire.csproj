@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hangfire.Core" Version="1.8.6" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="Hangfire.Core" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

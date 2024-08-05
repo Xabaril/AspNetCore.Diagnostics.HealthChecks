@@ -30,11 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     services:
       zookeeper:
-        image: confluent/zookeeper
+        image: confluent/zookeeper:latest
         ports:
           - 2181:2181
       kafka:
-        image: confluent/kafka
+        image: confluent/kafka:latest
         ports:
           - 9092:9092
         env:

@@ -43,7 +43,7 @@ public class kafka_healthcheck_should
     {
         var configuration = new ProducerConfig()
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = "localhost:29092",
             MessageSendMaxRetries = 0
         };
 

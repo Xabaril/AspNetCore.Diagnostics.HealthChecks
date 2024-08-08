@@ -43,6 +43,8 @@ jobs:
             6.0.x
             7.0.x
             8.0.x
+      - run:
+          ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj &&

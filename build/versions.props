@@ -39,7 +39,7 @@
     <HealthCheckMySql>8.0.1</HealthCheckMySql>
     <HealthCheckNetwork>8.0.1</HealthCheckNetwork>
     <HealthCheckNats>8.0.1</HealthCheckNats>
-    <HealthCheckNpgSql>8.0.1</HealthCheckNpgSql>
+    <HealthCheckNpgSql>8.0.2</HealthCheckNpgSql>
     <HealthCheckOpenIdConnectServer>8.0.1</HealthCheckOpenIdConnectServer>
     <HealthCheckOracle>8.0.1</HealthCheckOracle>
     <HealthCheckPrometheusMetrics>8.0.1</HealthCheckPrometheusMetrics>
@@ -59,7 +59,7 @@
     <HealthChecksUIK8sOperator>8.0.1</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>8.0.1</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>8.0.1</HealthCheckSystem>
-    <HealthCheckUI>8.0.1</HealthCheckUI>
+    <HealthCheckUI>8.0.2</HealthCheckUI>
     <HealthCheckUIClient>8.0.1</HealthCheckUIClient>
     <HealthCheckUICore>8.0.1</HealthCheckUICore>
     <HealthCheckUIData>8.0.1</HealthCheckUIData>

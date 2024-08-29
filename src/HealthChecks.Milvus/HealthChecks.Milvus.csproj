@@ -4,7 +4,7 @@
     <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Milvus</PackageTags>
     <Description>HealthChecks.Milvus is the health check package for Milvus.</Description>
-    <VersionPrefix>$(HealthCheckRedis)</VersionPrefix>
+    <VersionPrefix>$(HealthCheckMilvus)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>

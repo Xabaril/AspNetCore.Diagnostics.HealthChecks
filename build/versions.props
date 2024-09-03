@@ -48,7 +48,7 @@
     <HealthCheckPublisherDatadog>8.0.1</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>8.0.1</HealthCheckPublisherPrometheus>
     <HealthCheckPublisherSeq>8.0.1</HealthCheckPublisherSeq>
-    <HealthCheckRabbitMQ>8.0.1</HealthCheckRabbitMQ>
+    <HealthCheckRabbitMQ>8.0.2</HealthCheckRabbitMQ>
     <HealthCheckRavenDB>8.0.1</HealthCheckRavenDB>
     <HealthCheckRedis>8.0.1</HealthCheckRedis>
     <HealthCheckSendGrid>8.0.1</HealthCheckSendGrid>

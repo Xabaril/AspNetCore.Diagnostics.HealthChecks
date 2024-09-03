@@ -61,6 +61,8 @@ flags:
     carryforward: true
   MongoDb:
     carryforward: true
+  Milvus:
+    carryforward: true
   MySql:
     carryforward: true
   Nats:

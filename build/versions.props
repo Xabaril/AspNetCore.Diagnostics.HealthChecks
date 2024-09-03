@@ -35,6 +35,7 @@
     <HealthCheckKafka>8.0.1</HealthCheckKafka>
     <HealthCheckKeyVault>8.0.1</HealthCheckKeyVault>
     <HealthCheckKubernetes>8.0.1</HealthCheckKubernetes>
+    <HealthCheckMilvus>8.0.0</HealthCheckMilvus>
     <HealthCheckMongoDB>8.1.0</HealthCheckMongoDB>
     <HealthCheckMySql>8.0.1</HealthCheckMySql>
     <HealthCheckNetwork>8.0.1</HealthCheckNetwork>

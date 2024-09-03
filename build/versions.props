@@ -54,7 +54,7 @@
     <HealthCheckSendGrid>8.0.1</HealthCheckSendGrid>
     <HealthCheckSignalR>8.0.1</HealthCheckSignalR>
     <HealthCheckSolr>8.0.1</HealthCheckSolr>
-    <HealthCheckSqlite>8.0.1</HealthCheckSqlite>
+    <HealthCheckSqlite>8.1.0</HealthCheckSqlite>
     <HealthCheckSqlServer>8.0.2</HealthCheckSqlServer>
     <HealthChecksUIK8sOperator>8.0.1</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>8.0.1</HealthChecksUIPostgreSQLStorage>

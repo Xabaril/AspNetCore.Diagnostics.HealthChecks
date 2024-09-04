@@ -7,7 +7,10 @@ public class elasticsearch_healthcheck_should
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_available()
     {
-        var connectionString = @"http://localhost:9201";
+        // TODO: Port 9200 is Secure BUT will throw CA Certificate error if used with https
+        // `javax.net.ssl.SSLHandshakeException: Received fatal alert: unknown_ca`
+        // TODO: http://localhost:9200 results in a 503
+        var connectionString = @"https://localhost:9200";
 
         var webHostBuilder = new WebHostBuilder()
         .ConfigureServices(services =>
@@ -37,7 +40,7 @@ public class elasticsearch_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddElasticsearch("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
+                .AddElasticsearch("https://nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
             })
             .Configure(app =>
             {

@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.CassandraDb\HealthChecks.CassandraDb.csproj" />
+  </ItemGroup>
+</Project>

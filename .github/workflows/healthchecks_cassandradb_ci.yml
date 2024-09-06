@@ -1,0 +1,93 @@
+name: HealthChecks CassandraDb CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.CassandraDb/**
+      - test/HealthChecks.CassandraDb.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_cassandradb_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+    tags-ignore:
+      - release-*
+      - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.CassandraDb/**
+      - test/HealthChecks.CassandraDb.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_cassandradb_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      CassandraDb:
+        image: cassandra:latest
+        ports:
+          - 9042:9042
+        options: --health-cmd="cqlsh -e 'DESCRIBE KEYSPACES'" --health-interval=10s --health-timeout=5s --health-retries=6
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+
+      - name: Cache NuGet Packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/.*csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
+          dotnet restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
+
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.CassandraDb/HealthChecks.CassandraDb.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
+
+      - name: Wait for Cassandra to be ready
+        run: |
+          until docker run --network host -e CQLSH_HOST=localhost -e CQLSH_PORT=9042 cassandra:latest cqlsh -e "SELECT now() FROM system.local;"; do
+            echo "Waiting for Cassandra..."
+            sleep 10
+          done
+
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.CassandraDb.Tests/HealthChecks.CassandraDb.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          flags: CassandraDb
+          directory: .coverage

@@ -35,6 +35,9 @@ consul:
 cosmosdb:
   - src/HealthChecks.CosmosDb/**/*
 
+cassandradb:
+  - src/HealthChecks.CassandraDb/**/*
+
 dapr:
   - src/HealthChecks.Dapr/**/*
 

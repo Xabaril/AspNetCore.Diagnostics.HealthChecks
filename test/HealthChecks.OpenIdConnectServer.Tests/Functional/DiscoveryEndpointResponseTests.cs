@@ -1,5 +1,3 @@
-using HealthChecks.IdSvr;
-
 namespace HealthChecks.OpenIdConnectServer.Tests.Functional;
 
 public class discovery_endpoint_response_should

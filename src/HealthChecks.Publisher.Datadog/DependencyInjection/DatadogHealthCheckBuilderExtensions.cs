@@ -24,15 +24,34 @@ public static class DatadogHealthCheckBuilderExtensions
         string datadogAgentName = "127.0.0.1",
         string[]? defaultTags = default)
     {
+        builder.AddDatadogPublisher(serviceCheckName, new StatsdConfig() { StatsdServerName = datadogAgentName }, defaultTags);
+        return builder;
+    }
+
+    /// <summary>
+    /// Add a health check publisher for Datadog.
+    /// </summary>
+    /// <remarks>
+    /// For each <see cref="HealthReport"/> published a custom service check indicating the health check status (OK - Healthy, WARNING - Degraded, CRITICAL - Unhealthy)
+    /// and a metric indicating the total time the health check took to execute in milliseconds is sent to Datadog.
+    /// </remarks>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="serviceCheckName">Specifies the name of the custom check and metric that will be published to datadog. Example: "myservice.healthchecks".</param>
+    /// <param name="statsdConfig">The whole Datadog StatsdConfig</param>
+    /// <param name="defaultTags">Specifies a collection of tags to send with the custom check and metric.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    public static IHealthChecksBuilder AddDatadogPublisher(
+        this IHealthChecksBuilder builder,
+        string serviceCheckName,
+        StatsdConfig statsdConfig,
+        string[]? defaultTags = default)
+    {
         builder.Services
             .AddSingleton<IHealthCheckPublisher>(sp =>
             {
                 var dogStatsdService = new DogStatsdService();
 
-                dogStatsdService.Configure(new StatsdConfig
-                {
-                    StatsdServerName = datadogAgentName
-                });
+                dogStatsdService.Configure(statsdConfig);
 
                 return new DatadogPublisher(dogStatsdService, serviceCheckName, defaultTags);
             });

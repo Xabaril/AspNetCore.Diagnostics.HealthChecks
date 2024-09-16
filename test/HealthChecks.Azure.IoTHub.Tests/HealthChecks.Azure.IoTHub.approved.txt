@@ -1,23 +1,31 @@
 namespace HealthChecks.Azure.IoTHub
 {
-    public class IoTHubHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public sealed class IoTHubRegistryManagerHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public IoTHubHealthCheck(HealthChecks.Azure.IoTHub.IoTHubOptions options) { }
+        public IoTHubRegistryManagerHealthCheck(Microsoft.Azure.Devices.RegistryManager registryManager, HealthChecks.Azure.IoTHub.IotHubRegistryManagerOptions? options = null) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
-    public class IoTHubOptions
+    public sealed class IoTHubServiceClientHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public IoTHubOptions() { }
-        public HealthChecks.Azure.IoTHub.IoTHubOptions AddConnectionString(string connectionString) { }
-        public HealthChecks.Azure.IoTHub.IoTHubOptions AddRegistryReadCheck(string query = "SELECT deviceId FROM devices") { }
-        public HealthChecks.Azure.IoTHub.IoTHubOptions AddRegistryWriteCheck(System.Func<string>? deviceIdFactory = null) { }
-        public HealthChecks.Azure.IoTHub.IoTHubOptions AddServiceConnectionCheck(Microsoft.Azure.Devices.TransportType transport = 0) { }
+        public IoTHubServiceClientHealthCheck(Microsoft.Azure.Devices.ServiceClient serviceClient, IotHubServiceClientOptions? options = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
+    public sealed class IotHubRegistryManagerOptions
+    {
+        public IotHubRegistryManagerOptions() { }
+        public HealthChecks.Azure.IoTHub.IotHubRegistryManagerOptions AddRegistryReadCheck(string query = "SELECT deviceId FROM devices") { }
+        public HealthChecks.Azure.IoTHub.IotHubRegistryManagerOptions AddRegistryWriteCheck(System.Func<string>? deviceIdFactory = null) { }
+    }
+}
+public sealed class IotHubServiceClientOptions
+{
+    public IotHubServiceClientOptions() { }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IoTHubHealthChecksBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureIoTHub(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Azure.IoTHub.IoTHubOptions>? optionsFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureIoTHubRegistryManager(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Microsoft.Azure.Devices.RegistryManager>? registryManagerFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.IoTHub.IotHubRegistryManagerOptions>? optionsFactory = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureIoTHubServiceClient(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Microsoft.Azure.Devices.ServiceClient>? serviceClientFactory = null, System.Func<System.IServiceProvider, IotHubServiceClientOptions>? optionsFactory = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

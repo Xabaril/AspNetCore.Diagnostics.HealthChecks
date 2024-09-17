@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthCheks.Vault\HealthChecks.Vault.csproj" />
+  </ItemGroup>
+
+
+</Project>

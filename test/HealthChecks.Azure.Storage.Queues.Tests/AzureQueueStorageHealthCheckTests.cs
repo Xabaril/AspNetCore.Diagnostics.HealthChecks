@@ -55,13 +55,9 @@ public class azurequeuestoragehealthcheck_should
     }
 
     [Fact]
-    public async Task return_healthy_when_checking_healthy_service_and_queue()
+    public async Task return_healthy_when_checking_healthy_service_queue()
     {
         using var tokenSource = new CancellationTokenSource();
-
-        _queueServiceClient
-            .GetQueuesAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<QueueItem>.FromPages(new[] { Substitute.For<Page<QueueItem>>() }));
 
         _queueClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -70,10 +66,6 @@ public class azurequeuestoragehealthcheck_should
         _options.QueueName = QueueName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        _queueServiceClient
-            .Received(1)
-            .GetQueuesAsync(cancellationToken: tokenSource.Token);
-
         await _queueClient
             .Received(1)
             .GetPropertiesAsync(tokenSource.Token);
@@ -81,10 +73,8 @@ public class azurequeuestoragehealthcheck_should
         actual.Status.ShouldBe(HealthStatus.Healthy);
     }
 
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public async Task return_unhealthy_when_checking_unhealthy_service(bool checkQueue)
+    [Fact]
+    public async Task return_unhealthy_when_checking_unhealthy_service()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -108,7 +98,6 @@ public class azurequeuestoragehealthcheck_should
             .GetQueuesAsync(cancellationToken: tokenSource.Token)
             .Returns(pageable);
 
-        _options.QueueName = checkQueue ? QueueName : null;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _queueServiceClient
@@ -136,14 +125,33 @@ public class azurequeuestoragehealthcheck_should
             .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
     }
 
+
+    [Fact]
+    public async Task return_unhealthy_when_checking_unhealthy_service_queue()
+    {
+        using var tokenSource = new CancellationTokenSource();
+
+        _queueClient
+            .GetPropertiesAsync(tokenSource.Token)
+            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        _options.QueueName = QueueName;
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+
+        await _queueClient
+            .Received(1)
+            .GetPropertiesAsync(tokenSource.Token);
+
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
+    }
+
     [Fact]
     public async Task return_unhealthy_when_checking_unhealthy_queue()
     {
         using var tokenSource = new CancellationTokenSource();
-
-        _queueServiceClient
-            .GetQueuesAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<QueueItem>.FromPages(new[] { Substitute.For<Page<QueueItem>>() }));
 
         _queueClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -152,14 +160,11 @@ public class azurequeuestoragehealthcheck_should
         _options.QueueName = QueueName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        _queueServiceClient
-            .Received(1)
-            .GetQueuesAsync(cancellationToken: tokenSource.Token);
-
         await _queueClient
             .Received(1)
             .GetPropertiesAsync(tokenSource.Token);
 
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
             .Exception!.ShouldBeOfType<RequestFailedException>()
             .Status.ShouldBe((int)HttpStatusCode.NotFound);
@@ -172,17 +177,13 @@ public class azurequeuestoragehealthcheck_should
             .AddSingleton(_queueServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureQueueStorage(optionsFactory: _ => new AzureQueueStorageHealthCheckOptions() { QueueName = QueueName }, name: HealthCheckName)
+            .AddAzureQueueStorage(optionsFactory: _ => new AzureQueueStorageHealthCheckOptions(), name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 
         _queueServiceClient
             .GetQueuesAsync(cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(AsyncPageable<QueueItem>.FromPages(new[] { Substitute.For<Page<QueueItem>>() }));
-
-        _queueClient
-            .GetPropertiesAsync(Arg.Any<CancellationToken>())
-            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Queue not found"));
+            .Throws(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
 
         var service = provider.GetRequiredService<HealthCheckService>();
         var report = await service.CheckHealthAsync();
@@ -190,6 +191,29 @@ public class azurequeuestoragehealthcheck_should
         _queueServiceClient
             .Received(1)
             .GetQueuesAsync(cancellationToken: Arg.Any<CancellationToken>());
+
+        var actual = report.Entries[HealthCheckName];
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        actual.Exception!.ShouldBeOfType<RequestFailedException>();
+    }
+
+    [Fact]
+    public async Task return_unhealthy_when_invoked_from_healthcheckservice_for_queue()
+    {
+        using var provider = new ServiceCollection()
+            .AddSingleton(_queueServiceClient)
+            .AddLogging()
+            .AddHealthChecks()
+            .AddAzureQueueStorage(optionsFactory: _ => new AzureQueueStorageHealthCheckOptions() { QueueName = QueueName }, name: HealthCheckName)
+            .Services
+            .BuildServiceProvider();
+
+        _queueClient
+            .GetPropertiesAsync(Arg.Any<CancellationToken>())
+            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Queue not found"));
+
+        var service = provider.GetRequiredService<HealthCheckService>();
+        var report = await service.CheckHealthAsync();
 
         await _queueClient
             .Received(1)

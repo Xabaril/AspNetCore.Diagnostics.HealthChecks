@@ -19,6 +19,30 @@ public class sendgrid_registration_should
         check.ShouldBeOfType<SendGridHealthCheck>();
     }
 
+    private class SendGridOptions
+    {
+        public string ApiKey { get; set; } = default!;
+    }
+
+    [Fact]
+    public void add_health_check_from_DI_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+
+        services.AddOptions<SendGridOptions>().Configure(options => options.ApiKey = "my_api_key");
+        services.AddHealthChecks()
+            .AddSendGrid(sp => sp.GetRequiredService<IOptions<SendGridOptions>>().Value.ApiKey);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("sendgrid");
+        check.ShouldBeOfType<SendGridHealthCheck>();
+    }
+
     [Fact]
     public void add_named_health_check_when_properly_configured()
     {

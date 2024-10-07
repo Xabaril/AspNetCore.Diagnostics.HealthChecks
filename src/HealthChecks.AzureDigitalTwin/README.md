@@ -98,7 +98,7 @@ public void ConfigureServices(IServiceCollection services)
             "MyDigitalTwinClientSecret",
             "TenantId",
             "https://my-awesome-dt-host",
-            new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" })
+            ["my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1"])
 }
 ```
 
@@ -112,7 +112,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddAzureDigitalTwinModels(
             myCredentials,
-            new string[] { "my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1" },
+            ["my:dt:definition_a;1", "my:dt:definition_b;1", "my:dt:definition_c;1"],
             failureStatus: HealthStatus.Degraded)
 }
 ```

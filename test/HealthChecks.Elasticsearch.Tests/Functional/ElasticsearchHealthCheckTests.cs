@@ -13,7 +13,7 @@ public class elasticsearch_healthcheck_should
         .ConfigureServices(services =>
         {
             services.AddHealthChecks()
-             .AddElasticsearch(connectionString, tags: new string[] { "elasticsearch" });
+             .AddElasticsearch(connectionString, tags: ["elasticsearch"]);
         })
         .Configure(app =>
         {
@@ -37,7 +37,7 @@ public class elasticsearch_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddElasticsearch("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
+                .AddElasticsearch("nonexistingdomain:9200", tags: ["elasticsearch"]);
             })
             .Configure(app =>
             {

@@ -12,7 +12,7 @@ public static class UIResponseWriter
 {
     private const string DEFAULT_CONTENT_TYPE = "application/json";
 
-    private static readonly byte[] _emptyResponse = new byte[] { (byte)'{', (byte)'}' };
+    private static readonly byte[] _emptyResponse = [(byte)'{', (byte)'}'];
     private static readonly Lazy<JsonSerializerOptions> _options = new(CreateJsonOptions);
 
 #pragma warning disable IDE1006 // Naming Styles

@@ -37,7 +37,7 @@ public class SftpHealthCheck : IHealthCheck
                 {
                     if (item.FileCreationOptions.createFile)
                     {
-                        using var stream = new MemoryStream(new byte[] { 0x0 }, 0, 1);
+                        using var stream = new MemoryStream([0x0], 0, 1);
                         sftpClient.UploadFile(stream, item.FileCreationOptions.remoteFilePath);
                     }
                 }

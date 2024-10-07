@@ -26,7 +26,7 @@ public class smtp_healthcheck_should
                     setup.Port = 465;
                     setup.ConnectionType = SmtpConnectionType.SSL;
                     setup.AllowInvalidRemoteCertificates = true;
-                }, tags: new string[] { "smtp" });
+                }, tags: ["smtp"]);
             })
             .Configure(app =>
             {
@@ -56,7 +56,7 @@ public class smtp_healthcheck_should
                     setup.Port = 587;
                     setup.ConnectionType = SmtpConnectionType.TLS;
                     setup.AllowInvalidRemoteCertificates = true;
-                }, tags: new string[] { "smtp" });
+                }, tags: ["smtp"]);
             })
             .Configure(app =>
             {
@@ -84,7 +84,7 @@ public class smtp_healthcheck_should
                     setup.Host = _host;
                     setup.Port = 587;
                     setup.AllowInvalidRemoteCertificates = true;
-                }, tags: new string[] { "smtp" });
+                }, tags: ["smtp"]);
             })
             .Configure(app =>
             {
@@ -112,7 +112,7 @@ public class smtp_healthcheck_should
                         setup.Host = _host;
                         setup.Port = 45;
                         setup.AllowInvalidRemoteCertificates = true;
-                    }, tags: new string[] { "smtp" });
+                    }, tags: ["smtp"]);
             })
             .Configure(app =>
             {
@@ -141,7 +141,7 @@ public class smtp_healthcheck_should
                     setup.Port = 465;
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
-                }, tags: new string[] { "smtp" });
+                }, tags: ["smtp"]);
             })
             .Configure(app =>
             {
@@ -170,7 +170,7 @@ public class smtp_healthcheck_should
                     setup.Port = 587;
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
-                }, tags: new string[] { "smtp" });
+                }, tags: ["smtp"]);
             })
             .Configure(app =>
             {
@@ -200,7 +200,7 @@ public class smtp_healthcheck_should
                       setup.Port = 587;
                       setup.AllowInvalidRemoteCertificates = true;
                       setup.LoginWith(_validAccount, "wrongpass");
-                  }, tags: new string[] { "smtp" });
+                  }, tags: ["smtp"]);
              })
              .Configure(app =>
              {
@@ -234,7 +234,7 @@ public class smtp_healthcheck_should
                       setup.Port = 25;
                       setup.ConnectionType = SmtpConnectionType.PLAIN;
                       setup.LoginWith("user19@test.smtp.org", "pass19");
-                  }, tags: new string[] { "smtp" });
+                  }, tags: ["smtp"]);
              })
              .Configure(app =>
              {

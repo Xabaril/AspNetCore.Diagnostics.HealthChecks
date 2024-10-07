@@ -38,8 +38,8 @@ public class SeqPublisher : IHealthCheckPublisher
 
         var events = new RawEvents
         {
-            Events = new RawEvent[]
-            {
+            Events =
+            [
                 new RawEvent
                 {
                     Timestamp = DateTimeOffset.UtcNow,
@@ -54,7 +54,7 @@ public class SeqPublisher : IHealthCheckPublisher
                         { "RawReport" , JsonSerializer.Serialize(report)}
                     }
                 }
-            }
+            ]
         };
 
         _options.Configure?.Invoke(events);

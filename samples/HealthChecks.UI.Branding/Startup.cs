@@ -16,9 +16,9 @@ public class Startup
         services
             //.AddDemoAuthentication()
             .AddHealthChecks()
-            .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: new[] { "process", "memory" })
-            .AddCheck<RandomHealthCheck>("random1", tags: new[] { "random" })
-            .AddCheck<RandomHealthCheck>("random2", tags: new[] { "random" })
+            .AddProcessAllocatedMemoryHealthCheck(maximumMegabytesAllocated: 100, tags: ["process", "memory"])
+            .AddCheck<RandomHealthCheck>("random1", tags: ["random"])
+            .AddCheck<RandomHealthCheck>("random2", tags: ["random"])
             .Services
             .AddHealthChecksUI(setupSettings: setup =>
             {

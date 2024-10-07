@@ -34,7 +34,7 @@ public class aws_sns_registration_should
             .AddSnsTopicsAndSubscriptions(setup =>
             {
                 setup.Credentials = new BasicAWSCredentials("access-key", "secret-key");
-                setup.AddTopicAndSubscriptions("topic1", new string[] { "subscription1-arn", "subscription2-arn" });
+                setup.AddTopicAndSubscriptions("topic1", ["subscription1-arn", "subscription2-arn"]);
             });
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -76,7 +76,7 @@ public class aws_sns_registration_should
             .AddSnsTopicsAndSubscriptions(setup =>
             {
                 setup.Credentials = new AssumeRoleAWSCredentials(null, "role-arn", "session-name");
-                setup.AddTopicAndSubscriptions("topic1", new string[] { "subscription1-arn", "subscription2-arn" });
+                setup.AddTopicAndSubscriptions("topic1", ["subscription1-arn", "subscription2-arn"]);
             });
 
         using var serviceProvider = services.BuildServiceProvider();

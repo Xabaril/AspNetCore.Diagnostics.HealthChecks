@@ -24,7 +24,7 @@ public class ssl_healthcheck_should
                     options.AddHost(_validHost256);
                     options.AddHost(_validHost384);
                     options.AddHost(_validHost512);
-                }, tags: new string[] { "ssl" });
+                }, tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -48,7 +48,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_httpHost, 80), tags: new string[] { "ssl" });
+                .AddSslHealthCheck(options => options.AddHost(_httpHost, 80), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -72,7 +72,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_revokedHost), tags: new string[] { "ssl" });
+                .AddSslHealthCheck(options => options.AddHost(_revokedHost), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -96,7 +96,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_expiredHost), tags: new string[] { "ssl" });
+                .AddSslHealthCheck(options => options.AddHost(_expiredHost), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -120,7 +120,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_validHost256, checkLeftDays: 1095), tags: new string[] { "ssl" });
+                .AddSslHealthCheck(options => options.AddHost(_validHost256, checkLeftDays: 1095), tags: ["ssl"]);
             })
             .Configure(app =>
             {

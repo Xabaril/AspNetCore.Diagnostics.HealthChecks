@@ -11,7 +11,7 @@ public class idsvr_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddIdentityServer(new Uri("http://localhost:7777"), tags: new string[] { "idsvr" });
+                .AddIdentityServer(new Uri("http://localhost:7777"), tags: ["idsvr"]);
             })
             .Configure(app =>
             {
@@ -35,7 +35,7 @@ public class idsvr_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddIdentityServer(new Uri("http://localhost:8888"), tags: new string[] { "idsvr" });
+                .AddIdentityServer(new Uri("http://localhost:8888"), tags: ["idsvr"]);
             })
             .Configure(app =>
             {

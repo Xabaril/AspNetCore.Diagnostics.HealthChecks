@@ -21,7 +21,7 @@ public class dns_healthcheck_should
                 {
                     setup.ResolveHost(targetHost).To(targetHostIpAddresses)
                     .ResolveHost(targetHost2).To(targetHost2IpAddresses);
-                }, tags: new string[] { "dns" });
+                }, tags: ["dns"]);
             })
             .Configure(app =>
             {
@@ -44,7 +44,7 @@ public class dns_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddDnsResolveHealthCheck(setup => setup.ResolveHost("www.microsoft.com").To("8.8.8.8", "5.5.5.5"), tags: new string[] { "dns" });
+                .AddDnsResolveHealthCheck(setup => setup.ResolveHost("www.microsoft.com").To("8.8.8.8", "5.5.5.5"), tags: ["dns"]);
             })
             .Configure(app =>
             {

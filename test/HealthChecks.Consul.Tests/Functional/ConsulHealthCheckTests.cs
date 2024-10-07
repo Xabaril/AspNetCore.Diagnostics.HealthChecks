@@ -16,7 +16,7 @@ public class consul_healthcheck_should
                        setup.HostName = "localhost";
                        setup.Port = 8500;
                        setup.RequireHttps = false;
-                   }, tags: new string[] { "consul" });
+                   }, tags: ["consul"]);
            })
            .Configure(app =>
            {
@@ -45,7 +45,7 @@ public class consul_healthcheck_should
                         setup.HostName = "non-existing-host";
                         setup.Port = 8500;
                         setup.RequireHttps = false;
-                    }, tags: new string[] { "consul" });
+                    }, tags: ["consul"]);
             })
             .Configure(app =>
             {

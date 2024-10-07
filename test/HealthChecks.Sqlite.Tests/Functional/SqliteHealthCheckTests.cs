@@ -11,7 +11,7 @@ public class sqlite_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from sqlite_master where type='table'", tags: new string[] { "sqlite" });
+                .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from sqlite_master where type='table'", tags: ["sqlite"]);
             })
             .Configure(app =>
             {
@@ -35,7 +35,7 @@ public class sqlite_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlite($"Data Source=fake.db", healthQuery: "select * from Users", tags: new string[] { "sqlite" });
+                .AddSqlite($"Data Source=fake.db", healthQuery: "select * from Users", tags: ["sqlite"]);
             })
             .Configure(app =>
             {
@@ -59,7 +59,7 @@ public class sqlite_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from invaliddb", tags: new string[] { "sqlite" });
+                .AddSqlite($"Data Source=sqlite.db", healthQuery: "select name from invaliddb", tags: ["sqlite"]);
             })
             .Configure(app =>
             {

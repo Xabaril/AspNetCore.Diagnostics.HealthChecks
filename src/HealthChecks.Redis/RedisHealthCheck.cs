@@ -9,14 +9,19 @@ namespace HealthChecks.Redis;
 /// </summary>
 public class RedisHealthCheck : IHealthCheck
 {
-    private static readonly ConcurrentDictionary<string, IConnectionMultiplexer> _connections = new();
-    private readonly string? _redisConnectionString;
+    private static readonly ConcurrentDictionary<Func<CancellationToken, Task<string?>>, IConnectionMultiplexer> _connections = new();
+    private readonly Func<CancellationToken, Task<string?>>? _redisConnectionStringFactory;
     private readonly IConnectionMultiplexer? _connectionMultiplexer;
-    private readonly Func<IConnectionMultiplexer>? _connectionMultiplexerFactory;
+    private readonly Func<CancellationToken, Task<IConnectionMultiplexer>>? _connectionMultiplexerFactory;
 
     public RedisHealthCheck(string redisConnectionString)
     {
-        _redisConnectionString = Guard.ThrowIfNull(redisConnectionString);
+        _redisConnectionStringFactory = (_) => Task.FromResult<string?>(Guard.ThrowIfNull(redisConnectionString));
+    }
+
+    public RedisHealthCheck(Func<CancellationToken, Task<string?>> redisConnectionStringFactory)
+    {
+        _redisConnectionStringFactory = Guard.ThrowIfNull(redisConnectionStringFactory);
     }
 
     public RedisHealthCheck(IConnectionMultiplexer connectionMultiplexer)
@@ -36,21 +41,33 @@ public class RedisHealthCheck : IHealthCheck
     /// </remarks>
     internal RedisHealthCheck(Func<IConnectionMultiplexer> connectionMultiplexerFactory)
     {
+        _connectionMultiplexerFactory = (ct) => Task.FromResult(connectionMultiplexerFactory());
+    }
+
+    internal RedisHealthCheck(Func<CancellationToken, Task<IConnectionMultiplexer>> connectionMultiplexerFactory)
+    {
         _connectionMultiplexerFactory = connectionMultiplexerFactory;
     }
+
 
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            IConnectionMultiplexer? connection = _connectionMultiplexer ?? _connectionMultiplexerFactory?.Invoke();
+            var connection = (_connectionMultiplexer, _connectionMultiplexerFactory) switch
+            {
+                (not null, _) => _connectionMultiplexer,
+                (null, { } factory) => await factory(cancellationToken).ConfigureAwait(false),
+                _ => null
+            };
 
-            if (_redisConnectionString is not null && !_connections.TryGetValue(_redisConnectionString, out connection))
+            if (_redisConnectionStringFactory is not null && !_connections.TryGetValue(_redisConnectionStringFactory, out connection))
             {
                 try
                 {
-                    var connectionMultiplexerTask = ConnectionMultiplexer.ConnectAsync(_redisConnectionString!);
+                    var redisConnectionString = await _redisConnectionStringFactory(cancellationToken).ConfigureAwait(false);
+                    var connectionMultiplexerTask = ConnectionMultiplexer.ConnectAsync(redisConnectionString!);
                     connection = await TimeoutAsync(connectionMultiplexerTask, cancellationToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
@@ -58,11 +75,11 @@ public class RedisHealthCheck : IHealthCheck
                     return new HealthCheckResult(context.Registration.FailureStatus, description: "Healthcheck timed out");
                 }
 
-                if (!_connections.TryAdd(_redisConnectionString, connection))
+                if (!_connections.TryAdd(_redisConnectionStringFactory, connection))
                 {
                     // Dispose new connection which we just created, because we don't need it.
                     connection.Dispose();
-                    connection = _connections[_redisConnectionString];
+                    connection = _connections[_redisConnectionStringFactory];
                 }
             }
 
@@ -99,9 +116,9 @@ public class RedisHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            if (_redisConnectionString is not null)
+            if (_redisConnectionStringFactory is not null)
             {
-                _connections.TryRemove(_redisConnectionString, out var connection);
+                _connections.TryRemove(_redisConnectionStringFactory, out var connection);
 #pragma warning disable IDISP007 // Don't dispose injected [false positive here]
                 connection?.Dispose();
 #pragma warning restore IDISP007 // Don't dispose injected

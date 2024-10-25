@@ -49,7 +49,6 @@ public class RedisHealthCheck : IHealthCheck
         _connectionMultiplexerFactory = connectionMultiplexerFactory;
     }
 
-
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {

@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Net;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
@@ -11,6 +13,15 @@ namespace HealthChecks.DynamoDb;
 public class DynamoDbHealthCheck : IHealthCheck
 {
     private readonly DynamoDBOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "healthcheck.name", nameof(DynamoDbHealthCheck) },
+                    { "healthcheck.task", "ready" },
+                    { "db.system", "dynamodb" },
+                    { "event.name", "database.healthcheck"},
+                    { "client.address", Dns.GetHostName()},
+                    { "network.protocol.name", "http" },
+                    { "network.transport", "tcp" }
+    };
 
     /// <summary>
     /// Creates health check for AWS DynamoDb database with the specified options.
@@ -24,6 +35,7 @@ public class DynamoDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             AWSCredentials? credentials = _options.Credentials;
@@ -50,11 +62,11 @@ public class DynamoDbHealthCheck : IHealthCheck
 
             var response = await client.ListTablesAsync(request, cancellationToken).ConfigureAwait(false);
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 

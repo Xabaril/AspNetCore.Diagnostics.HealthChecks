@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Net;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -13,6 +15,15 @@ public class EventStoreHealthCheck : IHealthCheck
     private readonly string _eventStoreConnection;
     private readonly string? _login;
     private readonly string? _password;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "healthcheck.name", nameof(EventStoreHealthCheck) },
+                    { "healthcheck.task", "ready" },
+                    { "db.system", "azuretable" },
+                    { "event.name", "database.healthcheck"},
+                    { "client.address", Dns.GetHostName()},
+                    { "network.protocol.name", "http" },
+                    { "network.transport", "tcp" }
+    };
 
     public EventStoreHealthCheck(string eventStoreConnection, string? login, string? password)
     {
@@ -24,6 +35,7 @@ public class EventStoreHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             ConnectionSettingsBuilder connectionSettings;
@@ -52,14 +64,15 @@ public class EventStoreHealthCheck : IHealthCheck
                 var tcs = new TaskCompletionSource<HealthCheckResult>(TaskCreationOptions.RunContinuationsAsynchronously);
 
                 //connected
-                connection.Connected += (s, e) => tcs.TrySetResult(HealthCheckResult.Healthy());
+                connection.Connected += (s, e) => tcs.TrySetResult(HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails)));
 
                 //connection closed after configured amount of failed reconnections
                 connection.Closed += (s, e) =>
                 {
                     tcs.TrySetResult(new HealthCheckResult(
                         status: context.Registration.FailureStatus,
-                        description: e.Reason));
+                        description: e.Reason,
+                        data: new ReadOnlyDictionary<string, object>(checkDetails)));
                 };
 
                 //connection error
@@ -67,7 +80,8 @@ public class EventStoreHealthCheck : IHealthCheck
                 {
                     tcs.TrySetResult(new HealthCheckResult(
                         status: context.Registration.FailureStatus,
-                        exception: e.Exception));
+                        exception: e.Exception,
+                        data: new ReadOnlyDictionary<string, object>(checkDetails)));
                 };
 
                 using (cancellationToken.Register(() => connection.Close()))
@@ -86,7 +100,7 @@ public class EventStoreHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

@@ -5,6 +5,7 @@
     <PackageTags>$(PackageTags);Milvus</PackageTags>
     <Description>HealthChecks.Milvus is the health check package for Milvus.</Description>
     <VersionPrefix>$(HealthCheckMilvus)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

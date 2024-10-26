@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Azure.Data.Tables\HealthChecks.Azure.Data.Tables.csproj" />
+    <ProjectReference Include="..\..\src\HealthChecks.Milvus\HealthChecks.Milvus.csproj" />
+  </ItemGroup>
+
+</Project>

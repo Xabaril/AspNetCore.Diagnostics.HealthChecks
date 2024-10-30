@@ -2,7 +2,7 @@ namespace HealthChecks.Qdrant
 {
     public class QdrantHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public QdrantHealthCheck(Qdrant.Client.QdrantClient? client) { }
+        public QdrantHealthCheck(Qdrant.Client.QdrantClient client) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
 }

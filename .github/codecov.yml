@@ -87,6 +87,8 @@ flags:
     carryforward: true
   Publisher.Seq:
     carryforward: true
+  Qdrant:
+    carryforward: true
   RabbitMQ:
     carryforward: true
   RavenDb:

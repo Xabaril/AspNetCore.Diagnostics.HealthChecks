@@ -3,48 +3,29 @@ using Qdrant.Client;
 
 namespace HealthChecks.Qdrant;
 
+/// <summary>
+/// A health check for Qdrant services.
+/// </summary>
 public class QdrantHealthCheck : IHealthCheck
 {
-    private readonly QdrantHealthCheckOptions _options;
-    private QdrantClient? _connection;
+    private readonly QdrantClient _client;
 
-    public QdrantHealthCheck(QdrantHealthCheckOptions options)
+    public QdrantHealthCheck(QdrantClient? client)
     {
-        _options = options ?? throw new ArgumentNullException(nameof(options));
-        _connection = options.Client;
-
-        if (_connection is null && _options.ConnectionUri is null)
-        {
-            throw new ArgumentException("A connection string must be set!", nameof(options));
-        }
+        _client = Guard.ThrowIfNull(client);
     }
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            var model = await EnsureConnection().ListAliasesAsync(cancellationToken).ConfigureAwait(false);
-            return HealthCheckResult.Healthy();
+            var response = await _client.HealthAsync(cancellationToken).ConfigureAwait(false);
+            return !(response is null || response.Title is null)
+                ? HealthCheckResult.Healthy()
+                : new HealthCheckResult(HealthStatus.Unhealthy);
         }
         catch (Exception ex)
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
-    }
-
-    private QdrantClient EnsureConnection()
-    {
-        if (_connection is null)
-        {
-            if (_options.ConnectionUri is null)
-            {
-                throw new ArgumentException("A connection string must be set!", nameof(_options));
-            }
-
-            _connection = new QdrantClient(address: _options.ConnectionUri,
-                apiKey: _options.ApiKey,
-                grpcTimeout: _options.RequestedConnectionTimeout);
-        }
-
-        return _connection;
     }
 }

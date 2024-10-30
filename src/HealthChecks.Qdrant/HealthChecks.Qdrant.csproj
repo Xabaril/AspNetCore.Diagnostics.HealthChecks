@@ -1,17 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Qdrant</PackageTags>
     <Description>HealthChecks.Qdrant is the health check package for Qdrant.</Description>
     <VersionPrefix>$(HealthCheckQdrant)</VersionPrefix>
-    <RootNamespace>HealthChecks.Qdrant</RootNamespace> <!--For backward naming compatibility-->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Qdrant.Client" Version="1.8.0" />
+    <PackageReference Include="Qdrant.Client" Version="1.12.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
-    <Compile Include="../HealthCheckResultTask.cs" />
+    <!--<Compile Include="../HealthCheckResultTask.cs" />-->
   </ItemGroup>
 
 </Project>

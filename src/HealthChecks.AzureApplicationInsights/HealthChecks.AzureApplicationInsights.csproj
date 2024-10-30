@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>HealthCheck;Azure;ApplicationInsights</PackageTags>
     <Description>HealthChecks.AzureApplicationInsights is the health check package for Azure Application Insights.</Description>
     <VersionPrefix>$(HealthCheckAzureApplicationInsights)</VersionPrefix>

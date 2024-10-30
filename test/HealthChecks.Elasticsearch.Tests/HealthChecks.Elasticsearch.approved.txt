@@ -8,21 +8,26 @@ namespace HealthChecks.Elasticsearch
     public class ElasticsearchOptions
     {
         public ElasticsearchOptions() { }
-        public Elasticsearch.Net.ApiKeyAuthenticationCredentials? ApiKeyAuthenticationCredentials { get; }
+        public string? ApiKey { get; }
         public bool AuthenticateWithApiKey { get; }
         public bool AuthenticateWithBasicCredentials { get; }
         public bool AuthenticateWithCertificate { get; }
+        public bool AuthenticateWithElasticCloud { get; }
         public System.Security.Cryptography.X509Certificates.X509Certificate? Certificate { get; }
         public System.Func<object, System.Security.Cryptography.X509Certificates.X509Certificate, System.Security.Cryptography.X509Certificates.X509Chain, System.Net.Security.SslPolicyErrors, bool>? CertificateValidationCallback { get; }
+        public Elastic.Clients.Elasticsearch.ElasticsearchClient? Client { get; }
+        public string? CloudApiKey { get; }
+        public string? CloudId { get; }
         public string? Password { get; }
         public System.TimeSpan? RequestTimeout { get; set; }
-        public string Uri { get; }
+        public string? Uri { get; }
         public bool UseClusterHealthApi { get; set; }
         public string? UserName { get; }
-        public HealthChecks.Elasticsearch.ElasticsearchOptions UseApiKey(Elasticsearch.Net.ApiKeyAuthenticationCredentials apiKey) { }
+        public HealthChecks.Elasticsearch.ElasticsearchOptions UseApiKey(string apiKey) { }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseBasicAuthentication(string name, string password) { }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseCertificate(System.Security.Cryptography.X509Certificates.X509Certificate certificate) { }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseCertificateValidationCallback(System.Func<object, System.Security.Cryptography.X509Certificates.X509Certificate, System.Security.Cryptography.X509Certificates.X509Chain, System.Net.Security.SslPolicyErrors, bool> callback) { }
+        public HealthChecks.Elasticsearch.ElasticsearchOptions UseElasticCloud(string cloudId, string cloudApiKey) { }
         public HealthChecks.Elasticsearch.ElasticsearchOptions UseServer(string uri) { }
     }
 }
@@ -31,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ElasticsearchHealthCheckBuilderExtensions
     {
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddElasticsearch(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Elasticsearch.ElasticsearchOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddElasticsearch(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Elastic.Clients.Elasticsearch.ElasticsearchClient>? clientFactory = null, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddElasticsearch(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string elasticsearchUri, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

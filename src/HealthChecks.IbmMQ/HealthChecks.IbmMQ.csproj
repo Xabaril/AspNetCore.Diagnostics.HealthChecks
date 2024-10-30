@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);IbmMQ</PackageTags>
     <Description>HealthChecks.IbmMQ is the health check package for IbmMQ.</Description>
     <VersionPrefix>$(HealthCheckIbmMQ)</VersionPrefix>

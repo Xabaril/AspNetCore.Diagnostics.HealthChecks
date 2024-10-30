@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Redis</PackageTags>
     <Description>HealthChecks.Redis is the health check package for Redis.</Description>
     <VersionPrefix>$(HealthCheckRedis)</VersionPrefix>

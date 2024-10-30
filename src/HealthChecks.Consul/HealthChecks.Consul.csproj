@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Consul</PackageTags>
     <Description>HealthChecks.Consul is the health check package for Consul Server.</Description>
     <VersionPrefix>$(HealthCheckConsul)</VersionPrefix>

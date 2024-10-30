@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;AzureStorage</PackageTags>
     <Description>HealthChecks.Azure.Storage.Blobs is the health check package for Blobs.</Description>
     <VersionPrefix>$(HealthCheckAzureStorageBlobs)</VersionPrefix>

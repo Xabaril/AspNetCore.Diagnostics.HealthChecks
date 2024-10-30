@@ -10,16 +10,18 @@ public class QdrantHealthCheck : IHealthCheck
 {
     private readonly QdrantClient _client;
 
-    public QdrantHealthCheck(QdrantClient? client)
+    public QdrantHealthCheck(QdrantClient client)
     {
         _client = Guard.ThrowIfNull(client);
     }
+
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
             var response = await _client.HealthAsync(cancellationToken).ConfigureAwait(false);
-            return !(response is null || response.Title is null)
+            return response?.Title is not null
                 ? HealthCheckResult.Healthy()
                 : new HealthCheckResult(HealthStatus.Unhealthy);
         }

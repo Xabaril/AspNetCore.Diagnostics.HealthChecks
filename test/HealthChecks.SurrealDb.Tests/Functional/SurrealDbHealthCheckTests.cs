@@ -7,13 +7,13 @@ public class surrealdb_healthcheck_should
     [Fact]
     public async Task be_healthy_if_surrealdb_is_available()
     {
-        var connectionString = "Server=http://localhost:8000;Namespace=test;Database=test;Username=root;Password=root";
+        const string connectionString = "Server=http://localhost:8000;Namespace=test;Database=test;Username=root;Password=root";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSurreal(connectionString, tags: new string[] { "surrealdb" });
+                .AddSurreal(connectionString, tags: ["surrealdb"]);
             })
             .Configure(app =>
             {
@@ -33,13 +33,13 @@ public class surrealdb_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_surrealdb_is_not_available()
     {
-        var connectionString = "Server=http://localhost:1234;Namespace=test;Database=test;Username=root;Password=root";
+        const string connectionString = "Server=http://localhost:1234;Namespace=test;Database=test;Username=root;Password=root";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSurreal(connectionString, tags: new string[] { "surrealdb" });
+                .AddSurreal(connectionString, tags: ["surrealdb"]);
             })
             .Configure(app =>
             {
@@ -59,13 +59,13 @@ public class surrealdb_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_surql_query_throw_error()
     {
-        var connectionString = "Server=http://localhost:8000;Namespace=test;Database=test;Username=root;Password=root";
+        const string connectionString = "Server=http://localhost:8000;Namespace=test;Database=test;Username=root;Password=root";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSurreal(connectionString, healthQuery: "THROW \"Error\";", tags: new string[] { "surrealdb" });
+                .AddSurreal(connectionString, healthQuery: "THROW \"Error\";", tags: ["surrealdb"]);
             })
             .Configure(app =>
             {

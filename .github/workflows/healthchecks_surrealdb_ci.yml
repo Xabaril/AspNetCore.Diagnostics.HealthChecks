@@ -31,12 +31,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Start SurrealDB
-        uses: jvllmr/surrealdb-action@2.0.0
+        uses: surrealdb/setup-surreal@v2
         with:
-          surrealdb-version: latest
-          surrealdb-port: 8000
-          surrealdb-user: root
-          surrealdb-password: root
+          surrealdb_version: latest
+          surrealdb_port: 8000
+          surrealdb_username: root
+          surrealdb_password: root
+          surrealdb_auth: true
+          surrealdb_strict: 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:

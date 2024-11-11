@@ -18,6 +18,7 @@
     <HealthCheckAzureStorageBlobs>8.0.1</HealthCheckAzureStorageBlobs>
     <HealthCheckAzureStorageFilesShares>8.0.1</HealthCheckAzureStorageFilesShares>
     <HealthCheckAzureStorageQueues>8.0.1</HealthCheckAzureStorageQueues>
+    <HealthCheckClickHouse>8.0.1</HealthCheckClickHouse>
     <HealthCheckCloudFirestore>8.0.1</HealthCheckCloudFirestore>
     <HealthCheckConsul>8.0.1</HealthCheckConsul>
     <HealthCheckCosmosDb>8.0.1</HealthCheckCosmosDb>

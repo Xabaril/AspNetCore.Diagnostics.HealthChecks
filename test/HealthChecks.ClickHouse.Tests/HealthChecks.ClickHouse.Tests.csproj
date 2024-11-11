@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.ClickHouse\HealthChecks.ClickHouse.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
+    <PackageTags>$(PackageTags);Beat;ClickHouse</PackageTags>
+    <Description>HealthChecks.ClickHouse is a health check for ClickHouse.</Description>
+    <VersionPrefix>$(HealthCheckClickHouse)</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClickHouse.Client" Version="7.8.2" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

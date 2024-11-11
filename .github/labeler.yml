@@ -36,6 +36,9 @@ azure:
   - changed-files:
     - any-glob-to-any-file: [src/HealthChecks.Azure*/**/*]
 
+clickhouse:
+  - src/HealthChecks.ClickHouse/**/*
+
 consul:
   - changed-files:
     - any-glob-to-any-file: [src/HealthChecks.Consul/**/*]

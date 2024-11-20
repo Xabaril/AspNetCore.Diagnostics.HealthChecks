@@ -71,6 +71,9 @@ kafka:
 kubernetes:
   - src/HealthChecks.Kubernetes/**/*
 
+milvus:
+  - src/HealthChecks.Milvus/**/*
+
 mongodb:
   - src/HealthChecks.MongoDb/**/*
 

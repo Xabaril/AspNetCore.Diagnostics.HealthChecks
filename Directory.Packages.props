@@ -81,7 +81,7 @@
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />
     <PackageVersion Include="prometheus-net" Version="8.1.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.0.0" />
-    <PackageVersion Include="RabbitMQ.Client" Version="6.7.0" />
+    <PackageVersion Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageVersion Include="RavenDB.Client" Version="6.0.1" />
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.7.0" />

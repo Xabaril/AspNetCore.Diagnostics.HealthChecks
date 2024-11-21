@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       eventstore:
-        image: eventstore/eventstore:lts
+        image: eventstore/eventstore:22.10.5-jammy
         ports:
           - "1113:1113"
           - "2113:2113"

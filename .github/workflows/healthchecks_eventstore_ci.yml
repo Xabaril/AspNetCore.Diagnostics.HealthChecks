@@ -29,14 +29,14 @@ jobs:
     runs-on: ubuntu-latest
     services:
       eventstore:
-        image: eventstore/eventstore:24.6
+        image: eventstore/eventstore:23.10
         ports:
           - "2113:2113"
           - "1113:1113"
         env:
           EVENTSTORE_INSECURE: true
           EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: true
-          #EVENTSTORE_ENABLE_EXTERNAL_TCP: true
+          EVENTSTORE_ENABLE_EXTERNAL_TCP: true
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET

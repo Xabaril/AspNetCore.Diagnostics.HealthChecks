@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       eventstore:
-        image: eventstore/eventstore:lts
+        image: eventstore/eventstore:24.6
         ports:
           - "2113:2113"
           - "1113:1113"

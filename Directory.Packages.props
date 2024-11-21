@@ -68,6 +68,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Milvus.Client" Version="2.3.0-preview.1" />
     <PackageVersion Include="MongoDB.Driver" Version="2.28.0" />
     <PackageVersion Include="MySqlConnector" Version="2.3.1" />
     <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.3.1" />

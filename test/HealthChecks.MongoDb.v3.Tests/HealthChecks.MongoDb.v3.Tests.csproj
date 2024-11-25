@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>HealthChecks.MongoDb.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.MongoDb.v3\HealthChecks.MongoDb.v3.csproj" />
+
+    <Compile Include="../HealthChecks.MongoDb.Tests/DependencyInjection/RegistrationTests.cs" Link="DependencyInjection/RegistrationTests.cs" />
+    <Compile Include="../HealthChecks.MongoDb.Tests/Functional/MongoDbHealthCheckTests.cs" Link="Functional/MongoDbHealthCheckTests.cs" />
+  </ItemGroup>
+
+</Project>

@@ -21,7 +21,7 @@ namespace System.Runtime.CompilerServices
 
 #endif
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETFRAMEWORK
 
 namespace System.Diagnostics.CodeAnalysis
 {

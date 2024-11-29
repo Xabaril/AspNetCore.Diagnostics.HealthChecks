@@ -34,4 +34,8 @@
     <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" Condition="'$(SignAssembly)' != 'true'"/>
   </ItemGroup>
 
+  <ItemGroup Condition="!$(MSBuildProjectName.StartsWith('HealthChecks.UI'))">
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.11" />
+  </ItemGroup>
+
 </Project>

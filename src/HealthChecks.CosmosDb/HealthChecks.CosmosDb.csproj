@@ -5,6 +5,8 @@
     <PackageTags>$(PackageTags);Azure;CosmosDb</PackageTags>
     <Description>HealthChecks.CosmosDb is the health check package for Azure CosmosDb.</Description>
     <VersionPrefix>$(HealthCheckCosmosDb)</VersionPrefix>
+    <!-- Microsoft.Azure.Cosmos requires the app to install Newtonsoft.Json, we just disable that check here -->
+    <AzureCosmosDisableNewtonsoftJsonCheck>true</AzureCosmosDisableNewtonsoftJsonCheck>
   </PropertyGroup>
 
   <ItemGroup>

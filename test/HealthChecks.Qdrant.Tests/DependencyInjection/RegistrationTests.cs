@@ -9,7 +9,7 @@ public class qdrant_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddQdrant(_clientFactory);
+            .AddQdrant(ClientFactory);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -26,7 +26,7 @@ public class qdrant_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddQdrant(clientFactory: _clientFactory, name: "qdrant");
+            .AddQdrant(clientFactory: ClientFactory, name: "qdrant");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -59,6 +59,6 @@ public class qdrant_registration_should
         check.ShouldBeOfType<QdrantHealthCheck>();
     }
 
-    private QdrantClient _clientFactory(IServiceProvider _)
+    private QdrantClient ClientFactory(IServiceProvider _)
         => new("localhost");
 }

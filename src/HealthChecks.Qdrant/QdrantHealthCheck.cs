@@ -20,12 +20,11 @@ public class QdrantHealthCheck : IHealthCheck
     {
         try
         {
-            var response = await _client.HealthAsync(cancellationToken).ConfigureAwait(false);
-            return response?.Title is not null
-                ? HealthCheckResult.Healthy()
-                : new HealthCheckResult(HealthStatus.Unhealthy);
+            await _client.HealthAsync(cancellationToken).ConfigureAwait(false);
+            
+            return HealthCheckResult.Healthy();
         }
-        catch (Exception ex)
+        catch (RpcException ex)
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }

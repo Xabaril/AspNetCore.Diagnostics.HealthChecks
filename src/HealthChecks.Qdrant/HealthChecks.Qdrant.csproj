@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Qdrant.Client" Version="1.12.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Oracle.ManagedDataAccess.Client;
 
@@ -9,6 +10,15 @@ namespace HealthChecks.Oracle;
 public class OracleHealthCheck : IHealthCheck
 {
     private readonly OracleHealthCheckOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "healthcheck.name", nameof(OracleHealthCheck) },
+                    { "healthcheck.task", "ready" },
+                    { "db.system", "oracle" },
+                    { "event.name", "database.healthcheck"},
+                    { "client.address", Dns.GetHostName()},
+                    { "network.protocol.name", "http" },
+                    { "network.transport", "tcp" }
+    };
 
     public OracleHealthCheck(OracleHealthCheckOptions options)
     {
@@ -22,9 +32,13 @@ public class OracleHealthCheck : IHealthCheck
     {
         try
         {
+            Dictionary<string, object> checkDetails = _baseCheckDetails;
             using var connection = _options.Credential == null
                 ? new OracleConnection(_options.ConnectionString)
                 : new OracleConnection(_options.ConnectionString, _options.Credential);
+            checkDetails.Add("db.query.text", _options.CommandText);
+            checkDetails.Add("db.namespace", connection.Database);
+            checkDetails.Add("server.address", connection.DataSource);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);

@@ -12,8 +12,8 @@ public class ClickHouseHealthCheckOptions
     internal ClickHouseHealthCheckOptions()
     {
         // This ctor is internal on purpose: those who want to use ClickHouseHealthCheckOptions
-        // need to specify either ConnectionString or DataSource when creating it.
-        // Making the ConnectionString and DataSource setters internal
+        // need to specify either ConnectionString or a Func<ClickHouseConnection> when creating it.
+        // Making the ConnectionString and Func<ClickHouseConnection> setters internal
         // allows us to ensure that the customers don't try to mix both concepts.
         // By encapsulating all of that, we ensure that all instances of this type are valid.
     }

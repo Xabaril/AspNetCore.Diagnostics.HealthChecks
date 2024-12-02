@@ -31,9 +31,9 @@ public class UIWebHooksApiMiddleware
         var sanitizedWebhooksResponse = settings.Value.Webhooks.Select(item => new
         {
             item.Name,
+            // TODO improve the behaviour of poorly formed json provided to this method.
             Payload = string.IsNullOrEmpty(item.Payload) ? new JsonObject() : JsonNode.Parse(Regex.Unescape(item.Payload))
         });
-
         await context.Response.WriteAsJsonAsync(sanitizedWebhooksResponse, _jsonSerializerOptions).ConfigureAwait(false);
     }
 }

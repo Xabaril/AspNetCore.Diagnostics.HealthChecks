@@ -111,6 +111,9 @@ datadog:
 seq:
   -src/HealthChecks.Publisher.Seq/**/*
 
+qdrant:
+  - src/HealthChecks.Qdrant/**/*
+
 rabbitmq:
   - src/HealthChecks.Rabbitmq/**/*
 

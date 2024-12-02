@@ -21,7 +21,6 @@ public class QdrantHealthCheck : IHealthCheck
         try
         {
             await _client.HealthAsync(cancellationToken).ConfigureAwait(false);
-            
             return HealthCheckResult.Healthy();
         }
         catch (RpcException ex)

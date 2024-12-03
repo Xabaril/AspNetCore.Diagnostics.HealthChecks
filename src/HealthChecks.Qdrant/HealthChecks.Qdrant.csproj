@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Qdrant.Client" Version="1.12.0" />
+    <PackageReference Include="Qdrant.Client" />
   </ItemGroup>
 
 </Project>

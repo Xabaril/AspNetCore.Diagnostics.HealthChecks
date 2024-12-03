@@ -12,6 +12,6 @@
     <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" />
     <!-- some of the packages listed above target NS1.6, hence include transitive dependency to STR 4.3.0 which is vulnerable -->
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="System.Text.RegularExpressions" />
   </ItemGroup>
 </Project>

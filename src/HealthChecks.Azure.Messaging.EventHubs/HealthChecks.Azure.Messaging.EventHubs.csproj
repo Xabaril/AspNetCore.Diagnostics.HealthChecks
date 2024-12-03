@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;EventHub</PackageTags>
     <Description>HealthChecks.Azure.Messaging.EventHubs is the health check package for Azure Event Hubs.</Description>
     <VersionPrefix>$(HealthCheckAzureMessagingEventsHubs)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.10.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="Azure.Messaging.EventHubs" />
   </ItemGroup>
 
 </Project>

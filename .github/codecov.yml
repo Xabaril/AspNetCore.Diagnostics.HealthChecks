@@ -61,6 +61,8 @@ flags:
     carryforward: true
   MongoDb:
     carryforward: true
+  Milvus:
+    carryforward: true
   MySql:
     carryforward: true
   Nats:
@@ -84,6 +86,8 @@ flags:
   Publisher.Prometheus:
     carryforward: true
   Publisher.Seq:
+    carryforward: true
+  Qdrant:
     carryforward: true
   RabbitMQ:
     carryforward: true

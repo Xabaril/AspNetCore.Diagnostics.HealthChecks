@@ -1,0 +1,110 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="ArangoDBNetStandard" Version="2.0.1" />
+    <PackageVersion Include="AWSSDK.CloudWatch" Version="3.7.300.7" />
+    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.300.7" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.302" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="3.7.300.7" />
+    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="3.7.300.7" />
+    <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="3.7.301.3" />
+    <PackageVersion Include="AWSSDK.SQS" Version="3.7.300.7" />
+    <PackageVersion Include="Azure.Data.Tables" Version="12.8.2" />
+    <PackageVersion Include="Azure.DigitalTwins.Core" Version="1.4.0" />
+    <PackageVersion Include="Azure.Identity" Version="1.12.0" />
+    <PackageVersion Include="Azure.Messaging.EventHubs" Version="5.10.0" />
+    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
+    <PackageVersion Include="Azure.Search.Documents" Version="11.5.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Certificates" Version="4.5.1" />
+    <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.5.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.17.1" />
+    <PackageVersion Include="Azure.Storage.Queues" Version="12.17.1" />
+    <PackageVersion Include="Confluent.Kafka" Version="2.3.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="Dapr.Client" Version="1.12.0" />
+    <PackageVersion Include="DogStatsD-CSharp-Client" Version="8.0.0" />
+    <PackageVersion Include="Ductus.FluentDocker" Version="2.10.59" />
+    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.14.3" />
+    <PackageVersion Include="EventStore.Client" Version="22.0.0" />
+    <PackageVersion Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
+    <PackageVersion Include="Google.Cloud.Firestore" Version="3.4.0" />
+    <PackageVersion Include="Gremlin.Net" Version="3.7.3" />
+    <PackageVersion Include="Hangfire.Core" Version="1.8.6" />
+    <PackageVersion Include="IBMMQDotnetClient" Version="9.3.4" />
+    <PackageVersion Include="InfluxDB.Client" Version="4.18.0" />
+    <PackageVersion Include="KubernetesClient" Version="15.0.1" />
+    <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.21.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="6.0.21" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="7.0.10" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.46.0" />
+    <PackageVersion Include="Microsoft.Azure.Devices" Version="1.40.0" />
+    <PackageVersion Include="Microsoft.Azure.DocumentDB.Core" Version="2.20.0" />
+    <PackageVersion Include="Microsoft.Azure.Management.DigitalTwins" Version="1.2.0" />
+    <PackageVersion Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.1" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Milvus.Client" Version="2.3.0-preview.1" />
+    <PackageVersion Include="MongoDB.Driver" Version="2.28.0" />
+    <PackageVersion Include="MySqlConnector" Version="2.3.1" />
+    <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.3.1" />
+    <PackageVersion Include="NATS.Client" Version="1.1.1" />
+    <PackageVersion Include="Npgsql" Version="8.0.3" />
+    <PackageVersion Include="Npgsql.DependencyInjection" Version="8.0.1" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+    <PackageVersion Include="NSubstitute" Version="5.1.0" />
+    <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="2.19.190" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
+    <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />
+    <PackageVersion Include="prometheus-net" Version="8.1.0" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.0.0" />
+    <PackageVersion Include="Qdrant.Client" Version="1.12.0" />
+    <PackageVersion Include="RabbitMQ.Client" Version="6.8.1" />
+    <PackageVersion Include="RavenDB.Client" Version="6.0.1" />
+    <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.7.0" />
+    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="4.7.0" />
+    <PackageVersion Include="SendGrid" Version="9.28.1" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageVersion Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
+    <PackageVersion Include="Shouldly" Version="4.2.1" />
+    <PackageVersion Include="SolrNet.Core" Version="1.1.1" />
+    <PackageVersion Include="SSH.NET" Version="2023.0.0" />
+    <PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
+    <PackageVersion Include="System.Buffers" Version="4.5.1" />
+    <PackageVersion Include="System.Net.Http.Json" Version="8.0.1" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+    <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+  </ItemGroup>
+</Project>

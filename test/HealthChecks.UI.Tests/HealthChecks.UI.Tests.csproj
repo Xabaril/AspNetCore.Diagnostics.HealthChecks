@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-  </PropertyGroup>
-
   <ItemGroup>
     <Content Include="Functional\Configuration\appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -43,9 +43,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="6.0.21" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="7.0.10" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.11" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.0" Condition="'$(TargetFramework)' == 'net9.0'" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.46.0" />
     <PackageVersion Include="Microsoft.Azure.Devices" Version="1.40.0" />
     <PackageVersion Include="Microsoft.Azure.DocumentDB.Core" Version="2.20.0" />

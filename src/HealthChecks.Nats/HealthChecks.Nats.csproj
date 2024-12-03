@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NATS.Client" Version="1.1.1" />
+    <PackageReference Include="NATS.Client" />
   </ItemGroup>
 
 </Project>

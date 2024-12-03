@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RavenDB.Client" Version="6.0.1" />
+    <PackageReference Include="RavenDB.Client" />
   </ItemGroup>
 
 </Project>

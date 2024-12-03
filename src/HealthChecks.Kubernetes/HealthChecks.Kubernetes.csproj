@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="15.0.1" />
+    <PackageReference Include="KubernetesClient" PackageOverride="12.1.1" />
     <Compile Include="../DisposalHostedService.cs" />
   </ItemGroup>
 

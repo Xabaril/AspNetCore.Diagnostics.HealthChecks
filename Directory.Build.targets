@@ -2,7 +2,7 @@
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <None Include="..\..\assets\icon.png" Pack="true" PackagePath="\" Visible="false" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
     <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" Visible="false" />
     <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" Visible="false" />
   </ItemGroup>

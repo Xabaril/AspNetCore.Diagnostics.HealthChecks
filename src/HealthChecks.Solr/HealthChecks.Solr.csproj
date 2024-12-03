@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SolrNet.Core" Version="1.1.1" />
+    <PackageReference Include="SolrNet.Core" />
   </ItemGroup>
 
 </Project>

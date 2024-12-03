@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Milvus.Client" Version="2.3.0-preview.1" />
+    <PackageReference Include="Milvus.Client" />
     <!-- the following dependency can be removed once Milvus.Client starts using newer STJ version -->
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>

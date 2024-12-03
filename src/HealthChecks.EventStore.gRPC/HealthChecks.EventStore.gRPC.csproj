@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
+    <PackageReference Include="EventStore.Client.Grpc.Streams" />
   </ItemGroup>
 
 </Project>

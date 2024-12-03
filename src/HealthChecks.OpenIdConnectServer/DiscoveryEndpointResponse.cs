@@ -25,7 +25,7 @@ internal class DiscoveryEndpointResponse
     /// <summary>
     /// Validates Discovery response according to the <see href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID specification</see>
     /// </summary>
-    public void ValidateResponse(bool isDynamicOpenIdProvider = false)
+    public void ValidateResponse(bool isDynamicOpenIdProvider = true)
     {
         ValidateValue(Issuer, OidcConstants.ISSUER);
         ValidateValue(AuthorizationEndpoint, OidcConstants.AUTHORIZATION_ENDPOINT);

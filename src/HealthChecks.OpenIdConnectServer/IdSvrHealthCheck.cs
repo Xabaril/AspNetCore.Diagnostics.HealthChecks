@@ -11,11 +11,11 @@ public class IdSvrHealthCheck : IHealthCheck
     private readonly bool _isDynamicOpenIdProvider;
 
     public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
-        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT, false)
+        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT)
     {
     }
 
-    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment, bool isDynamicOpenIdProvider)
+    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment, bool isDynamicOpenIdProvider = true)
     {
         _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         _discoverConfigurationSegment = discoverConfigurationSegment;

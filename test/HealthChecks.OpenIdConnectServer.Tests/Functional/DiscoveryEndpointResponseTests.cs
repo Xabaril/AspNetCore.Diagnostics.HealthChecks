@@ -66,7 +66,7 @@ public class discovery_endpoint_response_should
             ResponseTypesSupported = responseTypesSupported,
         };
 
-        Action validate = () => response.ValidateResponse(true);
+        Action validate = () => response.ValidateResponse();
 
         validate
             .ShouldThrow<ArgumentException>()
@@ -84,7 +84,7 @@ public class discovery_endpoint_response_should
             ResponseTypesSupported = new[] { "id_token", "code" },
         };
 
-        Action validate = () => response.ValidateResponse(true);
+        Action validate = () => response.ValidateResponse();
 
         validate
             .ShouldThrow<ArgumentException>()
@@ -162,7 +162,7 @@ public class discovery_endpoint_response_should
             SigningAlgorithmsSupported = OidcConstants.REQUIRED_ALGORITHMS,
         };
 
-        Action validate = () => response.ValidateResponse();
+        Action validate = () => response.ValidateResponse(isDynamicOpenIdProvider: false);
 
         validate.ShouldNotThrow();
     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector.DependencyInjection" Version="2.3.1" />
+    <PackageReference Include="MySqlConnector.DependencyInjection" />
   </ItemGroup>
 
   <ItemGroup>

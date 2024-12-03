@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Qdrant</PackageTags>
+    <Description>HealthChecks.Qdrant is the health check package for Qdrant.</Description>
+    <VersionPrefix>$(HealthCheckQdrant)</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Qdrant.Client" />
+  </ItemGroup>
+
+</Project>

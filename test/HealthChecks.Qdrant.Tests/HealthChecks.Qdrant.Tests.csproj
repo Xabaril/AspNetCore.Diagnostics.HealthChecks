@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Qdrant\HealthChecks.Qdrant.csproj" />
+  </ItemGroup>
+
+</Project>

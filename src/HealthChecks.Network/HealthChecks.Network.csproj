@@ -9,9 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SSH.NET" Version="2023.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="SSH.NET" />
+    <PackageReference Include="System.Buffers" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

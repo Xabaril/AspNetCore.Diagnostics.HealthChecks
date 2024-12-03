@@ -5,7 +5,7 @@ namespace HealthChecks.Sqlite.Tests.Functional;
 public class sqlite_healthcheck_should
 {
     [Fact]
-    public async void be_healthy_when_sqlite_is_available()
+    public async Task be_healthy_when_sqlite_is_available()
     {
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -53,7 +53,7 @@ public class sqlite_healthcheck_should
     }
 
     [Fact]
-    public async void be_unhealthy_when_sqlquery_is_not_valid()
+    public async Task be_unhealthy_when_sqlquery_is_not_valid()
     {
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

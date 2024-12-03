@@ -78,7 +78,7 @@ public class network_registration_should
             .AddSftpHealthCheck(_ =>
             {
                 factoryCalled = true;
-                return new SftpConfiguration("host",22,"uName", new List<AuthenticationMethod>());
+                return new SftpConfiguration("host", 22, "uName", new List<AuthenticationMethod>());
             });
 
         using var serviceProvider = services.BuildServiceProvider();

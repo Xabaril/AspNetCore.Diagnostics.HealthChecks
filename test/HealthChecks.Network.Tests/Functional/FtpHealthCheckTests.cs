@@ -18,7 +18,7 @@ public class ftp_healthcheck_should
                         setup.AddHost("ftp://localhost:21",
                             createFile: false,
                             credentials: new NetworkCredential("bob", "12345"));
-                    }, tags: new string[] { "ftp" });
+                    }, tags: ["ftp"]);
             })
             .Configure(app =>
             {
@@ -46,7 +46,7 @@ public class ftp_healthcheck_should
                         setup.AddHost("ftp://localhost:21",
                             createFile: true,
                             credentials: new NetworkCredential("bob", "12345"));
-                    }, tags: new string[] { "ftp" });
+                    }, tags: ["ftp"]);
             })
             .Configure(app =>
             {

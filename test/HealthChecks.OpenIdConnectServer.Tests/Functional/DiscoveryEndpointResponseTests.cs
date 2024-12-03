@@ -81,7 +81,7 @@ public class discovery_endpoint_response_should
             Issuer = RandomString,
             AuthorizationEndpoint = RandomString,
             JwksUri = RandomString,
-            ResponseTypesSupported = new[] { "id_token", "code" },
+            ResponseTypesSupported = ["id_token", "code"],
         };
 
         Action validate = () => response.ValidateResponse();
@@ -102,7 +102,7 @@ public class discovery_endpoint_response_should
             AuthorizationEndpoint = RandomString,
             JwksUri = RandomString,
             ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
-            SubjectTypesSupported = new[] { subjectTypesSupported },
+            SubjectTypesSupported = [subjectTypesSupported],
         };
 
         Action validate = () => response.ValidateResponse();
@@ -122,7 +122,7 @@ public class discovery_endpoint_response_should
             JwksUri = RandomString,
             ResponseTypesSupported = REQUIRED_RESPONSE_TYPES,
             SubjectTypesSupported = OidcConstants.REQUIRED_SUBJECT_TYPES,
-            SigningAlgorithmsSupported = new[] { string.Empty },
+            SigningAlgorithmsSupported = [string.Empty],
         };
 
         Action validate = () => response.ValidateResponse();
@@ -152,5 +152,5 @@ public class discovery_endpoint_response_should
 
     private static string RandomString => Guid.NewGuid().ToString();
 
-    private static readonly string[] REQUIRED_RESPONSE_TYPES = OidcConstants.REQUIRED_RESPONSE_TYPES.Concat(new[] { "id_token token" }).ToArray();
+    private static readonly string[] REQUIRED_RESPONSE_TYPES = OidcConstants.REQUIRED_RESPONSE_TYPES.Concat(["id_token token"]).ToArray();
 }

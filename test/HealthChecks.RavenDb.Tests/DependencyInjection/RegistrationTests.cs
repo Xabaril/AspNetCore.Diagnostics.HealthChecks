@@ -9,7 +9,7 @@ public class ravendb_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" });
+            .AddRavenDB(_ => _.Urls = ["http://localhost:8080", "http://localhost:8081"]);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -26,7 +26,7 @@ public class ravendb_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddRavenDB(_ => _.Urls = new[] { "http://localhost:8080", "http://localhost:8081" },
+            .AddRavenDB(_ => _.Urls = ["http://localhost:8080", "http://localhost:8081"],
                 name: "my-ravendb");
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -44,7 +44,7 @@ public class ravendb_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" });
+            .AddRavenDB(setup => setup.Urls = ["http://localhost:8080"]);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -61,7 +61,7 @@ public class ravendb_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddRavenDB(setup => setup.Urls = new[] { "http://localhost:8080" }, name: "my-ravendb");
+            .AddRavenDB(setup => setup.Urls = ["http://localhost:8080"], name: "my-ravendb");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

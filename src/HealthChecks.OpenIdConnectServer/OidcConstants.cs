@@ -20,5 +20,5 @@ internal class OidcConstants
 
     internal static string[] REQUIRED_SUBJECT_TYPES => new[] { "pairwise", "public" };
 
-    internal static string[] REQUIRED_ALGORITHMS => new[] { "RS256" };
+    internal static string[] REQUIRED_ALGORITHMS => new[] { "RS256", "RS512" };
 }

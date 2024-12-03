@@ -6,7 +6,7 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
-      - test/HealthChecks.IdSvr.Tests/**
+      - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_idsvr_ci.yml
       - Directory.Build.props
@@ -20,7 +20,7 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
-      - test/HealthChecks.IdSvr.Tests/**
+      - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_idsvr_ci.yml
       - Directory.Build.props

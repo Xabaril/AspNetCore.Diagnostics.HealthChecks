@@ -150,6 +150,23 @@ public class discovery_endpoint_response_should
         validate.ShouldNotThrow();
     }
 
+    [Fact]
+    public void be_valid_when_dynamic_openid_provider_check_is_disabled_and_required_response_types_supported_are_missing()
+    {
+        var response = new DiscoveryEndpointResponse
+        {
+            Issuer = RandomString,
+            AuthorizationEndpoint = RandomString,
+            JwksUri = RandomString,
+            SubjectTypesSupported = OidcConstants.REQUIRED_SUBJECT_TYPES,
+            SigningAlgorithmsSupported = OidcConstants.REQUIRED_ALGORITHMS,
+        };
+
+        Action validate = () => response.ValidateResponse(isDynamicOpenIdProvider: false);
+
+        validate.ShouldNotThrow();
+    }
+
     private static string RandomString => Guid.NewGuid().ToString();
 
     private static readonly string[] REQUIRED_RESPONSE_TYPES = OidcConstants.REQUIRED_RESPONSE_TYPES.Concat(["id_token token"]).ToArray();

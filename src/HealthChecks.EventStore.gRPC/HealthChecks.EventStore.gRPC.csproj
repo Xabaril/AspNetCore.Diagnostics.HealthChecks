@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="EventStore.Client.Grpc.Streams" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

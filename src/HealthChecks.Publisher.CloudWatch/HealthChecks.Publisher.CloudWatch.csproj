@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.CloudWatch" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

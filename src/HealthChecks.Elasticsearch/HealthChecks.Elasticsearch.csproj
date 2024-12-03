@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Elastic.Clients.Elasticsearch" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
 
   </ItemGroup>
 

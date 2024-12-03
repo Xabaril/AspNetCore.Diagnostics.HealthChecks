@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

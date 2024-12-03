@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

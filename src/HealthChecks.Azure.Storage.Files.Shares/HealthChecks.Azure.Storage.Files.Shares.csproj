@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Files.Shares" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

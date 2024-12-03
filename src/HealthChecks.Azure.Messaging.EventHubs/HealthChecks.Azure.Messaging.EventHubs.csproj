@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.EventHubs" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

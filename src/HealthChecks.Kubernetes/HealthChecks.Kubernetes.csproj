@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="KubernetesClient" PackageOverride="12.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <Compile Include="../DisposalHostedService.cs" />
   </ItemGroup>
 

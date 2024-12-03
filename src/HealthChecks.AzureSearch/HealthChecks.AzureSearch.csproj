@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="DogStatsD-CSharp-Client" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

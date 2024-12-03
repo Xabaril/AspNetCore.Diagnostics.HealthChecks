@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

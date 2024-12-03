@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="SSH.NET" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <PackageReference Include="System.Buffers" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>

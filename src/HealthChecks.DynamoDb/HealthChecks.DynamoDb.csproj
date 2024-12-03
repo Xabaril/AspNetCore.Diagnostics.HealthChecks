@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.DynamoDBv2" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

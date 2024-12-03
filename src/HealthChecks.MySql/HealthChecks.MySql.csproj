@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="MySqlConnector" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

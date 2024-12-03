@@ -11,7 +11,7 @@ public class ping_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddPingHealthCheck(setup => setup.AddHost("127.0.0.1", 5000), tags: new string[] { "ping" });
+                .AddPingHealthCheck(setup => setup.AddHost("127.0.0.1", 5000), tags: ["ping"]);
             })
             .Configure(app =>
             {
@@ -22,7 +22,7 @@ public class ping_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -38,7 +38,7 @@ public class ping_healthcheck_should
                 {
                     setup.AddHost("127.0.0.1", 3000);
                     setup.AddHost("nonexistinghost", 3000);
-                }, tags: new string[] { "ping" });
+                }, tags: ["ping"]);
             })
             .Configure(app =>
             {
@@ -49,7 +49,7 @@ public class ping_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

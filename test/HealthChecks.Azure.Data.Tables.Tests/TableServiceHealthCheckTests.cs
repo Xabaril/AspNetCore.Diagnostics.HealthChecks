@@ -39,9 +39,9 @@ public class tableservicehealthcheck_should
 
         _tableServiceClient
             .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
+            .Returns(AsyncPageable<TableItem>.FromPages([]));
 
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _tableServiceClient
             .Received(1)
@@ -61,14 +61,14 @@ public class tableservicehealthcheck_should
 
         _tableServiceClient
             .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
+            .Returns(AsyncPageable<TableItem>.FromPages([]));
 
         _tableClient
             .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<TableEntity>.FromPages(Array.Empty<Page<TableEntity>>()));
+            .Returns(AsyncPageable<TableEntity>.FromPages([]));
 
         _options.TableName = TableName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _tableServiceClient
             .Received(1)
@@ -104,7 +104,7 @@ public class tableservicehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
 
         _options.TableName = checkTable ? TableName : null;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _tableServiceClient
             .Received(1)
@@ -116,8 +116,7 @@ public class tableservicehealthcheck_should
 
         await enumerator
             .Received(1)
-            .MoveNextAsync()
-            .ConfigureAwait(false);
+            .MoveNextAsync();
 
         _tableClient
             .DidNotReceiveWithAnyArgs()
@@ -139,7 +138,7 @@ public class tableservicehealthcheck_should
 
         _tableServiceClient
             .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
+            .Returns(AsyncPageable<TableItem>.FromPages([]));
 
         _tableClient
             .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token)
@@ -154,7 +153,7 @@ public class tableservicehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Table not found"));
 
         _options.TableName = TableName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token).ConfigureAwait(false);
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
         _tableServiceClient
             .Received(1)
@@ -170,8 +169,7 @@ public class tableservicehealthcheck_should
 
         await enumerator
             .Received(1)
-            .MoveNextAsync()
-            .ConfigureAwait(false);
+            .MoveNextAsync();
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
         actual
@@ -186,7 +184,7 @@ public class tableservicehealthcheck_should
             .AddSingleton(_tableServiceClient)
             .AddLogging()
             .AddHealthChecks()
-            .AddAzureTable(optionsFactory: _ => new AzureTableServiceHealthCheckOptions() { TableName = TableName }, healthCheckName: HealthCheckName)
+            .AddAzureTable(optionsFactory: _ => new AzureTableServiceHealthCheckOptions() { TableName = TableName }, name: HealthCheckName)
             .Services
             .BuildServiceProvider();
 
@@ -195,7 +193,7 @@ public class tableservicehealthcheck_should
 
         _tableServiceClient
             .QueryAsync(filter: "false", cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
+            .Returns(AsyncPageable<TableItem>.FromPages([]));
 
         _tableClient
             .QueryAsync<TableEntity>(filter: "false", cancellationToken: Arg.Any<CancellationToken>())
@@ -210,7 +208,7 @@ public class tableservicehealthcheck_should
             .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Table not found"));
 
         var service = provider.GetRequiredService<HealthCheckService>();
-        var report = await service.CheckHealthAsync().ConfigureAwait(false);
+        var report = await service.CheckHealthAsync();
 
         _tableServiceClient
             .Received(1)
@@ -226,8 +224,7 @@ public class tableservicehealthcheck_should
 
         await enumerator
             .Received(1)
-            .MoveNextAsync()
-            .ConfigureAwait(false);
+            .MoveNextAsync();
 
         var actual = report.Entries[HealthCheckName];
         actual.Status.ShouldBe(HealthStatus.Unhealthy);

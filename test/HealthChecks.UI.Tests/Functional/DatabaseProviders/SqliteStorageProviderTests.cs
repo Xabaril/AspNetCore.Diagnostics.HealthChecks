@@ -45,7 +45,7 @@ public class sqlite_storage_should
         hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
-        var configurations = await context.Configurations.ToListAsync().ConfigureAwait(false);
+        var configurations = await context.Configurations.ToListAsync();
 
         var host1 = ProviderTestHelper.Endpoints[0];
 
@@ -56,7 +56,7 @@ public class sqlite_storage_should
 
         collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
 
-        var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api").ConfigureAwait(false);
+        var report = await client.GetAsJson<List<HealthCheckExecution>>("/healthchecks-api");
         report.First().Name.ShouldBe(host1.Name);
     }
 }

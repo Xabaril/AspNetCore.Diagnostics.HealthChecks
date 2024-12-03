@@ -23,7 +23,7 @@ public class imap_healthcheck_should
                      setup.Host = _host;
                      setup.Port = 993;
                      setup.AllowInvalidRemoteCertificates = true;
-                 }, tags: new string[] { "imap" });
+                 }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -34,7 +34,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -52,7 +52,7 @@ public class imap_healthcheck_should
                     setup.Port = 993;
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -63,7 +63,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -82,7 +82,7 @@ public class imap_healthcheck_should
                     setup.ConnectionType = ImapConnectionType.SSL_TLS;
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith("invalid@healthchecks.com", "invalidpassword");
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -93,7 +93,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -112,7 +112,7 @@ public class imap_healthcheck_should
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
                     setup.CheckFolderExists("INBOX");
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -123,7 +123,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -142,7 +142,7 @@ public class imap_healthcheck_should
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
                     setup.CheckFolderExists("INVALIDFOLDER");
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -153,7 +153,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -170,7 +170,7 @@ public class imap_healthcheck_should
                     setup.Host = _host;
                     setup.Port = 143;
                     setup.AllowInvalidRemoteCertificates = true;
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -181,7 +181,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -199,7 +199,7 @@ public class imap_healthcheck_should
                     setup.Port = 143;
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -210,7 +210,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -230,7 +230,7 @@ public class imap_healthcheck_should
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith(_validAccount, _validPassword);
                     setup.CheckFolderExists("INBOX");
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -241,7 +241,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -257,7 +257,7 @@ public class imap_healthcheck_should
                 {
                     setup.Host = _host;
                     setup.Port = 135;
-                }, tags: new string[] { "imap" });
+                }, tags: ["imap"]);
             })
             .Configure(app =>
             {
@@ -271,7 +271,7 @@ public class imap_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -292,7 +292,7 @@ public class imap_healthcheck_should
                 failureStatus: HealthStatus.Degraded,
                 null,
                 timeout: null)
-        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token).ConfigureAwait(false);
+        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
 
         result.Exception.ShouldBeOfType<OperationCanceledException>();
     }

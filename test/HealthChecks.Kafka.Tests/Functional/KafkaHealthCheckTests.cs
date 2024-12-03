@@ -21,7 +21,7 @@ public class kafka_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddKafka(configuration, tags: new string[] { "kafka" });
+                .AddKafka(configuration, tags: ["kafka"]);
             })
             .Configure(app =>
             {
@@ -33,7 +33,7 @@ public class kafka_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -43,7 +43,7 @@ public class kafka_healthcheck_should
     {
         var configuration = new ProducerConfig()
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = "localhost:29092",
             MessageSendMaxRetries = 0
         };
 
@@ -51,7 +51,7 @@ public class kafka_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddKafka(configuration, tags: new string[] { "kafka" });
+                .AddKafka(configuration, tags: ["kafka"]);
             })
             .Configure(app =>
             {
@@ -63,7 +63,7 @@ public class kafka_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

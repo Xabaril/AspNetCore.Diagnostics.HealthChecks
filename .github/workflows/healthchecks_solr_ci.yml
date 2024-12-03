@@ -11,6 +11,7 @@ on:
       - .github/workflows/healthchecks_solr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -24,6 +25,7 @@ on:
       - .github/workflows/healthchecks_solr_ci.
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:
@@ -50,11 +52,12 @@ jobs:
           wget http://localhost:8983/solr/#
           curl http://localhost:8983/solr/# -v
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.0.x
             7.0.x
+            8.0.x
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.Solr/HealthChecks.Solr.csproj &&

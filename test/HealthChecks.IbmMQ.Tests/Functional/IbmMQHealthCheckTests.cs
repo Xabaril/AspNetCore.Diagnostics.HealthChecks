@@ -40,7 +40,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                 .AddHealthChecks()
-                .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -52,7 +52,7 @@ public class ibmmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -74,7 +74,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                    .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -86,7 +86,7 @@ public class ibmmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -99,7 +99,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: new string[] { "ibmmq" });
+                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -111,7 +111,7 @@ public class ibmmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -124,7 +124,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: new string[] { "ibmmq" });
+                    .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -136,7 +136,7 @@ public class ibmmq_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

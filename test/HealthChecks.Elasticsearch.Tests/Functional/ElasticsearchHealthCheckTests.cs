@@ -13,7 +13,7 @@ public class elasticsearch_healthcheck_should
         .ConfigureServices(services =>
         {
             services.AddHealthChecks()
-             .AddElasticsearch(connectionString, tags: new string[] { "elasticsearch" });
+             .AddElasticsearch(connectionString, tags: ["elasticsearch"]);
         })
         .Configure(app =>
         {
@@ -25,7 +25,7 @@ public class elasticsearch_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -37,7 +37,7 @@ public class elasticsearch_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddElasticsearch("nonexistingdomain:9200", tags: new string[] { "elasticsearch" });
+                .AddElasticsearch("nonexistingdomain:9200", tags: ["elasticsearch"]);
             })
             .Configure(app =>
             {
@@ -49,7 +49,7 @@ public class elasticsearch_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

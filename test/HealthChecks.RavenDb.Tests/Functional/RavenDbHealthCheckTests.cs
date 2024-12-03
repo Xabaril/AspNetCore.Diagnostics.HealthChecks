@@ -8,7 +8,7 @@ namespace HealthChecks.RavenDb.Tests.Functional;
 
 public class ravendb_healthcheck_should
 {
-    private readonly string[] _urls = new[] { "http://localhost:9030" };
+    private readonly string[] _urls = ["http://localhost:9030"];
 
     public ravendb_healthcheck_should()
     {
@@ -34,7 +34,7 @@ public class ravendb_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddRavenDB(_ => _.Urls = _urls, tags: new string[] { "ravendb" });
+                    .AddRavenDB(_ => _.Urls = _urls, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -47,9 +47,9 @@ public class ravendb_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class ravendb_healthcheck_should
                     {
                         _.Urls = _urls;
                         _.Database = "Demo";
-                    }, tags: new string[] { "ravendb" });
+                    }, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -77,9 +77,9 @@ public class ravendb_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -94,8 +94,8 @@ public class ravendb_healthcheck_should
                     {
                         _.Urls = _urls;
                         _.Database = "Demo";
-                        _.RequestTimeout = TimeSpan.Zero;
-                    }, tags: new string[] { "ravendb" });
+                        _.RequestTimeout = TimeSpan.FromMilliseconds(0.001);
+                    }, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -108,9 +108,9 @@ public class ravendb_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
-        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public class ravendb_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddRavenDB(_ => _.Urls = new string[] { connectionString }, tags: new string[] { "ravendb" });
+                    .AddRavenDB(_ => _.Urls = [connectionString], tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -136,9 +136,9 @@ public class ravendb_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
-        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public class ravendb_healthcheck_should
                     {
                         _.Urls = _urls;
                         _.Database = "ThisDatabaseReallyDoesnExist";
-                    }, tags: new string[] { "ravendb" });
+                    }, tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -166,8 +166,8 @@ public class ravendb_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
-        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
     }
 }

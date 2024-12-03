@@ -1,3 +1,5 @@
+using MySqlConnector;
+
 namespace HealthChecks.MySql.Tests.DependencyInjection;
 
 public class mysql_registration_should
@@ -18,6 +20,7 @@ public class mysql_registration_should
         registration.Name.ShouldBe("mysql");
         check.ShouldBeOfType<MySqlHealthCheck>();
     }
+
     [Fact]
     public void add_named_health_check_when_properly_configured()
     {
@@ -32,6 +35,24 @@ public class mysql_registration_should
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("my-mysql-group");
+        check.ShouldBeOfType<MySqlHealthCheck>();
+    }
+
+    [Fact]
+    public void add_health_check_for_data_source()
+    {
+        var services = new ServiceCollection();
+        services
+            .AddMySqlDataSource("Server=example")
+            .AddHealthChecks().AddMySql();
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("mysql");
         check.ShouldBeOfType<MySqlHealthCheck>();
     }
 }

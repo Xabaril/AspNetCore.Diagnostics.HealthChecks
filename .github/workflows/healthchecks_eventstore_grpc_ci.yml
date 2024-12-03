@@ -11,6 +11,7 @@ on:
       - .github/workflows/healthchecks_eventstore_grpc_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -24,13 +25,14 @@ on:
       - .github/workflows/healthchecks_eventstore_grpc_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
       eventstore:
-        image: eventstore/eventstore
+        image: eventstore/eventstore:22.10.5-jammy
         ports:
           - "1113:1113"
           - "2113:2113"
@@ -39,11 +41,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.0.x
             7.0.x
+            8.0.x
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.EventStore.gRPC/HealthChecks.EventStore.gRPC.csproj &&
@@ -67,7 +70,7 @@ jobs:
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           flags: EventStore.gRPC
           directory: .coverage

@@ -1,0 +1,75 @@
+name: HealthChecks Qdrant CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Qdrant/**
+      - test/HealthChecks.Qdrant.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_qdrant_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+      - Directory.Packages.props
+    tags-ignore:
+      - release-*
+      - preview-*
+
+  pull_request:
+    branches: [ master ]
+    paths:
+      - src/HealthChecks.Qdrant/**
+      - test/HealthChecks.Qdrant.Tests/**
+      - test/_SHARED/**
+      - .github/workflows/healthchecks_qdrant_ci.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+      - Directory.Packages.props
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      qdrant:
+        image: qdrant/qdrant:v1.12.1
+        ports:
+        - 6333:6333
+        - 6334:6334
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+      - name: Restore
+        run: |
+          dotnet restore ./src/HealthChecks.Qdrant/HealthChecks.Qdrant.csproj &&          
+          dotnet restore ./test/HealthChecks.Qdrant.Tests/HealthChecks.Qdrant.Tests.csproj
+      - name: Check formatting
+        run: |
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Qdrant/HealthChecks.Qdrant.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.Qdrant.Tests/HealthChecks.Qdrant.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+      - name: Build
+        run: |
+          dotnet build --no-restore ./src/HealthChecks.Qdrant/HealthChecks.Qdrant.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.Qdrant.Tests/HealthChecks.Qdrant.Tests.csproj
+      - name: Test
+        run: >
+          dotnet test
+          ./test/HealthChecks.Qdrant.Tests/HealthChecks.Qdrant.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v5
+        with:
+          flags: Qdrant
+          directory: .coverage

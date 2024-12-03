@@ -21,7 +21,7 @@ public class RabbitMQHealthCheck : IHealthCheck
 
         if (_connection is null && _options.ConnectionFactory is null && _options.ConnectionUri is null)
         {
-            throw new ArgumentException("A connection, connnection factory, or connection string must be set!", nameof(options));
+            throw new ArgumentException("A connection, connection factory, or connection string must be set!", nameof(options));
         }
     }
 
@@ -52,8 +52,7 @@ public class RabbitMQHealthCheck : IHealthCheck
                     factory = new ConnectionFactory
                     {
                         Uri = _options.ConnectionUri,
-                        AutomaticRecoveryEnabled = true,
-                        UseBackgroundThreadsForIO = true
+                        AutomaticRecoveryEnabled = true
                     };
 
                     if (_options.RequestedConnectionTimeout is not null)

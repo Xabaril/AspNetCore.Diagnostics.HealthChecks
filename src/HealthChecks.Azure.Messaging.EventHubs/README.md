@@ -30,8 +30,8 @@ void Configure(IHealthChecksBuilder builder)
         .AddKeyedSingleton(serviceKey: "eventHubName1", (serviceProvider, serviceKey) => new EventHubProducerClient("fullyQualifiedNamespace", "eventHubName1", new DefaultAzureCredential()))
         .AddKeyedSingleton(serviceKey: "eventHubName2", (serviceProvider, serviceKey) => new EventHubProducerClient("fullyQualifiedNamespace", "eventHubName2", new DefaultAzureCredential()))
         .AddHealthChecks()
-            .AddAzureKeyVaultSecrets(clientFactory: serviceProvider => serviceProvider.GetRequiredKeyedService<EventHubProducerClient>("eventHubName1"), healthCheckName: "event_hub_1")
-            .AddAzureKeyVaultSecrets(clientFactory: serviceProvider => serviceProvider.GetRequiredKeyedService<EventHubProducerClient>("eventHubName2"), healthCheckName: "event_hub_2");
+            .AddAzureKeyVaultSecrets(clientFactory: serviceProvider => serviceProvider.GetRequiredKeyedService<EventHubProducerClient>("eventHubName1"), name: "event_hub_1")
+            .AddAzureKeyVaultSecrets(clientFactory: serviceProvider => serviceProvider.GetRequiredKeyedService<EventHubProducerClient>("eventHubName2"), name: "event_hub_2");
 
 }
 ```

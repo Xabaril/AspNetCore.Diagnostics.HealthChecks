@@ -15,6 +15,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AzureTablesServiceHealthChecksBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Data.Tables.TableServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.Data.Tables.AzureTableServiceHealthCheckOptions>? optionsFactory = null, string? healthCheckName = "azure_tables", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureTable(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Data.Tables.TableServiceClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.Data.Tables.AzureTableServiceHealthCheckOptions>? optionsFactory = null, string? name = "azure_tables", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

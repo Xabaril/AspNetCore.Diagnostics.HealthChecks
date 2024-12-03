@@ -16,7 +16,7 @@ public class gremlin_healthcheck_should
                      Hostname = "localhost",
                      Port = 8182,
                      EnableSsl = false
-                 }, tags: new string[] { "gremlin" });
+                 }, tags: ["gremlin"]);
             })
             .Configure(app =>
             {
@@ -28,7 +28,7 @@ public class gremlin_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -45,13 +45,13 @@ public class gremlin_healthcheck_should
                      Hostname = "localhost",
                      Port = 8182,
                      EnableSsl = false
-                 }, tags: new string[] { "gremlin" }, name: "1")
+                 }, tags: ["gremlin"], name: "1")
                  .AddGremlin(_ => new GremlinOptions
                  {
                      Hostname = "localhost",
                      Port = 8182,
                      EnableSsl = false
-                 }, tags: new string[] { "gremlin" }, name: "2");
+                 }, tags: ["gremlin"], name: "2");
             })
             .Configure(app =>
             {
@@ -63,7 +63,7 @@ public class gremlin_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -80,7 +80,7 @@ public class gremlin_healthcheck_should
                      Hostname = "wronghost",
                      Port = 8182,
                      EnableSsl = false
-                 }, tags: new string[] { "gremlin" });
+                 }, tags: ["gremlin"]);
             })
             .Configure(app =>
             {
@@ -92,7 +92,7 @@ public class gremlin_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

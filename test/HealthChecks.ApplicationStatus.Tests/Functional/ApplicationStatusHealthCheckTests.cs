@@ -6,7 +6,7 @@ public class applicationstatus_healthcheck_should
     public async Task be_healthy_if_application_is_not_stopped()
     {
         using var sut = new ApplicationStatusHealthCheck(new TestHostApplicationLifeTime());
-        var result = await sut.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(false);
+        var result = await sut.CheckHealthAsync(new HealthCheckContext());
         result.ShouldBe(HealthCheckResult.Healthy());
     }
 
@@ -17,7 +17,7 @@ public class applicationstatus_healthcheck_should
         using var sut = new ApplicationStatusHealthCheck(lifetime);
         lifetime.StopApplication();
 
-        var result = await sut.CheckHealthAsync(new HealthCheckContext()).ConfigureAwait(false);
+        var result = await sut.CheckHealthAsync(new HealthCheckContext());
 
         result.ShouldBe(HealthCheckResult.Unhealthy());
     }

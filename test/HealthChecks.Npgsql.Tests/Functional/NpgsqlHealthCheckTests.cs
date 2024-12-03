@@ -20,7 +20,7 @@ public class npgsql_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddNpgSql(connectionString, tags: new string[] { "npgsql" });
+                .AddNpgSql(connectionString, tags: ["npgsql"]);
             })
             .Configure(app =>
             {
@@ -32,7 +32,7 @@ public class npgsql_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -46,7 +46,7 @@ public class npgsql_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB", tags: new string[] { "npgsql" });
+                .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB", tags: ["npgsql"]);
             })
             .Configure(app =>
             {
@@ -58,7 +58,7 @@ public class npgsql_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -70,7 +70,7 @@ public class npgsql_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddNpgSql("Server=200.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres", tags: new string[] { "npgsql" });
+                .AddNpgSql("Server=200.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres", tags: ["npgsql"]);
             })
             .Configure(app =>
             {
@@ -82,7 +82,7 @@ public class npgsql_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -99,7 +99,7 @@ public class npgsql_healthcheck_should
                 });
 
                 services.AddHealthChecks()
-                        .AddNpgSql(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: new string[] { "npgsql" });
+                        .AddNpgSql(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: ["npgsql"]);
             })
             .Configure(app =>
             {
@@ -111,7 +111,7 @@ public class npgsql_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -128,7 +128,7 @@ public class npgsql_healthcheck_should
                 });
 
                 services.AddHealthChecks()
-                        .AddNpgSql(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: new string[] { "npgsql" });
+                        .AddNpgSql(_ => _.GetRequiredService<DBConfigSetting>().ConnectionString, tags: ["npgsql"]);
             })
             .Configure(app =>
             {
@@ -140,7 +140,7 @@ public class npgsql_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -159,7 +159,7 @@ public class npgsql_healthcheck_should
                         .Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TestLoggerProvider>())
                     )
                 .AddHealthChecks()
-                .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB", tags: new string[] { "npgsql" });
+                .AddNpgSql(connectionString, "SELECT 1 FROM InvalidDB", tags: ["npgsql"]);
             })
             .Configure(app =>
             {
@@ -171,7 +171,7 @@ public class npgsql_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         var testLoggerProvider = (TestLoggerProvider)server.Services.GetRequiredService<ILoggerProvider>();
 

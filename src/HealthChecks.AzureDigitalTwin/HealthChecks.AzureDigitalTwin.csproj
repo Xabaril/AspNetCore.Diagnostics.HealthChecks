@@ -1,16 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);Azure;DigitalTwin</PackageTags>
     <Description>HealthChecks.AzureDigitalTwin is the health check package for Azure DigitalTwin.</Description>
     <VersionPrefix>$(HealthCheckAzureDigitalTwin)</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.DigitalTwins.Core" Version="1.4.0" />
-    <PackageReference Include="Azure.Identity" Version="1.10.0" />
-    <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" Version="1.2.0" />
-    <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.9" />
+    <PackageReference Include="Azure.DigitalTwins.Core" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Microsoft.Azure.Management.DigitalTwins" />
+    <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" />
+    <!-- some of the packages listed above target NS1.6, hence include transitive dependency to STR 4.3.0 which is vulnerable -->
+    <PackageReference Include="System.Text.RegularExpressions" />
   </ItemGroup>
 </Project>

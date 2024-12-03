@@ -48,7 +48,7 @@ public class uris_healthcheck_should
                     .AddUrlGroup(
                         uri,
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.Zero),
-                        tags: new string[] { "uris" });
+                        tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -60,7 +60,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -77,7 +77,7 @@ public class uris_healthcheck_should
                         uri,
                         HttpMethod.Post,
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.Zero),
-                        tags: new string[] { "uris" });
+                        tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -89,8 +89,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -102,7 +102,7 @@ public class uris_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddUrlGroup(uri, tags: new string[] { "uris" });
+                .AddUrlGroup(uri, tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -113,7 +113,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -128,7 +128,7 @@ public class uris_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddUrlGroup(uri, tags: new string[] { "uris" });
+                .AddUrlGroup(uri, tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -139,7 +139,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -154,7 +154,7 @@ public class uris_healthcheck_should
                 services.AddHealthChecks()
                 .AddUrlGroup(
                     opt => opt.AddUri(uri, options => options.UseTimeout(TimeSpan.FromSeconds(1))),
-                    tags: new string[] { "uris" });
+                    tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -165,7 +165,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -185,7 +185,7 @@ public class uris_healthcheck_should
                         opt.AddUri(uri);
                     },
                     configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(11)),
-                    tags: new string[] { "uris" });
+                    tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -196,7 +196,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -213,7 +213,7 @@ public class uris_healthcheck_should
                     .AddUrlGroup(
                         opt => opt.AddUri(uri, options => options.UseTimeout(TimeSpan.FromSeconds(3))),
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
-                        tags: new string[] { "uris" });
+                        tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -225,8 +225,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -246,7 +246,7 @@ public class uris_healthcheck_should
                             opt.AddUri(uri);
                         },
                         configurePrimaryHttpMessageHandler: _ => new DelayStubMessageHandler(TimeSpan.FromSeconds(2)),
-                        tags: new string[] { "uris" });
+                        tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -258,8 +258,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -274,7 +274,7 @@ public class uris_healthcheck_should
                     .AddUrlGroup(
                         opt => opt.AddUri(uri, options => options.ExpectContent("abc")),
                         configurePrimaryHttpMessageHandler: _ => new ContentStubMessageHandler("abc"),
-                        tags: new string[] { "uris" });
+                        tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -285,8 +285,8 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -301,7 +301,7 @@ public class uris_healthcheck_should
                     .AddUrlGroup(
                         opt => opt.AddUri(uri, options => options.ExpectContent("xyz")),
                         configurePrimaryHttpMessageHandler: _ => new ContentStubMessageHandler("abc"),
-                        tags: new string[] { "uris" });
+                        tags: ["uris"]);
             })
             .Configure(app =>
             {
@@ -312,7 +312,7 @@ public class uris_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

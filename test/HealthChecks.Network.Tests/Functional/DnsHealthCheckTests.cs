@@ -21,7 +21,7 @@ public class dns_healthcheck_should
                 {
                     setup.ResolveHost(targetHost).To(targetHostIpAddresses)
                     .ResolveHost(targetHost2).To(targetHost2IpAddresses);
-                }, tags: new string[] { "dns" });
+                }, tags: ["dns"]);
             })
             .Configure(app =>
             {
@@ -32,7 +32,7 @@ public class dns_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -44,7 +44,7 @@ public class dns_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddDnsResolveHealthCheck(setup => setup.ResolveHost("www.microsoft.com").To("8.8.8.8", "5.5.5.5"), tags: new string[] { "dns" });
+                .AddDnsResolveHealthCheck(setup => setup.ResolveHost("www.microsoft.com").To("8.8.8.8", "5.5.5.5"), tags: ["dns"]);
             })
             .Configure(app =>
             {
@@ -55,7 +55,7 @@ public class dns_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

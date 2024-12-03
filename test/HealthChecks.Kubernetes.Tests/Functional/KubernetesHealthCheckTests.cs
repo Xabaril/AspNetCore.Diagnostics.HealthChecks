@@ -17,7 +17,7 @@ public class kubernetes_healthcheck_should
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
-                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: new string[] { "k8s" });
+                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: ["k8s"]);
             })
             .Configure(app =>
             {
@@ -29,7 +29,7 @@ public class kubernetes_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -46,7 +46,7 @@ public class kubernetes_healthcheck_should
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
-                    }), tags: new string[] { "k8s" });
+                    }), tags: ["k8s"]);
             })
             .Configure(app =>
             {
@@ -58,7 +58,7 @@ public class kubernetes_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -75,7 +75,7 @@ public class kubernetes_healthcheck_should
                     {
                         Host = "https://localhost:443",
                         SkipTlsVerify = true
-                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: new string[] { "k8s" });
+                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: ["k8s"]);
             })
             .Configure(app =>
             {
@@ -87,7 +87,7 @@ public class kubernetes_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

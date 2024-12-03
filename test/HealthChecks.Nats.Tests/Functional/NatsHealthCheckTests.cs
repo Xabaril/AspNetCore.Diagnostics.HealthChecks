@@ -13,19 +13,19 @@ public class nats_healthcheck_should
     public Task be_healthy_if_nats_is_available_locally() =>
         FactAsync(
             setup => setup.Url = DefaultLocalConnectionString,
-            async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
+            async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
 
     [Fact]
     public Task be_healthy_for_official_demo_instance() =>
         FactAsync(
             setup => setup.Url = DemoConnectionString,
-            async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
+            async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()));
 
     [Fact]
     public Task be_healthy_if_nats_is_available_and_has_custom_name() =>
         FactAsync(
             setup => setup.Url = DefaultLocalConnectionString,
-            async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false)),
+            async response => response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync()),
             name: "Demo");
 
     [Fact]
@@ -35,7 +35,7 @@ public class nats_healthcheck_should
             async response =>
             {
                 response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var content = await response.Content.ReadAsStringAsync();
                 var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
                 report.Status.ShouldBe(UIHealthStatus.Unhealthy);
                 report.Entries["nats"].Exception.ShouldBe("Failed to connect");
@@ -49,7 +49,7 @@ public class nats_healthcheck_should
             async response =>
             {
                 response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var content = await response.Content.ReadAsStringAsync();
                 var report = JsonSerializer.Deserialize<UIHealthReport>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } })!;
                 report.Status.ShouldBe(UIHealthStatus.Unhealthy);
                 report.Entries["nats"].Exception.ShouldBe("Failed to connect");

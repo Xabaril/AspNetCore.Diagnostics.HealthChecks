@@ -19,7 +19,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" }, timeout: TimeSpan.FromSeconds(5));
+                }, tags: ["sftp"], timeout: TimeSpan.FromSeconds(5));
             })
             .Configure(app =>
             {
@@ -31,7 +31,7 @@ public class sftp_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -50,7 +50,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -62,7 +62,7 @@ public class sftp_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -83,7 +83,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -95,7 +95,7 @@ public class sftp_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -117,7 +117,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -129,7 +129,7 @@ public class sftp_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -151,7 +151,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -163,7 +163,7 @@ public class sftp_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.EnsureSuccessStatusCode();
     }
@@ -182,7 +182,7 @@ public class sftp_healthcheck_should
                                     .Build();
 
                     setup.AddHost(cfg);
-                }, tags: new string[] { "sftp" });
+                }, tags: ["sftp"]);
             })
             .Configure(app =>
             {
@@ -194,7 +194,7 @@ public class sftp_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

@@ -15,7 +15,7 @@ public class oracle_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddOracle(connectionString, tags: new string[] { "oracle" });
+                .AddOracle(connectionString, tags: ["oracle"]);
             })
             .Configure(app =>
             {
@@ -27,8 +27,8 @@ public class oracle_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class oracle_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddOracle(connectionString, tags: new string[] { "oracle" });
+                .AddOracle(connectionString, tags: ["oracle"]);
             })
             .Configure(app =>
             {
@@ -51,7 +51,7 @@ public class oracle_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -63,7 +63,7 @@ public class oracle_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddOracle(connectionString, "SELECT 1 FROM InvalidDb", tags: new string[] { "oracle" });
+                .AddOracle(connectionString, "SELECT 1 FROM InvalidDb", tags: ["oracle"]);
             })
             .Configure(app =>
             {
@@ -74,7 +74,7 @@ public class oracle_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -94,7 +94,7 @@ public class oracle_healthcheck_should
                     factoryCalled = true;
                     return connectionString;
 
-                }, tags: new string[] { "oracle" });
+                }, tags: ["oracle"]);
             })
             .Configure(app =>
             {
@@ -105,8 +105,8 @@ public class oracle_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         factoryCalled.ShouldBeTrue();
     }
 
@@ -124,7 +124,7 @@ public class oracle_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddOracle(connectionString, tags: new string[] { "oracle" },
+                    .AddOracle(connectionString, tags: ["oracle"],
                         configure: options =>
                         {
                             factoryCalled = true;
@@ -141,8 +141,8 @@ public class oracle_healthcheck_should
             });
 
         using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        using var response = await server.CreateRequest("/health").GetAsync();
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
         factoryCalled.ShouldBeTrue();
     }
 }

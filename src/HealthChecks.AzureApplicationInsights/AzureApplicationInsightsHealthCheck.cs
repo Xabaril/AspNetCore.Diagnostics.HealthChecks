@@ -7,11 +7,11 @@ public class AzureApplicationInsightsHealthCheck : IHealthCheck
 {
     // from https://docs.microsoft.com/en-us/azure/azure-monitor/app/ip-addresses#outgoing-ports
     private readonly string[] _appInsightsUrls =
-    {
+    [
         "https://dc.applicationinsights.azure.com",
         "https://dc.applicationinsights.microsoft.com",
         "https://dc.services.visualstudio.com"
-    };
+    ];
     private readonly string _instrumentationKey;
 
     private readonly IHttpClientFactory _httpClientFactory;

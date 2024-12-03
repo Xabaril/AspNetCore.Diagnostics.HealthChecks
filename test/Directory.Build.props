@@ -1,0 +1,44 @@
+<Project>
+
+  <Import Project="..\Directory.Build.props" />
+  
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);IDE1006;RCS1090</NoWarn>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="PublicApiGenerator" />
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
+
+    <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <Compile Include="../_SHARED/TestLogger.cs" Link="TestLogger.cs" Visible="false" />
+    <Compile Include="../_SHARED/TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
+    <Compile Include="../_SHARED/ConformanceTests.cs" Link="ConformanceTests.cs" Visible="false" />
+
+    <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
+    <Using Include="Microsoft.AspNetCore.Hosting" />
+    <Using Include="Microsoft.AspNetCore.Builder" />
+    <Using Include="Microsoft.AspNetCore.TestHost" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+    <Using Include="Microsoft.Extensions.Options" />
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

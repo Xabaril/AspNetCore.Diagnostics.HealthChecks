@@ -7,15 +7,16 @@
     <DockerfileContext>..\..</DockerfileContext>
     <VersionPrefix>$(HealthChecksUIK8sOperator)</VersionPrefix>
     <NoWarn>$(NoWarn);RCS1090</NoWarn>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="11.0.44" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
-    <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
+    <PackageReference Include="KubernetesClient" PackageOverride="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.ColoredConsole" />
+    <PackageReference Include="System.Threading.Channels" />
   </ItemGroup>
 
 </Project>

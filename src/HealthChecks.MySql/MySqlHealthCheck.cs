@@ -12,9 +12,7 @@ public class MySqlHealthCheck : IHealthCheck
 
     public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options.ConnectionString, true);
-        Guard.ThrowIfNull(options.CommandText, true);
-        _options = options;
+        _options = Guard.ThrowIfNull(options);
     }
 
     /// <inheritdoc />
@@ -22,18 +20,30 @@ public class MySqlHealthCheck : IHealthCheck
     {
         try
         {
-            using var connection = new MySqlConnection(_options.ConnectionString);
+            using var connection = _options.DataSource is not null ?
+                _options.DataSource.CreateConnection() :
+                new MySqlConnection(_options.ConnectionString);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            using var command = connection.CreateCommand();
-            command.CommandText = _options.CommandText;
-            object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+            if (_options.CommandText is { } commandText)
+            {
+                using var command = connection.CreateCommand();
+                command.CommandText = _options.CommandText;
+                object? result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
-            return _options.HealthCheckResultBuilder == null
-                ? HealthCheckResult.Healthy()
-                : _options.HealthCheckResultBuilder(result);
+                return _options.HealthCheckResultBuilder == null
+                    ? HealthCheckResult.Healthy()
+                    : _options.HealthCheckResultBuilder(result);
+            }
+            else
+            {
+                var success = await connection.PingAsync(cancellationToken).ConfigureAwait(false);
+                return _options.HealthCheckResultBuilder is null
+                    ? (success ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus)) :
+                    _options.HealthCheckResultBuilder(success);
+            }
         }
         catch (Exception ex)
         {

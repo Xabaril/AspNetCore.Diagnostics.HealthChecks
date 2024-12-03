@@ -21,7 +21,7 @@ public class signalr_healthcheck_should
                     () => new HubConnectionBuilder()
                             .WithUrl("http://localhost/test", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                             .Build(),
-                    tags: new string[] { "signalr" });
+                    tags: ["signalr"]);
             })
             .Configure(app =>
             {
@@ -37,7 +37,7 @@ public class signalr_healthcheck_should
 
         server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -59,7 +59,7 @@ public class signalr_healthcheck_should
                     () => new HubConnectionBuilder()
                             .WithUrl("http://localhost/badhub", o => o.HttpMessageHandlerFactory = _ => server.CreateHandler())
                             .Build(),
-                    tags: new string[] { "signalr" });
+                    tags: ["signalr"]);
             })
             .Configure(app =>
             {
@@ -74,7 +74,7 @@ public class signalr_healthcheck_should
 
         server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
 

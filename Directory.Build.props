@@ -2,85 +2,24 @@
   <Import Project="build/versions.props" />
 
   <PropertyGroup>
-    <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
-    <PackageIcon>icon.png</PackageIcon>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
-    <Authors>Xabaril Contributors</Authors>
-    <Company>Xabaril</Company>
     <LangVersion>latest</LangVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RepositoryType>git</RepositoryType>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
-    <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
-    <NoWarn>$(NoWarn);1591;IDISP013</NoWarn> <!--TODO: temporary solution-->
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <NoWarn>$(NoWarn);1591;IDISP013;AD0001;</NoWarn> <!--TODO: temporary solution, remove AD0001 after https://github.com/dotnet/aspnetcore/issues/50836 fixed-->
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-    <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
-    <NoWarn>$(NoWarn);IDE1006</NoWarn>
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);IDE0053;IDE0060</WarningsNotAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Tests'))">
-    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" Condition="'$(TargetFramework)' != 'net7.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.21" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.10" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Shouldly" Version="4.2.1" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
-    <PackageReference Include="xunit" Version="2.5.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0" />
-    <PackageReference Include="PublicApiGenerator" Version="11.0.0" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-
-    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
-
-    <Compile Include="../_SHARED/ApiApprovalTests.cs" Link="ApiApprovalTests.cs" Visible="false" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <Compile Include="../_SHARED/TestLogger.cs" Link="TestLogger.cs" Visible="false" />
-    <Compile Include="../_SHARED/TestLoggerProvider.cs" Link="TestLoggerProvider.cs" Visible="false" />
-    <Compile Include="../_SHARED/ConformanceTests.cs" Link="ConformanceTests.cs" Visible="false" />
-
-    <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
-    <Using Include="Microsoft.AspNetCore.Hosting" />
-    <Using Include="Microsoft.AspNetCore.Builder" />
-    <Using Include="Microsoft.AspNetCore.TestHost" />
-    <Using Include="Microsoft.Extensions.DependencyInjection" />
-    <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <Using Include="Microsoft.Extensions.Options" />
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.4.0">
+    <PackageReference Include="Roslynator.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.4.0">
+    <PackageReference Include="Roslynator.Formatting.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

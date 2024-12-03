@@ -16,7 +16,7 @@ public class consul_healthcheck_should
                        setup.HostName = "localhost";
                        setup.Port = 8500;
                        setup.RequireHttps = false;
-                   }, tags: new string[] { "consul" });
+                   }, tags: ["consul"]);
            })
            .Configure(app =>
            {
@@ -28,7 +28,7 @@ public class consul_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -45,7 +45,7 @@ public class consul_healthcheck_should
                         setup.HostName = "non-existing-host";
                         setup.Port = 8500;
                         setup.RequireHttps = false;
-                    }, tags: new string[] { "consul" });
+                    }, tags: ["consul"]);
             })
             .Configure(app =>
             {
@@ -57,7 +57,7 @@ public class consul_healthcheck_should
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

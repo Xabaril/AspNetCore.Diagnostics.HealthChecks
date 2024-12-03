@@ -15,7 +15,7 @@ public class ravendb_healthcheck_should_single_connection_string
         {
             using var store = new DocumentStore
             {
-                Urls = new string[] { ConnectionString },
+                Urls = [ConnectionString],
             };
 
             store.Initialize();
@@ -33,7 +33,7 @@ public class ravendb_healthcheck_should_single_connection_string
             {
                 services
                 .AddHealthChecks()
-                .AddRavenDB(setup => setup.Urls = new[] { ConnectionString }, tags: new string[] { "ravendb" });
+                .AddRavenDB(setup => setup.Urls = [ConnectionString], tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -45,7 +45,7 @@ public class ravendb_healthcheck_should_single_connection_string
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -58,7 +58,7 @@ public class ravendb_healthcheck_should_single_connection_string
             {
                 services
                 .AddHealthChecks()
-                .AddRavenDB(setup => setup.Urls = new[] { ConnectionString }, "Demo", tags: new string[] { "ravendb" });
+                .AddRavenDB(setup => setup.Urls = [ConnectionString], "Demo", tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -70,7 +70,7 @@ public class ravendb_healthcheck_should_single_connection_string
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -85,7 +85,7 @@ public class ravendb_healthcheck_should_single_connection_string
             {
                 services
                 .AddHealthChecks()
-                .AddRavenDB(setup => setup.Urls = new[] { connectionString }, tags: new string[] { "ravendb" });
+                .AddRavenDB(setup => setup.Urls = [connectionString], tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -97,7 +97,7 @@ public class ravendb_healthcheck_should_single_connection_string
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -112,9 +112,9 @@ public class ravendb_healthcheck_should_single_connection_string
                 .AddHealthChecks()
                 .AddRavenDB(setup =>
                 {
-                    setup.Urls = new[] { ConnectionString };
+                    setup.Urls = [ConnectionString];
                     setup.Database = "ThisDatabaseReallyDoesnExist";
-                }, "ThisDatabaseReallyDoesnExist", tags: new string[] { "ravendb" });
+                }, "ThisDatabaseReallyDoesnExist", tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -126,7 +126,7 @@ public class ravendb_healthcheck_should_single_connection_string
 
         using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

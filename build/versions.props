@@ -57,7 +57,7 @@
     <HealthCheckSignalR>8.0.1</HealthCheckSignalR>
     <HealthCheckSolr>8.0.1</HealthCheckSolr>
     <HealthCheckSqlite>8.1.0</HealthCheckSqlite>
-    <HealthCheckSqlServer>8.0.2</HealthCheckSqlServer>
+    <HealthCheckSqlServer>8.0.3</HealthCheckSqlServer>
     <HealthChecksUIK8sOperator>8.0.1</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>8.0.1</HealthChecksUIPostgreSQLStorage>
     <HealthCheckSystem>8.0.1</HealthCheckSystem>

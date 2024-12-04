@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TestTfmsInParallel>false</TestTfmsInParallel>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
     <PackageReference Include="Ductus.FluentDocker" />

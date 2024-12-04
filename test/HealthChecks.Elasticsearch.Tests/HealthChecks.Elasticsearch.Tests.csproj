@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- The functional tests can't be run in parallel because they conflict with each other when creating docker containers. -->
     <TestTfmsInParallel>false</TestTfmsInParallel>
   </PropertyGroup>
 

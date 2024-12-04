@@ -5,7 +5,6 @@
     <PackageTags>$(PackageTags);IdentityServer;IdSvr;OpenId;OpenIdConnect</PackageTags>
     <Description>HealthChecks.OpenIdConnectServer is the health check package for OpenIdConnect servers</Description>
     <VersionPrefix>$(HealthCheckOpenIdConnectServer)</VersionPrefix>
-    <RootNamespace>HealthChecks.OpenIdConnectServer</RootNamespace> <!--For backward naming compatibility-->
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 

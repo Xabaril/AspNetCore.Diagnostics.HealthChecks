@@ -10,8 +10,9 @@ public class oidc_server_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddOpenIdConnectServer(new Uri("http://localhost:7777"), tags: ["idsvr"]);
+                services
+                    .AddHealthChecks()
+                    .AddOpenIdConnectServer(new Uri("http://localhost:7777"), tags: ["oidcserver"]);
             })
             .Configure(app =>
             {
@@ -34,8 +35,9 @@ public class oidc_server_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddOpenIdConnectServer(new Uri("http://localhost:8888"), tags: ["idsvr"]);
+                services
+                    .AddHealthChecks()
+                    .AddOpenIdConnectServer(new Uri("http://localhost:8888"), tags: ["oidcserver"]);
             })
             .Configure(app =>
             {

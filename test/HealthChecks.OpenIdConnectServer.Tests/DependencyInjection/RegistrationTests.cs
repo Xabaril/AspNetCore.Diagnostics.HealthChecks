@@ -1,13 +1,13 @@
-namespace HealthChecks.IdSvr.Tests.DependencyInjection;
+namespace HealthChecks.OpenIdConnectServer.Tests.DependencyInjection;
 
-public class idsvr_registration_should
+public class oidc_server_registration_should
 {
     [Fact]
     public void add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddIdentityServer(new Uri("http://myidsvr"));
+            .AddOpenIdConnectServer(new Uri("http://myoidcserver"));
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -15,15 +15,15 @@ public class idsvr_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("idsvr");
-        check.ShouldBeOfType<IdSvrHealthCheck>();
+        registration.Name.ShouldBe("oidcserver");
+        check.ShouldBeOfType<OpenIdConnectServerHealthCheck>();
     }
     [Fact]
     public void add_named_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddIdentityServer(new Uri("http://myidsvr"), name: "my-idsvr-group");
+            .AddOpenIdConnectServer(new Uri("http://myoidcserver"), name: "my-oidc-server-group");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -31,15 +31,15 @@ public class idsvr_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("my-idsvr-group");
-        check.ShouldBeOfType<IdSvrHealthCheck>();
+        registration.Name.ShouldBe("my-oidc-server-group");
+        check.ShouldBeOfType<OpenIdConnectServerHealthCheck>();
     }
     [Fact]
     public void add_health_check_when_properly_configured_with_uri_provider()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddIdentityServer(sp => new Uri("http://myidsvr"));
+            .AddOpenIdConnectServer(sp => new Uri("http://myoidcserver"));
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -47,15 +47,15 @@ public class idsvr_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("idsvr");
-        check.ShouldBeOfType<IdSvrHealthCheck>();
+        registration.Name.ShouldBe("oidcserver");
+        check.ShouldBeOfType<OpenIdConnectServerHealthCheck>();
     }
     [Fact]
     public void add_named_health_check_when_properly_configured_with_uri_provider()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddIdentityServer(sp => new Uri("http://myidsvr"), name: "my-idsvr-group");
+            .AddOpenIdConnectServer(sp => new Uri("http://myoidcserver"), name: "my-oidc-server-group");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -63,7 +63,7 @@ public class idsvr_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("my-idsvr-group");
-        check.ShouldBeOfType<IdSvrHealthCheck>();
+        registration.Name.ShouldBe("my-oidc-server-group");
+        check.ShouldBeOfType<OpenIdConnectServerHealthCheck>();
     }
 }

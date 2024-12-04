@@ -2,20 +2,20 @@ using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.IdSvr;
+namespace HealthChecks.OpenIdConnectServer;
 
-public class IdSvrHealthCheck : IHealthCheck
+public class OpenIdConnectServerHealthCheck : IHealthCheck
 {
     private readonly Func<HttpClient> _httpClientFactory;
     private readonly string _discoverConfigurationSegment;
     private readonly bool _isDynamicOpenIdProvider;
 
-    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory)
-        : this(httpClientFactory, IdSvrHealthCheckBuilderExtensions.IDSVR_DISCOVER_CONFIGURATION_SEGMENT)
+    public OpenIdConnectServerHealthCheck(Func<HttpClient> httpClientFactory)
+        : this(httpClientFactory, OpenIdConnectServerHealthCheckBuilderExtensions.OIDC_SERVER_DISCOVER_CONFIGURATION_SEGMENT)
     {
     }
 
-    public IdSvrHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment, bool isDynamicOpenIdProvider = true)
+    public OpenIdConnectServerHealthCheck(Func<HttpClient> httpClientFactory, string discoverConfigurationSegment, bool isDynamicOpenIdProvider = true)
     {
         _httpClientFactory = Guard.ThrowIfNull(httpClientFactory);
         _discoverConfigurationSegment = discoverConfigurationSegment;

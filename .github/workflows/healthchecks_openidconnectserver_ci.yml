@@ -8,7 +8,7 @@ on:
       - src/HealthChecks.OpenIdConnectServer/**
       - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
-      - .github/workflows/healthchecks_idsvr_ci.yml
+      - .github/workflows/healthchecks_openidconnectserver_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
       - Directory.Packages.props
@@ -22,7 +22,7 @@ on:
       - src/HealthChecks.OpenIdConnectServer/**
       - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
-      - .github/workflows/healthchecks_idsvr_ci.yml
+      - .github/workflows/healthchecks_openidconnectserver_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
       - Directory.Packages.props

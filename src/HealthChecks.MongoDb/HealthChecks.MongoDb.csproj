@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
+    <!-- Match the TFMs of MongoDB.Driver -->
+    <TargetFrameworks>$(DefaultNetCoreApp);netstandard2.1;net472</TargetFrameworks>
     <PackageTags>$(PackageTags);MongoDb</PackageTags>
     <Description>HealthChecks.MongoDb is the health check package for MongoDb.</Description>
     <VersionPrefix>$(HealthCheckMongoDB)</VersionPrefix>

@@ -42,9 +42,8 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            6.0.x
-            7.0.x
             8.0.x
+            9.0.x
       - run:
           ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
       - name: Restore

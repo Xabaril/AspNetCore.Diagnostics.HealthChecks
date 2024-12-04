@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>$(DefaultNetCoreApp)</TargetFramework>
     <PackageTags>$(PackageTags);Prometheus;Prometheus Exporter;Metrics</PackageTags>
     <Description>HealthChecks.Publisher.Prometheus is a health check prometheus metrics exporter.</Description>
     <VersionPrefix>$(HealthCheckPrometheusMetrics)</VersionPrefix>

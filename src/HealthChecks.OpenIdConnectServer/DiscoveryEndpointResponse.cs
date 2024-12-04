@@ -36,7 +36,7 @@ internal class DiscoveryEndpointResponse
             ValidateRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_RESPONSE_TYPES);
 
             // Specification describes 'token id_token' response type,
-        // but some identity providers (f.e. IdentityServer and Entra ID) return 'id_token token'
+            // but some identity providers (f.e. IdentityServer and Entra ID) return 'id_token token'
             ValidateOneOfRequiredValues(ResponseTypesSupported, OidcConstants.RESPONSE_TYPES_SUPPORTED, OidcConstants.REQUIRED_COMBINED_RESPONSE_TYPES);
         }
 

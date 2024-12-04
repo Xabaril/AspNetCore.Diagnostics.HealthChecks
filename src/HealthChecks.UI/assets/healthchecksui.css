@@ -155,7 +155,6 @@ h4 {
 }
 
 .hc-aside__logo {
-  background-color: var(--primaryColor);
   background-image: var(--logoImageUrl);
   background-position: center;
   background-size: cover;

@@ -1,3 +1,5 @@
+using Renci.SshNet;
+
 namespace HealthChecks.Network.Tests.DependencyInjection;
 
 public class network_registration_should
@@ -66,6 +68,30 @@ public class network_registration_should
         registration.Name.ShouldBe("my-sftp-1");
         check.ShouldBeOfType<SftpHealthCheck>();
     }
+
+    [Fact]
+    public void add_health_check_with_sftp_configuration_factory_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        bool factoryCalled = false;
+        services.AddHealthChecks()
+            .AddSftpHealthCheck(_ =>
+            {
+                factoryCalled = true;
+                return new SftpConfiguration("host", 22, "uName", new List<AuthenticationMethod>());
+            });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("sftp");
+        check.ShouldBeOfType<SftpHealthCheck>();
+        factoryCalled.ShouldBeTrue();
+    }
+
     [Fact]
     public void add_ftp_check_when_properly_configured()
     {

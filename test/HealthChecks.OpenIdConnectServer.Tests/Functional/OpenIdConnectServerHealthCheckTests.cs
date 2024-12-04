@@ -11,7 +11,7 @@ public class oidc_server_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddOpenIdConnectServer(new Uri("http://localhost:7777"), tags: new string[] { "oidcserver" });
+                .AddOpenIdConnectServer(new Uri("http://localhost:7777"), tags: ["idsvr"]);
             })
             .Configure(app =>
             {
@@ -35,7 +35,7 @@ public class oidc_server_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddOpenIdConnectServer(new Uri("http://localhost:8888"), tags: new string[] { "oidcserver" });
+                .AddOpenIdConnectServer(new Uri("http://localhost:8888"), tags: ["idsvr"]);
             })
             .Configure(app =>
             {

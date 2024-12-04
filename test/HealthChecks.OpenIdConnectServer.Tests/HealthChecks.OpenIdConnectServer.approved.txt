@@ -3,7 +3,7 @@ namespace HealthChecks.OpenIdConnectServer
     public class OpenIdConnectServerHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
         public OpenIdConnectServerHealthCheck(System.Func<System.Net.Http.HttpClient> httpClientFactory) { }
-        public OpenIdConnectServerHealthCheck(System.Func<System.Net.Http.HttpClient> httpClientFactory, string discoverConfigurationSegment) { }
+        public OpenIdConnectServerHealthCheck(System.Func<System.Net.Http.HttpClient> httpClientFactory, string discoverConfigurationSegment, bool isDynamicOpenIdProvider = true) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
     }
 }
@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class OpenIdConnectServerHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOpenIdConnectServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, System.Uri> uriProvider, string discoverConfigurationSegment = ".well-known/openid-configuration", string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOpenIdConnectServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri oidcSvrUri, string discoverConfigurationSegment = ".well-known/openid-configuration", string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOpenIdConnectServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, System.Uri> uriProvider, string discoverConfigurationSegment = ".well-known/openid-configuration", bool isDynamicOpenIdProvider = true, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddOpenIdConnectServer(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Uri oidcSvrUri, string discoverConfigurationSegment = ".well-known/openid-configuration", bool isDynamicOpenIdProvider = true, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

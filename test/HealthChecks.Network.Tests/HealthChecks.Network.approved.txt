@@ -34,10 +34,10 @@ namespace HealthChecks.Network.Core
         public System.Threading.Tasks.Task<bool> ConnectAsync(System.Threading.CancellationToken cancellationToken = default) { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
-        protected System.Threading.Tasks.Task<T> ExecuteCommandAsync<T>(string command, HealthChecks.Network.Core.MailConnection.CommandResultAction<T> action, System.Threading.CancellationToken cancellationToken) { }
+        protected System.Threading.Tasks.Task<bool> ExecuteCommandAsync(string command, HealthChecks.Network.Core.MailConnection.CommandResultAction action, System.Threading.CancellationToken cancellationToken) { }
         protected System.Net.Security.SslStream GetSSLStream(System.IO.Stream stream) { }
         protected System.Threading.Tasks.Task<System.IO.Stream> GetStreamAsync(System.Threading.CancellationToken cancellationToken) { }
-        public delegate T CommandResultAction<T>(byte[] result);
+        public delegate bool CommandResultAction(byte[] result);
     }
     public class SmtpCommands
     {
@@ -129,6 +129,7 @@ namespace HealthChecks.Network
     {
         public SftpConfigurationBuilder(string host, int port, string userName) { }
         public HealthChecks.Network.SftpConfigurationBuilder AddPasswordAuthentication(string password) { }
+        public HealthChecks.Network.SftpConfigurationBuilder AddPrivateKeyAuthentication(Renci.SshNet.PrivateKeyFile privateKey) { }
         public HealthChecks.Network.SftpConfigurationBuilder AddPrivateKeyAuthentication(string privateKey, string passphrase) { }
         public HealthChecks.Network.SftpConfiguration Build() { }
         public HealthChecks.Network.SftpConfigurationBuilder CreateFileOnConnect(string remoteFilePath) { }
@@ -205,6 +206,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddImapHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.ImapHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddPingHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.PingHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSftpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.SftpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSftpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, HealthChecks.Network.SftpConfiguration> sftpConfigurationFactory, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSmtpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.SmtpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddSslHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.SslHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
         public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddTcpHealthCheck(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Action<HealthChecks.Network.TcpHealthCheckOptions>? setup, string? name = null, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }

@@ -11,6 +11,7 @@ on:
       - .github/workflows/healthchecks_kafka_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -24,23 +25,32 @@ on:
       - .github/workflows/healthchecks_kafka_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
       zookeeper:
-        image: confluent/zookeeper
+        image: confluentinc/cp-zookeeper:latest
         ports:
           - 2181:2181
+        env:
+         ZOOKEEPER_CLIENT_PORT: 2181
+         ZOOKEEPER_TICK_TIME: 2000
       kafka:
-        image: confluent/kafka
+        image: confluentinc/cp-kafka:latest
         ports:
-          - 9092:9092
+         - 9092:9092	
+         - 29092:29092
         env:
           KAFKA_ADVERTISED_HOST_NAME: localhost
           KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-          KAFKA_ADVERTISED_PORT: 9092
+          KAFKA_BROKER_ID: 1
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_HOST://localhost:29092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
@@ -73,7 +83,7 @@ jobs:
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           flags: Kafka
           directory: .coverage

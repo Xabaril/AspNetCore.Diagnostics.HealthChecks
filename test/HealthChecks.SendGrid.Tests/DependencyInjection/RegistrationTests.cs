@@ -27,11 +27,16 @@ public class sendgrid_registration_should
     [Fact]
     public void add_health_check_from_DI_when_properly_configured()
     {
+        bool called = false;
         var services = new ServiceCollection();
 
         services.AddOptions<SendGridOptions>().Configure(options => options.ApiKey = "my_api_key");
         services.AddHealthChecks()
-            .AddSendGrid(sp => sp.GetRequiredService<IOptions<SendGridOptions>>().Value.ApiKey);
+            .AddSendGrid(sp =>
+            {
+                called = true;
+                return sp.GetRequiredService<IOptions<SendGridOptions>>().Value.ApiKey;
+            });
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -41,6 +46,7 @@ public class sendgrid_registration_should
 
         registration.Name.ShouldBe("sendgrid");
         check.ShouldBeOfType<SendGridHealthCheck>();
+        called.ShouldBeTrue();
     }
 
     [Fact]

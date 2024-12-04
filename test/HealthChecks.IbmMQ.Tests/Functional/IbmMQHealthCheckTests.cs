@@ -40,7 +40,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                 .AddHealthChecks()
-                .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -74,7 +74,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQ(qManager, properties, tags: new string[] { "ibmmq" });
+                    .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -99,7 +99,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: new string[] { "ibmmq" });
+                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -124,7 +124,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: new string[] { "ibmmq" });
+                    .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {

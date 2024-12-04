@@ -71,6 +71,9 @@ kafka:
 kubernetes:
   - src/HealthChecks.Kubernetes/**/*
 
+milvus:
+  - src/HealthChecks.Milvus/**/*
+
 mongodb:
   - src/HealthChecks.MongoDb/**/*
 
@@ -107,6 +110,9 @@ datadog:
 
 seq:
   -src/HealthChecks.Publisher.Seq/**/*
+
+qdrant:
+  - src/HealthChecks.Qdrant/**/*
 
 rabbitmq:
   - src/HealthChecks.Rabbitmq/**/*

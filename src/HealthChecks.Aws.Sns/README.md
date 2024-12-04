@@ -80,7 +80,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddSnsSubscriptions(options =>
         {
-             options.AddTopicAndSubscriptions("topicName", new string[] { "subscription1-arn", "subscription2-arn" });
+             options.AddTopicAndSubscriptions("topicName", ["subscription1-arn", "subscription2-arn"]);
         });
 }
 ```
@@ -94,7 +94,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddSnsSubscriptions(options =>
         {
-            options.AddTopicAndSubscriptions("topicName", new string[] { "subscription1-arn", "subscription2-arn" });
+            options.AddTopicAndSubscriptions("topicName", ["subscription1-arn", "subscription2-arn"]);
             options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
         });
 }
@@ -109,7 +109,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddSnsSubscriptions(options =>
         {
-            options.AddTopicAndSubscriptions("topicName", new string[] { "subscription1-arn", "subscription2-arn" });
+            options.AddTopicAndSubscriptions("topicName", ["subscription1-arn", "subscription2-arn"]);
             options.RegionEndpoint = RegionEndpoint.EUCentral1;
         });
 }
@@ -124,7 +124,7 @@ public void ConfigureServices(IServiceCollection services)
         .AddHealthChecks()
         .AddSnsSubscriptions(options =>
         {
-            options.AddTopicAndSubscriptions("topicName", new string[] { "subscription1-arn", "subscription2-arn" });
+            options.AddTopicAndSubscriptions("topicName", ["subscription1-arn", "subscription2-arn"]);
             options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
             options.RegionEndpoint = RegionEndpoint.EUCentral1;
         });

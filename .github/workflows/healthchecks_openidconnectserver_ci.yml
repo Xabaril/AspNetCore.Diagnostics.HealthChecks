@@ -6,11 +6,12 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
-      - test/HealthChecks.IdSvr.Tests/**
+      - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_idsvr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -19,11 +20,12 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.OpenIdConnectServer/**
-      - test/HealthChecks.IdSvr.Tests/**
+      - test/HealthChecks.OpenIdConnectServer.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_idsvr_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:
@@ -65,7 +67,7 @@ jobs:
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           flags: OpenIdConnectServer
           directory: .coverage

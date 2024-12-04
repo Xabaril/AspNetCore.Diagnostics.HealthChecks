@@ -39,7 +39,7 @@ public class azureblobstoragehealthcheck_should
 
         _blobServiceClient
             .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<BlobContainerItem>.FromPages(Array.Empty<Page<BlobContainerItem>>()));
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages([]));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
@@ -61,7 +61,7 @@ public class azureblobstoragehealthcheck_should
 
         _blobServiceClient
             .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<BlobContainerItem>.FromPages(new[] { Substitute.For<Page<BlobContainerItem>>() }));
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages([Substitute.For<Page<BlobContainerItem>>()]));
 
         _blobContainerClient
             .GetPropertiesAsync(conditions: null, cancellationToken: tokenSource.Token)
@@ -144,7 +144,7 @@ public class azureblobstoragehealthcheck_should
 
         _blobServiceClient
             .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<BlobContainerItem>.FromPages(new[] { Substitute.For<Page<BlobContainerItem>>() }));
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages([Substitute.For<Page<BlobContainerItem>>()]));
 
         _blobContainerClient
             .GetPropertiesAsync(conditions: null, cancellationToken: tokenSource.Token)
@@ -180,7 +180,7 @@ public class azureblobstoragehealthcheck_should
 
         _blobServiceClient
             .GetBlobContainersAsync(cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(AsyncPageable<BlobContainerItem>.FromPages(new[] { Substitute.For<Page<BlobContainerItem>>() }));
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages([Substitute.For<Page<BlobContainerItem>>()]));
 
         _blobContainerClient
             .GetPropertiesAsync(conditions: null, cancellationToken: Arg.Any<CancellationToken>())

@@ -1,0 +1,17 @@
+name: HealthChecks Milvus Preview CD
+
+on:
+  push:
+    tags:
+      - preview-milvus-*
+      - preview-all-*
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_cd_preview_workflow.yml
+    secrets: inherit
+    with:
+      BUILD_CONFIG: Release
+      VERSION_SUFFIX_PREFIX: rc2
+      PROJECT_PATH: ./src/HealthChecks.Milvus/HealthChecks.Milvus.csproj
+      PACKAGE_NAME: AspNetCore.HealthChecks.Milvus

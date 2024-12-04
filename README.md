@@ -107,6 +107,7 @@ HealthChecks packages include health checks for:
 | Postgres                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.NpgSql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.NpgSql)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.NpgSql)](https://www.nuget.org/packages/AspNetCore.HealthChecks.NpgSql) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/npgsql)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/npgsql)
 | Identity Server            | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.OpenIdConnectServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.OpenIdConnectServer)           | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.OpenIdConnectServer)](https://www.nuget.org/packages/AspNetCore.HealthChecks.OpenIdConnectServer) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/openidconnect)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/openidconnect)
 | Oracle                     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Oracle)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Oracle)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Oracle)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Oracle) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/oracle)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/oracle)
+| Qdrant                     | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Qdrant)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Qdrant)                                     | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Qdrant)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Qdrant) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/qdrant)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/qdrant)
 | RabbitMQ                   | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.RabbitMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RabbitMQ)                                 | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.RabbitMQ)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RabbitMQ) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/rabbitmq)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/rabbitmq)
 | RavenDB                    | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.RavenDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RavenDB)                                   | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.RavenDB)](https://www.nuget.org/packages/AspNetCore.HealthChecks.RavenDB) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/ravendb)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/ravendb)
 | Redis                      | [![Nuget](https://img.shields.io/nuget/dt/AspNetCore.HealthChecks.Redis)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Redis)                                       | [![Nuget](https://img.shields.io/nuget/v/AspNetCore.HealthChecks.Redis)](https://www.nuget.org/packages/AspNetCore.HealthChecks.Redis) | [![view](https://img.shields.io/github/issues/Xabaril/AspNetCore.Diagnostics.HealthChecks/redis)](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/labels/redis)
@@ -163,6 +164,7 @@ Install-Package AspNetCore.HealthChecks.Network
 Install-Package AspNetCore.HealthChecks.Npgsql
 Install-Package AspNetCore.HealthChecks.OpenIdConnectServer
 Install-Package AspNetCore.HealthChecks.Oracle
+Install-Package AspNetCore.HealthChecks.Qdrant
 Install-Package AspNetCore.HealthChecks.RabbitMQ
 Install-Package AspNetCore.HealthChecks.RavenDB
 Install-Package AspNetCore.HealthChecks.Redis
@@ -200,7 +202,7 @@ public void ConfigureServices(IServiceCollection services)
             healthQuery: "SELECT 1;",
             name: "sql",
             failureStatus: HealthStatus.Degraded,
-            tags: new string[] { "db", "sql", "sqlserver" });
+            tags: ["db", "sql", "sqlserver"]);
 }
 ```
 

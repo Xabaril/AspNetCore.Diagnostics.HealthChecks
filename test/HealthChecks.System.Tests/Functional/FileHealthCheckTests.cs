@@ -11,7 +11,7 @@ public class file_healthcheck_should
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                   .AddFile(setup => setup.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "HealthChecks.System.Tests.dll")), tags: new string[] { "file" });
+                   .AddFile(setup => setup.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "HealthChecks.System.Tests.dll")), tags: ["file"]);
            })
            .Configure(app =>
            {
@@ -37,7 +37,7 @@ public class file_healthcheck_should
                services.AddHealthChecks()
                    .AddFile(setup =>
                    {
-                   }, tags: new string[] { "file" });
+                   }, tags: ["file"]);
            })
            .Configure(app =>
            {
@@ -61,7 +61,7 @@ public class file_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddFile(setup => setup.AddFile($"{Directory.GetCurrentDirectory()}/non-existing-file"), tags: new string[] { "file" });
+                    .AddFile(setup => setup.AddFile($"{Directory.GetCurrentDirectory()}/non-existing-file"), tags: ["file"]);
             })
             .Configure(app =>
             {

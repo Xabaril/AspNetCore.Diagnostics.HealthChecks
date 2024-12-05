@@ -8,11 +8,8 @@
 name: Labeler
 on:
   pull_request:
-    types:     
-    - ready_for_review
+    types: 
     - opened
-    - synchronize
-    - reopened
              
 
 jobs:

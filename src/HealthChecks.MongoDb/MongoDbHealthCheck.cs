@@ -6,7 +6,14 @@ namespace HealthChecks.MongoDb;
 
 public class MongoDbHealthCheck : IHealthCheck
 {
-    private const int MAX_PING_ATTEMPTS = 2;
+    // When running the tests locally during development, don't re-attempt
+    // as it prolongs the time it takes to run the tests.
+    private const int MAX_PING_ATTEMPTS
+#if DEBUG
+        = 1;
+#else
+        = 2;
+#endif
 
     private static readonly Lazy<BsonDocumentCommand<BsonDocument>> _command = new(() => new(BsonDocument.Parse("{ping:1}")));
     private readonly IMongoClient _client;

@@ -31,8 +31,7 @@
     "ts-loader": "^9.4.2",
     "typescript": "5.0.4",
     "uglifycss": "0.0.29",
-    "url-loader": "4.1.0",
-    "webpack": "5.80.0",
+    "webpack": "5.94.0",
     "webpack-cli": "5.0.2"
   }
 }

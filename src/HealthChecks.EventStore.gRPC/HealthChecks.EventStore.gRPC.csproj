@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFramework>$(DefaultNetCoreApp)</TargetFramework>
     <PackageTags>$(PackageTags);EventStore;gRPC</PackageTags>
     <Description>HealthChecks.EventStore.gRPC is the health check package for EventStore, using the gRPC client.</Description>
     <VersionPrefix>$(HealthCheckEventStoregRPC)</VersionPrefix>
@@ -9,8 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="EventStore.Client.Grpc.Streams" />
   </ItemGroup>
 
 </Project>

@@ -39,4 +39,7 @@ public class RabbitMQHealthCheckOptions
     /// Timeout setting for connection attempts.
     /// </summary>
     public TimeSpan? RequestedConnectionTimeout { get; set; }
+
+    // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/2048
+    internal bool AlreadyConfiguredByHealthCheckRegistrationCall { get; set; }
 }

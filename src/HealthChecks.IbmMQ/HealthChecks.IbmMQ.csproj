@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IBMMQDotnetClient" Version="9.3.4" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="IBMMQDotnetClient" />
     <Compile Include="../HealthCheckResultTask.cs" />
   </ItemGroup>
 

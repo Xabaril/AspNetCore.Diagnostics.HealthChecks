@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-  </PropertyGroup>
-
   <ItemGroup>
     <Content Include="Functional\Configuration\appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -15,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\build\docker-images\HealthChecks.UI.Image\HealthChecks.UI.Image.csproj" />
-    <ProjectReference Include="..\..\src\HealthChecks.UI.Client\HealthChecks.UI.Client.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.InMemory.Storage\HealthChecks.UI.InMemory.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.MySql.Storage\HealthChecks.UI.MySql.Storage.csproj" />
     <ProjectReference Include="..\..\src\HealthChecks.UI.PostgreSQL.Storage\HealthChecks.UI.PostgreSQL.Storage.csproj" />

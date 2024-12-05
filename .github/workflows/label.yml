@@ -9,7 +9,7 @@ name: Labeler
 on:
   pull_request_target:
     types:
-      - [ opened, reopened]        # when PR is opened
+      [ opened, reopened]        # when PR is opened
 
 jobs:
   label:

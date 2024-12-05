@@ -71,7 +71,6 @@
     <PackageVersion Include="MongoDB.Driver" Version="3.0.0" />
     <PackageVersion Include="MySqlConnector" Version="2.3.1" />
     <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.3.1" />
-    <PackageVersion Include="NATS.Client" Version="1.1.1" />
     <PackageVersion Include="NATS.Net" Version="2.5.4" />
     <PackageVersion Include="Npgsql" Version="8.0.3" />
     <PackageVersion Include="Npgsql.DependencyInjection" Version="8.0.1" />

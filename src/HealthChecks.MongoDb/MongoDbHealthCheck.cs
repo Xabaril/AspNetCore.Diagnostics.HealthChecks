@@ -48,7 +48,12 @@ public class MongoDbHealthCheck : IHealthCheck
                 // this you can check a specified database.
                 // Related with issue #43 and #617
 
+                // For most operations where it is possible, the MongoDB driver itself will retry exactly once
+                // to cover switches in the primary and temporary short term network outages.
+                // Due to the RunCommand being a lower level function, according to the spec (https://github.com/mongodb/specifications/blob/master/source/run-command/run-command.rst#retryability)
+                // for it, it is not retryable and this extends to the ping.
                 for (int attempt = 1; attempt <= MAX_PING_ATTEMPTS; attempt++)
+
                 {
                     try
                     {

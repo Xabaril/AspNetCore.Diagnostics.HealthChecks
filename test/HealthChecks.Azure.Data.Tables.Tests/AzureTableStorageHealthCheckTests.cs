@@ -2,7 +2,6 @@ using System.Net;
 using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 

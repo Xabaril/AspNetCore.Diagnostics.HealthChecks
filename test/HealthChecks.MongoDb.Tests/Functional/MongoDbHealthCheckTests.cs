@@ -1,4 +1,5 @@
 using System.Net;
+using MongoDB.Driver;
 
 namespace HealthChecks.MongoDb.Tests.Functional;
 
@@ -12,8 +13,10 @@ public class mongodb_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: ["mongodb"]);
+                services
+                    .AddSingleton(sp => new MongoClient(connectionString))
+                    .AddHealthChecks()
+                    .AddMongoDb(tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -38,8 +41,10 @@ public class mongodb_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddMongoDb(connectionString, mongoDatabaseName: "local", tags: ["mongodb"]);
+                services
+                    .AddSingleton(sp => new MongoClient(connectionString))
+                    .AddHealthChecks()
+                    .AddMongoDb(mongoDatabaseNameFactory: _ => "local", tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -63,8 +68,10 @@ public class mongodb_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: ["mongodb"]);
+                services
+                    .AddSingleton(sp => new MongoClient(connectionString))
+                    .AddHealthChecks()
+                    .AddMongoDb(tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -89,8 +96,10 @@ public class mongodb_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: ["mongodb"]);
+                services
+                    .AddSingleton(sp => new MongoClient(connectionString))
+                    .AddHealthChecks()
+                    .AddMongoDb(tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -113,8 +122,10 @@ public class mongodb_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: ["mongodb"]);
+                services
+                    .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
+                    .AddHealthChecks()
+                    .AddMongoDb(tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -139,10 +150,10 @@ public class mongodb_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                    .AddMongoDb("mongodb://nonexistingdomain:27017",
-                                mongoDatabaseName: mongoDatabaseName,
-                                tags: ["mongodb"]);
+                services
+                    .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
+                    .AddHealthChecks()
+                    .AddMongoDb(mongoDatabaseNameFactory: _ => mongoDatabaseName, tags: ["mongodb"]);
             })
             .Configure(app =>
             {

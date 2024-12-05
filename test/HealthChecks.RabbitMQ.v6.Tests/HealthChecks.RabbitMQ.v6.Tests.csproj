@@ -10,8 +10,6 @@
 
     <Compile Include="../HealthChecks.RabbitMQ.Tests/DependencyInjection/RegistrationTests.cs" Link="DependencyInjection/RegistrationTests.cs" />
     <Compile Include="../HealthChecks.RabbitMQ.Tests/Functional/RabbitHealthCheckTests.cs" Link="Functional/RabbitHealthCheckTests.cs" />
-
-    <None Include="../HealthChecks.RabbitMQ.Tests/HealthChecks.Rabbitmq.approved.txt" />
   </ItemGroup>
 
 </Project>

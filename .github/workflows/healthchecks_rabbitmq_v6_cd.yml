@@ -1,0 +1,16 @@
+name: HealthChecks RabbitMQ v6 CD
+
+on:
+  push:
+    tags:
+      - release-rabbitmq-*
+      - release-all-*
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable_cd_workflow.yml
+    secrets: inherit
+    with:
+      BUILD_CONFIG: Release
+      PROJECT_PATH: ./src/HealthChecks.Rabbitmq.v6/HealthChecks.Rabbitmq.v6.csproj
+      PACKAGE_NAME: AspNetCore.HealthChecks.Rabbitmq.v6

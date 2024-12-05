@@ -104,6 +104,9 @@ public static class KafkaHealthCheckBuilderExtensions
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
+
+        Guard.ThrowIfNull(builder);
+
         builder.Services.AddSingleton(_ => new KafkaHealthCheck(options));
 
         return builder.Add(new HealthCheckRegistration(

@@ -8,7 +8,7 @@ public class MongoDbHealthCheck : IHealthCheck
 {
     private const int MAX_PING_ATTEMPTS = 2;
 
-    private static readonly BsonDocumentCommand<BsonDocument> _command = new(BsonDocument.Parse("{ping:1}"));
+    private static readonly Lazy<BsonDocumentCommand<BsonDocument>> _command = new(() => new(BsonDocument.Parse("{ping:1}")));
     private readonly IMongoClient _client;
     private readonly string? _specifiedDatabase;
 
@@ -40,7 +40,7 @@ public class MongoDbHealthCheck : IHealthCheck
                     {
                         await _client
                             .GetDatabase(_specifiedDatabase)
-                            .RunCommandAsync(_command, cancellationToken: cancellationToken)
+                            .RunCommandAsync(_command.Value, cancellationToken: cancellationToken)
                             .ConfigureAwait(false);
                         break;
                     }

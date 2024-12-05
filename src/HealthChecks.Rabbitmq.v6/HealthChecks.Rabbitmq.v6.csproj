@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);RabbitMQ</PackageTags>
-    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.Client (version 7+).</Description>
+    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.Client (version 6).</Description>
     <VersionPrefix>$(HealthCheckRabbitMQ)</VersionPrefix>
     <AssemblyName>HealthChecks.Rabbitmq</AssemblyName>
     <RootNamespace>HealthChecks.RabbitMQ</RootNamespace> <!--For backward naming compatibility-->
@@ -11,8 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RabbitMQ.Client" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="RabbitMQ.Client" VersionOverride="6.8.1" />
 
     <Compile Include="../HealthCheckResultTask.cs" />
     <Compile Include="../HealthChecks.Rabbitmq/DependencyInjection/RabbitMQHealthCheckBuilderExtensions.cs" Link="DependencyInjection/RabbitMQHealthCheckBuilderExtensions.cs" />

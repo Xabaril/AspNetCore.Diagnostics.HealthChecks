@@ -62,7 +62,7 @@ public class mongodb_registration_should
         services
             .AddSingleton(sp => new MongoClient(MongoUrl.Create("mongodb://connectionstring")))
             .AddHealthChecks()
-            .AddMongoDb(mongoDatabaseNameFactory: _ => { called = true; return "customName"; });
+            .AddMongoDb(databaseNameFactory: _ => { called = true; return "customName"; });
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

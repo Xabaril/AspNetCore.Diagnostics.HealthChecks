@@ -44,7 +44,7 @@ public class mongodb_healthcheck_should
                 services
                     .AddSingleton(sp => new MongoClient(connectionString))
                     .AddHealthChecks()
-                    .AddMongoDb(mongoDatabaseNameFactory: _ => "local", tags: ["mongodb"]);
+                    .AddMongoDb(databaseNameFactory: _ => "local", tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -153,7 +153,7 @@ public class mongodb_healthcheck_should
                 services
                     .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
                     .AddHealthChecks()
-                    .AddMongoDb(mongoDatabaseNameFactory: _ => mongoDatabaseName, tags: ["mongodb"]);
+                    .AddMongoDb(databaseNameFactory: _ => mongoDatabaseName, tags: ["mongodb"]);
             })
             .Configure(app =>
             {

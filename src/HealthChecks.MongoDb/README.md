@@ -20,8 +20,8 @@ void Configure(IHealthChecksBuilder builder)
 
 You can additionally add the following parameters:
 
-- `mongoClientFactory`: A factory method to provide `MongoClient` instance.
-- `mongoDatabaseNameFactory`: A factory method to provide database name.
+- `clientFactory`: A factory method to provide `MongoClient` instance.
+- `databaseNameFactory`: A factory method to provide database name.
 - `name`: The health check name. The default is `mongodb`.
 - `failureStatus`: The `HealthStatus` that should be reported when the health check fails. Default is `HealthStatus.Unhealthy`.
 - `tags`: A list of tags that can be used to filter sets of health checks.
@@ -33,7 +33,7 @@ void Configure(IHealthChecksBuilder builder)
     builder.Services
         .AddSingleton(sp => new MongoClient("mongodb://localhost:27017"))
         .AddHealthChecks()
-        .AddMongoDb(mongoDatabaseNameFactory: sp => "theName");
+        .AddMongoDb(databaseNameFactory: sp => "theName");
 }
 ```
 

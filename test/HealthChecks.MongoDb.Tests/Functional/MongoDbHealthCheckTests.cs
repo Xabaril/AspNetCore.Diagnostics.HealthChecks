@@ -131,14 +131,18 @@ public class mongodb_healthcheck_should
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
-    [Fact]
-    public async Task be_unhealthy_on_specified_database_if_mongodb_is_not_available()
+    [Theory]
+    [InlineData("")]
+    [InlineData("nonexistingdatabase")]
+    public async Task be_unhealthy_on_specified_database_if_mongodb_is_not_available(string mongoDatabaseName)
     {
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: ["mongodb"]);
+                    .AddMongoDb("mongodb://nonexistingdomain:27017",
+                                mongoDatabaseName: mongoDatabaseName,
+                                tags: ["mongodb"]);
             })
             .Configure(app =>
             {

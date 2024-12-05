@@ -39,7 +39,7 @@ public class azurefilesharehealthcheck_should
 
         _shareServiceClient
             .GetSharesAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<ShareItem>.FromPages(Array.Empty<Page<ShareItem>>()));
+            .Returns(AsyncPageable<ShareItem>.FromPages([]));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
@@ -61,7 +61,7 @@ public class azurefilesharehealthcheck_should
 
         _shareServiceClient
             .GetSharesAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<ShareItem>.FromPages(new[] { Substitute.For<Page<ShareItem>>() }));
+            .Returns(AsyncPageable<ShareItem>.FromPages([Substitute.For<Page<ShareItem>>()]));
 
         _shareClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -143,7 +143,7 @@ public class azurefilesharehealthcheck_should
 
         _shareServiceClient
             .GetSharesAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<ShareItem>.FromPages(new[] { Substitute.For<Page<ShareItem>>() }));
+            .Returns(AsyncPageable<ShareItem>.FromPages([Substitute.For<Page<ShareItem>>()]));
 
         _shareClient
             .GetPropertiesAsync(tokenSource.Token)
@@ -178,7 +178,7 @@ public class azurefilesharehealthcheck_should
 
         _shareServiceClient
             .GetSharesAsync(cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(AsyncPageable<ShareItem>.FromPages(new[] { Substitute.For<Page<ShareItem>>() }));
+            .Returns(AsyncPageable<ShareItem>.FromPages([Substitute.For<Page<ShareItem>>()]));
 
         _shareClient
             .GetPropertiesAsync(Arg.Any<CancellationToken>())

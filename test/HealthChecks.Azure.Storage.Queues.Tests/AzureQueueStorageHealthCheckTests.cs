@@ -39,7 +39,7 @@ public class azurequeuestoragehealthcheck_should
 
         _queueServiceClient
             .GetQueuesAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<QueueItem>.FromPages(Array.Empty<Page<QueueItem>>()));
+            .Returns(AsyncPageable<QueueItem>.FromPages([]));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 

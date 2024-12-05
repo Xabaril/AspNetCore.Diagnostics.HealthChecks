@@ -13,7 +13,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -39,7 +39,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, mongoDatabaseName: "local", tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, mongoDatabaseName: "local", tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -64,7 +64,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -90,7 +90,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb(connectionString, tags: new string[] { "mongodb" });
+                .AddMongoDb(connectionString, tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -114,7 +114,7 @@ public class mongodb_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
+                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: ["mongodb"]);
             })
             .Configure(app =>
             {
@@ -131,14 +131,18 @@ public class mongodb_healthcheck_should
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
-    [Fact]
-    public async Task be_unhealthy_on_specified_database_if_mongodb_is_not_available()
+    [Theory]
+    [InlineData("")]
+    [InlineData("nonexistingdatabase")]
+    public async Task be_unhealthy_on_specified_database_if_mongodb_is_not_available(string mongoDatabaseName)
     {
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddMongoDb("mongodb://nonexistingdomain:27017", tags: new string[] { "mongodb" });
+                    .AddMongoDb("mongodb://nonexistingdomain:27017",
+                                mongoDatabaseName: mongoDatabaseName,
+                                tags: ["mongodb"]);
             })
             .Configure(app =>
             {

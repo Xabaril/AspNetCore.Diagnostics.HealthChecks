@@ -12,6 +12,7 @@ on:
       - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -26,6 +27,7 @@ on:
       - .github/workflows/reusable_ci_workflow.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:

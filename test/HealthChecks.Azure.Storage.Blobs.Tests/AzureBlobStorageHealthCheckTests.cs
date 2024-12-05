@@ -39,7 +39,7 @@ public class azureblobstoragehealthcheck_should
 
         _blobServiceClient
             .GetBlobContainersAsync(cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<BlobContainerItem>.FromPages(Array.Empty<Page<BlobContainerItem>>()));
+            .Returns(AsyncPageable<BlobContainerItem>.FromPages([]));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 

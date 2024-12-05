@@ -62,7 +62,7 @@ public class FtpHealthCheck : IHealthCheck
             ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 
             using var stream = ftpRequest.GetRequestStream();
-            stream.Write(new byte[] { 0x0 }, 0, 1);
+            stream.Write([0x0], 0, 1);
         }
         else
         {

@@ -40,7 +40,7 @@ public class tableservicehealthcheck_should
 
         _tableServiceClient
             .QueryAsync(filter: "false", cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<TableItem>.FromPages(Array.Empty<Page<TableItem>>()));
+            .Returns(AsyncPageable<TableItem>.FromPages([]));
 
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
@@ -62,7 +62,7 @@ public class tableservicehealthcheck_should
 
         _tableClient
             .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token)
-            .Returns(AsyncPageable<TableEntity>.FromPages(Array.Empty<Page<TableEntity>>()));
+            .Returns(AsyncPageable<TableEntity>.FromPages([]));
 
         _options.TableName = TableName;
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);

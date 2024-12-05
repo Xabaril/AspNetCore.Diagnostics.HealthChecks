@@ -7,6 +7,8 @@ namespace HealthChecks.MongoDb;
 
 public class MongoDbHealthCheck : IHealthCheck
 {
+    private const int MAX_PING_ATTEMPTS = 2;
+
     private static readonly BsonDocumentCommand<BsonDocument> _command = new(BsonDocument.Parse("{ping:1}"));
     private static readonly ConcurrentDictionary<string, IMongoClient> _mongoClient = new();
     private readonly MongoClientSettings _mongoClientSettings;
@@ -46,10 +48,35 @@ public class MongoDbHealthCheck : IHealthCheck
                 // this you can check a specified database.
                 // Related with issue #43 and #617
 
-                await mongoClient
-                    .GetDatabase(_specifiedDatabase)
-                    .RunCommandAsync(_command, cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
+                // For most operations where it is possible, the MongoDB driver itself will retry exactly once
+                // to cover switches in the primary and temporary short term network outages.
+                // Due to the RunCommand being a lower level function, according to the spec (https://github.com/mongodb/specifications/blob/master/source/run-command/run-command.rst#retryability)
+                // for it, it is not retryable and this extends to the ping.
+                for (int attempt = 1; attempt <= MAX_PING_ATTEMPTS; attempt++)
+
+                {
+                    try
+                    {
+                        await mongoClient
+                            .GetDatabase(_specifiedDatabase)
+                            .RunCommandAsync(_command, cancellationToken: cancellationToken)
+                            .ConfigureAwait(false);
+                        break;
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception)
+                    {
+                        if (MAX_PING_ATTEMPTS == attempt)
+                        {
+                            throw;
+                        }
+
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+                }
             }
             else
             {

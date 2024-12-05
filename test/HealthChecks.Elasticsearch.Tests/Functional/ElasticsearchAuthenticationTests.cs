@@ -30,7 +30,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                             return true;
                         });
                         options.RequestTimeout = TimeSpan.FromSeconds(30);
-                    }, tags: new[] { "elasticsearch" });
+                    }, tags: ["elasticsearch"]);
             })
             .Configure(app =>
             {
@@ -65,7 +65,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                             return true;
                         });
                         options.RequestTimeout = TimeSpan.FromSeconds(30);
-                    }, tags: new[] { "elasticsearch" });
+                    }, tags: ["elasticsearch"]);
             })
             .Configure(app =>
             {

@@ -2,15 +2,14 @@ namespace HealthChecks.Nats
 {
     public sealed class NatsHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
     {
-        public NatsHealthCheck(NATS.Client.INatsConnection connection) { }
+        public NatsHealthCheck(NATS.Client.Core.INatsConnection connection) { }
         public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
-        public void Dispose() { }
     }
 }
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class NatsHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddNats(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, NATS.Client.INatsConnection>? clientFactory = null, string? name = "nats", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }        
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddNats(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, NATS.Client.Core.INatsConnection>? clientFactory = null, string? name = "nats", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
     }
 }

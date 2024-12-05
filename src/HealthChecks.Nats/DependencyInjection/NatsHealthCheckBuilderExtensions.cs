@@ -36,9 +36,17 @@ public static class NatsHealthCheckBuilderExtensions
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp => new NatsHealthCheck(clientFactory?.Invoke(sp) ?? sp.GetRequiredService<INatsConnection>()),
+            sp => Factory(clientFactory, sp),
             failureStatus,
             tags,
             timeout));
+
+        static NatsHealthCheck Factory(Func<IServiceProvider, INatsConnection>? clientFactory, IServiceProvider sp)
+        {
+            // The user might have registered a factory for NatsConnection type, but not for the abstraction (INatsConnection).
+            // That is why we try to resolve NatsConnection first.
+            INatsConnection client = clientFactory?.Invoke(sp) ?? sp.GetService<NatsConnection>() ?? sp.GetRequiredService<INatsConnection>();
+            return new(client);
+        }
     }
 }

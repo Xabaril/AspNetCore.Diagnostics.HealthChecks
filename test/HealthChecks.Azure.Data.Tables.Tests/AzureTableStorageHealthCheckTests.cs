@@ -56,7 +56,7 @@ public class tableservicehealthcheck_should
     }
 
     [Fact]
-    public async Task return_healthy_when_checking_healthy_service_table()
+    public async Task return_healthy_when_checking_healthy_table()
     {
         using var tokenSource = new CancellationTokenSource();
 
@@ -110,29 +110,6 @@ public class tableservicehealthcheck_should
 
         _tableClient
             .DidNotReceiveWithAnyArgs()
-            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
-        actual
-            .Exception!.ShouldBeOfType<RequestFailedException>()
-            .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
-    }
-
-    [Fact]
-    public async Task return_unhealthy_when_checking_unhealthy_service_queue()
-    {
-        using var tokenSource = new CancellationTokenSource();
-
-        _tableClient
-            .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token)
-            .Throws(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
-
-
-        _options.TableName = TableName;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
-
-        _tableClient
-            .Received(1)
             .QueryAsync<TableEntity>(filter: "false", cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);

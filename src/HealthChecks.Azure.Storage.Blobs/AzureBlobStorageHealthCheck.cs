@@ -35,15 +35,18 @@ public sealed class AzureBlobStorageHealthCheck : IHealthCheck
             {
                 // Note: PoLP (Principle of least privilege)
                 // This can be used having at least the role assignment "Storage Blob Data Reader" at container level or at least "Storage Blob Data Reader" at storage account level.
-                // See <see href="https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad-app?tabs=dotnet#configure-permissions-for-access-to-blob-and-queue-data">Configure permissions for access to blob and queue data</see>
+                // See https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad-app?tabs=dotnet#configure-permissions-for-access-to-blob-and-queue-data
                 var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
                 await containerClient.GetPropertiesAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             else
             {
+                // Note: BlobServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Blob Data Contributor," so BlobServiceClient.GetBlobContainersAsync() is used instead to probe service health.
+                // However, BlobContainerClient.GetPropertiesAsync() does have sufficient permissions.
                 // Note: PoLP (Principle of least privilege)
                 // This can be used having at least "Storage Blob Data Reader" at storage account level.
-                // See <see href="https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad-app?tabs=dotnet#configure-permissions-for-access-to-blob-and-queue-data">Configure permissions for access to blob and queue data</see>
+                // See https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad-app?tabs=dotnet#configure-permissions-for-access-to-blob-and-queue-data
                 await _blobServiceClient
                     .GetBlobContainersAsync(cancellationToken: cancellationToken)
                     .AsPages(pageSizeHint: 1)

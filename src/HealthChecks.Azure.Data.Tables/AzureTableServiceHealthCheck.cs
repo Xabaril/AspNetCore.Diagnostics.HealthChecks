@@ -44,6 +44,9 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
             }
             else
             {
+                // Note: TableServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Table Data Contributor," so TableServiceClient.QueryAsync() and
+                // TableClient.QueryAsync<T>() are used instead to probe service health.
                 // Note: PoLP (Principle of least privilege)
                 // This can can be used with only the role assignment "Storage Table Data Reader" at storage account level.
                 await _tableServiceClient

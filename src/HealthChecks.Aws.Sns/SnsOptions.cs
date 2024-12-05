@@ -24,7 +24,7 @@ public class SnsOptions
     {
         if (!TopicsAndSubscriptions.TryGetValue(topicName, out var subs))
         {
-            TopicsAndSubscriptions.Add(topicName, subs = new List<string>(subscriptions ?? Array.Empty<string>()));
+            TopicsAndSubscriptions.Add(topicName, subs = new List<string>(subscriptions ?? []));
         }
         else if (subscriptions != null)
         {

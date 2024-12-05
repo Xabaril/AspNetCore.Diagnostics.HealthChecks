@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Npgsql.DependencyInjection" />
   </ItemGroup>
 
   <ItemGroup>

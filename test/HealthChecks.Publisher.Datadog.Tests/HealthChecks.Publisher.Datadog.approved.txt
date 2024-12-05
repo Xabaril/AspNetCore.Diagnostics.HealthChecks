@@ -2,6 +2,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DatadogHealthCheckBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDatadogPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceCheckName, string datadogAgentName = "127.0.0.1", string[]? defaultTags = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDatadogPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceCheckName, System.Func<System.IServiceProvider, StatsdClient.StatsdConfig> statsdConfigFactory, string[]? defaultTags = null) { }
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddDatadogPublisher(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, string serviceCheckName, System.Func<System.IServiceProvider, StatsdClient.DogStatsdService>? serviceFactory = null, string[]? defaultTags = null) { }
     }
 }

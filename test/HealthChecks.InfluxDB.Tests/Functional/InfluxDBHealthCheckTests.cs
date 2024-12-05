@@ -12,7 +12,7 @@ public class influxdb_healthcheck_should
             {
                 services
                 .AddHealthChecks()
-                .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password", "influxdb", tags: new string[] { "influxdb" });
+                .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password", "influxdb", tags: ["influxdb"]);
             })
             .Configure(app =>
             {
@@ -37,7 +37,7 @@ public class influxdb_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user_unavailable", "password", "influxdb", tags: new string[] { "influxdb" });
+                    .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user_unavailable", "password", "influxdb", tags: ["influxdb"]);
             })
             .Configure(app =>
             {

@@ -8,7 +8,11 @@
 name: Labeler
 on:
   pull_request_target:
-    types:  [ opened, reopened, synchronize ] # when PR is opened
+    types:     
+    - ready_for_review
+    - opened
+    - synchronize
+    - reopened
              
 
 jobs:

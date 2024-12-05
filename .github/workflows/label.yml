@@ -8,8 +8,8 @@
 name: Labeler
 on:
   pull_request_target:
-    types:
-      - opened        # when PR is opened
+    types:  [ opened, reopened, synchronize ] # when PR is opened
+             
 
 jobs:
   label:
@@ -17,6 +17,5 @@ jobs:
     steps:
     - uses: actions/labeler@v5
       with:
-        sync-labels: false
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
       continue-on-error: true

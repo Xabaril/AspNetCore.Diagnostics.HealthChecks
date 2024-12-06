@@ -74,4 +74,16 @@ public class mongodb_registration_should
         check.ShouldBeOfType<MongoDbHealthCheck>();
         called.ShouldBeTrue();
     }
+
+    [Fact]
+    public void throw_argumentNullException_for_null_dbFactory()
+    {
+        var services = new ServiceCollection();
+        var healthChecksBuilder = services.AddHealthChecks();
+
+        Action addNull = () => healthChecksBuilder.AddMongoDb(dbFactory: null!);
+
+        addNull
+            .ShouldThrow<ArgumentNullException>();
+    }
 }

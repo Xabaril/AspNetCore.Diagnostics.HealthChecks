@@ -1,12 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-
-  <ItemGroup>
-    <PackageReference Include="Testcontainers"/>
-  </ItemGroup>
-
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Vault\HealthChecks.Vault.csproj" />
+    <PackageReference Include="Testcontainers"/>
   </ItemGroup>
 </Project>

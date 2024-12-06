@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Vault</PackageTags>
+    <Description>HealthChecks.Vault is the health check package for Hashicorp Vault.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="VaultSharp"></PackageReference>
+  </ItemGroup>
+
+</Project>

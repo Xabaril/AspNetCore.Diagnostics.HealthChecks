@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
+    <PackageTags>$(PackageTags);RabbitMQ</PackageTags>
+    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.Client (version 6).</Description>
+    <VersionPrefix>$(HealthCheckRabbitMQ)</VersionPrefix>
+    <AssemblyName>HealthChecks.Rabbitmq</AssemblyName>
+    <RootNamespace>HealthChecks.RabbitMQ</RootNamespace> <!--For backward naming compatibility-->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" VersionOverride="[6.8.1,7.0.0)" />
+
+    <Compile Include="../HealthCheckResultTask.cs" />
+    <Compile Include="../HealthChecks.Rabbitmq/DependencyInjection/RabbitMQHealthCheckBuilderExtensions.cs" Link="DependencyInjection/RabbitMQHealthCheckBuilderExtensions.cs" />
+    <Compile Include="../HealthChecks.Rabbitmq/RabbitMQHealthCheckOptions.cs" />
+
+    <None Include="../HealthChecks.Rabbitmq/README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

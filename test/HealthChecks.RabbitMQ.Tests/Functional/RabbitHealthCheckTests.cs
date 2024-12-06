@@ -127,7 +127,11 @@ public class rabbitmq_healthcheck_should
             Ssl = new SslOption(serverName: "localhost", enabled: false)
         };
 
+#if RABBITMQ_V6
         var connection = factory.CreateConnection();
+#else
+        var connection = await factory.CreateConnectionAsync();
+#endif
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

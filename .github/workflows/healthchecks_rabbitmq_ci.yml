@@ -20,7 +20,9 @@ on:
     branches: [ master ]
     paths:
       - src/HealthChecks.Rabbitmq/**
+      - src/HealthChecks.Rabbitmq.v6/**
       - test/HealthChecks.RabbitMQ.Tests/**
+      - test/HealthChecks.RabbitMQ.v6.Tests/**
       - test/_SHARED/**
       - .github/workflows/healthchecks_rabbitmq_ci.yml
       - Directory.Build.props
@@ -46,19 +48,35 @@ jobs:
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj &&
-          dotnet restore ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj
+          dotnet restore ./src/HealthChecks.Rabbitmq.v6/HealthChecks.Rabbitmq.v6.csproj &&
+          dotnet restore ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj &&
+          dotnet restore ./test/HealthChecks.RabbitMQ.v6.Tests/HealthChecks.RabbitMQ.v6.Tests.csproj
       - name: Check formatting
         run: |
           dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
-          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
+          dotnet format --no-restore --verify-no-changes --severity warn ./src/HealthChecks.Rabbitmq.v6/HealthChecks.Rabbitmq.v6.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1) &&
+          dotnet format --no-restore --verify-no-changes --severity warn ./test/HealthChecks.RabbitMQ.v6.Tests/HealthChecks.RabbitMQ.v6.Tests.csproj || (echo "Run 'dotnet format' to fix issues" && exit 1)
       - name: Build
         run: |
           dotnet build --no-restore ./src/HealthChecks.Rabbitmq/HealthChecks.Rabbitmq.csproj &&
-          dotnet build --no-restore ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj
+          dotnet build --no-restore ./src/HealthChecks.Rabbitmq.v6/HealthChecks.Rabbitmq.v6.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj &&
+          dotnet build --no-restore ./test/HealthChecks.RabbitMQ.v6.Tests/HealthChecks.RabbitMQ.v6.Tests.csproj
       - name: Test
         run: >
           dotnet test
           ./test/HealthChecks.RabbitMQ.Tests/HealthChecks.RabbitMQ.Tests.csproj
+          --no-restore
+          --no-build
+          --collect "XPlat Code Coverage"
+          --results-directory .coverage
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Test v6
+        run: >
+          dotnet test
+          ./test/HealthChecks.RabbitMQ.v6.Tests/HealthChecks.RabbitMQ.v6.Tests.csproj
           --no-restore
           --no-build
           --collect "XPlat Code Coverage"

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.10.5" />
     <ProjectReference Include="..\..\src\HealthChecks.Azure.IoTHub\HealthChecks.Azure.IoTHub.csproj" />
   </ItemGroup>
 

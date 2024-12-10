@@ -27,7 +27,6 @@ on:
       - Directory.Build.targets
       - Directory.Packages.props
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,13 +43,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
             8.0.x
             9.0.x
-
-
-            6.0.x
-            7.0.x
-            8.0.x
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.ClickHouse/HealthChecks.ClickHouse.csproj &&

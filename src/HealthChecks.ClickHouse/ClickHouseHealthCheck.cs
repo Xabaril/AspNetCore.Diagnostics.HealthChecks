@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using ClickHouse.Client.ADO;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ClickHouse;
@@ -13,7 +11,6 @@ public class ClickHouseHealthCheck : IHealthCheck
 
     public ClickHouseHealthCheck(ClickHouseHealthCheckOptions options)
     {
-        Debug.Assert(options.ConnectionString is not null || options.ConnectionFactory is not null);
         Guard.ThrowIfNull(options.CommandText, true);
         _options = options;
     }
@@ -23,8 +20,7 @@ public class ClickHouseHealthCheck : IHealthCheck
     {
         try
         {
-            await using var connection = _options.ConnectionFactory?.Invoke() ?? new ClickHouseConnection(_options.ConnectionString);
-            _options.Configure?.Invoke(connection);
+            await using var connection = _options.ConnectionFactory();
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             using var command = connection.CreateCommand();

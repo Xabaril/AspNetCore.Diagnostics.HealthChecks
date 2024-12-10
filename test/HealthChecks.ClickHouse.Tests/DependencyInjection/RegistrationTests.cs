@@ -1,3 +1,5 @@
+using ClickHouse.Client.ADO;
+
 namespace HealthChecks.ClickHouse.Tests.DependencyInjection;
 
 public class clickhouse_registration_should
@@ -7,7 +9,7 @@ public class clickhouse_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddClickHouse("Host=localhost");
+            .AddClickHouse(static _ => new ClickHouseConnection("Host=localhost"));
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -24,7 +26,7 @@ public class clickhouse_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddClickHouse("Host=localhost", name: "my-ch-1");
+            .AddClickHouse(static _ => new ClickHouseConnection("Host=localhost"), name: "my-ch-1");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -45,7 +47,7 @@ public class clickhouse_registration_should
             .AddClickHouse(_ =>
             {
                 factoryCalled = true;
-                return "Host=localhost";
+                return new ClickHouseConnection("Host=localhost");
             }, name: "my-ch-1");
 
         using var serviceProvider = services.BuildServiceProvider();
@@ -69,7 +71,7 @@ public class clickhouse_registration_should
             .AddClickHouse(_ =>
             {
                 Interlocked.Increment(ref factoryCalls);
-                return "Host=localhost";
+                return new ClickHouseConnection("Host=localhost");
             }, name: "my-ch-1");
 
         using var serviceProvider = services.BuildServiceProvider();

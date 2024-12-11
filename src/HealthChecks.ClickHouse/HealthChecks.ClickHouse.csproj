@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="ClickHouse.Client" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 
 </Project>

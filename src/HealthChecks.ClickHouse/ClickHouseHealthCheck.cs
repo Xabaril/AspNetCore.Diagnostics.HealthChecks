@@ -1,3 +1,4 @@
+using ClickHouse.Client.ADO;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ClickHouse;
@@ -7,12 +8,15 @@ namespace HealthChecks.ClickHouse;
 /// </summary>
 public class ClickHouseHealthCheck : IHealthCheck
 {
-    private readonly ClickHouseHealthCheckOptions _options;
+    internal const string HEALTH_QUERY = "SELECT 1;";
 
-    public ClickHouseHealthCheck(ClickHouseHealthCheckOptions options)
+    private readonly ClickHouseConnection _connection;
+    private readonly string _command;
+
+    public ClickHouseHealthCheck(ClickHouseConnection connection, string command)
     {
-        Guard.ThrowIfNull(options.CommandText, true);
-        _options = options;
+        _connection = connection;
+        _command = command ?? HEALTH_QUERY;
     }
 
     /// <inheritdoc />
@@ -20,16 +24,14 @@ public class ClickHouseHealthCheck : IHealthCheck
     {
         try
         {
-            await using var connection = _options.ConnectionFactory();
-            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            using var command = connection.CreateCommand();
-            command.CommandText = _options.CommandText;
-            var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+            using var command = _connection.CreateCommand();
+            command.CommandText = _command;
 
-            return _options.HealthCheckResultBuilder == null
-                ? HealthCheckResult.Healthy()
-                : _options.HealthCheckResultBuilder(result);
+            await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+
+            return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

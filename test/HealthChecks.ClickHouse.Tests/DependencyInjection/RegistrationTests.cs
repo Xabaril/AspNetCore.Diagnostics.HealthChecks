@@ -17,7 +17,7 @@ public class clickhouse_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("clickhouse");
+        registration.Name.ShouldBe("ClickHouse");
         check.ShouldBeOfType<ClickHouseHealthCheck>();
     }
 
@@ -63,7 +63,7 @@ public class clickhouse_registration_should
     }
 
     [Fact]
-    public void factory_is_called_only_once()
+    public void factory_is_called_everytime_healthcheck_is_created()
     {
         ServiceCollection services = new();
         int factoryCalls = 0;
@@ -85,6 +85,7 @@ public class clickhouse_registration_should
             _ = registration.Factory(serviceProvider);
         }
 
-        factoryCalls.ShouldBe(1);
+        // ClickHouseConnection is not thread safe, so we assume that that we get a new instance every time
+        factoryCalls.ShouldBe(10);
     }
 }

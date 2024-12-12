@@ -79,7 +79,7 @@
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="2.19.190" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
     <PackageVersion Include="prometheus-net" Version="8.1.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.0.0" />
     <PackageVersion Include="Qdrant.Client" Version="1.12.0" />

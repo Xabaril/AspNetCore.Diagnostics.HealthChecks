@@ -11,30 +11,11 @@ With all of the following examples, you can additionally add the following param
 - `tags`: A list of tags that can be used to filter sets of health checks.
 - `timeout`: A `System.TimeSpan` representing the timeout of the check.
 
-### Basic
-
-This will create a new `IConnection` and reuse on every request to get the health check result. Use
-the extension method where you provide the `Uri` to connect with. You can optionally set the `SslOption` if needed.
-IConnection created with this option use UseBackgroundThreadsForIO by default in order to gracefully shutdown on non reference IConnection by ServiceCollection.
-
-```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    services
-        .AddHealthChecks()
-        .AddRabbitMQ(rabbitConnectionString: "amqps://user:pass@host1/vhost")
-        .AddRabbitMQ(rabbitConnectionString: "amqps://user:pass@host2/vhost");
-}
-```
-
 ### Dependency Injected `IConnection`
 
 As per [RabbitMQ docs](https://www.rabbitmq.com/connections.html) and its suggestions on
 [high connectivity churn](https://www.rabbitmq.com/networking.html#dealing-with-high-connection-churn), connections are meant to be long lived.
-Ideally, this should be configured as a singleton.
-
-If you are sharing a single connection for every time a health check is requested,
-you must ensure automatic recovery is enable so that the connection can be re-established if lost.
+Ideally, this should be configured as a singleton. The health check should use the same IConnection instance that is used in the application.
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -45,47 +26,38 @@ public void ConfigureServices(IServiceCollection services)
             var factory = new ConnectionFactory
             {
                 Uri = new Uri("amqps://user:pass@host/vhost"),
-                AutomaticRecoveryEnabled = true
             };
-            return  factory.CreateConnection();
+            return factory.CreateConnectionAsync().GetAwaiter().GetResult();
         })
         .AddHealthChecks()
         .AddRabbitMQ();
 }
 ```
 
-Alternatively, you can specify the connection to use with a factory function given the `IServiceProvider`.
+### Caching IConnection outside of Dependency Injection
+
+Alternatively, you can create the connection outside of the dependency injection container and use it in the health check.
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services
         .AddHealthChecks()
-        .AddRabbitMQ(sp =>
-        {
-            var factory = new ConnectionFactory
-            {
-                Uri = new Uri("amqps://user:pass@host/vhost"),
-                AutomaticRecoveryEnabled = true
-            };
-            return factory.CreateConnection();
-        });
+        .AddRabbitMQ(sp => connectionTask.Value);
 }
-```
 
-Or you register IConnectionFactory and then the healthcheck will create a single connection for that one.
+private static readonly Lazy<Task<IConnection>> connectionTask = new Lazy<Task<IConnection>>(CreateConnection);
 
-```csharp
-public void ConfigureServices(IServiceCollection services)
+private static async Task<IConnection> CreateConnection()
 {
-   services
-        .AddSingleton<IConnectionFactory>(sp =>
-            new ConnectionFactory
-            {
-                Uri = new Uri("amqps://user:pass@host/vhost"),
-                AutomaticRecoveryEnabled = true
-            })
-        .AddHealthChecks()
-        .AddRabbitMQ();
+    var factory = new ConnectionFactory
+    {
+        Uri = new Uri("amqps://user:pass@host/vhost"),
+    };
+    return await factory.CreateConnectionAsync();
 }
 ```
+
+### Breaking changes
+
+`RabbitMQHealthCheck` was letting the users specify how `IConnection` should be created (from raw connection string or from `Uri` or from `IConnectionFactory`), at a cost of maintaining an internal, static client instances cache. Now the type does not create client instances nor maintain an internal cache and **it's the caller responsibility to provide the instance of `IConnection`** (please see [#2048](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/2148) for more details). Since RabbitMQ [recommends](https://www.rabbitmq.com/client-libraries/dotnet-api-guide#connection-and-channel-lifespan) reusing client instances since they can be expensive to create, it's recommended to register a singleton factory method for `IConnection`. So the client is created only when needed and once per whole application lifetime.

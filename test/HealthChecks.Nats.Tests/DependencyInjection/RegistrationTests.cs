@@ -1,3 +1,4 @@
+using NATS.Client.Core;
 using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.DependencyInjection;
@@ -5,67 +6,88 @@ namespace HealthChecks.Nats.Tests.DependencyInjection;
 public class nats_registration_should
 {
     [Fact]
-    public void add_health_check_when_properly_configured_locally() =>
-        RegistrationFact(
-            _ => _.Url = DefaultLocalConnectionString,
-            check => check.ShouldBeOfType<NatsHealthCheck>());
-
-    [Fact]
-    public void add_named_health_check_when_properly_configured_multiple_local_instances() =>
-        RegistrationFact(
-            _ => _.Url = MixedLocalUrl,
-            check => check.ShouldBeOfType<NatsHealthCheck>(),
-            name: CustomRegistrationName);
-
-    [Fact]
-    public void add_health_check_when_demo_instance_properly_configured() =>
-        RegistrationFact(
-            setup => setup.Url = DemoConnectionString,
-            check => check.ShouldBeOfType<NatsHealthCheck>());
-
-    [Fact]
-    public void add_health_check_with_service_provider()
+    public void add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-
-        services
-            .AddSingleton<IDependency, Dependency>()
-            .AddHealthChecks()
-            .AddNats((sp, setup) => setup.Url = sp.GetRequiredService<IDependency>().ConnectionString);
+        services.AddHealthChecks()
+            .AddNats(ClientFactory);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
-        registration.Name.ShouldBe(NatsName);
-
         var check = registration.Factory(serviceProvider);
 
+        registration.Name.ShouldBe("nats");
         check.ShouldBeOfType<NatsHealthCheck>();
     }
 
-    private void RegistrationFact(Action<NatsOptions> setup, Action<IHealthCheck> assert, string? name = null)
+    [Fact]
+    public void add_named_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-        services.AddHealthChecks().AddNats(setup, name);
+        services.AddHealthChecks()
+            .AddNats(clientFactory: ClientFactory, name: "custom-nats");
 
-        var serviceProvider = services.BuildServiceProvider();
+        using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
-        registration.Name.ShouldBe(name ?? NatsName);
-
         var check = registration.Factory(serviceProvider);
-        assert(check);
+
+        registration.Name.ShouldBe("custom-nats");
+        check.ShouldBeOfType<NatsHealthCheck>();
     }
 
-    private interface IDependency
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void add_health_check_when_properly_configured_by_using_singlton_regestration(bool registerAsAbstraction)
     {
-        string ConnectionString { get; }
+        var services = new ServiceCollection();
+        var natsOpts = NatsOpts.Default with
+        {
+            Url = DefaultLocalConnectionString,
+        };
+        var connection = new NatsConnection(natsOpts);
+
+        if (registerAsAbstraction)
+        {
+            services.AddSingleton<INatsConnection>(connection);
+        }
+        else
+        {
+            services.AddSingleton(connection);
+        }
+
+        services.AddHealthChecks()
+              .AddNats();
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("nats");
+        check.ShouldBeOfType<NatsHealthCheck>();
+
+        if (registerAsAbstraction)
+        {
+            serviceProvider.GetRequiredService<INatsConnection>();
+        }
+        else
+        {
+            serviceProvider.GetRequiredService<NatsConnection>();
+        }
     }
 
-    private class Dependency : IDependency
+    private NatsConnection ClientFactory(IServiceProvider _)
     {
-        public string ConnectionString => DemoConnectionString;
+        var options = NatsOpts.Default with
+        {
+            Url = DefaultLocalConnectionString,
+        };
+        return new NatsConnection(options);
     }
 }

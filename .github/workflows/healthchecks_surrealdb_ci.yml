@@ -40,7 +40,7 @@ jobs:
           surrealdb_username: root
           surrealdb_password: root
           surrealdb_auth: true
-          surrealdb_strict: 
+          surrealdb_strict:  
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;$(DefaultNetCoreApp)</TargetFrameworks>
     <PackageTags>$(PackageTags);SurrealDb</PackageTags>
     <Description>HealthChecks.SurrealDb is the health check package for SurrealDB.</Description>
     <VersionPrefix>$(HealthCheckSurrealDb)</VersionPrefix>

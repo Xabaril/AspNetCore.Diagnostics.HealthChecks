@@ -211,4 +211,28 @@ public class rabbitmq_healthcheck_should
         response1.StatusCode.ShouldBe(HttpStatusCode.OK);
         response2.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
+
+    [Fact]
+    public async Task no_connection_registered()
+    {
+        var webHostBuilder = new WebHostBuilder()
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddHealthChecks()
+                    .AddRabbitMQ(tags: ["rabbitmq"]);
+            })
+            .Configure(app =>
+            {
+                app.UseHealthChecks("/health", new HealthCheckOptions
+                {
+                    Predicate = r => r.Tags.Contains("rabbitmq")
+                });
+            });
+
+        using var server = new TestServer(webHostBuilder);
+
+        using var response1 = await server.CreateRequest("/health").GetAsync();
+        response1.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+    }
 }

@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using RabbitMQ.Client;
 
 namespace HealthChecks.RabbitMQ.Tests.DependencyInjection;

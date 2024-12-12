@@ -1,6 +1,4 @@
 using System.Net;
-using System.Threading;
-using System.Xml.Linq;
 using RabbitMQ.Client;
 
 namespace HealthChecks.RabbitMQ.Tests.Functional;

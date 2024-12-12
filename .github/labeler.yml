@@ -183,6 +183,9 @@ sqlserver:
   - changed-files:
     - any-glob-to-any-file: [src/HealthChecks.SqlServer/**/*]
 
+surrealdb:
+  - src/HealthChecks.SurrealDb/**/*
+
 system:
   - changed-files:
     - any-glob-to-any-file: [src/HealthChecks.System/**/*]

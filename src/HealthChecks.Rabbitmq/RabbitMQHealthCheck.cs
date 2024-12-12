@@ -9,7 +9,7 @@ namespace HealthChecks.RabbitMQ;
 /// </summary>
 public class RabbitMQHealthCheck : IHealthCheck
 {
-    private static readonly ConcurrentDictionary<RabbitMQHealthCheckOptions, IConnection> _connections = new();
+    private static readonly ConcurrentDictionary<RabbitMQHealthCheckOptions, Task<IConnection>> _connections = new();
 
     private IConnection? _connection;
     private readonly RabbitMQHealthCheckOptions _options;
@@ -26,49 +26,88 @@ public class RabbitMQHealthCheck : IHealthCheck
     }
 
     /// <inheritdoc />
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        // TODO: cancellationToken unused, see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/714
         try
         {
-            using var model = EnsureConnection().CreateModel();
-            return HealthCheckResultTask.Healthy;
+            var connection = await EnsureConnectionAsync(cancellationToken).ConfigureAwait(false);
+            await using var model = await connection.CreateChannelAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+
+            return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
     }
 
-    private IConnection EnsureConnection()
-    {
-        _connection ??= _connections.GetOrAdd(_options, _ =>
+    private async Task<IConnection> EnsureConnectionAsync(CancellationToken cancellationToken) =>
+        _connection ??= await _connections.GetOrAddAsync(_options, async options =>
+        {
+            var factory = options.ConnectionFactory;
+
+            if (factory is null)
             {
-                var factory = _options.ConnectionFactory;
-
-                if (factory is null)
+                Guard.ThrowIfNull(options.ConnectionUri);
+                factory = new ConnectionFactory
                 {
-                    Guard.ThrowIfNull(_options.ConnectionUri);
-                    factory = new ConnectionFactory
-                    {
-                        Uri = _options.ConnectionUri,
-                        AutomaticRecoveryEnabled = true
-                    };
+                    Uri = options.ConnectionUri,
+                    AutomaticRecoveryEnabled = true
+                };
 
-                    if (_options.RequestedConnectionTimeout is not null)
-                    {
-                        ((ConnectionFactory)factory).RequestedConnectionTimeout = _options.RequestedConnectionTimeout.Value;
-                    }
-
-                    if (_options.Ssl is not null)
-                    {
-                        ((ConnectionFactory)factory).Ssl = _options.Ssl;
-                    }
+                if (options.RequestedConnectionTimeout is not null)
+                {
+                    ((ConnectionFactory)factory).RequestedConnectionTimeout = options.RequestedConnectionTimeout.Value;
                 }
 
-                return factory.CreateConnection();
-            });
+                if (options.Ssl is not null)
+                {
+                    ((ConnectionFactory)factory).Ssl = options.Ssl;
+                }
+            }
 
-        return _connection;
+            return await factory.CreateConnectionAsync(cancellationToken).ConfigureAwait(false);
+        }).ConfigureAwait(false);
+}
+
+internal static class ConcurrentDictionaryExtensions
+{
+    /// <summary>
+    /// Provides an alternative to <see cref="ConcurrentDictionary{TKey, TValue}.GetOrAdd(TKey, Func{TKey, TValue})"/> specifically for asynchronous values. The factory method will only run once.
+    /// </summary>
+    public static async Task<TValue> GetOrAddAsync<TKey, TValue>(
+        this ConcurrentDictionary<TKey, Task<TValue>> dictionary,
+        TKey key,
+        Func<TKey, Task<TValue>> valueFactory) where TKey : notnull
+    {
+        while (true)
+        {
+            if (dictionary.TryGetValue(key, out var task))
+            {
+                return await task.ConfigureAwait(false);
+            }
+
+            // This is the task that we'll return to all waiters. We'll complete it when the factory is complete
+            var tcs = new TaskCompletionSource<TValue>(TaskCreationOptions.RunContinuationsAsynchronously);
+            if (dictionary.TryAdd(key, tcs.Task))
+            {
+                try
+                {
+                    var value = await valueFactory(key).ConfigureAwait(false);
+                    tcs.TrySetResult(value);
+                    return await tcs.Task.ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    // Make sure all waiters see the exception
+                    tcs.SetException(ex);
+
+                    // We remove the entry if the factory failed so it's not a permanent failure
+                    // and future gets can retry (this could be a pluggable policy)
+                    dictionary.TryRemove(key, out _);
+                    throw;
+                }
+            }
+        }
     }
 }

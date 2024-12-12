@@ -1,13 +1,15 @@
-namespace HealthChecks.DocumentDb.Tests.DependencyInjection;
+using Qdrant.Client;
 
-public class documentdb_registration_should
+namespace HealthChecks.Qdrant.Tests.DependencyInjection;
+
+public class qdrant_registration_should
 {
     [Fact]
     public void add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddDocumentDb(_ => { _.PrimaryKey = "key"; _.UriEndpoint = "endpoint"; });
+            .AddQdrant(ClientFactory);
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -15,8 +17,8 @@ public class documentdb_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("documentdb");
-        check.ShouldBeOfType<DocumentDbHealthCheck>();
+        registration.Name.ShouldBe("qdrant");
+        check.ShouldBeOfType<QdrantHealthCheck>();
     }
 
     [Fact]
@@ -24,7 +26,7 @@ public class documentdb_registration_should
     {
         var services = new ServiceCollection();
         services.AddHealthChecks()
-            .AddDocumentDb(_ => { _.PrimaryKey = "key"; _.UriEndpoint = "endpoint"; }, name: "my-documentdb-group");
+            .AddQdrant(clientFactory: ClientFactory, name: "qdrant");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -32,30 +34,31 @@ public class documentdb_registration_should
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("my-documentdb-group");
-        check.ShouldBeOfType<DocumentDbHealthCheck>();
+        registration.Name.ShouldBe("qdrant");
+        check.ShouldBeOfType<QdrantHealthCheck>();
     }
 
     [Fact]
-    public void add_health_check_when_properly_configured_with_database_name_and_collection_name()
+    public void client_should_resolve_from_di()
     {
+        var client = new QdrantClient("localhost");
         var services = new ServiceCollection();
+        services.AddSingleton(client);
+
         services.AddHealthChecks()
-            .AddDocumentDb(_ =>
-            {
-                _.PrimaryKey = "key";
-                _.UriEndpoint = "endpoint";
-                _.DatabaseName = "database";
-                _.CollectionName = "collection";
-            });
+            .AddQdrant();
 
         using var serviceProvider = services.BuildServiceProvider();
+
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
 
         var registration = options.Value.Registrations.First();
         var check = registration.Factory(serviceProvider);
 
-        registration.Name.ShouldBe("documentdb");
-        check.ShouldBeOfType<DocumentDbHealthCheck>();
+        registration.Name.ShouldBe("qdrant");
+        check.ShouldBeOfType<QdrantHealthCheck>();
     }
+
+    private QdrantClient ClientFactory(IServiceProvider _)
+        => new("localhost");
 }

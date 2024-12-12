@@ -31,20 +31,26 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
     {
         try
         {
-            // Note: TableServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
-            // "Storage Table Data Contributor," so TableServiceClient.QueryAsync() and
-            // TableClient.QueryAsync<T>() are used instead to probe service health.
-            await _tableServiceClient
-                .QueryAsync(filter: "false", cancellationToken: cancellationToken)
-                .GetAsyncEnumerator(cancellationToken)
-                .MoveNextAsync()
-                .ConfigureAwait(false);
-
             if (!string.IsNullOrEmpty(_options.TableName))
             {
+                // Note: PoLP (Principle of least privilege)
+                // This can be used having at least the role assignment "Storage Table Data Reader" at table level.
                 var tableClient = _tableServiceClient.GetTableClient(_options.TableName);
                 await tableClient
                     .QueryAsync<TableEntity>(filter: "false", cancellationToken: cancellationToken)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                // Note: TableServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Table Data Contributor," so TableServiceClient.QueryAsync() and
+                // TableClient.QueryAsync<T>() are used instead to probe service health.
+                // Note: PoLP (Principle of least privilege)
+                // This can can be used with only the role assignment "Storage Table Data Reader" at storage account level.
+                await _tableServiceClient
+                    .QueryAsync(filter: "false", cancellationToken: cancellationToken)
                     .GetAsyncEnumerator(cancellationToken)
                     .MoveNextAsync()
                     .ConfigureAwait(false);

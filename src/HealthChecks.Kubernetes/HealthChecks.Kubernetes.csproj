@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFramework>$(DefaultNetCoreApp)</TargetFramework>
     <PackageTags>$(PackageTags);Kubernetes;k8s;Cluster</PackageTags>
     <Description>HealthChecks.HealthChecks is the health check package for Kubernetes clusters.</Description>
     <VersionPrefix>$(HealthCheckKubernetes)</VersionPrefix>
@@ -9,8 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="12.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+    <PackageReference Include="KubernetesClient" PackageOverride="12.1.1" />
     <Compile Include="../DisposalHostedService.cs" />
   </ItemGroup>
 

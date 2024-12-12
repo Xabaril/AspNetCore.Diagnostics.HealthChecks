@@ -11,6 +11,7 @@ on:
       - .github/workflows/healthchecks_ravendb_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -24,6 +25,7 @@ on:
       - .github/workflows/healthchecks_ravendb_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:
@@ -41,9 +43,8 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            6.0.x
-            7.0.x
             8.0.x
+            9.0.x
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj &&
@@ -67,7 +68,7 @@ jobs:
           --
           DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           flags: RavenDb
           directory: .coverage

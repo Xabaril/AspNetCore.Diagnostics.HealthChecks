@@ -31,6 +31,8 @@ flags:
     carryforward: true
   AzureStorage:
     carryforward: true
+  ClickHouse:
+    carryforward: true
   Consul:
     carryforward: true
   CosmosDb:
@@ -86,6 +88,8 @@ flags:
   Publisher.Prometheus:
     carryforward: true
   Publisher.Seq:
+    carryforward: true
+  Qdrant:
     carryforward: true
   RabbitMQ:
     carryforward: true

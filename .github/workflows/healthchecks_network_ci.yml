@@ -11,6 +11,7 @@ on:
       - .github/workflows/healthchecks_network_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
     tags-ignore:
       - release-*
       - preview-*
@@ -24,6 +25,7 @@ on:
       - .github/workflows/healthchecks_network_ci.yml
       - Directory.Build.props
       - Directory.Build.targets
+      - Directory.Packages.props
 
 jobs:
   build:
@@ -66,9 +68,8 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            6.0.x
-            7.0.x
             8.0.x
+            9.0.x
       - name: Restore
         run: |
           dotnet restore ./src/HealthChecks.Network/HealthChecks.Network.csproj &&

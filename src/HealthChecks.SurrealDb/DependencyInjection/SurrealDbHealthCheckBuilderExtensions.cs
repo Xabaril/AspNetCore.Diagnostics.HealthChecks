@@ -45,7 +45,7 @@ public static class SurrealDbHealthCheckBuilderExtensions
         static SurrealDbHealthCheck Factory(IServiceProvider sp, Func<IServiceProvider, ISurrealDbClient>? factory)
         {
             // The user might have registered a factory for SurrealDbClient type, but not for the abstraction (ISurrealDbClient).
-            // That is why we try to resolve SurrealDbClient first.
+            // That is why we try to resolve ISurrealDbClient first.
             ISurrealDbClient client = factory?.Invoke(sp) ?? sp.GetService<ISurrealDbClient>() ?? sp.GetRequiredService<SurrealDbClient>();
             return new(client);
         }

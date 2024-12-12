@@ -9,7 +9,7 @@ By default, the `ISurrealDbClient` instance is resolved from service provider.
 ```csharp
 void Configure(IHealthChecksBuilder builder)
 {
-    builder.Services.AddSurreal("Server=http://localhost:8000;Namespace=test;Database=test";
+    builder.Services.AddSurreal("Server=http://localhost:8000;Namespace=test;Database=test");
     builder.AddHealthChecks().AddSurreal();
 }
 ```

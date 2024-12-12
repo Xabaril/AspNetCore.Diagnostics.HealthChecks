@@ -63,6 +63,29 @@ public class redis_registration_should
     }
 
     [Fact]
+    public void add_health_check_with_async_connection_string_factory_when_properly_configured()
+    {
+        var services = new ServiceCollection();
+        var factoryCalled = false;
+        services.AddHealthChecks()
+            .AddRedis((sp, ct) =>
+            {
+                factoryCalled = true;
+                return Task.FromResult<string?>("connectionstring");
+            });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("redis");
+        check.ShouldBeOfType<RedisHealthCheck>();
+        factoryCalled.ShouldBeFalse();
+    }
+
+    [Fact]
     public void add_named_health_check_with_connection_multiplexer_when_properly_configured()
     {
         var connectionMultiplexer = Substitute.For<IConnectionMultiplexer>();
@@ -96,6 +119,35 @@ public class redis_registration_should
             {
                 factoryCalled = true;
                 return sp.GetRequiredService<IConnectionMultiplexer>();
+            });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe("redis");
+        check.ShouldBeOfType<RedisHealthCheck>();
+        // the factory is called when it's used for the first time, as it can throw
+        factoryCalled.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void add_health_check_with_async_connection_multiplexer_when_properly_configured()
+    {
+        var connectionMultiplexer = Substitute.For<IConnectionMultiplexer>();
+        var services = new ServiceCollection();
+
+        services.AddSingleton(connectionMultiplexer);
+        var factoryCalled = false;
+
+        services.AddHealthChecks()
+            .AddRedis((sp, _) =>
+            {
+                factoryCalled = true;
+                var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
+                return Task.FromResult(multiplexer);
             });
 
         using var serviceProvider = services.BuildServiceProvider();

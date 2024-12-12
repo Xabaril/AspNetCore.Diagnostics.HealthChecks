@@ -1,7 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SurrealDb.Net;
-using SurrealDb.Net.Models.Response;
 
 namespace HealthChecks.SurrealDb;
 
@@ -10,12 +8,11 @@ namespace HealthChecks.SurrealDb;
 /// </summary>
 public class SurrealDbHealthCheck : IHealthCheck
 {
-    private readonly SurrealDbHealthCheckOptions _options;
+    private readonly ISurrealDbClient _client;
 
-    public SurrealDbHealthCheck(SurrealDbHealthCheckOptions options)
+    public SurrealDbHealthCheck(ISurrealDbClient client)
     {
-        Guard.ThrowIfNull(options.ConnectionString, true);
-        _options = options;
+        _client = Guard.ThrowIfNull(client);
     }
 
     /// <inheritdoc />
@@ -23,40 +20,11 @@ public class SurrealDbHealthCheck : IHealthCheck
     {
         try
         {
-            var clientOptions = new SurrealDbOptionsBuilder()
-                .FromConnectionString(_options.ConnectionString)
-                .Build();
+            await _client.Connect(cancellationToken).ConfigureAwait(false);
 
-            using var client = new SurrealDbClient(clientOptions);
-
-            _options.Configure?.Invoke(client);
-            await client.Connect(cancellationToken).ConfigureAwait(false);
-
-            bool result = await client.Health(cancellationToken).ConfigureAwait(false);
-
-            if (!string.IsNullOrWhiteSpace(_options.Query))
-            {
-                var response = await client.RawQuery(_options.Query, cancellationToken: cancellationToken).ConfigureAwait(false);
-
-                if (response.HasErrors)
-                {
-                    var error = response.Errors.First();
-                    string errorMessage = error switch
-                    {
-                        SurrealDbErrorResult errorResult => errorResult.Details,
-                        SurrealDbProtocolErrorResult protocolErrorResult => protocolErrorResult.Details ?? protocolErrorResult.Description,
-                        _ => "Unknown error"
-                    };
-
-                    return _options.HealthCheckResultBuilder == null
-                        ? HealthCheckResult.Unhealthy(errorMessage)
-                        : _options.HealthCheckResultBuilder(false);
-                }
-            }
-
-            return _options.HealthCheckResultBuilder == null
+            return await _client.Health(cancellationToken).ConfigureAwait(false)
                 ? HealthCheckResult.Healthy()
-                : _options.HealthCheckResultBuilder(result);
+                : HealthCheckResult.Unhealthy();
         }
         catch (Exception ex)
         {

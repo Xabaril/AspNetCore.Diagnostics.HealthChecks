@@ -94,7 +94,7 @@ public abstract class ConformanceTests<TClient, THealthCheck, THealthCheckOption
     {
         const string healthCheckName = "random_name";
         var timeout = TimeSpan.FromSeconds(5);
-        string[] tags = { "a", "b", "c" };
+        string[] tags = ["a", "b", "c"];
         int counter = 0;
 
         ServiceCollection services = new();

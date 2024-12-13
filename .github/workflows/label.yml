@@ -7,16 +7,16 @@
 
 name: Labeler
 on:
-  pull_request_target:
-    types:
-      - opened        # when PR is opened
+  pull_request:
+    types: 
+    - opened
+             
 
 jobs:
   label:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/labeler@v4
+    - uses: actions/labeler@v5
       with:
-        sync-labels: ""
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
       continue-on-error: true

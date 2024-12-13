@@ -25,7 +25,7 @@ public class ApiApprovalTests
         string publicApi = asmForTest.GeneratePublicApi(new()
         {
             IncludeAssemblyAttributes = false,
-            AllowNamespacePrefixes = new[] { "Microsoft" }
+            AllowNamespacePrefixes = ["Microsoft"]
         });
 
         var location = Assembly.GetExecutingAssembly().Location;

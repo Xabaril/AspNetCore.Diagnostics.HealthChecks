@@ -22,7 +22,7 @@ samples:
 
 applicationstatus:
   - changed-files:
-  - any-glob-to-any-file: [src/HealthChecks.ApplicationStatus/**/*]
+    - any-glob-to-any-file: [src/HealthChecks.ApplicationStatus/**/*]
 
 arrangodb:
   - changed-files:

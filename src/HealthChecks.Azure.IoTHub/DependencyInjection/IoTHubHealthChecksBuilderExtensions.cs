@@ -53,7 +53,7 @@ public static class IoTHubHealthChecksBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
     /// <param name="serviceClientFactory">
-    /// /// An optional factory to obtain <see cref="ServiceClient" /> instance.
+    /// An optional factory to obtain <see cref="ServiceClient" /> instance.
     /// When not provided, <see cref="ServiceClient" /> is simply resolved from <see cref="IServiceProvider"/>.
     /// </param>
     /// <param name="optionsFactory">A action to configure the Azure IoT Hub connection to use.</param>

@@ -18,6 +18,7 @@
     <HealthCheckAzureStorageBlobs>9.0.0</HealthCheckAzureStorageBlobs>
     <HealthCheckAzureStorageFilesShares>9.0.0</HealthCheckAzureStorageFilesShares>
     <HealthCheckAzureStorageQueues>9.0.0</HealthCheckAzureStorageQueues>
+    <HealthCheckClickHouse>9.0.0</HealthCheckClickHouse>
     <HealthCheckCloudFirestore>9.0.0</HealthCheckCloudFirestore>
     <HealthCheckConsul>9.0.0</HealthCheckConsul>
     <HealthCheckCosmosDb>9.0.0</HealthCheckCosmosDb>
@@ -57,6 +58,7 @@
     <HealthCheckSignalR>9.0.0</HealthCheckSignalR>
     <HealthCheckSolr>9.0.0</HealthCheckSolr>
     <HealthCheckSqlite>9.0.0</HealthCheckSqlite>
+    <HealthCheckSurrealDb>9.0.0</HealthCheckSurrealDb>
     <HealthCheckSqlServer>9.0.0</HealthCheckSqlServer>
     <HealthChecksUIK8sOperator>9.0.0</HealthChecksUIK8sOperator>
     <HealthChecksUIPostgreSQLStorage>9.0.0</HealthChecksUIPostgreSQLStorage>
@@ -66,7 +68,7 @@
     <HealthCheckUICore>9.0.0</HealthCheckUICore>
     <HealthCheckUIData>9.0.0</HealthCheckUIData>
     <HealthCheckUIInMemoryStorage>9.0.0</HealthCheckUIInMemoryStorage>
-    <HealthCheckUIMySqlStorage>9.0.0-preview1</HealthCheckUIMySqlStorage>
+    <HealthCheckUIMySqlStorage>9.0.0</HealthCheckUIMySqlStorage>
     <HealthCheckUISQLiteStorage>9.0.0</HealthCheckUISQLiteStorage>
     <HealthCheckUISqlServerStorage>9.0.0</HealthCheckUISqlServerStorage>
     <HealthCheckUri>9.0.0</HealthCheckUri>

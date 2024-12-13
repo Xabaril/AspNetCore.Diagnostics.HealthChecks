@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>HealthChecks.RabbitMQ.Tests</AssemblyName>
+    <DefineConstants>$(DefineConstants);RABBITMQ_V6</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HealthChecks.Rabbitmq.v6\HealthChecks.Rabbitmq.v6.csproj" />
+
+    <Compile Include="../HealthChecks.RabbitMQ.Tests/DependencyInjection/RegistrationTests.cs" Link="DependencyInjection/RegistrationTests.cs" />
+    <Compile Include="../HealthChecks.RabbitMQ.Tests/Functional/RabbitHealthCheckTests.cs" Link="Functional/RabbitHealthCheckTests.cs" />
+  </ItemGroup>
+
+</Project>

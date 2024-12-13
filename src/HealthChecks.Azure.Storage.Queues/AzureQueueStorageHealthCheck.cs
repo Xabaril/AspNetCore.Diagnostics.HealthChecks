@@ -31,20 +31,28 @@ public sealed class AzureQueueStorageHealthCheck : IHealthCheck
     {
         try
         {
-            // Note: QueueServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
-            // "Storage Queue Data Contributor," so QueueServiceClient.GetQueuesAsync() is used instead to probe service health.
-            // However, QueueClient.GetPropertiesAsync() does have sufficient permissions.
-            await _queueServiceClient
-                .GetQueuesAsync(cancellationToken: cancellationToken)
-                .AsPages(pageSizeHint: 1)
-                .GetAsyncEnumerator(cancellationToken)
-                .MoveNextAsync()
-                .ConfigureAwait(false);
-
             if (!string.IsNullOrEmpty(_options.QueueName))
             {
+                // Note: PoLP (Principle of least privilege)
+                // This can be used having at least the role assignment "Storage Queue Data Reader" at container level or at least "Storage Queue Data Reader" at storage account level.
+                // See https://learn.microsoft.com/en-us/rest/api/storageservices/get-queue-metadata#authorization.
                 var queueClient = _queueServiceClient.GetQueueClient(_options.QueueName);
                 await queueClient.GetPropertiesAsync(cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                // Note: QueueServiceClient.GetPropertiesAsync() cannot be used with only the role assignment
+                // "Storage Queue Data Contributor," so QueueServiceClient.GetQueuesAsync() is used instead to probe service health.
+                // However, QueueClient.GetPropertiesAsync() does have sufficient permissions.
+                // Note: PoLP (Principle of least privilege)
+                // This can be used having at least "Storage Queue Data Reader" at storage account level.
+                // See https://learn.microsoft.com/en-us/rest/api/storageservices/get-queue-metadata#authorization.
+                await _queueServiceClient
+                    .GetQueuesAsync(cancellationToken: cancellationToken)
+                    .AsPages(pageSizeHint: 1)
+                    .GetAsyncEnumerator(cancellationToken)
+                    .MoveNextAsync()
+                    .ConfigureAwait(false);
             }
 
             return HealthCheckResult.Healthy();

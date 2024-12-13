@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;$(DefaultNetCoreApp)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Beat;ClickHouse</PackageTags>
+    <Description>HealthChecks.ClickHouse is a health check for ClickHouse.</Description>
+    <VersionPrefix>$(HealthCheckClickHouse)</VersionPrefix>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClickHouse.Client" />
+  </ItemGroup>
+
+</Project>

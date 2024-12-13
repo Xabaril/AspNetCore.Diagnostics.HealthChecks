@@ -5,145 +5,196 @@ test:
     all: ['!test/**/*.approved.txt']
 
 github_actions:
-  - .github/**/*
+- changed-files:
+  - any-glob-to-any-file: [.github/**/*]
 
 code style:
-  - .editorconfig
+  - changed-files:
+    - any-glob-to-any-file: [.editorconfig]
 
 docs:
-  - README.md
-  - doc/**/*
+  - changed-files:
+    - any-glob-to-any-file: [README.md, doc/**/*]
 
 samples:
-  - samples/**/*
+  - changed-files:
+    - any-glob-to-any-file: [samples/**/*]
 
 applicationstatus:
-  - src/HealthChecks.ApplicationStatus/**/*
+  - changed-files:
+  - any-glob-to-any-file: [src/HealthChecks.ApplicationStatus/**/*]
 
 arrangodb:
-  - src/HealthChecks.ArangoDb/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.ArangoDb/**/*]
 
 aws:
-  - src/HealthChecks.Aws.*/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Aws.*/**/*]
 
 azure:
-  - src/HealthChecks.Azure*/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Azure*/**/*]
+
+clickhouse:
+  - src/HealthChecks.ClickHouse/**/*
 
 consul:
-  - src/HealthChecks.Consul/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Consul/**/*]
 
 cosmosdb:
-  - src/HealthChecks.CosmosDb/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.CosmosDb/**/*]
 
 dapr:
-  - src/HealthChecks.Dapr/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Dapr/**/*]
 
 documentdb:
-  - src/HealthChecks.DocumentDb/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.DocumentDb/**/*]
 
 dynamodb:
-  - src/HealthChecks.DynamoDb/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.DynamoDb/**/*]
 
 elasticsearch:
-  - src/HealthChecks.Elasticsearch/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Elasticsearch/**/*]
 
 eventstore:
-  - src/HealthChecks.EventStore*/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.EventStore*/**/*]
 
 cloudfirestore:
-  - src/HealthChecks.Gcp.CloudFirestore/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Gcp.CloudFirestore/**/*]
 
 gremlin:
-  - src/HealthChecks.Gremlin/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Gremlin/**/*]
 
 hangfire:
-  - src/HealthChecks.Hangfire/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Hangfire/**/*]
 
 ibmmq:
-  src/HealthChecks.IbmMQ/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.IbmMQ/**/*]
 
 influxdb:
-  src/HealthChecks.InfluxDB/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.InfluxDB/**/*]
 
 kafka:
-  - src/HealthChecks.Kafka/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Kafka/**/*]
 
 kubernetes:
-  - src/HealthChecks.Kubernetes/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Kubernetes/**/*]
 
 milvus:
-  - src/HealthChecks.Milvus/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Milvus/**/*]
 
 mongodb:
-  - src/HealthChecks.MongoDb/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.MongoDb/**/*]
 
 mysql:
-  - src/HealthChecks.MySql/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.MySql/**/*]
 
 nats:
-  - src/HealthChecks.Nats/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Nats/**/*]
 
 network:
-  - src/HealthChecks.Network/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Network/**/*]
 
 npgsql:
-  - src/HealthChecks.NpgSql/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.NpgSql/**/*]
 
 openidconnect:
-  - src/HealthChecks.OpenIdConnectServer/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.OpenIdConnectServer/**/*]
 
 oracle:
-  - src/HealthChecks.Oracle/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Oracle/**/*]
 
 prometheus:
-  - src/HealthChecks.Prometheus.Metrics/**/*
-  - src/HealthChecks.Publisher.Prometheus/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Prometheus.Metrics/**/*, src/HealthChecks.Publisher.Prometheus/**/*]
 
 applicationinsights:
-  - src/HealthChecks.Publisher.ApplicationInsights/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Publisher.ApplicationInsights/**/*]
 
 cloudwatch:
-  - src/HealthChecks.Publisher.CloudWatch/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Publisher.CloudWatch/**/*]
 
 datadog:
-  - src/HealthChecks.Publisher.Datadog/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Publisher.Datadog/**/*]
 
 seq:
-  -src/HealthChecks.Publisher.Seq/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Publisher.Seq/**/*]
 
 qdrant:
-  - src/HealthChecks.Qdrant/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Qdrant/**/*]
 
 rabbitmq:
-  - src/HealthChecks.Rabbitmq/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Rabbitmq/**/*]
 
 ravendb:
-  - src/HealthChecks.RavenDB/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.RavenDB/**/*]
 
 redis:
-  - src/HealthChecks.Redis/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Redis/**/*]
 
 sendgrid:
-  - src/HealthChecks.SendGrid/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.SendGrid/**/*]
 
 signalr:
-  - src/HealthChecks.SignalR/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.SignalR/**/*]
 
 solr:
-  - src/HealthChecks.Solr/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Solr/**/*]
 
 sqlite:
-  - src/HealthChecks.Sqlite/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Sqlite/**/*]
 
 sqlserver:
-  - src/HealthChecks.SqlServer/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.SqlServer/**/*]
+
+surrealdb:
+  - src/HealthChecks.SurrealDb/**/*
 
 system:
-  - src/HealthChecks.System/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.System/**/*]
 
 UI:
-  - src/HealthChecks.UI/**/*
-  - src/HealthChecks.UI.*/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.UI/**/*,  src/HealthChecks.UI.*/**/*]
+  
 
 uris:
-  - src/HealthChecks.Uris/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.Uris/**/*]

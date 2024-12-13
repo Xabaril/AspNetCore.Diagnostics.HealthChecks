@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
     <PackageTags>$(PackageTags);RabbitMQ</PackageTags>
-    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.</Description>
+    <Description>HealthChecks.RabbitMQ is the health check package for RabbitMQ.Client.</Description>
     <VersionPrefix>$(HealthCheckRabbitMQ)</VersionPrefix>
     <RootNamespace>HealthChecks.RabbitMQ</RootNamespace> <!--For backward naming compatibility-->
   </PropertyGroup>

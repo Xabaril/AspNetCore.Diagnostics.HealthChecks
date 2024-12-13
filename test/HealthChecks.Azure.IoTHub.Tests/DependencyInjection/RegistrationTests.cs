@@ -1,3 +1,6 @@
+using Azure.Identity;
+using Microsoft.Azure.Devices;
+
 namespace HealthChecks.Azure.IoTHub.Tests.DependencyInjection;
 
 public class azure_iothub_registration_should
@@ -6,8 +9,10 @@ public class azure_iothub_registration_should
     public void add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-        services.AddHealthChecks()
-            .AddAzureIoTHub(options => options.AddConnectionString("the-iot-connection-string"));
+        services
+            .AddSingleton(sp => ServiceClient.Create("iot-hub-hostname", new DefaultAzureCredential()))
+            .AddHealthChecks()
+            .AddAzureIoTHubServiceClient(name: "iothub");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -16,15 +21,17 @@ public class azure_iothub_registration_should
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("iothub");
-        check.ShouldBeOfType<IoTHubHealthCheck>();
+        check.ShouldBeOfType<IoTHubServiceClientHealthCheck>();
     }
 
     [Fact]
     public void add_named_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-        services.AddHealthChecks()
-             .AddAzureIoTHub(options => options.AddConnectionString("the-iot-connection-string"), name: "iothubcheck");
+        services
+            .AddSingleton(sp => RegistryManager.Create("iot-hub-hostname", new DefaultAzureCredential()))
+            .AddHealthChecks()
+            .AddAzureIoTHubRegistryReadCheck(name: "iothubcheck");
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
@@ -33,6 +40,6 @@ public class azure_iothub_registration_should
         var check = registration.Factory(serviceProvider);
 
         registration.Name.ShouldBe("iothubcheck");
-        check.ShouldBeOfType<IoTHubHealthCheck>();
+        check.ShouldBeOfType<IoTHubRegistryManagerHealthCheck>();
     }
 }

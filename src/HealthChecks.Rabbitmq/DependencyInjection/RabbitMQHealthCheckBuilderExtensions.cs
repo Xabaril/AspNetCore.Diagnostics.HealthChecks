@@ -18,7 +18,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <paramref name="factory"/> will be called each time the healthcheck route is requested.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="factory">The action to get the RabbitMQ connection from the <see cref="IServiceProvider"/>.</param>
+    /// <param name="factory">The optional factory method to get the RabbitMQ connection from the <see cref="IServiceProvider"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
@@ -43,7 +43,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
                 {
                     // Pass the factory to RabbitMQHealthCheck to ensure the factory is called
                     // within CheckHealthAsync. HealthCheckRegistration.Factory should not throw
-                    // exceptions, which happen in the factory or getting the service.
+                    // exceptions, which can happen in the factory or getting the service.
                     var connection = factory?.Invoke(sp) ?? sp.GetRequiredService<IConnection>();
                     return Task.FromResult(connection);
                 });
@@ -60,7 +60,7 @@ public static class RabbitMQHealthCheckBuilderExtensions
     /// <paramref name="factory"/> will be called each time the healthcheck route is requested.
     /// </remarks>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="factory">The asynchronous action to get the RabbitMQ connection from the <see cref="IServiceProvider"/>.</param>
+    /// <param name="factory">The asynchronous factory method to get the RabbitMQ connection from the <see cref="IServiceProvider"/>.</param>
     /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'rabbitmq' will be used for the name.</param>
     /// <param name="failureStatus">
     /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then

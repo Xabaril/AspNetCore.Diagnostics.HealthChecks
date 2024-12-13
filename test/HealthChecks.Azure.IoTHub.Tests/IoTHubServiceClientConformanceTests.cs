@@ -6,7 +6,7 @@ namespace HealthChecks.Azure.IoTHub.Tests;
 public class IoTHubServiceClientConformanceTests : ConformanceTests<ServiceClient, IoTHubServiceClientHealthCheck, IotHubServiceClientOptions>
 {
     protected override IHealthChecksBuilder AddHealthCheck(IHealthChecksBuilder builder, Func<IServiceProvider, ServiceClient>? clientFactory = null, Func<IServiceProvider, IotHubServiceClientOptions>? optionsFactory = null, string? healthCheckName = null, HealthStatus? failureStatus = null, IEnumerable<string>? tags = null, TimeSpan? timeout = null)
-        => builder.AddAzureIoTHubServiceClient(clientFactory, optionsFactory, healthCheckName, failureStatus, tags, timeout);
+        => builder.AddAzureIoTHubServiceClient(clientFactory, healthCheckName, failureStatus, tags, timeout);
 
     protected override ServiceClient CreateClientForNonExistingEndpoint()
     {
@@ -14,8 +14,10 @@ public class IoTHubServiceClientConformanceTests : ConformanceTests<ServiceClien
     }
 
     protected override IoTHubServiceClientHealthCheck CreateHealthCheck(ServiceClient client, IotHubServiceClientOptions? options)
-        => new(client, options);
+        => new(client);
 
     protected override IotHubServiceClientOptions CreateHealthCheckOptions()
         => new();
 }
+
+public sealed class IotHubServiceClientOptions;

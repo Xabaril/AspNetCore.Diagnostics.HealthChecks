@@ -5,30 +5,33 @@ namespace HealthChecks.Azure.IoTHub;
 
 public sealed class IoTHubRegistryManagerHealthCheck : IHealthCheck
 {
-    private readonly IotHubRegistryManagerOptions _options;
     private readonly RegistryManager _registryManager;
+    private readonly string? _readQuery;
+    private readonly string? _writeDeviceId;
 
-    public IoTHubRegistryManagerHealthCheck(RegistryManager registryManager, IotHubRegistryManagerOptions? options = default)
+    public IoTHubRegistryManagerHealthCheck(RegistryManager registryManager, string? readQuery = default, string? writeDeviceId = default)
     {
-        _options = options ?? new IotHubRegistryManagerOptions();
         _registryManager = Guard.ThrowIfNull(registryManager);
+
+        if (string.IsNullOrEmpty(readQuery) && string.IsNullOrEmpty(writeDeviceId))
+        {
+            throw new ArgumentException("Either readQuery or writeDeviceId has to be provided");
+        }
+
+        _readQuery = readQuery;
+        _writeDeviceId = writeDeviceId;
     }
 
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        if (!_options.RegistryWriteCheck && !_options.RegistryReadCheck)
-        {
-            return new HealthCheckResult(context.Registration.FailureStatus, description: $"No health check enabled, both {nameof(IotHubRegistryManagerOptions.RegistryReadCheck)} and {nameof(IotHubRegistryManagerOptions.RegistryWriteCheck)} are false");
-        }
-
         try
         {
-            if (_options.RegistryWriteCheck)
+            if (!string.IsNullOrEmpty(_writeDeviceId))
             {
                 await ExecuteRegistryWriteCheckAsync(cancellationToken).ConfigureAwait(false);
             }
-            else if (_options.RegistryReadCheck)
+            else
             {
                 await ExecuteRegistryReadCheckAsync().ConfigureAwait(false);
             }
@@ -41,16 +44,15 @@ public sealed class IoTHubRegistryManagerHealthCheck : IHealthCheck
         }
     }
 
-
     private async Task ExecuteRegistryReadCheckAsync()
     {
-        var query = _registryManager.CreateQuery(_options.RegistryReadQuery, 1);
+        var query = _registryManager.CreateQuery(_readQuery!, 1);
         await query.GetNextAsJsonAsync().ConfigureAwait(false);
     }
 
     private async Task ExecuteRegistryWriteCheckAsync(CancellationToken cancellationToken)
     {
-        var deviceId = _options.RegistryWriteDeviceIdFactory();
+        string deviceId = _writeDeviceId!;
         var device = await _registryManager.GetDeviceAsync(deviceId, cancellationToken).ConfigureAwait(false);
 
         // in default implementation of configuration deviceId equals "health-check-registry-write-device-id"

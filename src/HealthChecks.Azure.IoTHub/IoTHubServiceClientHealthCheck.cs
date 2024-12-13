@@ -5,12 +5,10 @@ namespace HealthChecks.Azure.IoTHub;
 
 public sealed class IoTHubServiceClientHealthCheck : IHealthCheck
 {
-    private readonly IotHubServiceClientOptions _options;
     private readonly ServiceClient _serviceClient;
 
-    public IoTHubServiceClientHealthCheck(ServiceClient serviceClient, IotHubServiceClientOptions? options = default)
+    public IoTHubServiceClientHealthCheck(ServiceClient serviceClient)
     {
-        _options = options ?? new IotHubServiceClientOptions();
         _serviceClient = Guard.ThrowIfNull(serviceClient);
     }
 
@@ -19,7 +17,7 @@ public sealed class IoTHubServiceClientHealthCheck : IHealthCheck
     {
         try
         {
-            await ExecuteServiceConnectionCheckAsync(cancellationToken).ConfigureAwait(false);
+            await _serviceClient.GetServiceStatisticsAsync(cancellationToken).ConfigureAwait(false);
 
             return HealthCheckResult.Healthy();
         }
@@ -27,10 +25,5 @@ public sealed class IoTHubServiceClientHealthCheck : IHealthCheck
         {
             return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
         }
-    }
-
-    private async Task ExecuteServiceConnectionCheckAsync(CancellationToken cancellationToken)
-    {
-        await _serviceClient.GetServiceStatisticsAsync(cancellationToken).ConfigureAwait(false);
     }
 }

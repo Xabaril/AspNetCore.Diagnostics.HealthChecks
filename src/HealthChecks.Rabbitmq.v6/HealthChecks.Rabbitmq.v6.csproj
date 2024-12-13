@@ -14,10 +14,6 @@
     <PackageReference Include="RabbitMQ.Client" VersionOverride="[6.8.1,7.0.0)" />
 
     <Compile Include="../HealthCheckResultTask.cs" />
-    <Compile Include="../HealthChecks.Rabbitmq/DependencyInjection/RabbitMQHealthCheckBuilderExtensions.cs" Link="DependencyInjection/RabbitMQHealthCheckBuilderExtensions.cs" />
-    <Compile Include="../HealthChecks.Rabbitmq/RabbitMQHealthCheckOptions.cs" />
-
-    <None Include="../HealthChecks.Rabbitmq/README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

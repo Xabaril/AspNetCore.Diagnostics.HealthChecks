@@ -1,5 +1,6 @@
 using HealthChecks.Nats;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NATS.Client.Core;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -11,81 +12,41 @@ public static class NatsHealthCheckBuilderExtensions
     internal const string NAME = "nats";
 
     /// <summary>
-    /// Add a health check for Nats.
+    /// Add a health check for Nats services.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="setup">The action to configure the Nats setup.</param>
-    /// <param name="name">
-    /// The health check name.
-    /// Optional.
-    /// If <see langword="null"/> the type name 'nats' will be used for the name.
-    /// </param>
+    /// <param name="clientFactory">
+    /// An optional factory to obtain <see cref="INatsConnection" /> instance.
+    /// When not provided, <see cref="INatsConnection" /> is simply resolved from <see cref="IServiceProvider"/>.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'nats' will be used for the name.</param>
     /// <param name="failureStatus">
-    /// The <see cref="HealthStatus"/> that should be reported when the health check fails.
-    /// Optional.
-    /// If <see langword="null"/> then the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
-    /// </param>
-    /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
-    /// <param name="timeout">An optional System.TimeSpan representing the timeout of the check.</param>
-    /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
-    public static IHealthChecksBuilder AddNats(
-        this IHealthChecksBuilder builder,
-        Action<NatsOptions>? setup,
-        string? name = default,
-        HealthStatus? failureStatus = default,
-        IEnumerable<string>? tags = default,
-        TimeSpan? timeout = default)
-    {
-        var options = new NatsOptions();
-        setup?.Invoke(options);
-
-        builder.Services.AddSingleton(_ => new NatsHealthCheck(options));
-
-        return builder.Add(new HealthCheckRegistration(
-            name ?? NAME,
-            sp => sp.GetRequiredService<NatsHealthCheck>(),
-            failureStatus,
-            tags,
-            timeout));
-    }
-
-    /// <summary>
-    /// Add a health check for Nats.
-    /// </summary>
-    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
-    /// <param name="setup">The factory to configure the Nats setup.</param>
-    /// <param name="name">
-    /// The health check name.
-    /// Optional.
-    /// If <see langword="null"/> the type name 'nats' will be used for the name.
-    /// </param>
-    /// <param name="failureStatus">
-    /// The <see cref="HealthStatus"/> that should be reported when the health check fails.
-    /// Optional.
-    /// If <see langword="null"/> then the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
+    /// The <see cref="HealthStatus"/> that should be reported when the health check fails. Optional. If <c>null</c> then
+    /// the default status of <see cref="HealthStatus.Unhealthy"/> will be reported.
     /// </param>
     /// <param name="tags">A list of tags that can be used to filter sets of health checks. Optional.</param>
     /// <param name="timeout">An optional <see cref="TimeSpan"/> representing the timeout of the check.</param>
-    /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddNats(
         this IHealthChecksBuilder builder,
-        Action<IServiceProvider, NatsOptions>? setup,
-        string? name = default,
+        Func<IServiceProvider, INatsConnection>? clientFactory = default,
+        string? name = NAME,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,
         TimeSpan? timeout = default)
     {
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,
-            sp =>
-            {
-                var options = new NatsOptions();
-                setup?.Invoke(sp, options);
-
-                return new NatsHealthCheck(options);
-            },
+            sp => Factory(clientFactory, sp),
             failureStatus,
             tags,
             timeout));
+
+        static NatsHealthCheck Factory(Func<IServiceProvider, INatsConnection>? clientFactory, IServiceProvider sp)
+        {
+            // The user might have registered a factory for NatsConnection type, but not for the abstraction (INatsConnection).
+            // That is why we try to resolve NatsConnection first.
+            INatsConnection client = clientFactory?.Invoke(sp) ?? sp.GetService<NatsConnection>() ?? sp.GetRequiredService<INatsConnection>();
+            return new(client);
+        }
     }
 }

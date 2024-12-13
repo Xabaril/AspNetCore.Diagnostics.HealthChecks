@@ -10,6 +10,8 @@ public sealed class NatsHealthCheck(INatsConnection connection) : IHealthCheck
 {
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        await TryConnectAsync(connection).ConfigureAwait(false);
+
         var result = connection.ConnectionState switch
         {
             NatsConnectionState.Open => HealthCheckResult.Healthy(),

@@ -1,5 +1,6 @@
 using System.Net;
 using NATS.Client.Core;
+using NATS.Client.Hosting;
 using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.Functional;
@@ -12,17 +13,16 @@ public class nats_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
+                var options = NatsOpts.Default with
+                {
+                    Url = DefaultLocalConnectionString,
+                };
+                var natsConnection = new NatsConnection(options);
+
                 services
                     .AddHealthChecks()
                     .AddNats(
-                        clientFactory: sp =>
-                        {
-                            var options = NatsOpts.Default with
-                            {
-                                Url = DefaultLocalConnectionString,
-                            };
-                            return new NatsConnection(options);
-                        }, tags: new string[] { "nats" });
+                        clientFactory: sp => natsConnection, tags: new string[] { "nats" });
             })
             .Configure(app =>
             {

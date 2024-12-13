@@ -8,20 +8,8 @@ namespace HealthChecks.Nats;
 /// </summary>
 public sealed class NatsHealthCheck(INatsConnection connection) : IHealthCheck
 {
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-    {
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default) =>
         await TryConnectAsync(connection).ConfigureAwait(false);
-
-        var result = connection.ConnectionState switch
-        {
-            NatsConnectionState.Open => HealthCheckResult.Healthy(),
-            NatsConnectionState.Connecting or NatsConnectionState.Reconnecting => HealthCheckResult.Degraded(),
-            NatsConnectionState.Closed => await TryConnectAsync(connection).ConfigureAwait(false),
-            _ => new HealthCheckResult(context.Registration.FailureStatus)
-        };
-
-        return result;
-    }
 
     private static async Task<HealthCheckResult> TryConnectAsync(INatsConnection natsConnection)
     {

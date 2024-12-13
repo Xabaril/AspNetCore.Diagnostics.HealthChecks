@@ -37,7 +37,8 @@ azure:
     - any-glob-to-any-file: [src/HealthChecks.Azure*/**/*]
 
 clickhouse:
-  - src/HealthChecks.ClickHouse/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.ClickHouse/**/*]
 
 consul:
   - changed-files:
@@ -184,7 +185,8 @@ sqlserver:
     - any-glob-to-any-file: [src/HealthChecks.SqlServer/**/*]
 
 surrealdb:
-  - src/HealthChecks.SurrealDb/**/*
+  - changed-files:
+    - any-glob-to-any-file: [src/HealthChecks.SurrealDb/**/*]
 
 system:
   - changed-files:

@@ -95,7 +95,7 @@
     <PackageVersion Include="SolrNet.Core" Version="1.1.1" />
     <PackageVersion Include="SSH.NET" Version="2023.0.0" />
     <PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
-    <PackageVersion Include="SurrealDb.Net" Version="0.6.0" />
+    <PackageVersion Include="SurrealDb.Net" Version="0.7.0" />
     <PackageVersion Include="System.Buffers" Version="4.5.1" />
     <PackageVersion Include="System.Net.Http.Json" Version="8.0.1" />
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="8.0.0" />

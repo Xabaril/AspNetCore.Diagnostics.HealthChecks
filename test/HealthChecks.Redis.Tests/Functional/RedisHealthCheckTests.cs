@@ -5,12 +5,19 @@ using StackExchange.Redis.Profiling;
 
 namespace HealthChecks.Redis.Tests.Functional;
 
-public class redis_healthcheck_should
+public class redis_healthcheck_should : IClassFixture<RedisContainerFixture>
 {
+    private readonly RedisContainerFixture _redisContainerFixture;
+
+    public redis_healthcheck_should(RedisContainerFixture redisContainerFixture)
+    {
+        _redisContainerFixture = redisContainerFixture;
+    }
+
     [Fact]
     public async Task be_healthy_if_redis_is_available_with_connection_string()
     {
-        var connectionString = "localhost:6379,allowAdmin=true";
+        var connectionString = $"{_redisContainerFixture.GetConnectionString()},allowAdmin=true";
 
         var webHostBuilder = new WebHostBuilder()
          .ConfigureServices(services =>
@@ -36,7 +43,7 @@ public class redis_healthcheck_should
     [Fact]
     public async Task be_healthy_if_multiple_redis_are_available_with_connection_string()
     {
-        var connectionString = "localhost:6379,allowAdmin=true";
+        var connectionString = $"{_redisContainerFixture.GetConnectionString()},allowAdmin=true";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -63,8 +70,10 @@ public class redis_healthcheck_should
     [Fact]
     public async Task be_healthy_if_redis_is_available_with_connection_multiplexer()
     {
+        var connectionString = $"{_redisContainerFixture.GetConnectionString()},allowAdmin=true";
+
         var connectionMultiplexer = await ConnectionMultiplexer
-            .ConnectAsync("localhost:6379,allowAdmin=true");
+            .ConnectAsync(connectionString);
 
         var webHostBuilder = new WebHostBuilder()
          .ConfigureServices(services =>
@@ -90,8 +99,10 @@ public class redis_healthcheck_should
     [Fact]
     public async Task be_healthy_if_multiple_redis_are_available_with_connection_multiplexer()
     {
+        var connectionString = $"{_redisContainerFixture.GetConnectionString()},allowAdmin=true";
+
         var connectionMultiplexer = await ConnectionMultiplexer
-            .ConnectAsync("localhost:6379,allowAdmin=true");
+            .ConnectAsync(connectionString);
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

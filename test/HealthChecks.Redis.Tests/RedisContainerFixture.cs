@@ -4,6 +4,12 @@ namespace HealthChecks.Redis.Tests;
 
 public sealed class RedisContainerFixture : IAsyncLifetime
 {
+    public const string Registry = "docker.io";
+
+    public const string Image = "library/redis";
+
+    public const string Tag = "7.4";
+
     public RedisContainer? Container { get; private set; }
 
     public string GetConnectionString() => Container?.GetConnectionString() ??
@@ -20,7 +26,7 @@ public sealed class RedisContainerFixture : IAsyncLifetime
     public static async Task<RedisContainer> CreateContainerAsync()
     {
         var container = new RedisBuilder()
-            .WithImage($"{RedisContainerImageTags.Registry}/{RedisContainerImageTags.Image}:{RedisContainerImageTags.Tag}")
+            .WithImage($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

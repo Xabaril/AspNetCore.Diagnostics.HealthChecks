@@ -30,14 +30,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server
-        ports:
-          - 5433:1433
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: Password12!
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET

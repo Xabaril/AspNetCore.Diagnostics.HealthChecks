@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.DependencyInjection" />
+    <PackageReference Include="Testcontainers.PostgreSql" />
   </ItemGroup>
 
   <ItemGroup>

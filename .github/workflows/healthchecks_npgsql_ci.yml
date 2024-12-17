@@ -30,14 +30,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      npgsql:
-        image: postgres
-        ports:
-          - 8010:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: Password12!
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET

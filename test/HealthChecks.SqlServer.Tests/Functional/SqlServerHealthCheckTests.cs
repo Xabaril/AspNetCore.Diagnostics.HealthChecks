@@ -2,12 +2,12 @@ using System.Net;
 
 namespace HealthChecks.SqlServer.Tests.Functional;
 
-public class sqlserver_healthcheck_should
+public class sqlserver_healthcheck_should(SqlServerContainerFixture sqlServerContainerFixture) : IClassFixture<SqlServerContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_sqlServer_is_available()
     {
-        var connectionString = "Server=tcp:localhost,5433;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false";
+        var connectionString = sqlServerContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -57,7 +57,7 @@ public class sqlserver_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_sqlquery_spec_is_not_valid()
     {
-        var connectionString = "Server=tcp:localhost,5433;Initial Catalog=master;User Id=sa;Password=Password12!;Encrypt=false";
+        var connectionString = sqlServerContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

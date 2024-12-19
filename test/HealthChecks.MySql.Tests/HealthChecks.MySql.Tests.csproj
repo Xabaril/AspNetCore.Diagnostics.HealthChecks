@@ -8,4 +8,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.MySql\HealthChecks.MySql.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.MySql" />
+  </ItemGroup>
+  
 </Project>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>HealthChecks.RabbitMQ.Tests</AssemblyName>
@@ -8,4 +8,12 @@
     <ProjectReference Include="..\..\src\HealthChecks.Rabbitmq.v6\HealthChecks.Rabbitmq.v6.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\HealthChecks.RabbitMQ.Tests\RabbitMQContainerFixture.cs"></Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.RabbitMq" />
+  </ItemGroup>
+  
 </Project>

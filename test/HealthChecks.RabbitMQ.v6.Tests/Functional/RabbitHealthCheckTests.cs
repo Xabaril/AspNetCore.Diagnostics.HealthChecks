@@ -3,12 +3,12 @@ using RabbitMQ.Client;
 
 namespace HealthChecks.RabbitMQ.Tests.Functional;
 
-public class rabbitmq_healthcheck_should
+public class rabbitmq_healthcheck_should(RabbitMQContainerFixture rabbitMQContainerFixture) : IClassFixture<RabbitMQContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_rabbitmq_is_available()
     {
-        var connectionString = "amqp://localhost:5672";
+        var connectionString = rabbitMQContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -34,7 +34,7 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_rabbitmq_is_available_using_ssloption()
     {
-        var connectionString = "amqp://localhost:5672";
+        var connectionString = rabbitMQContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -64,7 +64,7 @@ public class rabbitmq_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddRabbitMQ("amqp://localhost:6672", sslOption: new SslOption(serverName: "localhost", enabled: false), tags: ["rabbitmq"]);
+                .AddRabbitMQ("amqp://invalidlocalhost:6672", sslOption: new SslOption(serverName: "invalidlocalhost", enabled: false), tags: ["rabbitmq"]);
             })
             .Configure(app =>
             {
@@ -84,7 +84,7 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_rabbitmq_is_available_using_iconnectionfactory()
     {
-        var connectionString = "amqp://localhost:5672";
+        var connectionString = rabbitMQContainerFixture.GetConnectionString();
 
         var factory = new ConnectionFactory()
         {
@@ -118,7 +118,7 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_rabbitmq_is_available_using_iconnection()
     {
-        var connectionString = "amqp://localhost:5672";
+        var connectionString = rabbitMQContainerFixture.GetConnectionString();
 
         var factory = new ConnectionFactory()
         {
@@ -155,7 +155,7 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_rabbitmq_is_available_and_specify_default_ssloption()
     {
-        var connectionString = "amqp://localhost:5672";
+        var connectionString = rabbitMQContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -189,7 +189,7 @@ public class rabbitmq_healthcheck_should
                     {
                         return new ConnectionFactory()
                         {
-                            Uri = new Uri("amqp://localhost:3333"),
+                            Uri = new Uri("amqp://invalidlocalhost:3333"),
                             AutomaticRecoveryEnabled = true,
                             Ssl = new SslOption(serverName: "localhost", enabled: false)
                         };
@@ -214,7 +214,7 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_rabbitmq_is_available_using_iServiceProvider()
     {
-        var connectionString = "amqp://localhost:5672";
+        var connectionString = rabbitMQContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -242,8 +242,8 @@ public class rabbitmq_healthcheck_should
     [Fact]
     public async Task two_rabbitmq_health_check()
     {
-        const string connectionString1 = "amqp://localhost:5672";
-        const string connectionString2 = "amqp://localhost:6672/";
+        var connectionString1 = rabbitMQContainerFixture.GetConnectionString();
+        const string connectionString2 = "amqp://invalidhost:6672/";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

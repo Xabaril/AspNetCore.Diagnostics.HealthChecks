@@ -4,4 +4,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.MongoDb\HealthChecks.MongoDb.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TestContainers.MongoDb" />
+  </ItemGroup>
 </Project>

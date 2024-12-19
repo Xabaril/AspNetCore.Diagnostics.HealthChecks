@@ -3,12 +3,12 @@ using MongoDB.Driver;
 
 namespace HealthChecks.MongoDb.Tests.Functional;
 
-public class mongodb_healthcheck_should
+public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainerFixture) : IClassFixture<MongoDbContainerFixture>
 {
     [Fact]
     public async Task be_healthy_listing_all_databases_if_mongodb_is_available()
     {
-        var connectionString = "mongodb://localhost:27017";
+        var connectionString = mongoDbContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -36,7 +36,7 @@ public class mongodb_healthcheck_should
     [Fact]
     public async Task be_healthy_on_specified_database_if_mongodb_is_available_and_database_exist()
     {
-        var connectionString = "mongodb://localhost:27017";
+        var connectionString = mongoDbContainerFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -64,7 +64,7 @@ public class mongodb_healthcheck_should
     [Fact]
     public async Task be_healthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist()
     {
-        var connectionString = "mongodb://localhost:27017/local";
+        var connectionString = $"{mongoDbContainerFixture.GetConnectionString()}local";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -92,11 +92,13 @@ public class mongodb_healthcheck_should
     [Fact]
     public async Task be_healthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_exist_dbFactory()
     {
+        var connectionString = mongoDbContainerFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton(sp => new MongoClient("mongodb://localhost:27017").GetDatabase("namedDb"))
+                    .AddSingleton(sp => new MongoClient(connectionString).GetDatabase("namedDb"))
                     .AddHealthChecks()
                     .AddMongoDb(dbFactory: sp => sp.GetRequiredService<IMongoDatabase>(), tags: ["mongodb"]);
             })
@@ -119,7 +121,7 @@ public class mongodb_healthcheck_should
     public async Task be_healthy_on_connectionstring_specified_database_if_mongodb_is_available_and_database_not_exist()
     {
         // NOTE: with mongodb the database is created automatically the first time something is written to it
-        var connectionString = "mongodb://localhost:27017/nonexisting";
+        var connectionString = $"{mongoDbContainerFixture.GetConnectionString()}nonexisting";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

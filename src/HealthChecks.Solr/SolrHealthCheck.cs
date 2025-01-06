@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using HttpWebAdapters;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SolrNet.Impl;
 
@@ -28,6 +29,11 @@ public class SolrHealthCheck : IHealthCheck
                 {
                     Timeout = (int)_options.Timeout.TotalMilliseconds
                 };
+
+                if (!string.IsNullOrWhiteSpace(_options.Username) && !string.IsNullOrWhiteSpace(_options.Password))
+                {
+                    solrConnection.HttpWebRequestFactory = new BasicAuthHttpWebRequestFactory(_options.Username, _options.Password);
+                }
 
                 if (!_connections.TryAdd(url, solrConnection))
                 {

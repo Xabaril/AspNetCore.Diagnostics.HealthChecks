@@ -1,5 +1,4 @@
 using System.Net;
-using Aspire.Milvus.Client.Tests;
 using Milvus.Client;
 
 namespace HealthChecks.Milvus.Tests.Functional;

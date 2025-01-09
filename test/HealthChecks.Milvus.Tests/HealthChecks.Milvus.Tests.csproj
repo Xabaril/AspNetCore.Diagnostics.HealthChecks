@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Testcontainers.Milvus" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Milvus\HealthChecks.Milvus.csproj" />
   </ItemGroup>
 

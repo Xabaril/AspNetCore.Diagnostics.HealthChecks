@@ -1,20 +1,23 @@
 using System.Net;
+using Aspire.Milvus.Client.Tests;
 using Milvus.Client;
 
 namespace HealthChecks.Milvus.Tests.Functional;
 
-public class milvus_healthcheck_should
+public class milvus_healthcheck_should(MilvusContainerFixture milvusContainerFixture) : IClassFixture<MilvusContainerFixture>
 {
     [Fact]
     public async Task be_healthy_when_milvus_is_available_using_client_factory()
     {
+        string connectionString = milvusContainerFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                     .AddHealthChecks()
                     .AddMilvus(
-                        clientFactory: sp => new MilvusClient("localhost"), tags: new string[] { "milvus" });
+                        clientFactory: sp => new MilvusClient(new Uri(connectionString)), tags: new string[] { "milvus" });
             })
             .Configure(app =>
             {
@@ -34,11 +37,13 @@ public class milvus_healthcheck_should
     [Fact]
     public async Task be_healthy_when_milvus_is_available_using_singleton()
     {
+        string connectionString = milvusContainerFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton(new MilvusClient("localhost"))
+                    .AddSingleton(new MilvusClient(new Uri(connectionString)))
                     .AddHealthChecks()
                     .AddMilvus(tags: new string[] { "milvus" });
             })

@@ -8,7 +8,6 @@ public sealed class MilvusContainerFixture : IAsyncLifetime
 
     public const string Image = "milvusdb/milvus";
 
-
     public const string Tag = "v2.4.13";
 
     public MilvusContainer? Container { get; private set; }

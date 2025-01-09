@@ -50,7 +50,7 @@
     <HealthCheckPublisherDatadog>9.0.0</HealthCheckPublisherDatadog>
     <HealthCheckPublisherPrometheus>9.0.0</HealthCheckPublisherPrometheus>
     <HealthCheckPublisherSeq>9.0.0</HealthCheckPublisherSeq>
-    <HealthCheckQdrant>9.0.0</HealthCheckQdrant>
+    <HealthCheckQdrant>9.0.1</HealthCheckQdrant>
     <HealthCheckRabbitMQ>9.0.0</HealthCheckRabbitMQ>
     <HealthCheckRavenDB>9.0.0</HealthCheckRavenDB>
     <HealthCheckRedis>9.0.0</HealthCheckRedis>

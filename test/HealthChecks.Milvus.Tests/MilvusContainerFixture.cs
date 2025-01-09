@@ -1,6 +1,6 @@
 using Testcontainers.Milvus;
 
-namespace Aspire.Milvus.Client.Tests;
+namespace HealthChecks.Milvus.Tests;
 
 public sealed class MilvusContainerFixture : IAsyncLifetime
 {

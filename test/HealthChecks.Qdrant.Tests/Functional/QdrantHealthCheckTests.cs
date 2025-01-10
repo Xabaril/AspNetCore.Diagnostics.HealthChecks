@@ -3,18 +3,20 @@ using Qdrant.Client;
 
 namespace HealthChecks.Qdrant.Tests.Functional;
 
-public class qdrant_healthcheck_should
+public class qdrant_healthcheck_should(QdrantContainerFixture qdrantContainerFixture) : IClassFixture<QdrantContainerFixture>
 {
     [Fact]
     public async Task be_healthy_when_qdrant_is_available_using_client_factory()
     {
+        string connectionString = qdrantContainerFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                     .AddHealthChecks()
                     .AddQdrant(
-                        clientFactory: sp => new QdrantClient("localhost"), tags: new string[] { "qdrant" });
+                        clientFactory: sp => new QdrantClient(new Uri(connectionString)), tags: new string[] { "qdrant" });
             })
             .Configure(app =>
             {
@@ -34,11 +36,13 @@ public class qdrant_healthcheck_should
     [Fact]
     public async Task be_healthy_when_qdrant_is_available_using_singleton()
     {
+        string connectionString = qdrantContainerFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
-                    .AddSingleton(new QdrantClient("localhost"))
+                    .AddSingleton(new QdrantClient(new Uri(connectionString)))
                     .AddHealthChecks()
                     .AddQdrant(tags: new string[] { "qdrant" });
             })

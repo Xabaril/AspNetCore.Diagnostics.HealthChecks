@@ -4,4 +4,7 @@
     <ProjectReference Include="..\..\src\HealthChecks.Kafka\HealthChecks.Kafka.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.Kafka"></PackageReference>
+  </ItemGroup>
 </Project>

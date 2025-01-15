@@ -27,6 +27,7 @@ public class HealthChecksDb : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("HealthCheck");
         modelBuilder.ApplyConfiguration(new HealthCheckConfigurationMap());
         modelBuilder.ApplyConfiguration(new HealthCheckExecutionMap());
         modelBuilder.ApplyConfiguration(new HealthCheckExecutionEntryMap());

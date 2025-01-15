@@ -5,6 +5,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Testcontainers.Kafka"></PackageReference>
+    <PackageReference Include="Testcontainers.Kafka" />
   </ItemGroup>
 </Project>

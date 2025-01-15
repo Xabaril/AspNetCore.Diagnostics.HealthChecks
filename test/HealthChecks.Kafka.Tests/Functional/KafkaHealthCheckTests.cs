@@ -3,7 +3,7 @@ using Confluent.Kafka;
 
 namespace HealthChecks.Kafka.Tests.Functional;
 
-public class kafka_healthcheck_should
+public class kafka_healthcheck_should(KafkaContainerFixture kafkaContainerFixture) : IClassFixture<KafkaContainerFixture>
 {
     [Fact]
     public async Task be_unhealthy_if_kafka_is_unavailable()
@@ -41,9 +41,11 @@ public class kafka_healthcheck_should
     [Fact]
     public async Task be_healthy_if_kafka_is_available()
     {
+        string connectionString = kafkaContainerFixture.GetConnectionString();
+
         var configuration = new ProducerConfig()
         {
-            BootstrapServers = "localhost:29092",
+            BootstrapServers = connectionString,
             MessageSendMaxRetries = 0
         };
 

@@ -323,6 +323,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ClickHouse", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ClickHouse.Tests", "test\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{2FB5CB9F-F870-48DE-BD1D-306AE86A67CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Neo4jClient", "src\HealthChecks.Neo4jClient\HealthChecks.Neo4jClient.csproj", "{3B70557A-BC3F-4CEF-8EAB-C57CE07DCEC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -905,6 +907,10 @@ Global
 		{2FB5CB9F-F870-48DE-BD1D-306AE86A67CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FB5CB9F-F870-48DE-BD1D-306AE86A67CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FB5CB9F-F870-48DE-BD1D-306AE86A67CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B70557A-BC3F-4CEF-8EAB-C57CE07DCEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B70557A-BC3F-4CEF-8EAB-C57CE07DCEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B70557A-BC3F-4CEF-8EAB-C57CE07DCEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B70557A-BC3F-4CEF-8EAB-C57CE07DCEC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1054,6 +1060,7 @@ Global
 		{44BB97EE-88DB-4C9B-8195-2C6D889AE391} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
 		{96E2B0A3-02BD-456B-8888-4D96DABA99EB} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 		{2FB5CB9F-F870-48DE-BD1D-306AE86A67CA} = {FF4414C2-8863-4ADA-8A1D-4B9F25C361FE}
+		{3B70557A-BC3F-4CEF-8EAB-C57CE07DCEC5} = {2A3FD988-2BB8-43CF-B3A2-B70E648259D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B8C62A1-11B6-469F-874C-A02443256568}

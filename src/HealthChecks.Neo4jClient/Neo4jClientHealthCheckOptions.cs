@@ -19,17 +19,17 @@ public class Neo4jClientHealthCheckOptions
     public string? Host { get; set; }
 
     /// <summary>
-    /// Username that will be used to connect to the database using the bolt protocol.
+    /// Username that will be used to connect to the database using the <see cref="IBoltGraphClient"/>.
     /// </summary>
     public string? Username { get; set; }
 
     /// <summary>
-    /// Password that will be used to connect to the database using the bolt protocol.
+    /// Password that will be used to connect to the database using the <see cref="IBoltGraphClient"/>.
     /// </summary>
     public string? Password { get; set; }
 
     /// <summary>
-    /// Realm that will be used to connect to the database using the bolt protocol.
+    /// Realm that will be used to connect to the database using the <see cref="IBoltGraphClient"/>.
     /// </summary>
     public string? Realm { get; set; }
 
@@ -69,6 +69,6 @@ public class Neo4jClientHealthCheckOptions
         Host = Guard.ThrowIfNull(host, true);
         Username = Guard.ThrowIfNull(username, true);
         Password = Guard.ThrowIfNull(password, true);
-        Realm = Guard.ThrowIfNull(realm, true);
+        Realm = realm;
     }
 }

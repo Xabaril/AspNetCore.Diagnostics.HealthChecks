@@ -10,10 +10,12 @@ public class Neo4jClientHealthCheck : IHealthCheck
 {
     private readonly Neo4jClientHealthCheckOptions _options;
 
+    /// <summary>
+    /// Creates an instance with the options passed to it
+    /// </summary>
     public Neo4jClientHealthCheck(Neo4jClientHealthCheckOptions options)
     {
-        Guard.ThrowIfNull(options);
-        _options = options;
+        _options = Guard.ThrowIfNull(options);
     }
 
     ///<inheritdoc/>

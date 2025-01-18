@@ -8,7 +8,7 @@ public class RegistrationTests
     public async Task add_health_check_when_properly_configured()
     {
         var services = new ServiceCollection();
-        var boltClient = new BoltGraphClient("bolt://localhost:7687", "neo4j", "P@ssword");
+        var boltClient = new BoltGraphClient("bolt://localhost:7687", "neo4j", "neo4j");
         await boltClient.ConnectAsync();
         await boltClient.Cypher
             .Create("(a:Test{Name: $param})")
@@ -32,7 +32,7 @@ public class RegistrationTests
     public async Task add_health_check_when_an_instance_of_bolt_graph_client_is_passed_to_options_class()
     {
         var services = new ServiceCollection();
-        var boltClient = new BoltGraphClient("bolt://localhost:7687", "neo4j", "P@ssword");
+        var boltClient = new BoltGraphClient("bolt://localhost:7687", "neo4j", "neo4j");
         await boltClient.ConnectAsync();
         await boltClient.Cypher
             .Create("(a:Test{Name: $param})")
@@ -58,7 +58,7 @@ public class RegistrationTests
     public async Task add_health_check_when_bolt_graph_client_configured_from_options_class()
     {
         var services = new ServiceCollection();
-        var healthCheckOptions = new Neo4jClientHealthCheckOptions("bolt://localhost:7687", "neo4j", "P@ssword", null);
+        var healthCheckOptions = new Neo4jClientHealthCheckOptions("bolt://localhost:7687", "neo4j", "neo4j", null);
 
         services.AddHealthChecks()
             .AddNeo4jClient(healthCheckOptions);

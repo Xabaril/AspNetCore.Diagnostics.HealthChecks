@@ -60,7 +60,7 @@ public class Neo4jClientHealthCheckOptions
     /// <summary>
     /// Creates instance of <see cref="Neo4jClientHealthCheckOptions"/>.
     /// </summary>
-    /// <param name="host">Host that will be used to connect to the database.</param>
+    /// <param name="host">Host that will be used to connect to the database. example: bolt://localhost:7687</param>
     /// <param name="username">Username that will be used to connect to the database.</param>
     /// <param name="password">Password that will be used to connect to the database.</param>
     /// <param name="realm">realm that will be used to connect to the database.</param>

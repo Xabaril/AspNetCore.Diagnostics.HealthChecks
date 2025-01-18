@@ -34,7 +34,7 @@ public static class SolrHealthCheckBuilderExtensions
         TimeSpan? timeout = default)
     {
         var options = new SolrOptions();
-        options.UseServer(solrUri, solrCore, timeout: null);
+        options.UseServer(solrUri, solrCore, username: null, password: null, timeout: null);
 
         return builder.Add(new HealthCheckRegistration(
             name ?? NAME,

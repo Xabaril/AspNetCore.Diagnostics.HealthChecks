@@ -18,5 +18,5 @@ var graphClient = new BoltGraphClient("bolt://localhost:7687", "neo4j", "neo4j")
 services.AddSingleton<IGraphClient>(graphClient);
 
 services.AddHealthChecks()
-  .AddNeo4jClient(_ => _.GetRequiredService<IGraphClient>());
+  .AddNeo4jClient(sp => sp.GetRequiredService<IGraphClient>());
 ```

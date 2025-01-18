@@ -13,7 +13,7 @@ public static class Neo4jClientHealthCheckBuilderExtensions
 
     public static IHealthChecksBuilder AddNeo4jClient(
         this IHealthChecksBuilder builder,
-        Func<IServiceProvider, IBoltGraphClient> graphClientFactory,
+        Func<IServiceProvider, IGraphClient> graphClientFactory,
         string? name = default,
         HealthStatus? failureStatus = default,
         IEnumerable<string>? tags = default,

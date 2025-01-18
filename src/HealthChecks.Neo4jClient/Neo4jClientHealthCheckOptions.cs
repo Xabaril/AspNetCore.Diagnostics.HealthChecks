@@ -11,25 +11,25 @@ public class Neo4jClientHealthCheckOptions
     /// <summary>
     /// Client for connecting to a database.
     /// </summary>
-    public IBoltGraphClient? GraphClient { get; set; }
-
+    public IGraphClient? GraphClient { get; set; }
+    
     /// <summary>
     /// Host that will be used to connect to the database.
     /// </summary>
     public string? Host { get; set; }
 
     /// <summary>
-    /// Username that will be used to connect to the database using the <see cref="IBoltGraphClient"/>.
+    /// Username that will be used to connect to the database using the <see cref="IGraphClient"/>.
     /// </summary>
     public string? Username { get; set; }
 
     /// <summary>
-    /// Password that will be used to connect to the database using the <see cref="IBoltGraphClient"/>.
+    /// Password that will be used to connect to the database using the <see cref="IGraphClient"/>.
     /// </summary>
     public string? Password { get; set; }
 
     /// <summary>
-    /// Realm that will be used to connect to the database using the <see cref="IBoltGraphClient"/>.
+    /// Realm that will be used to connect to the database using the <see cref="IGraphClient"/>.
     /// </summary>
     public string? Realm { get; set; }
 
@@ -52,7 +52,7 @@ public class Neo4jClientHealthCheckOptions
     /// Creates instance of <see cref="Neo4jClientHealthCheckOptions"/>.
     /// </summary>
     /// <param name="graphClient">The client for connecting to the database.</param>
-    public Neo4jClientHealthCheckOptions(IBoltGraphClient graphClient)
+    public Neo4jClientHealthCheckOptions(IGraphClient graphClient)
     {
         GraphClient = Guard.ThrowIfNull(graphClient);
     }

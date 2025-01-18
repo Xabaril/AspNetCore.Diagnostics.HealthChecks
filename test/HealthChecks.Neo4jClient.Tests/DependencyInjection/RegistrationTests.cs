@@ -18,7 +18,7 @@ public class RegistrationTests
         services.AddSingleton(boltClient);
 
         services.AddHealthChecks()
-            .AddNeo4jClient(f => f.GetRequiredService<IBoltGraphClient>());
+            .AddNeo4jClient(f => f.GetRequiredService<IGraphClient>());
 
         await using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();

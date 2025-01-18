@@ -12,7 +12,7 @@ public class Neo4jClientHealthCheckOptions
     /// Client for connecting to a database.
     /// </summary>
     public IGraphClient? GraphClient { get; set; }
-    
+
     /// <summary>
     /// Host that will be used to connect to the database.
     /// </summary>

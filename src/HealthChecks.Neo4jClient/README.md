@@ -1,6 +1,8 @@
 # Neo4j Health check
 
-This healthCheck checks the status of a database in a neo4j DBMS using the BOLT protocol to establish a connection
+This health сheck verifies the status of a database in a neo4j DBMS using the BOLT protocol to establish a connection
+
+This library uses the [Neo4jClient](https://www.nuget.org/packages/Neo4jClient/) package to connect to the database
 
 # Sample
 

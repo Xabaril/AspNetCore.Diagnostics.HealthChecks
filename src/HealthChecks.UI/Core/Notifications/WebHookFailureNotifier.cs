@@ -84,7 +84,7 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
                 }
 
                 if (absoluteUri == null)
-                    throw new InvalidOperationException("Could not get absolute uri");
+                    throw new InvalidOperationException($"Could not get absolute uri from \"{webHook.Uri}\" - webhook name: {webHook.Name}");
 
                 await SendRequestAsync(absoluteUri, webHook.Name, payload).ConfigureAwait(false);
             }

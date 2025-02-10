@@ -136,7 +136,7 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
         }
     }
 
-    private TelemetryClient GetOrCreateTelemetryClient()
+    internal virtual TelemetryClient GetOrCreateTelemetryClient()
     {
         if (_client == null)
         {

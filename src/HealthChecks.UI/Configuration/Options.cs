@@ -3,6 +3,7 @@ namespace HealthChecks.UI.Configuration;
 public class Options
 {
     internal ICollection<string> CustomStylesheets { get; } = new List<string>();
+    internal ICollection<string> CustomJavaScripts { get; } = new List<string>();
     public string UIPath { get; set; } = "/healthchecks-ui";
     public string ApiPath { get; set; } = "/healthchecks-api";
     public bool UseRelativeApiPath = true;
@@ -28,6 +29,25 @@ public class Options
         }
 
         CustomStylesheets.Add(stylesheetPath);
+
+        return this;
+    }
+
+    public Options AddCustomJavaScript(string path)
+    {
+        string javaScriptPath = path;
+
+        if (!Path.IsPathFullyQualified(javaScriptPath))
+        {
+            javaScriptPath = Path.Combine(Environment.CurrentDirectory, path);
+        }
+
+        if (!File.Exists(javaScriptPath))
+        {
+            throw new Exception($"Could not find javascript at path {javaScriptPath}");
+        }
+
+        CustomJavaScripts.Add(javaScriptPath);
 
         return this;
     }

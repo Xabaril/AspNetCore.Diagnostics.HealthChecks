@@ -84,7 +84,7 @@ internal static class UIResourceExtensions
             (s =>
             {
                 var linkHref = options.UseRelativeResourcesPath ? s.ResourcePath.AsRelativeResource() : s.ResourcePath;
-                return $"<script type='text/javascript' src='{linkHref}'></script>/>";
+                return $"<script type='text/javascript' src='{linkHref}'></script>";
 
             });
 

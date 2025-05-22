@@ -77,6 +77,8 @@
     <PackageVersion Include="Npgsql.DependencyInjection" Version="8.0.1" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.InMemory" Version="1.12.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
     <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="2.19.190" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 using HealthChecks.UI.Core;
 
 namespace HealthChecks.UI.Data;
@@ -15,4 +17,17 @@ public class HealthCheckExecutionEntry
     public TimeSpan Duration { get; set; }
 
     public List<string>? Tags { get; set; }
+
+    // Ek alanlar 
+    [Column("Data", TypeName = "nvarchar(max)")]
+    public string DataJson { get; set; } = string.Empty;
+
+    [NotMapped]
+    public Dictionary<string, object>? Data
+    {
+        get => string.IsNullOrEmpty(DataJson)
+            ? new Dictionary<string, object>()
+            : JsonSerializer.Deserialize<Dictionary<string, object>>(DataJson);
+        set => DataJson = JsonSerializer.Serialize(value);
+    }
 }

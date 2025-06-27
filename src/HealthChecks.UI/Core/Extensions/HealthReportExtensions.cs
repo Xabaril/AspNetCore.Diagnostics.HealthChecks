@@ -16,7 +16,9 @@ public static class HealthReportExtensions
                     Status = item.Value.Status,
                     Description = item.Value.Description,
                     Duration = item.Value.Duration,
-                    Tags = item.Value.Tags?.ToList() ?? null
+                    Tags = item.Value.Tags?.ToList() ?? null,
+                    Data = item.Value.Data?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+                        ?? new Dictionary<string, object>()
                 };
             }).ToList();
     }

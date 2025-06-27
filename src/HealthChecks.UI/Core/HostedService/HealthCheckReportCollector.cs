@@ -258,6 +258,7 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
                     existing.Description = item.Description;
                     existing.Duration = item.Duration;
                     existing.Tags = item.Tags;
+                    existing.Data = item.Data;
                 }
                 else
                 {

@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Aws.Sns/HealthChecks.Aws.Sns.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Aws.Sns
+      PACKAGE_NAME: Toltek.HealthChecks.Aws.Sns

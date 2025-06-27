@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.ArangoDb/HealthChecks.ArangoDb.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.ArangoDb
+      PACKAGE_NAME: Toltek.HealthChecks.ArangoDb

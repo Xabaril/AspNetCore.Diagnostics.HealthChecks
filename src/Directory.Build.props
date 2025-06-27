@@ -1,12 +1,8 @@
 <Project>
 
   <Import Project="..\Directory.Build.props" />
+
   <PropertyGroup>
-    <PackageFolder>C:\Toltek\TLibrary\Platform-v2\</PackageFolder>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>C:\Toltek\TLibrary\Platform-v2</PackageOutputPath>
     <PackageId>Toltek.$(MSBuildProjectName)</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

@@ -7,10 +7,10 @@
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
-    <Authors>Xabaril Contributors</Authors>
-    <Company>Xabaril</Company>
+    <PackageProjectUrl>https://github.com/yavuzcosar/AspNetCore.Diagnostics.HealthChecks</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yavuzcosar/AspNetCore.Diagnostics.HealthChecks</RepositoryUrl>
+    <Authors>yavuzcosar Contributors</Authors>
+    <Company>yavuzcosar</Company>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>

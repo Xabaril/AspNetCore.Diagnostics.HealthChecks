@@ -13,7 +13,6 @@
     <NoWarn>$(NoWarn);1591;IDISP013;</NoWarn>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Roslynator.Analyzers">
       <PrivateAssets>all</PrivateAssets>

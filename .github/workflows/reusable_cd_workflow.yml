@@ -30,5 +30,5 @@ jobs:
         run: dotnet build --no-restore ${{inputs.PROJECT_PATH}} -c ${{inputs.BUILD_CONFIG}}
       - name: Pack
         run: dotnet pack --no-build ${{inputs.PROJECT_PATH}} -c ${{inputs.BUILD_CONFIG}} -o ./artifacts
-      - name: Publish
-        run: dotnet nuget push ./artifacts/${{inputs.PACKAGE_NAME}}.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push ./artifacts/${{inputs.PACKAGE_NAME}}.*.nupkg -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/yavuzcosar/index.json --skip-duplicate

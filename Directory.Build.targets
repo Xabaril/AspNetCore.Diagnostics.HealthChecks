@@ -6,5 +6,8 @@
     <Compile Include="../ApiMarker.cs" Link="ApiMarker.cs" Visible="false" />
     <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" Visible="false" />
   </ItemGroup>
-
+  <Target Name="CopyPackage" AfterTargets="Pack" Condition="'$(GeneratePackageOnBuild)' == 'true'">
+    <Message Text="📦 Copying package to $(PackageOutputPath)" Importance="High" />
+    <Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(PackageOutputPath)" />
+  </Target>
 </Project>

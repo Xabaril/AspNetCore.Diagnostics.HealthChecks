@@ -5,7 +5,8 @@
     <PackageFolder>C:\Toltek\TLibrary\Platform-v2\</PackageFolder>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>C:\Toltek\TLibrary\Platform-v2</PackageOutputPath>
     <PackageId>Toltek.$(MSBuildProjectName)</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -41,7 +42,5 @@
   <ItemGroup Condition="!$(MSBuildProjectName.StartsWith('HealthChecks.UI')) OR '$(MSBuildProjectName)' == 'HealthChecks.UI.Core'">
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
-  <Target Name="CopyPackage" AfterTargets="Pack" Condition="'$(GeneratePackageOnBuild)' == 'true'" >
-    <Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(PackageFolder)" />
-  </Target>
+
 </Project>

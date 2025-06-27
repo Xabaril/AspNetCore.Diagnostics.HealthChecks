@@ -14,4 +14,4 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX_PREFIX: rc2
       PROJECT_PATH: ./src/HealthChecks.Milvus/HealthChecks.Milvus.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Milvus
+      PACKAGE_NAME: Toltek.HealthChecks.Milvus

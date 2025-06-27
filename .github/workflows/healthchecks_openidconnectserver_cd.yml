@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.OpenIdConnectServer/HealthChecks.OpenIdConnectServer.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.OpenIdConnectServer
+      PACKAGE_NAME: Toltek.HealthChecks.OpenIdConnectServer

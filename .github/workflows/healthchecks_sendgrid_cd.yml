@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.SendGrid/HealthChecks.SendGrid.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.SendGrid
+      PACKAGE_NAME: Toltek.HealthChecks.SendGrid

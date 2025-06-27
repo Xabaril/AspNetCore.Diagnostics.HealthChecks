@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.AzureDigitalTwin/HealthChecks.AzureDigitalTwin.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.AzureDigitalTwin
+      PACKAGE_NAME: Toltek.HealthChecks.AzureDigitalTwin

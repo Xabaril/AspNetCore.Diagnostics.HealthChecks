@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Publisher.Prometheus/HealthChecks.Publisher.Prometheus.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Publisher.Prometheus
+      PACKAGE_NAME: Toltek.HealthChecks.Publisher.Prometheus

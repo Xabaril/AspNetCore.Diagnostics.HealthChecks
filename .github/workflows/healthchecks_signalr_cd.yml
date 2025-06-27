@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.SignalR/HealthChecks.SignalR.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.SignalR
+      PACKAGE_NAME: Toltek.HealthChecks.SignalR

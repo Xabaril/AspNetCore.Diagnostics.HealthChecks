@@ -14,4 +14,4 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX_PREFIX: rc1
       PROJECT_PATH: ./src/HealthChecks.EventStore.gRPC/HealthChecks.EventStore.gRPC.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.EventStore.gRPC
+      PACKAGE_NAME: Toltek.HealthChecks.EventStore.gRPC

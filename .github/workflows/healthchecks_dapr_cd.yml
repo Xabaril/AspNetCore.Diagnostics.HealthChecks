@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Dapr/HealthChecks.Dapr.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Dapr
+      PACKAGE_NAME: Toltek.HealthChecks.Dapr

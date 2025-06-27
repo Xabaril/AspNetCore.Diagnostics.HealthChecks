@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Oracle/HealthChecks.Oracle.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Oracle
+      PACKAGE_NAME: Toltek.HealthChecks.Oracle

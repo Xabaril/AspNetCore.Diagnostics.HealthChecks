@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Hangfire/HealthChecks.Hangfire.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Hangfire
+      PACKAGE_NAME: Toltek.HealthChecks.Hangfire

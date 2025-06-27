@@ -14,4 +14,4 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX_PREFIX: rc1
       PROJECT_PATH: ./src/HealthChecks.MongoDb/HealthChecks.MongoDb.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.MongoDb
+      PACKAGE_NAME: Toltek.HealthChecks.MongoDb

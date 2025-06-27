@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.ClickHouse/HealthChecks.ClickHouse.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.ClickHouse
+      PACKAGE_NAME: Toltek.HealthChecks.ClickHouse

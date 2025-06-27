@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Solr/HealthChecks.Solr.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Solr
+      PACKAGE_NAME: Toltek.HealthChecks.Solr

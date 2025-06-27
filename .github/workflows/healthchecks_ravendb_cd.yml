@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.RavenDB/HealthChecks.RavenDB.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.RavenDB
+      PACKAGE_NAME: Toltek.HealthChecks.RavenDB

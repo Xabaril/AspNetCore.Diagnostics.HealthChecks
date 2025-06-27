@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Elasticsearch/HealthChecks.Elasticsearch.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Elasticsearch
+      PACKAGE_NAME: Toltek.HealthChecks.Elasticsearch

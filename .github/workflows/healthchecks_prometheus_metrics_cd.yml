@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Prometheus.Metrics/HealthChecks.Prometheus.Metrics.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Prometheus.Metrics
+      PACKAGE_NAME: Toltek.HealthChecks.Prometheus.Metrics

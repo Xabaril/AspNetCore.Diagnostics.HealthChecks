@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Gcp.CloudFirestore/HealthChecks.Gcp.CloudFirestore.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Gcp.CloudFirestore
+      PACKAGE_NAME: Toltek.HealthChecks.Gcp.CloudFirestore

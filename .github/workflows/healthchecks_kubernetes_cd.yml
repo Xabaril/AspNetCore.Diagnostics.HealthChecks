@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Kubernetes/HealthChecks.Kubernetes.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Kubernetes
+      PACKAGE_NAME: Toltek.HealthChecks.Kubernetes

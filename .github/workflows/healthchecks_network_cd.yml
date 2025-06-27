@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Network/HealthChecks.Network.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Network
+      PACKAGE_NAME: Toltek.HealthChecks.Network

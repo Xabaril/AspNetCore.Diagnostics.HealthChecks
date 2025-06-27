@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Publisher.Seq/HealthChecks.Publisher.Seq.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Publisher.Seq
+      PACKAGE_NAME: Toltek.HealthChecks.Publisher.Seq

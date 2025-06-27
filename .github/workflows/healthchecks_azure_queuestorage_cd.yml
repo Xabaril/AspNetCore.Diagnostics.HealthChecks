@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Azure.Storage.Queues/HealthChecks.Azure.Storage.Queues.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Azure.Storage.Queues
+      PACKAGE_NAME: Toltek.HealthChecks.Azure.Storage.Queues

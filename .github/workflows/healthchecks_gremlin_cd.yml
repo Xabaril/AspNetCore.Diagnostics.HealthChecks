@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Gremlin/HealthChecks.Gremlin.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Gremlin
+      PACKAGE_NAME: Toltek.HealthChecks.Gremlin

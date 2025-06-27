@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Publisher.Datadog/HealthChecks.Publisher.Datadog.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Publisher.Datadog
+      PACKAGE_NAME: Toltek.HealthChecks.Publisher.Datadog

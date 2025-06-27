@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.MySql/HealthChecks.MySql.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.MySql
+      PACKAGE_NAME: Toltek.HealthChecks.MySql

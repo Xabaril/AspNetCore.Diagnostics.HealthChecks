@@ -14,4 +14,4 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX_PREFIX: rc2
       PROJECT_PATH: ./src/HealthChecks.CosmosDb/HealthChecks.CosmosDb.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.CosmosDb
+      PACKAGE_NAME: Toltek.HealthChecks.CosmosDb

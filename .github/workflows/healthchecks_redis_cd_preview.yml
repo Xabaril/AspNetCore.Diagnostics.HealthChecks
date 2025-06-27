@@ -14,4 +14,4 @@ jobs:
       BUILD_CONFIG: Release
       VERSION_SUFFIX_PREFIX: rc1
       PROJECT_PATH: ./src/HealthChecks.Redis/HealthChecks.Redis.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Redis
+      PACKAGE_NAME: Toltek.HealthChecks.Redis

@@ -13,4 +13,4 @@ jobs:
     with:
       BUILD_CONFIG: Release
       PROJECT_PATH: ./src/HealthChecks.Azure.Data.Tables/HealthChecks.Azure.Data.Tables.csproj
-      PACKAGE_NAME: AspNetCore.HealthChecks.Azure.Data.Tables
+      PACKAGE_NAME: Toltek.HealthChecks.Azure.Data.Tables

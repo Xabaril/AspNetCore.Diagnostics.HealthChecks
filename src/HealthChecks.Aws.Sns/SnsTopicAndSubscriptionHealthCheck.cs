@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -7,6 +8,11 @@ namespace HealthChecks.Aws.Sns;
 public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 {
     private readonly SnsOptions _snsOptions;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                { "health_check.name", nameof(SnsTopicAndSubscriptionHealthCheck) },
+                { "health_check.task", "ready" },
+                { "messaging.system", "aws.sns" }
+    };
 
     public SnsTopicAndSubscriptionHealthCheck(SnsOptions snsOptions)
     {
@@ -16,12 +22,16 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var currentTopic = "";
+        var currentSubscription = "";
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             using var client = CreateSnsClient();
 
             foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
             {
+                currentTopic = topicName;
                 var topic = await client.FindTopicAsync(topicName).ConfigureAwait(false)
                     ?? throw new NotFoundException($"Topic {topicName} does not exist.");
 
@@ -36,6 +46,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
                 foreach (string? subscription in subscriptions)
                 {
+                    currentSubscription = subscription;
                     if (!subscriptionsArn.Contains(subscription))
                     {
                         throw new NotFoundException($"Subscription {subscription} in Topic {topicName} does not exist.");
@@ -43,11 +54,13 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            checkDetails.Add("messaging.destination.name", currentTopic);
+            checkDetails.Add("messaging.destination.subscription.name", currentSubscription);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 

@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Net;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -28,6 +27,7 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
             if (_producer == null)

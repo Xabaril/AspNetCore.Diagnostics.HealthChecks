@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NATS.Client.Core;
 
@@ -6,21 +7,33 @@ namespace HealthChecks.Nats;
 /// <summary>
 /// Health check for Nats Server.
 /// </summary>
-public sealed class NatsHealthCheck(INatsConnection connection) : IHealthCheck
+public class NatsHealthCheck : IHealthCheck
 {
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default) =>
-        await TryConnectAsync(connection).ConfigureAwait(false);
+    private readonly INatsConnection _natsConnection;
 
-    private static async Task<HealthCheckResult> TryConnectAsync(INatsConnection natsConnection)
+    public NatsHealthCheck(INatsConnection connection)
     {
+        _natsConnection = connection;
+    }
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                { "health_check.name", nameof(NatsHealthCheck) },
+                { "health_check.task", "ready" },
+                { "messaging.system", "nats" }
+    };
+
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        Dictionary<string, object> checkDetails = _baseCheckDetails;
         try
         {
-            await natsConnection.ConnectAsync().ConfigureAwait(false);
-            return HealthCheckResult.Healthy();
+            checkDetails.Add("server.address", _natsConnection.ServerInfo?.Host ?? "");
+            checkDetails.Add("server.port", _natsConnection.ServerInfo?.Port ?? 0);
+            await _natsConnection.ConnectAsync().ConfigureAwait(false);
+            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return HealthCheckResult.Unhealthy();
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
         }
     }
 }

@@ -184,4 +184,23 @@ public class azure_service_bus_subscription_registration_should
         var exception = Should.Throw<ArgumentException>(() => registration.Factory(serviceProvider));
         exception.ParamName.ShouldBe("options");
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("azuresubscriptioncheck")]
+    public void add_health_check_with_namespace_when_properly_configured(string? name)
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusSubscriptionWithNamespace("cnn", "topicName", "subscriptionName", name);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe(name ?? "azuresubscription");
+        check.ShouldBeOfType<AzureServiceBusSubscriptionHealthCheck>();
+    }
 }

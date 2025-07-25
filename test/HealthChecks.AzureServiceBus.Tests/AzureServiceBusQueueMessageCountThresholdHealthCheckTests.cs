@@ -1,5 +1,6 @@
 using Azure;
 using Azure.Core;
+using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
@@ -29,16 +30,19 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         _tokenCredential = Substitute.For<TokenCredential>();
 
         _clientProvider.CreateManagementClient(ConnectionString).Returns(_serviceBusAdministrationClient);
-        _clientProvider.CreateManagementClient(FullyQualifiedName, _tokenCredential).Returns(_serviceBusAdministrationClient);
+        _clientProvider.CreateManagementClient(FullyQualifiedName, Arg.Any<TokenCredential>()).Returns(_serviceBusAdministrationClient);
     }
 
-    [Fact]
-    public async Task can_create_client_with_connection_string()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task can_create_client_with_connection_string(bool configureCredential)
     {
         using var tokenSource = new CancellationTokenSource();
 
         await ExecuteHealthCheckAsync(
             QueueName,
+            configureCredential,
             connectionString: ConnectionString,
             cancellationToken: tokenSource.Token);
 
@@ -76,19 +80,22 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
             .GetQueueRuntimePropertiesAsync(otherQueueName, tokenSource.Token);
     }
 
-    [Fact]
-    public async Task can_create_client_with_fully_qualified_endpoint()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task can_create_client_with_fully_qualified_endpoint(bool configureCredential)
     {
         using var tokenSource = new CancellationTokenSource();
 
         await ExecuteHealthCheckAsync(
             QueueName,
+            configureCredential,
             fullyQualifiedName: FullyQualifiedName,
             cancellationToken: tokenSource.Token);
 
         _clientProvider
             .Received(1)
-            .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+            .CreateManagementClient(FullyQualifiedName, configureCredential ? _tokenCredential : Arg.Any<DefaultAzureCredential>());
     }
 
     [Fact]
@@ -109,7 +116,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
 
         _clientProvider
             .Received(1)
-            .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+            .CreateManagementClient(FullyQualifiedName, Arg.Any<DefaultAzureCredential>());
 
         await _serviceBusAdministrationClient
             .Received(1)
@@ -224,6 +231,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
 
     private Task<HealthCheckResult> ExecuteHealthCheckAsync(
         string queueName,
+        bool configureCredential = false,
         string? connectionString = null,
         string? fullyQualifiedName = null,
         AzureServiceBusQueueMessagesCountThreshold? activeMessagesCountThreshold = null,
@@ -234,7 +242,7 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
         {
             ConnectionString = connectionString,
             FullyQualifiedNamespace = fullyQualifiedName,
-            Credential = fullyQualifiedName is null ? null : _tokenCredential,
+            Credential = configureCredential ? _tokenCredential : null,
             ActiveMessages = activeMessagesCountThreshold,
             DeadLetterMessages = deadLetterMessagesCountThreshold,
         };
@@ -246,4 +254,9 @@ public class azureservicebusqueuemessagecountthresholdhealthcheck_should
 
         return healthCheck.CheckHealthAsync(context, cancellationToken);
     }
+
+    private TokenCredential TokenCredentialToAssert(bool configureCredential) =>
+        configureCredential
+            ? _tokenCredential
+            : Arg.Any<DefaultAzureCredential>();
 }

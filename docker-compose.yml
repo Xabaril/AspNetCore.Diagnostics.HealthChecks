@@ -67,6 +67,10 @@ services:
         image: rabbitmq
         ports:
           - ${RABBITMQ_PORT}:5672
+    activemq:
+        image: apache/activemq-artemis
+        ports:
+          - ${ACTIVEMQ_PORT}:61616
     idsvr:
         image: nakah/identityserver4
         ports:

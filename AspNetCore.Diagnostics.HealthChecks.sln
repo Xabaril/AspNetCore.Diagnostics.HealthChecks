@@ -324,9 +324,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ClickHouse", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ClickHouse.Tests", "test\HealthChecks.ClickHouse.Tests\HealthChecks.ClickHouse.Tests.csproj", "{2FB5CB9F-F870-48DE-BD1D-306AE86A67CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.Activemq", "src\HealthChecks.ActiveMq\HealthChecks.Activemq.csproj", "{C3B5AEE5-EA5E-489A-35BE-3C54BA398968}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ActiveMq", "src\HealthChecks.ActiveMq\HealthChecks.ActiveMQ.csproj", "{C3B5AEE5-EA5E-489A-35BE-3C54BA398968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ActiveMq.Tests", "test\HealthChecks.ActiveMQ.Tests\HealthChecks.ActiveMq.Tests.csproj", "{DA27FB88-8BE8-708C-96EB-A48BD08D0B88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthChecks.ActiveMQ.Tests", "test\HealthChecks.ActiveMQ.Tests\HealthChecks.ActiveMQ.Tests.csproj", "{DA27FB88-8BE8-708C-96EB-A48BD08D0B88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

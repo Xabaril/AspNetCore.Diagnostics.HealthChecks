@@ -7,6 +7,8 @@
     <VersionPrefix>$(HealthCheckUI)</VersionPrefix>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);RCS1090</WarningsNotAsErrors>
+    <PackageId>Mozaik.HealthChecks.UI</PackageId>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -21,6 +21,7 @@ internal class UIEndpointsResourceMapper
         var resources = _reader.UIResources;
         var ui = resources.GetMainUI(options);
         var styleSheets = ui.GetCustomStylesheets(options);
+        var javaScripts = ui.GetCustomJavaScripts(options);
 
         foreach (var resource in resources)
         {
@@ -52,6 +53,15 @@ internal class UIEndpointsResourceMapper
             endpoints.Add(builder.MapGet(item.ResourcePath, async context =>
             {
                 context.Response.ContentType = "text/css";
+                await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length).ConfigureAwait(false);
+            }));
+        }
+
+        foreach (var item in javaScripts)
+        {
+            endpoints.Add(builder.MapGet(item.ResourcePath, async context =>
+            {
+                context.Response.ContentType = "text/javascript";
                 await context.Response.Body.WriteAsync(item.Content, 0, item.Content.Length).ConfigureAwait(false);
             }));
         }

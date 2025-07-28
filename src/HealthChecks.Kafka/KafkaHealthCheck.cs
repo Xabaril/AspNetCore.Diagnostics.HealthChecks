@@ -13,7 +13,6 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
     private readonly KafkaHealthCheckOptions _options;
     private IProducer<string, string>? _producer;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(KafkaHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "kafka" }
     };

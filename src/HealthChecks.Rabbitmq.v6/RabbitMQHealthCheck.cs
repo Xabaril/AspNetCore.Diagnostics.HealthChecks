@@ -15,7 +15,6 @@ public class RabbitMQHealthCheck : IHealthCheck
     private IConnection? _connection;
     private readonly RabbitMQHealthCheckOptions _options;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(RabbitMQHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "rabbitmq" }
     };

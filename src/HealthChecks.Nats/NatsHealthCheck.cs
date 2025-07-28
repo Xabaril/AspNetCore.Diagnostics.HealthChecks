@@ -16,7 +16,6 @@ public class NatsHealthCheck : IHealthCheck
         _natsConnection = connection;
     }
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(NatsHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "nats" }
     };

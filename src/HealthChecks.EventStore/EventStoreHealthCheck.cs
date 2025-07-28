@@ -15,7 +15,6 @@ public class EventStoreHealthCheck : IHealthCheck
     private readonly string? _login;
     private readonly string? _password;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(EventStoreHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "eventstore" },
                     { "network.transport", "tcp" }

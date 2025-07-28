@@ -11,7 +11,6 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
 {
     private readonly EventStoreClient _client;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(EventStoreHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "eventstore" },
                     { "network.transport", "tcp" }

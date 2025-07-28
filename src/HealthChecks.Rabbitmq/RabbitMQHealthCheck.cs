@@ -13,7 +13,6 @@ public class RabbitMQHealthCheck : IHealthCheck
     private readonly IServiceProvider? _serviceProvider;
     private readonly Func<IServiceProvider, Task<IConnection>>? _factory;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(RabbitMQHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "rabbitmq" }
     };

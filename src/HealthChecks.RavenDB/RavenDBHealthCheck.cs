@@ -28,7 +28,6 @@ public class RavenDBHealthCheck : IHealthCheck
 
     private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> _stores = new();
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(RavenDBHealthCheck) },
                     { "db.system.name", "ravendb" },
                     { "network.transport", "tcp" }
     };

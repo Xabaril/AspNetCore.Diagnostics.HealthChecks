@@ -8,7 +8,6 @@ public sealed class AzureEventHubHealthCheck : IHealthCheck
 {
     private readonly EventHubProducerClient _client;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(AzureEventHubHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "eventhubs" }
     };

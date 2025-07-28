@@ -12,7 +12,6 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
     private readonly CosmosClient _cosmosClient;
     private readonly AzureCosmosDbHealthCheckOptions _options;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(AzureCosmosDbHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "azure.cosmosdb" },
                     { "network.transport", "tcp" }

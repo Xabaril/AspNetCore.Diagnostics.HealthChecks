@@ -12,7 +12,6 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
 #pragma warning restore IDISP008 // Don't assign member with injected and created disposables
     private readonly bool _ownsClient;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(InfluxDBHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "influxdb" },
                     { "network.transport", "tcp" }

@@ -9,7 +9,6 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 {
     private readonly SnsOptions _snsOptions;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(SnsTopicAndSubscriptionHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "aws.sns" }
     };

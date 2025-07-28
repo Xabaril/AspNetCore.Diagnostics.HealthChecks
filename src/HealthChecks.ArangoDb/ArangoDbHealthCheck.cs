@@ -10,7 +10,6 @@ public class ArangoDbHealthCheck : IHealthCheck
 {
     private readonly ArangoDbOptions _options;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(ArangoDbHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "arangodb" },
                     { "network.transport", "tcp" },

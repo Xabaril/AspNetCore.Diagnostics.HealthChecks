@@ -11,7 +11,6 @@ public class SurrealDbHealthCheck : IHealthCheck
 {
     private readonly ISurrealDbClient _client;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(SurrealDbHealthCheck) },
                 { "health_check.task", "ready" },
                 { "db.system.name", "surrealdb" }
     };

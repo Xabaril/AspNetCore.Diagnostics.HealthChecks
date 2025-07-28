@@ -7,7 +7,6 @@ public class CloudFirestoreHealthCheck : IHealthCheck
 {
     private readonly CloudFirestoreOptions _cloudFirestoreOptions;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(CloudFirestoreHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "gcp.firestore" },
                     { "network.transport", "tcp" }

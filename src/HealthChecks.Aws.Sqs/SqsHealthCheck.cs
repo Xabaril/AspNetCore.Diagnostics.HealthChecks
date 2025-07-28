@@ -8,7 +8,6 @@ public class SqsHealthCheck : IHealthCheck
 {
     private readonly SqsOptions _sqsOptions;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.name", nameof(SqsHealthCheck) },
                 { "health_check.task", "ready" },
                 { "messaging.system", "aws_sqs" }
     };

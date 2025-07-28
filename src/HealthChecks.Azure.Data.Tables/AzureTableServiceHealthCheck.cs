@@ -12,7 +12,6 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
     private readonly TableServiceClient _tableServiceClient;
     private readonly AzureTableServiceHealthCheckOptions _options;
     private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.name", nameof(AzureTableServiceHealthCheck) },
                     { "health_check.task", "ready" },
                     { "db.system.name", "azure.table" },
                     { "network.transport", "tcp" }

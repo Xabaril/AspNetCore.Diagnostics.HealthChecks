@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SurrealDb.Net;
 
@@ -10,10 +9,6 @@ namespace HealthChecks.SurrealDb;
 public class SurrealDbHealthCheck : IHealthCheck
 {
     private readonly ISurrealDbClient _client;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.task", "ready" },
-                { "db.system.name", "surrealdb" }
-    };
 
     public SurrealDbHealthCheck(ISurrealDbClient client)
     {
@@ -23,19 +18,23 @@ public class SurrealDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "surrealdb" }
+        };
+
         try
         {
             checkDetails.Add("server.address", _client.Uri.Host);
             checkDetails.Add("server.port", _client.Uri.Port);
 
             return await _client.Health(cancellationToken).ConfigureAwait(false)
-                ? HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails))
-                : HealthCheckResult.Unhealthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+                ? HealthCheckResult.Healthy(data: checkDetails)
+                : HealthCheckResult.Unhealthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

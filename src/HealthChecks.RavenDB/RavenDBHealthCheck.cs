@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
@@ -27,10 +26,6 @@ public class RavenDBHealthCheck : IHealthCheck
     private static readonly GetStatisticsOperation _legacyDatabaseHealthCheck = new();
 
     private static readonly ConcurrentDictionary<RavenDBOptions, DocumentStoreHolder> _stores = new();
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "db.system.name", "ravendb" },
-                    { "network.transport", "tcp" }
-    };
 
     public RavenDBHealthCheck(RavenDBOptions options)
     {
@@ -44,7 +39,11 @@ public class RavenDBHealthCheck : IHealthCheck
     [System.Diagnostics.CodeAnalysis.SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP004:Don't ignore created IDisposable", Justification = "DocumentStore instances are static")]
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "db.system.name", "ravendb" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             var value = _stores.GetOrAdd(_options, o =>
@@ -94,7 +93,7 @@ public class RavenDBHealthCheck : IHealthCheck
                 checkDetails.Add("db.namespace", _options.Database ?? "");
                 await CheckServerHealthAsync(store, cancellationToken).ConfigureAwait(false);
 
-                return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+                return HealthCheckResult.Healthy(data: checkDetails);
             }
 
             try
@@ -111,16 +110,16 @@ public class RavenDBHealthCheck : IHealthCheck
                     await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                 }
 
-                return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+                return HealthCheckResult.Healthy(data: checkDetails);
             }
             catch (DatabaseDoesNotExistException)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, $"RavenDB does not contain '{_options.Database}' database.", data: new ReadOnlyDictionary<string, object>(checkDetails));
+                return new HealthCheckResult(context.Registration.FailureStatus, $"RavenDB does not contain '{_options.Database}' database.", data: checkDetails);
             }
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

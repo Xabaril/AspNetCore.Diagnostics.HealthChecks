@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -11,11 +10,6 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
 {
     private readonly TableServiceClient _tableServiceClient;
     private readonly AzureTableServiceHealthCheckOptions _options;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "ready" },
-                    { "db.system.name", "azure.table" },
-                    { "network.transport", "tcp" }
-    };
 
     /// <summary>
     /// Creates new instance of Azure Tables health check.
@@ -35,7 +29,12 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "azure.table" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             checkDetails.Add("server.address", _tableServiceClient.Uri.Host);
@@ -66,11 +65,11 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
                     .ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

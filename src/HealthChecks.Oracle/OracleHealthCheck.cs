@@ -25,9 +25,14 @@ public class OracleHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "oracle.db" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
-            Dictionary<string, object> checkDetails = _baseCheckDetails;
             using var connection = _options.Credential == null
                 ? new OracleConnection(_options.ConnectionString)
                 : new OracleConnection(_options.ConnectionString, _options.Credential);
@@ -48,7 +53,7 @@ public class OracleHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails, exception: ex);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NATS.Client.Core;
 
@@ -15,24 +14,24 @@ public class NatsHealthCheck : IHealthCheck
     {
         _natsConnection = connection;
     }
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.task", "ready" },
-                { "messaging.system", "nats" }
-    };
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "nats" }
+        };
+
         try
         {
             checkDetails.Add("server.address", _natsConnection.ServerInfo?.Host ?? "");
             checkDetails.Add("server.port", _natsConnection.ServerInfo?.Port ?? 0);
             await _natsConnection.ConnectAsync().ConfigureAwait(false);
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 
@@ -12,10 +11,6 @@ public class RabbitMQHealthCheck : IHealthCheck
     private readonly IConnection? _connection;
     private readonly IServiceProvider? _serviceProvider;
     private readonly Func<IServiceProvider, Task<IConnection>>? _factory;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.task", "ready" },
-                { "messaging.system", "rabbitmq" }
-    };
 
     public RabbitMQHealthCheck(IConnection connection)
     {
@@ -31,7 +26,11 @@ public class RabbitMQHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+                { "health_check.task", "ready" },
+                { "messaging.system", "rabbitmq" }
+        };
+
         try
         {
             var connection = _connection ?? await _factory!(_serviceProvider!).ConfigureAwait(false);
@@ -44,11 +43,11 @@ public class RabbitMQHealthCheck : IHealthCheck
 
             await using var model = await connection.CreateChannelAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

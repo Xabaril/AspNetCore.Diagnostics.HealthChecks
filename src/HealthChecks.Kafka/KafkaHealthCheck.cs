@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -12,10 +11,6 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
 {
     private readonly KafkaHealthCheckOptions _options;
     private IProducer<string, string>? _producer;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.task", "ready" },
-                { "messaging.system", "kafka" }
-    };
 
     public KafkaHealthCheck(KafkaHealthCheckOptions options)
     {
@@ -26,7 +21,11 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "kafka" }
+        };
+
         try
         {
             if (_producer == null)
@@ -45,14 +44,14 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
 
             if (result.Status == PersistenceStatus.NotPersisted)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.", data: new ReadOnlyDictionary<string, object>(checkDetails));
+                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.", data: checkDetails);
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

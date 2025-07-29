@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.Gcp.CloudFirestore;
@@ -6,11 +5,6 @@ namespace HealthChecks.Gcp.CloudFirestore;
 public class CloudFirestoreHealthCheck : IHealthCheck
 {
     private readonly CloudFirestoreOptions _cloudFirestoreOptions;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "ready" },
-                    { "db.system.name", "gcp.firestore" },
-                    { "network.transport", "tcp" }
-    };
 
     public CloudFirestoreHealthCheck(CloudFirestoreOptions cloudFirestoreOptions)
     {
@@ -20,7 +14,12 @@ public class CloudFirestoreHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "gcp.firestore" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             checkDetails.Add("db.namespace", _cloudFirestoreOptions.FirestoreDatabase);
@@ -35,16 +34,16 @@ public class CloudFirestoreHealthCheck : IHealthCheck
                     return new HealthCheckResult(
                         context.Registration.FailureStatus,
                         description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'")),
-                        data: new ReadOnlyDictionary<string, object>(checkDetails)
+                        data: checkDetails
                     );
                 }
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

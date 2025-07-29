@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Amazon.SQS;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -7,10 +6,6 @@ namespace HealthChecks.Aws.Sqs;
 public class SqsHealthCheck : IHealthCheck
 {
     private readonly SqsOptions _sqsOptions;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.task", "ready" },
-                { "messaging.system", "aws_sqs" }
-    };
 
     public SqsHealthCheck(SqsOptions sqsOptions)
     {
@@ -21,7 +16,11 @@ public class SqsHealthCheck : IHealthCheck
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         var currentQueue = "";
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "aws.sqs" }
+        };
+
         try
         {
             using var client = CreateSqsClient();
@@ -31,12 +30,12 @@ public class SqsHealthCheck : IHealthCheck
                 _ = await client.GetQueueUrlAsync(queueName).ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
             checkDetails.Add("messaging.destination.name", currentQueue);
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

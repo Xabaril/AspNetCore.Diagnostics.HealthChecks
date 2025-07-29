@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
@@ -12,11 +11,6 @@ public class ElasticsearchHealthCheck : IHealthCheck
     private static readonly ConcurrentDictionary<string, ElasticsearchClient> _connections = new();
 
     private readonly ElasticsearchOptions _options;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "online" },
-                    { "db.system.name", "elasticsearch" },
-                    { "network.transport", "tcp" }
-    };
 
     public ElasticsearchHealthCheck(ElasticsearchOptions options)
     {
@@ -27,7 +21,12 @@ public class ElasticsearchHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+                    { "health_check.task", "online" },
+                    { "db.system.name", "elasticsearch" },
+                    { "network.transport", "tcp" }
+        };
+
         try
         {
             ElasticsearchClient? elasticsearchClient = null;
@@ -102,14 +101,14 @@ public class ElasticsearchHealthCheck : IHealthCheck
 
                 if (healthResponse.ApiCallDetails.HttpStatusCode != 200)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails));
+                    return new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails);
                 }
 
                 return healthResponse.Status switch
                 {
-                    Elastic.Clients.Elasticsearch.HealthStatus.Green => HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails)),
-                    Elastic.Clients.Elasticsearch.HealthStatus.Yellow => HealthCheckResult.Degraded(data: new ReadOnlyDictionary<string, object>(checkDetails)),
-                    _ => new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails))
+                    Elastic.Clients.Elasticsearch.HealthStatus.Green => HealthCheckResult.Healthy(data: checkDetails),
+                    Elastic.Clients.Elasticsearch.HealthStatus.Yellow => HealthCheckResult.Degraded(data: checkDetails),
+                    _ => new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails)
                 };
             }
 
@@ -118,12 +117,12 @@ public class ElasticsearchHealthCheck : IHealthCheck
             bool isSuccess = pingResult.ApiCallDetails.HttpStatusCode == 200;
 
             return isSuccess
-                ? HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails))
-                : new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails));
+                ? HealthCheckResult.Healthy(data: checkDetails)
+                : new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

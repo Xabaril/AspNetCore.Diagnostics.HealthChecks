@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -11,11 +10,6 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
 {
     private readonly CosmosClient _cosmosClient;
     private readonly AzureCosmosDbHealthCheckOptions _options;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "ready" },
-                    { "db.system.name", "azure.cosmosdb" },
-                    { "network.transport", "tcp" }
-    };
 
     /// <summary>
     /// Creates new instance of Azure Cosmos DB health check.
@@ -35,7 +29,12 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "azure.cosmosdb" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             checkDetails.Add("server.address", _cosmosClient.Endpoint.Host);
@@ -61,11 +60,11 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
                 }
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

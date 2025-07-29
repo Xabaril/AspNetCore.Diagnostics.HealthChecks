@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
@@ -11,11 +10,6 @@ namespace HealthChecks.NpgSql;
 public class NpgSqlHealthCheck : IHealthCheck
 {
     private readonly NpgSqlHealthCheckOptions _options;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "ready" },
-                    { "db.system.name", "npgsql" },
-                    { "network.transport", "tcp" }
-    };
 
     public NpgSqlHealthCheck(NpgSqlHealthCheckOptions options)
     {
@@ -27,7 +21,12 @@ public class NpgSqlHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "npgsql" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             await using var connection = _options.DataSource is not null
@@ -45,12 +44,12 @@ public class NpgSqlHealthCheck : IHealthCheck
             var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
             return _options.HealthCheckResultBuilder == null
-                ? HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails))
+                ? HealthCheckResult.Healthy(data: checkDetails)
                 : _options.HealthCheckResultBuilder(result);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, description: ex.Message, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, description: ex.Message, exception: ex, data: checkDetails);
         }
     }
 }

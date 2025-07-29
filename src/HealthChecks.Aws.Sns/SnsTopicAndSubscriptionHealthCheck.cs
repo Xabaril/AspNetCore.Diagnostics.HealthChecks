@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -8,10 +7,6 @@ namespace HealthChecks.Aws.Sns;
 public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 {
     private readonly SnsOptions _snsOptions;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                { "health_check.task", "ready" },
-                { "messaging.system", "aws.sns" }
-    };
 
     public SnsTopicAndSubscriptionHealthCheck(SnsOptions snsOptions)
     {
@@ -23,7 +18,11 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
     {
         var currentTopic = "";
         var currentSubscription = "";
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "aws.sns" }
+        };
+
         try
         {
             using var client = CreateSnsClient();
@@ -53,13 +52,13 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
                 }
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
             checkDetails.Add("messaging.destination.name", currentTopic);
             checkDetails.Add("messaging.destination.subscription.name", currentSubscription);
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

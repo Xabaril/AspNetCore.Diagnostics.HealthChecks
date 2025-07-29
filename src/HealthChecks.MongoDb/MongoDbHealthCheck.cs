@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -19,11 +18,6 @@ public class MongoDbHealthCheck : IHealthCheck
     private static readonly Lazy<BsonDocumentCommand<BsonDocument>> _command = new(() => new(BsonDocument.Parse("{ping:1}")));
     private readonly IMongoClient _client;
     private readonly string? _specifiedDatabase;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "ready" },
-                    { "db.system.name", "mongodb" },
-                    { "network.transport", "tcp" }
-    };
 
     public MongoDbHealthCheck(IMongoClient client, string? databaseName = default)
     {
@@ -34,7 +28,11 @@ public class MongoDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "mongodb" },
+            { "network.transport", "tcp" }
+        };
         try
         {
             checkDetails.Add("server.address", _client.Settings.Server.Host);
@@ -83,11 +81,11 @@ public class MongoDbHealthCheck : IHealthCheck
                 await cursor.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

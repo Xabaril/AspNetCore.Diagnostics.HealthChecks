@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySqlConnector;
 
@@ -10,11 +9,6 @@ namespace HealthChecks.MySql;
 public class MySqlHealthCheck : IHealthCheck
 {
     private readonly MySqlHealthCheckOptions _options;
-    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
-                    { "health_check.task", "ready" },
-                    { "db.system.name", "mysql" },
-                    { "network.transport", "tcp" }
-    };
 
     public MySqlHealthCheck(MySqlHealthCheckOptions options)
     {
@@ -24,7 +18,12 @@ public class MySqlHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Dictionary<string, object> checkDetails = _baseCheckDetails;
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "mysql" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             using var connection = _options.DataSource is not null ?
@@ -51,13 +50,13 @@ public class MySqlHealthCheck : IHealthCheck
             {
                 var success = await connection.PingAsync(cancellationToken).ConfigureAwait(false);
                 return _options.HealthCheckResultBuilder is null
-                    ? (success ? HealthCheckResult.Healthy(data: new ReadOnlyDictionary<string, object>(checkDetails)) : new HealthCheckResult(context.Registration.FailureStatus, data: new ReadOnlyDictionary<string, object>(checkDetails))) :
+                    ? (success ? HealthCheckResult.Healthy(data: checkDetails) : new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails)) :
                     _options.HealthCheckResultBuilder(success);
             }
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: new ReadOnlyDictionary<string, object>(checkDetails));
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

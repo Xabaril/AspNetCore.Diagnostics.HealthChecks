@@ -8,7 +8,7 @@ public class HealthChecksDbTests
     public async Task HealthChecksDb_Primitive_Test()
     {
         var services = new ServiceCollection();
-        services.AddDbContext<HealthChecksDb>(b => b.UseInMemoryDatabase(""));
+        services.AddDbContext<HealthChecksDb>(b => b.UseInMemoryDatabase("HealthChecksUI"));
         using var provider = services.BuildServiceProvider();
         var db = provider.GetRequiredService<HealthChecksDb>();
         (await db.Configurations.ToListAsync()).Count.ShouldBe(0);

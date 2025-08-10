@@ -1,7 +1,8 @@
-﻿namespace HealthChecks.UI.Client
+namespace HealthChecks.UI.Client
 {
     public static class UIResponseWriter
     {
+        public static System.Func<Microsoft.AspNetCore.Http.HttpContext, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport, System.Threading.Tasks.Task> CreateResponseWriter(System.Lazy<System.Text.Json.JsonSerializerOptions> jsonOptions, System.Func<System.Exception, string>? exceptionFormatter = null) { }
         public static System.Threading.Tasks.Task WriteHealthCheckUIResponse(Microsoft.AspNetCore.Http.HttpContext httpContext, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
         public static System.Threading.Tasks.Task WriteHealthCheckUIResponseNoExceptionDetails(Microsoft.AspNetCore.Http.HttpContext httpContext, Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport report) { }
     }

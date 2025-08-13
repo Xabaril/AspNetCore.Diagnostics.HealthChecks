@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Gremlin\HealthChecks.Gremlin.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers" />
+  </ItemGroup>
+
 </Project>

@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Oracle\HealthChecks.Oracle.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.Oracle" />
+  </ItemGroup>
+
 </Project>

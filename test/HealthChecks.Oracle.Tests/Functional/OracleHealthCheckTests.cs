@@ -4,12 +4,12 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace HealthChecks.Oracle.Tests.Functional;
 
-public class oracle_healthcheck_should
+public class oracle_healthcheck_should(OracleContainerFixture oracleFixture) : IClassFixture<OracleContainerFixture>
 {
     [Fact]
     public async Task be_healthy_when_oracle_is_available()
     {
-        var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle";
+        string connectionString = oracleFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -34,13 +34,15 @@ public class oracle_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_oracle_is_not_available()
     {
-        var connectionString = "Data Source=255.255.255.255:1521/XEPDB1;User Id=system;Password=oracle";
+        var connectionStringBuilder = oracleFixture.GetConnectionStringBuilder();
+
+        connectionStringBuilder.DataSource = "invalid";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddOracle(connectionString, tags: ["oracle"]);
+                .AddOracle(connectionStringBuilder.ConnectionString, tags: ["oracle"]);
             })
             .Configure(app =>
             {
@@ -58,7 +60,8 @@ public class oracle_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_sql_query_is_not_valid()
     {
-        var connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle";
+        string connectionString = oracleFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
@@ -82,7 +85,7 @@ public class oracle_healthcheck_should
     public async Task be_healthy_with_connection_string_factory_when_oracle_is_available()
     {
         bool factoryCalled = false;
-        string connectionString = "Data Source=localhost:1521/XEPDB1;User Id=system;Password=oracle";
+        string connectionString = oracleFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -114,8 +117,8 @@ public class oracle_healthcheck_should
     public async Task be_healthy_with_connection_string_and_credential_when_oracle_is_available()
     {
         bool factoryCalled = false;
-        string connectionString = "Data Source=localhost:1521/XEPDB1";
-        var password = new NetworkCredential("system", "oracle").SecurePassword;
+        var connectionStringBuilder = oracleFixture.GetConnectionStringBuilder();
+        var password = new NetworkCredential(connectionStringBuilder.UserID, connectionStringBuilder.Password).SecurePassword;
         password.MakeReadOnly();
         var credential = new OracleCredential("system", password);
 
@@ -124,7 +127,7 @@ public class oracle_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddOracle(connectionString, tags: ["oracle"],
+                    .AddOracle($"DATA SOURCE={connectionStringBuilder.DataSource}", tags: ["oracle"],
                         configure: options =>
                         {
                             factoryCalled = true;

@@ -5,24 +5,28 @@ using Raven.Client.ServerWide.Operations;
 
 namespace HealthChecks.RavenDb.Tests.Functional;
 
-public class ravendb_healthcheck_should_single_connection_string
+public class ravendb_healthcheck_should_single_connection_string : IClassFixture<RavenDbContainerFixture>
 {
-    private const string ConnectionString = "http://localhost:9030";
+    private readonly string _connectionString;
 
-    public ravendb_healthcheck_should_single_connection_string()
+    public ravendb_healthcheck_should_single_connection_string(RavenDbContainerFixture ravenDbFixture)
     {
+        _connectionString = ravenDbFixture.GetConnectionString();
+
         try
         {
-            using var store = new DocumentStore
-            {
-                Urls = [ConnectionString],
-            };
+            using var store = new DocumentStore();
+
+            store.Urls = [_connectionString];
 
             store.Initialize();
 
             store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord("Demo")));
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     [Fact]
@@ -33,7 +37,7 @@ public class ravendb_healthcheck_should_single_connection_string
             {
                 services
                 .AddHealthChecks()
-                .AddRavenDB(setup => setup.Urls = [ConnectionString], tags: ["ravendb"]);
+                .AddRavenDB(setup => setup.Urls = [_connectionString], tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -58,7 +62,7 @@ public class ravendb_healthcheck_should_single_connection_string
             {
                 services
                 .AddHealthChecks()
-                .AddRavenDB(setup => setup.Urls = [ConnectionString], "Demo", tags: ["ravendb"]);
+                .AddRavenDB(setup => setup.Urls = [_connectionString], "Demo", tags: ["ravendb"]);
             })
             .Configure(app =>
             {
@@ -112,7 +116,7 @@ public class ravendb_healthcheck_should_single_connection_string
                 .AddHealthChecks()
                 .AddRavenDB(setup =>
                 {
-                    setup.Urls = [ConnectionString];
+                    setup.Urls = [_connectionString];
                     setup.Database = "ThisDatabaseReallyDoesnExist";
                 }, "ThisDatabaseReallyDoesnExist", tags: ["ravendb"]);
             })

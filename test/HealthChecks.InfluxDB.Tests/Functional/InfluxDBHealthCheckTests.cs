@@ -2,17 +2,19 @@ using System.Net;
 
 namespace HealthChecks.InfluxDB.Tests.Functional;
 
-public class influxdb_healthcheck_should
+public class influxdb_healthcheck_should(InfluxDBContainerFixture influxDBFixture) : IClassFixture<InfluxDBContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_influxdb_is_available()
     {
+        var properties = influxDBFixture.GetConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                 .AddHealthChecks()
-                .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user", "password", "influxdb", tags: ["influxdb"]);
+                .AddInfluxDB(properties.Address, properties.Username, properties.Password, "influxdb", tags: ["influxdb"]);
             })
             .Configure(app =>
             {
@@ -32,12 +34,14 @@ public class influxdb_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_influxdb_is_unavailable()
     {
+        var properties = influxDBFixture.GetConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                     .AddHealthChecks()
-                    .AddInfluxDB("http://localhost:8086/?org=influxdata&bucket=dummy&latest=-72h", "ci_user_unavailable", "password", "influxdb", tags: ["influxdb"]);
+                    .AddInfluxDB(properties.Address, "invalid_user", properties.Password, "influxdb", tags: ["influxdb"]);
             })
             .Configure(app =>
             {

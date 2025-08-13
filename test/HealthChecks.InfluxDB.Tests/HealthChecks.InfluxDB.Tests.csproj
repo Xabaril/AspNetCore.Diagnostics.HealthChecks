@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.InfluxDB\HealthChecks.InfluxDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.InfluxDb" />
+  </ItemGroup>
+
 </Project>

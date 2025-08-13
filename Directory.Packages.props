@@ -4,6 +4,7 @@
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Apache.NMS.AMQP" Version="2.3.0" />
     <PackageVersion Include="ArangoDBNetStandard" Version="2.0.1" />
     <PackageVersion Include="AWSSDK.CloudWatch" Version="3.7.300.7" />
     <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.300.7" />
@@ -111,6 +112,7 @@
     <PackageVersion Include="Testcontainers.MySql" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Redis" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.RabbitMq" Version="$(TestcontainersVersion)" />
+    <PackageVersion Include="Testcontainers.ActiveMq" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="xunit" Version="2.9.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>

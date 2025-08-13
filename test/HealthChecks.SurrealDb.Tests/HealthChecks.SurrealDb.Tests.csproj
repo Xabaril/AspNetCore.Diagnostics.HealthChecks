@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.SurrealDb\HealthChecks.SurrealDb.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers" />
+  </ItemGroup>
+
 </Project>

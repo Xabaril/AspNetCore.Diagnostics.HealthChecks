@@ -16,12 +16,20 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var currentTopic = "";
+        var currentSubscription = "";
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "aws.sns" }
+        };
+
         try
         {
             using var client = CreateSnsClient();
 
             foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
             {
+                currentTopic = topicName;
                 var topic = await client.FindTopicAsync(topicName).ConfigureAwait(false)
                     ?? throw new NotFoundException($"Topic {topicName} does not exist.");
 
@@ -36,6 +44,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
                 foreach (string? subscription in subscriptions)
                 {
+                    currentSubscription = subscription;
                     if (!subscriptionsArn.Contains(subscription))
                     {
                         throw new NotFoundException($"Subscription {subscription} in Topic {topicName} does not exist.");
@@ -43,11 +52,13 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            checkDetails.Add("messaging.destination.name", currentTopic);
+            checkDetails.Add("messaging.destination.subscription.name", currentSubscription);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

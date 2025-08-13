@@ -18,6 +18,12 @@ public class MilvusHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "zilliz.milvus" },
+            { "network.transport", "tcp" },
+        };
+
         try
         {
             var result = await _client.HealthAsync(cancellationToken).ConfigureAwait(false)
@@ -25,21 +31,16 @@ public class MilvusHealthCheck : IHealthCheck
 
             if (!result.IsHealthy)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus,
-                    result.ToString(),
-                    null,
-                    new Dictionary<string, object>
-                    {
-                        { "responseErrorCode", result.ErrorCode },
-                        { "responseErrorMsg", result.ErrorMsg }
-                    });
+                checkDetails.Add("error.code", result.ErrorCode);
+                checkDetails.Add("error.message", result.ErrorMsg);
+                return new HealthCheckResult(context.Registration.FailureStatus, result.ToString(), null, data: checkDetails);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

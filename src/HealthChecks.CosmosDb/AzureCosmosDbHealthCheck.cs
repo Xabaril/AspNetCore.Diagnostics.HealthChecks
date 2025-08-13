@@ -29,15 +29,25 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "azure.cosmosdb" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
+            checkDetails.Add("server.address", _cosmosClient.Endpoint.Host);
+            checkDetails.Add("server.port", _cosmosClient.Endpoint.Port);
             await _cosmosClient.ReadAccountAsync().ConfigureAwait(false);
 
             if (_options.DatabaseId != null)
             {
+                checkDetails.Add("db.namespace", _options.DatabaseId);
                 var database = _cosmosClient.GetDatabase(_options.DatabaseId);
                 await database.ReadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-
+                checkDetails.Add("azure.cosmosdb.connection.mode", database.Client.ClientOptions.ConnectionMode);
+                checkDetails.Add("azure.cosmosdb.connection.level", database.Client.ClientOptions.ConsistencyLevel?.ToString() ?? "");
                 if (_options.ContainerIds != null)
                 {
                     foreach (var container in _options.ContainerIds)
@@ -50,11 +60,11 @@ public sealed class AzureCosmosDbHealthCheck : IHealthCheck
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

@@ -26,14 +26,19 @@ public class IbmMQHealthCheck : IHealthCheck
     /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "ibm.mq" },
+        };
+
         try
         {
             using var connection = new MQQueueManager(_queueManager, _connectionProperties);
-            return HealthCheckResultTask.Healthy;
+            return Task.FromResult(HealthCheckResult.Healthy(data: checkDetails));
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails));
         }
     }
 }

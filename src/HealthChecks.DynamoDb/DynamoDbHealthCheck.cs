@@ -24,6 +24,12 @@ public class DynamoDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "dynamodb" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             AWSCredentials? credentials = _options.Credentials;
@@ -50,11 +56,11 @@ public class DynamoDbHealthCheck : IHealthCheck
 
             var response = await client.ListTablesAsync(request, cancellationToken).ConfigureAwait(false);
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

@@ -29,10 +29,19 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "azure.table" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
+            checkDetails.Add("server.address", _tableServiceClient.Uri.Host);
+            checkDetails.Add("server.port", _tableServiceClient.Uri.Port);
             if (!string.IsNullOrEmpty(_options.TableName))
             {
+                checkDetails.Add("db.namespace", _options.TableName ?? "");
                 // Note: PoLP (Principle of least privilege)
                 // This can be used having at least the role assignment "Storage Table Data Reader" at table level.
                 var tableClient = _tableServiceClient.GetTableClient(_options.TableName);
@@ -56,11 +65,11 @@ public sealed class AzureTableServiceHealthCheck : IHealthCheck
                     .ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

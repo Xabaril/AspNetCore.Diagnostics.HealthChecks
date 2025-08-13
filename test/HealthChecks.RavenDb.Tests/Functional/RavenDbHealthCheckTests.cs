@@ -6,12 +6,14 @@ using Raven.Client.ServerWide.Operations;
 
 namespace HealthChecks.RavenDb.Tests.Functional;
 
-public class ravendb_healthcheck_should
+public class ravendb_healthcheck_should : IClassFixture<RavenDbContainerFixture>
 {
-    private readonly string[] _urls = ["http://localhost:9030"];
+    private readonly string[] _urls;
 
-    public ravendb_healthcheck_should()
+    public ravendb_healthcheck_should(RavenDbContainerFixture ravenDbFixture)
     {
+        _urls = [ravenDbFixture.GetConnectionString()];
+
         try
         {
             using var store = new DocumentStore
@@ -23,7 +25,10 @@ public class ravendb_healthcheck_should
 
             store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord("Demo")));
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     [Fact]

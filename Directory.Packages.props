@@ -103,6 +103,7 @@
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
     <PackageVersion Include="Testcontainers" Version="$(TestcontainersVersion)" />
+    <PackageVersion Include="Testcontainers.Consul" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Kafka" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Milvus" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="$(TestcontainersVersion)" />

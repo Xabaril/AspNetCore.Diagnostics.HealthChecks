@@ -2,18 +2,20 @@ using System.Net;
 
 namespace HealthChecks.Elasticsearch.Tests.Functional;
 
-public class elasticsearch_healthcheck_should
+public class elasticsearch_healthcheck_should(ElasticsearchContainerFixture elasticsearchFixture) : IClassFixture<ElasticsearchContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_available()
     {
-        var connectionString = @"http://localhost:9201";
+        string connectionString = elasticsearchFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
         .ConfigureServices(services =>
         {
             services.AddHealthChecks()
-             .AddElasticsearch(connectionString, tags: ["elasticsearch"]);
+             .AddElasticsearch(options => options
+                 .UseServer(connectionString)
+                 .UseCertificateValidationCallback((_, _, _, _) => true), tags: ["elasticsearch"]);
         })
         .Configure(app =>
         {

@@ -7,13 +7,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HealthChecks.Elasticsearch\HealthChecks.Elasticsearch.csproj" />
-    <PackageReference Include="Ductus.FluentDocker" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Resources\docker-compose.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.Elasticsearch" />
   </ItemGroup>
 
 </Project>

@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.OpenIdConnectServer\HealthChecks.OpenIdConnectServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.Keycloak" />
+  </ItemGroup>
+
 </Project>

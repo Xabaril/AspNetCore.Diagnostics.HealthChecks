@@ -2,37 +2,24 @@ using System.Collections;
 using System.Net;
 using IBM.WMQ;
 
-namespace HealthChecks.Ibmq.Tests.Functional;
+namespace HealthChecks.IbmMQ.Tests.Functional;
 
-public class ibmmq_healthcheck_should
+public class ibmmq_healthcheck_should(IbmMQContainerFixture ibmMqFixture) : IClassFixture<IbmMQContainerFixture>
 {
-
-    // Define the name of the queue manager to use (applies to all connections)
-    private const string qManager = "QM1";
-
-    // Define the name of your host connection (applies to client connections only)
-    private const string hostName = "localhost(1414)";
     private const string wrongHostName = "localhost(1417)";
-
-    // Define the name of the channel to use (applies to client connections only)
-    private const string channel = "DEV.APP.SVRCONN";
-
-    // Define the user name.
-    private const string user = "app";
-
-    // Define the password.
-    private const string password = "12345678";
 
     [Fact]
     public async Task be_healthy_if_ibmmq_is_available()
     {
-        var properties = new Hashtable
+        var properties = ibmMqFixture.GetConnectionProperties();
+
+        var connectionProperties = new Hashtable
         {
             { MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED },
-            { MQC.CHANNEL_PROPERTY, channel },
-            { MQC.CONNECTION_NAME_PROPERTY, hostName },
-            { MQC.USER_ID_PROPERTY, user },
-            { MQC.PASSWORD_PROPERTY, password }
+            { MQC.CHANNEL_PROPERTY, properties.Channel },
+            { MQC.CONNECTION_NAME_PROPERTY, properties.Hostname },
+            { MQC.USER_ID_PROPERTY, properties.Username },
+            { MQC.PASSWORD_PROPERTY, properties.Password }
         };
 
         var webHostBuilder = new WebHostBuilder()
@@ -40,7 +27,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                 .AddHealthChecks()
-                .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
+                .AddIbmMQ(properties.QueueManager, connectionProperties, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -60,13 +47,15 @@ public class ibmmq_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_ibmmq_is_unavailable()
     {
-        var properties = new Hashtable
+        var properties = ibmMqFixture.GetConnectionProperties();
+
+        var connectionProperties = new Hashtable
         {
             { MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED },
-            { MQC.CHANNEL_PROPERTY, channel },
+            { MQC.CHANNEL_PROPERTY, properties.Channel },
             { MQC.CONNECTION_NAME_PROPERTY, wrongHostName },
-            { MQC.USER_ID_PROPERTY, user },
-            { MQC.PASSWORD_PROPERTY, password }
+            { MQC.USER_ID_PROPERTY, properties.Username },
+            { MQC.PASSWORD_PROPERTY, properties.Password }
         };
 
         var webHostBuilder = new WebHostBuilder()
@@ -74,7 +63,7 @@ public class ibmmq_healthcheck_should
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
+                    .AddIbmMQ(properties.QueueManager, connectionProperties, tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -94,12 +83,20 @@ public class ibmmq_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_ibmmq_managed_is_unavailable()
     {
+        var properties = ibmMqFixture.GetConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: ["ibmmq"]);
+                    .AddIbmMQManagedConnection(
+                        properties.QueueManager,
+                        properties.Channel,
+                        wrongHostName,
+                        properties.Username,
+                        properties.Password,
+                        tags: ["ibmmq"]);
             })
             .Configure(app =>
             {
@@ -119,12 +116,20 @@ public class ibmmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_ibmmq_managed_is_available()
     {
+        var properties = ibmMqFixture.GetConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                     .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: ["ibmmq"]);
+                    .AddIbmMQManagedConnection(
+                        properties.QueueManager,
+                        properties.Channel,
+                        properties.Hostname,
+                        properties.Username,
+                        properties.Password,
+                        tags: ["ibmmq"]);
             })
             .Configure(app =>
             {

@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.EventStore\HealthChecks.EventStore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.EventStoreDb" />
+  </ItemGroup>
+
 </Project>

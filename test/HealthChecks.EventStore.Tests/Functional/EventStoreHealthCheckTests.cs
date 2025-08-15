@@ -3,16 +3,18 @@ using HealthChecks.UI.Client;
 
 namespace HealthChecks.EventStore.Tests.Functional;
 
-public class eventstore_healthcheck_should
+public class eventstore_healthcheck_should(EventStoreDbContainerFixture eventStoreDbFixture) : IClassFixture<EventStoreDbContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_eventstore_is_available_with_uri_format()
     {
+        string connectionString = eventStoreDbFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false", tags: ["eventstore"]);
+                    .AddEventStore(connectionString, tags: ["eventstore"]);
             })
             .Configure(app =>
             {
@@ -33,11 +35,13 @@ public class eventstore_healthcheck_should
     [Fact]
     public async Task be_healthy_if_eventstore_is_available()
     {
+        string connectionString = eventStoreDbFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("ConnectTo=tcp://localhost:1113; UseSslConnection=false; HeartBeatTimeout=500", tags: ["eventstore"]);
+                    .AddEventStore(connectionString, tags: ["eventstore"]);
             })
             .Configure(app =>
             {

@@ -28,7 +28,7 @@ public class RabbitMQHealthCheck : IHealthCheck
     {
         try
         {
-            var connection = _connection ?? await _factory!(_serviceProvider!).ConfigureAwait(false);
+            await using var connection = _connection ?? await _factory!(_serviceProvider!).ConfigureAwait(false);
 
             await using var model = await connection.CreateChannelAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 

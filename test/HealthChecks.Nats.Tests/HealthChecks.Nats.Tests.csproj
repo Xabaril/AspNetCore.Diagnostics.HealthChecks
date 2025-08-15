@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Nats\HealthChecks.Nats.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.Nats" />
+  </ItemGroup>
+
 </Project>

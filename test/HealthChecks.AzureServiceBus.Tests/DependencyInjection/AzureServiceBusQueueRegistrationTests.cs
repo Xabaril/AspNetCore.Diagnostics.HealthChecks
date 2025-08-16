@@ -137,4 +137,23 @@ public class azure_service_bus_queue_registration_should
         configurationOptions.ShouldNotBeNull();
         configurationOptions.UsePeekMode.ShouldBeTrue();
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("azureservicebusqueuecheck")]
+    public void add_health_check_with_namespace_when_properly_configured(string? name)
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueueWithNamespace("cnn", "queueName", name);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe(name ?? "azurequeue");
+        check.ShouldBeOfType<AzureServiceBusQueueHealthCheck>();
+    }
 }

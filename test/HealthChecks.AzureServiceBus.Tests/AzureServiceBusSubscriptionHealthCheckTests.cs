@@ -1,4 +1,5 @@
 using Azure.Core;
+using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
@@ -35,22 +36,25 @@ public class azureservicebussubscriptionhealthcheck_should
         _tokenCredential = Substitute.For<TokenCredential>();
 
         _clientProvider.CreateClient(ConnectionString).Returns(_serviceBusClient);
-        _clientProvider.CreateClient(FullyQualifiedName, _tokenCredential).Returns(_serviceBusClient);
+        _clientProvider.CreateClient(FullyQualifiedName, Arg.Any<TokenCredential>()).Returns(_serviceBusClient);
         _clientProvider.CreateManagementClient(ConnectionString).Returns(_serviceBusAdministrationClient);
-        _clientProvider.CreateManagementClient(FullyQualifiedName, _tokenCredential).Returns(_serviceBusAdministrationClient);
+        _clientProvider.CreateManagementClient(FullyQualifiedName, Arg.Any<TokenCredential>()).Returns(_serviceBusAdministrationClient);
         _serviceBusClient.CreateReceiver(TopicName, SubscriptionName).Returns(_serviceBusReceiver);
     }
 
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task can_create_client_with_connection_string(bool peakMode)
+    [InlineData(true, true)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(false, false)]
+    public async Task can_create_client_with_connection_string(bool peakMode, bool configureCredential)
     {
         using var tokenSource = new CancellationTokenSource();
 
         await ExecuteHealthCheckAsync(
             TopicName,
             peakMode,
+            configureCredential,
             connectionString: ConnectionString,
             cancellationToken: tokenSource.Token);
 
@@ -119,15 +123,18 @@ public class azureservicebussubscriptionhealthcheck_should
     }
 
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task can_create_client_with_fully_qualified_name(bool peakMode)
+    [InlineData(true, true)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(false, false)]
+    public async Task can_create_client_with_fully_qualified_name(bool peakMode, bool configureCredential)
     {
         using var tokenSource = new CancellationTokenSource();
 
         await ExecuteHealthCheckAsync(
             TopicName,
             peakMode,
+            configureCredential,
             fullyQualifiedName: FullyQualifiedName,
             cancellationToken: tokenSource.Token);
 
@@ -135,13 +142,13 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateClient(FullyQualifiedName, _tokenCredential);
+                .CreateClient(FullyQualifiedName, configureCredential ? _tokenCredential : Arg.Any<DefaultAzureCredential>());
         }
         else
         {
             _clientProvider
                 .Received(1)
-                .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+                .CreateManagementClient(FullyQualifiedName, configureCredential ? _tokenCredential : Arg.Any<DefaultAzureCredential>());
         }
     }
 
@@ -169,7 +176,7 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateClient(FullyQualifiedName, _tokenCredential);
+                .CreateClient(FullyQualifiedName, Arg.Any<TokenCredential>());
 
             _serviceBusClient
                 .Received(1)
@@ -183,7 +190,7 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             _clientProvider
                 .Received(1)
-                .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+                .CreateManagementClient(FullyQualifiedName, Arg.Any<TokenCredential>());
 
             await _serviceBusAdministrationClient
                 .Received(1)
@@ -325,6 +332,7 @@ public class azureservicebussubscriptionhealthcheck_should
     private Task<HealthCheckResult> ExecuteHealthCheckAsync(
         string topicName,
         bool peakMode,
+        bool configureCredential = false,
         string? connectionString = null,
         string? fullyQualifiedName = null,
         CancellationToken cancellationToken = default)
@@ -333,7 +341,7 @@ public class azureservicebussubscriptionhealthcheck_should
         {
             ConnectionString = connectionString,
             FullyQualifiedNamespace = fullyQualifiedName,
-            Credential = fullyQualifiedName is null ? null : _tokenCredential,
+            Credential = configureCredential ? _tokenCredential : null,
             UsePeekMode = peakMode,
         };
         var healthCheck = new AzureServiceBusSubscriptionHealthCheck(options, _clientProvider);

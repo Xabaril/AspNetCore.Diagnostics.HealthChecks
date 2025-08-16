@@ -52,4 +52,23 @@ public class azure_service_bus_queue_message_threshold_registration_should
 
         factory.ShouldThrow<ArgumentException>();
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("azureservicebusqueuemessagethresholdcheck")]
+    public void add_health_check_with_namespace_when_properly_configured(string? name)
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusQueueMessageCountThresholdWithNamespace("cnn", "queueName", name);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe(name ?? "azurequeuethreshold");
+        check.ShouldBeOfType<AzureServiceBusQueueMessageCountThresholdHealthCheck>();
+    }
 }

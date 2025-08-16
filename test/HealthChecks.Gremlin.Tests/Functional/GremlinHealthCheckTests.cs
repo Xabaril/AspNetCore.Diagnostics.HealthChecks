@@ -2,21 +2,18 @@ using System.Net;
 
 namespace HealthChecks.Gremlin.Tests.Functional;
 
-public class gremlin_healthcheck_should
+public class gremlin_healthcheck_should(GremlinContainerFixture gremlinFixture) : IClassFixture<GremlinContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_gremlin_is_available()
     {
+        var options = gremlinFixture.GetConnectionOptions();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddGremlin(_ => new GremlinOptions
-                 {
-                     Hostname = "localhost",
-                     Port = 8182,
-                     EnableSsl = false
-                 }, tags: ["gremlin"]);
+                 .AddGremlin(_ => options, tags: ["gremlin"]);
             })
             .Configure(app =>
             {
@@ -36,22 +33,14 @@ public class gremlin_healthcheck_should
     [Fact]
     public async Task be_healthy_if_multiple_gremlin_are_available()
     {
+        var options = gremlinFixture.GetConnectionOptions();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddGremlin(_ => new GremlinOptions
-                 {
-                     Hostname = "localhost",
-                     Port = 8182,
-                     EnableSsl = false
-                 }, tags: ["gremlin"], name: "1")
-                 .AddGremlin(_ => new GremlinOptions
-                 {
-                     Hostname = "localhost",
-                     Port = 8182,
-                     EnableSsl = false
-                 }, tags: ["gremlin"], name: "2");
+                 .AddGremlin(_ => options, tags: ["gremlin"], name: "1")
+                 .AddGremlin(_ => options, tags: ["gremlin"], name: "2");
             })
             .Configure(app =>
             {
@@ -71,16 +60,15 @@ public class gremlin_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_gremlin_is_not_available()
     {
+        var options = gremlinFixture.GetConnectionOptions();
+
+        options.Hostname = "wronghost";
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddGremlin(_ => new GremlinOptions
-                 {
-                     Hostname = "wronghost",
-                     Port = 8182,
-                     EnableSsl = false
-                 }, tags: ["gremlin"]);
+                 .AddGremlin(_ => options, tags: ["gremlin"]);
             })
             .Configure(app =>
             {

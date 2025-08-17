@@ -1,23 +1,26 @@
 using System.Net;
+using HealthChecks.Network.Tests.Fixtures;
 using Microsoft.AspNetCore.Http;
 
 namespace HealthChecks.Network.Tests.Functional;
 
-public class ftp_healthcheck_should
+public class ftp_healthcheck_should(SftpGoContainerFixture sftpGoFixture) : IClassFixture<SftpGoContainerFixture>
 {
 
     [Fact]
     public async Task be_healthy_when_connection_is_successful()
     {
+        var properties = sftpGoFixture.GetFtpConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                     .AddFtpHealthCheck(setup =>
                     {
-                        setup.AddHost("ftp://localhost:21",
+                        setup.AddHost($"ftp://{properties.Hostname}:{properties.Port}",
                             createFile: false,
-                            credentials: new NetworkCredential("bob", "12345"));
+                            credentials: new NetworkCredential(properties.Username, properties.Password));
                     }, tags: ["ftp"]);
             })
             .Configure(app =>
@@ -37,15 +40,17 @@ public class ftp_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connection_is_successful_and_file_is_created()
     {
+        var properties = sftpGoFixture.GetFtpConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                     .AddFtpHealthCheck(setup =>
                     {
-                        setup.AddHost("ftp://localhost:21",
+                        setup.AddHost($"ftp://{properties.Hostname}:{properties.Port}",
                             createFile: true,
-                            credentials: new NetworkCredential("bob", "12345"));
+                            credentials: new NetworkCredential(properties.Username, properties.Password));
                     }, tags: ["ftp"]);
             })
             .Configure(app =>
@@ -66,7 +71,7 @@ public class ftp_healthcheck_should
     public async Task respect_configured_timeout_and_throw_operation_cancelled_exception()
     {
         var options = new FtpHealthCheckOptions();
-        options.AddHost("ftp://invalid:21");
+        options.AddHost("ftp://10.255.255.255:21");
         var ftpHealthCheck = new FtpHealthCheck(options);
 
         var result = await ftpHealthCheck.CheckHealthAsync(new HealthCheckContext

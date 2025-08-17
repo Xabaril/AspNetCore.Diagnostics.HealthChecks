@@ -1,6 +1,4 @@
 using System.Net;
-using HealthChecks.UI.Client;
-using HealthChecks.UI.Core;
 
 namespace HealthChecks.Network.Tests.Functional;
 
@@ -71,15 +69,14 @@ public class dns_resolve_host_count_should
                 {
                     config.MapHealthChecks("/health", new HealthCheckOptions
                     {
-                        Predicate = r => true,
-                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        Predicate = r => true
                     });
                 });
-
             });
 
         using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateClient().GetAsJson<UIHealthReport>("/health");
-        response.ShouldNotBeNull();
+        using var response = await server.CreateRequest("/health").GetAsync();
+
+        response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

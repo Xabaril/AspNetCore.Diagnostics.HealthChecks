@@ -9,8 +9,8 @@ public class tcp_healthcheck_should
     {
         var options = new TcpHealthCheckOptions();
 
-        options.AddHost("invalid", 5555);
-        options.AddressFamily = AddressFamily.InterNetworkV6;
+        options.AddHost("10.255.255.255", 5555);
+        options.AddressFamily = AddressFamily.InterNetwork;
 
         var tcpHealthCheck = new TcpHealthCheck(options);
 

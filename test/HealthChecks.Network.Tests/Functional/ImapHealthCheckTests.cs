@@ -1,28 +1,26 @@
 using System.Net;
 using HealthChecks.Network.Core;
+using HealthChecks.Network.Tests.Fixtures;
 
 namespace HealthChecks.Network.Tests.Functional;
 
-public class imap_healthcheck_should
+public class imap_healthcheck_should(SecureDockerMailServerContainerFixture dockerMailServerFixture) : IClassFixture<SecureDockerMailServerContainerFixture>
 {
-
-    //Host and login account to fast switch tests against different server
-    private const string _host = "localhost";
-    private const string _validAccount = "admin@healthchecks.com";
-    private const string _validPassword = "beatpulse";
-
     [Fact]
     public async Task be_healthy_when_connecting_to_imap_ssl_port_without_login()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                  .AddImapHealthCheck(setup =>
                  {
-                     setup.Host = _host;
-                     setup.Port = 993;
+                     setup.Host = properties.Host;
+                     setup.Port = properties.ImplicitTlsPort;
                      setup.AllowInvalidRemoteCertificates = true;
+                     setup.ConnectionType = ImapConnectionType.SSL_TLS;
                  }, tags: ["imap"]);
             })
             .Configure(app =>
@@ -42,16 +40,19 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connecting_to_imap_ssl_and_login_with_correct_account()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 993;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ImplicitTlsPort;
+                    setup.ConnectionType = ImapConnectionType.SSL_TLS;
                     setup.AllowInvalidRemoteCertificates = true;
-                    setup.LoginWith(_validAccount, _validPassword);
+                    setup.LoginWith(properties.Username, properties.Password);
                 }, tags: ["imap"]);
             })
             .Configure(app =>
@@ -71,14 +72,16 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_connecting_to_imap_ssl_and_login_with_an_incorrect_account()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 993;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ImplicitTlsPort;
                     setup.ConnectionType = ImapConnectionType.SSL_TLS;
                     setup.AllowInvalidRemoteCertificates = true;
                     setup.LoginWith("invalid@healthchecks.com", "invalidpassword");
@@ -101,16 +104,19 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connecting_to_imap_ssl_with_a_correct_account_checking_an_existing_folder()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 143;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ImplicitTlsPort;
+                    setup.ConnectionType = ImapConnectionType.SSL_TLS;
                     setup.AllowInvalidRemoteCertificates = true;
-                    setup.LoginWith(_validAccount, _validPassword);
+                    setup.LoginWith(properties.Username, properties.Password);
                     setup.CheckFolderExists("INBOX");
                 }, tags: ["imap"]);
             })
@@ -131,16 +137,19 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_connecting_to_imap_ssl_with_a_correct_account_checking_an_non_existing_folder()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 993;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ImplicitTlsPort;
+                    setup.ConnectionType = ImapConnectionType.SSL_TLS;
                     setup.AllowInvalidRemoteCertificates = true;
-                    setup.LoginWith(_validAccount, _validPassword);
+                    setup.LoginWith(properties.Username, properties.Password);
                     setup.CheckFolderExists("INVALIDFOLDER");
                 }, tags: ["imap"]);
             })
@@ -161,14 +170,17 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_healthy_when_imap_connects_to_starttls_port()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 143;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ExplicitTlsPort;
+                    setup.ConnectionType = ImapConnectionType.STARTTLS;
                     setup.AllowInvalidRemoteCertificates = true;
                 }, tags: ["imap"]);
             })
@@ -189,16 +201,19 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_healthy_when_imap_performs_login_using_starttls_handshake()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 143;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ExplicitTlsPort;
+                    setup.ConnectionType = ImapConnectionType.STARTTLS;
                     setup.AllowInvalidRemoteCertificates = true;
-                    setup.LoginWith(_validAccount, _validPassword);
+                    setup.LoginWith(properties.Username, properties.Password);
                 }, tags: ["imap"]);
             })
             .Configure(app =>
@@ -218,17 +233,19 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_healthy_when_imap_performs_login_and_folder_check_using_starttls_handshake()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
-                    setup.Port = 143;
+                    setup.Host = properties.Host;
+                    setup.Port = properties.ExplicitTlsPort;
                     setup.ConnectionType = ImapConnectionType.STARTTLS;
                     setup.AllowInvalidRemoteCertificates = true;
-                    setup.LoginWith(_validAccount, _validPassword);
+                    setup.LoginWith(properties.Username, properties.Password);
                     setup.CheckFolderExists("INBOX");
                 }, tags: ["imap"]);
             })
@@ -249,13 +266,15 @@ public class imap_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_using_configuration_auto_with_an_invalid_imap_port()
     {
+        var properties = dockerMailServerFixture.GetImapConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddImapHealthCheck(setup =>
                 {
-                    setup.Host = _host;
+                    setup.Host = properties.Host;
                     setup.Port = 135;
                 }, tags: ["imap"]);
             })
@@ -279,7 +298,7 @@ public class imap_healthcheck_should
     [Fact]
     public async Task respect_configured_timeout_and_throw_operation_cancelled_exception()
     {
-        var options = new ImapHealthCheckOptions() { Host = "invalid", Port = 993 };
+        var options = new ImapHealthCheckOptions() { Host = "10.255.255.255", Port = 993 };
         options.LoginWith("user", "pass");
 
         var imapHealthCheck = new ImapHealthCheck(options);
@@ -292,7 +311,7 @@ public class imap_healthcheck_should
                 failureStatus: HealthStatus.Degraded,
                 null,
                 timeout: null)
-        }, new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token);
+        }, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
 
         result.Exception.ShouldBeOfType<OperationCanceledException>();
     }

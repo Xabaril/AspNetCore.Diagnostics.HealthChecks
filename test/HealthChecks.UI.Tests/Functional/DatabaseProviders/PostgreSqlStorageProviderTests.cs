@@ -1,10 +1,11 @@
 using HealthChecks.UI.Data;
+using HealthChecks.UI.Tests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Tests;
 
 [Collection("execution")]
-public class postgre_storage_should
+public class postgre_storage_should(PostgreSqlContainerFixture postgreSqlFixture) : IClassFixture<PostgreSqlContainerFixture>
 {
     private const string ProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL";
 
@@ -18,7 +19,7 @@ public class postgre_storage_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecksUI()
-                .AddPostgreSqlStorage("connectionString", options => customOptionsInvoked = true);
+                .AddPostgreSqlStorage(postgreSqlFixture.GetConnectionString(), _ => customOptionsInvoked = true);
             });
 
         var services = hostBuilder.Build().Services;
@@ -39,7 +40,7 @@ public class postgre_storage_should
         var webHostBuilder = HostBuilderHelper.Create(
                hostReset,
                collectorReset,
-               configureUI: config => config.AddPostgreSqlStorage(ProviderTestHelper.PostgresConnectionString()));
+               configureUI: config => config.AddPostgreSqlStorage(postgreSqlFixture.GetConnectionString()));
 
         using var host = new TestServer(webHostBuilder);
 

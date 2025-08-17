@@ -80,7 +80,7 @@ public class UI_configuration_should
         return Task.CompletedTask;
     }
 
-    [Fact(Skip = "Temporarily skipping in https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/pull/1807")]
+    [Fact]
     public Task configure_webhooks_endpoint_custom_delegating_handlers()
     {
         var hostReset = new ManualResetEventSlim(false);
@@ -101,7 +101,7 @@ public class UI_configuration_should
                     setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler>();
                     setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
 
-                }).AddInMemoryStorage();
+                }).AddInMemoryStorage(databaseName: Guid.NewGuid().ToString());
             })
             .Configure(app =>
             {

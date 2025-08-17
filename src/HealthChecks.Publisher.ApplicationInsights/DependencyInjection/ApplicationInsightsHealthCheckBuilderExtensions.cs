@@ -18,18 +18,20 @@ public static class ApplicationInsightsHealthCheckBuilderExtensions
     /// <param name="connectionString">Specified Application Insights connection string. Optional. If <c>null</c> <see cref="TelemetryConfiguration"/> is resolved from DI container.</param>
     /// <param name="saveDetailedReport">Specifies if save an Application Insights event for each HealthCheck or just save one event with the global status for all the HealthChecks. Optional.</param>
     /// <param name="excludeHealthyReports">Specifies if save an Application Insights event only for reports indicating an unhealthy status.</param>
+    /// <param name="trackAsAvailability">Specifies if healthCheck result should be tracked as availability event. If false, healthCheck result will be tracked as custom event.</param>
     /// <returns>The specified <paramref name="builder"/>.</returns>
     public static IHealthChecksBuilder AddApplicationInsightsPublisher(
         this IHealthChecksBuilder builder,
         string? connectionString = default,
         bool saveDetailedReport = false,
-        bool excludeHealthyReports = false)
+        bool excludeHealthyReports = false,
+        bool trackAsAvailability = false)
     {
         builder.Services
            .AddSingleton<IHealthCheckPublisher>(sp =>
            {
                var telemetryConfigurationOptions = sp.GetService<IOptions<TelemetryConfiguration>>();
-               return new ApplicationInsightsPublisher(telemetryConfigurationOptions, connectionString, saveDetailedReport, excludeHealthyReports);
+               return new ApplicationInsightsPublisher(telemetryConfigurationOptions, connectionString, saveDetailedReport, excludeHealthyReports, trackAsAvailability);
            });
 
         return builder;

@@ -101,7 +101,7 @@ public class UI_configuration_should
                     setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler>();
                     setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
 
-                }).AddInMemoryStorage();
+                }).AddInMemoryStorage(databaseName: Guid.NewGuid().ToString());
             })
             .Configure(app =>
             {

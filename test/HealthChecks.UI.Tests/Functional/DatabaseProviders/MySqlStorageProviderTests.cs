@@ -1,9 +1,14 @@
 using HealthChecks.UI.Data;
+using HealthChecks.UI.Image;
+using HealthChecks.UI.Image.Configuration;
+using HealthChecks.UI.Tests.Fixtures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HealthChecks.UI.Tests;
 
-public class mysql_storage_should
+[Collection("execution")]
+public class mysql_storage_should(MySqlContainerFixture mySqlFixture) : IClassFixture<MySqlContainerFixture>
 {
     private const string PROVIDER_NAME = "Pomelo.EntityFrameworkCore.MySql";
 
@@ -17,7 +22,7 @@ public class mysql_storage_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecksUI()
-                .AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI", options => customOptionsInvoked = true);
+                .AddMySqlStorage(mySqlFixture.GetConnectionString(), options => customOptionsInvoked = true);
             });
 
         var services = hostBuilder.Build().Services;
@@ -38,7 +43,7 @@ public class mysql_storage_should
         var webHostBuilder = HostBuilderHelper.Create(
                hostReset,
                collectorReset,
-               configureUI: config => config.AddMySqlStorage(ProviderTestHelper.MySqlConnectionString()));
+               configureUI: config => config.AddMySqlStorage(mySqlFixture.GetConnectionString()));
 
         using var host = new TestServer(webHostBuilder);
 

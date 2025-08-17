@@ -1,33 +1,10 @@
 using System.Net;
-using Raven.Client.Documents;
-using Raven.Client.ServerWide;
-using Raven.Client.ServerWide.Operations;
 
 namespace HealthChecks.RavenDb.Tests.Functional;
 
-public class ravendb_healthcheck_should_single_connection_string : IClassFixture<RavenDbContainerFixture>
+public class ravendb_healthcheck_should_single_connection_string(RavenDbContainerFixture ravenDbFixture) : IClassFixture<RavenDbContainerFixture>
 {
-    private readonly string _connectionString;
-
-    public ravendb_healthcheck_should_single_connection_string(RavenDbContainerFixture ravenDbFixture)
-    {
-        _connectionString = ravenDbFixture.GetConnectionString();
-
-        try
-        {
-            using var store = new DocumentStore();
-
-            store.Urls = [_connectionString];
-
-            store.Initialize();
-
-            store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord("Demo")));
-        }
-        catch
-        {
-            // ignored
-        }
-    }
+    private readonly string _connectionString = ravenDbFixture.GetConnectionString();
 
     [Fact]
     public async Task be_healthy_if_ravendb_is_available()

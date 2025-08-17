@@ -1,3 +1,6 @@
+using Raven.Client.Documents;
+using Raven.Client.ServerWide;
+using Raven.Client.ServerWide.Operations;
 using Testcontainers.RavenDb;
 
 namespace HealthChecks.RavenDb.Tests;
@@ -22,7 +25,18 @@ public class RavenDbContainerFixture : IAsyncLifetime
         return Container.GetConnectionString();
     }
 
-    public async Task InitializeAsync() => Container = await CreateContainerAsync();
+    public async Task InitializeAsync()
+    {
+        Container = await CreateContainerAsync();
+
+        using var store = new DocumentStore();
+
+        store.Urls = [GetConnectionString()];
+
+        store.Initialize();
+
+        await store.Maintenance.Server.SendAsync(new CreateDatabaseOperation(new DatabaseRecord("Demo")));
+    }
 
     public Task DisposeAsync() => Container?.DisposeAsync().AsTask() ?? Task.CompletedTask;
 

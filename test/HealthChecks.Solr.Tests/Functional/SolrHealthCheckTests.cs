@@ -3,7 +3,7 @@ using HealthChecks.UI.Client;
 
 namespace HealthChecks.Solr.Tests.Functional;
 
-public class solr_healthcheck_should
+public class solr_healthcheck_should(SolrContainerFixture solrFixture) : IClassFixture<SolrContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_solr_is_available()
@@ -12,7 +12,7 @@ public class solr_healthcheck_should
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
-                .AddSolr("http://localhost:8983/solr", "solrcore", tags: ["solr"]);
+                .AddSolr(solrFixture.GetConnectionString(), "solrcore", tags: ["solr"]);
            })
            .Configure(app =>
            {
@@ -35,7 +35,7 @@ public class solr_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSolr("http://localhost:8893/solr", "solrcoredown", tags: ["solr"]);
+                .AddSolr(solrFixture.GetConnectionString(), "solrcoredown", tags: ["solr"]);
             })
             .Configure(app =>
             {

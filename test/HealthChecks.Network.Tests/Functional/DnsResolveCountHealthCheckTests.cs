@@ -1,5 +1,4 @@
 using System.Net;
-using HealthChecks.UI.Client;
 
 namespace HealthChecks.Network.Tests.Functional;
 

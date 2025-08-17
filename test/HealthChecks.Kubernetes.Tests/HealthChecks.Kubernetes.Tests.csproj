@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Kubernetes\HealthChecks.Kubernetes.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.K3s" />
+  </ItemGroup>
+
 </Project>

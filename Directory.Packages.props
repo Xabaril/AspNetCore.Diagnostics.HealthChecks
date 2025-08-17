@@ -103,6 +103,7 @@
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
     <PackageVersion Include="Testcontainers" Version="$(TestcontainersVersion)" />
+    <PackageVersion Include="Testcontainers.ClickHouse" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.InfluxDb" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Kafka" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Milvus" Version="$(TestcontainersVersion)" />
@@ -110,6 +111,7 @@
     <PackageVersion Include="TestContainers.MongoDb" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.MsSql" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.MySql" Version="$(TestcontainersVersion)" />
+    <PackageVersion Include="Testcontainers.RavenDb" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Redis" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.RabbitMq" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="xunit" Version="2.9.2" />

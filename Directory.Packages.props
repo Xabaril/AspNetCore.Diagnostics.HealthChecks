@@ -29,7 +29,6 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="Dapr.Client" Version="1.12.0" />
     <PackageVersion Include="DogStatsD-CSharp-Client" Version="8.0.0" />
-    <PackageVersion Include="Ductus.FluentDocker" Version="2.10.59" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.14.3" />
     <PackageVersion Include="EventStore.Client" Version="22.0.0" />
     <PackageVersion Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
@@ -104,6 +103,7 @@
     <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
     <PackageVersion Include="Testcontainers" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.ClickHouse" Version="$(TestcontainersVersion)" />
+    <PackageVersion Include="Testcontainers.Elasticsearch" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Kafka" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Milvus" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="$(TestcontainersVersion)" />

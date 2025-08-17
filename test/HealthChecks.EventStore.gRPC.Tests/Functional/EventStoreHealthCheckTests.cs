@@ -2,16 +2,18 @@ using System.Net;
 
 namespace HealthChecks.EventStore.gRPC.Tests.Functional;
 
-public class eventstore_healthcheck_should
+public class eventstore_healthcheck_should(EventStoreDbContainerFixture eventStoreDbFixture) : IClassFixture<EventStoreDbContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_eventstore_is_available()
     {
+        string connectionString = eventStoreDbFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddEventStore("esdb://localhost:2113?tls=false", tags: ["eventstore"]);
+                    .AddEventStore(connectionString, tags: ["eventstore"]);
             })
             .Configure(app =>
             {

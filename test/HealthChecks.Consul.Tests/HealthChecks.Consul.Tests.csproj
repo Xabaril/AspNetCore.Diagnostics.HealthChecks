@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Consul\HealthChecks.Consul.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.Consul" />
+  </ItemGroup>
+
 </Project>

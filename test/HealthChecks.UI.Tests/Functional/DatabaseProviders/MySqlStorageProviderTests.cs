@@ -1,9 +1,6 @@
 using HealthChecks.UI.Data;
-using HealthChecks.UI.Image;
-using HealthChecks.UI.Image.Configuration;
 using HealthChecks.UI.Tests.Fixtures;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace HealthChecks.UI.Tests;
 

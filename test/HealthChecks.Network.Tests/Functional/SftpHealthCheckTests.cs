@@ -1,21 +1,23 @@
 using System.Net;
+using HealthChecks.Network.Tests.Fixtures;
 
 namespace HealthChecks.Network.Tests.Functional;
 
-public class sftp_healthcheck_should
+public class sftp_healthcheck_should(SftpGoContainerFixture sftpGoFixture) : IClassFixture<SftpGoContainerFixture>
 {
-
     [Fact]
     public async Task be_healthy_when_connection_to_sftp_is_successful_using_password_authentication()
     {
+        var properties = sftpGoFixture.GetSftpConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddSftpHealthCheck(setup =>
                 {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPasswordAuthentication("pass")
+                    var cfg = new SftpConfigurationBuilder(properties.Hostname, properties.Port, properties.Username)
+                                    .AddPasswordAuthentication(properties.Password)
                                     .Build();
 
                     setup.AddHost(cfg);
@@ -39,13 +41,15 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_connection_to_sftp_is_using_wrong_password()
     {
+        var properties = sftpGoFixture.GetSftpConnectionProperties();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
                 .AddSftpHealthCheck(setup =>
                 {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                    var cfg = new SftpConfigurationBuilder(properties.Hostname, properties.Port, properties.Username)
                                     .AddPasswordAuthentication("wrongpass")
                                     .Build();
 
@@ -70,7 +74,7 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connection_to_sftp_is_successful_using_private_key()
     {
-        string privateKey = File.ReadAllText("id_rsa");
+        var properties = sftpGoFixture.GetSftpConnectionProperties();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -78,8 +82,8 @@ public class sftp_healthcheck_should
                 services.AddHealthChecks()
                 .AddSftpHealthCheck(setup =>
                 {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPrivateKeyAuthentication(privateKey, "beatpulse")
+                    var cfg = new SftpConfigurationBuilder(properties.Hostname, properties.Port, properties.Username)
+                                    .AddPrivateKeyAuthentication(properties.PrivateKey, properties.Passphrase)
                                     .Build();
 
                     setup.AddHost(cfg);
@@ -103,7 +107,7 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_healthy_with_valid_authorization_and_file_creation_enabled()
     {
-        string privateKey = File.ReadAllText("id_rsa");
+        var properties = sftpGoFixture.GetSftpConnectionProperties();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -111,9 +115,9 @@ public class sftp_healthcheck_should
                 services.AddHealthChecks()
                 .AddSftpHealthCheck(setup =>
                 {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPrivateKeyAuthentication(privateKey, "beatpulse")
-                                    .CreateFileOnConnect("upload/beatpulse")
+                    var cfg = new SftpConfigurationBuilder(properties.Hostname, properties.Port, properties.Username)
+                                    .AddPrivateKeyAuthentication(properties.PrivateKey, properties.Passphrase)
+                                    .CreateFileOnConnect("beatpulse")
                                     .Build();
 
                     setup.AddHost(cfg);
@@ -137,7 +141,7 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_healthy_with_one_valid_authorization()
     {
-        string privateKey = File.ReadAllText("id_rsa");
+        var properties = sftpGoFixture.GetSftpConnectionProperties();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -145,9 +149,9 @@ public class sftp_healthcheck_should
                 services.AddHealthChecks()
                 .AddSftpHealthCheck(setup =>
                 {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                    var cfg = new SftpConfigurationBuilder(properties.Hostname, properties.Port, properties.Username)
                                     .AddPasswordAuthentication("wrongpass")
-                                    .AddPrivateKeyAuthentication(privateKey, "beatpulse")
+                                    .AddPrivateKeyAuthentication(properties.PrivateKey, properties.Passphrase)
                                     .Build();
 
                     setup.AddHost(cfg);

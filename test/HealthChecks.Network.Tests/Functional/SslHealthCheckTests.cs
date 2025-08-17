@@ -4,13 +4,12 @@ namespace HealthChecks.Network.Tests.Functional;
 
 public class ssl_healthcheck_should
 {
-    //Use https://badssl.com web site, witch provide samples certificates with various states and types
-    private const string _validHost256 = "sha256.badssl.com";
-    private const string _validHost384 = "sha384.badssl.com";
-    private const string _validHost512 = "sha512.badssl.com";
-    private const string _httpHost = "http.badssl.com";
-    private const string _revokedHost = "revoked.badssl.com";
-    private const string _expiredHost = "expired.badssl.com";
+    private const string ValidHost = "microsoft.com";
+
+    // TODO: BadSSL is archived, tests might break in the future: https://github.com/chromium/badssl.com
+    private const string HttpHost = "http.badssl.com";
+    private const string RevokedHost = "revoked.badssl.com";
+    private const string ExpiredHost = "expired.badssl.com";
 
     [Fact]
     public async Task be_healthy_if_ssl_is_valid()
@@ -21,9 +20,7 @@ public class ssl_healthcheck_should
                 services.AddHealthChecks()
                 .AddSslHealthCheck(options =>
                 {
-                    options.AddHost(_validHost256);
-                    options.AddHost(_validHost384);
-                    options.AddHost(_validHost512);
+                    options.AddHost(ValidHost, checkLeftDays: 0);
                 }, tags: ["ssl"]);
             })
             .Configure(app =>
@@ -48,7 +45,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_httpHost, 80), tags: ["ssl"]);
+                .AddSslHealthCheck(options => options.AddHost(HttpHost, 80), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -72,7 +69,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_revokedHost), tags: ["ssl"]);
+                .AddSslHealthCheck(options => options.AddHost(RevokedHost), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -96,7 +93,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_expiredHost), tags: ["ssl"]);
+                .AddSslHealthCheck(options => options.AddHost(ExpiredHost), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -120,7 +117,7 @@ public class ssl_healthcheck_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddSslHealthCheck(options => options.AddHost(_validHost256, checkLeftDays: 1095), tags: ["ssl"]);
+                .AddSslHealthCheck(options => options.AddHost(ValidHost, checkLeftDays: 1095), tags: ["ssl"]);
             })
             .Configure(app =>
             {
@@ -143,7 +140,7 @@ public class ssl_healthcheck_should
     public async Task respect_configured_timeout_and_throw_operation_cancelled_exception()
     {
         var options = new SslHealthCheckOptions();
-        options.AddHost("invalid", 5555);
+        options.AddHost("10.255.255.255", 5555);
 
         var sslHealthCheck = new SslHealthCheck(options);
 

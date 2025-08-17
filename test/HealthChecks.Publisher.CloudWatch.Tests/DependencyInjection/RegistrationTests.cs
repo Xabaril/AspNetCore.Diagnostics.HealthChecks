@@ -8,7 +8,7 @@ public class cloud_watch_publisher_registration_should
         var services = new ServiceCollection();
         services
             .AddHealthChecks()
-            .AddCloudWatchPublisher();
+            .AddCloudWatchPublisher(options => options.Region = Amazon.RegionEndpoint.USEast1);
 
         using var serviceProvider = services.BuildServiceProvider();
         var publisher = serviceProvider.GetService<IHealthCheckPublisher>();
@@ -22,7 +22,11 @@ public class cloud_watch_publisher_registration_should
         var services = new ServiceCollection();
         services
             .AddHealthChecks()
-            .AddCloudWatchPublisher(options => options.ServiceCheckName = "serviceCheckName");
+            .AddCloudWatchPublisher(options =>
+            {
+                options.ServiceCheckName = "serviceCheckName";
+                options.Region = Amazon.RegionEndpoint.USEast1;
+            });
 
         using var serviceProvider = services.BuildServiceProvider();
         var publisher = serviceProvider.GetService<IHealthCheckPublisher>();

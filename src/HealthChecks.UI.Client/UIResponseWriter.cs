@@ -15,40 +15,34 @@ public static class UIResponseWriter
     private static readonly byte[] _emptyResponse = [(byte)'{', (byte)'}'];
     private static readonly Lazy<JsonSerializerOptions> _options = new(CreateJsonOptions);
 
-#pragma warning disable IDE1006 // Naming Styles
-    public static async Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) // TODO: rename public API
-#pragma warning restore IDE1006 // Naming Styles
+    private static async Task WriteHealthCheckUIResponseAsync(HttpContext httpContext, HealthReport report, Lazy<JsonSerializerOptions> jsonOptions, Func<Exception, string>? exceptionFormatter = null)
     {
         if (report != null)
         {
             httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
 
-            var uiReport = UIHealthReport.CreateFrom(report);
+            var uiReport = UIHealthReport.CreateFrom(report, exceptionFormatter);
 
-            await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value).ConfigureAwait(false);
+            await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, jsonOptions.Value).ConfigureAwait(false);
         }
         else
         {
             await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse).ConfigureAwait(false);
         }
     }
-
-#pragma warning disable IDE1006 // Naming Styles
-    public static async Task WriteHealthCheckUIResponseNoExceptionDetails(HttpContext httpContext, HealthReport report)
-#pragma warning restore IDE1006 // Naming Styles
+    public static Task WriteHealthCheckUIResponse(HttpContext httpContext, HealthReport report) // TODO: rename public API
     {
-        if (report != null)
-        {
-            httpContext.Response.ContentType = DEFAULT_CONTENT_TYPE;
+        return WriteHealthCheckUIResponseAsync(httpContext, report, _options);
+    }
 
-            var uiReport = UIHealthReport.CreateFrom(report, _ => "Exception Occurred.");
+    public static Task WriteHealthCheckUIResponseNoExceptionDetails(HttpContext httpContext, HealthReport report)
+    {
+        return WriteHealthCheckUIResponseAsync(httpContext, report, _options, _ => "Exception Occurred.");
+    }
 
-            await JsonSerializer.SerializeAsync(httpContext.Response.Body, uiReport, _options.Value).ConfigureAwait(false);
-        }
-        else
-        {
-            await httpContext.Response.BodyWriter.WriteAsync(_emptyResponse).ConfigureAwait(false);
-        }
+    public static Func<HttpContext, HealthReport, Task> CreateResponseWriter(Lazy<JsonSerializerOptions> jsonOptions, Func<Exception, string>? exceptionFormatter = null)
+    {
+        return (HttpContext httpContext, HealthReport report) => WriteHealthCheckUIResponseAsync(httpContext, report, jsonOptions, exceptionFormatter);
     }
 
     private static JsonSerializerOptions CreateJsonOptions()

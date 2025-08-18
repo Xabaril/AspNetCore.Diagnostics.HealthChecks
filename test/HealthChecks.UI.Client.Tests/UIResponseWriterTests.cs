@@ -56,6 +56,38 @@ public class UIResponseWriterTests
         responseAsText.ShouldContain(healthReportKey);
     }
 
+    [Fact]
+    public async Task should_use_custom_jsonserializersettings_when_provided()
+    {
+        var healthReportKey = "Some key";
+        var httpContext = new DefaultHttpContext();
+        httpContext.Response.Body = new MemoryStream();
+        var entries = new Dictionary<string, HealthReportEntry>
+        {
+            { healthReportKey, new HealthReportEntry(HealthStatus.Healthy, null, TimeSpan.FromSeconds(1), null, null) }
+        };
+        var report = new HealthReport(entries, TimeSpan.FromSeconds(1));
+
+        var customJsonSettings = new Lazy<JsonSerializerOptions>(() => new JsonSerializerOptions
+        {
+            WriteIndented = true,
+        });
+
+        var customWriter = UIResponseWriter.CreateResponseWriter(customJsonSettings);
+        await customWriter(httpContext, report);
+
+        httpContext.Response.ContentType.ShouldBe("application/json");
+
+        // reset pointer to the beginning
+        httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
+
+        var responseStreamReader = new StreamReader(httpContext.Response.Body);
+        var responseAsText = await responseStreamReader.ReadToEndAsync();
+
+        responseAsText.ShouldContain(healthReportKey);
+        responseAsText.Split('\n').Length.ShouldBeGreaterThan(1);
+    }
+
     private static JsonSerializerOptions CreateJsonOptions()
     {
         var options = new JsonSerializerOptions

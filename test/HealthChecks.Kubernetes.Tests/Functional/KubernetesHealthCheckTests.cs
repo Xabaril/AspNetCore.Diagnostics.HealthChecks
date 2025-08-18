@@ -3,7 +3,7 @@ using k8s;
 
 namespace HealthChecks.Kubernetes.Tests.Functional;
 
-public class kubernetes_healthcheck_should
+public class kubernetes_healthcheck_should(K3sContainerFixture k3sFixture) : IClassFixture<K3sContainerFixture>
 {
     [Fact]
     public async Task be_unhealthy_if_kubernetes_is_unavailable()
@@ -63,19 +63,23 @@ public class kubernetes_healthcheck_should
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
-    [Fact(Skip = "TODO: Implement")]
+    [Fact]
     public async Task be_healthy_if_kubernetes_is_available()
     {
+        var kubeconfig = await k3sFixture.GetKubeconfigAsync();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services
                     .AddHealthChecks()
-                    .AddKubernetes(setup => setup.WithConfiguration(new KubernetesClientConfiguration
-                    {
-                        Host = "https://localhost:443",
-                        SkipTlsVerify = true
-                    }).CheckService("DummyService", s => s.Spec.Type == "LoadBalancer"), tags: ["k8s"]);
+                    .AddKubernetes(
+                        setup => setup
+                            .WithConfiguration(kubeconfig)
+                            .CheckService(
+                                "kubernetes",
+                                s => s.Spec.Type == "ClusterIP"),
+                        tags: ["k8s"]);
             })
             .Configure(app =>
             {

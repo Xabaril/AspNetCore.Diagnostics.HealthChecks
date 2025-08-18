@@ -1,21 +1,21 @@
 using System.Net;
 using NATS.Client.Core;
-using NATS.Client.Hosting;
-using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.Functional;
 
-public class nats_healthcheck_should
+public class nats_healthcheck_should(NatsContainerFixture natsFixture) : IClassFixture<NatsContainerFixture>
 {
     [Fact]
     public async Task be_healthy_when_nats_is_available_using_client_factory()
     {
+        string connectionString = natsFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 var options = NatsOpts.Default with
                 {
-                    Url = DefaultLocalConnectionString,
+                    Url = connectionString,
                 };
                 var natsConnection = new NatsConnection(options);
 
@@ -42,12 +42,14 @@ public class nats_healthcheck_should
     [Fact]
     public async Task be_healthy_when_nats_is_available_using_singleton()
     {
+        string connectionString = natsFixture.GetConnectionString();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 var options = NatsOpts.Default with
                 {
-                    Url = DefaultLocalConnectionString,
+                    Url = connectionString
                 };
 
                 services
@@ -83,7 +85,7 @@ public class nats_healthcheck_should
                         {
                             var options = NatsOpts.Default with
                             {
-                                Url = ConnectionStringDoesNotExistOrStopped,
+                                Url = "nats://DoesNotExist:4222",
                             };
                             return new NatsConnection(options);
                         }, tags: new string[] { "nats" });

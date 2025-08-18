@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.ArangoDb\HealthChecks.ArangoDb.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.ArangoDb" />
+  </ItemGroup>
+
 </Project>

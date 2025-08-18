@@ -16,6 +16,7 @@ internal class Keys
     internal const string HEALTHCHECKSUI_WEBHOOKS_API_TARGET = "#webhookPath#";
     internal const string HEALTHCHECKSUI_RESOURCES_TARGET = "#uiResourcePath#";
     internal const string HEALTHCHECKSUI_STYLESHEETS_TARGET = "#customstylesheets#";
+    internal const string HEALTHCHECKSUI_JAVASCRIPTS_TARGET = "#customjavascripts#";
     internal const string HEALTHCHECKSUI_ASIDEMENUEOPENED_TARGET = "#asideMenuOpened#";
     internal const string HEALTHCHECKSUI_SETTINGS_ENDPOINT_TARGET = "#uiSettingsEndpoint#";
     internal const string HEALTHCHECKSUI_PAGE_TITLE = "#pageTitle#";

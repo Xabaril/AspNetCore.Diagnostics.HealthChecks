@@ -64,4 +64,33 @@ internal static class UIResourceExtensions
 
         return styleSheets;
     }
+
+    public static ICollection<UIJavaScript> GetCustomJavaScripts(this UIResource resource, Options options)
+    {
+        var javaScripts = new List<UIJavaScript>();
+
+        if (options.CustomJavaScripts.Count == 0)
+        {
+            resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_JAVASCRIPTS_TARGET, string.Empty);
+            return javaScripts;
+        }
+
+        foreach (var javaScript in options.CustomJavaScripts)
+        {
+            javaScripts.Add(UIJavaScript.Create(options, javaScript));
+        }
+
+        var htmlScripts = javaScripts.Select
+            (s =>
+            {
+                var linkHref = options.UseRelativeResourcesPath ? s.ResourcePath.AsRelativeResource() : s.ResourcePath;
+                return $"<script type='text/javascript' src='{linkHref}'></script>";
+
+            });
+
+        resource.Content = resource.Content.Replace(Keys.HEALTHCHECKSUI_JAVASCRIPTS_TARGET,
+            string.Join("\n", htmlScripts));
+
+        return javaScripts;
+    }
 }

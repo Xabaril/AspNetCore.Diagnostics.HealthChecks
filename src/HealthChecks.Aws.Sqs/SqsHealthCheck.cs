@@ -15,19 +15,27 @@ public class SqsHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var currentQueue = "";
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "aws.sqs" }
+        };
+
         try
         {
             using var client = CreateSqsClient();
             foreach (var queueName in _sqsOptions.Queues)
             {
+                currentQueue = queueName;
                 _ = await client.GetQueueUrlAsync(queueName).ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            checkDetails.Add("messaging.destination.name", currentQueue);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

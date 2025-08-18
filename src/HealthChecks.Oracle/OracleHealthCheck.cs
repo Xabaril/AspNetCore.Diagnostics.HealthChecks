@@ -9,6 +9,11 @@ namespace HealthChecks.Oracle;
 public class OracleHealthCheck : IHealthCheck
 {
     private readonly OracleHealthCheckOptions _options;
+    private readonly Dictionary<string, object> _baseCheckDetails = new Dictionary<string, object>{
+                    { "health_check.task", "ready" },
+                    { "db.system.name", "oracle" },
+                    { "network.transport", "tcp" }
+    };
 
     public OracleHealthCheck(OracleHealthCheckOptions options)
     {
@@ -20,11 +25,20 @@ public class OracleHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "oracle.db" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             using var connection = _options.Credential == null
                 ? new OracleConnection(_options.ConnectionString)
                 : new OracleConnection(_options.ConnectionString, _options.Credential);
+            checkDetails.Add("db.query.text", _options.CommandText);
+            checkDetails.Add("db.namespace", connection.Database);
+            checkDetails.Add("server.address", connection.DataSource);
 
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -39,7 +53,7 @@ public class OracleHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails, exception: ex);
         }
     }
 }

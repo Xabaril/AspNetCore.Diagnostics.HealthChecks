@@ -26,6 +26,12 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "influxdb" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             var ready = await _influxDbClient.ReadyAsync().ConfigureAwait(false);
@@ -35,17 +41,17 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
             {
                 var me = await _influxDbClient.GetUsersApi().MeAsync(cancellationToken).ConfigureAwait(false);
                 return me?.Status == User.StatusEnum.Active
-                    ? HealthCheckResult.Healthy($"Started:{ready.Started} Up:{ready.Up}")
-                    : HealthCheckResult.Degraded($"User status is {me?.Status}.");
+                    ? HealthCheckResult.Healthy($"Started:{ready.Started} Up:{ready.Up}", data: checkDetails)
+                    : HealthCheckResult.Degraded($"User status is {me?.Status}.", data: checkDetails);
             }
             else
             {
-                return HealthCheckResult.Unhealthy($"Ping:{ping} Status:{ready.Status} Started:{ready.Started} Up:{ready.Up}");
+                return HealthCheckResult.Unhealthy($"Ping:{ping} Status:{ready.Status} Started:{ready.Started} Up:{ready.Up}", data: checkDetails);
             }
         }
         catch (Exception ex)
         {
-            return HealthCheckResult.Unhealthy(ex.Message, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, ex.Message, exception: ex, data: checkDetails);
         }
     }
 

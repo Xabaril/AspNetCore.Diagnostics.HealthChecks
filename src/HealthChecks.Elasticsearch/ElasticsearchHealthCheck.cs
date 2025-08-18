@@ -21,6 +21,12 @@ public class ElasticsearchHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+                    { "health_check.task", "online" },
+                    { "db.system.name", "elasticsearch" },
+                    { "network.transport", "tcp" }
+        };
+
         try
         {
             ElasticsearchClient? elasticsearchClient = null;
@@ -90,31 +96,33 @@ public class ElasticsearchHealthCheck : IHealthCheck
 
             if (_options.UseClusterHealthApi)
             {
+                checkDetails.Add("health_check.task", "ready");
                 var healthResponse = await elasticsearchClient.Cluster.HealthAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 if (healthResponse.ApiCallDetails.HttpStatusCode != 200)
                 {
-                    return new HealthCheckResult(context.Registration.FailureStatus);
+                    return new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails);
                 }
 
                 return healthResponse.Status switch
                 {
-                    Elastic.Clients.Elasticsearch.HealthStatus.Green => HealthCheckResult.Healthy(),
-                    Elastic.Clients.Elasticsearch.HealthStatus.Yellow => HealthCheckResult.Degraded(),
-                    _ => new HealthCheckResult(context.Registration.FailureStatus)
+                    Elastic.Clients.Elasticsearch.HealthStatus.Green => HealthCheckResult.Healthy(data: checkDetails),
+                    Elastic.Clients.Elasticsearch.HealthStatus.Yellow => HealthCheckResult.Degraded(data: checkDetails),
+                    _ => new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails)
                 };
             }
 
+            checkDetails.Add("health_check.task", "online");
             var pingResult = await elasticsearchClient.PingAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             bool isSuccess = pingResult.ApiCallDetails.HttpStatusCode == 200;
 
             return isSuccess
-                ? HealthCheckResult.Healthy()
-                : new HealthCheckResult(context.Registration.FailureStatus);
+                ? HealthCheckResult.Healthy(data: checkDetails)
+                : new HealthCheckResult(context.Registration.FailureStatus, data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

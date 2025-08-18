@@ -81,4 +81,23 @@ public class azure_service_bus_topic_registration_should
         connectionStringFactoryCalled.ShouldBeTrue();
         topicNameFactoryCalled.ShouldBeTrue();
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("azuretopiccheck")]
+    public void add_health_check_with_namespace_when_properly_configured(string? name)
+    {
+        var services = new ServiceCollection();
+        services.AddHealthChecks()
+            .AddAzureServiceBusTopicWithNamespace("cnn", "topicName", name);
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<IOptions<HealthCheckServiceOptions>>();
+
+        var registration = options.Value.Registrations.First();
+        var check = registration.Factory(serviceProvider);
+
+        registration.Name.ShouldBe(name ?? "azuretopic");
+        check.ShouldBeOfType<AzureServiceBusTopicHealthCheck>();
+    }
 }

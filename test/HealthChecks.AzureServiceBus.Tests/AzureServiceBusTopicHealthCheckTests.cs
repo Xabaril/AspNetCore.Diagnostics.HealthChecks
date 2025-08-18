@@ -1,4 +1,5 @@
 using Azure.Core;
+using Azure.Identity;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
 using NSubstitute;
@@ -28,16 +29,19 @@ public class azureservicebustopichealthcheck_should
         _tokenCredential = Substitute.For<TokenCredential>();
 
         _clientProvider.CreateManagementClient(ConnectionString).Returns(_serviceBusAdministrationClient);
-        _clientProvider.CreateManagementClient(FullyQualifiedName, _tokenCredential).Returns(_serviceBusAdministrationClient);
+        _clientProvider.CreateManagementClient(FullyQualifiedName, Arg.Any<TokenCredential>()).Returns(_serviceBusAdministrationClient);
     }
 
-    [Fact]
-    public async Task can_create_client_with_connection_string()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task can_create_client_with_connection_string(bool configureCredential)
     {
         using var tokenSource = new CancellationTokenSource();
 
         await ExecuteHealthCheckAsync(
             TopicName,
+            configureCredential,
             connectionString: ConnectionString,
             cancellationToken: tokenSource.Token);
 
@@ -75,19 +79,22 @@ public class azureservicebustopichealthcheck_should
             .GetTopicRuntimePropertiesAsync(otherTopicName, tokenSource.Token);
     }
 
-    [Fact]
-    public async Task can_create_client_with_fully_qualified_name()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task can_create_client_with_fully_qualified_name(bool configureCredential)
     {
         using var tokenSource = new CancellationTokenSource();
 
         await ExecuteHealthCheckAsync(
             TopicName,
+            configureCredential,
             fullyQualifiedName: FullyQualifiedName,
             cancellationToken: tokenSource.Token);
 
         _clientProvider
             .Received(1)
-            .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+            .CreateManagementClient(FullyQualifiedName, configureCredential ? _tokenCredential : Arg.Any<DefaultAzureCredential>());
     }
 
     [Fact]
@@ -108,7 +115,7 @@ public class azureservicebustopichealthcheck_should
 
         _clientProvider
             .Received(1)
-            .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+            .CreateManagementClient(FullyQualifiedName, Arg.Any<TokenCredential>());
 
         await _serviceBusAdministrationClient
             .Received(1)
@@ -154,7 +161,7 @@ public class azureservicebustopichealthcheck_should
 
         _clientProvider
             .Received(1)
-            .CreateManagementClient(FullyQualifiedName, _tokenCredential);
+            .CreateManagementClient(FullyQualifiedName, Arg.Any<TokenCredential>());
 
         await _serviceBusAdministrationClient
             .Received(1)
@@ -184,6 +191,7 @@ public class azureservicebustopichealthcheck_should
 
     private Task<HealthCheckResult> ExecuteHealthCheckAsync(
         string topicName,
+        bool configureCredential = false,
         string? connectionString = null,
         string? fullyQualifiedName = null,
         CancellationToken cancellationToken = default)
@@ -192,7 +200,7 @@ public class azureservicebustopichealthcheck_should
         {
             ConnectionString = connectionString,
             FullyQualifiedNamespace = fullyQualifiedName,
-            Credential = fullyQualifiedName is null ? null : _tokenCredential,
+            Credential = configureCredential ? _tokenCredential : null,
         };
         var healthCheck = new AzureServiceBusTopicHealthCheck(options, _clientProvider);
         var context = new HealthCheckContext

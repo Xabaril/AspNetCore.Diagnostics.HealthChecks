@@ -1,4 +1,5 @@
 using Azure.Core;
+using Azure.Identity;
 using HealthChecks.AzureServiceBus;
 using HealthChecks.AzureServiceBus.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -182,6 +183,26 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     }
 
     /// <summary>
+    /// Add a health check for specified Azure Service Bus Queue.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="queueName">The name of the queue to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeue' will be used for the name.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    /// <remarks> Uses the <see cref="DefaultAzureCredential"/> for authentication.</remarks>
+    public static IHealthChecksBuilder AddAzureServiceBusQueueWithNamespace(
+        this IHealthChecksBuilder builder,
+        string fullyQualifiedNamespace,
+        string queueName,
+        string? name = default) =>
+        builder.AddAzureServiceBusQueue(
+            fullyQualifiedNamespace,
+            queueName,
+            new DefaultAzureCredential(),
+            name: name);
+
+    /// <summary>
     /// Add a health check for specified Azure Service Bus Queue active or dead letter messages threshold.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
@@ -270,6 +291,26 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             tags,
             timeout));
     }
+
+    /// <summary>
+    /// Add a health check for specified Azure Service Bus Queue active or dead letter messages threshold.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="queueName">The name of the queue to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azurequeuethreshold' will be used for the name.</param>
+    /// <returns>The <see cref="IHealthChecksBuilder"/>.</returns>
+    /// <remarks> Uses the <see cref="DefaultAzureCredential"/> for authentication.</remarks>
+    public static IHealthChecksBuilder AddAzureServiceBusQueueMessageCountThresholdWithNamespace(
+        this IHealthChecksBuilder builder,
+        string fullyQualifiedNamespace,
+        string queueName,
+        string? name = default) =>
+        builder.AddAzureServiceBusQueueMessageCountThreshold(
+            fullyQualifiedNamespace,
+            queueName,
+            new DefaultAzureCredential(),
+            name: name);
 
     /// <summary>
     /// Add a health check for Azure Service Bus Topic.
@@ -433,6 +474,26 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
     }
 
     /// <summary>
+    /// Add a health check for Azure Service Bus Topic.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="topicName">The name of the topic to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    /// <remarks> Uses the <see cref="DefaultAzureCredential"/> for authentication.</remarks>
+    public static IHealthChecksBuilder AddAzureServiceBusTopicWithNamespace(
+        this IHealthChecksBuilder builder,
+        string fullyQualifiedNamespace,
+        string topicName,
+        string? name = default) =>
+        builder.AddAzureServiceBusTopic(
+            fullyQualifiedNamespace,
+            topicName,
+            new DefaultAzureCredential(),
+            name: name);
+
+    /// <summary>
     /// Add a health check for Azure Service Bus Subscription.
     /// </summary>
     /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
@@ -606,4 +667,27 @@ public static class AzureServiceBusHealthCheckBuilderExtensions
             tags,
             timeout));
     }
+
+    /// <summary>
+    /// Add a health check for Azure Service Bus Subscription.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHealthChecksBuilder"/>.</param>
+    /// <param name="fullyQualifiedNamespace">The azure service bus fully qualified namespace to be used, format sb://myservicebus.servicebus.windows.net/.</param>
+    /// <param name="topicName">The name of the topic to check.</param>
+    /// <param name="subscriptionName">The subscription name of the topic subscription to check.</param>
+    /// <param name="name">The health check name. Optional. If <c>null</c> the type name 'azuretopic' will be used for the name.</param>
+    /// <returns>The specified <paramref name="builder"/>.</returns>
+    /// <remarks> Uses the <see cref="DefaultAzureCredential"/> for authentication.</remarks>
+    public static IHealthChecksBuilder AddAzureServiceBusSubscriptionWithNamespace(
+        this IHealthChecksBuilder builder,
+        string fullyQualifiedNamespace,
+        string topicName,
+        string subscriptionName,
+        string? name = default) =>
+        builder.AddAzureServiceBusSubscription(
+            fullyQualifiedNamespace,
+            topicName,
+            subscriptionName,
+            new DefaultAzureCredential(),
+            name: name);
 }

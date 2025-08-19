@@ -8,7 +8,7 @@ internal class KubernetesAddressFactory
     {
         var defaultPort = int.Parse(resource.Spec.PortNumber ?? Constants.DEFAULT_PORT);
         var port = GetServicePort(service)?.Port ?? defaultPort;
-        var address = service.Spec.ClusterIP;
+        var address = $"{service.Metadata.Name}.{service.Metadata.Namespace()}.svc.cluster.local";
 
         string healthScheme = resource.Spec.HealthChecksScheme;
 

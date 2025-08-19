@@ -28,7 +28,7 @@ public class ProcessHealthCheck : IHealthCheck
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, exception: ex));
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
         }
 
         return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus));

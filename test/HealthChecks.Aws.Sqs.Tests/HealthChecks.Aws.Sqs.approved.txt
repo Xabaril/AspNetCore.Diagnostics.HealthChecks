@@ -10,6 +10,7 @@ namespace HealthChecks.Aws.Sqs
         public SqsOptions() { }
         public Amazon.Runtime.AWSCredentials? Credentials { get; set; }
         public Amazon.RegionEndpoint? RegionEndpoint { get; set; }
+        public string? ServiceURL { get; set; }
         public HealthChecks.Aws.Sqs.SqsOptions AddQueue(string queueName) { }
     }
 }

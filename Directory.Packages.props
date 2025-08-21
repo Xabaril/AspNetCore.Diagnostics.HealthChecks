@@ -105,7 +105,7 @@
     <PackageVersion Include="Testcontainers" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.ClickHouse" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Kafka" Version="$(TestcontainersVersion)" />
-    <PackageVersion Include="Testcontainers.LocalStack" Version="4.1.0" />
+    <PackageVersion Include="Testcontainers.LocalStack" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Milvus" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="TestContainers.MongoDb" Version="$(TestcontainersVersion)" />

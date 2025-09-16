@@ -1,4 +1,4 @@
-using ClickHouse.Client.ADO;
+using ClickHouse.Driver.ADO;
 
 namespace HealthChecks.ClickHouse.Tests.DependencyInjection;
 

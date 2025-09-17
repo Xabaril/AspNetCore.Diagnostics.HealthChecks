@@ -45,7 +45,15 @@ public class AzureServiceBusSubscriptionHealthCheck : AzureServiceBusHealthCheck
                 _ => client.CreateReceiver(Options.TopicName, Options.SubscriptionName))
                 .ConfigureAwait(false);
 
-            await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            var cancel_task = Task.Delay(Timeout.Infinite, cts.Token);
+            var peek_task = receiver.PeekMessageAsync(cancellationToken: cancellationToken);
+            var winner = await Task.WhenAny(peek_task, cancel_task).ConfigureAwait(false);
+            if (winner == peek_task)
+            {
+                cts.Cancel();
+            }
+            await winner.ConfigureAwait(false);
         }
 
         Task CheckWithManagement()

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClickHouse.Client" />
+    <PackageReference Include="ClickHouse.Driver" />
   </ItemGroup>
 
 </Project>

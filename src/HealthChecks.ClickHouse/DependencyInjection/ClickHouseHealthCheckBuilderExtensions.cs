@@ -1,4 +1,4 @@
-using ClickHouse.Client.ADO;
+using ClickHouse.Driver.ADO;
 using HealthChecks.ClickHouse;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

@@ -1,6 +1,6 @@
 ## ClickHouse Health Check
 
-This health check verifies the ability to communicate with [ClickHouse](https://www.clickhouse.com/). It uses the [ClickHouse.Client](https://www.nuget.org/packages/ClickHouse.Client) library.
+This health check verifies the ability to communicate with [ClickHouse](https://www.clickhouse.com/). It uses the official [ClickHouse.Driver](https://www.nuget.org/packages/ClickHouse.Driver) library.
 
 ## Recommended approach
 

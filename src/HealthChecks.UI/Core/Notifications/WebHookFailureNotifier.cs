@@ -63,7 +63,7 @@ internal sealed class WebHookFailureNotifier : IHealthCheckFailureNotifier, IDis
                 {
                     _logger.LogInformation("Webhook notification will not be sent because of user configuration");
                     continue;
-                };
+                }
 
                 if (!isHealthy)
                 {

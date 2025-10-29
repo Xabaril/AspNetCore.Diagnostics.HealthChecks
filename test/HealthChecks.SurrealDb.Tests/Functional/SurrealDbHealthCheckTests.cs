@@ -2,12 +2,12 @@ using System.Net;
 
 namespace HealthChecks.SurrealDb.Tests.Functional;
 
-public class surrealdb_healthcheck_should
+public class surrealdb_healthcheck_should(SurrealDbContainerFixture surrealDbFixture) : IClassFixture<SurrealDbContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_surrealdb_is_available()
     {
-        const string connectionString = "Server=http://localhost:8000;Namespace=test;Database=test;Username=root;Password=root";
+        string connectionString = surrealDbFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -36,7 +36,7 @@ public class surrealdb_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_surrealdb_is_not_available()
     {
-        const string connectionString = "Server=http://localhost:1234;Namespace=test;Database=test;Username=root;Password=root";
+        const string connectionString = "Server=http://localhost:1234;Username=root;Password=root";
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>

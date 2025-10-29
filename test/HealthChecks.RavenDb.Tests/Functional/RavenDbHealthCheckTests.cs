@@ -1,30 +1,11 @@
 using System.Net;
 using HealthChecks.UI.Client;
-using Raven.Client.Documents;
-using Raven.Client.ServerWide;
-using Raven.Client.ServerWide.Operations;
 
 namespace HealthChecks.RavenDb.Tests.Functional;
 
-public class ravendb_healthcheck_should
+public class ravendb_healthcheck_should(RavenDbContainerFixture ravenDbFixture) : IClassFixture<RavenDbContainerFixture>
 {
-    private readonly string[] _urls = ["http://localhost:9030"];
-
-    public ravendb_healthcheck_should()
-    {
-        try
-        {
-            using var store = new DocumentStore
-            {
-                Urls = _urls,
-            };
-
-            store.Initialize();
-
-            store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord("Demo")));
-        }
-        catch { }
-    }
+    private readonly string[] _urls = [ravenDbFixture.GetConnectionString()];
 
     [Fact]
     public async Task be_healthy_if_ravendb_is_available()

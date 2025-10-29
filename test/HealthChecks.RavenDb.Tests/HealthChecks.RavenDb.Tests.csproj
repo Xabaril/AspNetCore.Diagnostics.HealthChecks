@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.RavenDB\HealthChecks.RavenDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.RavenDb" />
+  </ItemGroup>
+
 </Project>

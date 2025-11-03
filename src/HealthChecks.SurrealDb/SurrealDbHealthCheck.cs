@@ -20,8 +20,6 @@ public class SurrealDbHealthCheck : IHealthCheck
     {
         try
         {
-            await _client.Connect(cancellationToken).ConfigureAwait(false);
-
             return await _client.Health(cancellationToken).ConfigureAwait(false)
                 ? HealthCheckResult.Healthy()
                 : HealthCheckResult.Unhealthy();

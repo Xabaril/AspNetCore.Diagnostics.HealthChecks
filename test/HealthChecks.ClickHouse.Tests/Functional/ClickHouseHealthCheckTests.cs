@@ -10,18 +10,18 @@ public class DBConfigSetting
     public string ConnectionString { get; set; } = null!;
 }
 
-public class ClickHouse_healthcheck_should
+public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouseFixture) : IClassFixture<ClickHouseContainerFixture>
 {
-    private const string ConnectionString = "Host=127.0.0.1;Port=8123;Database=default;Username=default;Password=Password12!;";
+    private readonly string _connectionString = clickHouseFixture.GetConnectionString();
 
     [Fact]
     public async Task be_healthy_if_ClickHouse_is_available()
     {
         var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(static services =>
+            .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddClickHouse(static _ => new ClickHouseConnection(ConnectionString), tags: new string[] { "ClickHouse" });
+                .AddClickHouse(_ => new ClickHouseConnection(_connectionString), tags: new string[] { "ClickHouse" });
             })
             .Configure(static app =>
             {
@@ -42,10 +42,10 @@ public class ClickHouse_healthcheck_should
     public async Task be_unhealthy_if_sql_query_is_not_valid()
     {
         var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(static services =>
+            .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                .AddClickHouse(static _ => new ClickHouseConnection(ConnectionString), "SELECT 1 FROM InvalidDB", tags: new string[] { "ClickHouse" });
+                .AddClickHouse(_ => new ClickHouseConnection(_connectionString), "SELECT 1 FROM InvalidDB", tags: new string[] { "ClickHouse" });
             })
             .Configure(static app =>
             {
@@ -68,8 +68,11 @@ public class ClickHouse_healthcheck_should
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
-                services.AddHealthChecks()
-                .AddClickHouse(static _ => new ClickHouseConnection("Host=200.0.0.1;Port=8123;Database=default;Username=default;Password=Password12!;"), tags: new string[] { "ClickHouse" });
+                services
+                    .AddHealthChecks()
+                    .AddClickHouse(static _ => new ClickHouseConnection("Host=200.0.0.1;Port=8123;Database=default;Username=default;Password=Password12!;"),
+                        tags: ["ClickHouse"],
+                        timeout: TimeSpan.FromSeconds(15));
             })
             .Configure(app =>
             {
@@ -94,7 +97,7 @@ public class ClickHouse_healthcheck_should
             {
                 services.AddSingleton(new DBConfigSetting
                 {
-                    ConnectionString = ConnectionString
+                    ConnectionString = _connectionString
                 });
 
                 services.AddHealthChecks()
@@ -126,8 +129,12 @@ public class ClickHouse_healthcheck_should
                     ConnectionString = "Server=200.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres"
                 });
 
-                services.AddHealthChecks()
-                        .AddClickHouse(static sp => new ClickHouseConnection(sp.GetRequiredService<DBConfigSetting>().ConnectionString), tags: new string[] { "ClickHouse" });
+                services
+                    .AddHealthChecks()
+                    .AddClickHouse(
+                        static sp => new ClickHouseConnection(sp.GetRequiredService<DBConfigSetting>().ConnectionString),
+                        tags: ["ClickHouse"],
+                        timeout: TimeSpan.FromSeconds(15));
             })
             .Configure(app =>
             {

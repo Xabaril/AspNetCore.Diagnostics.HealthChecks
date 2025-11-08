@@ -52,7 +52,7 @@ dotnet_style_predefined_type_for_member_access = true:error
 
 # .NET code style settings - Modifier preferences
 # https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-language-conventions?view=vs-2019#normalize-modifiers
-dotnet_style_require_accessibility_modifiers = always:warning
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:warning
 dotnet_style_readonly_field = true:warning
 

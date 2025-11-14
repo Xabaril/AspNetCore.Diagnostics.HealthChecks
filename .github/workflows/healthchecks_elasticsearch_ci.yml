@@ -44,6 +44,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
       - run:
           ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
       - name: Restore

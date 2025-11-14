@@ -1,7 +1,7 @@
 <Project>
 
   <Import Project="..\Directory.Build.props" />
-  
+
   <PropertyGroup>
     <PackageId>AspNetCore.$(MSBuildProjectName)</PackageId>
     <PackageIcon>icon.png</PackageIcon>
@@ -20,22 +20,25 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefaultNetCoreApp>net8.0</DefaultNetCoreApp>
+    <DefaultNetCoreApp>net10.0</DefaultNetCoreApp>
     <DefaultLibraryTargetFrameworks>$(DefaultNetCoreApp);netstandard2.0</DefaultLibraryTargetFrameworks>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(Configuration)' == 'Release' AND !$(MSBuildProjectName.StartsWith('HealthChecks.UI'))">
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)../build/strongNameKey.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Condition="Exists('README.md')" Include="README.md" Pack="true" PackagePath="\" />
     <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" Condition="'$(SignAssembly)' != 'true'"/>
   </ItemGroup>
 
-  <ItemGroup Condition="!$(MSBuildProjectName.StartsWith('HealthChecks.UI')) OR '$(MSBuildProjectName)' == 'HealthChecks.UI.Core'">
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-  </ItemGroup>
+<ItemGroup Condition="!($(MSBuildProjectName.StartsWith('HealthChecks.UI'))
+                      OR '$(MSBuildProjectName)' == 'HealthChecks.Publisher.Prometheus'
+                      OR '$(MSBuildProjectName)' == 'HealthChecks.Prometheus.Metrics' )
+                      OR '$(MSBuildProjectName)' == 'HealthChecks.UI.Core'">
+  <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+</ItemGroup>
 
 </Project>

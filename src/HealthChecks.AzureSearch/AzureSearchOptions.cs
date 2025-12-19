@@ -1,3 +1,5 @@
+using Azure.Core;
+
 namespace HealthChecks.AzureSearch;
 
 /// <summary>
@@ -17,6 +19,13 @@ public class AzureSearchOptions
 
     /// <summary>
     /// The API credential used to authenticate against the Search service.
+    /// Ignored, when <see cref="TokenCredential"/> is set.
     /// </summary>
-    public string AuthKey { get; set; } = null!;
+    public string? AuthKey { get; set; }
+
+    /// <summary>
+    /// The Azure token credential used to authenticate against the Search service.
+    /// When set, it has precedence over <see cref="AuthKey"/>."/>
+    /// </summary>
+    public TokenCredential? TokenCredential { get; set; }
 }

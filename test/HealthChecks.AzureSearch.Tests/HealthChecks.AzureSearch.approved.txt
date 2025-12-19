@@ -8,9 +8,10 @@ namespace HealthChecks.AzureSearch
     public class AzureSearchOptions
     {
         public AzureSearchOptions() { }
-        public string AuthKey { get; set; }
+        public string? AuthKey { get; set; }
         public string Endpoint { get; set; }
         public string IndexName { get; set; }
+        public Azure.Core.TokenCredential? TokenCredential { get; set; }
     }
 }
 namespace HealthChecks.AzureSearch.DependencyInjection

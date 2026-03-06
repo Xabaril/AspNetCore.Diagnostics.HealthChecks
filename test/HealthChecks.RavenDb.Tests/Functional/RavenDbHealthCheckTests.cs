@@ -1,4 +1,7 @@
 using System.Net;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using HealthChecks.RavenDB;
 using HealthChecks.UI.Client;
 
 namespace HealthChecks.RavenDb.Tests.Functional;
@@ -150,5 +153,32 @@ public class ravendb_healthcheck_should(RavenDbContainerFixture ravenDbFixture) 
         using var response = await server.CreateRequest("/health").GetAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable, await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task not_dispose_shared_certificate_when_store_initialization_fails()
+    {
+        using var rsa = RSA.Create(2048);
+        var certificateRequest = new CertificateRequest("CN=ravendb-healthcheck-test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = certificateRequest.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddDays(1));
+
+        var options = new RavenDBOptions
+        {
+            Urls = ["http://localhost:0"],
+            Certificate = certificate
+        };
+
+        var healthCheck = new RavenDBHealthCheck(options);
+        var context = new HealthCheckContext
+        {
+            Registration = new HealthCheckRegistration("ravendb", _ => healthCheck, HealthStatus.Unhealthy, tags: null)
+        };
+
+        var result = await healthCheck.CheckHealthAsync(context);
+
+        result.Status.ShouldBe(HealthStatus.Unhealthy);
+
+        using var privateKey = certificate.GetRSAPrivateKey();
+        privateKey.ShouldNotBeNull();
     }
 }

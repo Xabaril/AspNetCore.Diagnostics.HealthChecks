@@ -49,6 +49,10 @@ public class RavenDBHealthCheck : IHealthCheck
                     Certificate = o.Certificate
                 };
 
+                // Health check doesn't own the certificate lifetime; it may be shared (e.g. DI/KeyVault).
+                // Disposing it can break other RavenDB stores in the process.
+                store.Conventions.DisposeCertificate = false;
+
                 try
                 {
                     store.Initialize();

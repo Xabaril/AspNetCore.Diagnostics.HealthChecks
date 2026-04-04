@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefaultNetCoreApp>net8.0</DefaultNetCoreApp>
+    <DefaultNetCoreApp>net10.0</DefaultNetCoreApp>
     <DefaultLibraryTargetFrameworks>$(DefaultNetCoreApp);netstandard2.0</DefaultLibraryTargetFrameworks>
   </PropertyGroup>
 

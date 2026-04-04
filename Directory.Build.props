@@ -10,7 +10,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
-    <NoWarn>$(NoWarn);1591;IDISP013;</NoWarn>
+    <NoWarn>$(NoWarn);1591;IDISP013;NU1510</NoWarn>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
   <ItemGroup>

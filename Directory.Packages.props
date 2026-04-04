@@ -36,16 +36,15 @@
     <PackageVersion Include="Google.Cloud.Firestore" Version="4.2.0" />
     <PackageVersion Include="Gremlin.Net" Version="3.8.0" />
     <PackageVersion Include="Hangfire.Core" Version="1.8.23" />
-    <PackageVersion Include="IBMMQDotnetClient" Version="9.3.5.1" />
+    <PackageVersion Include="IBMMQDotnetClient" Version="9.4.5" />
     <PackageVersion Include="InfluxDB.Client" Version="5.0.0" />
     <PackageVersion Include="KubernetesClient" Version="19.0.2" />
     <PackageVersion Include="Microsoft.ApplicationInsights" Version="3.1.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.1.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.25" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.14" Condition="'$(TargetFramework)' == 'net9.0'" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.58.0" />
     <PackageVersion Include="Microsoft.Azure.Devices" Version="1.41.0" />
     <PackageVersion Include="Microsoft.Azure.DocumentDB.Core" Version="2.22.0" />
@@ -53,33 +52,33 @@
     <PackageVersion Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.1" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.25" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.14" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="8.5.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.25" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.25" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="10.0.5" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageVersion Include="Milvus.Client" Version="2.3.0-preview.1" />
     <PackageVersion Include="MongoDB.Driver" Version="3.7.1" />
     <PackageVersion Include="MySqlConnector" Version="2.5.0" />
     <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.5.0" />
     <PackageVersion Include="NATS.Net" Version="2.7.3" />
-    <PackageVersion Include="Npgsql" Version="8.0.9" />
-    <PackageVersion Include="Npgsql.DependencyInjection" Version="8.0.9" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+    <PackageVersion Include="Npgsql" Version="10.0.2" />
+    <PackageVersion Include="Npgsql.DependencyInjection" Version="10.0.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="2.19.300" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
     <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.26.100" Condition="'$(TargetFramework)' != 'netstandard2.0'" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageVersion Include="prometheus-net" Version="8.2.1" />
     <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
     <PackageVersion Include="Qdrant.Client" Version="1.17.0" />
@@ -97,11 +96,11 @@
     <PackageVersion Include="StackExchange.Redis" Version="2.12.14" />
     <PackageVersion Include="SurrealDb.Net" Version="0.9.0" />
     <PackageVersion Include="System.Buffers" Version="4.6.1" />
-    <PackageVersion Include="System.Net.Http.Json" Version="8.0.1" />
-    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
-    <PackageVersion Include="System.Text.Json" Version="8.0.6" />
+    <PackageVersion Include="System.Net.Http.Json" Version="10.0.5" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.5" />
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
+    <PackageVersion Include="System.Threading.Channels" Version="10.0.5" />
     <PackageVersion Include="Testcontainers" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.ClickHouse" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Kafka" Version="$(TestcontainersVersion)" />

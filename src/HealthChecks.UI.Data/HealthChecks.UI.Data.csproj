@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <PackageTags>$(PackageTags);Data</PackageTags>
     <Description>HealthChecks.UI.Data package containing data models and database context definition</Description>
     <VersionPrefix>$(HealthCheckUIData)</VersionPrefix>

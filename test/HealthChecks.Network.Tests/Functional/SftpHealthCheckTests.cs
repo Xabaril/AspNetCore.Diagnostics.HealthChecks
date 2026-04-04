@@ -8,30 +8,26 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connection_to_sftp_is_successful_using_password_authentication()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddSftpHealthCheck(setup =>
-                {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPasswordAuthentication("pass")
-                                    .Build();
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                                        .AddPasswordAuthentication("pass")
+                                        .Build();
 
-                    setup.AddHost(cfg);
-                }, tags: ["sftp"], timeout: TimeSpan.FromSeconds(5));
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("sftp")
-                });
-            });
+                        setup.AddHost(cfg);
+                    }, tags: ["sftp"], timeout: TimeSpan.FromSeconds(5));
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
@@ -39,30 +35,26 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_connection_to_sftp_is_using_wrong_password()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddSftpHealthCheck(setup =>
-                {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPasswordAuthentication("wrongpass")
-                                    .Build();
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                                        .AddPasswordAuthentication("wrongpass")
+                                        .Build();
 
-                    setup.AddHost(cfg);
-                }, tags: ["sftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("sftp")
-                });
-            });
+                        setup.AddHost(cfg);
+                    }, tags: ["sftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -72,30 +64,26 @@ public class sftp_healthcheck_should
     {
         string privateKey = File.ReadAllText("id_rsa");
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddSftpHealthCheck(setup =>
-                {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPrivateKeyAuthentication(privateKey, "beatpulse")
-                                    .Build();
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                                        .AddPrivateKeyAuthentication(privateKey, "beatpulse")
+                                        .Build();
 
-                    setup.AddHost(cfg);
-                }, tags: ["sftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("sftp")
-                });
-            });
+                        setup.AddHost(cfg);
+                    }, tags: ["sftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
@@ -105,31 +93,27 @@ public class sftp_healthcheck_should
     {
         string privateKey = File.ReadAllText("id_rsa");
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddSftpHealthCheck(setup =>
-                {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPrivateKeyAuthentication(privateKey, "beatpulse")
-                                    .CreateFileOnConnect("upload/beatpulse")
-                                    .Build();
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                                        .AddPrivateKeyAuthentication(privateKey, "beatpulse")
+                                        .CreateFileOnConnect("upload/beatpulse")
+                                        .Build();
 
-                    setup.AddHost(cfg);
-                }, tags: ["sftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("sftp")
-                });
-            });
+                        setup.AddHost(cfg);
+                    }, tags: ["sftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
@@ -139,31 +123,27 @@ public class sftp_healthcheck_should
     {
         string privateKey = File.ReadAllText("id_rsa");
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddSftpHealthCheck(setup =>
-                {
-                    var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
-                                    .AddPasswordAuthentication("wrongpass")
-                                    .AddPrivateKeyAuthentication(privateKey, "beatpulse")
-                                    .Build();
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 22, "foo")
+                                        .AddPasswordAuthentication("wrongpass")
+                                        .AddPrivateKeyAuthentication(privateKey, "beatpulse")
+                                        .Build();
 
-                    setup.AddHost(cfg);
-                }, tags: ["sftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("sftp")
-                });
-            });
+                        setup.AddHost(cfg);
+                    }, tags: ["sftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
@@ -171,30 +151,26 @@ public class sftp_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_using_wrong_port()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddSftpHealthCheck(setup =>
-                {
-                    var cfg = new SftpConfigurationBuilder("localhost", 5551, "foo")
-                                    .AddPasswordAuthentication("pass")
-                                    .Build();
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddSftpHealthCheck(setup =>
+                    {
+                        var cfg = new SftpConfigurationBuilder("localhost", 5551, "foo")
+                                        .AddPasswordAuthentication("pass")
+                                        .Build();
 
-                    setup.AddHost(cfg);
-                }, tags: ["sftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("sftp")
-                });
-            });
+                        setup.AddHost(cfg);
+                    }, tags: ["sftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("sftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

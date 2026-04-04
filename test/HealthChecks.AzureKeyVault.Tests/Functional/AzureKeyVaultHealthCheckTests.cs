@@ -9,31 +9,27 @@ public class AzureKeyVaultHealthCheckTests
     [Fact]
     public async Task be_unhealthy_if_keyvalue_is_not_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddAzureKeyVault(
-                        new Uri("https://www.thisisnotarealurl.com"),
-                        new DefaultAzureCredential(),
-                        setup =>
-                        {
-                            //setup
-                            //    .UseKeyVaultUrl("https://www.thisisnotarealurl2.com")
-                            //    .UseAzureManagedServiceIdentity();
-                        });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddAzureKeyVault(
+                            new Uri("https://www.thisisnotarealurl.com"),
+                            new DefaultAzureCredential(),
+                            setup =>
+                            {
+                                //setup
+                                //    .UseKeyVaultUrl("https://www.thisisnotarealurl2.com")
+                                //    .UseAzureManagedServiceIdentity();
+                            });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = _ => true,
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

@@ -12,13 +12,9 @@ public class mysql_storage_should
     {
         var customOptionsInvoked = false;
 
-        var hostBuilder = new WebHostBuilder()
-            .UseStartup<DefaultStartup>()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecksUI()
-                .AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI", options => customOptionsInvoked = true);
-            });
+        var hostBuilder = WebApplication.CreateBuilder();
+                    hostBuilder.Services.AddHealthChecksUI()
+                    .AddMySqlStorage("Host=localhost;User Id=root;Password=Password12!;Database=UI", options => customOptionsInvoked = true);
 
         var services = hostBuilder.Build().Services;
         var context = services.GetRequiredService<HealthChecksDb>();
@@ -35,12 +31,10 @@ public class mysql_storage_should
         var hostReset = new ManualResetEventSlim(false);
         var collectorReset = new ManualResetEventSlim(false);
 
-        var webHostBuilder = HostBuilderHelper.Create(
+        await using var host = await HostBuilderHelper.CreateAsync(
                hostReset,
                collectorReset,
                configureUI: config => config.AddMySqlStorage(ProviderTestHelper.MySqlConnectionString()));
-
-        using var host = new TestServer(webHostBuilder);
 
         hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
@@ -51,7 +45,7 @@ public class mysql_storage_should
         configurations[0].Name.ShouldBe(host1.Name);
         configurations[0].Uri.ShouldBe(host1.Uri);
 
-        using var client = host.CreateClient();
+        using var client = host.GetTestClient();
 
         collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
 

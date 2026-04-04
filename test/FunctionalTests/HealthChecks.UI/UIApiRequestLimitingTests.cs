@@ -30,44 +30,38 @@ namespace FunctionalTests.HealthChecks.UI
         {
             int maxActiveRequests = 2;
 
-            var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
-                   .ConfigureServices(services =>
-                   {
-                       services
-                            .AddRouting()
-                           .AddHealthChecks()
-                           .AddAsyncCheck("Delayed", async () =>
-                           {
-                               await Task.Delay(200);
-                               return HealthCheckResult.Healthy();
-                           })
-                           .Services
-                           .AddHealthChecksUI(setup =>
-                           {
-                               setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                               setup.SetApiMaxActiveRequests(maxActiveRequests);
-                           })
-                           .AddInMemoryStorage(databaseName: "LimitingTests");
+            var webHostBuilder = WebApplication.CreateBuilder();
+                               webHostBuilder.Services
+                                    .AddRouting()
+                                   .AddHealthChecks()
+                                   .AddAsyncCheck("Delayed", async () =>
+                                   {
+                                       await Task.Delay(200);
+                                       return HealthCheckResult.Healthy();
+                                   })
+                                   .Services
+                                   .AddHealthChecksUI(setup =>
+                                   {
+                                       setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
+                                       setup.SetApiMaxActiveRequests(maxActiveRequests);
+                                   })
+                                   .AddInMemoryStorage(databaseName: "LimitingTests");
+            webHostBuilder.WebHost.UseTestServer();
+            await using var app = webHostBuilder.Build();
+                               app.UseRouting();
+                               app.UseEndpoints(setup =>
+                               {
+                                   setup.MapHealthChecks("/health", new HealthCheckOptions
+                                   {
+                                       Predicate = r => true,
+                                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                                   });
 
-                   })
-                   .Configure(app =>
-                   {
-                       app.UseRouting();
-                       app.UseEndpoints(setup =>
-                       {
-                           setup.MapHealthChecks("/health", new HealthCheckOptions
-                           {
-                               Predicate = r => true,
-                               ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                           });
+                                   setup.MapHealthChecksUI();
+                               });
+            await app.StartAsync();
 
-                           setup.MapHealthChecksUI();
-                       });
-
-                   });
-
-            var server = new TestServer(webHostBuilder);
+            var server = app.GetTestServer();
 
             var requests = Enumerable.Range(1, maxActiveRequests)
                 .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());
@@ -82,45 +76,39 @@ namespace FunctionalTests.HealthChecks.UI
         [Fact]
         public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
         {
-            var webHostBuilder = new WebHostBuilder()
-                .UseStartup<DefaultStartup>()
-                   .ConfigureServices(services =>
-                   {
-                       services
-                            .AddRouting()
-                           .AddHealthChecks()
-                           .AddAsyncCheck("Delayed", async () =>
-                           {
-                               await Task.Delay(200);
-                               return HealthCheckResult.Healthy();
-                           })
-                           .Services
-                           .AddHealthChecksUI(setup =>
-                           {
-                               setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                           })
-                           .AddInMemoryStorage(databaseName: "LimitingTests");
+            var webHostBuilder = WebApplication.CreateBuilder();
+                               webHostBuilder.Services
+                                    .AddRouting()
+                                   .AddHealthChecks()
+                                   .AddAsyncCheck("Delayed", async () =>
+                                   {
+                                       await Task.Delay(200);
+                                       return HealthCheckResult.Healthy();
+                                   })
+                                   .Services
+                                   .AddHealthChecksUI(setup =>
+                                   {
+                                       setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
+                                   })
+                                   .AddInMemoryStorage(databaseName: "LimitingTests");
+            webHostBuilder.WebHost.UseTestServer();
+            await using var app = webHostBuilder.Build();
+                               app.UseRouting();
+                               app.UseEndpoints(setup =>
+                               {
+                                   setup.MapHealthChecks("/health", new HealthCheckOptions
+                                   {
+                                       Predicate = r => true,
+                                       ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                                   });
 
-                   })
-                   .Configure(app =>
-                   {
-                       app.UseRouting();
-                       app.UseEndpoints(setup =>
-                       {
-                           setup.MapHealthChecks("/health", new HealthCheckOptions
-                           {
-                               Predicate = r => true,
-                               ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                           });
+                                   setup.MapHealthChecksUI();
+                               });
+            await app.StartAsync();
 
-                           setup.MapHealthChecksUI();
-                       });
+            var server = app.GetTestServer();
 
-                   });
-
-            var server = new TestServer(webHostBuilder);
-
-            var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
+            var serverSettings = app.Services.GetRequiredService<IOptions<Settings>>().Value;
 
             var requests = Enumerable.Range(1, serverSettings.ApiMaxActiveRequests)
                 .Select(n => server.CreateRequest($"/healthchecks-api").GetAsync());

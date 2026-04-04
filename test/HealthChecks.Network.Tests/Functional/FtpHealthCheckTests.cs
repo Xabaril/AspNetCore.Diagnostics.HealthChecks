@@ -9,27 +9,23 @@ public class ftp_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connection_is_successful()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddFtpHealthCheck(setup =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddFtpHealthCheck(setup =>
+                        {
+                            setup.AddHost("ftp://localhost:21",
+                                createFile: false,
+                                credentials: new NetworkCredential("bob", "12345"));
+                        }, tags: ["ftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        setup.AddHost("ftp://localhost:21",
-                            createFile: false,
-                            credentials: new NetworkCredential("bob", "12345"));
-                    }, tags: ["ftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ftp")
-                });
-            });
+                        Predicate = r => r.Tags.Contains("ftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe((HttpStatusCode)StatusCodes.Status200OK);
     }
@@ -37,27 +33,23 @@ public class ftp_healthcheck_should
     [Fact]
     public async Task be_healthy_when_connection_is_successful_and_file_is_created()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddFtpHealthCheck(setup =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddFtpHealthCheck(setup =>
+                        {
+                            setup.AddHost("ftp://localhost:21",
+                                createFile: true,
+                                credentials: new NetworkCredential("bob", "12345"));
+                        }, tags: ["ftp"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        setup.AddHost("ftp://localhost:21",
-                            createFile: true,
-                            credentials: new NetworkCredential("bob", "12345"));
-                    }, tags: ["ftp"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ftp")
-                });
-            });
+                        Predicate = r => r.Tags.Contains("ftp")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }

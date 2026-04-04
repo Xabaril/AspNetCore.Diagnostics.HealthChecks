@@ -16,35 +16,37 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_with_invalid_storage_provider_value()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
+            config.Sources.Clear();
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", "invalidvalue")
-                });
-            })
-            .UseStartup<Startup>();
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", "invalidvalue")
+            });
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         Should.Throw<ArgumentException>(() => hostBuilder.Build());
     }
     [Fact]
     public void register_sql_server()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
-                    new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
+                new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         var host = hostBuilder.Build();
 
@@ -55,17 +57,19 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_sql_server_with_no_connection_string()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString())
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString())
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
@@ -73,18 +77,20 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_sqlite()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
-                    new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
+                new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         var host = hostBuilder.Build();
 
@@ -95,17 +101,19 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_sqlite_with_no_connection_string()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString())
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString())
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
@@ -113,18 +121,20 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_postgresql()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
-                    new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
+                new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         var host = hostBuilder.Build();
 
@@ -135,17 +145,19 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_postgresql_with_no_connection_string()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
@@ -153,17 +165,19 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_inmemory()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.InMemory.ToString())
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.InMemory.ToString())
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         var host = hostBuilder.Build();
 
@@ -188,19 +202,21 @@ public class docker_image_storage_provider_configuration_should
     public void register_mysql()
     {
         //
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
+
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
             {
-                config.Sources.Clear();
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString()),
+                new KeyValuePair<string, string?>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString()),
-                    new KeyValuePair<string, string?>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
-
-                });
-            })
-            .UseStartup<Startup>();
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         var host = hostBuilder.Build();
 
@@ -211,17 +227,19 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_mysql_with_no_connection_string()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config =>
-            {
-                config.Sources.Clear();
+        var hostBuilder = WebApplication.CreateBuilder();
+        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
+        {
 
-                config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-                {
-                    new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString())
-                });
-            })
-            .UseStartup<Startup>();
+            config.Sources.Clear();
+
+            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
+            {
+                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString())
+            });
+            
+        });
+        hostBuilder.WebHost.UseStartup<Startup>();
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }

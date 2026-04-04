@@ -50,7 +50,7 @@ internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
                     Dimensions = _dimensions,
                     MetricName = "status",
                     StatisticValues = new StatisticSet(),
-                    TimestampUtc = utcNow,
+                    Timestamp = utcNow,
                     Unit = StandardUnit.Count,
                     Value = (int)report.Status
                 }
@@ -63,7 +63,7 @@ internal sealed class CloudWatchPublisher : IHealthCheckPublisher, IDisposable
                 Dimensions = _dimensions,
                 MetricName = keyedEntry.Key,
                 StatisticValues = new StatisticSet(),
-                TimestampUtc = utcNow,
+                Timestamp = utcNow,
                 Unit = StandardUnit.Count,
                 Value = (int)keyedEntry.Value.Status
             };

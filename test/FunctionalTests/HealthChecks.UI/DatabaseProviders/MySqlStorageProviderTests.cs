@@ -29,12 +29,10 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             var hostReset = new ManualResetEventSlim(false);
             var collectorReset = new ManualResetEventSlim(false);
 
-            var webHostBuilder = HostBuilderHelper.Create(
+            await using var host = await HostBuilderHelper.CreateAsync(
                    hostReset,
                    collectorReset,
                    configureUI: config => config.AddMySqlStorage(ProviderTestHelper.MySqlConnectionString(_fixture)));
-
-            using var host = new TestServer(webHostBuilder);
 
             hostReset.Wait(ProviderTestHelper.DefaultHostTimeout);
 
@@ -46,7 +44,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             configurations[0].Name.Should().Be(host1.Name);
             configurations[0].Uri.Should().Be(host1.Uri);
 
-            using var client = host.CreateClient();
+            using var client = host.GetTestClient();
 
             collectorReset.Wait(ProviderTestHelper.DefaultCollectorTimeout);
 

@@ -7,15 +7,15 @@ public class prometheus_response_writer_should
     [Fact]
     public async Task be_healthy_when_health_checks_are()
     {
-        using var sut = new TestServer(new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddCheck("fake", check => HealthCheckResult.Healthy());
-            })
-            .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
+        var appBuilder = WebApplication.CreateBuilder();
+        appBuilder.Services.AddHealthChecks()
+            .AddCheck("fake", check => HealthCheckResult.Healthy());
+        appBuilder.WebHost.UseTestServer();
+        await using var sut = appBuilder.Build();
+        sut.UseHealthChecksPrometheusExporter("/health");
+        await sut.StartAsync();
 
-        using var response = await sut.CreateRequest("/health").GetAsync();
+        using var response = await sut.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
         var resultAsString = await response.Content.ReadAsStringAsync();
@@ -25,15 +25,15 @@ public class prometheus_response_writer_should
     [Fact]
     public async Task be_unhealthy_and_return_503_when_health_checks_are()
     {
-        using var sut = new TestServer(new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddCheck("fake", check => HealthCheckResult.Unhealthy());
-            })
-            .Configure(app => app.UseHealthChecksPrometheusExporter("/health")));
+        var appBuilder = WebApplication.CreateBuilder();
+        appBuilder.Services.AddHealthChecks()
+            .AddCheck("fake", check => HealthCheckResult.Unhealthy());
+        appBuilder.WebHost.UseTestServer();
+        await using var sut = appBuilder.Build();
+        sut.UseHealthChecksPrometheusExporter("/health");
+        await sut.StartAsync();
 
-        using var response = await sut.CreateRequest("/health").GetAsync();
+        using var response = await sut.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         var resultAsString = await response.Content.ReadAsStringAsync();
@@ -43,15 +43,15 @@ public class prometheus_response_writer_should
     [Fact]
     public async Task be_unhealthy_and_return_configured_status_code_when_health_checks_are()
     {
-        using var sut = new TestServer(new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddCheck("fake", check => HealthCheckResult.Unhealthy());
-            })
-            .Configure(app => app.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK)));
+        var appBuilder = WebApplication.CreateBuilder();
+        appBuilder.Services.AddHealthChecks()
+            .AddCheck("fake", check => HealthCheckResult.Unhealthy());
+        appBuilder.WebHost.UseTestServer();
+        await using var sut = appBuilder.Build();
+        sut.UseHealthChecksPrometheusExporter("/health", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
+        await sut.StartAsync();
 
-        using var response = await sut.CreateRequest("/health").GetAsync();
+        using var response = await sut.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();

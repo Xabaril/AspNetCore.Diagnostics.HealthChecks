@@ -15,33 +15,24 @@ public class dns_resolve_host_count_should
         int addresses = (await Dns.GetHostAddressesAsync(hostName)).Length;
         int addresses2 = (await Dns.GetHostAddressesAsync(hostName2)).Length;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddRouting()
-                .AddHealthChecks()
-                .AddDnsResolveHostCountHealthCheck(setup =>
-                {
-                    setup.AddHost(hostName, addresses, addresses);
-                    setup.AddHost(hostName2, addresses2, addresses2);
-                });
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(config =>
-                {
-                    config.MapHealthChecks("/health", new HealthCheckOptions
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                    .AddRouting()
+                    .AddHealthChecks()
+                    .AddDnsResolveHostCountHealthCheck(setup =>
                     {
-                        Predicate = r => true
+                        setup.AddHost(hostName, addresses, addresses);
+                        setup.AddHost(hostName2, addresses2, addresses2);
                     });
-                });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                            app.MapHealthChecks("/health", new HealthCheckOptions
+                            {
+                                Predicate = r => true
+                    });
+        await app.StartAsync();
 
-            });
-
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
@@ -52,34 +43,25 @@ public class dns_resolve_host_count_should
         int addresses = (await Dns.GetHostAddressesAsync(hostName)).Length;
         int addresses2 = (await Dns.GetHostAddressesAsync(hostName2)).Length;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddRouting()
-                .AddHealthChecks()
-                .AddDnsResolveHostCountHealthCheck(setup =>
-                {
-                    setup.AddHost(hostName, addresses + 1, addresses - 1);
-                    setup.AddHost(hostName2, addresses2 + 1, addresses2 - 1);
-                });
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(config =>
-                {
-                    config.MapHealthChecks("/health", new HealthCheckOptions
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                    .AddRouting()
+                    .AddHealthChecks()
+                    .AddDnsResolveHostCountHealthCheck(setup =>
                     {
-                        Predicate = r => true,
-                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        setup.AddHost(hostName, addresses + 1, addresses - 1);
+                        setup.AddHost(hostName2, addresses2 + 1, addresses2 - 1);
                     });
-                });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                            app.MapHealthChecks("/health", new HealthCheckOptions
+                            {
+                                Predicate = r => true,
+                                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+        await app.StartAsync();
 
-            });
-
-        using var server = new TestServer(webHostBuilder);
-        var response = await server.CreateClient().GetAsJson<UIHealthReport>("/health");
+        var response = await app.GetTestClient().GetAsJson<UIHealthReport>("/health");
         response.ShouldNotBeNull();
     }
 }

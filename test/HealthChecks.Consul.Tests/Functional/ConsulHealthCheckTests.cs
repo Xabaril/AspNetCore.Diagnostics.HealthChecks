@@ -7,28 +7,24 @@ public class consul_healthcheck_should
     [Fact]
     public async Task be_healthy_if_consul_is_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-           .ConfigureServices(services =>
-           {
-               services.AddHealthChecks()
-                   .AddConsul(setup =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                   webHostBuilder.Services.AddHealthChecks()
+                       .AddConsul(setup =>
+                       {
+                           setup.HostName = "localhost";
+                           setup.Port = 8500;
+                           setup.RequireHttps = false;
+                       }, tags: ["consul"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                   app.UseHealthChecks("/health", new HealthCheckOptions
                    {
-                       setup.HostName = "localhost";
-                       setup.Port = 8500;
-                       setup.RequireHttps = false;
-                   }, tags: ["consul"]);
-           })
-           .Configure(app =>
-           {
-               app.UseHealthChecks("/health", new HealthCheckOptions
-               {
-                   Predicate = r => r.Tags.Contains("consul")
-               });
-           });
+                       Predicate = r => r.Tags.Contains("consul")
+                   });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -36,28 +32,24 @@ public class consul_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_consul_is_not_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddConsul(setup =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddConsul(setup =>
+                        {
+                            setup.HostName = "non-existing-host";
+                            setup.Port = 8500;
+                            setup.RequireHttps = false;
+                        }, tags: ["consul"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
                     {
-                        setup.HostName = "non-existing-host";
-                        setup.Port = 8500;
-                        setup.RequireHttps = false;
-                    }, tags: ["consul"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("consul")
-                });
-            });
+                        Predicate = r => r.Tags.Contains("consul")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

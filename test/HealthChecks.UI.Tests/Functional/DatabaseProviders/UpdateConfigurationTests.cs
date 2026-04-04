@@ -13,26 +13,25 @@ public class UpdateConfigurationTests
         var endpointUri = "http://server/sample";
         var updatedEndpointUri = $"{endpointUri}2";
 
-        Func<string, ManualResetEventSlim, IWebHostBuilder> getHost = (uri, hostReset) =>
-            new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
+        async Task<WebApplication> getHost(string uri, ManualResetEventSlim hostReset)
+        {
+            var appBuilder = WebApplication.CreateBuilder();
+            appBuilder.Services
                 .AddRouting()
                 .AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint(endpointName, uri))
                 .AddSqliteStorage("Data Source = sqlite-updates.db");
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(setup => setup.MapHealthChecksUI());
-
-                var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-                lifetime.ApplicationStarted.Register(() => hostReset.Set());
-            });
+            appBuilder.WebHost.UseTestServer();
+            var app = appBuilder.Build();
+            app.UseRouting();
+            app.UseEndpoints(setup => setup.MapHealthChecksUI());
+            var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+            lifetime.ApplicationStarted.Register(() => hostReset.Set());
+            await app.StartAsync();
+            return app;
+        }
 
         var hostReset = new ManualResetEventSlim(false);
-        using var host1 = new TestServer(getHost(endpointUri, hostReset));
+        await using var host1 = await getHost(endpointUri, hostReset);
         hostReset.Wait();
 
         var context = host1.Services.GetRequiredService<HealthChecksDb>();
@@ -42,7 +41,7 @@ public class UpdateConfigurationTests
         configurations[0].Uri.ShouldBe(endpointUri);
 
         hostReset = new ManualResetEventSlim(false);
-        using var host2 = new TestServer(getHost(updatedEndpointUri, hostReset));
+        await using var host2 = await getHost(updatedEndpointUri, hostReset);
         hostReset.Wait();
 
         context = host2.Services.GetRequiredService<HealthChecksDb>();

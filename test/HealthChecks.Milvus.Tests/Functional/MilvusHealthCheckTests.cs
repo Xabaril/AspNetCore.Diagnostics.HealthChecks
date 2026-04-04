@@ -10,25 +10,21 @@ public class milvus_healthcheck_should(MilvusContainerFixture milvusContainerFix
     {
         string connectionString = milvusContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddHealthChecks()
-                    .AddMilvus(
-                        clientFactory: sp => new MilvusClient(new Uri(connectionString)), tags: new string[] { "milvus" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("milvus")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddMilvus(
+                            clientFactory: sp => new MilvusClient(new Uri(connectionString)), tags: new string[] { "milvus" });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("milvus")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -38,25 +34,21 @@ public class milvus_healthcheck_should(MilvusContainerFixture milvusContainerFix
     {
         string connectionString = milvusContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(new MilvusClient(new Uri(connectionString)))
-                    .AddHealthChecks()
-                    .AddMilvus(tags: new string[] { "milvus" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("milvus")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(new MilvusClient(new Uri(connectionString)))
+                        .AddHealthChecks()
+                        .AddMilvus(tags: new string[] { "milvus" });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("milvus")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -64,25 +56,21 @@ public class milvus_healthcheck_should(MilvusContainerFixture milvusContainerFix
     [Fact]
     public async Task be_unhealthy_when_milvus_is_unavailable()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddHealthChecks()
-                    .AddMilvus(
-                        clientFactory: sp => new MilvusClient("255.255.255.255"), tags: new string[] { "milvus" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("milvus")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddMilvus(
+                            clientFactory: sp => new MilvusClient("255.255.255.255"), tags: new string[] { "milvus" });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("milvus")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

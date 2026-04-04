@@ -17,31 +17,26 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
     {
         var connectionString = @"https://localhost:9200";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddElasticsearch(options =>
-                    {
-                        options.UseServer(connectionString);
-                        options.UseApiKey(_fixture.ApiKey!);
-                        options.UseCertificateValidationCallback(delegate
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddElasticsearch(options =>
                         {
-                            return true;
-                        });
-                        options.RequestTimeout = TimeSpan.FromSeconds(30);
-                    }, tags: ["elasticsearch"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health",
-                    new HealthCheckOptions { Predicate = r => r.Tags.Contains("elasticsearch") });
-            });
+                            options.UseServer(connectionString);
+                            options.UseApiKey(_fixture.ApiKey!);
+                            options.UseCertificateValidationCallback(delegate
+                            {
+                                return true;
+                            });
+                            options.RequestTimeout = TimeSpan.FromSeconds(30);
+                        }, tags: ["elasticsearch"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health",
+                        new HealthCheckOptions { Predicate = r => r.Tags.Contains("elasticsearch") });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-            .GetAsync();
+        var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode
             .ShouldBe(HttpStatusCode.OK);
@@ -52,31 +47,26 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
     {
         var connectionString = @"https://localhost:9200";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddElasticsearch(options =>
-                    {
-                        options.UseServer(connectionString);
-                        options.UseBasicAuthentication("elastic", ElasticContainerFixture.ELASTIC_PASSWORD);
-                        options.UseCertificateValidationCallback(delegate
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddElasticsearch(options =>
                         {
-                            return true;
-                        });
-                        options.RequestTimeout = TimeSpan.FromSeconds(30);
-                    }, tags: ["elasticsearch"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health",
-                    new HealthCheckOptions { Predicate = r => r.Tags.Contains("elasticsearch") });
-            });
+                            options.UseServer(connectionString);
+                            options.UseBasicAuthentication("elastic", ElasticContainerFixture.ELASTIC_PASSWORD);
+                            options.UseCertificateValidationCallback(delegate
+                            {
+                                return true;
+                            });
+                            options.RequestTimeout = TimeSpan.FromSeconds(30);
+                        }, tags: ["elasticsearch"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health",
+                        new HealthCheckOptions { Predicate = r => r.Tags.Contains("elasticsearch") });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        var response = await server.CreateRequest("/health")
-            .GetAsync();
+        var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode
             .ShouldBe(HttpStatusCode.OK);

@@ -35,24 +35,20 @@ public class ibmmq_healthcheck_should
             { MQC.PASSWORD_PROPERTY, password }
         };
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddHealthChecks()
-                .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ibmmq")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                    .AddHealthChecks()
+                    .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ibmmq")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -69,24 +65,20 @@ public class ibmmq_healthcheck_should
             { MQC.PASSWORD_PROPERTY, password }
         };
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddHealthChecks()
-                    .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ibmmq")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddIbmMQ(qManager, properties, tags: ["ibmmq"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ibmmq")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -94,24 +86,20 @@ public class ibmmq_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_ibmmq_managed_is_unavailable()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: ["ibmmq"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ibmmq")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddIbmMQManagedConnection(qManager, channel, wrongHostName, user, password, tags: ["ibmmq"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ibmmq")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -119,24 +107,20 @@ public class ibmmq_healthcheck_should
     [Fact]
     public async Task be_healthy_if_ibmmq_managed_is_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddHealthChecks()
-                    .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: ["ibmmq"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ibmmq")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddIbmMQManagedConnection(qManager, channel, hostName, user, password, tags: ["ibmmq"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ibmmq")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

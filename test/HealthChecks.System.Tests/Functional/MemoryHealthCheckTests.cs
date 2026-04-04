@@ -14,22 +14,18 @@ public class memory_healthcheck_should
         var currentMemory = Process.GetCurrentProcess().PrivateMemorySize64;
         var maximumMemory = currentMemory + 104857600;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("privatememory")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("privatememory")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await app.GetTestClient().GetAsync("/health").ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -39,22 +35,18 @@ public class memory_healthcheck_should
         var currentMemory = Process.GetCurrentProcess().PrivateMemorySize64;
         var maximumMemory = currentMemory - 104857600;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("privatememory")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("privatememory")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await app.GetTestClient().GetAsync("/health").ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -64,22 +56,18 @@ public class memory_healthcheck_should
         var currentMemory = Process.GetCurrentProcess().WorkingSet64;
         var maximumMemory = currentMemory + 104857600;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddWorkingSetHealthCheck(maximumMemory, tags: ["workingset"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("workingset")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddWorkingSetHealthCheck(maximumMemory, tags: ["workingset"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("workingset")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await app.GetTestClient().GetAsync("/health").ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -89,22 +77,18 @@ public class memory_healthcheck_should
         var currentMemory = Process.GetCurrentProcess().WorkingSet64;
         var maximumMemory = currentMemory - 104857600;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("privatememory")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddPrivateMemoryHealthCheck(maximumMemory, tags: ["privatememory"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("privatememory")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await app.GetTestClient().GetAsync("/health").ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 
@@ -114,22 +98,18 @@ public class memory_healthcheck_should
         var currentMemory = Process.GetCurrentProcess().VirtualMemorySize64;
         var maximumMemory = currentMemory + 104857600;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: ["virtualmemory"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("virtualmemory")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: ["virtualmemory"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("virtualmemory")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await app.GetTestClient().GetAsync("/health").ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
@@ -139,22 +119,18 @@ public class memory_healthcheck_should
         var currentMemory = Process.GetCurrentProcess().VirtualMemorySize64;
         var maximumMemory = currentMemory - 104857600;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: ["virtualmemory"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("virtualmemory")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddVirtualMemorySizeHealthCheck(maximumMemory, tags: ["virtualmemory"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("virtualmemory")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync().ConfigureAwait(false);
+        using var response = await app.GetTestClient().GetAsync("/health").ConfigureAwait(false);
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
 }

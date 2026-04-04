@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using HealthChecks.UI.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,35 +20,31 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             var endpointUri = "http://server/sample";
             var updatedEndpointUri = $"{endpointUri}2";
 
-            Func<string, ManualResetEventSlim, IWebHostBuilder> getHost = (uri, hostReset) =>
-                new WebHostBuilder()
-                .ConfigureServices(services =>
-                {
-                    services
+            async Task<WebApplication> getHost(string uri, ManualResetEventSlim hostReset)
+            {
+                var appBuilder = WebApplication.CreateBuilder();
+                appBuilder.Services
                     .AddRouting()
                     .AddHealthChecksUI(setup =>
                     {
                         setup.AddHealthCheckEndpoint(endpointName, uri);
                     })
                     .AddSqliteStorage("Data Source = sqlite-updates.db");
-                })
-                .Configure(app =>
+                appBuilder.WebHost.UseTestServer();
+                var app = appBuilder.Build();
+                app.UseRouting();
+                app.UseEndpoints(setup =>
                 {
-                    app.UseRouting();
-                    app.UseEndpoints(setup =>
-                    {
-                        setup.MapHealthChecksUI();
-                    });
-
-                    var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
-                    lifetime.ApplicationStarted.Register(() =>
-                    {
-                        hostReset.Set();
-                    });
+                    setup.MapHealthChecksUI();
                 });
+                var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+                lifetime.ApplicationStarted.Register(() => hostReset.Set());
+                await app.StartAsync();
+                return app;
+            }
 
             var hostReset = new ManualResetEventSlim(false);
-            using var host1 = new TestServer(getHost(endpointUri, hostReset));
+            await using var host1 = await getHost(endpointUri, hostReset);
             hostReset.Wait();
 
             var context = host1.Services.GetRequiredService<HealthChecksDb>();
@@ -60,7 +54,7 @@ namespace FunctionalTests.HealthChecks.UI.DatabaseProviders
             configurations[0].Uri.Should().Be(endpointUri);
 
             hostReset = new ManualResetEventSlim(false);
-            using var host2 = new TestServer(getHost(updatedEndpointUri, hostReset));
+            await using var host2 = await getHost(updatedEndpointUri, hostReset);
             hostReset.Wait();
 
             context = host2.Services.GetRequiredService<HealthChecksDb>();

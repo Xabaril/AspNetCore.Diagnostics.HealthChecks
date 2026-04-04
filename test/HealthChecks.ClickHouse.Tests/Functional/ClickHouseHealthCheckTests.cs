@@ -17,23 +17,18 @@ public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouse
     [Fact]
     public async Task be_healthy_if_ClickHouse_is_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddClickHouse(_ => new ClickHouseConnection(_connectionString), tags: new string[] { "ClickHouse" });
+
+            webHostBuilder.WebHost.UseTestServer();
+            await using var app = webHostBuilder.Build();
+            app.UseHealthChecks("/health", new HealthCheckOptions
             {
-                services.AddHealthChecks()
-                .AddClickHouse(_ => new ClickHouseConnection(_connectionString), tags: new string[] { "ClickHouse" });
-            })
-            .Configure(static app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = static r => r.Tags.Contains("ClickHouse")
-                });
+                Predicate = static r => r.Tags.Contains("ClickHouse")
             });
-
-        using var server = new TestServer(webHostBuilder);
-
-        using var response = await server.CreateRequest("/health").GetAsync();
+            await app.StartAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -41,23 +36,18 @@ public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouse
     [Fact]
     public async Task be_unhealthy_if_sql_query_is_not_valid()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddClickHouse(_ => new ClickHouseConnection(_connectionString), "SELECT 1 FROM InvalidDB", tags: new string[] { "ClickHouse" });
+
+            webHostBuilder.WebHost.UseTestServer();
+            await using var app = webHostBuilder.Build();
+            app.UseHealthChecks("/health", new HealthCheckOptions
             {
-                services.AddHealthChecks()
-                .AddClickHouse(_ => new ClickHouseConnection(_connectionString), "SELECT 1 FROM InvalidDB", tags: new string[] { "ClickHouse" });
-            })
-            .Configure(static app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = static r => r.Tags.Contains("ClickHouse")
-                });
+                Predicate = static r => r.Tags.Contains("ClickHouse")
             });
-
-        using var server = new TestServer(webHostBuilder);
-
-        using var response = await server.CreateRequest("/health").GetAsync();
+            await app.StartAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -65,26 +55,22 @@ public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouse
     [Fact]
     public async Task be_unhealthy_if_ClickHouse_is_not_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddHealthChecks()
-                    .AddClickHouse(static _ => new ClickHouseConnection("Host=200.0.0.1;Port=8123;Database=default;Username=default;Password=Password12!;"),
-                        tags: ["ClickHouse"],
-                        timeout: TimeSpan.FromSeconds(15));
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ClickHouse")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddClickHouse(static _ => new ClickHouseConnection("Host=200.0.0.1;Port=8123;Database=default;Username=default;Password=Password12!;"),
+                            tags: ["ClickHouse"],
+                            timeout: TimeSpan.FromSeconds(15));
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ClickHouse")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -92,28 +78,24 @@ public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouse
     [Fact]
     public async Task be_healthy_if_ClickHouse_is_available_by_iServiceProvider_registered()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddSingleton(new DBConfigSetting
-                {
-                    ConnectionString = _connectionString
-                });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddSingleton(new DBConfigSetting
+                    {
+                        ConnectionString = _connectionString
+                    });
 
-                services.AddHealthChecks()
-                        .AddClickHouse(static sp => new ClickHouseConnection(sp.GetRequiredService<DBConfigSetting>().ConnectionString), tags: new string[] { "ClickHouse" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ClickHouse")
-                });
-            });
+                    webHostBuilder.Services.AddHealthChecks()
+                            .AddClickHouse(static sp => new ClickHouseConnection(sp.GetRequiredService<DBConfigSetting>().ConnectionString), tags: new string[] { "ClickHouse" });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ClickHouse")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -121,32 +103,28 @@ public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouse
     [Fact]
     public async Task be_unhealthy_if_ClickHouse_is_not_available_registered()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddSingleton(new DBConfigSetting
-                {
-                    ConnectionString = "Server=200.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres"
-                });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddSingleton(new DBConfigSetting
+                    {
+                        ConnectionString = "Server=200.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres"
+                    });
 
-                services
-                    .AddHealthChecks()
-                    .AddClickHouse(
-                        static sp => new ClickHouseConnection(sp.GetRequiredService<DBConfigSetting>().ConnectionString),
-                        tags: ["ClickHouse"],
-                        timeout: TimeSpan.FromSeconds(15));
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("ClickHouse")
-                });
-            });
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddClickHouse(
+                            static sp => new ClickHouseConnection(sp.GetRequiredService<DBConfigSetting>().ConnectionString),
+                            tags: ["ClickHouse"],
+                            timeout: TimeSpan.FromSeconds(15));
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("ClickHouse")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -156,30 +134,26 @@ public class ClickHouse_healthcheck_should(ClickHouseContainerFixture clickHouse
     {
         const string connectionString = "Server=127.0.0.1;Port=8010;User ID=postgres;Password=Password12!;database=postgres";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddLogging(b =>
-                        b.ClearProviders()
-                        .Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TestLoggerProvider>())
-                    )
-                .AddHealthChecks()
-                .AddClickHouse(static _ => new ClickHouseConnection(connectionString), "SELECT 1 FROM InvalidDB", tags: new string[] { "ClickHouse" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
-                {
-                    Predicate = r => r.Tags.Contains("ClickHouse")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                    .AddLogging(b =>
+                            b.ClearProviders()
+                            .Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TestLoggerProvider>())
+                        )
+                    .AddHealthChecks()
+                    .AddClickHouse(static _ => new ClickHouseConnection(connectionString), "SELECT 1 FROM InvalidDB", tags: new string[] { "ClickHouse" });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions()
+                    {
+                        Predicate = r => r.Tags.Contains("ClickHouse")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
-        var testLoggerProvider = (TestLoggerProvider)server.Services.GetRequiredService<ILoggerProvider>();
+        var testLoggerProvider = (TestLoggerProvider)app.Services.GetRequiredService<ILoggerProvider>();
 
         testLoggerProvider.ShouldNotBeNull();
         var logger = testLoggerProvider.GetLogger("Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService");

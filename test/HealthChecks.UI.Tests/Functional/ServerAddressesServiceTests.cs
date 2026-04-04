@@ -1,6 +1,5 @@
 using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.Http.Features;
 
 namespace HealthChecks.UI.Tests;
 
@@ -8,35 +7,31 @@ public class server_addresses_service_should
 {
     // Based in AspNetCore TestServer test - https://github.com/aspnet/Hosting/pull/969
     [Fact]
-    public void parse_correctly_relative_endpoint_uris()
+    public async Task parse_correctly_relative_endpoint_uris()
     {
         var serverAddress = "http://localhost:5000";
 
-        var host = new WebHostBuilder()
-            .UseUrls(serverAddress)
-            .ConfigureServices(services => services.AddSingleton<ServerAddressesService>())
-            .Configure(app =>
-            {
-                app.ServerFeatures.Get<IServerAddressesFeature>().ShouldNotBeNull();
+        var host = WebApplication.CreateBuilder();
+        host.WebHost.UseUrls(serverAddress);
+        host.Services.AddSingleton<ServerAddressesService>();
+        host.WebHost.UseTestServer();
+        await using var app = host.Build();
+        await app.StartAsync();
 
-                var serverAddressService = app.ApplicationServices.GetRequiredService<ServerAddressesService>();
+        app.ServerFeatures.Get<IServerAddressesFeature>().ShouldNotBeNull();
 
-                serverAddressService.AbsoluteUriFromRelative("/health2")
-                    .ShouldBe($"{serverAddress}/health2");
+        var serverAddressService = app.Services.GetRequiredService<ServerAddressesService>();
 
-                serverAddressService.AbsoluteUriFromRelative("healthz")
-                    .ShouldBe($"{serverAddress}/healthz");
+        serverAddressService.AbsoluteUriFromRelative("/health2")
+            .ShouldBe($"{serverAddress}/health2");
 
-                serverAddressService.AbsoluteUriFromRelative("/my/relative/url")
-                   .ShouldBe($"{serverAddress}/my/relative/url");
+        serverAddressService.AbsoluteUriFromRelative("healthz")
+            .ShouldBe($"{serverAddress}/healthz");
 
-                serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
-                 .ShouldBe($"{serverAddress}/segment1/segment2/segment3");
-            });
+        serverAddressService.AbsoluteUriFromRelative("/my/relative/url")
+           .ShouldBe($"{serverAddress}/my/relative/url");
 
-        var featureCollection = new FeatureCollection();
-        featureCollection.Set<IServerAddressesFeature>(new ServerAddressesFeature());
-
-        var testServer = new TestServer(host, featureCollection);
+        serverAddressService.AbsoluteUriFromRelative("segment1/segment2/segment3")
+         .ShouldBe($"{serverAddress}/segment1/segment2/segment3");
     }
 }

@@ -9,26 +9,22 @@ public class surrealdb_healthcheck_should(SurrealDbContainerFixture surrealDbFix
     {
         string connectionString = surrealDbFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSurreal(connectionString);
-                services
-                    .AddHealthChecks()
-                    .AddSurreal(tags: ["surrealdb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("surrealdb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSurreal(connectionString);
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddSurreal(tags: ["surrealdb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("surrealdb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -38,26 +34,22 @@ public class surrealdb_healthcheck_should(SurrealDbContainerFixture surrealDbFix
     {
         const string connectionString = "Server=http://localhost:1234;Username=root;Password=root";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSurreal(connectionString);
-                services
-                    .AddHealthChecks()
-                    .AddSurreal(tags: ["surrealdb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("surrealdb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSurreal(connectionString);
+                    webHostBuilder.Services
+                        .AddHealthChecks()
+                        .AddSurreal(tags: ["surrealdb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("surrealdb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

@@ -10,24 +10,20 @@ public class mysql_healthcheck_should(MySqlContainerFixture mySqlContainerFixtur
     {
         var connectionString = mySqlContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddMySqlDataSource(connectionString)
-                    .AddHealthChecks().AddMySql(tags: new string[] { "mysql" });
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mysql")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddMySqlDataSource(connectionString)
+                        .AddHealthChecks().AddMySql(tags: new string[] { "mysql" });
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mysql")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -37,23 +33,19 @@ public class mysql_healthcheck_should(MySqlContainerFixture mySqlContainerFixtur
     {
         var connectionString = mySqlContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddMySql(connectionString, tags: ["mysql"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mysql")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddMySql(connectionString, tags: ["mysql"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mysql")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -63,23 +55,19 @@ public class mysql_healthcheck_should(MySqlContainerFixture mySqlContainerFixtur
     {
         var connectionString = "server=255.255.255.255;port=3306;database=information_schema;uid=root;password=Password12!";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddMySql(connectionString, tags: ["mysql"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mysql")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddMySql(connectionString, tags: ["mysql"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mysql")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -89,24 +77,20 @@ public class mysql_healthcheck_should(MySqlContainerFixture mySqlContainerFixtur
     {
         var connectionString = "server=255.255.255.255;port=3306;database=information_schema;uid=root;password=Password12!";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                var mysqlOptions = new MySqlHealthCheckOptions(connectionString);
-                services.AddHealthChecks()
-                    .AddMySql(mysqlOptions, tags: ["mysql"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mysql")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    var mysqlOptions = new MySqlHealthCheckOptions(connectionString);
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddMySql(mysqlOptions, tags: ["mysql"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mysql")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

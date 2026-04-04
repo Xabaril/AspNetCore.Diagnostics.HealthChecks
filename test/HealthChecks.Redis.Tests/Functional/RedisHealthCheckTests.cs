@@ -12,23 +12,19 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
     {
         var connectionString = $"{redisContainerFixture.GetConnectionString()},allowAdmin=true";
 
-        var webHostBuilder = new WebHostBuilder()
-         .ConfigureServices(services =>
-         {
-             services.AddHealthChecks()
-              .AddRedis(connectionString, tags: ["redis"]);
-         })
-         .Configure(app =>
-         {
-             app.UseHealthChecks("/health", new HealthCheckOptions
-             {
-                 Predicate = r => r.Tags.Contains("redis")
-             });
-         });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                 webHostBuilder.Services.AddHealthChecks()
+                  .AddRedis(connectionString, tags: ["redis"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                 app.UseHealthChecks("/health", new HealthCheckOptions
+                 {
+                     Predicate = r => r.Tags.Contains("redis")
+                 });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -38,24 +34,20 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
     {
         var connectionString = $"{redisContainerFixture.GetConnectionString()},allowAdmin=true";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddRedis(connectionString, tags: ["redis"], name: "1")
-                .AddRedis(connectionString, tags: ["redis"], name: "2");
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("redis")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddRedis(connectionString, tags: ["redis"], name: "1")
+                    .AddRedis(connectionString, tags: ["redis"], name: "2");
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("redis")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -68,23 +60,19 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
         var connectionMultiplexer = await ConnectionMultiplexer
             .ConnectAsync(connectionString);
 
-        var webHostBuilder = new WebHostBuilder()
-         .ConfigureServices(services =>
-         {
-             services.AddHealthChecks()
-              .AddRedis(connectionMultiplexer, tags: ["redis"]);
-         })
-         .Configure(app =>
-         {
-             app.UseHealthChecks("/health", new HealthCheckOptions
-             {
-                 Predicate = r => r.Tags.Contains("redis")
-             });
-         });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                 webHostBuilder.Services.AddHealthChecks()
+                  .AddRedis(connectionMultiplexer, tags: ["redis"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                 app.UseHealthChecks("/health", new HealthCheckOptions
+                 {
+                     Predicate = r => r.Tags.Contains("redis")
+                 });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -97,26 +85,22 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
         var connectionMultiplexer = await ConnectionMultiplexer
             .ConnectAsync(connectionString);
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddSingleton<IConnectionMultiplexer>(connectionMultiplexer);
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddSingleton<IConnectionMultiplexer>(connectionMultiplexer);
 
-                services.AddHealthChecks()
-                    .AddRedis(connectionMultiplexer, tags: ["redis"], name: "1")
-                    .AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>(), tags: ["redis"], name: "2");
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("redis")
-                });
-            });
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddRedis(connectionMultiplexer, tags: ["redis"], name: "1")
+                        .AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>(), tags: ["redis"], name: "2");
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("redis")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -124,27 +108,23 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
     [Fact]
     public async Task be_unhealthy_when_connection_multiplexer_factory_throws_on_connect()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                // This factory will throw when called for the first time.
-                // The health check should take care of that and report Unhealthy status rather than throw an exception.
-                services.AddSingleton<IConnectionMultiplexer>(
-                    _ => ConnectionMultiplexer.Connect("nonexistinghost:6379,allowAdmin=true"));
-                services.AddHealthChecks()
-                    .AddRedis(serviceProvider => serviceProvider.GetRequiredService<IConnectionMultiplexer>());
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = _ => true
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    // This factory will throw when called for the first time.
+                    // The health check should take care of that and report Unhealthy status rather than throw an exception.
+                    webHostBuilder.Services.AddSingleton<IConnectionMultiplexer>(
+                        _ => ConnectionMultiplexer.Connect("nonexistinghost:6379,allowAdmin=true"));
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddRedis(serviceProvider => serviceProvider.GetRequiredService<IConnectionMultiplexer>());
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = _ => true
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -152,23 +132,19 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
     [Fact]
     public async Task be_unhealthy_if_redis_is_not_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-         .ConfigureServices(services =>
-         {
-             services.AddHealthChecks()
-              .AddRedis("nonexistinghost:6379,allowAdmin=true", tags: ["redis"]);
-         })
-         .Configure(app =>
-         {
-             app.UseHealthChecks("/health", new HealthCheckOptions
-             {
-                 Predicate = r => r.Tags.Contains("redis")
-             });
-         });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                 webHostBuilder.Services.AddHealthChecks()
+                  .AddRedis("nonexistinghost:6379,allowAdmin=true", tags: ["redis"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                 app.UseHealthChecks("/health", new HealthCheckOptions
+                 {
+                     Predicate = r => r.Tags.Contains("redis")
+                 });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -176,24 +152,20 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
     [Fact]
     public async Task be_unhealthy_if_redis_is_not_available_within_specified_timeout()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                    .AddRedis("nonexistinghost:6379,allowAdmin=true,connectRetry=2147483647", tags: ["redis"], timeout: TimeSpan.FromSeconds(2));
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("redis"),
-                    ResponseWriter = HealthChecks.UI.Client.UIResponseWriter.WriteHealthCheckUIResponse,
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                        .AddRedis("nonexistinghost:6379,allowAdmin=true,connectRetry=2147483647", tags: ["redis"], timeout: TimeSpan.FromSeconds(2));
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("redis"),
+                        ResponseWriter = HealthChecks.UI.Client.UIResponseWriter.WriteHealthCheckUIResponse,
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         (await response.Content.ReadAsStringAsync()).ShouldContain("Healthcheck timed out");
@@ -202,23 +174,19 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
     [Fact]
     public async Task not_every_IConnectionMultiplexer_is_ConnectionMultiplexer()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddSingleton<IConnectionMultiplexer>(new NotConnectionMultiplexer());
-                services.AddHealthChecks().AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>());
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = _ => true
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddSingleton<IConnectionMultiplexer>(new NotConnectionMultiplexer());
+                    webHostBuilder.Services.AddHealthChecks().AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>());
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = _ => true
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

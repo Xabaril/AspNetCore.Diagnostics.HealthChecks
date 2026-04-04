@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -57,49 +58,35 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
     {
         foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
         {
-            client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
-                properties: new Dictionary<string, string?>()
-                {
-                    { nameof(Environment.MachineName), Environment.MachineName },
-                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
-                    { HEALTHCHECK_NAME, reportEntry.Key }
-                },
-                metrics: new Dictionary<string, double>()
-                {
-                    { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0 },
-                    { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
-                });
+            var eventTelemetry = new EventTelemetry($"{EVENT_NAME}:{reportEntry.Key}");
+            eventTelemetry.Properties[nameof(Environment.MachineName)] = Environment.MachineName;
+            eventTelemetry.Properties[nameof(Assembly)] = Assembly.GetEntryAssembly()?.GetName().Name;
+            eventTelemetry.Properties[HEALTHCHECK_NAME] = reportEntry.Key;
+            eventTelemetry.Metrics[METRIC_STATUS_NAME] = reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0;
+            eventTelemetry.Metrics[METRIC_DURATION_NAME] = reportEntry.Value.Duration.TotalMilliseconds;
+            client.TrackEvent(eventTelemetry);
         }
 
         foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
         {
-            client.TrackException(reportEntry.Value.Exception,
-                properties: new Dictionary<string, string?>()
-                {
-                    { nameof(Environment.MachineName), Environment.MachineName },
-                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
-                    { HEALTHCHECK_NAME, reportEntry.Key }
-                },
-                metrics: new Dictionary<string, double>()
-                {
-                    { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0 },
-                    { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
-                });
+            var exceptionTelemetry = new ExceptionTelemetry(reportEntry.Value.Exception!);
+            exceptionTelemetry.Properties[nameof(Environment.MachineName)] = Environment.MachineName;
+            exceptionTelemetry.Properties[nameof(Assembly)] = Assembly.GetEntryAssembly()?.GetName().Name;
+            exceptionTelemetry.Properties[HEALTHCHECK_NAME] = reportEntry.Key;
+            exceptionTelemetry.Metrics[METRIC_STATUS_NAME] = reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0;
+            exceptionTelemetry.Metrics[METRIC_DURATION_NAME] = reportEntry.Value.Duration.TotalMilliseconds;
+            client.TrackException(exceptionTelemetry);
         }
     }
+
     private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
     {
-        client.TrackEvent(EVENT_NAME,
-            properties: new Dictionary<string, string?>
-            {
-                { nameof(Environment.MachineName), Environment.MachineName },
-                { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name }
-            },
-            metrics: new Dictionary<string, double>
-            {
-                { METRIC_STATUS_NAME, report.Status == HealthStatus.Healthy ? 1 : 0 },
-                { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
-            });
+        var eventTelemetry = new EventTelemetry(EVENT_NAME);
+        eventTelemetry.Properties[nameof(Environment.MachineName)] = Environment.MachineName;
+        eventTelemetry.Properties[nameof(Assembly)] = Assembly.GetEntryAssembly()?.GetName().Name;
+        eventTelemetry.Metrics[METRIC_STATUS_NAME] = report.Status == HealthStatus.Healthy ? 1 : 0;
+        eventTelemetry.Metrics[METRIC_DURATION_NAME] = report.TotalDuration.TotalMilliseconds;
+        client.TrackEvent(eventTelemetry);
     }
 
     private TelemetryClient GetOrCreateTelemetryClient()

@@ -16,25 +16,22 @@ public class UI_configuration_should
         var handler = new ClientHandler(tracer, new Dictionary<string, string> { [keyName] = valueName });
         var hostReset = new ManualResetEventSlim(false);
 
-        var builder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddRouting()
-                .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
-                .AddHealthChecksUI(setup =>
-                {
-                    setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
-                    setup.UseApiEndpointHttpMessageHandler(sp => handler);
-                }).AddInMemoryStorage();
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(setup => setup.MapHealthChecksUI());
-            });
+        var builder = WebApplication.CreateBuilder();
+                    builder.Services
+                    .AddRouting()
+                    .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
+                    .AddHealthChecksUI(setup =>
+                    {
+                        setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
+                        setup.UseApiEndpointHttpMessageHandler(sp => handler);
+                    }).AddInMemoryStorage();
+        builder.WebHost.UseTestServer();
+        await using var app = builder.Build();
+                    app.UseRouting();
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
+        await app.StartAsync();
 
-        var server = new TestServer(builder);
+        var server = app.GetTestServer();
         hostReset.Wait(3000);
 
         tracer.Received().Log(keyName, valueName);
@@ -48,29 +45,26 @@ public class UI_configuration_should
         var hostReset = new ManualResetEventSlim(false);
         var tracer = Substitute.For<MessageHandlerTracer>();
 
-        var builder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddRouting()
-                .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
-                .AddTransient(sp => new CustomDelegatingHandler(tracer))
-                .AddTransient(sp => new CustomDelegatingHandler2(tracer))
-                .AddHealthChecksUI(setup =>
-                {
-                    setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
-                    setup.UseApiEndpointDelegatingHandler<CustomDelegatingHandler>();
-                    setup.UseApiEndpointDelegatingHandler<CustomDelegatingHandler2>();
+        var builder = WebApplication.CreateBuilder();
+                    builder.Services
+                    .AddRouting()
+                    .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
+                    .AddTransient(sp => new CustomDelegatingHandler(tracer))
+                    .AddTransient(sp => new CustomDelegatingHandler2(tracer))
+                    .AddHealthChecksUI(setup =>
+                    {
+                        setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
+                        setup.UseApiEndpointDelegatingHandler<CustomDelegatingHandler>();
+                        setup.UseApiEndpointDelegatingHandler<CustomDelegatingHandler2>();
 
-                }).AddInMemoryStorage();
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(setup => setup.MapHealthChecksUI());
-            });
+                    }).AddInMemoryStorage();
+        builder.WebHost.UseTestServer();
+        await using var app = builder.Build();
+                    app.UseRouting();
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
+        await app.StartAsync();
 
-        var server = new TestServer(builder);
+        var server = app.GetTestServer();
 
         hostReset.Wait(3000);
 
@@ -86,30 +80,27 @@ public class UI_configuration_should
         var hostReset = new ManualResetEventSlim(false);
         var tracer = Substitute.For<MessageHandlerTracer>();
 
-        var builder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                .AddRouting()
-                .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
-                .AddTransient(sp => new CustomDelegatingHandler(tracer))
-                .AddTransient(sp => new CustomDelegatingHandler2(tracer))
-                .AddHealthChecksUI(setup =>
-                {
-                    setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
-                    setup.AddWebhookNotification("webhook1", "https://httpstat.us/200", "test payload");
-                    setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler>();
-                    setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
+        var builder = WebApplication.CreateBuilder();
+                    builder.Services
+                    .AddRouting()
+                    .AddSingleton<IHealthCheckCollectorInterceptor>(sp => new TestCollectorInterceptor(hostReset))
+                    .AddTransient(sp => new CustomDelegatingHandler(tracer))
+                    .AddTransient(sp => new CustomDelegatingHandler2(tracer))
+                    .AddHealthChecksUI(setup =>
+                    {
+                        setup.AddHealthCheckEndpoint("endpoint1", "https://httpstat.us/200");
+                        setup.AddWebhookNotification("webhook1", "https://httpstat.us/200", "test payload");
+                        setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler>();
+                        setup.UseWebHooksEndpointDelegatingHandler<CustomDelegatingHandler2>();
 
-                }).AddInMemoryStorage();
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(setup => setup.MapHealthChecksUI());
-            });
+                    }).AddInMemoryStorage();
+        builder.WebHost.UseTestServer();
+        await using var app = builder.Build();
+                    app.UseRouting();
+                    app.UseEndpoints(setup => setup.MapHealthChecksUI());
+        await app.StartAsync();
 
-        var server = new TestServer(builder);
+        var server = app.GetTestServer();
 
         hostReset.Wait(3000);
 

@@ -12,37 +12,33 @@ public class ui_api_request_limiting
     {
         int maxActiveRequests = 2;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddRouting()
-                    .AddHealthChecks()
-                    .Services
-                    .AddHealthChecksUI(setup =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddRouting()
+                        .AddHealthChecks()
+                        .Services
+                        .AddHealthChecksUI(setup =>
+                        {
+                            setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
+                            setup.SetApiMaxActiveRequests(maxActiveRequests);
+                            setup.ConfigureUIApiEndpointResult = _ => Task.Delay(200);
+                        })
+                        .AddInMemoryStorage(databaseName: "LimitingTests");
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseRouting();
+                    app.UseEndpoints(setup =>
                     {
-                        setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                        setup.SetApiMaxActiveRequests(maxActiveRequests);
-                        setup.ConfigureUIApiEndpointResult = _ => Task.Delay(200);
-                    })
-                    .AddInMemoryStorage(databaseName: "LimitingTests");
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(setup =>
-                {
-                    setup.MapHealthChecks("/health", new HealthCheckOptions
-                    {
-                        Predicate = _ => true,
-                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        setup.MapHealthChecks("/health", new HealthCheckOptions
+                        {
+                            Predicate = _ => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+
+                        setup.MapHealthChecksUI();
                     });
+        await app.StartAsync();
 
-                    setup.MapHealthChecksUI();
-                });
-            });
-
-        using var server = new TestServer(webHostBuilder);
 
         var tasks = Enumerable.Range(0, maxActiveRequests + 5)
             .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())
@@ -57,39 +53,34 @@ public class ui_api_request_limiting
     [Fact]
     public async Task should_return_too_many_requests_status_using_default_server_max_active_requests()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddRouting()
-                    .AddHealthChecks()
-                    .Services
-                    .AddHealthChecksUI(setup =>
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddRouting()
+                        .AddHealthChecks()
+                        .Services
+                        .AddHealthChecksUI(setup =>
+                        {
+                            setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
+                            setup.ConfigureUIApiEndpointResult = _ => Task.Delay(200);
+                        })
+                        .AddInMemoryStorage(databaseName: "LimitingTests");
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseRouting();
+                    app.UseEndpoints(setup =>
                     {
-                        setup.AddHealthCheckEndpoint("endpoint1", "http://localhost/health");
-                        setup.ConfigureUIApiEndpointResult = _ => Task.Delay(200);
-                    })
-                    .AddInMemoryStorage(databaseName: "LimitingTests");
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(setup =>
-                {
-                    setup.MapHealthChecks("/health", new HealthCheckOptions
-                    {
-                        Predicate = _ => true,
-                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        setup.MapHealthChecks("/health", new HealthCheckOptions
+                        {
+                            Predicate = _ => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+
+                        setup.MapHealthChecksUI();
                     });
+        await app.StartAsync();
 
-                    setup.MapHealthChecksUI();
-                });
 
-            });
-
-        using var server = new TestServer(webHostBuilder);
-
-        var serverSettings = server.Services.GetRequiredService<IOptions<Settings>>().Value;
+        var serverSettings = app.Services.GetRequiredService<IOptions<Settings>>().Value;
 
         var tasks = Enumerable.Range(0, serverSettings.ApiMaxActiveRequests + 5)
             .Select(_ => server.CreateRequest(new Configuration.Options().ApiPath).GetAsync())

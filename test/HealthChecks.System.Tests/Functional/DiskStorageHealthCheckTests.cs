@@ -15,22 +15,18 @@ public class disk_storage_healthcheck_should
         var testDriveActualFreeMegabytes = testDrive.AvailableFreeSpace / 1024 / 1024;
         var targetFreeSpace = testDriveActualFreeMegabytes - 50;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: ["diskstorage"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("diskstorage")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: ["diskstorage"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("diskstorage")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
@@ -43,22 +39,18 @@ public class disk_storage_healthcheck_should
         var testDriveActualFreeMegabytes = testDrive.AvailableFreeSpace / 1024 / 1024;
         var targetFreeSpace = testDriveActualFreeMegabytes + 50;
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: ["diskstorage"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("diskstorage")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddDiskStorageHealthCheck(setup => setup.AddDrive(testDrive.Name, targetFreeSpace), tags: ["diskstorage"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("diskstorage")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -66,22 +58,18 @@ public class disk_storage_healthcheck_should
     [Fact]
     public async Task be_unhealthy_when_a_configured_disk_does_not_exist()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddHealthChecks()
-                .AddDiskStorageHealthCheck(setup => setup.AddDrive("nonexistingdisk", 104857600), tags: ["diskstorage"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("diskstorage")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services.AddHealthChecks()
+                    .AddDiskStorageHealthCheck(setup => setup.AddDrive("nonexistingdisk", 104857600), tags: ["diskstorage"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("diskstorage")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

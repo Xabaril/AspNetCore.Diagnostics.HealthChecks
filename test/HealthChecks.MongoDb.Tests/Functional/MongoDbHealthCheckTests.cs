@@ -10,25 +10,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
     {
         var connectionString = mongoDbContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient(connectionString))
-                    .AddHealthChecks()
-                    .AddMongoDb(tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient(connectionString))
+                        .AddHealthChecks()
+                        .AddMongoDb(tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -38,25 +34,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
     {
         var connectionString = mongoDbContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient(connectionString))
-                    .AddHealthChecks()
-                    .AddMongoDb(databaseNameFactory: _ => "local", tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient(connectionString))
+                        .AddHealthChecks()
+                        .AddMongoDb(databaseNameFactory: _ => "local", tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -66,25 +58,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
     {
         var connectionString = $"{mongoDbContainerFixture.GetConnectionString()}local";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient(connectionString))
-                    .AddHealthChecks()
-                    .AddMongoDb(tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient(connectionString))
+                        .AddHealthChecks()
+                        .AddMongoDb(tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -94,25 +82,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
     {
         var connectionString = mongoDbContainerFixture.GetConnectionString();
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient(connectionString).GetDatabase("namedDb"))
-                    .AddHealthChecks()
-                    .AddMongoDb(dbFactory: sp => sp.GetRequiredService<IMongoDatabase>(), tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient(connectionString).GetDatabase("namedDb"))
+                        .AddHealthChecks()
+                        .AddMongoDb(dbFactory: sp => sp.GetRequiredService<IMongoDatabase>(), tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -123,25 +107,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
         // NOTE: with mongodb the database is created automatically the first time something is written to it
         var connectionString = $"{mongoDbContainerFixture.GetConnectionString()}nonexisting";
 
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient(connectionString))
-                    .AddHealthChecks()
-                    .AddMongoDb(tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient(connectionString))
+                        .AddHealthChecks()
+                        .AddMongoDb(tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
@@ -149,25 +129,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
     [Fact]
     public async Task be_unhealthy_listing_all_databases_if_mongodb_is_not_available()
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
-                    .AddHealthChecks()
-                    .AddMongoDb(tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
+                        .AddHealthChecks()
+                        .AddMongoDb(tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }
@@ -177,25 +153,21 @@ public class mongodb_healthcheck_should(MongoDbContainerFixture mongoDbContainer
     [InlineData("nonexistingdatabase")]
     public async Task be_unhealthy_on_specified_database_if_mongodb_is_not_available(string mongoDatabaseName)
     {
-        var webHostBuilder = new WebHostBuilder()
-            .ConfigureServices(services =>
-            {
-                services
-                    .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
-                    .AddHealthChecks()
-                    .AddMongoDb(databaseNameFactory: _ => mongoDatabaseName, tags: ["mongodb"]);
-            })
-            .Configure(app =>
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("mongodb")
-                });
-            });
+        var webHostBuilder = WebApplication.CreateBuilder();
+                    webHostBuilder.Services
+                        .AddSingleton(sp => new MongoClient("mongodb://nonexistingdomain:27017"))
+                        .AddHealthChecks()
+                        .AddMongoDb(databaseNameFactory: _ => mongoDatabaseName, tags: ["mongodb"]);
+        webHostBuilder.WebHost.UseTestServer();
+        await using var app = webHostBuilder.Build();
+                    app.UseHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("mongodb")
+                    });
+        await app.StartAsync();
 
-        using var server = new TestServer(webHostBuilder);
 
-        using var response = await server.CreateRequest("/health").GetAsync();
+        using var response = await app.GetTestClient().GetAsync("/health");
 
         response.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
     }

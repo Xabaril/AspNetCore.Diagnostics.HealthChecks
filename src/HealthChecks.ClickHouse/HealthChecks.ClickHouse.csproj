@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;$(DefaultNetCoreApp)</TargetFrameworks>
+    <TargetFramework>$(DefaultNetCoreApp)</TargetFramework>
     <PackageTags>$(PackageTags);Beat;ClickHouse</PackageTags>
     <Description>HealthChecks.ClickHouse is a health check for ClickHouse.</Description>
     <VersionPrefix>$(HealthCheckClickHouse)</VersionPrefix>

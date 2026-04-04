@@ -76,7 +76,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TestcontainersVersion>4.1.0</TestcontainersVersion>
+    <TestcontainersVersion>4.11.0</TestcontainersVersion>
   </PropertyGroup>
 
 </Project>

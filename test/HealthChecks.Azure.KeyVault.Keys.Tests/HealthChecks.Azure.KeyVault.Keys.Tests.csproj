@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <ProjectReference Include="..\..\src\HealthChecks.Azure.KeyVault.Keys\HealthChecks.Azure.KeyVault.Keys.csproj" />
+  </ItemGroup>
+
+</Project>

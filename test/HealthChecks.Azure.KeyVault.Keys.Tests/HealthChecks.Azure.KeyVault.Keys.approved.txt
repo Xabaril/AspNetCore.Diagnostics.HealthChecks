@@ -1,0 +1,20 @@
+namespace HealthChecks.Azure.KeyVault.Keys
+{
+    public sealed class AzureKeyVaultKeysHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureKeyVaultKeysHealthCheck(Azure.Security.KeyVault.Keys.KeyClient keyClient, HealthChecks.Azure.KeyVault.Keys.AzureKeyVaultKeysHealthCheckOptions? options = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public sealed class AzureKeyVaultKeysHealthCheckOptions
+    {
+        public AzureKeyVaultKeysHealthCheckOptions() { }
+        public string KeyName { get; set; }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class AzureKeyVaultKeysHealthChecksBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureKeyVaultKeys(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Security.KeyVault.Keys.KeyClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.KeyVault.Keys.AzureKeyVaultKeysHealthCheckOptions>? optionsFactory = null, string? name = "azure_key_vault_key", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

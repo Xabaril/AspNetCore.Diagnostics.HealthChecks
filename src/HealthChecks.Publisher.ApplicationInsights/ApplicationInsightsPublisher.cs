@@ -19,17 +19,20 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
     private readonly string? _connectionString;
     private readonly bool _saveDetailedReport;
     private readonly bool _excludeHealthyReports;
+    private readonly bool _trackAsAvailability;
 
     public ApplicationInsightsPublisher(
         IOptions<TelemetryConfiguration>? telemetryConfiguration,
         string? connectionString = default,
         bool saveDetailedReport = false,
-        bool excludeHealthyReports = false)
+        bool excludeHealthyReports = false,
+        bool trackAsAvailability = false)
     {
         _telemetryConfiguration = telemetryConfiguration?.Value;
         _connectionString = connectionString;
         _saveDetailedReport = saveDetailedReport;
         _excludeHealthyReports = excludeHealthyReports;
+        _trackAsAvailability = trackAsAvailability;
     }
 
     public Task PublishAsync(HealthReport report, CancellationToken cancellationToken)
@@ -57,18 +60,34 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
     {
         foreach (var reportEntry in report.Entries.Where(entry => !_excludeHealthyReports || entry.Value.Status != HealthStatus.Healthy))
         {
-            client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
-                properties: new Dictionary<string, string?>()
-                {
-                    { nameof(Environment.MachineName), Environment.MachineName },
-                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
-                    { HEALTHCHECK_NAME, reportEntry.Key }
-                },
-                metrics: new Dictionary<string, double>()
-                {
-                    { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0 },
-                    { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
-                });
+            if( _trackAsAvailability )
+            {
+                client.TrackAvailability( $"{EVENT_NAME}:{reportEntry.Key}",
+                    DateTimeOffset.UtcNow,
+                    reportEntry.Value.Duration,
+                    Environment.MachineName,
+                    reportEntry.Value.Status == HealthStatus.Healthy,
+                    reportEntry.Value.Exception?.Message,
+                    properties: new Dictionary<string, string?>()
+                    {
+                        { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
+                        { HEALTHCHECK_NAME, reportEntry.Key }
+                    });
+            }
+            else
+            {
+                client.TrackEvent($"{EVENT_NAME}:{reportEntry.Key}",
+                    properties: new Dictionary<string, string?>()
+                    {
+                        { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name },
+                        { HEALTHCHECK_NAME, reportEntry.Key }
+                    },
+                    metrics: new Dictionary<string, double>()
+                    {
+                        { METRIC_STATUS_NAME, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0 },
+                        { METRIC_DURATION_NAME, reportEntry.Value.Duration.TotalMilliseconds }
+                    });
+            }
         }
 
         foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
@@ -87,22 +106,37 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
                 });
         }
     }
-    private static void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
+    private void SaveGeneralizedReport(HealthReport report, TelemetryClient client)
     {
-        client.TrackEvent(EVENT_NAME,
-            properties: new Dictionary<string, string?>
-            {
-                { nameof(Environment.MachineName), Environment.MachineName },
-                { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name }
-            },
-            metrics: new Dictionary<string, double>
-            {
-                { METRIC_STATUS_NAME, report.Status == HealthStatus.Healthy ? 1 : 0 },
-                { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
-            });
+        if( _trackAsAvailability )
+        {
+            client.TrackAvailability( EVENT_NAME,
+                DateTimeOffset.UtcNow,
+                report.TotalDuration,
+                Environment.MachineName,
+                report.Status == HealthStatus.Healthy,
+                properties: new Dictionary<string, string?>
+                {
+                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name }
+                });
+        }
+        else
+        {
+            client.TrackEvent(EVENT_NAME,
+                properties: new Dictionary<string, string?>
+                {
+                    { nameof(Environment.MachineName), Environment.MachineName },
+                    { nameof(Assembly), Assembly.GetEntryAssembly()?.GetName().Name }
+                },
+                metrics: new Dictionary<string, double>
+                {
+                    { METRIC_STATUS_NAME, report.Status == HealthStatus.Healthy ? 1 : 0 },
+                    { METRIC_DURATION_NAME, report.TotalDuration.TotalMilliseconds }
+                });
+        }
     }
 
-    private TelemetryClient GetOrCreateTelemetryClient()
+    internal virtual TelemetryClient GetOrCreateTelemetryClient()
     {
         if (_client == null)
         {

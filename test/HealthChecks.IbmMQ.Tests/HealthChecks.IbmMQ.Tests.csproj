@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.IbmMQ\HealthChecks.IbmMQ.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers" />
+  </ItemGroup>
+
 </Project>

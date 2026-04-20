@@ -21,6 +21,11 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "messaging.system", "kafka" }
+        };
+
         try
         {
             if (_producer == null)
@@ -31,19 +36,22 @@ public class KafkaHealthCheck : IHealthCheck, IDisposable
             }
 
             var message = _options.MessageBuilder(_options);
+            var topic = _options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC;
 
-            var result = await _producer.ProduceAsync(_options.Topic ?? KafkaHealthCheckBuilderExtensions.DEFAULT_TOPIC, message, cancellationToken).ConfigureAwait(false);
+            checkDetails.Add("messaging.destination.name", topic);
+
+            var result = await _producer.ProduceAsync(topic, message, cancellationToken).ConfigureAwait(false);
 
             if (result.Status == PersistenceStatus.NotPersisted)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.");
+                return new HealthCheckResult(context.Registration.FailureStatus, description: $"Message is not persisted or a failure is raised on health check for kafka.", data: checkDetails);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

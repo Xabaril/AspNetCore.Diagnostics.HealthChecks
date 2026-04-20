@@ -21,12 +21,21 @@ public class NpgSqlHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "npgsql" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             await using var connection = _options.DataSource is not null
                 ? _options.DataSource.CreateConnection()
                 : new NpgsqlConnection(_options.ConnectionString);
 
+            checkDetails.Add("db.query.text", _options.CommandText);
+            checkDetails.Add("db.namespace", connection.Database);
+            checkDetails.Add("server.address", connection.DataSource);
             _options.Configure?.Invoke(connection);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
@@ -35,12 +44,12 @@ public class NpgSqlHealthCheck : IHealthCheck
             var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
             return _options.HealthCheckResultBuilder == null
-                ? HealthCheckResult.Healthy()
+                ? HealthCheckResult.Healthy(data: checkDetails)
                 : _options.HealthCheckResultBuilder(result);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, description: ex.Message, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, description: ex.Message, exception: ex, data: checkDetails);
         }
     }
 }

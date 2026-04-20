@@ -20,6 +20,12 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
     /// <inheritdoc/>
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "eventstore" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             var readAllStreamResult = _client.ReadAllAsync(
@@ -32,14 +38,14 @@ public class EventStoreHealthCheck : IHealthCheck, IDisposable
             {
                 // If there are messages in the response,
                 // that means we successfully connected to EventStore
-                return HealthCheckResult.Healthy();
+                return HealthCheckResult.Healthy(data: checkDetails);
             }
 
             return new HealthCheckResult(context.Registration.FailureStatus, "Failed to connect to EventStore.");
         }
         catch (Exception exception)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: exception);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: exception, data: checkDetails);
         }
     }
 

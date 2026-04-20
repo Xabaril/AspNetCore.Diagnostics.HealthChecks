@@ -39,6 +39,11 @@ public class RavenDBHealthCheck : IHealthCheck
     [System.Diagnostics.CodeAnalysis.SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP004:Don't ignore created IDisposable", Justification = "DocumentStore instances are static")]
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "db.system.name", "ravendb" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
             var value = _stores.GetOrAdd(_options, o =>
@@ -49,11 +54,13 @@ public class RavenDBHealthCheck : IHealthCheck
                     Certificate = o.Certificate
                 };
 
+                checkDetails.Add("server.address", _options.Urls);
                 try
                 {
                     store.Initialize();
                     if (!string.IsNullOrWhiteSpace(_options.Database))
                     {
+                        checkDetails.Add("db.namespace", _options.Database ?? "");
                         store.SetRequestTimeout(_options.RequestTimeout ?? TimeSpan.FromSeconds(DEFAULT_REQUEST_TIMEOUT_IN_SECONDS), _options.Database);
                     }
 
@@ -82,15 +89,19 @@ public class RavenDBHealthCheck : IHealthCheck
 
             if (string.IsNullOrWhiteSpace(_options.Database))
             {
+                checkDetails.Add("health_check.task", "online");
+                checkDetails.Add("db.namespace", _options.Database ?? "");
                 await CheckServerHealthAsync(store, cancellationToken).ConfigureAwait(false);
 
-                return HealthCheckResult.Healthy();
+                return HealthCheckResult.Healthy(data: checkDetails);
             }
 
             try
             {
                 try
                 {
+                    checkDetails.Add("health_check.task", "ready");
+                    checkDetails.Add("db.namespace", _options.Database ?? "");
                     await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                 }
                 catch (ClientVersionMismatchException e) when (e.Message.Contains(nameof(RouteNotFoundException)))
@@ -99,16 +110,16 @@ public class RavenDBHealthCheck : IHealthCheck
                     await CheckDatabaseHealthAsync(store, _options.Database!, value.Legacy, cancellationToken).ConfigureAwait(false);
                 }
 
-                return HealthCheckResult.Healthy();
+                return HealthCheckResult.Healthy(data: checkDetails);
             }
             catch (DatabaseDoesNotExistException)
             {
-                return new HealthCheckResult(context.Registration.FailureStatus, $"RavenDB does not contain '{_options.Database}' database.");
+                return new HealthCheckResult(context.Registration.FailureStatus, $"RavenDB does not contain '{_options.Database}' database.", data: checkDetails);
             }
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

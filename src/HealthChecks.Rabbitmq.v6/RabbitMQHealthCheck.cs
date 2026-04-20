@@ -28,15 +28,27 @@ public class RabbitMQHealthCheck : IHealthCheck
     /// <inheritdoc />
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+                { "health_check.task", "ready" },
+                { "messaging.system", "rabbitmq" }
+        };
+
         // TODO: cancellationToken unused, see https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/714
         try
         {
+
+            checkDetails.Add("server.address", _connection!.Endpoint.HostName);
+            checkDetails.Add("server.port", _connection.Endpoint.Port);
+            checkDetails.Add("network.protocol.name", _connection.Endpoint.Protocol.ApiName);
+            checkDetails.Add("network.protocol.version", $"{_connection.Endpoint.Protocol.MajorVersion}.{_connection.Endpoint.Protocol.MinorVersion}.{_connection.Endpoint.Protocol.Revision}");
+            checkDetails.Add("network.local.port", _connection.LocalPort);
+            checkDetails.Add("network.remote.port", _connection.RemotePort);
             using var model = EnsureConnection().CreateModel();
-            return HealthCheckResultTask.Healthy;
+            return Task.FromResult(HealthCheckResult.Healthy(data: checkDetails));
         }
         catch (Exception ex)
         {
-            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex));
+            return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails));
         }
     }
 

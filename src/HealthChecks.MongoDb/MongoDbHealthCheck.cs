@@ -28,10 +28,19 @@ public class MongoDbHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "mongodb" },
+            { "network.transport", "tcp" }
+        };
         try
         {
+            checkDetails.Add("server.address", _client.Settings.Server.Host);
+            checkDetails.Add("server.port", _client.Settings.Server.Port);
+
             if (!string.IsNullOrEmpty(_specifiedDatabase))
             {
+                checkDetails.Add("db.namespace", _specifiedDatabase ?? "");
                 // some users can't list all databases depending on database privileges, with
                 // this you can check a specified database.
                 // Related with issue #43 and #617
@@ -72,11 +81,11 @@ public class MongoDbHealthCheck : IHealthCheck
                 await cursor.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 }

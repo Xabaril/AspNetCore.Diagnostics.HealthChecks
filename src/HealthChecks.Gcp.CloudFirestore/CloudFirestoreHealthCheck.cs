@@ -14,8 +14,15 @@ public class CloudFirestoreHealthCheck : IHealthCheck
     /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
+        var checkDetails = new Dictionary<string, object>{
+            { "health_check.task", "ready" },
+            { "db.system.name", "gcp.firestore" },
+            { "network.transport", "tcp" }
+        };
+
         try
         {
+            checkDetails.Add("db.namespace", _cloudFirestoreOptions.FirestoreDatabase);
             var currentRootCollections = await GetRootCollectionsAsync(cancellationToken).ConfigureAwait(false);
             if (_cloudFirestoreOptions.RequiredCollections != null)
             {
@@ -26,16 +33,17 @@ public class CloudFirestoreHealthCheck : IHealthCheck
                 {
                     return new HealthCheckResult(
                         context.Registration.FailureStatus,
-                        description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'"))
+                        description: "Collections not found: " + string.Join(", ", inexistantCollections.Select(c => "'" + c + "'")),
+                        data: checkDetails
                     );
                 }
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy(data: checkDetails);
         }
         catch (Exception ex)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex, data: checkDetails);
         }
     }
 

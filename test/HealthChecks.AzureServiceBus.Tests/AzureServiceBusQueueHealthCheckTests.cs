@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using Azure.Core;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Xunit.Abstractions;
 
 namespace HealthChecks.AzureServiceBus.Tests;
 
@@ -19,8 +21,9 @@ public class azureservicebusqueuehealthcheck_should
     private readonly ServiceBusClientProvider _clientProvider;
     private readonly ServiceBusAdministrationClient _serviceBusAdministrationClient;
     private readonly TokenCredential _tokenCredential;
+    private readonly ITestOutputHelper _output;
 
-    public azureservicebusqueuehealthcheck_should()
+    public azureservicebusqueuehealthcheck_should(ITestOutputHelper output)
     {
         ConnectionString = Guid.NewGuid().ToString();
         FullyQualifiedName = Guid.NewGuid().ToString();
@@ -37,6 +40,7 @@ public class azureservicebusqueuehealthcheck_should
         _clientProvider.CreateManagementClient(ConnectionString).Returns(_serviceBusAdministrationClient);
         _clientProvider.CreateManagementClient(FullyQualifiedName, _tokenCredential).Returns(_serviceBusAdministrationClient);
         _serviceBusClient.CreateReceiver(QueueName).Returns(_serviceBusReceiver);
+        _output = output;
     }
 
     [Theory]
@@ -253,6 +257,38 @@ public class azureservicebusqueuehealthcheck_should
             cancellationToken: tokenSource.Token);
 
         actual.Status.ShouldBe(HealthStatus.Unhealthy);
+
+        _serviceBusClient
+            .Received(1)
+            .CreateReceiver(QueueName);
+
+        await _serviceBusReceiver
+            .Received(1)
+            .PeekMessageAsync(cancellationToken: tokenSource.Token);
+    }
+
+    [Fact]
+    public async Task respect_cancellation_token_when_using_peek()
+    {
+        _serviceBusReceiver
+            .PeekMessageAsync(cancellationToken: default)
+            .ReturnsForAnyArgs(async Task<ServiceBusReceivedMessage> (call_info) =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                throw new Exception();
+            });
+
+        using var tokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
+        var sw = new Stopwatch();
+        sw.Start();
+        var actual = await ExecuteHealthCheckAsync(
+            QueueName,
+            true,
+            connectionString: ConnectionString,
+            cancellationToken: tokenSource.Token);
+        sw.Stop();
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        sw.Elapsed.ShouldBeLessThan(TimeSpan.FromSeconds(1));
 
         _serviceBusClient
             .Received(1)

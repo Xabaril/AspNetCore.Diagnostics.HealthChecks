@@ -1,4 +1,3 @@
-version: '3'
 services:
     sqlserver:
         image: mcr.microsoft.com/mssql/server
@@ -180,4 +179,3 @@ services:
           DOCKER_INFLUXDB_INIT_PASSWORD: password
           DOCKER_INFLUXDB_INIT_ORG: influxdata
           DOCKER_INFLUXDB_INIT_BUCKET: dummy
-

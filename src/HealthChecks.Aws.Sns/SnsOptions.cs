@@ -8,6 +8,7 @@ namespace HealthChecks.Aws.Sns;
 /// </summary>
 public class SnsOptions
 {
+    public string? ServiceURL { get; set; }
     public AWSCredentials? Credentials { get; set; }
 
     public RegionEndpoint? RegionEndpoint { get; set; }

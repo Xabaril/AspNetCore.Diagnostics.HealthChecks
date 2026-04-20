@@ -6,11 +6,12 @@ namespace HealthChecks.Aws.Sns;
 
 public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 {
-    private readonly SnsOptions _snsOptions;
+    private readonly SnsOptions _options;
+
 
     public SnsTopicAndSubscriptionHealthCheck(SnsOptions snsOptions)
     {
-        _snsOptions = Guard.ThrowIfNull(snsOptions);
+        _options = Guard.ThrowIfNull(snsOptions);
     }
 
     /// <inheritdoc />
@@ -20,7 +21,7 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
         {
             using var client = CreateSnsClient();
 
-            foreach (var (topicName, subscriptions) in _snsOptions.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
+            foreach (var (topicName, subscriptions) in _options.TopicsAndSubscriptions.Select(x => (x.Key, x.Value)))
             {
                 var topic = await client.FindTopicAsync(topicName).ConfigureAwait(false)
                     ?? throw new NotFoundException($"Topic {topicName} does not exist.");
@@ -53,14 +54,22 @@ public class SnsTopicAndSubscriptionHealthCheck : IHealthCheck
 
     private AmazonSimpleNotificationServiceClient CreateSnsClient()
     {
-        bool credentialsProvided = _snsOptions.Credentials is not null;
-        bool regionProvided = _snsOptions.RegionEndpoint is not null;
-        return (credentialsProvided, regionProvided) switch
+        bool credentialsProvided = _options.Credentials is not null;
+        bool regionProvided = _options.RegionEndpoint is not null;
+
+        var config = new AmazonSimpleNotificationServiceConfig();
+
+        if (_options.ServiceURL is not null)
         {
-            (false, false) => new AmazonSimpleNotificationServiceClient(),
-            (false, true) => new AmazonSimpleNotificationServiceClient(_snsOptions.RegionEndpoint),
-            (true, false) => new AmazonSimpleNotificationServiceClient(_snsOptions.Credentials),
-            (true, true) => new AmazonSimpleNotificationServiceClient(_snsOptions.Credentials, _snsOptions.RegionEndpoint)
-        };
+            config.ServiceURL = _options.ServiceURL;
+        }
+        if (_options.RegionEndpoint is not null)
+        {
+            config.RegionEndpoint = _options.RegionEndpoint;
+        }
+
+        return _options.Credentials is not null
+            ? new AmazonSimpleNotificationServiceClient(_options.Credentials, config)
+            : new AmazonSimpleNotificationServiceClient(config);
     }
 }

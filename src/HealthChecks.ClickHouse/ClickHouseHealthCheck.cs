@@ -1,4 +1,4 @@
-using ClickHouse.Client.ADO;
+using ClickHouse.Driver.ADO;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace HealthChecks.ClickHouse;
@@ -26,10 +26,10 @@ public class ClickHouseHealthCheck : IHealthCheck
         {
             await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-            using var command = _connection.CreateCommand();
+            await using var command = _connection.CreateCommand();
             command.CommandText = _command;
 
-            await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+            _ = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 
             return HealthCheckResult.Healthy();
         }

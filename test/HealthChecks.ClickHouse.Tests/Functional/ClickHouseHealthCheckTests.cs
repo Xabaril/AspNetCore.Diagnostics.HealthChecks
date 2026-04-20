@@ -1,5 +1,5 @@
 using System.Net;
-using ClickHouse.Client.ADO;
+using ClickHouse.Driver.ADO;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 

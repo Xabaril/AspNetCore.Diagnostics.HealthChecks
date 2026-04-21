@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Activemq</PackageTags>
+    <Description>HealthChecks.Activemq is the health check package for ActiveMQ.Client.</Description>
+    <VersionPrefix>$(HealthCheckActivemq)</VersionPrefix>
+    <RootNamespace>HealthChecks.Activemq</RootNamespace> <!--For backward naming compatibility-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Apache.NMS.AMQP" />
+  </ItemGroup>
+
+
+
+</Project>

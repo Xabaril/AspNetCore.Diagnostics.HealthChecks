@@ -26,7 +26,11 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
         {
             if (Options.UsePeekMode)
                 await CheckWithReceiver().ConfigureAwait(false);
-            else
+
+            if (Options.UseCreateMessageBatchAsyncMode)
+                await CheckWithSender().ConfigureAwait(false);
+
+            if (Options.UsePeekMode is false && Options.UseCreateMessageBatchAsyncMode is false)
                 await CheckWithManagement().ConfigureAwait(false);
 
             return HealthCheckResult.Healthy();
@@ -45,6 +49,17 @@ public class AzureServiceBusQueueHealthCheck : AzureServiceBusHealthCheck<AzureS
                 .ConfigureAwait(false);
 
             await receiver.PeekMessageAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
+        async Task CheckWithSender()
+        {
+            var client = await ClientCache.GetOrAddAsyncDisposableAsync(ConnectionKey, _ => CreateClient()).ConfigureAwait(false);
+            var sender = await ClientCache.GetOrAddAsyncDisposableAsync(
+                _queueKey,
+                _ => client.CreateSender(Options.QueueName))
+                .ConfigureAwait(false);
+
+            await sender.CreateMessageBatchAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         Task CheckWithManagement()

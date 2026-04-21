@@ -10,5 +10,4 @@
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.ServiceBus" />
   </ItemGroup>
-
 </Project>

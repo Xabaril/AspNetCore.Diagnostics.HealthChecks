@@ -21,6 +21,17 @@ public class AzureServiceBusQueueHealthCheckOptions : AzureServiceBusHealthCheck
     /// </remarks>
     public bool UsePeekMode { get; set; } = true;
 
+    /// <summary>
+    /// Will use <c>CreateMessageBatchAsync</c> method to determine status if set to <see langword="true"/> (default),
+    /// otherwise; will use <c>GetProperties*</c> method.
+    /// </summary>
+    /// <remarks>
+    /// CreateMessageBatch requires Send claim to work. However, if only Receiver claim using the Azure built-in roles (RBAC)
+    /// <see href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/integration#azure-service-bus-data-receiver">Azure Service Bus Data Receiver</see>
+    /// is used set this to <see langword="false"/>. By default <see langword="true"/>.
+    /// </remarks>
+    public bool UseCreateMessageBatchAsyncMode { get; set; } = true;
+
     public AzureServiceBusQueueHealthCheckOptions(string queueName)
     {
         QueueName = queueName;

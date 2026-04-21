@@ -1,10 +1,11 @@
 using NATS.Client.Core;
-using static HealthChecks.Nats.Tests.Defines;
 
 namespace HealthChecks.Nats.Tests.DependencyInjection;
 
 public class nats_registration_should
 {
+    private const string ConnectionString = "nats://localhost:4222";
+
     [Fact]
     public void add_health_check_when_properly_configured()
     {
@@ -47,7 +48,7 @@ public class nats_registration_should
         var services = new ServiceCollection();
         var natsOpts = NatsOpts.Default with
         {
-            Url = DefaultLocalConnectionString,
+            Url = ConnectionString,
         };
         var connection = new NatsConnection(natsOpts);
 
@@ -86,7 +87,7 @@ public class nats_registration_should
     {
         var options = NatsOpts.Default with
         {
-            Url = DefaultLocalConnectionString,
+            Url = ConnectionString,
         };
         return new NatsConnection(options);
     }

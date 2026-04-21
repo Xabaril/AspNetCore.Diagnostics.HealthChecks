@@ -4,4 +4,8 @@
     <ProjectReference Include="..\..\src\HealthChecks.Aws.Sqs\HealthChecks.Aws.Sqs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.LocalStack" />
+  </ItemGroup>
+
 </Project>

@@ -5,11 +5,11 @@ namespace HealthChecks.Aws.Sqs;
 
 public class SqsHealthCheck : IHealthCheck
 {
-    private readonly SqsOptions _sqsOptions;
+    private readonly SqsOptions _options;
 
     public SqsHealthCheck(SqsOptions sqsOptions)
     {
-        _sqsOptions = Guard.ThrowIfNull(sqsOptions);
+        _options = Guard.ThrowIfNull(sqsOptions);
     }
 
     /// <inheritdoc />
@@ -18,29 +18,36 @@ public class SqsHealthCheck : IHealthCheck
         try
         {
             using var client = CreateSqsClient();
-            foreach (var queueName in _sqsOptions.Queues)
+
+            foreach (string queueName in _options.Queues)
             {
-                _ = await client.GetQueueUrlAsync(queueName).ConfigureAwait(false);
+                await client.GetQueueUrlAsync(queueName, cancellationToken).ConfigureAwait(false);
             }
 
             return HealthCheckResult.Healthy();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, exception: e);
         }
     }
 
-    private IAmazonSQS CreateSqsClient()
+    private AmazonSQSClient CreateSqsClient()
     {
-        var credentialsProvided = _sqsOptions.Credentials is not null;
-        var regionProvided = _sqsOptions.RegionEndpoint is not null;
-        return (credentialsProvided, regionProvided) switch
+        var config = new AmazonSQSConfig();
+
+        if (_options.ServiceURL is not null)
         {
-            (false, false) => new AmazonSQSClient(),
-            (false, true) => new AmazonSQSClient(_sqsOptions.RegionEndpoint),
-            (true, false) => new AmazonSQSClient(_sqsOptions.Credentials),
-            (true, true) => new AmazonSQSClient(_sqsOptions.Credentials, _sqsOptions.RegionEndpoint)
-        };
+            config.ServiceURL = _options.ServiceURL;
+        }
+
+        if (_options.RegionEndpoint is not null)
+        {
+            config.RegionEndpoint = _options.RegionEndpoint;
+        }
+
+        return _options.Credentials is not null
+            ? new AmazonSQSClient(_options.Credentials, config)
+            : new AmazonSQSClient(config);
     }
 }

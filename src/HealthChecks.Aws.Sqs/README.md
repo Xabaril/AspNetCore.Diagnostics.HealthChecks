@@ -13,7 +13,7 @@ With all of the following examples, you can additionally add the following param
 
 ### Basic
 
-### Check existence of a queue and load credentials from the application's default configuration
+### Check the existence of a queue and load credentials from the application's default configuration
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -27,7 +27,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-### Check existence of a queue and directly pass credentials
+### Check the existence of a queue and directly pass credentials
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -42,7 +42,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-### Check existence of a queue and specify region endpoint
+### Check the existence of a queue and specify region endpoint
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -57,7 +57,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-### Check existence of a queue and specify credentials with region endpoint
+### Check the existence of a queue and specify credentials with region endpoint
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -69,6 +69,21 @@ public void ConfigureServices(IServiceCollection services)
             options.AddQueue("queueName");
             options.Credentials = new BasicAWSCredentials("access-key", "secret-key");
             options.RegionEndpoint = RegionEndpoint.EUCentral1;
+        });
+}
+```
+
+### Check the existence of a queue and specify service URL
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services
+        .AddHealthChecks()
+        .AddSqs(options =>
+        {
+            options.AddQueue("queueName");
+            options.ServiceURL = "http://localhost:4566";
         });
 }
 ```

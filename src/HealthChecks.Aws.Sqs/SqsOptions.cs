@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Amazon;
 using Amazon.Runtime;
 
@@ -8,11 +9,14 @@ namespace HealthChecks.Aws.Sqs;
 /// </summary>
 public class SqsOptions
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public string? ServiceURL { get; set; }
+
     public AWSCredentials? Credentials { get; set; }
 
     public RegionEndpoint? RegionEndpoint { get; set; }
 
-    internal HashSet<string> Queues { get; } = new HashSet<string>();
+    internal HashSet<string> Queues { get; } = [];
 
     /// <summary>
     /// Add an AWS SQS queue to be checked.

@@ -12,6 +12,8 @@
     <HealthCheckAzureDigitalTwin>9.0.0</HealthCheckAzureDigitalTwin>
     <HealthCheckAzureSearch>9.0.0</HealthCheckAzureSearch>
     <HealthCheckAzureDataTables>9.0.0</HealthCheckAzureDataTables>
+    <HealthCheckAzureKeyVaultCertificates>9.0.0</HealthCheckAzureKeyVaultCertificates>
+    <HealthCheckAzureKeyVaultKeys>9.0.0</HealthCheckAzureKeyVaultKeys>
     <HealthCheckAzureKeyVaultSecrets>9.0.0</HealthCheckAzureKeyVaultSecrets>
     <HealthCheckAzureMessagingEventsHubs>9.0.0</HealthCheckAzureMessagingEventsHubs>
     <HealthCheckAzureServiceBus>9.0.0</HealthCheckAzureServiceBus>

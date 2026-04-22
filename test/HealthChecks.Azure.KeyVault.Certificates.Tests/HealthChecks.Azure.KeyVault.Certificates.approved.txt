@@ -1,0 +1,20 @@
+namespace HealthChecks.Azure.KeyVault.Certificates
+{
+    public sealed class AzureKeyVaultCertificatesHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public AzureKeyVaultCertificatesHealthCheck(Azure.Security.KeyVault.Certificates.CertificateClient certificateClient, HealthChecks.Azure.KeyVault.Certificates.AzureKeyVaultCertificatesHealthCheckOptions? options = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public sealed class AzureKeyVaultCertificatesHealthCheckOptions
+    {
+        public AzureKeyVaultCertificatesHealthCheckOptions() { }
+        public string CertificateName { get; set; }
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class AzureKeyVaultCertificatesHealthChecksBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder AddAzureKeyVaultCertificates(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder builder, System.Func<System.IServiceProvider, Azure.Security.KeyVault.Certificates.CertificateClient>? clientFactory = null, System.Func<System.IServiceProvider, HealthChecks.Azure.KeyVault.Certificates.AzureKeyVaultCertificatesHealthCheckOptions>? optionsFactory = null, string? name = "azure_key_vault_certificate", Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus = default, System.Collections.Generic.IEnumerable<string>? tags = null, System.TimeSpan? timeout = default) { }
+    }
+}

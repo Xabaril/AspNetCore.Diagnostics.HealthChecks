@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(DefaultLibraryTargetFrameworks)</TargetFrameworks>
+    <PackageTags>$(PackageTags);Azure Key Vault;Keys</PackageTags>
+    <Description>HealthChecks.Azure.KeyVault.Keys is the health check package for Azure Key Vault keys</Description>
+    <VersionPrefix>$(HealthCheckAzureKeyVaultKeys)</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Security.KeyVault.Keys" />
+  </ItemGroup>
+
+</Project>

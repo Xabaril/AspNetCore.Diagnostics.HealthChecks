@@ -73,6 +73,7 @@
     <PackageVersion Include="MySqlConnector" Version="2.3.1" />
     <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.3.1" />
     <PackageVersion Include="NATS.Net" Version="2.5.4" />
+    <PackageVersion Include="Neo4jClient" Version="5.1.20" />
     <PackageVersion Include="Npgsql" Version="8.0.3" />
     <PackageVersion Include="Npgsql.DependencyInjection" Version="8.0.1" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
@@ -113,7 +114,7 @@
     <PackageVersion Include="Testcontainers.RavenDb" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Redis" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.RabbitMq" Version="$(TestcontainersVersion)" />
-    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
   <ItemGroup Condition="'$(IsPackable)' == 'true'">

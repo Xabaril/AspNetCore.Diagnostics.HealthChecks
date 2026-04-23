@@ -1,21 +1,14 @@
 using System.Net;
-using HealthChecks.Elasticsearch.Tests.Fixtures;
 
 namespace HealthChecks.Elasticsearch.Tests.Functional;
 
-public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFixture>
+public class ElasticsearchAuthenticationTests(ElasticsearchContainerFixture elasticsearchFixture) : IClassFixture<ElasticsearchContainerFixture>
 {
-    private readonly ElasticContainerFixture _fixture;
-
-    public ElasticsearchAuthenticationTests(ElasticContainerFixture fixture)
-    {
-        _fixture = fixture;
-    }
-
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_using_valid_api_key()
     {
-        var connectionString = @"https://localhost:9200";
+        string connectionString = elasticsearchFixture.GetConnectionString();
+        string apiKey = elasticsearchFixture.GetApiKey();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -24,7 +17,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                     .AddElasticsearch(options =>
                     {
                         options.UseServer(connectionString);
-                        options.UseApiKey(_fixture.ApiKey!);
+                        options.UseApiKey(apiKey);
                         options.UseCertificateValidationCallback(delegate
                         {
                             return true;
@@ -50,7 +43,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
     [Fact]
     public async Task be_healthy_if_elasticsearch_is_using_valid_user_and_password()
     {
-        var connectionString = @"https://localhost:9200";
+        string connectionString = elasticsearchFixture.GetConnectionString();
 
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
@@ -59,7 +52,7 @@ public class ElasticsearchAuthenticationTests : IClassFixture<ElasticContainerFi
                     .AddElasticsearch(options =>
                     {
                         options.UseServer(connectionString);
-                        options.UseBasicAuthentication("elastic", ElasticContainerFixture.ELASTIC_PASSWORD);
+                        options.UseBasicAuthentication(elasticsearchFixture.Username, elasticsearchFixture.Password);
                         options.UseCertificateValidationCallback(delegate
                         {
                             return true;

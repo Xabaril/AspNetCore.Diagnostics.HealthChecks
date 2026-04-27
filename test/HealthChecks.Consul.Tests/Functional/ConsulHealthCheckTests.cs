@@ -2,20 +2,22 @@ using System.Net;
 
 namespace HealthChecks.Consul.Tests.Functional;
 
-public class consul_healthcheck_should
+public class consul_healthcheck_should(ConsulContainerFixture consulFixture) : IClassFixture<ConsulContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_consul_is_available()
     {
+        var options = consulFixture.GetConnectionOptions();
+
         var webHostBuilder = new WebHostBuilder()
            .ConfigureServices(services =>
            {
                services.AddHealthChecks()
                    .AddConsul(setup =>
                    {
-                       setup.HostName = "localhost";
-                       setup.Port = 8500;
-                       setup.RequireHttps = false;
+                       setup.HostName = options.HostName;
+                       setup.Port = options.Port;
+                       setup.RequireHttps = options.RequireHttps;
                    }, tags: ["consul"]);
            })
            .Configure(app =>
@@ -36,6 +38,8 @@ public class consul_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_consul_is_not_available()
     {
+        var options = consulFixture.GetConnectionOptions();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
@@ -43,8 +47,8 @@ public class consul_healthcheck_should
                     .AddConsul(setup =>
                     {
                         setup.HostName = "non-existing-host";
-                        setup.Port = 8500;
-                        setup.RequireHttps = false;
+                        setup.Port = options.Port;
+                        setup.RequireHttps = options.RequireHttps;
                     }, tags: ["consul"]);
             })
             .Configure(app =>

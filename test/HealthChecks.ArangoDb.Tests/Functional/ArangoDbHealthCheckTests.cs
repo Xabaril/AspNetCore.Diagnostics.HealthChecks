@@ -2,22 +2,18 @@ using System.Net;
 
 namespace HealthChecks.ArangoDb.Tests.Functional;
 
-public class arangodb_healthcheck_should
+public class arangodb_healthcheck_should(ArangoDbContainerFixture arangoDbFixture) : IClassFixture<ArangoDbContainerFixture>
 {
     [Fact]
     public async Task be_healthy_if_arangodb_is_available()
     {
+        var options = arangoDbFixture.GetConnectionOptions();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddArangoDb(_ => new ArangoDbOptions
-                 {
-                     HostUri = "http://localhost:8529/",
-                     Database = "_system",
-                     UserName = "root",
-                     Password = "strongArangoDbPassword"
-                 }, tags: ["arangodb"]);
+                    .AddArangoDb(_ => options, tags: ["arangodb"]);
             })
             .Configure(app =>
             {
@@ -37,25 +33,14 @@ public class arangodb_healthcheck_should
     [Fact]
     public async Task be_healthy_if_multiple_arango_are_available()
     {
+        var options = arangoDbFixture.GetConnectionOptions();
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                    .AddArangoDb(_ => new ArangoDbOptions
-                    {
-                        HostUri = "http://localhost:8529/",
-                        Database = "_system",
-                        UserName = "root",
-                        Password = "strongArangoDbPassword"
-                    }, tags: ["arango"], name: "1")
-                    .AddArangoDb(_ => new ArangoDbOptions
-                    {
-                        HostUri = "http://localhost:8529/",
-                        Database = "_system",
-                        UserName = "root",
-                        Password = "strongArangoDbPassword",
-                        IsGenerateJwtTokenBasedOnUserNameAndPassword = true
-                    }, tags: ["arango"], name: "2");
+                    .AddArangoDb(_ => options, tags: ["arango"], name: "1")
+                    .AddArangoDb(_ => options, tags: ["arango"], name: "2");
             })
             .Configure(app =>
             {
@@ -75,17 +60,15 @@ public class arangodb_healthcheck_should
     [Fact]
     public async Task be_unhealthy_if_arango_is_not_available()
     {
+        var options = arangoDbFixture.GetConnectionOptions();
+
+        options.Password = "invalid password";
+
         var webHostBuilder = new WebHostBuilder()
             .ConfigureServices(services =>
             {
                 services.AddHealthChecks()
-                 .AddArangoDb(_ => new ArangoDbOptions
-                 {
-                     HostUri = "http://localhost:8529/",
-                     Database = "_system",
-                     UserName = "root",
-                     Password = "invalid password"
-                 }, tags: ["arango"]);
+                 .AddArangoDb(_ => options, tags: ["arango"]);
             })
             .Configure(app =>
             {

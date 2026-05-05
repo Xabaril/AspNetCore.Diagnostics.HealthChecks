@@ -1,9 +1,10 @@
 using HealthChecks.UI.Data;
+using HealthChecks.UI.Tests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 
 namespace HealthChecks.UI.Tests;
 
-public class sqlserver_storage_should
+public class sqlserver_storage_should(SqlServerContainerFixture sqlServerFixture) : IClassFixture<SqlServerContainerFixture>
 {
     private const string ProviderName = "Microsoft.EntityFrameworkCore.SqlServer";
 
@@ -17,7 +18,7 @@ public class sqlserver_storage_should
             .ConfigureServices(services =>
             {
                 services.AddHealthChecksUI()
-                .AddSqlServerStorage("connectionString", opt => customOptionsInvoked = true);
+                .AddSqlServerStorage(sqlServerFixture.GetConnectionString(), opt => customOptionsInvoked = true);
             });
 
         var services = hostBuilder.Build().Services;
@@ -38,7 +39,7 @@ public class sqlserver_storage_should
         var webHostBuilder = HostBuilderHelper.Create(
                hostReset,
                collectorReset,
-               configureUI: config => config.AddSqlServerStorage(ProviderTestHelper.SqlServerConnectionString()));
+               configureUI: config => config.AddSqlServerStorage(sqlServerFixture.GetConnectionString()));
 
         using var host = new TestServer(webHostBuilder);
 

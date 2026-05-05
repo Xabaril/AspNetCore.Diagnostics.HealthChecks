@@ -36,27 +36,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server
-        ports:
-          - 5433:1433
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: Password12!
-      npgsql:
-        image: postgres
-        ports:
-          - 8010:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: Password12!
-      mysql:
-        image: mysql
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: Password12!
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET

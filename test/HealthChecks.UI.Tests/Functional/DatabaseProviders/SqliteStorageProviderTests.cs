@@ -38,7 +38,7 @@ public class sqlite_storage_should
         var webHostBuilder = HostBuilderHelper.Create(
                hostReset,
                collectorReset,
-               configureUI: setup => setup.AddSqliteStorage(ProviderTestHelper.SqliteConnectionString()));
+               configureUI: setup => setup.AddSqliteStorage("Data Source = sqlite.db"));
 
         using var host = new TestServer(webHostBuilder);
 

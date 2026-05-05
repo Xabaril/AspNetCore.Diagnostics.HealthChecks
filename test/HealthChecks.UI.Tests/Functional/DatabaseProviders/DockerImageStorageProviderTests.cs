@@ -1,6 +1,7 @@
 using HealthChecks.UI.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
+using HealthChecks.UI.Tests.Fixtures;
 using Microsoft.Extensions.Configuration;
 
 namespace HealthChecks.UI.Tests;
@@ -11,7 +12,6 @@ public class docker_image_storage_provider_configuration_should
     private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
     private const string PostgreProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL";
     private const string InMemoryProviderName = "Microsoft.EntityFrameworkCore.InMemory";
-    private const string MySqlProviderName = "Pomelo.EntityFrameworkCore.MySql";
 
     [Fact]
     public void fail_with_invalid_storage_provider_value()
@@ -183,11 +183,16 @@ public class docker_image_storage_provider_configuration_should
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(InMemoryProviderName);
     }
+}
+
+[Collection("execution")]
+public class docker_image_storage_provider_mysql_configuration_should(MySqlContainerFixture mySqlFixture) : IClassFixture<MySqlContainerFixture>
+{
+    private const string MySqlProviderName = "Pomelo.EntityFrameworkCore.MySql";
 
     [Fact]
     public void register_mysql()
     {
-        //
         var hostBuilder = new WebHostBuilder()
             .ConfigureAppConfiguration(config =>
             {
@@ -196,8 +201,7 @@ public class docker_image_storage_provider_configuration_should
                 config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
                 {
                     new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString()),
-                    new KeyValuePair<string, string?>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
-
+                    new KeyValuePair<string, string?>("storage_connection", mySqlFixture.GetConnectionString()),
                 });
             })
             .UseStartup<Startup>();
@@ -225,5 +229,4 @@ public class docker_image_storage_provider_configuration_should
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
-
 }

@@ -29,7 +29,7 @@ public class inmemory_storage_should
         customOptionsInvoked.ShouldBeTrue();
     }
 
-    [Fact(Skip = "conflicts with other tests that use inmemory storage too")]
+    [Fact]
     public async Task seed_database_and_serve_stored_executions()
     {
         var hostReset = new ManualResetEventSlim(false);
@@ -38,7 +38,7 @@ public class inmemory_storage_should
         var webHostBuilder = HostBuilderHelper.Create(
                hostReset,
                collectorReset,
-               configureUI: config => config.AddInMemoryStorage());
+               configureUI: config => config.AddInMemoryStorage(databaseName: Guid.NewGuid().ToString()));
 
         using var host = new TestServer(webHostBuilder);
 

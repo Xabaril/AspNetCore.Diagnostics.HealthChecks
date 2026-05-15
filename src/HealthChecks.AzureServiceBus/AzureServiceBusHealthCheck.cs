@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using HealthChecks.AzureServiceBus.Configuration;
@@ -25,7 +26,7 @@ public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : Azur
 
         if (!string.IsNullOrWhiteSpace(options.FullyQualifiedNamespace))
         {
-            Guard.ThrowIfNull(options.Credential);
+            options.Credential ??= new DefaultAzureCredential();
             return;
         }
 
@@ -33,12 +34,12 @@ public abstract class AzureServiceBusHealthCheck<TOptions> where TOptions : Azur
     }
 
     protected ServiceBusClient CreateClient() =>
-        Options.Credential is null
+        !string.IsNullOrWhiteSpace(Options.ConnectionString)
             ? _clientProvider.CreateClient(Options.ConnectionString)
-            : _clientProvider.CreateClient(Options.FullyQualifiedNamespace, Options.Credential);
+            : _clientProvider.CreateClient(Options.FullyQualifiedNamespace, Options.Credential!);
 
     protected ServiceBusAdministrationClient CreateManagementClient() =>
-        Options.Credential is null
+        !string.IsNullOrWhiteSpace(Options.ConnectionString)
             ? _clientProvider.CreateManagementClient(Options.ConnectionString)
-            : _clientProvider.CreateManagementClient(Options.FullyQualifiedNamespace, Options.Credential);
+            : _clientProvider.CreateManagementClient(Options.FullyQualifiedNamespace, Options.Credential!);
 }

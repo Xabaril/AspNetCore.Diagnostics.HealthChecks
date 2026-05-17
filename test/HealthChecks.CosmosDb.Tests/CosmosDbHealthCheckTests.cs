@@ -107,40 +107,60 @@ public class cosmosdbhealthcheck_should
     {
         using var tokenSource = new CancellationTokenSource();
 
-        _cosmosClient
-            .ReadAccountAsync()
-            .Returns(Substitute.For<AccountProperties>());
-
-        _database
-            .ReadAsync(null, tokenSource.Token)
-            .Returns(Substitute.For<DatabaseResponse>());
-
-        foreach (var container in _containers.Values)
-        {
-            container
-                .ReadContainerAsync(null, tokenSource.Token)
-                .Returns(Substitute.For<ContainerResponse>());
-        }
-
         _options.ContainerIds = ContainerIds;
         _options.DatabaseId = DatabaseId;
+
+        for (var containerIndex = 0; containerIndex < _options.ContainerIds.Count(); containerIndex++)
+        {
+            _cosmosClient.GetContainer(_options.DatabaseId, _options.ContainerIds.ElementAt(containerIndex)).Returns(_containers[ContainerIds[containerIndex]]);
+        }
+
         var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
 
-        await _cosmosClient
-            .Received(1)
-            .ReadAccountAsync();
-
-        await _database
-            .Received(1)
-            .ReadAsync(null, tokenSource.Token);
-
-        await Task.WhenAll(_containers
-            .Values
-            .Select(x => x
-                .Received(1)
-                .ReadContainerAsync(null, tokenSource.Token)));
+        for (int containerIndex = 0; containerIndex < _options.ContainerIds.Count(); containerIndex++)
+        {
+            _cosmosClient.Received(1)
+                .GetContainer(_options.DatabaseId, _options.ContainerIds.ElementAt(containerIndex));
+            _containers.ElementAt(containerIndex).Value.Received(1)
+                .GetItemQueryStreamIterator(Arg.Is<QueryDefinition>(q => q.QueryText.Equals($"SELECT 1 FROM {_options.ContainerIds.ElementAt(containerIndex)}")));
+        }
 
         actual.Status.ShouldBe(HealthStatus.Healthy);
+    }
+
+    [Fact]
+    public async Task return_unhealthy_when_checking_unhealthy_database()
+    {
+        using var tokenSource = new CancellationTokenSource();
+        _options.ContainerIds = ContainerIds;
+        _options.DatabaseId = DatabaseId;
+
+        _cosmosClient.GetContainer(_options.DatabaseId, _options.ContainerIds.ElementAt(0)).Throws(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task return_unhealthy_when_checking_unhealthy_container()
+    {
+        using var tokenSource = new CancellationTokenSource();
+        _options.ContainerIds = ContainerIds;
+        _options.DatabaseId = DatabaseId;
+
+        _cosmosClient.GetContainer(_options.DatabaseId, _options.ContainerIds.ElementAt(0)).Returns(_containers[ContainerIds[0]]);
+        _containers.ElementAt(0).Value.GetItemQueryStreamIterator(Arg.Any<QueryDefinition>()).Throws(new RequestFailedException((int)HttpStatusCode.Unauthorized, "Unable to authorize access."));
+
+        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
+
+        actual.Status.ShouldBe(HealthStatus.Unhealthy);
+        actual
+            .Exception!.ShouldBeOfType<RequestFailedException>()
+            .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
     }
 
     [Theory]
@@ -177,96 +197,6 @@ public class cosmosdbhealthcheck_should
         actual
             .Exception!.ShouldBeOfType<RequestFailedException>()
             .Status.ShouldBe((int)HttpStatusCode.Unauthorized);
-    }
-
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public async Task return_unhealthy_when_checking_unhealthy_database(bool checkContainers)
-    {
-        using var tokenSource = new CancellationTokenSource();
-
-        _cosmosClient
-            .ReadAccountAsync()
-            .Returns(Substitute.For<AccountProperties>());
-
-        _database
-            .ReadAsync(null, tokenSource.Token)
-            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Database not found"));
-
-        _options.ContainerIds = checkContainers ? ContainerIds : null;
-        _options.DatabaseId = DatabaseId;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
-
-        await _cosmosClient
-            .Received(1)
-            .ReadAccountAsync();
-
-        await _database
-            .Received(1)
-            .ReadAsync(null, tokenSource.Token);
-
-        await Task.WhenAll(_containers
-            .Values
-            .Select(x => x
-                .DidNotReceiveWithAnyArgs()
-                .ReadContainerAsync(default, default)));
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
-        actual
-            .Exception!.ShouldBeOfType<RequestFailedException>()
-            .Status.ShouldBe((int)HttpStatusCode.NotFound);
-    }
-
-    [Fact]
-    public async Task return_unhealthy_when_checking_unhealthy_container()
-    {
-        using var tokenSource = new CancellationTokenSource();
-
-        _cosmosClient
-            .ReadAccountAsync()
-            .Returns(Substitute.For<AccountProperties>());
-
-        _database
-            .ReadAsync(null, tokenSource.Token)
-            .Returns(Substitute.For<DatabaseResponse>());
-
-        _containers["one"]
-            .ReadContainerAsync(null, tokenSource.Token)
-            .Returns(Substitute.For<ContainerResponse>());
-
-        _containers["two"]
-            .ReadContainerAsync(null, tokenSource.Token)
-            .ThrowsAsync(new RequestFailedException((int)HttpStatusCode.NotFound, "Container not found"));
-
-        _options.ContainerIds = ContainerIds;
-        _options.DatabaseId = DatabaseId;
-        var actual = await _healthCheck.CheckHealthAsync(_context, tokenSource.Token);
-
-        await _cosmosClient
-            .Received(1)
-            .ReadAccountAsync();
-
-        await _database
-            .Received(1)
-            .ReadAsync(null, tokenSource.Token);
-
-        await _containers["one"]
-            .Received(1)
-            .ReadContainerAsync(null, tokenSource.Token);
-
-        await _containers["two"]
-            .Received(1)
-            .ReadContainerAsync(null, tokenSource.Token);
-
-        await _containers["three"]
-            .DidNotReceiveWithAnyArgs()
-            .ReadContainerAsync(default, default);
-
-        actual.Status.ShouldBe(HealthStatus.Unhealthy);
-        actual
-            .Exception!.ShouldBeOfType<RequestFailedException>()
-            .Status.ShouldBe((int)HttpStatusCode.NotFound);
     }
 
     [Fact]

@@ -31,7 +31,7 @@ public class ApplicationStatusHealthCheck : IHealthCheck, IDisposable
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        return Task.FromResult(IsApplicationRunning ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
+        return Task.FromResult(IsApplicationRunning ? HealthCheckResult.Healthy() : new HealthCheckResult(context.Registration.FailureStatus));
     }
 
     public virtual void Dispose()

@@ -45,7 +45,7 @@ public class InfluxDBHealthCheck : IHealthCheck, IDisposable
         }
         catch (Exception ex)
         {
-            return HealthCheckResult.Unhealthy(ex.Message, exception: ex);
+            return new HealthCheckResult(context.Registration.FailureStatus, ex.Message, exception: ex);
         }
     }
 

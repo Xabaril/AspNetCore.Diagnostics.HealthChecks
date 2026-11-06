@@ -41,6 +41,7 @@
     <HealthCheckMySql>9.0.0</HealthCheckMySql>
     <HealthCheckNetwork>9.0.0</HealthCheckNetwork>
     <HealthCheckNats>9.0.0</HealthCheckNats>
+    <HealthCheckNeo4j>9.0.0</HealthCheckNeo4j>
     <HealthCheckNpgSql>9.0.0</HealthCheckNpgSql>
     <HealthCheckOpenIdConnectServer>9.0.0</HealthCheckOpenIdConnectServer>
     <HealthCheckOracle>9.0.0</HealthCheckOracle>

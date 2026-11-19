@@ -26,7 +26,7 @@
     <PackageVersion Include="Azure.Storage.Queues" Version="12.25.0" />
     <PackageVersion Include="ClickHouse.Client" Version="7.14.0" />
     <PackageVersion Include="Confluent.Kafka" Version="2.14.0" />
-    <PackageVersion Include="coverlet.collector" Version="8.0.1" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.1" />
     <PackageVersion Include="Dapr.Client" Version="1.17.7" />
     <PackageVersion Include="DogStatsD-CSharp-Client" Version="9.0.0" />
     <PackageVersion Include="Ductus.FluentDocker" Version="2.85.0" />
@@ -38,7 +38,7 @@
     <PackageVersion Include="Hangfire.Core" Version="1.8.23" />
     <PackageVersion Include="IBMMQDotnetClient" Version="9.4.5" />
     <PackageVersion Include="InfluxDB.Client" Version="5.0.0" />
-    <PackageVersion Include="KubernetesClient" Version="19.0.2" />
+    <PackageVersion Include="KubernetesClient" Version="21.0.8" />
     <PackageVersion Include="Microsoft.ApplicationInsights" Version="3.1.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
@@ -72,9 +72,7 @@
     <PackageVersion Include="MongoDB.Driver" Version="3.7.1" />
     <PackageVersion Include="MySqlConnector" Version="2.5.0" />
     <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.5.0" />
-    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.1" /> 
-
-    
+    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.1" />
     <PackageVersion Include="NATS.Net" Version="2.7.3" />
     <PackageVersion Include="Npgsql" Version="10.0.2" />
     <PackageVersion Include="Npgsql.DependencyInjection" Version="10.0.2" />
@@ -116,7 +114,7 @@
     <PackageVersion Include="Testcontainers.Redis" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.RabbitMq" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.201" />

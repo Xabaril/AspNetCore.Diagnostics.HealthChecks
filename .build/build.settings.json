@@ -1,0 +1,9 @@
+{
+  "solution": "AspNetCore.Diagnostics.HealthChecks.sln",
+  "masterSolution": "AspNetCore.Diagnostics.HealthChecks.sln",
+  "packageFolder": "H:/Toltek/Packages/Platform",
+  "configuration": "Debug",
+  "binRoot": "",
+  "packableRoots": [],
+  "testTargets": []
+}

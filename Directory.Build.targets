@@ -7,4 +7,23 @@
     <Compile Include="../CallerArgumentExpressionAttribute.cs" Link="CallerArgumentExpressionAttribute.cs" Visible="false" />
   </ItemGroup>
 
+  <!-- Toltek yerel feed düzeni (ana depolarla aynı mantık):
+       .build\build.ps1 pack sürümü bu dosyadaki <Version>'dan okur ve -p:ToltekPack=true geçer;
+       paketlenen nupkg PackageFolder'a (global NuGet.Config'teki LocalHealthChecks kaynağı) kopyalanır.
+       GitHub Packages'a basım kullanılmaz. -->
+  <PropertyGroup>
+    <Version>10.0.0</Version>
+    <PackageFolder Condition="'$(PackageFolder)' == ''">H:\Toltek\Packages\HealthChecks\</PackageFolder>
+    <GeneratePackageOnBuild Condition="'$(ToltekPack)' == 'true'">true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <Target Name="CopyPackage" AfterTargets="Pack" Condition="'$(GeneratePackageOnBuild)' == 'true' AND '$(IsPackable)' != 'false' AND '$(CI)' != 'true'">
+    <PropertyGroup>
+      <_ToltekNupkgPath>$(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg</_ToltekNupkgPath>
+    </PropertyGroup>
+    <MakeDir Directories="$(PackageFolder)" />
+    <Copy SourceFiles="$(_ToltekNupkgPath)" DestinationFolder="$(PackageFolder)" Condition="Exists('$(_ToltekNupkgPath)')" />
+    <Warning Text="CopyPackage: nupkg bulunamadı, feed'e kopyalanamadı: $(_ToltekNupkgPath)" Condition="!Exists('$(_ToltekNupkgPath)')" />
+  </Target>
+
 </Project>

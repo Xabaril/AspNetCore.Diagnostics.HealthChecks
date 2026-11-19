@@ -41,6 +41,9 @@ internal sealed class NamespacedServiceWatcher : IDisposable
                 watch: true,
                 cancellationToken: token);
 
+            // KubernetesClient 21'de Watch geri çağırım API'si "ileride kaldırılacak" diye işaretli ama çalışıyor;
+            // WatchAsync (IAsyncEnumerable) geçişi davranış değişikliği olduğu için ayrı bir işe bırakıldı.
+#pragma warning disable CS0618
             var watcher = response.Watch<V1Service, V1ServiceList>(
                 onEvent: async (type, item) => await _notificationHandler.NotifyDiscoveredServiceAsync(type, item, resource),
                 onError: e =>
@@ -49,6 +52,7 @@ internal sealed class NamespacedServiceWatcher : IDisposable
                     Watch(resource, token);
                 }
             );
+#pragma warning restore CS0618
 
             _diagnostics.ServiceWatcherStarting(resource.Metadata.NamespaceProperty);
 

@@ -5,103 +5,107 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="ArangoDBNetStandard" Version="3.1.0" />
-    <PackageVersion Include="AWSSDK.CloudWatch" Version="4.0.9.1" />
-    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="4.0.17.6" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.20.3" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.0.4.15" />
-    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.2.25" />
-    <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="4.0.7.9" />
-    <PackageVersion Include="AWSSDK.SQS" Version="4.0.2.23" />
-    <PackageVersion Include="Azure.Data.Tables" Version="12.11.0" />
+    <PackageVersion Include="AWSSDK.CloudWatch" Version="4.1.1.2" />
+    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="4.1.0.2" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.1.2" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="4.1.1.2" />
+    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.1.0.2" />
+    <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="4.1.1.2" />
+    <PackageVersion Include="AWSSDK.SQS" Version="4.1.0.2" />
+    <PackageVersion Include="Azure.Data.Tables" Version="12.13.0" />
     <PackageVersion Include="Azure.DigitalTwins.Core" Version="1.6.0" />
-    <PackageVersion Include="Azure.Identity" Version="1.20.0" />
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Messaging.EventHubs" Version="5.12.2" />
-    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
-    <PackageVersion Include="Azure.Search.Documents" Version="11.7.0" />
-    <PackageVersion Include="Azure.Security.KeyVault.Certificates" Version="4.8.0" />
-    <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.9.0" />
-    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.9.0" />
-    <PackageVersion Include="Azure.Storage.Blobs" Version="12.27.0" />
-    <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.25.0" />
-    <PackageVersion Include="Azure.Storage.Queues" Version="12.25.0" />
+    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.21.0" />
+    <PackageVersion Include="Azure.Search.Documents" Version="12.0.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Certificates" Version="4.10.0" />
+    <PackageVersion Include="Azure.Security.KeyVault.Keys" Version="4.10.2" />
+    <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.12.0" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.30.1" />
+    <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.28.0" />
+    <PackageVersion Include="Azure.Storage.Queues" Version="12.28.1" />
     <PackageVersion Include="ClickHouse.Client" Version="7.14.0" />
-    <PackageVersion Include="Confluent.Kafka" Version="2.14.0" />
+    <PackageVersion Include="Confluent.Kafka" Version="2.16.0" />
     <PackageVersion Include="coverlet.collector" Version="10.1.1" />
-    <PackageVersion Include="Dapr.Client" Version="1.17.7" />
-    <PackageVersion Include="DogStatsD-CSharp-Client" Version="9.0.0" />
+    <PackageVersion Include="Dapr.Client" Version="1.19.1" />
+    <PackageVersion Include="DogStatsD-CSharp-Client" Version="9.2.1" />
     <PackageVersion Include="Ductus.FluentDocker" Version="2.85.0" />
-    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="9.3.4" />
+    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="9.5.3" />
     <PackageVersion Include="EventStore.Client" Version="22.0.0" />
     <PackageVersion Include="EventStore.Client.Grpc.Streams" Version="23.3.9" />
-    <PackageVersion Include="Google.Cloud.Firestore" Version="4.2.0" />
-    <PackageVersion Include="Gremlin.Net" Version="3.8.0" />
-    <PackageVersion Include="Hangfire.Core" Version="1.8.23" />
-    <PackageVersion Include="IBMMQDotnetClient" Version="9.4.5" />
-    <PackageVersion Include="InfluxDB.Client" Version="5.0.0" />
+    <PackageVersion Include="Google.Cloud.Firestore" Version="4.7.0" />
+    <PackageVersion Include="Gremlin.Net" Version="3.8.2" />
+    <PackageVersion Include="Hangfire.Core" Version="1.8.25" />
+    <PackageVersion Include="IBMMQDotnetClient" Version="10.0.1" />
+    <PackageVersion Include="InfluxDB.Client" Version="5.1.0" />
     <PackageVersion Include="KubernetesClient" Version="21.0.8" />
-    <PackageVersion Include="Microsoft.ApplicationInsights" Version="3.1.0" />
-    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.1.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.58.0" />
-    <PackageVersion Include="Microsoft.Azure.Devices" Version="1.41.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights" Version="3.2.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.64.0" />
+    <PackageVersion Include="Microsoft.Azure.Devices" Version="1.41.1" />
     <PackageVersion Include="Microsoft.Azure.DocumentDB.Core" Version="2.22.0" />
     <PackageVersion Include="Microsoft.Azure.Management.DigitalTwins" Version="1.2.0" />
     <PackageVersion Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.1" />
-    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="8.5.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageVersion Include="Milvus.Client" Version="2.3.0-preview.1" />
-    <PackageVersion Include="MongoDB.Driver" Version="3.7.1" />
-    <PackageVersion Include="MySqlConnector" Version="2.5.0" />
-    <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.5.0" />
-    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.1" />
-    <PackageVersion Include="NATS.Net" Version="2.7.3" />
-    <PackageVersion Include="Npgsql" Version="10.0.2" />
-    <PackageVersion Include="Npgsql.DependencyInjection" Version="10.0.2" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
-    <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.26.100" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.2" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="8.6.1" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageVersion Include="Milvus.Client" Version="3.0.1" />
+    <PackageVersion Include="MongoDB.Driver" Version="3.14.0" />
+    <PackageVersion Include="MySqlConnector" Version="3.0.0" />
+    <PackageVersion Include="MySqlConnector.DependencyInjection" Version="2.6.2" />
+    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.12" />
+    <PackageVersion Include="NATS.Net" Version="3.4.0" />
+    <!-- Geçişli sabitleme (NuGetAudit NU1903): Hangfire ve Azure DigitalTwin zinciri eski Newtonsoft.Json getiriyor -->
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="Npgsql" Version="10.0.3" />
+    <PackageVersion Include="Npgsql.DependencyInjection" Version="10.0.3" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
+    <PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="23.26.401" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageVersion Include="prometheus-net" Version="8.2.1" />
     <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
-    <PackageVersion Include="Qdrant.Client" Version="1.17.0" />
-    <PackageVersion Include="RabbitMQ.Client" Version="7.2.1" />
-    <PackageVersion Include="RavenDB.Client" Version="7.2.1" />
-    <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
-    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
+    <PackageVersion Include="Qdrant.Client" Version="1.20.0" />
+    <PackageVersion Include="RabbitMQ.Client" Version="7.2.2" />
+    <PackageVersion Include="RavenDB.Client" Version="7.2.7" />
+    <PackageVersion Include="RichardSzalay.MockHttp" Version="7.1.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="5.0.1" />
+    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="5.0.1" />
     <PackageVersion Include="SendGrid" Version="9.29.3" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
+    <!-- Geçişli sabitleme (NuGetAudit NU1902): 1.0 ana sürümü yerine 0.x'in sonu; MongoDB.Driver 3.14 >= 0.48.1 istiyor -->
+    <PackageVersion Include="SharpCompress" Version="0.50.10" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="SolrNet.Core" Version="1.2.1" />
-    <PackageVersion Include="SSH.NET" Version="2025.1.0" />
-    <PackageVersion Include="StackExchange.Redis" Version="2.12.14" />
-    <PackageVersion Include="SurrealDb.Net" Version="0.9.0" />
+    <PackageVersion Include="SSH.NET" Version="2026.0.1" />
+    <PackageVersion Include="StackExchange.Redis" Version="3.4.35" />
+    <PackageVersion Include="SurrealDb.Net" Version="1.0.1" />
     <PackageVersion Include="System.Buffers" Version="4.6.1" />
-    <PackageVersion Include="System.Net.Http.Json" Version="10.0.5" />
-    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.5" />
-    <PackageVersion Include="System.Text.Json" Version="10.0.5" />
+    <PackageVersion Include="System.Net.Http.Json" Version="10.0.15" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.15" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.15" />
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageVersion Include="System.Threading.Channels" Version="10.0.5" />
+    <PackageVersion Include="System.Threading.Channels" Version="10.0.15" />
     <PackageVersion Include="Testcontainers" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.ClickHouse" Version="$(TestcontainersVersion)" />
     <PackageVersion Include="Testcontainers.Kafka" Version="$(TestcontainersVersion)" />
@@ -117,6 +121,6 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.201" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.404" />
   </ItemGroup>
 </Project>

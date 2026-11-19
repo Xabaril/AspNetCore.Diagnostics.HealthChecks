@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using MySql.EntityFrameworkCore.Metadata;
 
 namespace HealthChecks.UI.MySql.Storage.Migrations;
 
@@ -12,7 +13,7 @@ public partial class Initial : Migration
             columns: table => new
             {
                 Id = table.Column<int>(nullable: false)
-                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                 Uri = table.Column<string>(maxLength: 500, nullable: false),
                 Name = table.Column<string>(maxLength: 500, nullable: false),
                 DiscoveryService = table.Column<string>(maxLength: 100, nullable: true)
@@ -24,7 +25,7 @@ public partial class Initial : Migration
             columns: table => new
             {
                 Id = table.Column<int>(nullable: false)
-                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                 Status = table.Column<int>(nullable: false),
                 OnStateFrom = table.Column<DateTime>(nullable: false),
                 LastExecuted = table.Column<DateTime>(nullable: false),
@@ -39,7 +40,7 @@ public partial class Initial : Migration
             columns: table => new
             {
                 Id = table.Column<int>(nullable: false)
-                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                 HealthCheckName = table.Column<string>(maxLength: 500, nullable: false),
                 LastNotified = table.Column<DateTime>(nullable: false),
                 IsUpAndRunning = table.Column<bool>(nullable: false)
@@ -51,7 +52,7 @@ public partial class Initial : Migration
             columns: table => new
             {
                 Id = table.Column<int>(nullable: false)
-                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                 Name = table.Column<string>(maxLength: 500, nullable: false),
                 Status = table.Column<int>(nullable: false),
                 Description = table.Column<string>(nullable: true),
@@ -74,7 +75,7 @@ public partial class Initial : Migration
             columns: table => new
             {
                 Id = table.Column<int>(nullable: false)
-                    .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                 Name = table.Column<string>(maxLength: 50, nullable: true),
                 Description = table.Column<string>(nullable: true),
                 Status = table.Column<int>(maxLength: 50, nullable: false),

@@ -27,8 +27,7 @@ public sealed class MilvusContainerFixture : IAsyncLifetime
 
     public static async Task<MilvusContainer> CreateContainerAsync()
     {
-        var container = new MilvusBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new MilvusBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

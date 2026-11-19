@@ -16,7 +16,7 @@
     <PackageTags>HealthCheck;HealthChecks;Health</PackageTags>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageReadmeFile Condition="Exists('README.md')">README.md</PackageReadmeFile>
-    <NuGetAuditLevel>critical</NuGetAuditLevel>
+    <NuGetAuditLevel>moderate</NuGetAuditLevel>
     <!-- TODO: remove-->
   </PropertyGroup>
 

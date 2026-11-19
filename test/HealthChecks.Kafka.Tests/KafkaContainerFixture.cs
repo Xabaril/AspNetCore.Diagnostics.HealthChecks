@@ -25,8 +25,7 @@ public sealed class KafkaContainerFixture : IAsyncLifetime
 
     public static async Task<KafkaContainer> CreateContainerAsync()
     {
-        var container = new KafkaBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new KafkaBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

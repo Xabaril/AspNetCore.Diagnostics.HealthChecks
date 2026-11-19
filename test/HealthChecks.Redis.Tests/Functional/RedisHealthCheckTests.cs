@@ -217,6 +217,8 @@ public class redis_healthcheck_should(RedisContainerFixture redisContainerFixtur
         public event EventHandler<HashSlotMovedEventArgs>? HashSlotMoved;
         public void Close(bool allowCommandsToComplete = true) => throw new NotImplementedException();
         public Task CloseAsync(bool allowCommandsToComplete = true) => throw new NotImplementedException();
+        public IServer GetServer(RedisKey key, object? asyncState = null, CommandFlags flags = CommandFlags.None) => throw new NotImplementedException();
+        public void AddLibraryNameSuffix(string suffix) => throw new NotImplementedException();
         public bool Configure(TextWriter? log = null) => throw new NotImplementedException();
         public Task<bool> ConfigureAsync(TextWriter? log = null) => throw new NotImplementedException();
         public void Dispose() => throw new NotImplementedException();

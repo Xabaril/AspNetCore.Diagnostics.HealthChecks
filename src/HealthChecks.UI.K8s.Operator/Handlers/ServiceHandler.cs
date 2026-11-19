@@ -91,6 +91,6 @@ internal class ServiceHandler
             meta.Annotations.Add(annotation.Name, annotation.Value);
         }
 
-        return new V1Service(metadata: meta, spec: spec);
+        return new V1Service { Metadata = meta, Spec = spec };
     }
 }

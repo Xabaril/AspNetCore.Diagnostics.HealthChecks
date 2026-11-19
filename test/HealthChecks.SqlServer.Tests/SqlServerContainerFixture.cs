@@ -25,8 +25,7 @@ public sealed class SqlServerContainerFixture : IAsyncLifetime
 
     public static async Task<MsSqlContainer> CreateContainerAsync()
     {
-        var container = new MsSqlBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new MsSqlBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

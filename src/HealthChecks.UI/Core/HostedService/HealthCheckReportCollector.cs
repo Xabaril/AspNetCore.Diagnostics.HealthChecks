@@ -1,4 +1,6 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using HealthChecks.UI.Configuration;
@@ -120,9 +122,15 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
 
             if (!string.IsNullOrEmpty(absoluteUri.UserInfo))
             {
-                var userInfoArr = absoluteUri.UserInfo.Split(':');
-                if (userInfoArr.Length == 2 && !string.IsNullOrEmpty(userInfoArr[0]) && !string.IsNullOrEmpty(userInfoArr[1]))
+                // "kullanıcı:parola" biçimi; parola ':' içerebileceği için yalnız ilk ':' ayırıcıdır.
+                // IdentityModel'in BasicAuthenticationHeaderValue'su yerine BCL kullanılır (IdentityModel bağımlılığı kalktı).
+                var userInfo = absoluteUri.UserInfo;
+                var separatorIndex = userInfo.IndexOf(':');
+                if (separatorIndex > 0 && separatorIndex < userInfo.Length - 1)
                 {
+                    var userName = Uri.UnescapeDataString(userInfo[..separatorIndex]);
+                    var password = Uri.UnescapeDataString(userInfo[(separatorIndex + 1)..]);
+
                     //_httpClient.DefaultRequestHeaders.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
 
                     // To support basic auth; we can add an auth header to _httpClient, in the DefaultRequestHeaders (as above commented line).
@@ -134,7 +142,9 @@ internal sealed class HealthCheckReportCollector : IHealthCheckReportCollector, 
                     // means you can't use _httpClient.GetAsync and have to use _httpClient.SendAsync
 
                     using var requestMessage = new HttpRequestMessage(HttpMethod.Get, absoluteUri);
-                    requestMessage.Headers.Authorization = new BasicAuthenticationHeaderValue(userInfoArr[0], userInfoArr[1]);
+                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue(
+                        "Basic",
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes($"{userName}:{password}")));
                     response = await _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 }
             }

@@ -81,6 +81,8 @@ internal class HealthChecksOperator : IHostedService
             cancellationToken: token
             );
 
+        // KubernetesClient 21'de Watch geri çağırım API'si "ileride kaldırılacak" diye işaretli ama çalışıyor.
+#pragma warning disable CS0618
         _watcher = response.Watch<HealthCheckResource, object>(
             onEvent: async (eventType, item) =>
             {
@@ -98,6 +100,7 @@ internal class HealthChecksOperator : IHostedService
             },
             onError: e => _logger.LogError(e.Message)
             );
+#pragma warning restore CS0618
     }
 
     private async Task OperatorListenerAsync()

@@ -25,8 +25,7 @@ public sealed class RedisContainerFixture : IAsyncLifetime
 
     public static async Task<RedisContainer> CreateContainerAsync()
     {
-        var container = new RedisBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new RedisBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

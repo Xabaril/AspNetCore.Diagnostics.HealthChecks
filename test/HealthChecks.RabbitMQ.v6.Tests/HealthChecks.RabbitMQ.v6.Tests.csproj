@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="Testcontainers.RabbitMq" />
+    <!-- v6 testleri v6 istemcisine derlenir; geçişli sabitleme merkezi 7.x'i dayatmasın -->
+    <PackageReference Include="RabbitMQ.Client" VersionOverride="[6.8.1,7.0.0)" />
   </ItemGroup>
   
 </Project>

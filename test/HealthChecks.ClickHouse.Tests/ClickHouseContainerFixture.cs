@@ -28,8 +28,7 @@ public class ClickHouseContainerFixture : IAsyncLifetime
 
     private async Task<ClickHouseContainer?> CreateContainerAsync()
     {
-        var container = new ClickHouseBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new ClickHouseBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
 
         await container.StartAsync();

@@ -4,4 +4,9 @@
     <ProjectReference Include="..\..\src\HealthChecks.CosmosDb\HealthChecks.CosmosDb.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Microsoft.Azure.Cosmos tüketen uygulamanın Newtonsoft.Json'a açık başvurusunu istiyor -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
 </Project>

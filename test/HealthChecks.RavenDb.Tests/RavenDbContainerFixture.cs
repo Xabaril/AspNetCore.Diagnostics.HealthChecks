@@ -42,8 +42,7 @@ public class RavenDbContainerFixture : IAsyncLifetime
 
     private async Task<RavenDbContainer?> CreateContainerAsync()
     {
-        var container = new RavenDbBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new RavenDbBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
 
         await container.StartAsync();

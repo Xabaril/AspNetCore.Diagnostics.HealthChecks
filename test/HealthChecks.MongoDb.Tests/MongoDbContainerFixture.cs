@@ -25,8 +25,7 @@ public sealed class MongoDbContainerFixture : IAsyncLifetime
 
     public static async Task<MongoDbContainer> CreateContainerAsync()
     {
-        var container = new MongoDbBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new MongoDbBuilder($"{Registry}/{Image}:{Tag}")
             .WithUsername(null)
             .WithPassword(null)
             .Build();

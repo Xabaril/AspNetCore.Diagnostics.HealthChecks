@@ -49,8 +49,7 @@ public class SurrealDbContainerFixture : IAsyncLifetime
             .ForUnixContainer()
             .UntilHttpRequestIsSucceeded(x => x.ForPath("/health").ForPort(Port));
 
-        var container = new ContainerBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new ContainerBuilder($"{Registry}/{Image}:{Tag}")
             .WithPortBinding(Port, true)
             .WithCommand("start", "--user", Username, "--pass", Password, "memory")
             .WithWaitStrategy(waitStrategy)

@@ -25,8 +25,7 @@ public sealed class PostgreSQLContainerFixture : IAsyncLifetime
 
     public static async Task<PostgreSqlContainer> CreateContainerAsync()
     {
-        var container = new PostgreSqlBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new PostgreSqlBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

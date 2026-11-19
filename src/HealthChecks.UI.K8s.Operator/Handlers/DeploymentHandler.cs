@@ -83,23 +83,36 @@ internal class DeploymentHandler
             Image = resource.Spec.Image ?? Constants.IMAGE_NAME,
             Ports = new List<V1ContainerPort>
                             {
-                                new V1ContainerPort(80)
+                                new V1ContainerPort { ContainerPort = 80 }
                             },
             Env = new List<V1EnvVar>
                             {
-                                new V1EnvVar("enable_push_endpoint", "true"),
-                                new V1EnvVar("push_endpoint_secret", valueFrom: new V1EnvVarSource(secretKeyRef: new V1SecretKeySelector("key", $"{resource.Spec.Name}-secret"))),
-                                new V1EnvVar("Logging__LogLevel__Default", "Debug"),
-                                new V1EnvVar("Logging__LogLevel__Microsoft", "Warning"),
-                                new V1EnvVar("Logging__LogLevel__System", "Warning"),
-                                new V1EnvVar("Logging__LogLevel__HealthChecks", "Information")
+                                new V1EnvVar { Name = "enable_push_endpoint", Value = "true" },
+                                new V1EnvVar
+                                {
+                                    Name = "push_endpoint_secret",
+                                    ValueFrom = new V1EnvVarSource
+                                    {
+                                        SecretKeyRef = new V1SecretKeySelector { Key = "key", Name = $"{resource.Spec.Name}-secret" }
+                                    }
+                                },
+                                new V1EnvVar { Name = "Logging__LogLevel__Default", Value = "Debug" },
+                                new V1EnvVar { Name = "Logging__LogLevel__Microsoft", Value = "Warning" },
+                                new V1EnvVar { Name = "Logging__LogLevel__System", Value = "Warning" },
+                                new V1EnvVar { Name = "Logging__LogLevel__HealthChecks", Value = "Information" }
                             }
         };
 
         uiContainer.MapCustomUIPaths(resource, _operatorDiagnostics);
 
-        var tolerations = resource.Spec.Tolerations?.Select(toleration => new V1Toleration(toleration.Effect,
-            toleration.Key, toleration.Operator, toleration.Seconds, toleration.Value)).ToList() ?? new List<V1Toleration>();
+        var tolerations = resource.Spec.Tolerations?.Select(toleration => new V1Toleration
+        {
+            Effect = toleration.Effect,
+            Key = toleration.Key,
+            OperatorProperty = toleration.Operator,
+            TolerationSeconds = toleration.Seconds,
+            Value = toleration.Value
+        }).ToList() ?? new List<V1Toleration>();
 
         var spec = new V1DeploymentSpec
         {
@@ -145,10 +158,10 @@ internal class DeploymentHandler
             var webhook = resource.Spec.Webhooks[i];
             _logger.LogInformation("Adding webhook configuration for webhook {Webhook}", webhook.Name);
 
-            container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Name", webhook.Name));
-            container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Uri", webhook.Uri));
-            container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__Payload", webhook.Payload));
-            container.Env.Add(new V1EnvVar($"HealthChecksUI__Webhooks__{i}__RestoredPayload", webhook.RestoredPayload));
+            container.Env.Add(new V1EnvVar { Name = $"HealthChecksUI__Webhooks__{i}__Name", Value = webhook.Name });
+            container.Env.Add(new V1EnvVar { Name = $"HealthChecksUI__Webhooks__{i}__Uri", Value = webhook.Uri });
+            container.Env.Add(new V1EnvVar { Name = $"HealthChecksUI__Webhooks__{i}__Payload", Value = webhook.Payload });
+            container.Env.Add(new V1EnvVar { Name = $"HealthChecksUI__Webhooks__{i}__RestoredPayload", Value = webhook.RestoredPayload });
         }
 
         if (resource.HasBrandingConfigured())
@@ -158,13 +171,16 @@ internal class DeploymentHandler
             specification.Volumes ??= new List<V1Volume>();
             container.VolumeMounts ??= new List<V1VolumeMount>();
 
-            specification.Volumes.Add(new V1Volume(name: volumeName,
-                configMap: new V1ConfigMapVolumeSource(name: $"{resource.Spec.Name}-config")));
+            specification.Volumes.Add(new V1Volume
+            {
+                Name = volumeName,
+                ConfigMap = new V1ConfigMapVolumeSource { Name = $"{resource.Spec.Name}-config" }
+            });
 
-            container.Env.Add(new V1EnvVar("ui_stylesheet", $"{Constants.STYLES_PATH}/{Constants.STYLE_SHEET_NAME}"));
-            container.VolumeMounts.Add(new V1VolumeMount($"/app/{Constants.STYLES_PATH}", volumeName));
+            container.Env.Add(new V1EnvVar { Name = "ui_stylesheet", Value = $"{Constants.STYLES_PATH}/{Constants.STYLE_SHEET_NAME}" });
+            container.VolumeMounts.Add(new V1VolumeMount { MountPath = $"/app/{Constants.STYLES_PATH}", Name = volumeName });
         }
 
-        return new V1Deployment(metadata: metadata, spec: spec);
+        return new V1Deployment { Metadata = metadata, Spec = spec };
     }
 }

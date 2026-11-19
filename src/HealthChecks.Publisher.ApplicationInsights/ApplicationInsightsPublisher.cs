@@ -62,9 +62,8 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
             eventTelemetry.Properties[nameof(Environment.MachineName)] = Environment.MachineName;
             eventTelemetry.Properties[nameof(Assembly)] = Assembly.GetEntryAssembly()?.GetName().Name;
             eventTelemetry.Properties[HEALTHCHECK_NAME] = reportEntry.Key;
-            eventTelemetry.Metrics[METRIC_STATUS_NAME] = reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0;
-            eventTelemetry.Metrics[METRIC_DURATION_NAME] = reportEntry.Value.Duration.TotalMilliseconds;
             client.TrackEvent(eventTelemetry);
+            TrackMetrics(client, eventTelemetry.Properties, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0, reportEntry.Value.Duration.TotalMilliseconds);
         }
 
         foreach (var reportEntry in report.Entries.Where(entry => entry.Value.Exception != null))
@@ -73,9 +72,8 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
             exceptionTelemetry.Properties[nameof(Environment.MachineName)] = Environment.MachineName;
             exceptionTelemetry.Properties[nameof(Assembly)] = Assembly.GetEntryAssembly()?.GetName().Name;
             exceptionTelemetry.Properties[HEALTHCHECK_NAME] = reportEntry.Key;
-            exceptionTelemetry.Metrics[METRIC_STATUS_NAME] = reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0;
-            exceptionTelemetry.Metrics[METRIC_DURATION_NAME] = reportEntry.Value.Duration.TotalMilliseconds;
             client.TrackException(exceptionTelemetry);
+            TrackMetrics(client, exceptionTelemetry.Properties, reportEntry.Value.Status == HealthStatus.Healthy ? 1 : 0, reportEntry.Value.Duration.TotalMilliseconds);
         }
     }
 
@@ -84,9 +82,16 @@ internal class ApplicationInsightsPublisher : IHealthCheckPublisher
         var eventTelemetry = new EventTelemetry(EVENT_NAME);
         eventTelemetry.Properties[nameof(Environment.MachineName)] = Environment.MachineName;
         eventTelemetry.Properties[nameof(Assembly)] = Assembly.GetEntryAssembly()?.GetName().Name;
-        eventTelemetry.Metrics[METRIC_STATUS_NAME] = report.Status == HealthStatus.Healthy ? 1 : 0;
-        eventTelemetry.Metrics[METRIC_DURATION_NAME] = report.TotalDuration.TotalMilliseconds;
         client.TrackEvent(eventTelemetry);
+        TrackMetrics(client, eventTelemetry.Properties, report.Status == HealthStatus.Healthy ? 1 : 0, report.TotalDuration.TotalMilliseconds);
+    }
+
+    // ApplicationInsights 3.x'te EventTelemetry/ExceptionTelemetry.Metrics kalktı;
+    // durum ve süre, olayla aynı özelliklerle ayrı metrik telemetrisi olarak gönderilir.
+    private static void TrackMetrics(TelemetryClient client, IDictionary<string, string> properties, double status, double durationMilliseconds)
+    {
+        client.TrackMetric(METRIC_STATUS_NAME, status, properties);
+        client.TrackMetric(METRIC_DURATION_NAME, durationMilliseconds, properties);
     }
 
     private TelemetryClient GetOrCreateTelemetryClient()

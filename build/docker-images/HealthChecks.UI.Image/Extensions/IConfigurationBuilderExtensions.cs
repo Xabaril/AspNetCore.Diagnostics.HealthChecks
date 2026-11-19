@@ -11,7 +11,7 @@ public static class IConfigurationBuilderExtensions
         Action<AzureAppConfigurationOptions> setupConfig = AzureAppConfiguration.UseConnectionString switch
         {
             true => options => options.Connect(AzureAppConfiguration.ConnectionString),
-            false => options => options.Connect(new Uri(AzureAppConfiguration.ManagedIdentityEndpoint!), new ManagedIdentityCredential())
+            false => options => options.Connect(new Uri(AzureAppConfiguration.ManagedIdentityEndpoint!), new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned))
         };
 
         builder.AddAzureAppConfiguration(options =>
@@ -20,7 +20,7 @@ public static class IConfigurationBuilderExtensions
 
             if (AzureAppConfiguration.UseCacheExpiration)
             {
-                options.ConfigureRefresh(config => config.SetCacheExpiration(TimeSpan.FromSeconds(AzureAppConfiguration.CacheExpiration)));
+                options.ConfigureRefresh(config => config.SetRefreshInterval(TimeSpan.FromSeconds(AzureAppConfiguration.CacheExpiration)));
             }
 
             if (AzureAppConfiguration.UseLabel)

@@ -152,9 +152,9 @@ public class UI_Configuration_should
                             };
                         });
                     });
-.Build();
 
-        var clientFactory = webhost.Services.GetRequiredService<IHttpClientFactory>();
+        // "Fix 509 build errors" geçişi burada yarım kalmıştı (yetim .Build()); diğer testlerdeki kalıba uyduruldu.
+        var clientFactory = webhost.Build().Services.GetRequiredService<IHttpClientFactory>();
         var apiClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_HTTP_CLIENT_NAME);
         var webhookClient = clientFactory.CreateClient(Keys.HEALTH_CHECK_WEBHOOK_HTTP_CLIENT_NAME);
 

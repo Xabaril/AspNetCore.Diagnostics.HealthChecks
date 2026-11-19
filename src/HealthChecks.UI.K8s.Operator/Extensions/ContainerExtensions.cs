@@ -9,31 +9,31 @@ public static class ContainerExtensions
     {
 
         var uiPath = resource.Spec.UiPath ?? Constants.DEFAULT_UI_PATH;
-        container.Env.Add(new V1EnvVar("ui_path", uiPath));
+        container.Env.Add(new V1EnvVar { Name = "ui_path", Value = uiPath });
         diagnostics.UiPathConfigured(nameof(resource.Spec.UiPath), uiPath);
 
         if (!string.IsNullOrEmpty(resource.Spec.UiApiPath))
         {
-            container.Env.Add(new V1EnvVar("ui_api_path", resource.Spec.UiApiPath));
+            container.Env.Add(new V1EnvVar { Name = "ui_api_path", Value = resource.Spec.UiApiPath });
             diagnostics.UiPathConfigured(nameof(resource.Spec.UiApiPath), resource.Spec.UiApiPath);
         }
 
         if (!string.IsNullOrEmpty(resource.Spec.UiResourcesPath))
         {
-            container.Env.Add(new V1EnvVar("ui_resources_path", resource.Spec.UiResourcesPath));
+            container.Env.Add(new V1EnvVar { Name = "ui_resources_path", Value = resource.Spec.UiResourcesPath });
             diagnostics.UiPathConfigured(nameof(resource.Spec.UiResourcesPath), resource.Spec.UiResourcesPath);
         }
 
         if (!string.IsNullOrEmpty(resource.Spec.UiWebhooksPath))
         {
-            container.Env.Add(new V1EnvVar("ui_webhooks_path", resource.Spec.UiWebhooksPath));
+            container.Env.Add(new V1EnvVar { Name = "ui_webhooks_path", Value = resource.Spec.UiWebhooksPath });
             diagnostics.UiPathConfigured(nameof(resource.Spec.UiWebhooksPath), resource.Spec.UiWebhooksPath);
         }
 
         if (resource.Spec.UiNoRelativePaths.HasValue)
         {
             var noRelativePaths = resource.Spec.UiNoRelativePaths.Value.ToString();
-            container.Env.Add(new V1EnvVar("ui_no_relative_paths", noRelativePaths));
+            container.Env.Add(new V1EnvVar { Name = "ui_no_relative_paths", Value = noRelativePaths });
             diagnostics.UiPathConfigured(nameof(resource.Spec.UiNoRelativePaths), noRelativePaths);
         }
     }

@@ -25,8 +25,7 @@ public sealed class MySqlContainerFixture : IAsyncLifetime
 
     public static async Task<MySqlContainer> CreateContainerAsync()
     {
-        var container = new MySqlBuilder()
-            .WithImage($"{Registry}/{Image}:{Tag}")
+        var container = new MySqlBuilder($"{Registry}/{Image}:{Tag}")
             .Build();
         await container.StartAsync();
 

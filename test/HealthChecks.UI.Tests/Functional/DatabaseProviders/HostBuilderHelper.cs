@@ -26,17 +26,12 @@ public class HostBuilderHelper
         appBuilder.WebHost.UseTestServer();
         var app = appBuilder.Build();
 
-        app
-        .UseRouting()
-        .UseEndpoints(endpoints =>
+        app.MapHealthChecks("/health", new HealthCheckOptions
         {
-            endpoints.MapHealthChecks("/health", new HealthCheckOptions
-            {
-                Predicate = r => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            endpoints.MapHealthChecksUI();
+            Predicate = r => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
         });
+        app.MapHealthChecksUI();
 
         var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
         lifetime.ApplicationStarted.Register(() => hostReset.Set());

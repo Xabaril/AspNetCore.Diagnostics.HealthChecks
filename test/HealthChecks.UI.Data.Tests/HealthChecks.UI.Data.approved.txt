@@ -33,6 +33,10 @@ namespace HealthChecks.UI.Data
     public class HealthCheckExecutionEntry
     {
         public HealthCheckExecutionEntry() { }
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public System.Collections.Generic.Dictionary<string, object>? Data { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.Column("Data", TypeName="nvarchar(max)")]
+        public string DataJson { get; set; }
         public string? Description { get; set; }
         public System.TimeSpan Duration { get; set; }
         public int Id { get; set; }

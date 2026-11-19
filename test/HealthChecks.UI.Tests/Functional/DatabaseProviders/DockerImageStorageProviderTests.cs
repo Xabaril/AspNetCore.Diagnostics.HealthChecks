@@ -2,6 +2,7 @@ using HealthChecks.UI.Data;
 using HealthChecks.UI.Image;
 using HealthChecks.UI.Image.Configuration;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace HealthChecks.UI.Tests;
 
@@ -11,44 +12,38 @@ public class docker_image_storage_provider_configuration_should
     private const string SqliteProviderName = "Microsoft.EntityFrameworkCore.Sqlite";
     private const string PostgreProviderName = "Npgsql.EntityFrameworkCore.PostgreSQL";
     private const string InMemoryProviderName = "Microsoft.EntityFrameworkCore.InMemory";
-    private const string MySqlProviderName = "Pomelo.EntityFrameworkCore.MySql";
+    // MySQL depolaması Pomelo'dan Oracle'ın MySql.EntityFrameworkCore paketine geçirildi (net10 yükseltmesi).
+    private const string MySqlProviderName = "MySql.EntityFrameworkCore";
+
+    // Docker imajının Startup sınıfı yalnız UseStartup ile sınanabilir. WebApplicationBuilder.WebHost.UseStartup
+    // çalışma zamanında NotSupportedException fırlattığı için (ASP0010) eski WebHostBuilder kalıbının genel host
+    // karşılığı kullanılır. Kaynaklar temizlenir: imaj yalnız verilen ayarları görür.
+    private static IHostBuilder CreateHostBuilder(params (string Key, string Value)[] settings) =>
+        new HostBuilder()
+            .ConfigureWebHost(webHost => webHost
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.Sources.Clear();
+                    config.AddInMemoryCollection(settings.Select(s => new KeyValuePair<string, string?>(s.Key, s.Value)));
+                })
+                .UseStartup<Startup>());
 
     [Fact]
     public void fail_with_invalid_storage_provider_value()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", "invalidvalue")
-            });
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
+        var hostBuilder = CreateHostBuilder(("storage_provider", "invalidvalue"));
 
         Should.Throw<ArgumentException>(() => hostBuilder.Build());
     }
+
     [Fact]
     public void register_sql_server()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
+        var hostBuilder = CreateHostBuilder(
+            ("storage_provider", StorageProviderEnum.SqlServer.ToString()),
+            ("storage_connection", "connectionstring"));
 
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString()),
-                new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
-
-        var host = hostBuilder.Build();
+        using var host = hostBuilder.Build();
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(SqlProviderName);
@@ -57,19 +52,7 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_sql_server_with_no_connection_string()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
-
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.SqlServer.ToString())
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
+        var hostBuilder = CreateHostBuilder(("storage_provider", StorageProviderEnum.SqlServer.ToString()));
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
@@ -77,22 +60,11 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_sqlite()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
+        var hostBuilder = CreateHostBuilder(
+            ("storage_provider", StorageProviderEnum.Sqlite.ToString()),
+            ("storage_connection", "connectionstring"));
 
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString()),
-                new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
-
-        var host = hostBuilder.Build();
+        using var host = hostBuilder.Build();
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(SqliteProviderName);
@@ -101,19 +73,7 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_sqlite_with_no_connection_string()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
-
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.Sqlite.ToString())
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
+        var hostBuilder = CreateHostBuilder(("storage_provider", StorageProviderEnum.Sqlite.ToString()));
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
@@ -121,22 +81,11 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_postgresql()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
+        var hostBuilder = CreateHostBuilder(
+            ("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
+            ("storage_connection", "connectionstring"));
 
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString()),
-                new KeyValuePair<string, string?>("storage_connection", "connectionstring"),
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
-
-        var host = hostBuilder.Build();
+        using var host = hostBuilder.Build();
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(PostgreProviderName);
@@ -145,19 +94,7 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_postgresql_with_no_connection_string()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
-
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.PostgreSql.ToString())
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
+        var hostBuilder = CreateHostBuilder(("storage_provider", StorageProviderEnum.PostgreSql.ToString()));
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
@@ -165,21 +102,9 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_inmemory()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
+        var hostBuilder = CreateHostBuilder(("storage_provider", StorageProviderEnum.InMemory.ToString()));
 
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.InMemory.ToString())
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
-
-        var host = hostBuilder.Build();
+        using var host = hostBuilder.Build();
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(InMemoryProviderName);
@@ -188,11 +113,9 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_inmemory_as_default_provider_when_no_option_is_configured()
     {
-        var hostBuilder = new WebHostBuilder()
-            .ConfigureAppConfiguration(config => config.Sources.Clear())
-            .UseStartup<Startup>();
+        var hostBuilder = CreateHostBuilder();
 
-        var host = hostBuilder.Build();
+        using var host = hostBuilder.Build();
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(InMemoryProviderName);
@@ -201,24 +124,11 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void register_mysql()
     {
-        //
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
+        var hostBuilder = CreateHostBuilder(
+            ("storage_provider", StorageProviderEnum.MySql.ToString()),
+            ("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"));
 
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString()),
-                new KeyValuePair<string, string?>("storage_connection", "Host=localhost;User Id=root;Password=Password12!;Database=UI"),
-
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
-
-        var host = hostBuilder.Build();
+        using var host = hostBuilder.Build();
 
         var context = host.Services.GetRequiredService<HealthChecksDb>();
         context.Database.ProviderName.ShouldBe(MySqlProviderName);
@@ -227,21 +137,8 @@ public class docker_image_storage_provider_configuration_should
     [Fact]
     public void fail_to_register_mysql_with_no_connection_string()
     {
-        var hostBuilder = WebApplication.CreateBuilder();
-        hostBuilder.WebHost.ConfigureAppConfiguration(config =>
-        {
-
-            config.Sources.Clear();
-
-            config.AddInMemoryCollection(new List<KeyValuePair<string, string?>>
-            {
-                new KeyValuePair<string, string?>("storage_provider", StorageProviderEnum.MySql.ToString())
-            });
-            
-        });
-        hostBuilder.WebHost.UseStartup<Startup>();
+        var hostBuilder = CreateHostBuilder(("storage_provider", StorageProviderEnum.MySql.ToString()));
 
         Should.Throw<ArgumentNullException>(() => hostBuilder.Build());
     }
-
 }

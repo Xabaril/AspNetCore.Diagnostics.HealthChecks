@@ -11,14 +11,19 @@ public class server_addresses_service_should
     {
         var serverAddress = "http://localhost:5000";
 
-        var host = WebApplication.CreateBuilder();
-        host.WebHost.UseUrls(serverAddress);
-        host.Services.AddSingleton<ServerAddressesService>();
-        host.WebHost.UseTestServer();
-        await using var app = host.Build();
+        var builder = WebApplication.CreateBuilder();
+        builder.WebHost.UseUrls(serverAddress);
+        builder.WebHost.UseTestServer();
+        builder.Services.AddSingleton<ServerAddressesService>();
+        await using var app = builder.Build();
+
+        // Eski testteki gibi TestServer'a adres özelliği verilir; host başlarken "urls" ayarındaki adresi buraya yazar.
+        var serverFeatures = app.GetTestServer().Features;
+        serverFeatures.Set<IServerAddressesFeature>(new ServerAddressesFeature());
+
         await app.StartAsync();
 
-        app.ServerFeatures.Get<IServerAddressesFeature>().ShouldNotBeNull();
+        serverFeatures.Get<IServerAddressesFeature>().ShouldNotBeNull();
 
         var serverAddressService = app.Services.GetRequiredService<ServerAddressesService>();
 

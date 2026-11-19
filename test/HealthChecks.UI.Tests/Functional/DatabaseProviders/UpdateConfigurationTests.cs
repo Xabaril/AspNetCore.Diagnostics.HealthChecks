@@ -22,8 +22,7 @@ public class UpdateConfigurationTests
                 .AddSqliteStorage("Data Source = sqlite-updates.db");
             appBuilder.WebHost.UseTestServer();
             var app = appBuilder.Build();
-            app.UseRouting();
-            app.UseEndpoints(setup => setup.MapHealthChecksUI());
+            app.MapHealthChecksUI();
             var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
             lifetime.ApplicationStarted.Register(() => hostReset.Set());
             await app.StartAsync();

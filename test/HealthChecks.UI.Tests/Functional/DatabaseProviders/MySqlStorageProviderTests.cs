@@ -5,7 +5,8 @@ namespace HealthChecks.UI.Tests;
 
 public class mysql_storage_should
 {
-    private const string PROVIDER_NAME = "Pomelo.EntityFrameworkCore.MySql";
+    // Depolama sağlayıcısı Pomelo'dan Oracle'ın MySql.EntityFrameworkCore paketine geçirildi (net10 yükseltmesi).
+    private const string PROVIDER_NAME = "MySql.EntityFrameworkCore";
 
     [Fact]
     public void register_healthchecksdb_context_with_migrations()

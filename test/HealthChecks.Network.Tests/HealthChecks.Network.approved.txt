@@ -28,8 +28,8 @@ namespace HealthChecks.Network.Core
         protected System.Net.Sockets.TcpClient? _tcpClient;
         protected System.Func<object, System.Security.Cryptography.X509Certificates.X509Certificate?, System.Security.Cryptography.X509Certificates.X509Chain?, System.Net.Security.SslPolicyErrors, bool> _validateRemoteCertificate;
         public MailConnection(string host, int port, bool useSSL = true, bool allowInvalidCertificates = false) { }
-        public string Host { get; set; }
-        public int Port { get; set; }
+        public string Host { get; protected set; }
+        public int Port { get; protected set; }
         protected bool UseSSL { get; set; }
         public System.Threading.Tasks.Task<bool> ConnectAsync(System.Threading.CancellationToken cancellationToken = default) { }
         public void Dispose() { }
